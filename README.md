@@ -33,16 +33,46 @@ In general it follows the structure shown in the image below:
 
 #### Generating
 
+1. Checkout developer branch: `git checkout develop`
+2. Generate and checkout the new feature branch: `git checkout -b feature_branch_name`
+
 #### Closing
+
+1. Checkout developer branch: `git checkout develop`
+2. Merge your finished feature branch: `git merge feature_branch_name`
+3. Delete the branch: `git branch -D feature_branch_name`
 
 ### Release branches
 
 #### Generating
 
+1. Checkout developer branch: `git checkout develop`
+2. Generate and checkout the new release branch: `git checkout -b release_v0.1.0`
+
 #### Closing
+
+1. Checkout master branch: `git checkout master`
+2. Merge into master: `git merge release_v0.1.0`
+3. Tag the version: `git tag -a v0.1.0 -m "Add some details about the verion 0.1.0"`
+4. You have to push the changes **and** also have to explicitly push the tag the following way `git push origin v0.1.0`
+5. (Optional) Merge into develop too if changes are not only for production: 
+5.1 Checkout developer branch: `git checkout develop`
+5.2 Merge into develop: `git merge release_v0.1.0`
+6. Delete the branch: `git branch -D release_v0.1.0`
 
 ### Hotfix branches 
 
 #### Generating
 
+1. Checkout master branch: `git checkout master`
+2. Generate and checkout the new hotfix branch: `git checkout -b hotfix_v0.1.1`
+
 #### Closing
+
+1. Checkout master branch: `git checkout master`
+2. Merge into master: `git merge hotfix_v0.1.1`
+3. Tag the version: `git tag -a v0.1.1 -m "Add some details about the hotfix verion 0.1.1"`
+4. You have to push the changes **and** also have to explicitly push the tag the following way `git push origin v0.1.1`
+5. Checkout developer branch: `git checkout develop`
+6. Merge into develop: `git merge hotfix_v0.1.1`
+7. Delete the branch: `git branch -D hotfix_v0.1.1`

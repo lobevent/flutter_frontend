@@ -1,5 +1,4 @@
-
-import 'package:flutter/material.dart';
+import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:http/http.dart';
 
 
@@ -35,10 +34,10 @@ class SymfonyCommunicator{
 
   Future<Response> handleErrors(Response response){
     switch (response.statusCode){
-      case 401: break;
-      case 402: break;
-      case 404: break;
-      case 500: break;
+      case 401: throw NotAuthenticatedError();
+      case 403: throw NotAuthorizedError();
+      case 404: throw NotFoundError();
+      case 500: throw InternalServerError();
     }
   }
 }

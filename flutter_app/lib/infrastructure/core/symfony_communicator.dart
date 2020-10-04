@@ -5,39 +5,66 @@ import 'package:http/http.dart';
 class SymfonyCommunicator{
   Client client;
   final url = "ourUrl.com";
-  var jwt = null;
+  var header;
 
 
   SymfonyCommunicator([String jwt]){
     if(jwt != null){
-      this.jwt =jwt;
+      header =  {"Authentication": "Baerer $jwt"};
     }
   }
-
+  ///get an resource with uri
+  ///throws [NotAuthenticatedError], [NotAuthorizedError], [NotFoundError], [InternalServerError]
+  ///the id (if needed) should be in the uri
+  ///uri has to start with an backslash "/"
   Future<Response> get(String uri) async{
-    Response response = await client.get(url+uri, headers:{"Authentication": "Baerer $jwt"});
-    return handleErrors(response);
+    return _handleErrors( () async {client.get(url+uri, headers:header); });
   }
 
+  ///post to an resource with uri
+  ///throws [NotAuthenticatedError], [NotAuthorizedError], [NotFoundError], [InternalServerError]
+  ///the id (if needed) should be in the uri
+  ///uri has to start with an backslash "/"
   Future<Response> post(String uri, dynamic body) async{
-    Response response = await client.post(url+uri, headers:{"Authentication": "Baerer $jwt"}, body: body);
-    return handleErrors(response);
-  }
-  Future<Response> put(String uri, dynamic body) async{
-    Response response = await client.put(url+uri, headers:{"Authentication": "Baerer $jwt"}, body: body);
-    return handleErrors(response);
-  }
-  Future<Response> delete(String uri) async{
-    Response response = await client.delete(url+uri, headers:{"Authentication": "Baerer $jwt"});
-    return handleErrors(response);
+    return _handleErrors( () async {client.post(url+uri, headers:header, body: body); });
   }
 
-  Future<Response> handleErrors(Response response){
-    switch (response.statusCode){
-      case 401: throw NotAuthenticatedError();
-      case 403: throw NotAuthorizedError();
-      case 404: throw NotFoundError();
-      case 500: throw InternalServerError();
+  ///put an resource with uri
+  ///throws [NotAuthenticatedError], [NotAuthorizedError], [NotFoundError], [InternalServerError]
+  ///the id (if needed) should be in the uri
+  ///uri has to start with an backslash "/"
+  Future<Response> put(String uri, dynamic body) async{
+    return _handleErrors( () async {client.put(url+uri, headers:header, body: body); }) ;
+  }
+
+  ///delete resource with uri
+  ///throws [NotAuthenticatedError], [NotAuthorizedError], [NotFoundError], [InternalServerError]
+  ///the id (if needed) should be in the uri
+  ///uri has to start with an backslash "/"
+  Future<Response> delete(String uri) async{
+    return _handleErrors( () async { return client.delete(url+uri, headers:header); });
+  }
+
+
+  ///[requestFunction] is an lambda function, containing a request to execute
+  Future<Response> _handleErrors(Function requestFunction) async{
+    Response response;
+    try{
+      response  = await requestFunction();
+      switch (response.statusCode) {
+        case 401:
+          throw NotAuthenticatedError(); break;
+        case 403:
+          throw NotAuthorizedError(); break;
+        case 404:
+          throw NotFoundError(); break;
+        case 500:
+          throw InternalServerError(); break;
+        default:
+          return response; break;
+      }
+    }on Exception catch(e){
+        rethrow;
     }
   }
 }

@@ -1,0 +1,19 @@
+name: test_and_build
+on:
+  push
+
+jobs:
+
+  test_and_build:
+    name: Test the flutter and build it (should always pass)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1.3.2
+        with:
+          channel: stable
+      - run: |
+          cd flutter_app
+          flutter pub get
+          flutter build appbundle
+          flutter build ios

@@ -1,75 +1,79 @@
 import 'dart:convert';
 
-import 'package:dartz/dartz.dart';
+import 'package:meta/meta.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:http/http.dart';
 
-
 class SymfonyCommunicator{
-  Client client;
-  final url = "ourUrl.com";
-  var header;
+  final Client client;
+  final String url = "ourUrl.com";
+  final Map<String, String> headers;
 
+  SymfonyCommunicator({@required this.client, @required String jwt})
+    : assert(client != null, "client must be given"),
+      assert(jwt != null, "jwt must be given"),
+      headers = {"Authentication": "Baerer $jwt"};
 
-  SymfonyCommunicator([String jwt]){
-    if(jwt != null){
-      header =  {"Authentication": "Baerer $jwt"};
-    }
-  }
-  ///get an resource with uri
-  ///throws [NotAuthenticatedError], [NotAuthorizedError], [NotFoundError], [InternalServerError]
-  ///the id (if needed) should be in the uri
-  ///uri has to start with an backslash "/"
+  /// Get an resource with uri.
+  /// Throws [NotAuthenticatedError], [NotAuthorizedError], [NotFoundError], [InternalServerError]
+  /// The id (if needed) should be in the uri.
+  /// Uri has to start with an backslash "/".
   Future<Response> get(String uri) async{
-    return _handleErrors( () async {client.get(url+uri, headers:header); });
+    return _handleErrors( () async => client.get("$url$uri", headers: headers));
   }
 
-  ///post to an resource with uri
-  ///throws [NotAuthenticatedError], [NotAuthorizedError], [NotFoundError], [InternalServerError]
-  ///the id (if needed) should be in the uri
-  ///uri has to start with an backslash "/"
+  /// Post to an resource with uri.
+  /// Throws [NotAuthenticatedError], [NotAuthorizedError], [NotFoundError], [InternalServerError]
+  /// The id (if needed) should be in the uri.
+  /// Uri has to start with an backslash "/".
   Future<Response> post(String uri, dynamic body, [Encoding encoding]) async{
-    encoding = encoding == null ? "text/plain" : encoding;
-    return _handleErrors( () async {client.post(url+uri, headers:header, body: body, encoding: encoding); });
+    encoding ??= Encoding.getByName("text/plain");
+    return _handleErrors( () async => client.post("$url$uri", headers: headers, body: body, encoding: encoding));
   }
 
-  ///put an resource with uri
-  ///throws [NotAuthenticatedError], [NotAuthorizedError], [NotFoundError], [InternalServerError]
-  ///the id (if needed) should be in the uri
-  ///uri has to start with an backslash "/"
+  /// Put an resource with uri.
+  /// Throws [NotAuthenticatedError], [NotAuthorizedError], [NotFoundError], [InternalServerError]
+  /// The id (if needed) should be in the uri.
+  /// Uri has to start with an backslash "/".
   Future<Response> put(String uri, dynamic body, [Encoding encoding]) async{
-    encoding = encoding == null ? "text/plain" : encoding;
-    return _handleErrors( () async {client.put(url+uri, headers:header, body: body, encoding: encoding); }) ;
+    encoding ??= Encoding.getByName("text/plain");
+    return _handleErrors( () async  => client.put("$url$uri", headers: headers, body: body, encoding: encoding)) ;
   }
 
-  ///delete resource with uri
-  ///throws [NotAuthenticatedError], [NotAuthorizedError], [NotFoundError], [InternalServerError]
-  ///the id (if needed) should be in the uri
-  ///uri has to start with an backslash "/"
-  Future<Response> delete(String uri) async{
-    return _handleErrors( () async { return client.delete(url+uri, headers:header); });
+  /// Delete resource with uri.
+  /// Throws [NotAuthenticatedError], [NotAuthorizedError], [NotFoundError], [InternalServerError]
+  /// The id (if needed) should be in the uri.
+  /// Uri has to start with an backslash "/".
+  Future<Response> delete(String uri) async {
+    return _handleErrors( () async => client.delete("$url$uri", headers: headers));
   }
 
 
-  ///[requestFunction] is an lambda function, containing a request to execute
-  Future<Response> _handleErrors(Function requestFunction) async{
-    Response response;
+  /// The [requestFunction] is an lambda function, containing a request to execute
+  Future<Response> _handleErrors(Function requestFunction) async {
     try{
-      response  = await requestFunction();
+      // TODO any reason to give a lambda into this? We could directly pass the response or
+      // TODO subclassing the Response class (like the reddit link I did sent you)
+      final Response response  = await requestFunction() as Response; // really not a good practice we have to use casting here. We should consider one of the two options from the todo
       switch (response.statusCode) {
         case 401:
-          throw NotAuthenticatedError(); break;
+          throw NotAuthenticatedError();
+          break;
         case 403:
-          throw NotAuthorizedError(); break;
+          throw NotAuthorizedError();
+          break;
         case 404:
-          throw NotFoundError(); break;
+          throw NotFoundError();
+          break;
         case 500:
-          throw InternalServerError(); break;
+          throw InternalServerError();
+          break;
         default:
           return response; break;
       }
-    }on Exception catch(e){
-        rethrow;
+    } catch(e) {
+      // TODO if we don't do any error handling here then remove the whole try catch block
+      rethrow;
     }
   }
 }

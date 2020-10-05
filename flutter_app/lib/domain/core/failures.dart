@@ -21,13 +21,13 @@ abstract class ValueFailure<T> with _$ValueFailure<T> {
   }) = ShortPassword<T>;
   const factory ValueFailure.exceedingLenght({
     @required T failedValue,
-  }) = ShortPassword<T>;
+  }) = ExceedingLength<T>;
   const factory ValueFailure.invalidDate({
     @required T failedValue,
-  }) = ShortPassword<T>;
+  }) = InvalidDate<T>;
   const factory ValueFailure.multiline({
     @required T failedValue,
-  }) = ShortPassword<T>;
+  }) = Multiline<T>;
 }
 
 /*

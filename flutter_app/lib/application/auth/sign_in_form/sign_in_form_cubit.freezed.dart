@@ -19,7 +19,7 @@ class _$SignInFormStateTearOff {
       @required Password password,
       @required bool showErrorMessages,
       @required bool isSubmitting,
-      @required dynamic authFailureOrSuccessOption}) {
+      @required Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption}) {
     return _SignInFormState(
       emailAddress: emailAddress,
       password: password,
@@ -40,7 +40,7 @@ mixin _$SignInFormState {
   Password get password;
   bool get showErrorMessages;
   bool get isSubmitting;
-  dynamic get authFailureOrSuccessOption;
+  Option<Either<AuthFailure, Unit>> get authFailureOrSuccessOption;
 
   $SignInFormStateCopyWith<SignInFormState> get copyWith;
 }
@@ -55,7 +55,7 @@ abstract class $SignInFormStateCopyWith<$Res> {
       Password password,
       bool showErrorMessages,
       bool isSubmitting,
-      dynamic authFailureOrSuccessOption});
+      Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption});
 }
 
 /// @nodoc
@@ -87,7 +87,7 @@ class _$SignInFormStateCopyWithImpl<$Res>
           isSubmitting == freezed ? _value.isSubmitting : isSubmitting as bool,
       authFailureOrSuccessOption: authFailureOrSuccessOption == freezed
           ? _value.authFailureOrSuccessOption
-          : authFailureOrSuccessOption as dynamic,
+          : authFailureOrSuccessOption as Option<Either<AuthFailure, Unit>>,
     ));
   }
 }
@@ -104,7 +104,7 @@ abstract class _$SignInFormStateCopyWith<$Res>
       Password password,
       bool showErrorMessages,
       bool isSubmitting,
-      dynamic authFailureOrSuccessOption});
+      Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption});
 }
 
 /// @nodoc
@@ -138,7 +138,7 @@ class __$SignInFormStateCopyWithImpl<$Res>
           isSubmitting == freezed ? _value.isSubmitting : isSubmitting as bool,
       authFailureOrSuccessOption: authFailureOrSuccessOption == freezed
           ? _value.authFailureOrSuccessOption
-          : authFailureOrSuccessOption,
+          : authFailureOrSuccessOption as Option<Either<AuthFailure, Unit>>,
     ));
   }
 }
@@ -166,7 +166,7 @@ class _$_SignInFormState implements _SignInFormState {
   @override
   final bool isSubmitting;
   @override
-  final dynamic authFailureOrSuccessOption;
+  final Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption;
 
   @override
   String toString() {
@@ -212,11 +212,17 @@ class _$_SignInFormState implements _SignInFormState {
 
 abstract class _SignInFormState implements SignInFormState {
   const factory _SignInFormState(
-      {@required EmailAddress emailAddress,
-      @required Password password,
-      @required bool showErrorMessages,
-      @required bool isSubmitting,
-      @required dynamic authFailureOrSuccessOption}) = _$_SignInFormState;
+          {@required
+              EmailAddress emailAddress,
+          @required
+              Password password,
+          @required
+              bool showErrorMessages,
+          @required
+              bool isSubmitting,
+          @required
+              Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption}) =
+      _$_SignInFormState;
 
   @override
   EmailAddress get emailAddress;
@@ -227,7 +233,7 @@ abstract class _SignInFormState implements SignInFormState {
   @override
   bool get isSubmitting;
   @override
-  dynamic get authFailureOrSuccessOption;
+  Option<Either<AuthFailure, Unit>> get authFailureOrSuccessOption;
   @override
   _$SignInFormStateCopyWith<_SignInFormState> get copyWith;
 }

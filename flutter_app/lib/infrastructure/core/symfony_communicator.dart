@@ -51,7 +51,6 @@ class SymfonyCommunicator{
 
   /// The [requestFunction] is an lambda function, containing a request to execute
   Future<Response> _handleErrors(Function requestFunction) async {
-    try{
       // TODO any reason to give a lambda into this? We could directly pass the response or
       // TODO subclassing the Response class (like the reddit link I did sent you)
       final Response response  = await requestFunction() as Response; // really not a good practice we have to use casting here. We should consider one of the two options from the todo
@@ -71,9 +70,5 @@ class SymfonyCommunicator{
         default:
           return response; break;
       }
-    } catch(e) {
-      // TODO if we don't do any error handling here then remove the whole try catch block
-      rethrow;
-    }
   }
 }

@@ -1,3 +1,5 @@
+![test_and_build](https://github.com/lobevent/flutter_frontend/workflows/test_and_build/badge.svg?branch=develop)
+
 # Flutter Frontend - repository for the frontend
 
 Flutter App for iOS and Android for the lobevent project.

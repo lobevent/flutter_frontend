@@ -20,4 +20,4 @@ jobs:
           flutter pub get
           flutter test --no-pub --coverage
           flutter build appbundle
-          flutter build ios
+          flutter build ios --no-codesign

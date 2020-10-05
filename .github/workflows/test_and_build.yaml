@@ -5,15 +5,19 @@ on:
 jobs:
 
   test_and_build:
-    name: Test the flutter and build it (should always pass)
-    runs-on: ubuntu-latest
+    name: Test the flutter app and build it (should always pass)
+    runs-on: macos-latest # needs to be macos otherwise flutter can't build for iOS
     steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1.3.2
+      - name: Checkout the git repository
+        uses: actions/checkout@v2
+      - name: Install flutter using the stable channel
+        uses: subosito/flutter-action@v1.3.2
         with:
           channel: stable
-      - run: |
+      - name: Run pub get, run tests and build for Android & iOS
+        run: |
           cd flutter_app
           flutter pub get
+          flutter test --no-pub --coverage
           flutter build appbundle
           flutter build ios

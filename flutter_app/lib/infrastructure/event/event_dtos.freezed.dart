@@ -22,13 +22,15 @@ class _$EventDtoTearOff {
       @required String name,
       @required bool public,
       @required String description,
-      @required DateTime date}) {
+      @required DateTime date,
+      @required DateTime creationDate}) {
     return _EventDto(
       id: id,
       name: name,
       public: public,
       description: description,
       date: date,
+      creationDate: creationDate,
     );
   }
 
@@ -49,6 +51,7 @@ mixin _$EventDto {
   bool get public;
   String get description;
   DateTime get date;
+  DateTime get creationDate;
 
   Map<String, dynamic> toJson();
   $EventDtoCopyWith<EventDto> get copyWith;
@@ -59,7 +62,12 @@ abstract class $EventDtoCopyWith<$Res> {
   factory $EventDtoCopyWith(EventDto value, $Res Function(EventDto) then) =
       _$EventDtoCopyWithImpl<$Res>;
   $Res call(
-      {int id, String name, bool public, String description, DateTime date});
+      {int id,
+      String name,
+      bool public,
+      String description,
+      DateTime date,
+      DateTime creationDate});
 }
 
 /// @nodoc
@@ -77,6 +85,7 @@ class _$EventDtoCopyWithImpl<$Res> implements $EventDtoCopyWith<$Res> {
     Object public = freezed,
     Object description = freezed,
     Object date = freezed,
+    Object creationDate = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed ? _value.id : id as int,
@@ -85,6 +94,9 @@ class _$EventDtoCopyWithImpl<$Res> implements $EventDtoCopyWith<$Res> {
       description:
           description == freezed ? _value.description : description as String,
       date: date == freezed ? _value.date : date as DateTime,
+      creationDate: creationDate == freezed
+          ? _value.creationDate
+          : creationDate as DateTime,
     ));
   }
 }
@@ -95,7 +107,12 @@ abstract class _$EventDtoCopyWith<$Res> implements $EventDtoCopyWith<$Res> {
       __$EventDtoCopyWithImpl<$Res>;
   @override
   $Res call(
-      {int id, String name, bool public, String description, DateTime date});
+      {int id,
+      String name,
+      bool public,
+      String description,
+      DateTime date,
+      DateTime creationDate});
 }
 
 /// @nodoc
@@ -114,6 +131,7 @@ class __$EventDtoCopyWithImpl<$Res> extends _$EventDtoCopyWithImpl<$Res>
     Object public = freezed,
     Object description = freezed,
     Object date = freezed,
+    Object creationDate = freezed,
   }) {
     return _then(_EventDto(
       id: id == freezed ? _value.id : id as int,
@@ -122,6 +140,9 @@ class __$EventDtoCopyWithImpl<$Res> extends _$EventDtoCopyWithImpl<$Res>
       description:
           description == freezed ? _value.description : description as String,
       date: date == freezed ? _value.date : date as DateTime,
+      creationDate: creationDate == freezed
+          ? _value.creationDate
+          : creationDate as DateTime,
     ));
   }
 }
@@ -135,12 +156,14 @@ class _$_EventDto extends _EventDto {
       @required this.name,
       @required this.public,
       @required this.description,
-      @required this.date})
+      @required this.date,
+      @required this.creationDate})
       : assert(id != null),
         assert(name != null),
         assert(public != null),
         assert(description != null),
         assert(date != null),
+        assert(creationDate != null),
         super._();
 
   factory _$_EventDto.fromJson(Map<String, dynamic> json) =>
@@ -156,10 +179,12 @@ class _$_EventDto extends _EventDto {
   final String description;
   @override
   final DateTime date;
+  @override
+  final DateTime creationDate;
 
   @override
   String toString() {
-    return 'EventDto(id: $id, name: $name, public: $public, description: $description, date: $date)';
+    return 'EventDto(id: $id, name: $name, public: $public, description: $description, date: $date, creationDate: $creationDate)';
   }
 
   @override
@@ -176,7 +201,10 @@ class _$_EventDto extends _EventDto {
                 const DeepCollectionEquality()
                     .equals(other.description, description)) &&
             (identical(other.date, date) ||
-                const DeepCollectionEquality().equals(other.date, date)));
+                const DeepCollectionEquality().equals(other.date, date)) &&
+            (identical(other.creationDate, creationDate) ||
+                const DeepCollectionEquality()
+                    .equals(other.creationDate, creationDate)));
   }
 
   @override
@@ -186,7 +214,8 @@ class _$_EventDto extends _EventDto {
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(public) ^
       const DeepCollectionEquality().hash(description) ^
-      const DeepCollectionEquality().hash(date);
+      const DeepCollectionEquality().hash(date) ^
+      const DeepCollectionEquality().hash(creationDate);
 
   @override
   _$EventDtoCopyWith<_EventDto> get copyWith =>
@@ -205,7 +234,8 @@ abstract class _EventDto extends EventDto {
       @required String name,
       @required bool public,
       @required String description,
-      @required DateTime date}) = _$_EventDto;
+      @required DateTime date,
+      @required DateTime creationDate}) = _$_EventDto;
 
   factory _EventDto.fromJson(Map<String, dynamic> json) = _$_EventDto.fromJson;
 
@@ -219,6 +249,8 @@ abstract class _EventDto extends EventDto {
   String get description;
   @override
   DateTime get date;
+  @override
+  DateTime get creationDate;
   @override
   _$EventDtoCopyWith<_EventDto> get copyWith;
 }

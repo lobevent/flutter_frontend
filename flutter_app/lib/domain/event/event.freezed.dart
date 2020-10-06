@@ -19,6 +19,7 @@ class _$EventTearOff {
       @required EventName name,
       @required DateTime date,
       @required EventDescription description,
+      @required DateTime creationDate,
       @required Profile owner,
       @required bool public}) {
     return _Event(
@@ -26,6 +27,7 @@ class _$EventTearOff {
       name: name,
       date: date,
       description: description,
+      creationDate: creationDate,
       owner: owner,
       public: public,
     );
@@ -42,6 +44,7 @@ mixin _$Event {
   EventName get name;
   DateTime get date;
   EventDescription get description;
+  DateTime get creationDate;
   Profile get owner;
   bool get public;
 
@@ -57,6 +60,7 @@ abstract class $EventCopyWith<$Res> {
       EventName name,
       DateTime date,
       EventDescription description,
+      DateTime creationDate,
       Profile owner,
       bool public});
 
@@ -77,6 +81,7 @@ class _$EventCopyWithImpl<$Res> implements $EventCopyWith<$Res> {
     Object name = freezed,
     Object date = freezed,
     Object description = freezed,
+    Object creationDate = freezed,
     Object owner = freezed,
     Object public = freezed,
   }) {
@@ -87,6 +92,9 @@ class _$EventCopyWithImpl<$Res> implements $EventCopyWith<$Res> {
       description: description == freezed
           ? _value.description
           : description as EventDescription,
+      creationDate: creationDate == freezed
+          ? _value.creationDate
+          : creationDate as DateTime,
       owner: owner == freezed ? _value.owner : owner as Profile,
       public: public == freezed ? _value.public : public as bool,
     ));
@@ -113,6 +121,7 @@ abstract class _$EventCopyWith<$Res> implements $EventCopyWith<$Res> {
       EventName name,
       DateTime date,
       EventDescription description,
+      DateTime creationDate,
       Profile owner,
       bool public});
 
@@ -135,6 +144,7 @@ class __$EventCopyWithImpl<$Res> extends _$EventCopyWithImpl<$Res>
     Object name = freezed,
     Object date = freezed,
     Object description = freezed,
+    Object creationDate = freezed,
     Object owner = freezed,
     Object public = freezed,
   }) {
@@ -145,6 +155,9 @@ class __$EventCopyWithImpl<$Res> extends _$EventCopyWithImpl<$Res>
       description: description == freezed
           ? _value.description
           : description as EventDescription,
+      creationDate: creationDate == freezed
+          ? _value.creationDate
+          : creationDate as DateTime,
       owner: owner == freezed ? _value.owner : owner as Profile,
       public: public == freezed ? _value.public : public as bool,
     ));
@@ -158,12 +171,14 @@ class _$_Event extends _Event {
       @required this.name,
       @required this.date,
       @required this.description,
+      @required this.creationDate,
       @required this.owner,
       @required this.public})
       : assert(id != null),
         assert(name != null),
         assert(date != null),
         assert(description != null),
+        assert(creationDate != null),
         assert(owner != null),
         assert(public != null),
         super._();
@@ -177,13 +192,15 @@ class _$_Event extends _Event {
   @override
   final EventDescription description;
   @override
+  final DateTime creationDate;
+  @override
   final Profile owner;
   @override
   final bool public;
 
   @override
   String toString() {
-    return 'Event(id: $id, name: $name, date: $date, description: $description, owner: $owner, public: $public)';
+    return 'Event(id: $id, name: $name, date: $date, description: $description, creationDate: $creationDate, owner: $owner, public: $public)';
   }
 
   @override
@@ -199,6 +216,9 @@ class _$_Event extends _Event {
             (identical(other.description, description) ||
                 const DeepCollectionEquality()
                     .equals(other.description, description)) &&
+            (identical(other.creationDate, creationDate) ||
+                const DeepCollectionEquality()
+                    .equals(other.creationDate, creationDate)) &&
             (identical(other.owner, owner) ||
                 const DeepCollectionEquality().equals(other.owner, owner)) &&
             (identical(other.public, public) ||
@@ -212,6 +232,7 @@ class _$_Event extends _Event {
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(date) ^
       const DeepCollectionEquality().hash(description) ^
+      const DeepCollectionEquality().hash(creationDate) ^
       const DeepCollectionEquality().hash(owner) ^
       const DeepCollectionEquality().hash(public);
 
@@ -227,6 +248,7 @@ abstract class _Event extends Event {
       @required EventName name,
       @required DateTime date,
       @required EventDescription description,
+      @required DateTime creationDate,
       @required Profile owner,
       @required bool public}) = _$_Event;
 
@@ -238,6 +260,8 @@ abstract class _Event extends Event {
   DateTime get date;
   @override
   EventDescription get description;
+  @override
+  DateTime get creationDate;
   @override
   Profile get owner;
   @override

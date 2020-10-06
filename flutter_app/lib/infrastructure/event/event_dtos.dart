@@ -19,6 +19,7 @@ abstract class EventDto with _$EventDto{
     @required bool public,
     @required String description,
     @required DateTime date,
+    @required DateTime creationDate,
     //ProfileDto profile, //TODO: implement profile
   }) = _EventDto;
 
@@ -30,6 +31,7 @@ abstract class EventDto with _$EventDto{
       public: event.public,
       date: event.date,
       description: event.description.getOrCrash(),
+      creationDate: event.creationDate,
       //profile: event.owner.
 
     );
@@ -48,6 +50,7 @@ abstract class EventDto with _$EventDto{
       description: EventDescription(description),
       owner: Profile(id: 0, name: null), //TODO:
       public: public,
+      creationDate: creationDate,
 
     );
   }

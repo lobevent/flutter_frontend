@@ -14,6 +14,7 @@ abstract class Event implements _$Event {
     @required EventName name,
     @required DateTime date,
     @required EventDescription description,
+    @required DateTime creationDate,
     @required Profile owner,
     @required bool public,
   }) = _Event;

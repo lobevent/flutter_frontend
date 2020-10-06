@@ -44,7 +44,7 @@ abstract class PostDto implements _$PostDto {
       postContent: PostContent(postContent),
       owner: Profile(id: 0, name: null), //TODO
       event: event.toDomain(),
-      comments: List<Comment>()
+      comments: <Comment>[]
     );
   }
 }

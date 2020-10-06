@@ -1,6 +1,6 @@
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter_frontend/domain/profile/baseProfile.dart';
+import 'package:flutter_frontend/domain/profile/base_profile.dart';
 part 'event.freezed.dart';
 
 @freezed

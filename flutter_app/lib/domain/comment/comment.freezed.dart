@@ -22,7 +22,7 @@ class _$CommentTearOff {
       @required Event event,
       @required Post post,
       @required Comment commentParent,
-      @required List<Comment> commentChilds}) {
+      List<Comment> commentChilds}) {
     return _Comment(
       id: id,
       creationDate: creationDate,
@@ -230,15 +230,14 @@ class _$_Comment implements _Comment {
       @required this.event,
       @required this.post,
       @required this.commentParent,
-      @required this.commentChilds})
+      this.commentChilds})
       : assert(id != null),
         assert(creationDate != null),
         assert(commentContent != null),
         assert(owner != null),
         assert(event != null),
         assert(post != null),
-        assert(commentParent != null),
-        assert(commentChilds != null);
+        assert(commentParent != null);
 
   @override
   final int id;
@@ -314,7 +313,7 @@ abstract class _Comment implements Comment {
       @required Event event,
       @required Post post,
       @required Comment commentParent,
-      @required List<Comment> commentChilds}) = _$_Comment;
+      List<Comment> commentChilds}) = _$_Comment;
 
   @override
   int get id;

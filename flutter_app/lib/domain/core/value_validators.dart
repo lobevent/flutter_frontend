@@ -51,3 +51,8 @@ Either<ValueFailure<String>, String> validateDate(String input) {
     return left(ValueFailure.invalidDate(failedValue: input));
   }
 }
+
+Either<ValueFailure<String>, String> doNothing(String input) {
+  // if u dont need to validate some object
+  return right(input);
+}

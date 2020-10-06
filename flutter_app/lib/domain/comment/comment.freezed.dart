@@ -18,7 +18,7 @@ class _$CommentTearOff {
       {@required int id,
       @required DateTime creationDate,
       @required CommentContent commentContent,
-      @required BaseProfile owner,
+      @required Profile owner,
       @required Event event,
       @required Post post,
       @required Comment commentParent,
@@ -45,7 +45,7 @@ mixin _$Comment {
   int get id;
   DateTime get creationDate;
   CommentContent get commentContent;
-  BaseProfile get owner;
+  Profile get owner;
   Event get event;
   Post get post;
   Comment get commentParent;
@@ -62,13 +62,13 @@ abstract class $CommentCopyWith<$Res> {
       {int id,
       DateTime creationDate,
       CommentContent commentContent,
-      BaseProfile owner,
+      Profile owner,
       Event event,
       Post post,
       Comment commentParent,
       List<Comment> commentChilds});
 
-  $BaseProfileCopyWith<$Res> get owner;
+  $ProfileCopyWith<$Res> get owner;
   $EventCopyWith<$Res> get event;
   $PostCopyWith<$Res> get post;
   $CommentCopyWith<$Res> get commentParent;
@@ -101,7 +101,7 @@ class _$CommentCopyWithImpl<$Res> implements $CommentCopyWith<$Res> {
       commentContent: commentContent == freezed
           ? _value.commentContent
           : commentContent as CommentContent,
-      owner: owner == freezed ? _value.owner : owner as BaseProfile,
+      owner: owner == freezed ? _value.owner : owner as Profile,
       event: event == freezed ? _value.event : event as Event,
       post: post == freezed ? _value.post : post as Post,
       commentParent: commentParent == freezed
@@ -114,11 +114,11 @@ class _$CommentCopyWithImpl<$Res> implements $CommentCopyWith<$Res> {
   }
 
   @override
-  $BaseProfileCopyWith<$Res> get owner {
+  $ProfileCopyWith<$Res> get owner {
     if (_value.owner == null) {
       return null;
     }
-    return $BaseProfileCopyWith<$Res>(_value.owner, (value) {
+    return $ProfileCopyWith<$Res>(_value.owner, (value) {
       return _then(_value.copyWith(owner: value));
     });
   }
@@ -163,14 +163,14 @@ abstract class _$CommentCopyWith<$Res> implements $CommentCopyWith<$Res> {
       {int id,
       DateTime creationDate,
       CommentContent commentContent,
-      BaseProfile owner,
+      Profile owner,
       Event event,
       Post post,
       Comment commentParent,
       List<Comment> commentChilds});
 
   @override
-  $BaseProfileCopyWith<$Res> get owner;
+  $ProfileCopyWith<$Res> get owner;
   @override
   $EventCopyWith<$Res> get event;
   @override
@@ -207,7 +207,7 @@ class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
       commentContent: commentContent == freezed
           ? _value.commentContent
           : commentContent as CommentContent,
-      owner: owner == freezed ? _value.owner : owner as BaseProfile,
+      owner: owner == freezed ? _value.owner : owner as Profile,
       event: event == freezed ? _value.event : event as Event,
       post: post == freezed ? _value.post : post as Post,
       commentParent: commentParent == freezed
@@ -246,7 +246,7 @@ class _$_Comment implements _Comment {
   @override
   final CommentContent commentContent;
   @override
-  final BaseProfile owner;
+  final Profile owner;
   @override
   final Event event;
   @override
@@ -309,7 +309,7 @@ abstract class _Comment implements Comment {
       {@required int id,
       @required DateTime creationDate,
       @required CommentContent commentContent,
-      @required BaseProfile owner,
+      @required Profile owner,
       @required Event event,
       @required Post post,
       @required Comment commentParent,
@@ -322,7 +322,7 @@ abstract class _Comment implements Comment {
   @override
   CommentContent get commentContent;
   @override
-  BaseProfile get owner;
+  Profile get owner;
   @override
   Event get event;
   @override

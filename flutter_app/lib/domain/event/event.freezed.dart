@@ -19,7 +19,7 @@ class _$EventTearOff {
       @required EventName name,
       @required DateTime creationDate,
       @required EventDescription description,
-      @required BaseProfile owner}) {
+      @required Profile owner}) {
     return _Event(
       id: id,
       name: name,
@@ -40,7 +40,7 @@ mixin _$Event {
   EventName get name;
   DateTime get creationDate;
   EventDescription get description;
-  BaseProfile get owner;
+  Profile get owner;
 
   $EventCopyWith<Event> get copyWith;
 }
@@ -54,9 +54,9 @@ abstract class $EventCopyWith<$Res> {
       EventName name,
       DateTime creationDate,
       EventDescription description,
-      BaseProfile owner});
+      Profile owner});
 
-  $BaseProfileCopyWith<$Res> get owner;
+  $ProfileCopyWith<$Res> get owner;
 }
 
 /// @nodoc
@@ -84,16 +84,16 @@ class _$EventCopyWithImpl<$Res> implements $EventCopyWith<$Res> {
       description: description == freezed
           ? _value.description
           : description as EventDescription,
-      owner: owner == freezed ? _value.owner : owner as BaseProfile,
+      owner: owner == freezed ? _value.owner : owner as Profile,
     ));
   }
 
   @override
-  $BaseProfileCopyWith<$Res> get owner {
+  $ProfileCopyWith<$Res> get owner {
     if (_value.owner == null) {
       return null;
     }
-    return $BaseProfileCopyWith<$Res>(_value.owner, (value) {
+    return $ProfileCopyWith<$Res>(_value.owner, (value) {
       return _then(_value.copyWith(owner: value));
     });
   }
@@ -109,10 +109,10 @@ abstract class _$EventCopyWith<$Res> implements $EventCopyWith<$Res> {
       EventName name,
       DateTime creationDate,
       EventDescription description,
-      BaseProfile owner});
+      Profile owner});
 
   @override
-  $BaseProfileCopyWith<$Res> get owner;
+  $ProfileCopyWith<$Res> get owner;
 }
 
 /// @nodoc
@@ -141,7 +141,7 @@ class __$EventCopyWithImpl<$Res> extends _$EventCopyWithImpl<$Res>
       description: description == freezed
           ? _value.description
           : description as EventDescription,
-      owner: owner == freezed ? _value.owner : owner as BaseProfile,
+      owner: owner == freezed ? _value.owner : owner as Profile,
     ));
   }
 }
@@ -169,7 +169,7 @@ class _$_Event implements _Event {
   @override
   final EventDescription description;
   @override
-  final BaseProfile owner;
+  final Profile owner;
 
   @override
   String toString() {
@@ -214,7 +214,7 @@ abstract class _Event implements Event {
       @required EventName name,
       @required DateTime creationDate,
       @required EventDescription description,
-      @required BaseProfile owner}) = _$_Event;
+      @required Profile owner}) = _$_Event;
 
   @override
   int get id;
@@ -225,7 +225,7 @@ abstract class _Event implements Event {
   @override
   EventDescription get description;
   @override
-  BaseProfile get owner;
+  Profile get owner;
   @override
   _$EventCopyWith<_Event> get copyWith;
 }

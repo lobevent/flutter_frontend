@@ -18,7 +18,7 @@ class _$PostTearOff {
       {@required int id,
       @required DateTime creationDate,
       @required PostContent postContent,
-      @required BaseProfile owner,
+      @required Profile owner,
       @required Event event,
       @required List<Comment> comments}) {
     return _Post(
@@ -41,7 +41,7 @@ mixin _$Post {
   int get id;
   DateTime get creationDate;
   PostContent get postContent;
-  BaseProfile get owner;
+  Profile get owner;
   Event get event;
   List<Comment> get comments;
 
@@ -56,11 +56,11 @@ abstract class $PostCopyWith<$Res> {
       {int id,
       DateTime creationDate,
       PostContent postContent,
-      BaseProfile owner,
+      Profile owner,
       Event event,
       List<Comment> comments});
 
-  $BaseProfileCopyWith<$Res> get owner;
+  $ProfileCopyWith<$Res> get owner;
   $EventCopyWith<$Res> get event;
 }
 
@@ -89,7 +89,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
       postContent: postContent == freezed
           ? _value.postContent
           : postContent as PostContent,
-      owner: owner == freezed ? _value.owner : owner as BaseProfile,
+      owner: owner == freezed ? _value.owner : owner as Profile,
       event: event == freezed ? _value.event : event as Event,
       comments:
           comments == freezed ? _value.comments : comments as List<Comment>,
@@ -97,11 +97,11 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
   }
 
   @override
-  $BaseProfileCopyWith<$Res> get owner {
+  $ProfileCopyWith<$Res> get owner {
     if (_value.owner == null) {
       return null;
     }
-    return $BaseProfileCopyWith<$Res>(_value.owner, (value) {
+    return $ProfileCopyWith<$Res>(_value.owner, (value) {
       return _then(_value.copyWith(owner: value));
     });
   }
@@ -126,12 +126,12 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       {int id,
       DateTime creationDate,
       PostContent postContent,
-      BaseProfile owner,
+      Profile owner,
       Event event,
       List<Comment> comments});
 
   @override
-  $BaseProfileCopyWith<$Res> get owner;
+  $ProfileCopyWith<$Res> get owner;
   @override
   $EventCopyWith<$Res> get event;
 }
@@ -162,7 +162,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
       postContent: postContent == freezed
           ? _value.postContent
           : postContent as PostContent,
-      owner: owner == freezed ? _value.owner : owner as BaseProfile,
+      owner: owner == freezed ? _value.owner : owner as Profile,
       event: event == freezed ? _value.event : event as Event,
       comments:
           comments == freezed ? _value.comments : comments as List<Comment>,
@@ -193,7 +193,7 @@ class _$_Post implements _Post {
   @override
   final PostContent postContent;
   @override
-  final BaseProfile owner;
+  final Profile owner;
   @override
   final Event event;
   @override
@@ -245,7 +245,7 @@ abstract class _Post implements Post {
       {@required int id,
       @required DateTime creationDate,
       @required PostContent postContent,
-      @required BaseProfile owner,
+      @required Profile owner,
       @required Event event,
       @required List<Comment> comments}) = _$_Post;
 
@@ -256,7 +256,7 @@ abstract class _Post implements Post {
   @override
   PostContent get postContent;
   @override
-  BaseProfile get owner;
+  Profile get owner;
   @override
   Event get event;
   @override

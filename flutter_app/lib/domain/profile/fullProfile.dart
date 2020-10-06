@@ -1,4 +1,6 @@
+import 'package:flutter_frontend/domain/comment/comment.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/profile/baseProfile.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -8,7 +10,7 @@ part 'fullProfile.freezed.dart';
 @freezed
 abstract class FullProfile extends BaseProfile with _$FullProfile {
   const factory FullProfile({
-    @override @required int id,
+    @required int id,
     @required ProfileName name,
     @required List<UsrEvntStats> userEventStatus,
     @required List<Event> ownedEvents,

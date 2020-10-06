@@ -66,6 +66,7 @@ class Friendship2 extends ValueObject<String> {
   const Friendship2._(this.value);
 }
 
+/*
 class Post extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
@@ -78,6 +79,7 @@ class Post extends ValueObject<String> {
   const Post._(this.value);
 }
 
+
 class Comment extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
@@ -89,3 +91,5 @@ class Comment extends ValueObject<String> {
   }
   const Comment._(this.value);
 }
+
+ */

@@ -221,7 +221,7 @@ class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_Comment implements _Comment {
+class _$_Comment extends _Comment {
   const _$_Comment(
       {@required this.id,
       @required this.creationDate,
@@ -237,7 +237,8 @@ class _$_Comment implements _Comment {
         assert(owner != null),
         assert(event != null),
         assert(post != null),
-        assert(commentParent != null);
+        assert(commentParent != null),
+        super._();
 
   @override
   final int id;
@@ -304,7 +305,8 @@ class _$_Comment implements _Comment {
       __$CommentCopyWithImpl<_Comment>(this, _$identity);
 }
 
-abstract class _Comment implements Comment {
+abstract class _Comment extends Comment {
+  const _Comment._() : super._();
   const factory _Comment(
       {@required int id,
       @required DateTime creationDate,

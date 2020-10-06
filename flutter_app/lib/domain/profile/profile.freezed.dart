@@ -159,10 +159,11 @@ class __$BaseProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_BaseProfile implements _BaseProfile {
+class _$_BaseProfile extends _BaseProfile {
   const _$_BaseProfile({@required this.id, @required this.name})
       : assert(id != null),
-        assert(name != null);
+        assert(name != null),
+        super._();
 
   @override
   final int id;
@@ -264,7 +265,8 @@ class _$_BaseProfile implements _BaseProfile {
   }
 }
 
-abstract class _BaseProfile implements Profile {
+abstract class _BaseProfile extends Profile {
+  const _BaseProfile._() : super._();
   const factory _BaseProfile({@required int id, @required ProfileName name}) =
       _$_BaseProfile;
 
@@ -342,7 +344,7 @@ class __$FulllProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_FulllProfile implements _FulllProfile {
+class _$_FulllProfile extends _FulllProfile {
   const _$_FulllProfile(
       {@required this.id,
       @required this.name,
@@ -361,7 +363,8 @@ class _$_FulllProfile implements _FulllProfile {
         assert(friendships != null),
         assert(friendships2 != null),
         assert(posts != null),
-        assert(comments != null);
+        assert(comments != null),
+        super._();
 
   @override
   final int id;
@@ -506,7 +509,8 @@ class _$_FulllProfile implements _FulllProfile {
   }
 }
 
-abstract class _FulllProfile implements Profile {
+abstract class _FulllProfile extends Profile {
+  const _FulllProfile._() : super._();
   const factory _FulllProfile(
       {@required int id,
       @required ProfileName name,

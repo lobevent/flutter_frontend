@@ -147,7 +147,7 @@ class __$EventCopyWithImpl<$Res> extends _$EventCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_Event implements _Event {
+class _$_Event extends _Event {
   const _$_Event(
       {@required this.id,
       @required this.name,
@@ -158,7 +158,8 @@ class _$_Event implements _Event {
         assert(name != null),
         assert(creationDate != null),
         assert(description != null),
-        assert(owner != null);
+        assert(owner != null),
+        super._();
 
   @override
   final int id;
@@ -208,7 +209,8 @@ class _$_Event implements _Event {
       __$EventCopyWithImpl<_Event>(this, _$identity);
 }
 
-abstract class _Event implements Event {
+abstract class _Event extends Event {
+  const _Event._() : super._();
   const factory _Event(
       {@required int id,
       @required EventName name,

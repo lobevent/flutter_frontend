@@ -171,7 +171,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_Post implements _Post {
+class _$_Post extends _Post {
   const _$_Post(
       {@required this.id,
       @required this.creationDate,
@@ -184,7 +184,8 @@ class _$_Post implements _Post {
         assert(postContent != null),
         assert(owner != null),
         assert(event != null),
-        assert(comments != null);
+        assert(comments != null),
+        super._();
 
   @override
   final int id;
@@ -240,7 +241,8 @@ class _$_Post implements _Post {
       __$PostCopyWithImpl<_Post>(this, _$identity);
 }
 
-abstract class _Post implements Post {
+abstract class _Post extends Post {
+  const _Post._() : super._();
   const factory _Post(
       {@required int id,
       @required DateTime creationDate,

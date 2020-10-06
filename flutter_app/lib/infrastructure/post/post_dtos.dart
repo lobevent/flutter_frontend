@@ -27,7 +27,7 @@ abstract class PostDto implements _$PostDto {
       id: post.id,
       creationDate: post.creationDate,
       postContent: post.postContent.getOrCrash(),
-      owner: post.owner,
+      owner: post.owner, // TODO this needs a string as argument (see unnamed constructor above) but post.owner is of type profile as can be seen in the file: flutter_app/lib/domain/post/post.dart line 19 -> check types
       event: EventDto.fromDomain(post.event),
     );
   }

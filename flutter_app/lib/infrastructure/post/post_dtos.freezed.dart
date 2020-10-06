@@ -22,7 +22,7 @@ class _$PostDtoTearOff {
       @required DateTime creationDate,
       @required String postContent,
       @required String owner,
-      @required String event}) {
+      @required EventDto event}) {
     return _PostDto(
       id: id,
       creationDate: creationDate,
@@ -48,7 +48,7 @@ mixin _$PostDto {
   DateTime get creationDate;
   String get postContent;
   String get owner;
-  String get event;
+  EventDto get event;
 
   Map<String, dynamic> toJson();
   $PostDtoCopyWith<PostDto> get copyWith;
@@ -63,7 +63,9 @@ abstract class $PostDtoCopyWith<$Res> {
       DateTime creationDate,
       String postContent,
       String owner,
-      String event});
+      EventDto event});
+
+  $EventDtoCopyWith<$Res> get event;
 }
 
 /// @nodoc
@@ -90,8 +92,18 @@ class _$PostDtoCopyWithImpl<$Res> implements $PostDtoCopyWith<$Res> {
       postContent:
           postContent == freezed ? _value.postContent : postContent as String,
       owner: owner == freezed ? _value.owner : owner as String,
-      event: event == freezed ? _value.event : event as String,
+      event: event == freezed ? _value.event : event as EventDto,
     ));
+  }
+
+  @override
+  $EventDtoCopyWith<$Res> get event {
+    if (_value.event == null) {
+      return null;
+    }
+    return $EventDtoCopyWith<$Res>(_value.event, (value) {
+      return _then(_value.copyWith(event: value));
+    });
   }
 }
 
@@ -105,7 +117,10 @@ abstract class _$PostDtoCopyWith<$Res> implements $PostDtoCopyWith<$Res> {
       DateTime creationDate,
       String postContent,
       String owner,
-      String event});
+      EventDto event});
+
+  @override
+  $EventDtoCopyWith<$Res> get event;
 }
 
 /// @nodoc
@@ -133,7 +148,7 @@ class __$PostDtoCopyWithImpl<$Res> extends _$PostDtoCopyWithImpl<$Res>
       postContent:
           postContent == freezed ? _value.postContent : postContent as String,
       owner: owner == freezed ? _value.owner : owner as String,
-      event: event == freezed ? _value.event : event as String,
+      event: event == freezed ? _value.event : event as EventDto,
     ));
   }
 }
@@ -141,7 +156,7 @@ class __$PostDtoCopyWithImpl<$Res> extends _$PostDtoCopyWithImpl<$Res>
 @JsonSerializable()
 
 /// @nodoc
-class _$_PostDto implements _PostDto {
+class _$_PostDto extends _PostDto {
   const _$_PostDto(
       {@required this.id,
       @required this.creationDate,
@@ -152,7 +167,8 @@ class _$_PostDto implements _PostDto {
         assert(creationDate != null),
         assert(postContent != null),
         assert(owner != null),
-        assert(event != null);
+        assert(event != null),
+        super._();
 
   factory _$_PostDto.fromJson(Map<String, dynamic> json) =>
       _$_$_PostDtoFromJson(json);
@@ -166,7 +182,7 @@ class _$_PostDto implements _PostDto {
   @override
   final String owner;
   @override
-  final String event;
+  final EventDto event;
 
   @override
   String toString() {
@@ -210,13 +226,14 @@ class _$_PostDto implements _PostDto {
   }
 }
 
-abstract class _PostDto implements PostDto {
+abstract class _PostDto extends PostDto {
+  const _PostDto._() : super._();
   const factory _PostDto(
       {@required int id,
       @required DateTime creationDate,
       @required String postContent,
       @required String owner,
-      @required String event}) = _$_PostDto;
+      @required EventDto event}) = _$_PostDto;
 
   factory _PostDto.fromJson(Map<String, dynamic> json) = _$_PostDto.fromJson;
 
@@ -229,7 +246,7 @@ abstract class _PostDto implements PostDto {
   @override
   String get owner;
   @override
-  String get event;
+  EventDto get event;
   @override
   _$PostDtoCopyWith<_PostDto> get copyWith;
 }

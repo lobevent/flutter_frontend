@@ -14,7 +14,9 @@ _$_PostDto _$_$_PostDtoFromJson(Map<String, dynamic> json) {
         : DateTime.parse(json['creationDate'] as String),
     postContent: json['postContent'] as String,
     owner: json['owner'] as String,
-    event: json['event'] as String,
+    event: json['event'] == null
+        ? null
+        : EventDto.fromJson(json['event'] as Map<String, dynamic>),
   );
 }
 

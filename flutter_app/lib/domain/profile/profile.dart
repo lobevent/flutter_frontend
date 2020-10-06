@@ -27,7 +27,7 @@ abstract class Profile implements _$Profile {
     @required List<Friendship2> friendships2,
     @required List<Post> posts,
     @required List<Comment> comments,
-  }) = _FulllProfile;
+  }) = _FullProfile;
 
 //check if the whole object is no failure
   Option<ValueFailure<dynamic>> get failureOption {

@@ -8,7 +8,7 @@ abstract class Event with _$Event {
     @required int id,
     @required EventName name,
     @required DateTime creationDate,
-    @required String description,
-    @required String owner,
+    @required EventDescription description,
+    @required Profile owner,
   }) = _Event;
 }

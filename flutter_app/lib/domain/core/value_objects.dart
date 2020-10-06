@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:meta/meta.dart';
 
 import 'failures.dart';
@@ -15,6 +16,14 @@ abstract class ValueObject<T>{
           (r) => right(unit),
     );
   }
+
+
+  /// Throws [UnexpectedValueError] containing the [ValueFailure]
+  T getOrCrash() {
+    // id = identity - same as writing (right) => right
+    return value.fold((f) => throw UnexpectedValueError(f), id);
+  }
+
 
   bool isValid() => value.isRight();
 

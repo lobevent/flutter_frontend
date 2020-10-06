@@ -12,9 +12,10 @@ abstract class Event implements _$Event {
   const factory Event({
     @required int id,
     @required EventName name,
-    @required DateTime creationDate,
+    @required DateTime date,
     @required EventDescription description,
     @required Profile owner,
+    @required bool public,
   }) = _Event;
 //check if the whole object is no failure
   Option<ValueFailure<dynamic>> get failureOption {

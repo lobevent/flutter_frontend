@@ -17,15 +17,17 @@ class _$EventTearOff {
   _Event call(
       {@required int id,
       @required EventName name,
-      @required DateTime creationDate,
+      @required DateTime date,
       @required EventDescription description,
-      @required Profile owner}) {
+      @required Profile owner,
+      @required bool public}) {
     return _Event(
       id: id,
       name: name,
-      creationDate: creationDate,
+      date: date,
       description: description,
       owner: owner,
+      public: public,
     );
   }
 }
@@ -38,9 +40,10 @@ const $Event = _$EventTearOff();
 mixin _$Event {
   int get id;
   EventName get name;
-  DateTime get creationDate;
+  DateTime get date;
   EventDescription get description;
   Profile get owner;
+  bool get public;
 
   $EventCopyWith<Event> get copyWith;
 }
@@ -52,9 +55,10 @@ abstract class $EventCopyWith<$Res> {
   $Res call(
       {int id,
       EventName name,
-      DateTime creationDate,
+      DateTime date,
       EventDescription description,
-      Profile owner});
+      Profile owner,
+      bool public});
 
   $ProfileCopyWith<$Res> get owner;
 }
@@ -71,20 +75,20 @@ class _$EventCopyWithImpl<$Res> implements $EventCopyWith<$Res> {
   $Res call({
     Object id = freezed,
     Object name = freezed,
-    Object creationDate = freezed,
+    Object date = freezed,
     Object description = freezed,
     Object owner = freezed,
+    Object public = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed ? _value.id : id as int,
       name: name == freezed ? _value.name : name as EventName,
-      creationDate: creationDate == freezed
-          ? _value.creationDate
-          : creationDate as DateTime,
+      date: date == freezed ? _value.date : date as DateTime,
       description: description == freezed
           ? _value.description
           : description as EventDescription,
       owner: owner == freezed ? _value.owner : owner as Profile,
+      public: public == freezed ? _value.public : public as bool,
     ));
   }
 
@@ -107,9 +111,10 @@ abstract class _$EventCopyWith<$Res> implements $EventCopyWith<$Res> {
   $Res call(
       {int id,
       EventName name,
-      DateTime creationDate,
+      DateTime date,
       EventDescription description,
-      Profile owner});
+      Profile owner,
+      bool public});
 
   @override
   $ProfileCopyWith<$Res> get owner;
@@ -128,20 +133,20 @@ class __$EventCopyWithImpl<$Res> extends _$EventCopyWithImpl<$Res>
   $Res call({
     Object id = freezed,
     Object name = freezed,
-    Object creationDate = freezed,
+    Object date = freezed,
     Object description = freezed,
     Object owner = freezed,
+    Object public = freezed,
   }) {
     return _then(_Event(
       id: id == freezed ? _value.id : id as int,
       name: name == freezed ? _value.name : name as EventName,
-      creationDate: creationDate == freezed
-          ? _value.creationDate
-          : creationDate as DateTime,
+      date: date == freezed ? _value.date : date as DateTime,
       description: description == freezed
           ? _value.description
           : description as EventDescription,
       owner: owner == freezed ? _value.owner : owner as Profile,
+      public: public == freezed ? _value.public : public as bool,
     ));
   }
 }
@@ -151,14 +156,16 @@ class _$_Event extends _Event {
   const _$_Event(
       {@required this.id,
       @required this.name,
-      @required this.creationDate,
+      @required this.date,
       @required this.description,
-      @required this.owner})
+      @required this.owner,
+      @required this.public})
       : assert(id != null),
         assert(name != null),
-        assert(creationDate != null),
+        assert(date != null),
         assert(description != null),
         assert(owner != null),
+        assert(public != null),
         super._();
 
   @override
@@ -166,15 +173,17 @@ class _$_Event extends _Event {
   @override
   final EventName name;
   @override
-  final DateTime creationDate;
+  final DateTime date;
   @override
   final EventDescription description;
   @override
   final Profile owner;
+  @override
+  final bool public;
 
   @override
   String toString() {
-    return 'Event(id: $id, name: $name, creationDate: $creationDate, description: $description, owner: $owner)';
+    return 'Event(id: $id, name: $name, date: $date, description: $description, owner: $owner, public: $public)';
   }
 
   @override
@@ -185,14 +194,15 @@ class _$_Event extends _Event {
                 const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.creationDate, creationDate) ||
-                const DeepCollectionEquality()
-                    .equals(other.creationDate, creationDate)) &&
+            (identical(other.date, date) ||
+                const DeepCollectionEquality().equals(other.date, date)) &&
             (identical(other.description, description) ||
                 const DeepCollectionEquality()
                     .equals(other.description, description)) &&
             (identical(other.owner, owner) ||
-                const DeepCollectionEquality().equals(other.owner, owner)));
+                const DeepCollectionEquality().equals(other.owner, owner)) &&
+            (identical(other.public, public) ||
+                const DeepCollectionEquality().equals(other.public, public)));
   }
 
   @override
@@ -200,9 +210,10 @@ class _$_Event extends _Event {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(name) ^
-      const DeepCollectionEquality().hash(creationDate) ^
+      const DeepCollectionEquality().hash(date) ^
       const DeepCollectionEquality().hash(description) ^
-      const DeepCollectionEquality().hash(owner);
+      const DeepCollectionEquality().hash(owner) ^
+      const DeepCollectionEquality().hash(public);
 
   @override
   _$EventCopyWith<_Event> get copyWith =>
@@ -214,20 +225,23 @@ abstract class _Event extends Event {
   const factory _Event(
       {@required int id,
       @required EventName name,
-      @required DateTime creationDate,
+      @required DateTime date,
       @required EventDescription description,
-      @required Profile owner}) = _$_Event;
+      @required Profile owner,
+      @required bool public}) = _$_Event;
 
   @override
   int get id;
   @override
   EventName get name;
   @override
-  DateTime get creationDate;
+  DateTime get date;
   @override
   EventDescription get description;
   @override
   Profile get owner;
+  @override
+  bool get public;
   @override
   _$EventCopyWith<_Event> get copyWith;
 }

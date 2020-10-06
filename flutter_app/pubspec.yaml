@@ -23,6 +23,6 @@ dev_dependencies:
     sdk: flutter
   build_runner:
   freezed: ^0.12.1
-
+  json_serializable: ^3.5.0
 flutter:
   uses-material-design: true

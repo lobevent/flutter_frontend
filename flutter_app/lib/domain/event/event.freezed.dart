@@ -14,10 +14,18 @@ class _$EventTearOff {
   const _$EventTearOff();
 
 // ignore: unused_element
-  _Event call({@required int Id, @required String content}) {
+  _Event call(
+      {@required int id,
+      @required String name,
+      @required DateTime creationDate,
+      @required String description,
+      @required String owner}) {
     return _Event(
-      Id: Id,
-      content: content,
+      id: id,
+      name: name,
+      creationDate: creationDate,
+      description: description,
+      owner: owner,
     );
   }
 }
@@ -28,8 +36,11 @@ const $Event = _$EventTearOff();
 
 /// @nodoc
 mixin _$Event {
-  int get Id;
-  String get content;
+  int get id;
+  String get name;
+  DateTime get creationDate;
+  String get description;
+  String get owner;
 
   $EventCopyWith<Event> get copyWith;
 }
@@ -38,7 +49,12 @@ mixin _$Event {
 abstract class $EventCopyWith<$Res> {
   factory $EventCopyWith(Event value, $Res Function(Event) then) =
       _$EventCopyWithImpl<$Res>;
-  $Res call({int Id, String content});
+  $Res call(
+      {int id,
+      String name,
+      DateTime creationDate,
+      String description,
+      String owner});
 }
 
 /// @nodoc
@@ -51,12 +67,21 @@ class _$EventCopyWithImpl<$Res> implements $EventCopyWith<$Res> {
 
   @override
   $Res call({
-    Object Id = freezed,
-    Object content = freezed,
+    Object id = freezed,
+    Object name = freezed,
+    Object creationDate = freezed,
+    Object description = freezed,
+    Object owner = freezed,
   }) {
     return _then(_value.copyWith(
-      Id: Id == freezed ? _value.Id : Id as int,
-      content: content == freezed ? _value.content : content as String,
+      id: id == freezed ? _value.id : id as int,
+      name: name == freezed ? _value.name : name as String,
+      creationDate: creationDate == freezed
+          ? _value.creationDate
+          : creationDate as DateTime,
+      description:
+          description == freezed ? _value.description : description as String,
+      owner: owner == freezed ? _value.owner : owner as String,
     ));
   }
 }
@@ -66,7 +91,12 @@ abstract class _$EventCopyWith<$Res> implements $EventCopyWith<$Res> {
   factory _$EventCopyWith(_Event value, $Res Function(_Event) then) =
       __$EventCopyWithImpl<$Res>;
   @override
-  $Res call({int Id, String content});
+  $Res call(
+      {int id,
+      String name,
+      DateTime creationDate,
+      String description,
+      String owner});
 }
 
 /// @nodoc
@@ -80,47 +110,81 @@ class __$EventCopyWithImpl<$Res> extends _$EventCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object Id = freezed,
-    Object content = freezed,
+    Object id = freezed,
+    Object name = freezed,
+    Object creationDate = freezed,
+    Object description = freezed,
+    Object owner = freezed,
   }) {
     return _then(_Event(
-      Id: Id == freezed ? _value.Id : Id as int,
-      content: content == freezed ? _value.content : content as String,
+      id: id == freezed ? _value.id : id as int,
+      name: name == freezed ? _value.name : name as String,
+      creationDate: creationDate == freezed
+          ? _value.creationDate
+          : creationDate as DateTime,
+      description:
+          description == freezed ? _value.description : description as String,
+      owner: owner == freezed ? _value.owner : owner as String,
     ));
   }
 }
 
 /// @nodoc
 class _$_Event implements _Event {
-  const _$_Event({@required this.Id, @required this.content})
-      : assert(Id != null),
-        assert(content != null);
+  const _$_Event(
+      {@required this.id,
+      @required this.name,
+      @required this.creationDate,
+      @required this.description,
+      @required this.owner})
+      : assert(id != null),
+        assert(name != null),
+        assert(creationDate != null),
+        assert(description != null),
+        assert(owner != null);
 
   @override
-  final int Id;
+  final int id;
   @override
-  final String content;
+  final String name;
+  @override
+  final DateTime creationDate;
+  @override
+  final String description;
+  @override
+  final String owner;
 
   @override
   String toString() {
-    return 'Event(Id: $Id, content: $content)';
+    return 'Event(id: $id, name: $name, creationDate: $creationDate, description: $description, owner: $owner)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _Event &&
-            (identical(other.Id, Id) ||
-                const DeepCollectionEquality().equals(other.Id, Id)) &&
-            (identical(other.content, content) ||
-                const DeepCollectionEquality().equals(other.content, content)));
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.name, name) ||
+                const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.creationDate, creationDate) ||
+                const DeepCollectionEquality()
+                    .equals(other.creationDate, creationDate)) &&
+            (identical(other.description, description) ||
+                const DeepCollectionEquality()
+                    .equals(other.description, description)) &&
+            (identical(other.owner, owner) ||
+                const DeepCollectionEquality().equals(other.owner, owner)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(Id) ^
-      const DeepCollectionEquality().hash(content);
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(name) ^
+      const DeepCollectionEquality().hash(creationDate) ^
+      const DeepCollectionEquality().hash(description) ^
+      const DeepCollectionEquality().hash(owner);
 
   @override
   _$EventCopyWith<_Event> get copyWith =>
@@ -128,12 +192,23 @@ class _$_Event implements _Event {
 }
 
 abstract class _Event implements Event {
-  const factory _Event({@required int Id, @required String content}) = _$_Event;
+  const factory _Event(
+      {@required int id,
+      @required String name,
+      @required DateTime creationDate,
+      @required String description,
+      @required String owner}) = _$_Event;
 
   @override
-  int get Id;
+  int get id;
   @override
-  String get content;
+  String get name;
+  @override
+  DateTime get creationDate;
+  @override
+  String get description;
+  @override
+  String get owner;
   @override
   _$EventCopyWith<_Event> get copyWith;
 }

@@ -9,6 +9,13 @@ abstract class ValueObject<T>{
   const ValueObject();
   Either<ValueFailure<T>, T> get value;
 
+  Either<ValueFailure<dynamic>, Unit> get failureOrUnit {
+    return value.fold(
+          (l) => left(l),
+          (r) => right(unit),
+    );
+  }
+
   bool isValid() => value.isRight();
 
   @override

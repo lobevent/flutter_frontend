@@ -19,9 +19,14 @@ abstract class Comment implements _$Comment {
     @required Profile owner,
     @required Event event,
     @required Post post,
-    @required Comment commentParent,
-    List<Comment> commentChilds,
+    Either<_CommentParent, Unit> commentParent,
+    Either<Either<int, List<Comment>>, Unit> commentChildren,
   }) = _Comment;
+
+  const factory Comment.parent({
+    @required int id,
+  }) = _CommentParent;
+
 //check if the whole object is no failure
   Option<ValueFailure<dynamic>> get failureOption {
     return commentContent.failureOrUnit.fold((f) => some(f), (_) => none());

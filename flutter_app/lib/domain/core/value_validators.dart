@@ -45,7 +45,7 @@ Either<ValueFailure<String>, String> validateDate(String input) {
   // check if the date isin valid format
   //TODO: idk if this is right, might be fucked up somehow
   DateTime validDate = DateTime.parse(input);
-  if (validDate.isAfter(DateTime.now())) {
+  if (validDate.isAfter(DateTime.now()) || isValidDate(validDate.toString())) {
     return right(input);
   } else {
     return left(ValueFailure.invalidDate(failedValue: input));
@@ -55,4 +55,19 @@ Either<ValueFailure<String>, String> validateDate(String input) {
 Either<ValueFailure<String>, String> doNothing(String input) {
   // if u dont need to validate some object
   return right(input);
+}
+
+bool isValidDate(String input) {
+  final date = DateTime.parse(input);
+  final originalString = toOriginalString(date);
+
+  return input == originalString;
+}
+
+String toOriginalString(DateTime dateTime) {
+  //dates with format yyyy.mm.dd please
+  final y = dateTime.year.toString().padLeft(4, '0');
+  final m = dateTime.month.toString().padLeft(2, '0');
+  final d = dateTime.day.toString().padLeft(2, '0');
+  return "$y$m$d";
 }

@@ -16,6 +16,6 @@ abstract class Comment with _$Comment {
     @required Event event,
     @required Post post,
     @required Comment commentParent,
-    @required List<Comment> commentChilds,
+    List<Comment> commentChilds,
   }) = _Comment;
 }

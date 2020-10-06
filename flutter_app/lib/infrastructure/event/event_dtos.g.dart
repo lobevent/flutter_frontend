@@ -13,6 +13,9 @@ _$_EventDto _$_$_EventDtoFromJson(Map<String, dynamic> json) {
     public: json['public'] as bool,
     description: json['description'] as String,
     date: json['date'] == null ? null : DateTime.parse(json['date'] as String),
+    creationDate: json['creationDate'] == null
+        ? null
+        : DateTime.parse(json['creationDate'] as String),
   );
 }
 
@@ -23,4 +26,5 @@ Map<String, dynamic> _$_$_EventDtoToJson(_$_EventDto instance) =>
       'public': instance.public,
       'description': instance.description,
       'date': instance.date?.toIso8601String(),
+      'creationDate': instance.creationDate?.toIso8601String(),
     };

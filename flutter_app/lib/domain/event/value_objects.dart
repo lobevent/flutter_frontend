@@ -17,3 +17,19 @@ class EventName extends ValueObject<String> {
   }
   const EventName._(this.value);
 }
+
+class EventDescription extends ValueObject<String> {
+  @override
+  final Either<ValueFailure<String>, String> value;
+
+  static int maxLength;
+
+  factory EventDescription(String input) {
+    assert(input != null);
+    {
+      return EventDescription._(
+          validateLength(input, maxLength).flatMap((a) => null));
+    }
+  }
+  const EventDescription._(this.value);
+}

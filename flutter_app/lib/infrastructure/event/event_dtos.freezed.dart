@@ -129,7 +129,7 @@ class __$EventDtoCopyWithImpl<$Res> extends _$EventDtoCopyWithImpl<$Res>
 @JsonSerializable()
 
 /// @nodoc
-class _$_EventDto implements _EventDto {
+class _$_EventDto extends _EventDto {
   _$_EventDto(
       {@required this.id,
       @required this.name,
@@ -140,7 +140,8 @@ class _$_EventDto implements _EventDto {
         assert(name != null),
         assert(public != null),
         assert(description != null),
-        assert(date != null);
+        assert(date != null),
+        super._();
 
   factory _$_EventDto.fromJson(Map<String, dynamic> json) =>
       _$_$_EventDtoFromJson(json);
@@ -197,7 +198,8 @@ class _$_EventDto implements _EventDto {
   }
 }
 
-abstract class _EventDto implements EventDto {
+abstract class _EventDto extends EventDto {
+  _EventDto._() : super._();
   factory _EventDto(
       {@required int id,
       @required String name,

@@ -10,6 +10,8 @@ part 'post_dtos.g.dart';
 
 @freezed
 abstract class PostDto implements _$PostDto {
+  const PostDto._();
+
   const factory PostDto({
     @required int id,
     @required DateTime creationDate,
@@ -36,7 +38,7 @@ abstract class PostDto implements _$PostDto {
       id: id,
       creationDate: creationDate,
       postContent: PostContent(postContent),
-      owner: Profile(id:0,null), //TODO
+      owner: Profile(id: 0, name: null), //TODO
       event: Event(event),
     );
   }

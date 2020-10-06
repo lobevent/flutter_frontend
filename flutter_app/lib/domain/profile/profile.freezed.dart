@@ -22,7 +22,7 @@ class _$ProfileTearOff {
   }
 
 // ignore: unused_element
-  _FulllProfile full(
+  _FullProfile full(
       {@required int id,
       @required ProfileName name,
       @required List<UsrEvntStats> userEventStatus,
@@ -32,7 +32,7 @@ class _$ProfileTearOff {
       @required List<Friendship2> friendships2,
       @required List<Post> posts,
       @required List<Comment> comments}) {
-    return _FulllProfile(
+    return _FullProfile(
       id: id,
       name: name,
       userEventStatus: userEventStatus,
@@ -88,12 +88,12 @@ mixin _$Profile {
   @optionalTypeArgs
   Result map<Result extends Object>(
     Result $default(_BaseProfile value), {
-    @required Result full(_FulllProfile value),
+    @required Result full(_FullProfile value),
   });
   @optionalTypeArgs
   Result maybeMap<Result extends Object>(
     Result $default(_BaseProfile value), {
-    Result full(_FulllProfile value),
+    Result full(_FullProfile value),
     @required Result orElse(),
   });
 
@@ -243,7 +243,7 @@ class _$_BaseProfile extends _BaseProfile {
   @optionalTypeArgs
   Result map<Result extends Object>(
     Result $default(_BaseProfile value), {
-    @required Result full(_FulllProfile value),
+    @required Result full(_FullProfile value),
   }) {
     assert($default != null);
     assert(full != null);
@@ -254,7 +254,7 @@ class _$_BaseProfile extends _BaseProfile {
   @optionalTypeArgs
   Result maybeMap<Result extends Object>(
     Result $default(_BaseProfile value), {
-    Result full(_FulllProfile value),
+    Result full(_FullProfile value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -279,10 +279,10 @@ abstract class _BaseProfile extends Profile {
 }
 
 /// @nodoc
-abstract class _$FulllProfileCopyWith<$Res> implements $ProfileCopyWith<$Res> {
-  factory _$FulllProfileCopyWith(
-          _FulllProfile value, $Res Function(_FulllProfile) then) =
-      __$FulllProfileCopyWithImpl<$Res>;
+abstract class _$FullProfileCopyWith<$Res> implements $ProfileCopyWith<$Res> {
+  factory _$FullProfileCopyWith(
+          _FullProfile value, $Res Function(_FullProfile) then) =
+      __$FullProfileCopyWithImpl<$Res>;
   @override
   $Res call(
       {int id,
@@ -297,14 +297,14 @@ abstract class _$FulllProfileCopyWith<$Res> implements $ProfileCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$FulllProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
-    implements _$FulllProfileCopyWith<$Res> {
-  __$FulllProfileCopyWithImpl(
-      _FulllProfile _value, $Res Function(_FulllProfile) _then)
-      : super(_value, (v) => _then(v as _FulllProfile));
+class __$FullProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
+    implements _$FullProfileCopyWith<$Res> {
+  __$FullProfileCopyWithImpl(
+      _FullProfile _value, $Res Function(_FullProfile) _then)
+      : super(_value, (v) => _then(v as _FullProfile));
 
   @override
-  _FulllProfile get _value => super._value as _FulllProfile;
+  _FullProfile get _value => super._value as _FullProfile;
 
   @override
   $Res call({
@@ -318,7 +318,7 @@ class __$FulllProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
     Object posts = freezed,
     Object comments = freezed,
   }) {
-    return _then(_FulllProfile(
+    return _then(_FullProfile(
       id: id == freezed ? _value.id : id as int,
       name: name == freezed ? _value.name : name as ProfileName,
       userEventStatus: userEventStatus == freezed
@@ -344,8 +344,8 @@ class __$FulllProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_FulllProfile extends _FulllProfile {
-  const _$_FulllProfile(
+class _$_FullProfile extends _FullProfile {
+  const _$_FullProfile(
       {@required this.id,
       @required this.name,
       @required this.userEventStatus,
@@ -393,7 +393,7 @@ class _$_FulllProfile extends _FulllProfile {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _FulllProfile &&
+        (other is _FullProfile &&
             (identical(other.id, id) ||
                 const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.name, name) ||
@@ -434,8 +434,8 @@ class _$_FulllProfile extends _FulllProfile {
       const DeepCollectionEquality().hash(comments);
 
   @override
-  _$FulllProfileCopyWith<_FulllProfile> get copyWith =>
-      __$FulllProfileCopyWithImpl<_FulllProfile>(this, _$identity);
+  _$FullProfileCopyWith<_FullProfile> get copyWith =>
+      __$FullProfileCopyWithImpl<_FullProfile>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -487,7 +487,7 @@ class _$_FulllProfile extends _FulllProfile {
   @optionalTypeArgs
   Result map<Result extends Object>(
     Result $default(_BaseProfile value), {
-    @required Result full(_FulllProfile value),
+    @required Result full(_FullProfile value),
   }) {
     assert($default != null);
     assert(full != null);
@@ -498,7 +498,7 @@ class _$_FulllProfile extends _FulllProfile {
   @optionalTypeArgs
   Result maybeMap<Result extends Object>(
     Result $default(_BaseProfile value), {
-    Result full(_FulllProfile value),
+    Result full(_FullProfile value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -509,9 +509,9 @@ class _$_FulllProfile extends _FulllProfile {
   }
 }
 
-abstract class _FulllProfile extends Profile {
-  const _FulllProfile._() : super._();
-  const factory _FulllProfile(
+abstract class _FullProfile extends Profile {
+  const _FullProfile._() : super._();
+  const factory _FullProfile(
       {@required int id,
       @required ProfileName name,
       @required List<UsrEvntStats> userEventStatus,
@@ -520,7 +520,7 @@ abstract class _FulllProfile extends Profile {
       @required List<Friendship> friendships,
       @required List<Friendship2> friendships2,
       @required List<Post> posts,
-      @required List<Comment> comments}) = _$_FulllProfile;
+      @required List<Comment> comments}) = _$_FullProfile;
 
   @override
   int get id;
@@ -534,5 +534,5 @@ abstract class _FulllProfile extends Profile {
   List<Post> get posts;
   List<Comment> get comments;
   @override
-  _$FulllProfileCopyWith<_FulllProfile> get copyWith;
+  _$FullProfileCopyWith<_FullProfile> get copyWith;
 }

@@ -130,7 +130,7 @@ class __$EventDtoCopyWithImpl<$Res> extends _$EventDtoCopyWithImpl<$Res>
 
 /// @nodoc
 class _$_EventDto extends _EventDto {
-  _$_EventDto(
+  const _$_EventDto(
       {@required this.id,
       @required this.name,
       @required this.public,
@@ -199,8 +199,8 @@ class _$_EventDto extends _EventDto {
 }
 
 abstract class _EventDto extends EventDto {
-  _EventDto._() : super._();
-  factory _EventDto(
+  const _EventDto._() : super._();
+  const factory _EventDto(
       {@required int id,
       @required String name,
       @required bool public,

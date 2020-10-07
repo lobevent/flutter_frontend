@@ -5,14 +5,15 @@ import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:http/http.dart';
 
 class SymfonyCommunicator{
-  final Client client;
+  final Client client = Client();
   final String url = "ourUrl.com";
   final Map<String, String> headers;
 
-  SymfonyCommunicator({@required this.client, @required String jwt})
+  SymfonyCommunicator({@required String jwt})
     : assert(client != null, "client must be given"),
       assert(jwt != null, "jwt must be given"),
       headers = {"Authentication": "Baerer $jwt"};
+
 
   /// Get an resource with uri.
   /// Throws [NotAuthenticatedError], [NotAuthorizedError], [NotFoundError], [InternalServerError]

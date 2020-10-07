@@ -19,13 +19,13 @@ abstract class Comment implements _$Comment {
     @required Profile owner,
     @required Event event,
     @required int post,
-    Either<_CommentParent, Unit> commentParent,
+    Either<CommentParent, Unit> commentParent,
     Either<Either<int, List<Comment>>, Unit> commentChildren,
   }) = CommentFull;
 
   const factory Comment.parent({
     @required int id,
-  }) = _CommentParent;
+  }) = CommentParent;
 
 //check if the whole object is no failure
   Option<ValueFailure<dynamic>> get failureOption {

@@ -18,10 +18,10 @@ abstract class Comment implements _$Comment {
     @required CommentContent commentContent,
     @required Profile owner,
     @required Event event,
-    @required Post post,
+    @required int post,
     Either<_CommentParent, Unit> commentParent,
     Either<Either<int, List<Comment>>, Unit> commentChildren,
-  }) = _Comment;
+  }) = CommentFull;
 
   const factory Comment.parent({
     @required int id,
@@ -29,6 +29,9 @@ abstract class Comment implements _$Comment {
 
 //check if the whole object is no failure
   Option<ValueFailure<dynamic>> get failureOption {
-    return commentContent.failureOrUnit.fold((f) => some(f), (_) => none());
+    return maybeMap(
+            (CommentFull value) => value.commentContent.failureOrUnit.fold((f) => some(f), (_) => none()),
+            orElse: () => none());
+
   }
 }

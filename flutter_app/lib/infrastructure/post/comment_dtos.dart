@@ -22,7 +22,7 @@ abstract class CommentDto with _$CommentDto {
     @required int id,
     @required String commentContent,
     @required DateTime creationDate,
-    @required ProfileDto profile,
+    @required ProfileDto profile, //TODO: make it an integer
     @required @ParentConverter() Either<CommentDto, Unit> commentParent,
     @required int post,
     @ChildrenConverter() Either<int, Unit> commentChildren,
@@ -83,6 +83,13 @@ abstract class CommentDto with _$CommentDto {
   }
 }
 
+
+
+
+
+
+
+
 ///converts the Either type from and to json for comment children
 class ChildrenConverter implements JsonConverter<Either<int, Unit>, Object> {
   const ChildrenConverter();
@@ -109,6 +116,14 @@ class ChildrenConverter implements JsonConverter<Either<int, Unit>, Object> {
     throw UnimplementedError();
   }
 }
+
+
+
+
+
+
+
+
 
 ///converts the Either type from and to json for comment parent
 class ParentConverter

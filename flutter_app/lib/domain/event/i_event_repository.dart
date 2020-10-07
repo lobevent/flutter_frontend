@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 
+
 import '../profile/profile.dart';
 import 'event.dart';
 import 'event_failure.dart';

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 
+import '../profile/profile.dart';
 import 'post_failure.dart';
 import 'post.dart';
 

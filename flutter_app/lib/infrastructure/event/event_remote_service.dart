@@ -11,6 +11,8 @@ class EventRemoteService{
   final String _PROFILEEVENTPATH = "/user/events";
   final String _ATTENDINGEVENTSPATH = "/user/eventStatus";
   final String _UNREACTEDEVENTSPATH = "/event";
+  final String _POSTPATH = "/event";
+  final String _DELETEPATH = "/event/";
 
 
   SymfonyCommunicator client;
@@ -19,7 +21,7 @@ class EventRemoteService{
     client = SymfonyCommunicator(jwt: null);
   }
 
-  Future<EventDto> getSingleEvent(int id) async{
+  Future<EventDto> getSingle(int id) async{
       String uri = _EVENTBYIDPATH+id.toString();
       Response response = await client.get(uri);
       EventDto eventDto =
@@ -27,20 +29,30 @@ class EventRemoteService{
       return eventDto;
   }
 
-  Future<List<EventDto>> getOwnedEvents() async{
+  Future<List<EventDto>> getOwned() async{
     return _getEventList(_OWNEDEVENTSPATH);
   }
 
-  Future<List<EventDto>> getAttendingEvents() async{
+  Future<List<EventDto>> getAttending() async{
     return _getEventList(_ATTENDINGEVENTSPATH);
   }
 
-  Future<List<EventDto>> getUnreactedEvents() async{
+  Future<List<EventDto>> getUnreacted() async{
     return _getEventList(_UNREACTEDEVENTSPATH);
   }
 
-  Future<>
+  void create(EventDto event) async {
+    client.post(_POSTPATH, event.toJson());
+  }
 
+  void delete(EventDto event) async {
+    client.delete(_DELETEPATH + event.id.toString());
+  }
+  
+  void update(EventDto event) async {
+    //    client.put(uri, body)
+    throw UnimplementedError();
+  }
 
 
 

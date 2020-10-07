@@ -14,10 +14,13 @@ jobs:
         uses: subosito/flutter-action@v1.3.2
         with:
           channel: stable
-      - name: Run pub get, run tests and build for Android & iOS
+      - name: Run dartanalyzer, pub get, tests and build for Android & iOS
         run: |
           cd flutter_app
+          flutter --version
           flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+          dartanalyzer --no-hints lib test
           flutter test --no-pub --coverage
           flutter build appbundle
           flutter build ios --no-codesign

@@ -1,0 +1,3 @@
+class EventRemoteService{
+//Rest API
+}

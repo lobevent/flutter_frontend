@@ -17,7 +17,6 @@ abstract class Comment implements _$Comment {
     @required DateTime creationDate,
     @required CommentContent commentContent,
     @required Profile owner,
-    @required Event event,
     @required int post,
     Either<CommentParent, Unit> commentParent,
     Either<Either<int, List<Comment>>, Unit> commentChildren,

@@ -23,28 +23,32 @@ abstract class CommentDto with _$CommentDto {
     @required String commentContent,
     @required DateTime creationDate,
     @required ProfileDto profile,
-    @required EventDto event,
     @required @ParentConverter() Either<CommentDto, Unit> commentParent,
     @required int post,
     @ChildrenConverter() Either<int, Unit> commentChildren,
   }) = _CommentDto;
 
+  ///generate dto from domain, respecting the different union cases
+  ///
+  /// map comment to parent or to full and generate the dto respectively
   factory CommentDto.fromDomain(Comment comment) {
     CommentDto returnedDto;
+    //distinguish between the two Comment options
     comment.map(
-        (CommentFull comment) => {
+        (CommentFull comment) => { //the full case
               returnedDto = CommentDto(
                 id: comment.id,
                 creationDate: comment.creationDate,
                 profile: ProfileDto.fromDomain(comment.owner),
-                event: EventDto.fromDomain(comment.event),
                 commentContent: comment.commentContent.getOrCrash(),
                 post: comment.post,
+                //fold for the Either type
                 commentParent: comment.commentParent.fold(
                     (l) => left(CommentDto.fromDomain(l)), (r) => right(r)),
+                //leave out children, as they arent used in to Api communication
               ),
             },
-        parent: (CommentParent comment) => {
+        parent: (CommentParent comment) => { //the parent case
               returnedDto = CommentDto.parent(id: comment.id),
             });
 
@@ -54,6 +58,9 @@ abstract class CommentDto with _$CommentDto {
   factory CommentDto.fromJson(Map<String, dynamic> json) =>
       _$CommentDtoFromJson(json);
 
+  ///generate dto from domain, respecting the different union cases
+  ///
+  /// map comment to parent or to full and generate the entity respectively
   Comment toDomain() {
     Comment returnedComment;
     map(
@@ -63,8 +70,9 @@ abstract class CommentDto with _$CommentDto {
                 creationDate: value.creationDate,
                 commentContent: CommentContent(value.commentContent),
                 owner: value.profile.toDomain(),
-                event: value.event.toDomain(),
                 commentChildren: value.commentChildren
+                //left(left()) because of the complex Either type
+                //where the list isn`t used here yet
                     .fold((l) => left(left(l)), (r) => right(r)),
                 post: value.post,
               )
@@ -75,10 +83,16 @@ abstract class CommentDto with _$CommentDto {
   }
 }
 
+///converts the Either type from and to json for comment children
 class ChildrenConverter implements JsonConverter<Either<int, Unit>, Object> {
   const ChildrenConverter();
 
   @override
+  ///get children property from json
+  ///api returns number of children,
+  ///but if its 0 we want to have an Unit in the Either
+  ///
+  /// throws [UnexpectedTypeError] if the type isn`t an integer
   Either<int, Unit> fromJson(Object json) {
     if (json is int && json > 0) {
       return left(json);
@@ -89,26 +103,31 @@ class ChildrenConverter implements JsonConverter<Either<int, Unit>, Object> {
   }
 
   @override
+  ///dont need that, as the api does not accept children
   Object toJson(Either<dynamic, dynamic> object) {
     // TODO: implement toJson
     throw UnimplementedError();
   }
 }
 
+///converts the Either type from and to json for comment parent
 class ParentConverter
     implements JsonConverter<Either<CommentDto, Unit>, Object> {
   const ParentConverter();
 
   @override
+  //calls parent factory if an parent id is included in the api request
+  //if not it reurns the unit type
   Either<CommentDto, Unit> fromJson(Object json) {
     if (json is int) {
       return left(CommentDto.parent(id: json));
-    } else if (json == 0) {
+    } else if (json == null) {
       return right(unit);
     }
     throw UnexpectedTypeError();
   }
 
+  //converts parent unit type to null if no id is given
   @override
   Object toJson(Either<CommentDto, Unit> object) {
     return object.fold(

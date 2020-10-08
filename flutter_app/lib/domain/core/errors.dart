@@ -5,7 +5,7 @@ class NotAuthorizedError extends Error {}
 class NotFoundError extends Error {}
 class InternalServerError extends Error {}
 class UnexpectedTypeError extends Error {}
-class UnknownError extends Error {}
+class UnknownError extends Error {} // TODO if it's a UnknownError just throw an Error
 
 
 class UnexpectedValueError extends Error {

@@ -5,9 +5,11 @@ import 'package:flutter_frontend/domain/event/event_failure.dart';
 import 'package:flutter_frontend/domain/event/i_event_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 
-import 'event_dtos.dart';
-import 'event_local_service.dart';
-import 'event_remote_service.dart';
+import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
+import 'package:flutter_frontend/infrastructure/event/event_local_service.dart';
+import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
+
+// TODO ignored this it's too late and seems to be in progress
 
 class EventRepository implements IEventRepository{
   final EventRemoteService _eventRemoteService;

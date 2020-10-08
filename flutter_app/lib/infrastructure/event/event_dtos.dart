@@ -1,9 +1,8 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_dtos.freezed.dart';
 part 'event_dtos.g.dart';
@@ -12,8 +11,7 @@ part 'event_dtos.g.dart';
 abstract class EventDto with _$EventDto{
   const EventDto._();
 
-
- const factory EventDto({
+  const factory EventDto({
     @required int id,
     @required String name,
     @required bool public,
@@ -35,12 +33,9 @@ abstract class EventDto with _$EventDto{
       //profile: event.owner.
 
     );
-
-
   }
 
-  factory EventDto.fromJson(Map<String, dynamic> json) =>
-    _$EventDtoFromJson(json);
+  factory EventDto.fromJson(Map<String, dynamic> json) => _$EventDtoFromJson(json);
 
   Event toDomain(){
     return Event(
@@ -48,10 +43,9 @@ abstract class EventDto with _$EventDto{
       name: EventName(name),
       date: date,
       description: EventDescription(description),
-      owner: Profile(id: 0, name: null), //TODO:
+      owner: Profile(id: 0, name: null), //TODO: don't forget this one!
       public: public,
       creationDate: creationDate,
-
     );
   }
 

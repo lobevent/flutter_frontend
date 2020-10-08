@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_frontend/domain/event/event.dart';
-import 'package:meta/meta.dart';
+
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_validators.dart';
@@ -12,7 +11,9 @@ class ProfileName extends ValueObject<String> {
   factory ProfileName(String input) {
     assert(input != null);
     {
-      return ProfileName._(validateSingleLine(input).flatMap((a) => null));
+      return ProfileName._(
+        validateSingleLine(input)
+      );
     }
   }
   const ProfileName._(this.value);
@@ -24,7 +25,7 @@ class Invitation extends ValueObject<String> {
 
   factory Invitation(String input) {
     {
-      return Invitation._(doNothing(input).flatMap((a) => null));
+      return Invitation._(doNothing(input).flatMap((a) => null)); // TODO we will clean this up after cleaning up the validators
     }
   }
   const Invitation._(this.value);
@@ -36,7 +37,7 @@ class UsrEvntStats extends ValueObject<String> {
 
   factory UsrEvntStats(String input) {
     {
-      return UsrEvntStats._(doNothing(input).flatMap((a) => null));
+      return UsrEvntStats._(doNothing(input).flatMap((a) => null)); // TODO we will clean this up after cleaning up the validators
     }
   }
   const UsrEvntStats._(this.value);
@@ -48,19 +49,20 @@ class Friendship extends ValueObject<String> {
 
   factory Friendship(String input) {
     {
-      return Friendship._(doNothing(input).flatMap((a) => null));
+      return Friendship._(doNothing(input).flatMap((a) => null)); // TODO we will clean this up after cleaning up the validators
     }
   }
   const Friendship._(this.value);
 }
 
+// TODO find a more expressive name
 class Friendship2 extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
 
   factory Friendship2(String input) {
     {
-      return Friendship2._(doNothing(input).flatMap((a) => null));
+      return Friendship2._(doNothing(input).flatMap((a) => null)); // TODO we will clean this up after cleaning up the validators
     }
   }
   const Friendship2._(this.value);

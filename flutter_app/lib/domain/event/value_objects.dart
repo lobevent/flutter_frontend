@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_frontend/domain/event/event.dart';
-import 'package:meta/meta.dart';
+
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_validators.dart';
@@ -12,7 +11,9 @@ class EventName extends ValueObject<String> {
   factory EventName(String input) {
     assert(input != null);
     {
-      return EventName._(validateSingleLine(input).flatMap((a) => null));
+      return EventName._(
+        validateSingleLine(input)
+      );
     }
   }
   const EventName._(this.value);
@@ -22,13 +23,14 @@ class EventDescription extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
 
+  // TODO maxLength is never initialized?! -> export constants into a file in domain/core/constants.dart
   static int maxLength;
-
   factory EventDescription(String input) {
     assert(input != null);
     {
       return EventDescription._(
-          validateLength(input, maxLength).flatMap((a) => null));
+          validateLength(input, maxLength)
+      );
     }
   }
   const EventDescription._(this.value);

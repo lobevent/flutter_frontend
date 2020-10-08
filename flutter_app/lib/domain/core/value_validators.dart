@@ -41,8 +41,13 @@ Either<ValueFailure<String>, String> validateSingleLine(String input) {
   }
 }
 
+
+
+// TODO lets make this right tomorrow don't know what this should actually do (all the functions under this comment)
+
+
 Either<ValueFailure<String>, String> validateDate(String input) {
-  // check if the date isin valid format
+  // check if the date is in valid format
   //TODO: idk if this is right, might be fucked up somehow
   DateTime validDate = DateTime.parse(input);
   if (validDate.isAfter(DateTime.now()) || isValidDate(validDate.toString())) {

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -20,7 +21,10 @@ abstract class Post implements _$Post {
     @required Event event,
     @required List<Comment> comments,
   }) = _Post;
-//check if the whole object is no failure
+
+  //check if the whole object is no failure
+  // TODO same as in domain/event/event.dart
+  // TODO in this case if you only check one data field this is already implemented. Just realized it yet but it should actually also work for the other case. The base class ValueObjects implements failureOrUnit why not use it?
   Option<ValueFailure<dynamic>> get failureOption {
     return postContent.failureOrUnit.fold((f) => some(f), (_) => none());
   }

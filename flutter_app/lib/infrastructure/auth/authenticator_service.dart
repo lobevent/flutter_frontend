@@ -4,6 +4,8 @@ import 'package:flutter_frontend/domain/auth/auth_failure.dart';
 import 'package:flutter_frontend/domain/auth/i_auth_facade.dart';
 import 'package:flutter_frontend/domain/auth/value_objects.dart';
 
+// TODO i don't understand this class?! I thought we use firebase?!
+
 class AuthenticatorSymfony implements IAuthFacade {
   final String _authenticator;
 

@@ -1,15 +1,15 @@
 import 'package:dartz/dartz.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/post/value_objects.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../domain/post/comment.dart';
+import 'package:flutter_frontend/domain/post/comment.dart';
+import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 
-import '../event/event_dtos.dart';
-import '../profile/profile_dtos.dart';
-import 'post_dtos.dart';
 part 'comment_dtos.freezed.dart';
 part 'comment_dtos.g.dart';
+
+// TODO I will go through infrastructure/post tomorrow
 
 @freezed
 abstract class CommentDto with _$CommentDto {
@@ -29,9 +29,8 @@ abstract class CommentDto with _$CommentDto {
     @ChildrenConverter() Either<int, Unit> commentChildren,
   }) = _CommentDto;
 
-  ///generate dto from domain, respecting the different union cases
-  ///
-  /// map comment to parent or to full and generate the dto respectively
+  /// Generate dto from domain, respecting the different union cases
+  /// Map comment to parent or to full and generate the dto respectively
   factory CommentDto.fromDomain(Comment comment) {
     CommentDto returnedDto;
     //distinguish between the two Comment options
@@ -59,9 +58,8 @@ abstract class CommentDto with _$CommentDto {
   factory CommentDto.fromJson(Map<String, dynamic> json) =>
       _$CommentDtoFromJson(json);
 
-  ///generate dto from domain, respecting the different union cases
-  ///
-  /// map comment to parent or to full and generate the entity respectively
+  /// Generate dto from domain, respecting the different union cases
+  /// Map comment to parent or to full and generate the entity respectively
   Comment toDomain() {
     Comment returnedComment;
     map(

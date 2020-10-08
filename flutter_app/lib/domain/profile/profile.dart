@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -29,7 +30,8 @@ abstract class Profile implements _$Profile {
     @required List<Comment> comments,
   }) = _FullProfile;
 
-//check if the whole object is no failure
+  //check if the whole object is no failure
+  // TODO same problem as in all other data classes before. Use the methods of value objects. And this seems to be a pretty repetitive task --> implement a super class!
   Option<ValueFailure<dynamic>> get failureOption {
     return name.failureOrUnit.fold((f) => some(f), (_) => none());
   }

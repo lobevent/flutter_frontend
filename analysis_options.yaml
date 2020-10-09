@@ -4,7 +4,6 @@
 ##
 # Lint rules to be used for apps without developer facing API. i.e. command line tools and Flutter applications
 ##
-
 analyzer:
   strong-mode:
     # Will become the default once non-nullable types land
@@ -13,9 +12,9 @@ analyzer:
 
   exclude:
     # exclude all generated files form analysis
-    "*.g.dart"
+    - "*.g.dart"
     # exclude all by freezed generated files from analysis
-    "*.freezed.dart"
+    - "*.freezed.dart"
 
   errors:
     # treat missing required parameters as a error (not a hint)

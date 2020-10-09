@@ -30,3 +30,22 @@ Temporary Items
 .apdisk
 
 ## End section MacOS
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.atom/
+.buildlog/
+.history
+.svn/
+
+# VScode releated
+.vscode/

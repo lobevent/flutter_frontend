@@ -9,7 +9,7 @@ import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 part 'comment_dtos.freezed.dart';
 part 'comment_dtos.g.dart';
 
-// TODO I will go through infrastructure/post tomorrow
+// TODO I will go through infrastructure
 
 @freezed
 abstract class CommentDto with _$CommentDto {
@@ -31,6 +31,8 @@ abstract class CommentDto with _$CommentDto {
 
   /// Generate dto from domain, respecting the different union cases
   /// Map comment to parent or to full and generate the dto respectively
+  ///
+  // TODO this function does something really really strange! The syntax is a little bit mixed up but also it does not what it should
   factory CommentDto.fromDomain(Comment comment) {
     CommentDto returnedDto;
     //distinguish between the two Comment options
@@ -60,6 +62,7 @@ abstract class CommentDto with _$CommentDto {
 
   /// Generate dto from domain, respecting the different union cases
   /// Map comment to parent or to full and generate the entity respectively
+  // TODO this function does something really really strange! The syntax is a little bit mixed up but also it does not what it should
   Comment toDomain() {
     Comment returnedComment;
     map(
@@ -90,6 +93,7 @@ abstract class CommentDto with _$CommentDto {
 
 
 ///converts the Either type from and to json for comment children
+// TODO change the return type to left failure and right success
 class ChildrenConverter implements JsonConverter<Either<int, Unit>, Object> {
   const ChildrenConverter();
 
@@ -99,6 +103,7 @@ class ChildrenConverter implements JsonConverter<Either<int, Unit>, Object> {
   ///but if its 0 we want to have an Unit in the Either
   ///
   /// throws [UnexpectedTypeError] if the type isn`t an integer
+  // TODO problematic in many ways. Since json is normally of tpye Map<String, dynamic> this would always fail or at least in the raw form it's a string and Object as input is a little bit wide spread. And also the problem of json decoding must be handled (like in the other cases mentioned earlier i.e. /infrastructure/event/event_remote_service.dart)
   Either<int, Unit> fromJson(Object json) {
     if (json is int && json > 0) {
       return left(json);
@@ -111,7 +116,7 @@ class ChildrenConverter implements JsonConverter<Either<int, Unit>, Object> {
   @override
   ///dont need that, as the api does not accept children
   Object toJson(Either<dynamic, dynamic> object) {
-    // TODO: implement toJson
+    // TODO: implement toJson (can't be handled here -> see problem above)
     throw UnimplementedError();
   }
 }
@@ -125,6 +130,7 @@ class ChildrenConverter implements JsonConverter<Either<int, Unit>, Object> {
 
 
 ///converts the Either type from and to json for comment parent
+// TODO change the return type to left failure and right success
 class ParentConverter
     implements JsonConverter<Either<CommentDto, Unit>, Object> {
   const ParentConverter();
@@ -132,6 +138,7 @@ class ParentConverter
   @override
   //calls parent factory if an parent id is included in the api request
   //if not it reurns the unit type
+  // TODO same problem as in ChildConverter
   Either<CommentDto, Unit> fromJson(Object json) {
     if (json is int) {
       return left(CommentDto.parent(id: json));

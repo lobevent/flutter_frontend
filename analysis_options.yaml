@@ -1,19 +1,31 @@
-# steps followed from this guide: https://dash-overflow.net/articles/getting_started/
-# list by https://github.com/passsy/dart-lint/blob/master/lib/analysis_options.yaml
+## this guide: https://dash-overflow.net/articles/getting_started/
+## list by https://github.com/passsy/dart-lint/blob/master/lib/analysis_options.yaml
 
 ##
 # Lint rules to be used for apps without developer facing API. i.e. command line tools and Flutter applications
 ##
+
 analyzer:
   strong-mode:
     # Will become the default once non-nullable types land
     # https://github.com/dart-lang/sdk/issues/31410#issuecomment-510683629
     implicit-casts: false
+
+  exclude:
+    # exclude all generated files form analysis
+    "*.g.dart"
+    # exclude all by freezed generated files from analysis
+    "*.freezed.dart"
+
   errors:
-    # treat missing required parameters as a warning (not a hint)
-    missing_required_param: warning
-    # treat missing returns as a warning (not a hint)
-    missing_return: warning
+    # treat missing required parameters as a error (not a hint)
+    missing_required_param: error
+    # treat missing returns as a error (not a hint)
+    missing_return: error
+    # treat not immutable classes which are tagged as immutable as error
+    must_be_immutable: error
+    # Ignore this option in favor of freezed package.
+    sort_unnamed_constructors_first: ignore
     # allow having TODOs in the code
     todo: ignore
 
@@ -228,7 +240,6 @@ linter:
     # https://dart-lang.github.io/linter/lints/avoid_unused_constructor_parameters.html
     - avoid_unused_constructor_parameters
 
-    # TODO double check
     # For async functions use `Future<void>` as return value, not `void`
     # This allows usage of the await keyword and prevents operations from running in parallel.
     # pedantic: disabled

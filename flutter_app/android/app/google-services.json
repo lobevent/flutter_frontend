@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "753914379569",
+    "firebase_url": "https://lobevent.firebaseio.com",
+    "project_id": "lobevent",
+    "storage_bucket": "lobevent.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:753914379569:android:489b642a48c2e726fb8410",
+        "android_client_info": {
+          "package_name": "com.lobevent.flutter_frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "753914379569-ma8r2i48bn14g2ifqmplp6mg8un9sd9d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lobevent.flutter_frontend",
+            "certificate_hash": "d2fbd5ad8968daf429142138443fb1f837f3dc48"
+          }
+        },
+        {
+          "client_id": "753914379569-ol3qid8jn86pvur3ghmmtbtbm0k19q7k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATYvr_D4UOy6qawn5yQDV5fS-SJP_TRWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "753914379569-ol3qid8jn86pvur3ghmmtbtbm0k19q7k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "753914379569-bhr5qbaaat6u9e78a04rfumeu9g5paut.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.test.test"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,12 +7,28 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  http: ^0.12.2
-  bloc: ^6.0.3
-  flutter_bloc: ^6.0.5
-  freezed_annotation: ^0.12.0
-  dartz: ^0.9.2
+  # annotations for json code generation
   json_annotation: ^3.1.0
+
+  # annotations for freezed data and union classes code generation
+  freezed_annotation: ^0.12.0
+
+  # dartz for a ton of useful utils (like Either type and so on)
+  dartz: ^0.9.2
+
+  # standard dart http library
+  http: ^0.12.2
+
+  # bloc library in general (Cubit and Bloc)
+  bloc: ^6.0.3
+
+  # flutter bloc specific widgets like BlocConsumer
+  flutter_bloc: ^6.0.6
+
+  # firebase releated stuff
+  # not using firebase core since every firebase plugin imports firebase core by itself
+  # firebase auth for the authentication with firebase
+  firebase_auth: ^0.18.1+2
 
   flutter:
     sdk: flutter
@@ -22,8 +38,15 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner:
-  freezed: ^0.12.1
+  build_runner: ^1.10.3
+
+  # data and union classes generator
+  freezed: ^0.12.2
+
+  # json serializable code generation
   json_serializable: ^3.5.0
+
+
+
 flutter:
   uses-material-design: true

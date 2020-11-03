@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/event_failure.dart';
 import 'package:flutter_frontend/domain/event/i_event_repository.dart';
@@ -17,12 +18,28 @@ class EventRepository implements IEventRepository{
 
   EventRepository(this._eventRemoteService, this._eventLocalService);
 
+
   @override
   Future<Either<EventFailure, List<Event>>> getList(Operation operation, {Profile profile}) async{
     try {
-      final eventDto = EventDto.fromDomain(event);
+      List<EventDto> eventDtos;
+      switch(operation) {
+        case Operation.owned:
+          eventDtos = await _eventRemoteService.getOwnedEvents();
+          break;
+        case Operation.fromUser:
+          // TODO: Handle this case.
+          break;
+        case Operation.attending:
+          eventDtos = await _eventRemoteService.getAttendingEvents();
+          break;
+        case Operation.unreacted:
+          eventDtos = await _eventRemoteService.getUnreactedEvents();
+          break;
+      }
+      List<Event> events =  eventDtos.map((edto) => edto.toDomain()).toList();
       //function implementation
-      return right(List<EventDto>);
+      return right(events);
     }  on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {
         return left(const EventFailure.insufficientPermissions());
@@ -33,12 +50,12 @@ class EventRepository implements IEventRepository{
   }
 
   @override
-  Future<Either<EventFailure, Event>> getSingle(Operation operation, {Profile profile}) async{
+  Future<Either<EventFailure, Event>> getSingle(Id id) async{
     try {
-       await _eventRemoteService.getSingleEvent(event.id);
-      final eventDto = EventDto.fromDomain(event);
+       final EventDto eventDto = await _eventRemoteService.getSingle(id.getOrCrash());
+       final Event event = eventDto.toDomain();
       //function implementation
-      return right(eventDto);
+      return right(event);
     }  on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {
         return left(const EventFailure.insufficientPermissions());

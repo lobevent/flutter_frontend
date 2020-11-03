@@ -78,3 +78,9 @@ In general it follows the structure shown in the image below:
 5. Checkout developer branch: `git checkout develop`
 6. Merge into develop: `git merge hotfix_v0.1.1`
 7. Delete the branch: `git branch -D hotfix_v0.1.1`
+
+
+## Project Notes
+Not using Injection Package
+Thats why cubit to iauthfacade to authentification_service is not working
+Solution: leave the iauthfacade so we see what functions are need in the infrastructure. But dont use Injectable so implement a constructor in the cubit. (dont use the interface as interface only for safety)

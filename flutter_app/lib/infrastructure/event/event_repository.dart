@@ -35,7 +35,7 @@ class EventRepository implements IEventRepository{
   @override
   Future<Either<EventFailure, Event>> getSingle(Operation operation, {Profile profile}) async{
     try {
-       await _eventRemoteService.getSingleEvent(event.id)
+       await _eventRemoteService.getSingleEvent(event.id);
       final eventDto = EventDto.fromDomain(event);
       //function implementation
       return right(eventDto);

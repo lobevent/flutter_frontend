@@ -17,6 +17,7 @@ abstract class Comment implements _$Comment {
     @required CommentContent commentContent,
     @required Profile owner,
     @required int post,
+    //TODO change this, all kid comments are comments. lazy loading from application layer (cubit)
     Either<CommentParent, Unit> commentParent,
     Either<Either<int, List<Comment>>, Unit> commentChildren, // TODO find some solution for this one
   }) = CommentFull;

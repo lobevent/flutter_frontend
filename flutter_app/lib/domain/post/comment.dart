@@ -19,7 +19,7 @@ abstract class Comment implements _$Comment {
     @required int post,
     //TODO change this, all kid comments are comments. lazy loading from application layer (cubit)
     Either<CommentParent, Unit> commentParent,
-    Either<Either<int, List<Comment>>, Unit> commentChildren, // TODO find some solution for this one
+    Comment commentChildren, // TODO find some solution for this one
   }) = CommentFull;
 
   const factory Comment.parent({
@@ -33,7 +33,7 @@ abstract class Comment implements _$Comment {
       ) = CommentChildCount;
 
   const factory Comment.children({
-      @required CommentChildCount count,
+      @required int count,
       @required List<Comment> commentChildren,
   }) = CommentChildren;
 
@@ -48,5 +48,12 @@ abstract class Comment implements _$Comment {
       ),
             orElse: () => none());
 
+  }
+
+}
+extension CommentX on CommentFull {
+
+  void addChildren(CommentChildren commentChildren){
+    commentChildren = commentChildren;
   }
 }

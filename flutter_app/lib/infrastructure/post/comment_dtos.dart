@@ -29,6 +29,13 @@ abstract class CommentDto with _$CommentDto {
     @ChildrenConverter() Either<int, Unit> commentChildren,
   }) = _CommentDto;
 
+  //TODO: is this intager usefull? Determine that shit!
+  const factory CommentDto.children({
+    @required int count,
+    @required List<CommentDto> children,
+  }) = _CommentChildrenDto;
+
+
   /// Generate dto from domain, respecting the different union cases
   /// Map comment to parent or to full and generate the dto respectively
   ///
@@ -36,8 +43,9 @@ abstract class CommentDto with _$CommentDto {
   factory CommentDto.fromDomain(Comment comment) {
     CommentDto returnedDto;
     //distinguish between the two Comment options
-    comment.map(
-        (CommentFull comment) => { //the full case
+    comment.maybeMap(
+        (CommentFull comment) => {
+              //the full case
               returnedDto = CommentDto(
                 id: comment.id,
                 creationDate: comment.creationDate,
@@ -50,9 +58,11 @@ abstract class CommentDto with _$CommentDto {
                 //leave out children, as they arent used in to Api communication
               ),
             },
-        parent: (CommentParent comment) => { //the parent case
+        parent: (CommentParent comment) => {
+              //the parent case
               returnedDto = CommentDto.parent(id: comment.id),
-            });
+            },
+        orElse: () {});
 
     return returnedDto;
   }
@@ -68,29 +78,29 @@ abstract class CommentDto with _$CommentDto {
     map(
         (_CommentDto value) => {
               returnedComment = Comment(
-                id: this.id,
+                id: value.id,
                 creationDate: value.creationDate,
                 commentContent: CommentContent(value.commentContent),
                 owner: value.profile.toDomain(),
                 commentChildren: value.commentChildren
-                //left(left()) because of the complex Either type
-                //where the list isn`t used here yet
-                    .fold((l) => left(left(l)), (r) => right(r)),
+                    //left(left()) because of the complex Either type
+                    //where the list isn`t used here yet
+                    .fold((l) => Comment.childCount(l),
+                        (r) => const Comment.childLess()),
                 post: value.post,
               )
             }, parent: (_CommentParentDto value) {
       returnedComment = Comment.parent(id: value.id);
-    });
+    }, children: (_CommentChildrenDto value) {
+      returnedComment = Comment.children(
+          count: value.count,
+          commentChildren: value.children
+              .map((commentDto) => commentDto.toDomain())
+              .toList());
+    },);
     return returnedComment;
   }
 }
-
-
-
-
-
-
-
 
 ///converts the Either type from and to json for comment children
 // TODO change the return type to left failure and right success
@@ -98,6 +108,7 @@ class ChildrenConverter implements JsonConverter<Either<int, Unit>, Object> {
   const ChildrenConverter();
 
   @override
+
   ///get children property from json
   ///api returns number of children,
   ///but if its 0 we want to have an Unit in the Either
@@ -114,20 +125,13 @@ class ChildrenConverter implements JsonConverter<Either<int, Unit>, Object> {
   }
 
   @override
+
   ///dont need that, as the api does not accept children
   Object toJson(Either<dynamic, dynamic> object) {
     // TODO: implement toJson (can't be handled here -> see problem above)
     throw UnimplementedError();
   }
 }
-
-
-
-
-
-
-
-
 
 ///converts the Either type from and to json for comment parent
 // TODO change the return type to left failure and right success

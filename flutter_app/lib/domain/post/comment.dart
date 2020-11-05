@@ -26,6 +26,16 @@ abstract class Comment implements _$Comment {
     @required int id,
   }) = CommentParent;
 
+  const factory Comment.childLess() = CommentChildLess;
+
+  const factory Comment.childCount(
+        @required int count,
+      ) = CommentChildCount;
+
+  const factory Comment.children({
+      @required CommentChildCount count,
+      @required List<Comment> commentChildren,
+  }) = CommentChildren;
 
   // check if the whole object is no failure
   // TODO same as in domain/event/event.dart

@@ -37,8 +37,8 @@ class EventRepository implements IEventRepository{
           eventDtos = await _eventRemoteService.getUnreactedEvents();
           break;
       }
+      //convert the dto objects to domain Objects
       List<Event> events =  eventDtos.map((edto) => edto.toDomain()).toList();
-      //function implementation
       return right(events);
     }  on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {
@@ -54,7 +54,6 @@ class EventRepository implements IEventRepository{
     try {
        final EventDto eventDto = await _eventRemoteService.getSingle(id.getOrCrash());
        final Event event = eventDto.toDomain();
-      //function implementation
       return right(event);
     }  on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {

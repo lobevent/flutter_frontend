@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'constants.dart' as Constants;
 
 import 'failures.dart';
 
@@ -25,7 +26,7 @@ Either<ValueFailure<String>, String> validatePassword(String input) {
 Either<ValueFailure<String>, String> validateLength(
     String input, int maxLength) {
   // check if the string is longer than maxlength
-  if (input.length >= maxLength) {
+  if (input.length >= Constants.maxLength) {
     return left(ValueFailure.exceedingLenght(failedValue: input));
   } else {
     return right(input);

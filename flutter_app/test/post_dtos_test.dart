@@ -11,7 +11,7 @@ import 'package:flutter_frontend/domain/event/event.dart';
 class MockPost extends Mock implements Post {}
 
 main() {
-  test("Event Convertion", ()
+  test("Post Convertion", ()
   {
     PostDto testPostDto = PostDto(
         id: 1,

@@ -21,7 +21,7 @@ class SymfonyCommunicator{
   /// The id (if needed) should be in the uri.
   /// Uri has to start with an backslash "/".
   Future<Response> get(String uri) async{
-    return _handleErrors( () async => client.get("$url$uri", headers: headers));
+    return _handleErrors( await client.get("$url$uri", headers: headers));
   }
 
   /// Post to an resource with uri.
@@ -30,7 +30,7 @@ class SymfonyCommunicator{
   /// Uri has to start with an backslash "/".
   Future<Response> post(String uri, dynamic body, [Encoding encoding]) async{
     encoding ??= Encoding.getByName("text/plain");
-    return _handleErrors( () async => client.post("$url$uri", headers: headers, body: body, encoding: encoding));
+    return _handleErrors( await client.post("$url$uri", headers: headers, body: body, encoding: encoding));
   }
 
   /// Put an resource with uri.
@@ -39,7 +39,7 @@ class SymfonyCommunicator{
   /// Uri has to start with an backslash "/".
   Future<Response> put(String uri, dynamic body, [Encoding encoding]) async{
     encoding ??= Encoding.getByName("text/plain");
-    return _handleErrors( () async  => client.put("$url$uri", headers: headers, body: body, encoding: encoding)) ;
+    return _handleErrors( await client.put("$url$uri", headers: headers, body: body, encoding: encoding)) ;
   }
 
   /// Delete resource with uri.
@@ -47,15 +47,15 @@ class SymfonyCommunicator{
   /// The id (if needed) should be in the uri.
   /// Uri has to start with an backslash "/".
   Future<Response> delete(String uri) async {
-    return _handleErrors( () async => client.delete("$url$uri", headers: headers));
+    return _handleErrors( await client.delete("$url$uri", headers: headers));
   }
 
 
   /// The [requestFunction] is an lambda function, containing a request to execute
-  Future<Response> _handleErrors(Function requestFunction) async {
+  Future<Response> _handleErrors(Response response) async {
       // TODO any reason to give a lambda into this? We could directly pass the response or
       // TODO subclassing the Response class (like the reddit link I did sent you)
-      final Response response  = await requestFunction() as Response; // really not a good practice we have to use casting here. We should consider one of the two options from the todo
+      //tried the solution with passing -> now I get that i can call await when calling a function
       switch (response.statusCode) {
         case 401:
           throw NotAuthenticatedError();

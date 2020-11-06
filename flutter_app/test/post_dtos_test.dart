@@ -15,7 +15,7 @@ main() {
   {
     PostDto testPostDto = PostDto(
         id: 1,
-        event: EventDto(id: 1,name: "event1",public: true,description: "best event ever", date: DateTime.now(),creationDate: DateTime.now(), owner: ProfileDto(id: 1,name: "Manfred")),
+        event: EventDto(id: 1,name: "event1",public: true,description: "best event ever", date: DateTime.now(),creationDate: DateTime.now(), owner: ProfileDto(id: 0,name: "Manfred")),
         postContent: "kleines event",
         owner: ProfileDto(id: 0, name: "manfred"),
         creationDate: DateTime.now());

@@ -1,3 +1,4 @@
+import 'package:flutter_frontend/infrastructure/core/i_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -9,7 +10,7 @@ part 'event_dtos.freezed.dart';
 part 'event_dtos.g.dart';
 
 @freezed
-abstract class EventDto with _$EventDto {
+abstract class EventDto with _$EventDto implements IDto {
   const EventDto._();
 
   const factory EventDto({
@@ -61,5 +62,5 @@ class OwnerConverter implements JsonConverter<ProfileDto, Map<String, dynamic>>{
   Map<String, dynamic> toJson(ProfileDto profileDto) {
     return profileDto.toJson();
   }
-
 }
+

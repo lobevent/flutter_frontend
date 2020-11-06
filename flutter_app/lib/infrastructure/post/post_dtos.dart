@@ -3,6 +3,7 @@ import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/post/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/infrastructure/core/i_dtos.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -13,7 +14,7 @@ part 'post_dtos.freezed.dart';
 part 'post_dtos.g.dart';
 
 @freezed
-abstract class PostDto implements _$PostDto {
+abstract class PostDto implements _$PostDto, IDto {
   const PostDto._();
 
   const factory PostDto({
@@ -42,7 +43,7 @@ abstract class PostDto implements _$PostDto {
       id: id,
       creationDate: creationDate,
       postContent: PostContent(postContent),
-      owner: Profile(id: 0, name: null), //TODO
+      owner: owner.toDomain(),
       event: event.toDomain(),
       comments: <Comment>[]
     );

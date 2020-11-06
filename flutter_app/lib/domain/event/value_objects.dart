@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_validators.dart';
+import 'package:flutter_frontend/domain/core/constants.dart' as Constants;
 
 class EventName extends ValueObject<String> {
   @override
@@ -24,7 +25,7 @@ class EventDescription extends ValueObject<String> {
   final Either<ValueFailure<String>, String> value;
 
   // TODO maxLength is never initialized?! -> export constants into a file in domain/core/constants.dart
-  static int maxLength;
+  static int maxLength=Constants.maxLength;
   factory EventDescription(String input) {
     assert(input != null);
     {

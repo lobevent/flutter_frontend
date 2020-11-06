@@ -13,7 +13,7 @@ part 'comment_dtos.g.dart';
 // TODO I will go through infrastructure
 
 @freezed
-abstract class CommentDto with _$CommentDto implements IDto{
+abstract class CommentDto with _$CommentDto{
   const CommentDto._();
 
   const factory CommentDto.parent({

@@ -10,7 +10,7 @@ part 'event_dtos.freezed.dart';
 part 'event_dtos.g.dart';
 
 @freezed
-abstract class EventDto with _$EventDto implements IDto {
+abstract class EventDto with _$EventDto {
   const EventDto._();
 
   const factory EventDto({

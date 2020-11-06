@@ -9,15 +9,19 @@ import 'package:flutter_frontend/domain/profile/profile.dart';
 class MockEvent extends Mock implements Event {}
 
 main() {
-  EventDto test = EventDto(
-      id: 1,
-      name: "EVENT1",
-      public: true,
-      description: "kleines event",
-      owner: ProfileDto(id: 0, name: "manfred"),
-      date: DateTime.now(),
-      creationDate: DateTime.now());
-  EventDto testDto =
-      EventDto.fromJson(EventDto.fromDomain(test.toDomain()).toJson());
-  assert(testDto == test);
+
+  test("Event Convertion", () {
+    EventDto test = EventDto(
+        id: 1,
+        name: "EVENT1",
+        public: true,
+        description: "kleines event",
+        owner: ProfileDto(id: 0, name: "manfred"),
+        date: DateTime.now(),
+        creationDate: DateTime.now());
+    EventDto testDto =
+    EventDto.fromJson(EventDto.fromDomain(test.toDomain()).toJson());
+    expect(testDto, test);
+  });
+
 }

@@ -19,7 +19,7 @@ abstract class EventDto with _$EventDto {
     @required String description,
     @required DateTime date,
     @required DateTime creationDate,
-    @required ProfileDto owner,
+    @required @OwnerConverter() ProfileDto owner,
   }) = _EventDto;
 
   factory EventDto.fromDomain(Event event) {
@@ -48,4 +48,18 @@ abstract class EventDto with _$EventDto {
       creationDate: creationDate,
     );
   }
+}
+
+class OwnerConverter implements JsonConverter<ProfileDto, Map<String, dynamic>>{
+  const OwnerConverter();
+  @override
+  ProfileDto fromJson(Map<String, dynamic> owner) {
+    return ProfileDto.fromJson(owner);
+  }
+
+  @override
+  Map<String, dynamic> toJson(ProfileDto profileDto) {
+    return profileDto.toJson();
+  }
+
 }

@@ -52,8 +52,7 @@ abstract class Comment implements _$Comment {
 
 }
 extension CommentX on CommentFull {
-
-  void addChildren(CommentChildren commentChildren){
-    commentChildren = commentChildren;
+  void set commentChildren(CommentChildren commentChi){
+    commentChildren = commentChi;
   }
 }

@@ -46,7 +46,7 @@ main() {
           .thenAnswer((_) async => http.Response(test.toJson().toString(), 200));
 
       EventRemoteService remoteservice
-      = EventRemoteService(communicator: SymfonyCommunicator(jwt: null, client: client));
+      = EventRemoteService(communicator: SymfonyCommunicator(jwt: "lalala", client: client));
 
       EventRepository repository = EventRepository(remoteservice, null);
       expect(repository.getSingle(Id.fromUnique(1))

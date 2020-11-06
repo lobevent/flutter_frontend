@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -42,11 +44,13 @@ main() {
 
       final client = MockEvent();
 
-      when(client.get("ourUrl.com/event/1"))
-          .thenAnswer((_) async => http.Response(test.toJson().toString(), 200));
+      when(client.get("ourUrl.com/event/1", headers: {"Authentication": "Baerer lalala"}))
+          .thenAnswer((_) async => http.Response(jsonEncode(test.toJson()), 200));
+
+      SymfonyCommunicator communicator = SymfonyCommunicator(jwt: "lalala", client: client);
 
       EventRemoteService remoteservice
-      = EventRemoteService(communicator: SymfonyCommunicator(jwt: "lalala", client: client));
+      = EventRemoteService(communicator: communicator);
 
       EventRepository repository = EventRepository(remoteservice, null);
       expect(await repository.getSingle(Id.fromUnique(1)).then((value) => value.fold((l) => null, (r) => EventDto.fromDomain(r))), test);

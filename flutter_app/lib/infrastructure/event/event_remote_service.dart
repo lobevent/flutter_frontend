@@ -6,7 +6,7 @@ import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:http/http.dart';
 
 class EventRemoteService{
-  static const String _eventByIdPath = "/event/{{id}}";
+  static const String _eventByIdPath = "/event/";
   static const String _ownedEventsPath = "/user/events";
   static const String _profileEventPath = "/user/events";
   static const String _attendingEventsPath = "/user/eventStatus";

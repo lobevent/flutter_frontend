@@ -11,7 +11,7 @@ class MockComment extends Mock implements CommentDto {}
 main() {
   test("Comment Convertion", ()
   {
-    CommentDto testCommentDto = CommentDto(id: 1,commentContent: "eins guter Kommentar",creationDate: DateTime.now(),profile: ProfileDto(id: 1,name: "manfred"),commentParent: null,post: 1,commentChildren: null);
+    CommentDto testCommentDto = CommentDto(id: 1,commentContent: "eins guter Kommentar",creationDate: DateTime.now(),profile: ProfileDto(id: 1,name: "manfred"),commentParent: null ,post: 1,commentChildren: null);
     CommentDto convertedCommentDto =
     CommentDto.fromJson(CommentDto.fromDomain(testCommentDto.toDomain()).toJson());
     expect(testCommentDto, convertedCommentDto);

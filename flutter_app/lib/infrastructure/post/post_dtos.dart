@@ -21,8 +21,8 @@ abstract class PostDto implements _$PostDto{
     @required int id,
     @required DateTime creationDate,
     @required String postContent,
-    @required ProfileDto owner,
-    @required EventDto event,
+    @required @ProfileConverter() ProfileDto owner,
+    @required @EventConverter() EventDto event,
   }) = _PostDto;
 
   factory PostDto.fromDomain(Post post) {
@@ -47,6 +47,30 @@ abstract class PostDto implements _$PostDto{
       event: event.toDomain(),
       comments: <Comment>[]
     );
+  }
+}
+class ProfileConverter implements JsonConverter<ProfileDto, Map<String, dynamic>>{
+  const ProfileConverter();
+  @override
+  ProfileDto fromJson(Map<String, dynamic> owner) {
+    return ProfileDto.fromJson(owner);
+  }
+
+  @override
+  Map<String, dynamic> toJson(ProfileDto profileDto) {
+    return profileDto.toJson();
+  }
+}
+class EventConverter implements JsonConverter<EventDto, Map<String, dynamic>>{
+  const EventConverter();
+  @override
+  EventDto fromJson(Map<String, dynamic> event) {
+    return EventDto.fromJson(event);
+  }
+
+  @override
+  Map<String, dynamic> toJson(EventDto EventDto) {
+    return EventDto.toJson();
   }
 }
 

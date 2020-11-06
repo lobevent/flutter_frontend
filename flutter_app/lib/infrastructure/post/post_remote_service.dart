@@ -28,6 +28,7 @@ class PostRemoteService {
 
   Future<PostDto> getPaginated() async {
     //TODO
+    throw UnimplementedError();
   }
 
   void create(PostDto post) async {

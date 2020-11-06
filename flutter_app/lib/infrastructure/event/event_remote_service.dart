@@ -18,8 +18,8 @@ class EventRemoteService{
 
   final SymfonyCommunicator client;
 
-  EventRemoteService()
-    : client = SymfonyCommunicator(jwt: null); // TODO this doesn't work on runtime -> will throw an error!
+  EventRemoteService({SymfonyCommunicator communicator})
+    : client = communicator ?? SymfonyCommunicator(jwt: null); // TODO this doesn't work on runtime -> will throw an error!
 
   Future<EventDto> getSingle(int id) async {
       final String uri = "$_eventByIdPath$id"; // TODO combine string this way it's a best practice

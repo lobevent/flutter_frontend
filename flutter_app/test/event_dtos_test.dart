@@ -17,47 +17,62 @@ import 'package:http/http.dart' as http;
 class MockEvent extends Mock implements Event, http.Client {}
 
 main() {
+  EventDto origTestDto = EventDto(
+      id: 1,
+      name: "EVENT1",
+      public: true,
+      description: "kleines event",
+      owner: ProfileDto(id: 0, name: "manfred"),
+      date: DateTime.now(),
+      creationDate: DateTime.now());
+
 
   test("Event Convertion", () {
-    EventDto test = EventDto(
-        id: 1,
-        name: "EVENT1",
-        public: true,
-        description: "kleines event",
-        owner: ProfileDto(id: 0, name: "manfred"),
-        date: DateTime.now(),
-        creationDate: DateTime.now());
+
     EventDto testDto =
-    EventDto.fromJson(EventDto.fromDomain(test.toDomain()).toJson());
+    EventDto.fromJson(EventDto.fromDomain(origTestDto.toDomain()).toJson());
     expect(testDto, test);
   });
 
   test("connectionTest", () async {
-    EventDto test = EventDto(
-        id: 1,
-        name: "EVENT1",
-        public: true,
-        description: "kleines event",
-        owner: ProfileDto(id: 0, name: "manfred"),
-        date: DateTime.now(),
-        creationDate: DateTime.now());
 
       final client = MockEvent();
 
       when(client.get("ourUrl.com/event/1", headers: {"Authentication": "Baerer lalala"}))
-          .thenAnswer((_) async => http.Response(jsonEncode(test.toJson()), 200));
+          .thenAnswer((_) async => http.Response(jsonEncode(origTestDto.toJson()), 200));
 
-      SymfonyCommunicator communicator = SymfonyCommunicator(jwt: "lalala", client: client);
+      SymfonyCommunicator communicator
+      = SymfonyCommunicator(jwt: "lalala", client: client);
 
       EventRemoteService remoteservice
       = EventRemoteService(communicator: communicator);
 
       EventRepository repository = EventRepository(remoteservice, null);
-      expect(await repository.getSingle(Id.fromUnique(1)).then((value) => value.fold((l) => null, (r) => EventDto.fromDomain(r))), test);
+      expect(await repository.getSingle(Id.fromUnique(1)).then((value) => value.fold((l) => null, (r) => EventDto.fromDomain(r))), origTestDto);
+  });
+
+
+
+
+  test("connectionTestPost", () async {
+
+    final client = MockEvent();
+
+    when(client.post("ourUrl.com/event",  headers: {"Authentication": "Baerer lalala"})).thenAnswer((realInvocation) async => http.Response("1", 200));
+    //whenObject.thenAnswer((_) async =>  http.Response("1", 200));
+
+
+    SymfonyCommunicator communicator
+    = SymfonyCommunicator(jwt: "lalala", client: client);
+
+    EventRemoteService remoteservice
+    = EventRemoteService(communicator: communicator);
+
+    EventRepository repository = EventRepository(remoteservice, null);
+    expect(await repository.create(origTestDto.toDomain()).then((value) => value.fold((l) => null, (r) => Unit)), origTestDto); //TODO: get body from postfunction
 
 
   });
-
 
 
 }

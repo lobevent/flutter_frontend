@@ -3,12 +3,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 
 part 'event_dtos.freezed.dart';
 part 'event_dtos.g.dart';
 
 @freezed
-abstract class EventDto with _$EventDto{
+abstract class EventDto with _$EventDto {
   const EventDto._();
 
   const factory EventDto({
@@ -18,11 +19,10 @@ abstract class EventDto with _$EventDto{
     @required String description,
     @required DateTime date,
     @required DateTime creationDate,
-    //ProfileDto profile, //TODO: implement profile
+    @required ProfileDto owner,
   }) = _EventDto;
 
-  factory EventDto.fromDomain(Event event)
-  {
+  factory EventDto.fromDomain(Event event) {
     return EventDto(
       id: event.id,
       name: event.name.getOrCrash(),
@@ -30,24 +30,22 @@ abstract class EventDto with _$EventDto{
       date: event.date,
       description: event.description.getOrCrash(),
       creationDate: event.creationDate,
-      //profile: event.owner.
-
+      owner: ProfileDto.fromDomain(event.owner),
     );
   }
 
-  factory EventDto.fromJson(Map<String, dynamic> json) => _$EventDtoFromJson(json);
+  factory EventDto.fromJson(Map<String, dynamic> json) =>
+      _$EventDtoFromJson(json);
 
-  Event toDomain(){
+  Event toDomain() {
     return Event(
       id: id,
       name: EventName(name),
       date: date,
       description: EventDescription(description),
-      owner: Profile(id: 0, name: null), //TODO: don't forget this one!
+      owner: owner.toDomain(), //TODO: don't forget this one!
       public: public,
       creationDate: creationDate,
     );
   }
-
-
 }

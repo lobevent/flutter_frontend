@@ -2,9 +2,9 @@ import 'package:flutter_frontend/infrastructure/core/i_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 
-class SimpleConverter implements JsonConverter<ProfileDto,Map<String, dynamic>> {
+class ProfileConverter implements JsonConverter<ProfileDto,Map<String, dynamic>> {
 
-  const SimpleConverter();
+  const ProfileConverter();
 
   @override
   ProfileDto fromJson(Map<String, dynamic> owner) {

@@ -30,7 +30,7 @@ main() {
     expect(testDto, test);
   });
 
-  test("connectionTest", (){
+  test("connectionTest", () async {
     EventDto test = EventDto(
         id: 1,
         name: "EVENT1",
@@ -49,8 +49,7 @@ main() {
       = EventRemoteService(communicator: SymfonyCommunicator(jwt: "lalala", client: client));
 
       EventRepository repository = EventRepository(remoteservice, null);
-      expect(repository.getSingle(Id.fromUnique(1))
-          .then((value) => value.fold((l) => null, (r) => EventDto.fromDomain(r))), test);
+      expect(await repository.getSingle(Id.fromUnique(1)).then((value) => value.fold((l) => null, (r) => EventDto.fromDomain(r))), test);
 
 
   });

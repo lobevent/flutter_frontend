@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_frontend/infrastructure/core/i_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutter_frontend/domain/core/errors.dart';

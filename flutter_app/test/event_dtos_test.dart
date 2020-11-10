@@ -31,7 +31,7 @@ main() {
 
     EventDto testDto =
     EventDto.fromJson(EventDto.fromDomain(origTestDto.toDomain()).toJson());
-    expect(testDto, test);
+    expect(testDto, origTestDto);
   });
 
   test("connectionTest", () async {
@@ -58,7 +58,8 @@ main() {
 
     final client = MockEvent();
 
-    when(client.post("ourUrl.com/event",  headers: {"Authentication": "Baerer lalala"})).thenAnswer((realInvocation) async => http.Response("1", 200));
+    print(jsonEncode(origTestDto.toJson()));
+    when(client.post("ourUrl.com/event",  headers: {"Authentication": "Baerer lalala"}, body: origTestDto.toJson())).thenAnswer((realInvocation) async => http.Response("1", 200));
     //whenObject.thenAnswer((_) async =>  http.Response("1", 200));
 
 
@@ -69,8 +70,8 @@ main() {
     = EventRemoteService(communicator: communicator);
 
     EventRepository repository = EventRepository(remoteservice, null);
-    expect(await repository.create(origTestDto.toDomain()).then((value) => value.fold((l) => null, (r) => Unit)), origTestDto); //TODO: get body from postfunction
 
+    expect(await repository.create(origTestDto.toDomain()).then((value) => value.fold((l) => null, (r) => Unit)), origTestDto); //TODO: get body from postfunction
 
   });
 

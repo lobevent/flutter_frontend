@@ -67,7 +67,7 @@ class EventRepository implements IEventRepository{
   Future<Either<EventFailure, Unit>> create(Event event) async {
     try {
       final eventDto = EventDto.fromDomain(event);
-      //function implementation
+      _eventRemoteService.createEvent(eventDto);
       return right(unit);
     }  on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {

@@ -1,9 +1,7 @@
-import 'package:flutter_frontend/infrastructure/core/i_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
-import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 
 part 'event_dtos.freezed.dart';

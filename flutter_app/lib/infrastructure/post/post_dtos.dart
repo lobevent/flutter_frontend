@@ -1,9 +1,5 @@
-import 'package:flutter_frontend/domain/core/value_validators.dart';
-import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/post/value_objects.dart';
-import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:flutter_frontend/infrastructure/core/i_dtos.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

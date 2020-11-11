@@ -25,6 +25,9 @@ dependencies:
   # flutter bloc specific widgets like BlocConsumer
   flutter_bloc: ^6.0.6
 
+  # uuid for the user objects (and probably more later)
+  uuid: ^2.2.2
+
   # firebase releated stuff
   # not using firebase core since every firebase plugin imports firebase core by itself
   # firebase auth for the authentication with firebase

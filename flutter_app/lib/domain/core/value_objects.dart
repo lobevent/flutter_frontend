@@ -1,8 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:meta/meta.dart';
+import 'package:uuid/uuid.dart';
 
-import 'failures.dart';
+import 'package:flutter_frontend/domain/core/errors.dart';
+import 'package:flutter_frontend/domain/core/failures.dart';
 
 
 @immutable
@@ -49,4 +50,24 @@ class Id extends ValueObject<int> {
   }
 
   const Id._(this.value);
+}
+
+class UniqueId extends ValueObject<String> {
+  @override
+  final Either<ValueFailure<String>, String> value;
+
+  factory UniqueId() {
+    return UniqueId._(
+      right(Uuid().v4()),
+    );
+  }
+
+  factory UniqueId.fromUniqueString(String uniqueId) {
+    assert(uniqueId != null);
+    return UniqueId._(
+      right(uniqueId),
+    );
+  }
+
+  const UniqueId._(this.value);
 }

@@ -18,10 +18,16 @@ abstract class ValueFailure<T> with _$ValueFailure<T> {
   }) = InvalidEmail<T>;
   const factory ValueFailure.shortPassword({
     @required T failedValue,
+    @required int minLength,
   }) = ShortPassword<T>;
   const factory ValueFailure.exceedingLenght({
     @required T failedValue,
+    @required int maxLength,
   }) = ExceedingLength<T>;
+  const factory ValueFailure.lengthTooShort({
+    @required T failedValue,
+    @required int minLength,
+  }) = LengthTooShort<T>;
   const factory ValueFailure.invalidDate({
     @required T failedValue,
   }) = InvalidDate<T>;

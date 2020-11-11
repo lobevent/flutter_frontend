@@ -12,7 +12,7 @@ abstract class EventDto with _$EventDto {
   const EventDto._();
 
   const factory EventDto({
-    @required int id,
+    int id,
     @required String name,
     @required bool public,
     @required String description,

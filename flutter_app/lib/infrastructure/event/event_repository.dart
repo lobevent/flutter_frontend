@@ -64,11 +64,11 @@ class EventRepository implements IEventRepository{
     }
   }
   @override
-  Future<Either<EventFailure, Unit>> create(Event event) async {
+  Future<Either<EventFailure, Event>> create(Event event) async {
     try {
       final eventDto = EventDto.fromDomain(event);
-      _eventRemoteService.createEvent(eventDto);
-      return right(unit);
+      EventDto returnedEvent = await _eventRemoteService.createEvent(eventDto);
+      return right(returnedEvent.toDomain());
     }  on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {
         return left(const EventFailure.insufficientPermissions());
@@ -78,11 +78,13 @@ class EventRepository implements IEventRepository{
     }
   }
   @override
-  Future<Either<EventFailure, Unit>> update(Event event) async {
+  Future<Either<EventFailure, Event>> update(Event event) async {
     try {
       final eventDto = EventDto.fromDomain(event);
+      Event returnedEvent;
       //function implementation
-      return right(unit);
+      throw UnimplementedError();
+      return right(returnedEvent);
     }  on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {
         return left(const EventFailure.insufficientPermissions());
@@ -94,11 +96,13 @@ class EventRepository implements IEventRepository{
     }
   }
   @override
-  Future<Either<EventFailure, Unit>> delete(Event event) async{
+  Future<Either<EventFailure, Event>> delete(Event event) async{
     try {
       final eventDto = EventDto.fromDomain(event);
       //function implementation
-      return right(unit);
+      Event returnedEvent;
+      throw UnimplementedError();
+      return right(returnedEvent);
     }  on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {
         return left(const EventFailure.insufficientPermissions());

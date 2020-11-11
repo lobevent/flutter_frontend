@@ -17,7 +17,7 @@ enum Operation{
 abstract class IPostRepository{
   Future <Either<PostFailure, List<Post>>> getList(Operation operation, {Profile profile});
   Future <Either<PostFailure, Post>> getSingle(Id id);
-  Future<Either<PostFailure, Unit>> create(Post post);
-  Future<Either<PostFailure, Unit>> update(Post post);
-  Future<Either<PostFailure, Unit>> delete(Post post);
+  Future<Either<PostFailure, Post>> create(Post post);
+  Future<Either<PostFailure, Post>> update(Post post);
+  Future<Either<PostFailure, Post>> delete(Post post);
 }

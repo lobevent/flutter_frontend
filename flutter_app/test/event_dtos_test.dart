@@ -18,7 +18,6 @@ class MockEvent extends Mock implements Event, http.Client {}
 
 main() {
   EventDto origTestDto = EventDto(
-      id: 1,
       name: "EVENT1",
       public: true,
       description: "kleines event",
@@ -55,11 +54,12 @@ main() {
 
 
   test("connectionTestPost", () async {
+    const int id = 2;
 
     final client = MockEvent();
 
-    print(jsonEncode(origTestDto.toJson()));
-    when(client.post("ourUrl.com/event",  headers: {"Authentication": "Baerer lalala"}, body: origTestDto.toJson())).thenAnswer((realInvocation) async => http.Response("1", 200));
+    EventDto newTestDto = origTestDto.copyWith(id: id);
+    when(client.post("ourUrl.com/event",  headers: {"Authentication": "Baerer lalala"}, body: jsonEncode(origTestDto.toJson()))).thenAnswer((realInvocation) async => http.Response(jsonEncode(newTestDto.toJson()), 200));
     //whenObject.thenAnswer((_) async =>  http.Response("1", 200));
 
 
@@ -70,8 +70,10 @@ main() {
     = EventRemoteService(communicator: communicator);
 
     EventRepository repository = EventRepository(remoteservice, null);
-
-    expect(await repository.create(origTestDto.toDomain()).then((value) => value.fold((l) => null, (r) => Unit)), origTestDto); //TODO: get body from postfunction
+    Event answer = await repository.create(origTestDto.toDomain()).then((value) => value.fold((l) => null, (r) => r));
+    expect(answer.id, id);
+    expect(answer == null, false);
+    expect(EventDto.fromDomain(answer), origTestDto.copyWith(id: id));
 
   });
 

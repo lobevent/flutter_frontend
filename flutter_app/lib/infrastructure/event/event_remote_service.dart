@@ -24,8 +24,7 @@ class EventRemoteService{
   Future<EventDto> getSingle(int id) async {
       final String uri = "$_eventByIdPath$id"; // TODO combine string this way it's a best practice
       final Response response = await client.get(uri);
-      final EventDto eventDto =
-        EventDto.fromJson(jsonDecode(response.body) as Map<String, dynamic>); // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
+      final EventDto eventDto = await _decodeEvent(response); // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
       return eventDto;
   }
 
@@ -41,8 +40,8 @@ class EventRemoteService{
     return _getEventList(_unreactedEventsPath);
   }
 
-  Future<void> createEvent(EventDto event) async { // TODO always return Future<void> instead of only void when using async this way the function can be awaited in later usage same for the next 2 methods
-    client.post(_postPath, event.toJson()); //
+  Future<EventDto> createEvent(EventDto event) async { // TODO always return Future<void> instead of only void when using async this way the function can be awaited in later usage same for the next 2 methods
+    return _decodeEvent( await client.post(_postPath, jsonEncode(event.toJson()))); //
   }
 
   Future<void> deleteEvent(EventDto event) async {
@@ -61,7 +60,9 @@ class EventRemoteService{
 
 
 
-
+  Future<EventDto> _decodeEvent(Response json) async {
+    return EventDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
+  }
 
   Future<List<EventDto>> _getEventList(String path) async{
     final Response response = await client.get(path);

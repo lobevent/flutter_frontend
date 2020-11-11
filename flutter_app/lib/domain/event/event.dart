@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
@@ -10,7 +11,7 @@ abstract class Event implements _$Event {
   const Event._();
 
   const factory Event({
-    @required int id,
+    int id,
     @required EventName name,
     @required DateTime date,
     @required EventDescription description,

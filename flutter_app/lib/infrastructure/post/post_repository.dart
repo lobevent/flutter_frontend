@@ -18,7 +18,8 @@ class PostRepository implements IPostRepository {
     try {
       final postDto = PostDto.fromDomain(post);
       _postRemoteService.create(postDto);
-      return right(returnedpost); //TODO implement with .toDomain
+      throw UnimplementedError();
+      //return right(returnedpost); //TODO implement with .toDomain
     } on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {
         return left(const PostFailure.insufficientPermissions());
@@ -33,7 +34,8 @@ class PostRepository implements IPostRepository {
     try {
       final postDto = PostDto.fromDomain(post);
       _postRemoteService.delete(postDto);
-      return right(returnedpost); //TODO implement with .toDomain
+      throw UnimplementedError();
+      //return right(returnedpost); //TODO implement with .toDomain
     } on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {
         return left(const PostFailure.insufficientPermissions());
@@ -44,10 +46,11 @@ class PostRepository implements IPostRepository {
   }
 
   @override
-  Future<Either<PostFailure, List<Post>>> getList(Operation operation, {Profile profile}) async {
+  Future<Either<PostFailure, List<Post>>> getList(Operation operation,
+      {Profile profile}) async {
     try {
       List<PostDto> postDtos;
-      switch(operation) {
+      switch (operation) {
         case Operation.own:
           postDtos = await _postRemoteService.getOwnPosts();
           break;
@@ -59,9 +62,10 @@ class PostRepository implements IPostRepository {
           break;
       }
       //convert the dto objects to domain Objects
-      final List<Post> posts =  postDtos.map((postDto) => postDto.toDomain()).toList();
+      final List<Post> posts =
+          postDtos.map((postDto) => postDto.toDomain()).toList();
       return right(posts);
-    }  on PlatformException catch (e) {
+    } on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {
         return left(const PostFailure.insufficientPermissions());
       } else {
@@ -69,13 +73,15 @@ class PostRepository implements IPostRepository {
       }
     }
   }
+
   @override
   Future<Either<PostFailure, Post>> getSinglePost(Id id) async {
     try {
-      final PostDto postDto = await _postRemoteService.getSinglePost(id.getOrCrash());
+      final PostDto postDto =
+          await _postRemoteService.getSinglePost(id.getOrCrash());
       final Post post = postDto.toDomain();
       return right(post);
-    }  on PlatformException catch (e) {
+    } on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {
         return left(const PostFailure.insufficientPermissions());
       } else {
@@ -89,7 +95,8 @@ class PostRepository implements IPostRepository {
     try {
       final postDto = PostDto.fromDomain(post);
       _postRemoteService.update(postDto);
-      return right(returnedpost); //TODO implement with .toDomain
+      throw UnimplementedError();
+      //return right(returnedpost); //TODO implement with .toDomain
     } on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {
         return left(const PostFailure.insufficientPermissions());

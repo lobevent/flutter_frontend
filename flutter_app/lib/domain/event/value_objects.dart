@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
@@ -12,9 +13,7 @@ class EventName extends ValueObject<String> {
   factory EventName(String input) {
     assert(input != null);
     {
-      return EventName._(
-        validateSingleLine(input)
-      );
+      return EventName._(validateSingleLine(input));
     }
   }
   const EventName._(this.value);
@@ -25,13 +24,11 @@ class EventDescription extends ValueObject<String> {
   final Either<ValueFailure<String>, String> value;
 
   // TODO maxLength is never initialized?! -> export constants into a file in domain/core/constants.dart
-  static int maxLength=Constants.maxLength;
+  static int maxLength = Constants.Constants.maxLength;
   factory EventDescription(String input) {
     assert(input != null);
     {
-      return EventDescription._(
-          validateLength(input, maxLength)
-      );
+      return EventDescription._(validateLength(input, maxLength: maxLength));
     }
   }
   const EventDescription._(this.value);

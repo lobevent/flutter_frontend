@@ -75,6 +75,8 @@ class EventRepository implements IEventRepository{
       } else {
         return left(const EventFailure.unexpected());
       }
+    } catch (e) {
+        return left(const EventFailure.unexpected());
     }
   }
   @override

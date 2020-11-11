@@ -19,7 +19,8 @@ class ProfileRepository extends IProfileRepository{
     try {
       final profileDto = ProfileDto.fromDomain(profile);
       _profileRemoteService.create(profileDto);
-      return right(returnedprofile); //TODO implement with .toDomain
+      throw UnimplementedError();
+      //return right(returnedprofile); //TODO implement with .toDomain
     }on PlatformException catch(e){
       if(e.message.contains('PERMISSION_DENIED')){
         return left(const ProfileFailure.insufficientPermissions());
@@ -34,7 +35,8 @@ class ProfileRepository extends IProfileRepository{
     try {
       final profileDto = ProfileDto.fromDomain(profile);
       _profileRemoteService.delete(profileDto);
-      return right(returnedprofile); //TODO implement with .toDomain
+      throw UnimplementedError();
+      //return right(returnedprofile); //TODO implement with .toDomain
     } on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {
         return left(const ProfileFailure.insufficientPermissions());
@@ -60,8 +62,9 @@ class ProfileRepository extends IProfileRepository{
   Future<Either<ProfileFailure, Profile>> update(Profile profile) async{
     try {
       final postDto = ProfileDto.fromDomain(profile);
-      _profileRemoteService.update(profileDto);
-      return right(returnedprofile); //TODO implement with .toDomain
+      throw UnimplementedError();
+      //_profileRemoteService.update(profileDto);
+      //return right(returnedprofile); //TODO implement with .toDomain
     } on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {
         return left(const ProfileFailure.insufficientPermissions());
@@ -71,5 +74,3 @@ class ProfileRepository extends IProfileRepository{
     }
   }
   }
-
-}

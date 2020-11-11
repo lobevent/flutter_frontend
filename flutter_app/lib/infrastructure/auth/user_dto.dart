@@ -5,11 +5,10 @@ import 'package:flutter_frontend/domain/auth/user.dart';
 
 part 'user_dto.freezed.dart';
 
-abstract class UserDto implements _UserDto {
+abstract class UserDto implements _$UserDto {
   const UserDto._();
 
   factory UserDto({
     @required Uuid id,
-    @required 
-  })
+  })= _UserDto;
 }

@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
-import 'post_dtos.dart';
 import 'package:http/http.dart';
+
+import 'post_dtos.dart';
 
 class PostRemoteService {
   static const String _postIdPath = "/event/post/{postId}";

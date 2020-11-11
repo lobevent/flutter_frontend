@@ -8,10 +8,10 @@ part 'user_dto.freezed.dart';
 part 'user_dto.g.dart';
 
 @freezed
-abstract class UserDto implements _$UserDto {
+abstract class UserDto with _$UserDto {
   const UserDto._();
 
-  factory UserDto({
+  const factory UserDto({
     @required String id,
     @required String username,
     @JsonKey(includeIfNull: false) String emailAddress,

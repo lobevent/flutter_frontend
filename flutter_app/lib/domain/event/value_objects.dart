@@ -23,7 +23,6 @@ class EventDescription extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
 
-  // TODO maxLength is never initialized?! -> export constants into a file in domain/core/constants.dart
   static int maxLength = Constants.maxLength;
   factory EventDescription(String input) {
     assert(input != null);

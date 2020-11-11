@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
@@ -16,7 +15,6 @@ class ProfileRemoteService {
   static const String _followerPath = ""; //TODO no existing path
   static const String _postProfilePath = ""; //TODO no existing path
 
-
   SymfonyCommunicator client;
 
   ProfileRemoteService() {
@@ -27,12 +25,14 @@ class ProfileRemoteService {
     final String uri = "$_profileIdPath$id";
     Response response = await client.get(uri);
     ProfileDto profileDto =
-    ProfileDto.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+        ProfileDto.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
     return profileDto;
   }
 
-  Future<void> create(ProfileDto profile) async { //change return value to postDto
+  Future<void> create(ProfileDto profile) async {
+    //change return value to postDto
     throw UnimplementedError();
+    client.post(_profileIdPath, profile.toJson());
   }
 
   Future<void> delete(ProfileDto profile) async {
@@ -63,8 +63,8 @@ class ProfileRemoteService {
   Future<List<ProfileDto>> _getProfileList(String path) async {
     final Response response = await client.get(path);
     final List<ProfileDto> profile = (jsonDecode(response.body) as List<
-        Map<String,
-            dynamic>>) // TODO one liners are nice for the flex xD but you already use a variable then I think it is easier to just put it into the next line
+            Map<String,
+                dynamic>>) // TODO one liners are nice for the flex xD but you already use a variable then I think it is easier to just put it into the next line
         .map((e) => ProfileDto.fromJson(e))
         .toList(); // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
 
@@ -78,5 +78,3 @@ class ProfileRemoteService {
         .toList();
   }
 }
-
-

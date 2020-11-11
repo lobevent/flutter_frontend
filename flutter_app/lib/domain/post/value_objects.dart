@@ -9,9 +9,8 @@ class PostContent extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
 
-  // TODO maxLength is never initialized?! -> export constants into a file in domain/core/constants.dart
   static int maxLength = Constants.maxLength;
-  //check with maxLength (which u get from backend) if the PostContent is too long
+  //check with maxLength, which is defined in the class constants.dart
   factory PostContent(String input) {
     assert(input != null);
     {
@@ -25,9 +24,8 @@ class CommentContent extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
 
-  // TODO maxLength is never initialized?! -> export constants into a file in domain/core/constants.dart
   static int maxLength = Constants.maxLength;
-  //check with maxLength (which u get from backend) if the CommentContent is too long
+  //check with maxLength, which is defined in the class constants.dart
   factory CommentContent(String input) {
     assert(input != null);
     {

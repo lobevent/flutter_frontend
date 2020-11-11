@@ -51,6 +51,7 @@ class EventRemoteService{
   }
 
   Future<void> updateEvent(EventDto event) async {
+    //TODO
     //    client.put(uri, body)
     throw UnimplementedError();
   }

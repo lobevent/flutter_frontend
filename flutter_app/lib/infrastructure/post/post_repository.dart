@@ -14,7 +14,7 @@ class PostRepository implements IPostRepository {
   PostRepository(this._postRemoteService);
 
   @override
-  Future<Either<PostFailure, Post>> create(Post post) async {
+  Future<Either<PostFailure, Profile>> create(Post post) async {
     try {
       final postDto = PostDto.fromDomain(post);
       _postRemoteService.create(postDto);
@@ -29,7 +29,7 @@ class PostRepository implements IPostRepository {
   }
 
   @override
-  Future<Either<PostFailure, Post>> delete(Post post) async {
+  Future<Either<PostFailure, Profile>> delete(Post post) async {
     try {
       final postDto = PostDto.fromDomain(post);
       _postRemoteService.delete(postDto);
@@ -44,7 +44,7 @@ class PostRepository implements IPostRepository {
   }
 
   @override
-  Future<Either<PostFailure, List<Post>>> getList(Operation operation, {Profile profile}) async {
+  Future<Either<PostFailure, List<Profile>>> getList(Operation operation, {Profile profile}) async {
     try {
       List<PostDto> postDtos;
       switch(operation) {
@@ -59,7 +59,7 @@ class PostRepository implements IPostRepository {
           break;
       }
       //convert the dto objects to domain Objects
-      final List<Post> post =  postDtos.map((postDto) => postDto.toDomain()).toList();
+      final List<Profile> post =  postDtos.map((postDto) => postDto.toDomain()).toList();
       return right(post);
     }  on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {
@@ -70,10 +70,10 @@ class PostRepository implements IPostRepository {
     }
   }
   @override
-  Future<Either<PostFailure, Post>> getSinglePost(Id id) async {
+  Future<Either<PostFailure, Profile>> getSinglePost(Id id) async {
     try {
       final PostDto postDto = await _postRemoteService.getSinglePost(id.getOrCrash());
-      final Post post = postDto.toDomain();
+      final Profile post = postDto.toDomain();
       return right(post);
     }  on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {
@@ -85,7 +85,7 @@ class PostRepository implements IPostRepository {
   }
 
   @override
-  Future<Either<PostFailure, Post>> update(Post post) async {
+  Future<Either<PostFailure, Profile>> update(Post post) async {
     try {
       final postDto = PostDto.fromDomain(post);
       _postRemoteService.update(postDto);

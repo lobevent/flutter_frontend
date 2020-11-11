@@ -26,7 +26,7 @@ abstract class Profile implements _$Profile {
     @required List<Invitation> invitations,
     @required List<Friendship> friendships,
     @required List<Friendship2> friendships2,
-    @required List<Post> posts,
+    @required List<Profile> posts,
     @required List<Comment> comments,
   }) = _FullProfile;
 

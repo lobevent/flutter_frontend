@@ -8,7 +8,7 @@ import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 
-class MockPost extends Mock implements Post {}
+class MockPost extends Mock implements Profile {}
 
 main() {
   test("Post Convertion", ()

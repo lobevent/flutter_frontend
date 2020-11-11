@@ -2,13 +2,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 
 part 'failures.freezed.dart';
+
 /*
 @freezed
 abstract class ValueFailure<T> with _$ValueFailure<T> {
   const factory ValueFailure.auth(AuthValueFailure<T> f) = _Auth<T>;
   const factory ValueFailure.event(EventValueFailure<T> f) = _Event<T>;
 }
-
  */
 
 @freezed
@@ -16,6 +16,7 @@ abstract class ValueFailure<T> with _$ValueFailure<T> {
   const factory ValueFailure.invalidEmail({
     @required T failedValue,
   }) = InvalidEmail<T>;
+  const factory ValueFailure.noEmailProvided() = NoEmailProvided;
   const factory ValueFailure.shortPassword({
     @required T failedValue,
     @required int minLength,

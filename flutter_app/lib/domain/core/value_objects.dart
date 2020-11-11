@@ -38,6 +38,7 @@ abstract class ValueObject<T>{
   @override
   String toString() => 'Value($value)';
 }
+
 class Id extends ValueObject<int> {
   @override
   final Either<ValueFailure<int>, int> value;

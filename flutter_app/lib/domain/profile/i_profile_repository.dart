@@ -8,9 +8,10 @@ import 'package:flutter_frontend/domain/profile/profile_failure.dart';
 /// For dertermination of the List to load
 /// for example for showing created posts or feed
 enum Operation{
-  own,
-  feed,
-  fromUser
+  search,
+  attendingUsersEvent,
+  follower,
+  postProfile,
 }
 
 abstract class IProfileRepository{

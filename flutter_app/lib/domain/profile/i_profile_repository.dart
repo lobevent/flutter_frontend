@@ -15,7 +15,7 @@ enum Operation{
 }
 
 abstract class IProfileRepository{
-  Future <Either<ProfileFailure, List<Profile>>> getList(Operation operation, {Profile profile});
+  Future <Either<ProfileFailure, List<Profile>>> getList(Operation operation);
   Future <Either<ProfileFailure, Profile>> getSingleProfile(Id id);
   Future <Either<ProfileFailure, Profile>> create(Profile profile);
   Future <Either<ProfileFailure, Profile>> update(Profile profile);

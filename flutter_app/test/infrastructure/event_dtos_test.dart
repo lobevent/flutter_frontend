@@ -26,6 +26,14 @@ main() {
       date: DateTime.now(),
       creationDate: DateTime.now());
 
+  final client = MockEvent();
+  final SymfonyCommunicator communicator
+  = SymfonyCommunicator(jwt: "lalala", client: client);
+
+  final EventRemoteService remoteservice
+  = EventRemoteService(communicator: communicator);
+
+  EventRepository repository = EventRepository(remoteservice, null);
 
   test("Event Convertion", () {
 
@@ -45,20 +53,13 @@ main() {
 
     test("connectionTest", () async {
 
-      final client = MockEvent();
-
       when(client.get("ourUrl.com/event/1", headers: {"Authentication": "Baerer lalala"}))
           .thenAnswer((_) async => http.Response(jsonEncode(origTestDto.toJson()), 200));
 
-      SymfonyCommunicator communicator
-      = SymfonyCommunicator(jwt: "lalala", client: client);
 
-      EventRemoteService remoteservice
-      = EventRemoteService(communicator: communicator);
-
-      EventRepository repository = EventRepository(remoteservice, null);
       expect(await repository.getSingle(Id.fromUnique(1)).then((value) => value.fold((l) => null, (r) => EventDto.fromDomain(r))), origTestDto);
     });
+
 
 
 
@@ -66,20 +67,10 @@ main() {
     test("Post with 200 response", () async {
       const int id = 2;
 
-      final client = MockEvent();
 
       EventDto newTestDto = origTestDto.copyWith(id: id);
       when(client.post("ourUrl.com/event",  headers: {"Authentication": "Baerer lalala"}, body: jsonEncode(origTestDto.toJson()))).thenAnswer((realInvocation) async => http.Response(jsonEncode(newTestDto.toJson()), 200));
-      //whenObject.thenAnswer((_) async =>  http.Response("1", 200));
 
-
-      SymfonyCommunicator communicator
-      = SymfonyCommunicator(jwt: "lalala", client: client);
-
-      EventRemoteService remoteservice
-      = EventRemoteService(communicator: communicator);
-
-      EventRepository repository = EventRepository(remoteservice, null);
       Event answer = await repository.create(origTestDto.toDomain()).then((value) => value.fold((l) => null, (r) => r));
       expect(answer.id, id);
       expect(answer == null, false);
@@ -87,26 +78,13 @@ main() {
 
     });
 
-    test("Post with 401 response", () async {
-      const int id = 2;
-
-      final client = MockEvent();
-
-      EventDto newTestDto = origTestDto.copyWith(id: id);
-      when(client.post("ourUrl.com/event",  headers: {"Authentication": "Baerer lalala"}, body: jsonEncode(origTestDto.toJson()))).thenAnswer((realInvocation) async => http.Response("" ,401));
-      //whenObject.thenAnswer((_) async =>  http.Response("1", 200));
-
-
-      SymfonyCommunicator communicator
-      = SymfonyCommunicator(jwt: "lalala", client: client);
-
-      EventRemoteService remoteservice
-      = EventRemoteService(communicator: communicator);
-
-      EventRepository repository = EventRepository(remoteservice, null);
-      EventFailure answer = await repository.create(origTestDto.toDomain()).then((value) => value.fold((l) => l, (r) => null));
-      expect(answer, EventFailure.unexpected());
-
+    test("Post with communicaton errors", () async {
+      final codesAndFailures = { 401:const EventFailure.notAuthenticated(), 403:const EventFailure.insufficientPermissions(), 404:const EventFailure.notFound(), 500:const EventFailure.internalServer()};
+      codesAndFailures.forEach((key, value) async {
+        when(client.post("ourUrl.com/event",  headers: {"Authentication": "Baerer lalala"}, body: jsonEncode(origTestDto.toJson()))).thenAnswer((realInvocation) async => http.Response("" ,key));
+        final EventFailure answer = await repository.create(origTestDto.toDomain()).then((value) => value.fold((l) => l, (r) => null));
+        expect(answer, value);
+      });
     });
 
     }

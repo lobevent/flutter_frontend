@@ -1,10 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/event_failure.dart';
 import 'package:flutter_frontend/domain/event/i_event_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/event/event_local_service.dart';
@@ -40,12 +42,8 @@ class EventRepository implements IEventRepository{
       //convert the dto objects to domain Objects
       List<Event> events =  eventDtos.map((edto) => edto.toDomain()).toList();
       return right(events);
-    }  on PlatformException catch (e) {
-      if (e.message.contains('PERMISSION_DENIED')) {
-        return left(const EventFailure.insufficientPermissions());
-      } else {
-        return left(const EventFailure.unexpected());
-      }
+    }  on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
     }
   }
 
@@ -54,13 +52,9 @@ class EventRepository implements IEventRepository{
     try {
        final EventDto eventDto = await _eventRemoteService.getSingle(id.getOrCrash());
        final Event event = eventDto.toDomain();
-      return right(event);
-    }  on PlatformException catch (e) {
-      if (e.message.contains('PERMISSION_DENIED')) {
-        return left(const EventFailure.insufficientPermissions());
-      } else {
-        return left(const EventFailure.unexpected());
-      }
+       return right(event);
+    }  on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
     }
   }
   @override
@@ -69,14 +63,8 @@ class EventRepository implements IEventRepository{
       final eventDto = EventDto.fromDomain(event);
       EventDto returnedEvent = await _eventRemoteService.createEvent(eventDto);
       return right(returnedEvent.toDomain());
-    }  on PlatformException catch (e) {
-      if (e.message.contains('PERMISSION_DENIED')) {
-        return left(const EventFailure.insufficientPermissions());
-      } else {
-        return left(const EventFailure.unexpected());
-      }
-    } catch (e) {
-        return left(const EventFailure.unexpected());
+    } on CommunicationException catch (e) {
+        return left(_reactOnCommunicationException(e));
     }
   }
   @override
@@ -87,14 +75,8 @@ class EventRepository implements IEventRepository{
       //function implementation
       throw UnimplementedError();
       return right(returnedEvent);
-    }  on PlatformException catch (e) {
-      if (e.message.contains('PERMISSION_DENIED')) {
-        return left(const EventFailure.insufficientPermissions());
-      } else if (e.message.contains('NOT_FOUND')) {
-        return left(const EventFailure.unableToUpdate());
-      } else {
-        return left(const EventFailure.unexpected());
-      }
+    }  on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
     }
   }
   @override
@@ -105,12 +87,20 @@ class EventRepository implements IEventRepository{
       Event returnedEvent;
       throw UnimplementedError();
       return right(returnedEvent);
-    }  on PlatformException catch (e) {
-      if (e.message.contains('PERMISSION_DENIED')) {
-        return left(const EventFailure.insufficientPermissions());
-      } else {
-        return left(const EventFailure.unexpected());
-      }
+    }  on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
+    }
+  }
+
+
+
+  EventFailure _reactOnCommunicationException(CommunicationException e){
+    switch(e.runtimeType){
+      case NotFoundException: return const EventFailure.notFound(); break;
+      case InternalServerException: return const EventFailure.internalServer(); break;
+      case NotAuthenticatedException: return const EventFailure.notAuthenticated(); break;
+      case NotAuthorizedException: return const EventFailure.insufficientPermissions(); break;
+      default: return const EventFailure.unexpected(); break;
     }
   }
 }

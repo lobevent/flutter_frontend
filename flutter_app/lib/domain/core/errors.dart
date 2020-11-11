@@ -1,11 +1,12 @@
 import 'package:flutter_frontend/domain/core/failures.dart';
 
-class NotAuthenticatedError extends Error {}
-class NotAuthorizedError extends Error {}
-class NotFoundError extends Error {}
-class InternalServerError extends Error {}
+class CommunicationError extends Error {}
+
+class NotAuthenticatedError extends CommunicationError {}
+class NotAuthorizedError extends CommunicationError {}
+class NotFoundError extends CommunicationError {}
+class InternalServerError extends CommunicationError {}
 class UnexpectedTypeError extends Error {}
-class UnknownError extends Error {} // TODO if it's a UnknownError just throw an Error
 
 
 class UnexpectedValueError extends Error {

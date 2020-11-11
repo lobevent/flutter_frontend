@@ -16,6 +16,10 @@ class EmailAddress extends ValueObject<String> {
     );
   }
 
+  factory EmailAddress.notProvided() {
+    return EmailAddress._(left(const ValueFailure.noEmailProvided()));
+  }
+
   const EmailAddress._(this.value);
 }
 

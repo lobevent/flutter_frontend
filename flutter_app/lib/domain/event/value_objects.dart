@@ -3,7 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_validators.dart';
-import 'package:flutter_frontend/domain/core/constants.dart' as Constants;
+import 'package:flutter_frontend/domain/core/constants.dart';
 
 class EventName extends ValueObject<String> {
   @override

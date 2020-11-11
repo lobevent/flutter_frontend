@@ -1,5 +1,5 @@
 
 
-class PostRemoteService{
+class ProfileRemoteService{
 
 }

@@ -7,6 +7,7 @@ import 'package:flutter_frontend/domain/profile/i_profile_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/profile_failure.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
+import 'package:flutter_frontend/infrastructure/profile/profile_remote_service.dart';
 
 class ProfileRepository extends IProfileRepository{
   final ProfileRemoteService _profileRemoteService;

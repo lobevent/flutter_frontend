@@ -47,7 +47,7 @@ class PostRemoteService {
     throw UnimplementedError();
   }
 
-  Future<PostDto> create(PostDto post) async {
+  Future<void> create(PostDto post) async { //change return value to postDto
     client.post(_postIdPath, post.toJson());
     throw UnimplementedError();
     //return postDto; //TODO json decode extra function

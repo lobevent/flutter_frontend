@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'constants.dart' as Constants;
 
-import 'failures.dart';
+import 'package:flutter_frontend/domain/core/constants.dart';
+import 'package:flutter_frontend/domain/core/failures.dart';
 
 Either<ValueFailure<String>, String> validateEmailAddress(String input) {
   // Maybe not the most robust way of email validation but it's good enough
@@ -16,21 +16,36 @@ Either<ValueFailure<String>, String> validateEmailAddress(String input) {
 
 Either<ValueFailure<String>, String> validatePassword(String input) {
   // You can also add some advanced password checks (uppercase/lowercase, at least 1 number, ...)
-  if (input.length >= 6) {
-    return right(input);
+  if (input.length < Constants.minPasswordLength) {
+    return left(
+      ValueFailure.shortPassword(
+        failedValue: input, 
+        minLength: Constants.minPasswordLength
+      )
+    );
   } else {
-    return left(ValueFailure.shortPassword(failedValue: input));
+    return right(input);
   }
 }
 
 Either<ValueFailure<String>, String> validateLength(
-    String input, int maxLength) {
-  // check if the string is longer than maxlength
-  if (input.length >= Constants.maxLength) {
-    return left(ValueFailure.exceedingLenght(failedValue: input));
-  } else {
-    return right(input);
+  String input, 
+  {int minLength=0, int maxLength}
+  ) {
+  if (input.length < minLength) {
+    return left(
+      ValueFailure.lengthTooShort(failedValue: input, minLength: minLength)
+    );
   }
+  if (maxLength != null) {
+    if (input.length > maxLength) { // check if the string is longer than maxlength
+      return left(
+        ValueFailure.exceedingLenght(failedValue: input, maxLength: maxLength)
+      );
+    }
+  }
+
+  return right(input);
 }
 
 Either<ValueFailure<String>, String> validateSingleLine(String input) {
@@ -42,10 +57,7 @@ Either<ValueFailure<String>, String> validateSingleLine(String input) {
   }
 }
 
-
-
 // TODO lets make this right tomorrow don't know what this should actually do (all the functions under this comment)
-
 
 Either<ValueFailure<String>, String> validateDate(String input) {
   // check if the date is in valid format
@@ -57,6 +69,7 @@ Either<ValueFailure<String>, String> validateDate(String input) {
     return left(ValueFailure.invalidDate(failedValue: input));
   }
 }
+
 //glaube nicht das man so die klassen initialisieren sollte für profile.dart List<...>
 Either<ValueFailure<String>, String> doNothing(String input) {
   // if u dont need to validate some object

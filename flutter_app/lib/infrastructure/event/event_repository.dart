@@ -30,7 +30,7 @@ class EventRepository implements IEventRepository{
           eventDtos = await _eventRemoteService.getOwnedEvents();
           break;
         case Operation.fromUser:
-          // TODO: Handle this case.
+          throw UnimplementedError();
           break;
         case Operation.attending:
           eventDtos = await _eventRemoteService.getAttendingEvents();
@@ -100,6 +100,7 @@ class EventRepository implements IEventRepository{
       case InternalServerException: return const EventFailure.internalServer(); break;
       case NotAuthenticatedException: return const EventFailure.notAuthenticated(); break;
       case NotAuthorizedException: return const EventFailure.insufficientPermissions(); break;
+      case UnexpectedFormatException: return const EventFailure.unexpected();
       default: return const EventFailure.unexpected(); break;
     }
   }

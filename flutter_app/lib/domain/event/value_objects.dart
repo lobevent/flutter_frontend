@@ -23,7 +23,7 @@ class EventDescription extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
 
-  static int maxLength = Constants.maxLength;
+  static int maxLength = Constants.maxTextLength;
   factory EventDescription(String input) {
     assert(input != null);
     {

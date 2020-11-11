@@ -7,7 +7,7 @@ import 'exceptions.dart';
 
 class SymfonyCommunicator{
   Client client;
-  final String url = "ourUrl.com";
+  static const String url = "ourUrl.com";
   final Map<String, String> headers;
 
   SymfonyCommunicator({@required String jwt, Client client})

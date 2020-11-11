@@ -9,7 +9,7 @@ class PostContent extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
 
-  static int maxLength = Constants.maxLength;
+  static int maxLength = Constants.maxTextLength;
   //check with maxLength, which is defined in the class constants.dart
   factory PostContent(String input) {
     assert(input != null);
@@ -24,7 +24,7 @@ class CommentContent extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
 
-  static int maxLength = Constants.maxLength;
+  static int maxLength = Constants.maxTextLength;
   //check with maxLength, which is defined in the class constants.dart
   factory CommentContent(String input) {
     assert(input != null);

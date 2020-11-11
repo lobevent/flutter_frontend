@@ -27,7 +27,7 @@ abstract class UserDto with _$UserDto {
 
   User toDomain() {
     return User(
-      id: UniqueId.fromUniqueString(id),
+      id: UniqueId.fromUniqueString(id.toString()),
       username: Username(username),
       email: emailAddress == null ? EmailAddress.notProvided() : EmailAddress(emailAddress)
     );

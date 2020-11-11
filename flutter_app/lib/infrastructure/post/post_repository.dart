@@ -73,7 +73,7 @@ class PostRepository implements IPostRepository {
   Future<Either<PostFailure, Post>> getSinglePost(Id id) async {
     try {
       final PostDto postDto = await _postRemoteService.getSinglePost(id.getOrCrash());
-      final Profile post = postDto.toDomain();
+      final Post post = postDto.toDomain();
       return right(post);
     }  on PlatformException catch (e) {
       if (e.message.contains('PERMISSION_DENIED')) {

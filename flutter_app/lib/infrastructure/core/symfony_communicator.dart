@@ -57,21 +57,24 @@ class SymfonyCommunicator{
       // TODO any reason to give a lambda into this? We could directly pass the response or
       // TODO subclassing the Response class (like the reddit link I did sent you)
       //tried the solution with passing -> now I get that i can call await when calling a function
-      switch (response.statusCode) {
-        case 401:
-          throw NotAuthenticatedException();
-          break;
-        case 403:
-          throw NotAuthorizedException();
-          break;
-        case 404:
-          throw NotFoundException();
-          break;
-        case 500:
-          throw InternalServerException();
-          break;
-        default:
-          return response; break;
-      }
+    if(response.statusCode/100 == 2){ // return response if the statuscode is something with 200, all these are ok
+      return response;
+    }
+    switch (response.statusCode) {
+      case 401:
+        throw NotAuthenticatedException();
+        break;
+      case 403:
+        throw NotAuthorizedException();
+        break;
+      case 404:
+        throw NotFoundException();
+        break;
+      case 500:
+        throw InternalServerException();
+        break;
+      default:
+        throw CommunicationException(); break; //return the baseclass for all other codes
+    }
   }
 }

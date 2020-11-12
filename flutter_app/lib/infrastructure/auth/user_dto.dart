@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutter_frontend/domain/auth/user.dart';
@@ -8,7 +9,7 @@ part 'user_dto.freezed.dart';
 part 'user_dto.g.dart';
 
 @freezed
-abstract class UserDto with _$UserDto {
+abstract class UserDto implements _$UserDto {
   const UserDto._();
 
   const factory UserDto({
@@ -34,4 +35,12 @@ abstract class UserDto with _$UserDto {
   }
 
   factory UserDto.fromJson(Map<String, dynamic> json) => _$UserDtoFromJson(json);
+
+  factory UserDto.fromFirebase(firebase.User firebaseUser) {
+    return UserDto(
+      id: firebaseUser.uid,
+      username: firebaseUser.displayName,
+      emailAddress: firebaseUser.email,
+    );
+  }
 }

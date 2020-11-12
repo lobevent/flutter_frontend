@@ -16,6 +16,7 @@ class EventRemoteService{
   // TODO combine it to event path?
   static const String postPath = "/event";
   static const String deletePath = "/event/";
+  static const String updatePath = "/event/";
 
   final SymfonyCommunicator client;
 

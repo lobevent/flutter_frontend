@@ -47,5 +47,4 @@ abstract class EventValueFailure<T> with _$EventValueFailure<T> {
     @required T failedValue,
   }) = ShortPassword<T>;
 }
-
- */
+*/

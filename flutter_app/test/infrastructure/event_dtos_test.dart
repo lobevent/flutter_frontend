@@ -59,15 +59,35 @@ main() {
   List<EventDto> evnentList = [origTestDto1, origTestDto2, origTestDto3]; //used for list tests
 
 
-  //initializing often used objects
+  //initializing Client and communication Objects
   final client = MockEvent();
   final SymfonyCommunicator communicator
-  = SymfonyCommunicator(jwt: "lalala", client: client);
-
-  final EventRemoteService remoteservice
-  = EventRemoteService(communicator: communicator);
-
+  = SymfonyCommunicator(jwt: "lalala", client: client); //SymfonyCommunicator for communication mocking with fake jwt and the mocking client
+  final EventRemoteService remoteservice //we have to pass the communicator, as it has the mocked client
+  = EventRemoteService(communicator: communicator); //remoteService for mocking in the repository
   EventRepository repository = EventRepository(remoteservice, null);
+
+
+  //some often used values
+  const int testId = 2;
+  const String jwt = "lalala";
+  const Map<String, String> authenticationHeader = {"Authentication": "Baerer $jwt"};
+
+  //HTTP error codes with corresponding eventFailures
+  final codesAndFailures = {
+    401:const EventFailure.notAuthenticated(),
+    403:const EventFailure.insufficientPermissions(),
+    404:const EventFailure.notFound(),
+    500:const EventFailure.internalServer()};
+
+  //getList operations with corresponding api paths
+  final listOperations = {
+    Operation.attending:EventRemoteService.attendingEventsPath,
+    Operation.fromUser:EventRemoteService.profileEventPath,
+    Operation.owned:EventRemoteService.ownedEventsPath,
+    Operation.unreacted:EventRemoteService.unreactedEventsPath
+  }; //instantiating map with different operation options
+
 
 
   //first test
@@ -90,7 +110,7 @@ main() {
 
     test("get Single Test", () async {
 
-      when(client.get("ourUrl.com/event/1", headers: {"Authentication": "Baerer lalala"}))
+      when(client.get("ourUrl.com/event/1", headers: authenticationHeader))
           .thenAnswer((_) async => http.Response(jsonEncode(origTestDto.toJson()), 200));
 
 
@@ -98,76 +118,116 @@ main() {
     });
 
     //testing list chain and convertion
-    final listOptions = {
-      Operation.attending:EventRemoteService.attendingEventsPath,
-      Operation.fromUser:EventRemoteService.profileEventPath,
-      Operation.owned:EventRemoteService.ownedEventsPath,
-      Operation.unreacted:EventRemoteService.unreactedEventsPath
-    }; //instantiating map with different operation options
-    listOptions.forEach((operation, path) async{ // generate testcases for different operations
+    listOperations.forEach((operation, path) async{ // generate testcases for different operations
       test("get List Test with 200 response. Operation: $operation", () async {
 
           Either<EventFailure, List<Event>> returnedList;
-          List<Map<String, dynamic>> jsonList = evnentList.map((e) => e.toJson()).toList();
-          when(client.get(SymfonyCommunicator.url + path, headers: {"Authentication": "Baerer lalala"}))
-              .thenAnswer((_) async => http.Response(jsonEncode(jsonList), 200));
+          when(client.get(SymfonyCommunicator.url + path, headers: authenticationHeader))
+              .thenAnswer((_) async => http.Response(jsonEncode(evnentList.map((e) => e.toJson()).toList()), 200));
           if(operation == Operation.fromUser){
             returnedList = await repository.getList(operation, profile: profileDto.toDomain());
           }else{
             returnedList = await repository.getList(operation);
           }
-          expect(returnedList.fold((l) => null, (r) => r.map((e) => EventDto.fromDomain(e)).toList()), evnentList);
+          expect(returnedList.getOrElse(() => throw Error()).map((e) => EventDto.fromDomain(e)).toList(), evnentList);
         });
 
     });
 
 
     test("Post with 200 response", () async {
-      const int id = 2;
 
+      EventDto newTestDto = origTestDto.copyWith(id: testId);
+      when(client.post("ourUrl.com/event",  headers: authenticationHeader, body: jsonEncode(origTestDto.toJson()))).thenAnswer((realInvocation) async => http.Response(jsonEncode(newTestDto.toJson()), 200));
 
-      EventDto newTestDto = origTestDto.copyWith(id: id);
-      when(client.post("ourUrl.com/event",  headers: {"Authentication": "Baerer lalala"}, body: jsonEncode(origTestDto.toJson()))).thenAnswer((realInvocation) async => http.Response(jsonEncode(newTestDto.toJson()), 200));
-
-      Event answer = await repository.create(origTestDto.toDomain()).then((value) => value.fold((l) => null, (r) => r));
-      expect(answer.id, id);
+      Event answer = await repository.create(origTestDto.toDomain()).then((value) => value.fold((l) => throw Error(), (r) => r));
+      expect(answer.id, testId);
       expect(answer == null, false);
-      expect(EventDto.fromDomain(answer), origTestDto.copyWith(id: id));
+      expect(EventDto.fromDomain(answer), origTestDto.copyWith(id: testId));
     });
 
 
     test("Delete with 200 response", () async {
-      const int id = 2;
 
-
-      EventDto newTestDto = origTestDto.copyWith(id: id);
-      when(client.delete(SymfonyCommunicator.url + EventRemoteService.deletePath + id.toString(),  headers: {"Authentication": "Baerer lalala"})).thenAnswer((realInvocation) async => http.Response(jsonEncode(newTestDto.toJson()), 200));
-      Event answer = await repository.delete(newTestDto.toDomain()).then((value) => value.fold((l) => null, (r) => r));
-      expect(answer.id, id);
+      EventDto newTestDto = origTestDto.copyWith(id: testId);
+      when(
+          client.delete(
+              SymfonyCommunicator.url + EventRemoteService.deletePath + testId.toString(),
+              headers: authenticationHeader))
+          .thenAnswer((realInvocation) async => http.Response(jsonEncode(newTestDto.toJson()), 200));
+      Event answer = await repository.delete(
+          newTestDto.toDomain())
+          .then((value) => value.fold((l) => null, (r) => r));
+      expect(answer.id, testId);
       expect(answer == null, false);
-      expect(EventDto.fromDomain(answer), origTestDto.copyWith(id: id));
+      expect(EventDto.fromDomain(answer), origTestDto.copyWith(id: testId));
     });
 
+    //---------------------UPDATE----------------------
     test("Put with 200 response", () async {
-      const int id = 2;
+      EventDto newTestDto = origTestDto.copyWith(id: testId);
+      when(
+          client.put(
+              SymfonyCommunicator.url + EventRemoteService.updatePath + testId.toString(),
+              headers: authenticationHeader,
+              body: jsonEncode(newTestDto.toJson())))
+          .thenAnswer((realInvocation) async => http.Response(jsonEncode(newTestDto.toJson()), 200));
 
-
-      EventDto newTestDto = origTestDto.copyWith(id: id);
-      when(client.put(SymfonyCommunicator.url + EventRemoteService.deletePath + id.toString(),  headers: {"Authentication": "Baerer lalala"}, body: jsonEncode(newTestDto.toJson()))).thenAnswer((realInvocation) async => http.Response(jsonEncode(newTestDto.toJson()), 200));
-
-      Event answer = await repository.update(newTestDto.toDomain()).then((value) => value.fold((l) => null, (r) => r));
-      expect(answer.id, id);
+      Event answer = await repository.update(newTestDto.toDomain())
+          .then((value) => value.fold((l) => null, (r) => r));
+      expect(answer.id, testId);
       expect(answer == null, false);
-      expect(EventDto.fromDomain(answer), origTestDto.copyWith(id: id));
+      expect(EventDto.fromDomain(answer), origTestDto.copyWith(id: testId));
     });
 
-    final codesAndFailures = { 401:const EventFailure.notAuthenticated(), 403:const EventFailure.insufficientPermissions(), 404:const EventFailure.notFound(), 500:const EventFailure.internalServer()};
-    codesAndFailures.forEach((key, value) async { //Autogenerated tests for the different failures
-      test("Post with communicaton errors. Code: $key", () async {
-          when(client.post(SymfonyCommunicator.url + EventRemoteService.postPath,  headers: {"Authentication": "Baerer lalala"}, body: jsonEncode(origTestDto.toJson()))).thenAnswer((realInvocation) async => http.Response("" ,key));
+    //-------autogenerated on Http error codes -----------------
+    ///Test crud methods and reaction to the statuscodes
+    ///the tests are generated based on the error codes and the associated errors
+    codesAndFailures.forEach((code, evFailure) { //Autogenerated tests for the different failures in post
+      test("Post with communicaton errors. Code: $code", () async { //tests for posts
+          when(client.post(SymfonyCommunicator.url + EventRemoteService.postPath,  headers: authenticationHeader, body: jsonEncode(origTestDto.toJson()))).thenAnswer((realInvocation) async => http.Response("" ,code));
           final EventFailure answer = await repository.create(origTestDto.toDomain()).then((value) => value.fold((l) => l, (r) => null));
-          expect(answer, value);
+          expect(answer, evFailure);
         });
+
+      test("Delete with communication errors. Code: $code", () async { //Autogenerated tests for the different failures in delete
+        EventDto newTestDto = origTestDto.copyWith(id: testId);
+        when(
+            client.delete(
+                SymfonyCommunicator.url + EventRemoteService.deletePath + testId.toString(),
+                headers: authenticationHeader))
+            .thenAnswer((realInvocation) async => http.Response("", code));
+        final Either<EventFailure, Event> answer = await repository.delete(newTestDto.toDomain()); //await answer from repository
+        final EventFailure failure = answer.swap().getOrElse(() => throw Error()); //swap, so we can use get or else, and throw an error if its not an failure
+        expect(failure, evFailure);
+      });
+      test("Put with communication Errors. Code: $code", () async {
+        EventDto newTestDto = origTestDto.copyWith(id: testId);
+        when(
+            client.put(
+                SymfonyCommunicator.url + EventRemoteService.updatePath + testId.toString(),
+                headers: authenticationHeader,
+                body: jsonEncode(newTestDto.toJson())))
+            .thenAnswer((realInvocation) async => http.Response("", code));
+        EventFailure failure = await repository.update(newTestDto.toDomain())
+            .then((value) => value.swap().getOrElse(() => throw Error()));
+        expect(failure, evFailure);
+      });
+
+      ///Test for the failures in the get listCalls
+      listOperations.forEach((operation, path) {
+        test("getList with communication Errors. Operation: $operation. Code: $code", () async{
+          EventFailure returnedFailure;
+          when(client.get(SymfonyCommunicator.url + path, headers: authenticationHeader))
+              .thenAnswer((_) async => http.Response(jsonEncode(evnentList.map((e) => e.toJson()).toList()), code));
+          if(operation == Operation.fromUser){
+            returnedFailure = await repository.getList(operation, profile: profileDto.toDomain()).then((value) => value.swap().getOrElse(() => throw Error()));
+          }else{
+            returnedFailure = await repository.getList(operation).then((value) => value.swap().getOrElse(() => throw Error()));
+          }
+          expect(returnedFailure, evFailure);
+        });
+      });
     });
 
     }

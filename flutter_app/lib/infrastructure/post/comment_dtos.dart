@@ -85,31 +85,40 @@ abstract class CommentDto with _$CommentDto {
   Comment toDomain() {
     Comment returnedComment;
     map(
-      (_CommentDto value) => {
-        returnedComment = Comment(
-          id: Id.fromUnique(value.id),
-          creationDate: value.creationDate,
-          commentContent: CommentContent(value.commentContent),
-          owner: value.profile.toDomain(),
-          commentChildren: value.commentChildren
-              //left(left()) because of the complex Either type
-              //where the list isn`t used here yet
-              .fold((l) => Comment.childCount(l),
-                  (r) => const Comment.childLess()),
-          post: value.post,
-        )
-      },
-      parent: (_CommentParentDto value) {
-        returnedComment = Comment.parent(id: Id.fromUnique(value.id));
-      },
-      children: (_CommentChildrenDto value) {
-        returnedComment = Comment.children(
-            count: value.count,
-            commentChildren: value.children
-                .map((commentDto) => commentDto.toDomain())
-                .toList());
-      },
-    );
+        (_CommentDto value) => {
+              returnedComment = Comment(
+                id: Id.fromUnique(value.id),
+                creationDate: value.creationDate,
+                commentContent: CommentContent(value.commentContent),
+                owner: value.profile.toDomain(),
+                commentChildren: value.commentChildren
+                    //left(left()) because of the complex Either type
+                    //where the list isn`t used here yet
+                    .fold((l) => Comment.childCount(l),
+                        (r) => const Comment.childLess()),
+                post: value.post,
+              )
+            }, parent: (_CommentParentDto value) {
+      returnedComment = Comment.parent(id: Id.fromUnique(value.id));
+    }, children: (_CommentChildrenDto value) {
+      returnedComment = Comment.children(
+          count: value.count,
+          commentChildren: value.children
+              .map((commentDto) => commentDto.toDomain())
+              .toList());
+    }, WithoutId: (_CommentDtoWithoutId value) {
+      returnedComment = CommentWithoutId(
+        creationDate: value.creationDate,
+        commentContent: CommentContent(value.commentContent),
+        owner: value.profile.toDomain(),
+        commentChildren: value.commentChildren
+            //left(left()) because of the complex Either type
+            //where the list isn`t used here yet
+            .fold(
+                (l) => Comment.childCount(l), (r) => const Comment.childLess()),
+        post: value.post,
+      );
+    });
     return returnedComment;
   }
 }

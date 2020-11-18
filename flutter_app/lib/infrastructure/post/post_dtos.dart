@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/post/value_objects.dart';
@@ -30,13 +32,21 @@ abstract class PostDto implements _$PostDto {
   }) = _PostDtoWithoutId;
 
   factory PostDto.fromDomain(Post post) {
-    return PostDto(
-      id: post.id.getOrCrash(),
-      creationDate: post.creationDate,
-      postContent: post.postContent.getOrCrash(),
-      owner: ProfileDto.fromDomain(post.owner),
-      event: EventDto.fromDomain(post.event),
-    );
+    PostDto returnedDto;
+    //distinguish between both PostDto cases
+    return post.map(
+        (value) => PostDto(
+              id: value.id.getOrCrash(),
+              creationDate: value.creationDate,
+              postContent: value.postContent.getOrCrash(),
+              owner: ProfileDto.fromDomain(post.owner),
+              event: EventDto.fromDomain(post.event),
+            ),
+        WithoutId: (value) => (PostDto.WithoutId(
+            creationDate: value.creationDate,
+            postContent: value.postContent.getOrCrash(),
+            owner: ProfileDto.fromDomain(value.owner),
+            event: EventDto.fromDomain(value.event))));
   }
 
   factory PostDto.fromJson(Map<String, dynamic> json) =>

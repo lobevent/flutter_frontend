@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

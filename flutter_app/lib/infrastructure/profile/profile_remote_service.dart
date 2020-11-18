@@ -43,14 +43,15 @@ class ProfileRemoteService {
   }
 
   Future<ProfileDto> delete(ProfileDto profileDto) async {
-    await client.delete("$deletePath${profileDto.id}");
-    return profileDto;
+    return _decodeProfile(
+    await client.delete("$deletePath${profileDto.id}"));
+
   }
 
   Future<ProfileDto> update(ProfileDto profileDto) async {
+    return _decodeProfile(
     await client.put(
-        "$updatePath${profileDto.id}", jsonEncode(profileDto.toJson()));
-    return profileDto;
+        "$updatePath${profileDto.id}", jsonEncode(profileDto.toJson())));
   }
 
   Future<List<ProfileDto>> getSearchedProfile() async {

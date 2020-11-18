@@ -67,14 +67,16 @@ class PostRemoteService {
   }
 
   Future<PostDto> delete(PostDto postDto) async {
-    await client.delete("$_postDeletePath${postDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}");
-    return postDto;
+    return _decodePost(
+        await client.delete("$_postDeletePath${postDto.maybeMap((value) => value.id, orElse: ()
+        => throw UnexpectedFormatException())}"));
   }
 
   Future<PostDto> update(PostDto postDto) async{
-    await client.put(
-        "$updatePath${postDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}", jsonEncode(postDto.toJson()));
-    return postDto;
+    return _decodePost(
+        await client.put(
+        "$updatePath${postDto.maybeMap((value) => value.id, orElse: ()
+        => throw UnexpectedFormatException())}", jsonEncode(postDto.toJson())));
   }
 
   Future<List<PostDto>> _getPostList(String path) async {

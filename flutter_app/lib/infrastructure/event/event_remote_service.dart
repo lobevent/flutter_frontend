@@ -29,7 +29,8 @@ class EventRemoteService {
   Future<EventDto> getSingle(int id) async {
     final String uri = "$eventByIdPath$id";
     final Response response = await client.get(uri);
-    final EventDto eventDto = await _decodeEvent(response); // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
+    final EventDto eventDto = await _decodeEvent(
+        response); // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
     return eventDto;
   }
 
@@ -52,14 +53,16 @@ class EventRemoteService {
 
   Future<EventDto> deleteEvent(EventDto eventDto) async {
     // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive
+
     await client.delete(
-        "$deletePath${eventDto.id}");
+        "$deletePath${eventDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}");
     return eventDto;
   }
 
   Future<EventDto> updateEvent(EventDto eventDto) async {
     await client.put(
-        "$updatePath${eventDto.id}", jsonEncode(eventDto.toJson()));
+        "$updatePath${eventDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}",
+        jsonEncode(eventDto.toJson()));
     return eventDto;
   }
 

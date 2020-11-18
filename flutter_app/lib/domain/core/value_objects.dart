@@ -44,7 +44,7 @@ class Id extends ValueObject<int> {
   final Either<ValueFailure<int>, int> value;
 
   factory Id.fromUnique(int uniqueId) {
-    assert(uniqueId != null);
+    //assert(uniqueId != null);
     return Id._(
       right(uniqueId),
     );

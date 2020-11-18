@@ -42,24 +42,30 @@ abstract class PostDto implements _$PostDto {
               owner: ProfileDto.fromDomain(post.owner),
               event: EventDto.fromDomain(post.event),
             ),
-        WithoutId: (value) => (PostDto.WithoutId(
+        WithoutId: (value) => PostDto.WithoutId(
             creationDate: value.creationDate,
             postContent: value.postContent.getOrCrash(),
             owner: ProfileDto.fromDomain(value.owner),
-            event: EventDto.fromDomain(value.event))));
+            event: EventDto.fromDomain(value.event)));
   }
 
   factory PostDto.fromJson(Map<String, dynamic> json) =>
       _$PostDtoFromJson(json);
 
   Post toDomain() {
-    return Post(
-        id: Id.fromUnique(id),
-        creationDate: creationDate,
-        postContent: PostContent(postContent),
-        owner: owner.toDomain(),
-        event: event.toDomain(),
-        comments: <Comment>[]);
+    return map((value) => Post(
+        id: Id.fromUnique(value.id),
+        creationDate: value.creationDate,
+        postContent: PostContent(value.postContent),
+        owner: value.owner.toDomain(),
+        event: value.event.toDomain(),
+        comments: <Comment>[]),
+        WithoutId: (value) => Post.WithoutId(
+        creationDate: value.creationDate,
+        postContent: PostContent(value.postContent),
+        owner: value.owner.toDomain(),
+        event: value.event.toDomain(),
+        comments: <Comment>[]));
   }
 }
 

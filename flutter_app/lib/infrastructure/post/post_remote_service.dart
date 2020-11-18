@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 
+import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:http/http.dart';
 
@@ -66,13 +67,13 @@ class PostRemoteService {
   }
 
   Future<PostDto> delete(PostDto postDto) async {
-    await client.delete("$_postDeletePath${postDto.id}");
+    await client.delete("$_postDeletePath${postDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}");
     return postDto;
   }
 
   Future<PostDto> update(PostDto postDto) async{
     await client.put(
-        "$updatePath${postDto.id}", jsonEncode(postDto.toJson()));
+        "$updatePath${postDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}", jsonEncode(postDto.toJson()));
     return postDto;
   }
 

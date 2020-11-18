@@ -21,7 +21,6 @@ abstract class Profile implements _$Profile {
   const factory Profile.full({
     @required int id,
     @required ProfileName name,
-    @required List<UsrEvntStats> userEventStatus,
     @required List<Event> ownedEvents,
     @required List<Invitation> invitations,
     @required List<Friendship> friendships,
@@ -30,16 +29,6 @@ abstract class Profile implements _$Profile {
     @required List<Comment> comments,
   }) = _FullProfile;
 
-  const factory Profile.withoutId({
-    @required ProfileName name,
-    @required List<UsrEvntStats> userEventStatus,
-    @required List<Event> ownedEvents,
-    @required List<Invitation> invitations,
-    @required List<Friendship> friendships,
-    @required List<Friendship2> friendships2,
-    @required List<Profile> posts,
-    @required List<Comment> comments,
-  }) = ProfileWithoutId;
 
   //check if the whole object is no failure
   // TODO same problem as in all other data classes before. Use the methods of value objects. And this seems to be a pretty repetitive task --> implement a super class!

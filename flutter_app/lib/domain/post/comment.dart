@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:flutter_frontend/domain/core/failures.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/post/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -12,7 +13,7 @@ abstract class Comment implements _$Comment {
   const Comment._();
 
   const factory Comment({
-    @required int id,
+    @required Id id,
     @required DateTime creationDate,
     @required CommentContent commentContent,
     @required Profile owner,
@@ -23,7 +24,7 @@ abstract class Comment implements _$Comment {
   }) = CommentFull;
 
   const factory Comment.parent({
-    @required int id,
+    @required Id id,
   }) = CommentParent;
 
   const factory Comment.childLess() = CommentChildLess;

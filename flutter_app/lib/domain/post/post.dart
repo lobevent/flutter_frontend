@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
@@ -14,7 +15,7 @@ abstract class Post implements _$Post {
   const Post._();
 
   const factory Post({
-    @required int id,
+    @required Id id,
     @required DateTime creationDate,
     @required PostContent postContent,
     @required Profile owner,

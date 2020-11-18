@@ -11,7 +11,7 @@ abstract class Event implements _$Event {
   const Event._();
 
   const factory Event({
-    int id,
+    Id id,
     @required EventName name,
     @required DateTime date,
     @required EventDescription description,

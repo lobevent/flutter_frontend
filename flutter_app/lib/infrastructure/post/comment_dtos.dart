@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutter_frontend/domain/core/errors.dart';
@@ -47,7 +48,7 @@ abstract class CommentDto with _$CommentDto{
         (CommentFull comment) => {
               //the full case
               returnedDto = CommentDto(
-                id: comment.id,
+                id: comment.id.getOrCrash(),
                 creationDate: comment.creationDate,
                 profile: ProfileDto.fromDomain(comment.owner),
                 commentContent: comment.commentContent.getOrCrash(),
@@ -60,7 +61,7 @@ abstract class CommentDto with _$CommentDto{
             },
         parent: (CommentParent comment) => {
               //the parent case
-              returnedDto = CommentDto.parent(id: comment.id),
+              returnedDto = CommentDto.parent(id: comment.id.getOrCrash()),
             },
         orElse: () {});
 
@@ -78,7 +79,7 @@ abstract class CommentDto with _$CommentDto{
     map(
         (_CommentDto value) => {
               returnedComment = Comment(
-                id: value.id,
+                id: Id.fromUnique(value.id),
                 creationDate: value.creationDate,
                 commentContent: CommentContent(value.commentContent),
                 owner: value.profile.toDomain(),
@@ -90,7 +91,7 @@ abstract class CommentDto with _$CommentDto{
                 post: value.post,
               )
             }, parent: (_CommentParentDto value) {
-      returnedComment = Comment.parent(id: value.id);
+      returnedComment = Comment.parent(id: Id.fromUnique(value.id));
     }, children: (_CommentChildrenDto value) {
       returnedComment = Comment.children(
           count: value.count,

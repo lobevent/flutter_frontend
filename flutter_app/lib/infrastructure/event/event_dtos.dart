@@ -1,3 +1,4 @@
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -23,7 +24,7 @@ abstract class EventDto with _$EventDto {
 
   factory EventDto.fromDomain(Event event) {
     return EventDto(
-      id: event.id,
+      id: event.id.getOrCrash(),
       name: event.name.getOrCrash(),
       public: event.public,
       date: event.date,
@@ -38,7 +39,7 @@ abstract class EventDto with _$EventDto {
 
   Event toDomain() {
     return Event(
-      id: id,
+      id: Id.fromUnique(id),
       name: EventName(name),
       date: date,
       description: EventDescription(description),

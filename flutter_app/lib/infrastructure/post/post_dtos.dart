@@ -1,3 +1,4 @@
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/post/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
@@ -23,7 +24,7 @@ abstract class PostDto implements _$PostDto{
 
   factory PostDto.fromDomain(Post post) {
     return PostDto(
-      id: post.id,
+      id: post.id.getOrCrash(),
       creationDate: post.creationDate,
       postContent: post.postContent.getOrCrash(),
       owner: ProfileDto.fromDomain(post.owner),
@@ -36,7 +37,7 @@ abstract class PostDto implements _$PostDto{
 
   Post toDomain(){
     return Post(
-      id: id,
+      id: Id.fromUnique(id),
       creationDate: creationDate,
       postContent: PostContent(postContent),
       owner: owner.toDomain(),

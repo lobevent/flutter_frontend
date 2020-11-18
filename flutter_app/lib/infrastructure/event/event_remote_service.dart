@@ -12,7 +12,6 @@ class EventRemoteService {
   static const String profileEventPath = "/user/events";
   static const String attendingEventsPath = "/user/eventStatus";
   static const String unreactedEventsPath = "/event";
-  static const String fromUserEventsPat = "/event";
 
   // TODO combine it to event path?
   static const String postPath = "/event";
@@ -39,7 +38,7 @@ class EventRemoteService {
     return _getEventList(ownedEventsPath);
   }
   Future<List<EventDto>> getEventsFromUser() async {
-    return _getEventList(fromUserEventsPath);
+    return _getEventList(profileEventPath);
   }
   Future<List<EventDto>> getAttendingEvents() async {
     return _getEventList(attendingEventsPath);
@@ -57,16 +56,14 @@ class EventRemoteService {
   Future<EventDto> deleteEvent(EventDto eventDto) async {
     // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive
 
-    await client.delete(
-        "$deletePath${eventDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}");
-    return eventDto;
+    return _decodeEvent(await client.delete(
+        "$deletePath${eventDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}"));
   }
 
   Future<EventDto> updateEvent(EventDto eventDto) async {
-    await client.put(
+    return _decodeEvent(await client.put(
         "$updatePath${eventDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}",
-        jsonEncode(eventDto.toJson()));
-    return eventDto;
+        jsonEncode(eventDto.toJson())));
   }
 
   Future<EventDto> _decodeEvent(Response json) async {

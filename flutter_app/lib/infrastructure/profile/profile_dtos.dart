@@ -15,6 +15,10 @@ abstract class ProfileDto with _$ProfileDto {
     @required String name,
   }) = _ProfileDto;
 
+  const factory ProfileDto.WithoutId({
+    @required String name,
+  }) = _ProfileDtoWithoutId;
+
   factory ProfileDto.fromDomain(Profile profile) {
     return ProfileDto(
       id: profile.id,

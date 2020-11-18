@@ -12,6 +12,7 @@ class EventRemoteService {
   static const String profileEventPath = "/user/events";
   static const String attendingEventsPath = "/user/eventStatus";
   static const String unreactedEventsPath = "/event";
+  static const String fromUserEventsPath = "/event";
 
   // TODO combine it to event path?
   static const String postPath = "/event";
@@ -37,7 +38,9 @@ class EventRemoteService {
   Future<List<EventDto>> getOwnedEvents() async {
     return _getEventList(ownedEventsPath);
   }
-
+  Future<List<EventDto>> getEventsFromUser() async {
+    return _getEventList(fromUserEventsPath);
+  }
   Future<List<EventDto>> getAttendingEvents() async {
     return _getEventList(attendingEventsPath);
   }

@@ -11,7 +11,7 @@ part 'post_dtos.freezed.dart';
 part 'post_dtos.g.dart';
 
 @freezed
-abstract class PostDto implements _$PostDto{
+abstract class PostDto implements _$PostDto {
   const PostDto._();
 
   const factory PostDto({
@@ -21,6 +21,13 @@ abstract class PostDto implements _$PostDto{
     @required @ProfileConverter() ProfileDto owner,
     @required @EventConverter() EventDto event,
   }) = _PostDto;
+
+  const factory PostDto.WithoutId({
+    @required DateTime creationDate,
+    @required String postContent,
+    @required @ProfileConverter() ProfileDto owner,
+    @required @EventConverter() EventDto event,
+  }) = _PostDtoWithoutId;
 
   factory PostDto.fromDomain(Post post) {
     return PostDto(
@@ -35,18 +42,19 @@ abstract class PostDto implements _$PostDto{
   factory PostDto.fromJson(Map<String, dynamic> json) =>
       _$PostDtoFromJson(json);
 
-  Post toDomain(){
+  Post toDomain() {
     return Post(
-      id: Id.fromUnique(id),
-      creationDate: creationDate,
-      postContent: PostContent(postContent),
-      owner: owner.toDomain(),
-      event: event.toDomain(),
-      comments: <Comment>[]
-    );
+        id: Id.fromUnique(id),
+        creationDate: creationDate,
+        postContent: PostContent(postContent),
+        owner: owner.toDomain(),
+        event: event.toDomain(),
+        comments: <Comment>[]);
   }
 }
-class ProfileConverter implements JsonConverter<ProfileDto, Map<String, dynamic>>{
+
+class ProfileConverter
+    implements JsonConverter<ProfileDto, Map<String, dynamic>> {
   const ProfileConverter();
   @override
   ProfileDto fromJson(Map<String, dynamic> owner) {
@@ -58,7 +66,8 @@ class ProfileConverter implements JsonConverter<ProfileDto, Map<String, dynamic>
     return profileDto.toJson();
   }
 }
-class EventConverter implements JsonConverter<EventDto, Map<String, dynamic>>{
+
+class EventConverter implements JsonConverter<EventDto, Map<String, dynamic>> {
   const EventConverter();
   @override
   EventDto fromJson(Map<String, dynamic> event) {

@@ -13,7 +13,7 @@ part 'comment_dtos.g.dart';
 // TODO I will go through infrastructure
 
 @freezed
-abstract class CommentDto with _$CommentDto{
+abstract class CommentDto with _$CommentDto {
   const CommentDto._();
 
   const factory CommentDto.parent({
@@ -30,12 +30,20 @@ abstract class CommentDto with _$CommentDto{
     @ChildrenConverter() Either<int, Unit> commentChildren,
   }) = _CommentDto;
 
+  const factory CommentDto.WithoutId({
+    @required String commentContent,
+    @required DateTime creationDate,
+    @required ProfileDto profile, //TODO: make it an integer
+    @required @ParentConverter() Either<CommentDto, Unit> commentParent,
+    @required int post,
+    @ChildrenConverter() Either<int, Unit> commentChildren,
+  }) = _CommentDtoWithoutId;
+
   //TODO: is this intager usefull? Determine that shit!
   const factory CommentDto.children({
     @required int count,
     @required List<CommentDto> children,
   }) = _CommentChildrenDto;
-
 
   /// Generate dto from domain, respecting the different union cases
   /// Map comment to parent or to full and generate the dto respectively
@@ -77,28 +85,31 @@ abstract class CommentDto with _$CommentDto{
   Comment toDomain() {
     Comment returnedComment;
     map(
-        (_CommentDto value) => {
-              returnedComment = Comment(
-                id: Id.fromUnique(value.id),
-                creationDate: value.creationDate,
-                commentContent: CommentContent(value.commentContent),
-                owner: value.profile.toDomain(),
-                commentChildren: value.commentChildren
-                    //left(left()) because of the complex Either type
-                    //where the list isn`t used here yet
-                    .fold((l) => Comment.childCount(l),
-                        (r) => const Comment.childLess()),
-                post: value.post,
-              )
-            }, parent: (_CommentParentDto value) {
-      returnedComment = Comment.parent(id: Id.fromUnique(value.id));
-    }, children: (_CommentChildrenDto value) {
-      returnedComment = Comment.children(
-          count: value.count,
-          commentChildren: value.children
-              .map((commentDto) => commentDto.toDomain())
-              .toList());
-    },);
+      (_CommentDto value) => {
+        returnedComment = Comment(
+          id: Id.fromUnique(value.id),
+          creationDate: value.creationDate,
+          commentContent: CommentContent(value.commentContent),
+          owner: value.profile.toDomain(),
+          commentChildren: value.commentChildren
+              //left(left()) because of the complex Either type
+              //where the list isn`t used here yet
+              .fold((l) => Comment.childCount(l),
+                  (r) => const Comment.childLess()),
+          post: value.post,
+        )
+      },
+      parent: (_CommentParentDto value) {
+        returnedComment = Comment.parent(id: Id.fromUnique(value.id));
+      },
+      children: (_CommentChildrenDto value) {
+        returnedComment = Comment.children(
+            count: value.count,
+            commentChildren: value.children
+                .map((commentDto) => commentDto.toDomain())
+                .toList());
+      },
+    );
     return returnedComment;
   }
 }

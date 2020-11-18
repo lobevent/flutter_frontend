@@ -12,7 +12,7 @@ class EventRemoteService {
   static const String profileEventPath = "/user/events";
   static const String attendingEventsPath = "/user/eventStatus";
   static const String unreactedEventsPath = "/event";
-  static const String fromUserEventsPath = "/event";
+  static const String fromUserEventsPat = "/event";
 
   // TODO combine it to event path?
   static const String postPath = "/event";

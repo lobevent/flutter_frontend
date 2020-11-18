@@ -15,10 +15,16 @@ class ProfileRemoteService {
   static const String _followerPath = ""; //TODO no existing path
   static const String _postProfilePath = ""; //TODO no existing path
 
+  static const String postPath = "/profile";
+
   SymfonyCommunicator client;
 
   ProfileRemoteService() {
     client = SymfonyCommunicator(jwt: null); // TODO check on this one
+  }
+
+  Future<ProfileDto> _decodeProfile(Response json) async {
+    return ProfileDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
 
   Future<ProfileDto> getSingleProfile(int id) async {
@@ -29,10 +35,8 @@ class ProfileRemoteService {
     return profileDto;
   }
 
-  Future<void> create(ProfileDto profile) async {
-    //change return value to postDto
-    throw UnimplementedError();
-    client.post(_profileIdPath, profile.toJson());
+  Future<ProfileDto> create(ProfileDto profile) async {
+    return _decodeProfile( await client.post(postPath, jsonEncode(profile.toJson())));
   }
 
   Future<void> delete(ProfileDto profile) async {

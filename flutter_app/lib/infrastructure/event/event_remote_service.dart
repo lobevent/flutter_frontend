@@ -43,8 +43,8 @@ class EventRemoteService{
     return _getEventList(unreactedEventsPath);
   }
 
-  Future<EventDto> createEvent(EventDto event) async { // TODO always return Future<void> instead of only void when using async this way the function can be awaited in later usage same for the next 2 methods
-    return _decodeEvent( await client.post(postPath, jsonEncode(event.toJson()))); //
+  Future<EventDto> createEvent(EventDto event) async {
+    return _decodeEvent( await client.post(postPath, jsonEncode(event.toJson())));
   }
 
   Future<void> deleteEvent(EventDto event) async {

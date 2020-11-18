@@ -56,15 +56,13 @@ class EventRemoteService {
   Future<EventDto> deleteEvent(EventDto eventDto) async {
     // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive
     await client.delete(
-        "$deletePath${eventDto.id}"); // TODO this way the toString function will be called automatically
-    //client.delete(deletePath + event.id.toString()); // TODO combine string this way it's a best practice
+        "$deletePath${eventDto.id}");
     return eventDto;
   }
 
   Future<EventDto> updateEvent(EventDto eventDto) async {
-    //TODO
-    throw UnimplementedError();
-    // await client.put("uri", body)
+    await client.put(
+        "$updatePath${eventDto.id}", jsonEncode(eventDto.toJson()));
     return eventDto;
   }
 

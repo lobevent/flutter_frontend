@@ -16,12 +16,11 @@ class ProfileRepository extends IProfileRepository {
 
   @override
   Future<Either<ProfileFailure, Profile>> create(Profile profile) async {
-    // TODO: implement create
     try {
       final profileDto = ProfileDto.fromDomain(profile);
-      _profileRemoteService.create(profileDto);
-      throw UnimplementedError();
-      //return right(returnedprofile); //TODO implement with .toDomain
+      ProfileDto returnedProfileDto =
+          await _profileRemoteService.create(profileDto);
+      return right(returnedProfileDto.toDomain());
     } on CommunicationException catch (e) {
       return left(_reactOnCommunicationException(e));
     }
@@ -31,9 +30,9 @@ class ProfileRepository extends IProfileRepository {
   Future<Either<ProfileFailure, Profile>> delete(Profile profile) async {
     try {
       final profileDto = ProfileDto.fromDomain(profile);
-      _profileRemoteService.delete(profileDto);
-      throw UnimplementedError();
-      //return right(returnedprofile); //TODO implement with .toDomain
+      ProfileDto returnedProfileDto =
+          await _profileRemoteService.delete(profileDto);
+      return right(returnedProfileDto.toDomain());
     } on CommunicationException catch (e) {
       return left(_reactOnCommunicationException(e));
     }

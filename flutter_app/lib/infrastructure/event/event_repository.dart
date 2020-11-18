@@ -75,8 +75,7 @@ class EventRepository implements IEventRepository {
   Future<Either<EventFailure, Event>> update(Event event) async {
     try {
       final eventDto = EventDto.fromDomain(event);
-      EventDto returnedEvent;
-      returnedEvent = await _eventRemoteService.updateEvent(returnedEvent);
+      EventDto returnedEvent = await _eventRemoteService.updateEvent(eventDto);
       return right(returnedEvent.toDomain());
     } on CommunicationException catch (e) {
       return left(_reactOnCommunicationException(e));
@@ -87,10 +86,8 @@ class EventRepository implements IEventRepository {
   Future<Either<EventFailure, Event>> delete(Event event) async {
     try {
       final eventDto = EventDto.fromDomain(event);
-      //function implementation
-      Event returnedEvent;
-      throw UnimplementedError();
-      return right(returnedEvent);
+      EventDto returnedEvent = await _eventRemoteService.deleteEvent(eventDto);
+      return right(returnedEvent.toDomain());
     } on CommunicationException catch (e) {
       return left(_reactOnCommunicationException(e));
     }

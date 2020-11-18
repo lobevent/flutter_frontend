@@ -17,6 +17,7 @@ class CommentRemoteService {
   }
 
   //decode the json response for post
+  //TODO dont know if this is stable, because of cancer childrenconverter
   Future<CommentDto> _decodePost(Response json) async {
     return CommentDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }

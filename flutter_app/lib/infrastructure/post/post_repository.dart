@@ -5,6 +5,7 @@ import 'package:flutter_frontend/domain/post/i_post_repository.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/post/post_failure.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
 import 'package:flutter_frontend/infrastructure/post/post_remote_service.dart';
 
@@ -103,6 +104,16 @@ class PostRepository implements IPostRepository {
       } else {
         return left(const PostFailure.unexpected());
       }
+    }
+  }
+  PostFailure _reactOnCommunicationException(CommunicationException e){
+    switch(e.runtimeType){
+      case NotFoundException: return const PostFailure.notFound(); break;
+      case InternalServerException: return const PostFailure.internalServer(); break;
+      case NotAuthenticatedException: return const PostFailure.notAuthenticated(); break;
+      case NotAuthorizedException: return const PostFailure.insufficientPermissions(); break;
+      case UnexpectedFormatException: return const PostFailure.unexpected();
+      default: return const PostFailure.unexpected(); break;
     }
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/i_profile_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/profile_failure.dart';
+import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_remote_service.dart';
 
@@ -72,6 +73,16 @@ class ProfileRepository extends IProfileRepository{
       } else {
         return left(const ProfileFailure.unexpected());
       }
+    }
+  }
+  ProfileFailure _reactOnCommunicationException(CommunicationException e){
+    switch(e.runtimeType){
+      case NotFoundException: return const ProfileFailure.notFound(); break;
+      case InternalServerException: return const ProfileFailure.internalServer(); break;
+      case NotAuthenticatedException: return const ProfileFailure.notAuthenticated(); break;
+      case NotAuthorizedException: return const ProfileFailure.insufficientPermissions(); break;
+      case UnexpectedFormatException: return const ProfileFailure.unexpected();
+      default: return const ProfileFailure.unexpected(); break;
     }
   }
   }

@@ -44,6 +44,7 @@ dependencies:
 
   #local sqlite db
   moor: ^3.4.0
+  moor_flutter: ^3.1.0
   #dependencies for moor
   sqlite3: ^0.1.7 # Ships the latest sqlite3 version with your Android or iOS app.
   path_provider: ^1.6.24 #Used to find a suitable location to store the database.

@@ -54,21 +54,21 @@ class PostRemoteService {
     throw UnimplementedError();
   }
 
-  Future<void> create(PostDto post) async {
+  Future<PostDto> create(PostDto post) async {
     //change return value to postDto
     client.post(_postIdPath, post.toJson());
     //throw UnimplementedError();
-    //TODO check the path
     return _decodePost(
         await client.post(_postAddPath, jsonEncode(post.toJson())));
   }
 
-  Future<void> delete(PostDto post) async {
+  Future<PostDto> delete(PostDto post) async {
     // client.delete(_postDeletePath + post.id.toString()); // TODO use the dart best practice
     client.delete("$_postDeletePath${post.id}");
+    return post; //implement this
   }
 
-  Future<void> update(PostDto postDto) {
+  Future<PostDto> update(PostDto postDto) {
     //TODO
     throw UnimplementedError();
   }

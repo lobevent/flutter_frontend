@@ -21,12 +21,8 @@ class PostRepository implements IPostRepository {
       _postRemoteService.create(postDto);
       throw UnimplementedError();
       //return right(returnedpost); //TODO implement with .toDomain
-    } on PlatformException catch (e) {
-      if (e.message.contains('PERMISSION_DENIED')) {
-        return left(const PostFailure.insufficientPermissions());
-      } else {
-        return left(const PostFailure.unexpected());
-      }
+    } on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
     }
   }
 
@@ -37,12 +33,8 @@ class PostRepository implements IPostRepository {
       _postRemoteService.delete(postDto);
       throw UnimplementedError();
       //return right(returnedpost); //TODO implement with .toDomain
-    } on PlatformException catch (e) {
-      if (e.message.contains('PERMISSION_DENIED')) {
-        return left(const PostFailure.insufficientPermissions());
-      } else {
-        return left(const PostFailure.unexpected());
-      }
+    } on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
     }
   }
 
@@ -66,12 +58,8 @@ class PostRepository implements IPostRepository {
       final List<Post> posts =
           postDtos.map((postDto) => postDto.toDomain()).toList();
       return right(posts);
-    } on PlatformException catch (e) {
-      if (e.message.contains('PERMISSION_DENIED')) {
-        return left(const PostFailure.insufficientPermissions());
-      } else {
-        return left(const PostFailure.unexpected());
-      }
+    } on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
     }
   }
 
@@ -82,12 +70,8 @@ class PostRepository implements IPostRepository {
           await _postRemoteService.getSinglePost(id.getOrCrash());
       final Post post = postDto.toDomain();
       return right(post);
-    } on PlatformException catch (e) {
-      if (e.message.contains('PERMISSION_DENIED')) {
-        return left(const PostFailure.insufficientPermissions());
-      } else {
-        return left(const PostFailure.unexpected());
-      }
+    } on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
     }
   }
 
@@ -95,15 +79,11 @@ class PostRepository implements IPostRepository {
   Future<Either<PostFailure, Post>> update(Post post) async {
     try {
       final postDto = PostDto.fromDomain(post);
-      _postRemoteService.update(postDto);
-      throw UnimplementedError();
-      //return right(returnedpost); //TODO implement with .toDomain
-    } on PlatformException catch (e) {
-      if (e.message.contains('PERMISSION_DENIED')) {
-        return left(const PostFailure.insufficientPermissions());
-      } else {
-        return left(const PostFailure.unexpected());
-      }
+      PostDto returnedPost;
+      returnedPost = await _postRemoteService.update(postDto);
+      return right(returnedPost.toDomain()); //TODO implement with .toDomain
+    } on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
     }
   }
   PostFailure _reactOnCommunicationException(CommunicationException e){

@@ -23,12 +23,8 @@ class ProfileRepository extends IProfileRepository{
       _profileRemoteService.create(profileDto);
       throw UnimplementedError();
       //return right(returnedprofile); //TODO implement with .toDomain
-    }on PlatformException catch(e){
-      if(e.message.contains('PERMISSION_DENIED')){
-        return left(const ProfileFailure.insufficientPermissions());
-      }else{
-        return left(const ProfileFailure.unexpected());
-      }
+    } on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
     }
   }
 
@@ -39,12 +35,8 @@ class ProfileRepository extends IProfileRepository{
       _profileRemoteService.delete(profileDto);
       throw UnimplementedError();
       //return right(returnedprofile); //TODO implement with .toDomain
-    } on PlatformException catch (e) {
-      if (e.message.contains('PERMISSION_DENIED')) {
-        return left(const ProfileFailure.insufficientPermissions());
-      } else {
-        return left(const ProfileFailure.unexpected());
-      }
+    } on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
     }
   }
 
@@ -67,12 +59,8 @@ class ProfileRepository extends IProfileRepository{
       throw UnimplementedError();
       //_profileRemoteService.update(profileDto);
       //return right(returnedprofile); //TODO implement with .toDomain
-    } on PlatformException catch (e) {
-      if (e.message.contains('PERMISSION_DENIED')) {
-        return left(const ProfileFailure.insufficientPermissions());
-      } else {
-        return left(const ProfileFailure.unexpected());
-      }
+    } on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
     }
   }
   ProfileFailure _reactOnCommunicationException(CommunicationException e){

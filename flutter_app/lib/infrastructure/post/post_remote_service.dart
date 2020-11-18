@@ -8,14 +8,14 @@ import 'package:http/http.dart';
 import 'post_dtos.dart';
 
 class PostRemoteService {
-  static const String _postIdPath = "/event/post/{postId}";
-  static const String _postAddPath =
+  static const String postIdPath = "/event/post/{postId}";
+  static const String postAddPath =
       "/event/{eventId}/post"; //Path for creating
-  static const String _postPaginatedPath = "/event/{eventId}/posts/{page}";
-  static const String _postDeletePath = "/event/post/";
-  static const String _ownPostsPath = "/event/post/"; //TODO don't know the path
-  static const String _feedPath = "/event/post/"; //TODO don't know the path
-  static const String _postsFromUserPath =
+  static const String postPaginatedPath = "/event/{eventId}/posts/{page}";
+  static const String postDeletePath = "/event/post/";
+  static const String ownPostsPath = "/event/post/"; //TODO don't know the path
+  static const String feedPath = "/event/post/"; //TODO don't know the path
+  static const String postsFromUserPath =
       "/event/post/"; //TODO don't know the path
 
   static const String postPath = "/post";
@@ -34,20 +34,20 @@ class PostRemoteService {
   }
 
   Future<List<PostDto>> getOwnPosts() async {
-    return _getPostList(_ownPostsPath);
+    return _getPostList(ownPostsPath);
   }
 
   Future<List<PostDto>> getFeed() async {
-    return _getPostList(_feedPath);
+    return _getPostList(feedPath);
   }
 
   Future<List<PostDto>> getPostsFromUser() async {
-    return _getPostList(_postsFromUserPath);
+    return _getPostList(postsFromUserPath);
   }
 
   Future<PostDto> getSinglePost(int id) async {
     // String uri = _postIdPath + id.toString(); // TODO use the dart best practice
-    final String uri = "$_postIdPath$id";
+    final String uri = "$postIdPath$id";
     Response response = await client.get(uri);
     PostDto postDto =
         PostDto.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
@@ -61,14 +61,14 @@ class PostRemoteService {
 
   Future<PostDto> create(PostDto postDto) async {
 
-    client.post(_postIdPath, postDto.toJson());
+    client.post(postIdPath, postDto.toJson());
     return _decodePost(
-        await client.post(_postAddPath, jsonEncode(postDto.toJson())));
+        await client.post(postAddPath, jsonEncode(postDto.toJson())));
   }
 
   Future<PostDto> delete(PostDto postDto) async {
     return _decodePost(
-        await client.delete("$_postDeletePath${postDto.maybeMap((value) => value.id, orElse: ()
+        await client.delete("$postDeletePath${postDto.maybeMap((value) => value.id, orElse: ()
         => throw UnexpectedFormatException())}"));
   }
 

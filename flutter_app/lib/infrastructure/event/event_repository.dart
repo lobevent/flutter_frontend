@@ -31,7 +31,7 @@ class EventRepository implements IEventRepository {
           eventDtos = await _eventRemoteService.getOwnedEvents();
           break;
         case Operation.fromUser:
-          throw UnimplementedError();
+          eventDtos = await _eventRemoteService.getEventsFromUser();
           break;
         case Operation.attending:
           eventDtos = await _eventRemoteService.getAttendingEvents();

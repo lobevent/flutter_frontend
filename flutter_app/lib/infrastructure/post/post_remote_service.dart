@@ -8,6 +8,8 @@ import 'post_dtos.dart';
 
 class PostRemoteService {
   static const String _postIdPath = "/event/post/{postId}";
+  static const String _postAddPath =
+      "/event/{eventId}/post"; //Path for creating
   static const String _postPaginatedPath = "/event/{eventId}/posts/{page}";
   static const String _postDeletePath = "/event/post/";
   static const String _ownPostsPath = "/event/post/"; //TODO don't know the path
@@ -19,6 +21,11 @@ class PostRemoteService {
 
   PostRemoteService() {
     client = SymfonyCommunicator(jwt: null); // TODO check on this one
+  }
+
+  //decode the json response for post
+  Future<PostDto> _decodePost(Response json) async {
+    return PostDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
 
   Future<List<PostDto>> getOwnPosts() async {
@@ -47,10 +54,13 @@ class PostRemoteService {
     throw UnimplementedError();
   }
 
-  Future<void> create(PostDto post) async { //change return value to postDto
+  Future<void> create(PostDto post) async {
+    //change return value to postDto
     client.post(_postIdPath, post.toJson());
-    throw UnimplementedError();
-    //return postDto; //TODO json decode extra function
+    //throw UnimplementedError();
+    //TODO check the path
+    return _decodePost(
+        await client.post(_postAddPath, jsonEncode(post.toJson())));
   }
 
   Future<void> delete(PostDto post) async {

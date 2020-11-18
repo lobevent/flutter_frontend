@@ -35,13 +35,14 @@ class ProfileRemoteService {
     return profileDto;
   }
 
-  Future<ProfileDto> create(ProfileDto profile) async {
+  Future<ProfileDto> create(ProfileDto profileDto) async {
     return _decodeProfile(
         await client.post(postPath, jsonEncode(profile.toJson())));
   }
 
-  Future<ProfileDto> delete(ProfileDto profile) async {
+  Future<ProfileDto> delete(ProfileDto profileDto) async {
     throw UnimplementedError();
+
   }
 
   Future<ProfileDto> update(ProfileDto profileDto) {

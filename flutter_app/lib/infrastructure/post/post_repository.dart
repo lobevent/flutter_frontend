@@ -81,7 +81,7 @@ class PostRepository implements IPostRepository {
       final postDto = PostDto.fromDomain(post);
       PostDto returnedPost;
       returnedPost = await _postRemoteService.update(postDto);
-      return right(returnedPost.toDomain()); //TODO implement with .toDomain
+      return right(returnedPost.toDomain());
     } on CommunicationException catch (e) {
       return left(_reactOnCommunicationException(e));
     }

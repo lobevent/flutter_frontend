@@ -43,17 +43,17 @@ class EventRemoteService{
     return _getEventList(unreactedEventsPath);
   }
 
-  Future<EventDto> createEvent(EventDto event) async {
+  Future<EventDto> createEvent(EventDto eventDto) async {
     return _decodeEvent( await client.post(postPath, jsonEncode(event.toJson())));
   }
 
-  Future<void> deleteEvent(EventDto event) async {
+  Future<EventDto> deleteEvent(EventDto eventDto) async {
     // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive
     client.delete("$deletePath${event.id}"); // TODO this way the toString function will be called automatically
     //client.delete(deletePath + event.id.toString()); // TODO combine string this way it's a best practice
   }
 
-  Future<void> updateEvent(EventDto event) async {
+  Future<EventDto> updateEvent(EventDto eventDto) async {
     //TODO
     //    client.put(uri, body)
     throw UnimplementedError();

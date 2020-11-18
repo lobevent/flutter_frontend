@@ -45,10 +45,10 @@ class SignInFormCubit extends Cubit<SignInFormState> {
       )
       );
 
-      failureOrSuccess = await _authFacade.registerWithEmailAndPassword(
-        emailAddress: state.emailAddress,
-        password: state.password,
-      );
+      // failureOrSuccess = await _authFacade.registerWithEmailAndPassword(
+      //   emailAddress: state.emailAddress,
+      //   password: state.password,
+      // );
     }
     emit (state.copyWith(
       isSubmitting: false,
@@ -70,10 +70,10 @@ class SignInFormCubit extends Cubit<SignInFormState> {
       )
       );
 
-      failureOrSuccess = await _authFacade.signInWithEmailAndPassword(
-        emailAddress: state.emailAddress,
-        password: state.password,
-      );
+      // failureOrSuccess = await _authFacade.signInWithEmailAndPassword(
+      //   emailAddress: state.emailAddress,
+      //   password: state.password,
+      // );
     }
     emit (state.copyWith(
       isSubmitting: false,

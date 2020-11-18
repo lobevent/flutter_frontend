@@ -17,6 +17,10 @@ class PostRemoteService {
   static const String _postsFromUserPath =
       "/event/post/"; //TODO don't know the path
 
+  static const String postPath = "/post";
+  static const String deletePath = "/post";
+  static const String updatePath = "/post";
+
   SymfonyCommunicator client;
 
   PostRemoteService() {
@@ -55,22 +59,20 @@ class PostRemoteService {
   }
 
   Future<PostDto> create(PostDto postDto) async {
-    //change return value to postDto
+
     client.post(_postIdPath, postDto.toJson());
-    //throw UnimplementedError();
     return _decodePost(
         await client.post(_postAddPath, jsonEncode(postDto.toJson())));
   }
 
   Future<PostDto> delete(PostDto postDto) async {
-    // client.delete(_postDeletePath + post.id.toString()); // TODO use the dart best practice
     await client.delete("$_postDeletePath${postDto.id}");
-    return postDto; //implement this
+    return postDto;
   }
 
   Future<PostDto> update(PostDto postDto) async{
-
-    throw UnimplementedError;
+    await client.put(
+        "$updatePath${postDto.id}", jsonEncode(postDto.toJson()));
     return postDto;
   }
 

@@ -16,6 +16,8 @@ class ProfileRemoteService {
   static const String _postProfilePath = ""; //TODO no existing path
 
   static const String postPath = "/profile";
+  static const String deletePath = "/profile";
+  static const String updatePath = "/profile";
 
   SymfonyCommunicator client;
 
@@ -41,13 +43,14 @@ class ProfileRemoteService {
   }
 
   Future<ProfileDto> delete(ProfileDto profileDto) async {
-    throw UnimplementedError();
-
+    await client.delete("$deletePath${profileDto.id}");
+    return profileDto;
   }
 
-  Future<ProfileDto> update(ProfileDto profileDto) {
-    //TODO
-    throw UnimplementedError();
+  Future<ProfileDto> update(ProfileDto profileDto) async {
+    await client.put(
+        "$updatePath${profileDto.id}", jsonEncode(profileDto.toJson()));
+    return profileDto;
   }
 
   Future<List<ProfileDto>> getSearchedProfile() async {

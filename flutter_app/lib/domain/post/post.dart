@@ -23,6 +23,14 @@ abstract class Post implements _$Post {
     @required List<Comment> comments,
   }) = _Post;
 
+  const factory Post.WithoutId({
+    @required DateTime creationDate,
+    @required PostContent postContent,
+    @required Profile owner,
+    @required Event event,
+    @required List<Comment> comments,
+  }) = PostWithoutId;
+
   //check if the whole object is no failure
   // TODO same as in domain/event/event.dart
   // TODO in this case if you only check one data field this is already implemented. Just realized it yet but it should actually also work for the other case. The base class ValueObjects implements failureOrUnit why not use it?

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
@@ -72,13 +73,11 @@ class EventRepository implements IEventRepository {
 
   @override
   Future<Either<EventFailure, Event>> update(Event event) async {
-    //
     try {
       final eventDto = EventDto.fromDomain(event);
-      Event returnedEvent;
-      //function implementation
-      throw UnimplementedError();
-      return right(returnedEvent);
+      EventDto returnedEvent;
+      returnedEvent = await _eventRemoteService.updateEvent(returnedEvent);
+      return right(returnedEvent.toDomain());
     } on CommunicationException catch (e) {
       return left(_reactOnCommunicationException(e));
     }

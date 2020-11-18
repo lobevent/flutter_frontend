@@ -86,14 +86,26 @@ class PostRepository implements IPostRepository {
       return left(_reactOnCommunicationException(e));
     }
   }
-  PostFailure _reactOnCommunicationException(CommunicationException e){
-    switch(e.runtimeType){
-      case NotFoundException: return const PostFailure.notFound(); break;
-      case InternalServerException: return const PostFailure.internalServer(); break;
-      case NotAuthenticatedException: return const PostFailure.notAuthenticated(); break;
-      case NotAuthorizedException: return const PostFailure.insufficientPermissions(); break;
-      case UnexpectedFormatException: return const PostFailure.unexpected();
-      default: return const PostFailure.unexpected(); break;
+
+  PostFailure _reactOnCommunicationException(CommunicationException e) {
+    switch (e.runtimeType) {
+      case NotFoundException:
+        return const PostFailure.notFound();
+        break;
+      case InternalServerException:
+        return const PostFailure.internalServer();
+        break;
+      case NotAuthenticatedException:
+        return const PostFailure.notAuthenticated();
+        break;
+      case NotAuthorizedException:
+        return const PostFailure.insufficientPermissions();
+        break;
+      case UnexpectedFormatException:
+        return const PostFailure.unexpected();
+      default:
+        return const PostFailure.unexpected();
+        break;
     }
   }
 }

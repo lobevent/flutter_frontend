@@ -37,7 +37,7 @@ class ProfileRemoteService {
 
   Future<ProfileDto> create(ProfileDto profileDto) async {
     return _decodeProfile(
-        await client.post(postPath, jsonEncode(profile.toJson())));
+        await client.post(postPath, jsonEncode(profileDto.toJson())));
   }
 
   Future<ProfileDto> delete(ProfileDto profileDto) async {

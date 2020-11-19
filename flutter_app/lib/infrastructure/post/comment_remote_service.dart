@@ -12,7 +12,8 @@ class CommentRemoteService {
   static const String commentIdGet = "/comment/";
   static const String commentsFromPostPath = "/post/";
   static const String ownCommentsPath = "/comment/"; //TODO create route for it
-  static const String commentsFromUserPath = "/comment/";//TODO create route for it
+  static const String commentsFromUserPath =
+      "/comment/"; //TODO create route for it
   static const String commentsFromCommentParentPath = "/comment/";
 
   static const String postPath = "/comment";
@@ -33,19 +34,30 @@ class CommentRemoteService {
     return CommentDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
 
-  Future<List<CommentDto>> getCommentsFromPost(DateTime lastCommentTime, int amount, String postId) async {
-    return _getCommentList(_generatePaginatedRoute("$commentsFromPostPath$postId", amount, lastCommentTime));
+  Future<List<CommentDto>> getCommentsFromPost(
+      DateTime lastCommentTime, int amount, String postId) async {
+    return _getCommentList(_generatePaginatedRoute(
+        "$commentsFromPostPath$postId", amount, lastCommentTime));
   }
-  Future<List<CommentDto>> getOwnComments(DateTime lastCommentTime, int amount) async {
+
+  Future<List<CommentDto>> getOwnComments(
+      DateTime lastCommentTime, int amount) async {
     throw UnimplementedError(); //This path is not yet defined properly
     return _getCommentList(ownCommentsPath);
   }
-  Future<List<CommentDto>> getCommentsFromUser(DateTime lastCommentTime, int amount, String profileId) async {
+
+  Future<List<CommentDto>> getCommentsFromUser(
+      DateTime lastCommentTime, int amount, String profileId) async {
     throw UnimplementedError(); //This path is not yet defined properly
     return _getCommentList(commentsFromUserPath);
   }
-  Future<List<CommentDto>> getCommentsFromCommentParent(DateTime lastCommentTime, int amount, String parentCommentId) async {
-    return _getCommentList(_generatePaginatedRoute("$commentsFromCommentParentPath$parentCommentId", amount, lastCommentTime));
+
+  Future<List<CommentDto>> getCommentsFromCommentParent(
+      DateTime lastCommentTime, int amount, String parentCommentId) async {
+    return _getCommentList(_generatePaginatedRoute(
+        "$commentsFromCommentParentPath$parentCommentId",
+        amount,
+        lastCommentTime));
   }
 
   Future<CommentDto> getSingleComment(int id) async {
@@ -57,42 +69,35 @@ class CommentRemoteService {
     return returnedCommentDto;
   }
 
-
-
   Future<CommentDto> create(CommentDto commentDto) async {
     return _decodeComment(
         await client.post(postPath, jsonEncode(commentDto.toJson())));
   }
 
   Future<CommentDto> delete(CommentDto commentDto) async {
-    return _decodeComment(
-        await client.delete("$deletePath${commentDto.maybeMap((value) => value.id, orElse: ()
-        => throw UnexpectedFormatException())}"));
+    return _decodeComment(await client.delete(
+        "$deletePath${commentDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}"));
   }
 
   Future<CommentDto> update(CommentDto commentDto) async {
-    return _decodeComment(
-        await client.put(
-            "$updatePath${commentDto.maybeMap((value) => value.id, orElse: ()
-            => throw UnexpectedFormatException())}", jsonEncode(commentDto.toJson())));
+    return _decodeComment(await client.put(
+        "$updatePath${commentDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}",
+        jsonEncode(commentDto.toJson())));
   }
 
-  String _generatePaginatedRoute(String route, int amount, DateTime lastCommentTime){
+  String _generatePaginatedRoute(
+      String route, int amount, DateTime lastCommentTime) {
     return "$route/comments/$amount/$lastCommentTime";
   }
 
   Future<List<CommentDto>> _getCommentList(String path) async {
     final Response response = await client.get(path);
-    final List<CommentDto> comments = (jsonDecode(response.body) as List<
-            Map<String,
-                dynamic>>) // TODO one liners are nice for the flex xD but you already use a variable then I think it is easier to just put it into the next line
-        .map((e) => CommentDto.fromJson(e))
-        .toList(); // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
 
-    final List<Map<String, dynamic>> commentsJsonList = jsonDecode(
-        response
-            .body) as List<
+    final List<
         Map<String,
+            dynamic>> commentsJsonList = jsonDecode(response.body) as List<
+        Map<
+            String, // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
             dynamic>>; // TODO same stuff with one variable and bit cleaner still we will have to rewrite it because of the json transformation
     return commentsJsonList
         .map((commentJsonMap) => CommentDto.fromJson(commentJsonMap))

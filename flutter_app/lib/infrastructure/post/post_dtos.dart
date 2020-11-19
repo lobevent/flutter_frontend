@@ -53,19 +53,20 @@ abstract class PostDto implements _$PostDto {
       _$PostDtoFromJson(json);
 
   Post toDomain() {
-    return map((value) => Post(
-        id: Id.fromUnique(value.id),
-        creationDate: value.creationDate,
-        postContent: PostContent(value.postContent),
-        owner: value.owner.toDomain(),
-        event: value.event.toDomain(),
-        comments: <Comment>[]),
+    return map(
+        (value) => Post(
+            id: Id.fromUnique(value.id),
+            creationDate: value.creationDate,
+            postContent: PostContent(value.postContent),
+            owner: value.owner.toDomain(),
+            event: value.event.toDomain(),
+            comments: <Comment>[]),
         WithoutId: (value) => Post.WithoutId(
-        creationDate: value.creationDate,
-        postContent: PostContent(value.postContent),
-        owner: value.owner.toDomain(),
-        event: value.event.toDomain(),
-        comments: <Comment>[]));
+            creationDate: value.creationDate,
+            postContent: PostContent(value.postContent),
+            owner: value.owner.toDomain(),
+            event: value.event.toDomain(),
+            comments: <Comment>[]));
   }
 }
 

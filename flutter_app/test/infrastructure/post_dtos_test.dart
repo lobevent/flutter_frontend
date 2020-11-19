@@ -64,7 +64,7 @@ main() {
           description: "geile corona party mit 20 mann",
           date: DateTime.now(),
           creationDate: DateTime.now(),
-          owner: ProfileDto(id: 1, name: "adolf")));
+          owner: ProfileDto(id: 0, name: "manni")));
 
   PostDto postDtoWithoutId2 = PostDto.WithoutId(
       creationDate: DateTime.now(),
@@ -79,7 +79,7 @@ main() {
           creationDate: DateTime.now(),
           owner: ProfileDto(id: 1, name: "adolf")));
 
-  const ProfileDto profileDto = ProfileDto(id: 1, name: "max");
+  const ProfileDto profileDto = ProfileDto(id: 0, name: "manni");
 
   List<PostDto> postList = [
     normalPostDto1,
@@ -90,13 +90,13 @@ main() {
 
   //initializing Client and communication Objects
   final client = MockPost();
-  final PostRemoteService
-      remoteService //we have to pass the communicator, as it has the mocked client
-      = PostRemoteService(); //remoteService for mocking in the repository
   final SymfonyCommunicator communicator = SymfonyCommunicator(
       jwt: "lalala",
-      client:
-          client); //SymfonyCommunicator for communication mocking with fake jwt and the mocking client
+      client: client); //SymfonyCommunicator for communication mocking with fake jwt and the mocking client
+  final PostRemoteService
+      remoteService //we have to pass the communicator, as it has the mocked client
+      = PostRemoteService(communicator:
+      communicator); //remoteService for mocking in the repository
   PostRepository repository = PostRepository(remoteService);
 
   //some often used values
@@ -130,13 +130,14 @@ main() {
   });
 
   test("Post with 200 response", () async {
-    when(client.post("ourUrl.com/event",
+    when(client.post("ourUrl.com/post",
             headers: authenticationHeader,
             body: jsonEncode(postDtoWithoutId1.toJson())))
         .thenAnswer((realInvocation) async =>
             http.Response(jsonEncode(normalPostDto1.toJson()), 200));
 
-    Post answer = await repository
+    Post answer =
+    await repository
         .create(postDtoWithoutId1.toDomain())
         .then((value) => value.fold((l) => throw Error(), (r) => r));
     expect(

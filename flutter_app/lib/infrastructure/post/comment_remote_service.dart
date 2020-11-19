@@ -13,6 +13,10 @@ class CommentRemoteService {
   static const String _commentIdGet = "/comment";
   static const String _commentUpdate = "/comment";
   static const String _commentsPaginated = "/comment";
+  static const String commentsFromPostPath = "/comment"; //TODO create route for it
+  static const String ownCommentsPath = "/comment"; //TODO create route for it
+  static const String commentsFromUserPath = "/comment";//TODO create route for it
+  static const String commentsFromCommentParentPath = "/comment";//TODO create route for it
 
   static const String postPath = "/comment";
   static const String deletePath = "/comment";
@@ -32,21 +36,17 @@ class CommentRemoteService {
     return CommentDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
 
-  Future<List<CommentDto>> getCommentsFromPost(DateTime lastCommentTime, int amount, String PostId) async {
-    return _getCommentList(_commentsGet);
+  Future<List<CommentDto>> getCommentsFromPost(DateTime lastCommentTime, int amount, String postId) async {
+    return _getCommentList(commentsFromPostPath);
   }
-
   Future<List<CommentDto>> getOwnComments(DateTime lastCommentTime, int amount) async {
-    throw UnimplementedError();
-    return _getCommentList(_commentsGet);
+    return _getCommentList(ownCommentsPath);
   }
   Future<List<CommentDto>> getCommentsFromUser(DateTime lastCommentTime, int amount, String profileId) async {
-    throw UnimplementedError();
-    return _getCommentList(_commentsGet);
+    return _getCommentList(commentsFromUserPath);
   }
   Future<List<CommentDto>> getCommentsFromCommentParent(DateTime lastCommentTime, int amount, String parentCommentId) async {
-    throw UnimplementedError();
-    return _getCommentList(_commentsGet);
+    return _getCommentList(commentsFromCommentParentPath);
   }
 
   Future<CommentDto> getSingleComment(int id) async {

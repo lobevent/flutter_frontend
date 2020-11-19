@@ -17,7 +17,7 @@ enum Operation{
 }
 
 abstract class IEventRepository {
-  Future <Either<EventFailure, List<Event>>> getList(Operation operation, {Profile profile});
+  Future <Either<EventFailure, List<Event>>> getList(Operation operation, DateTime lastCommentTime, int amount, {Event event}, {Profile profile});
   Future <Either<EventFailure, Event>> getSingle(Id id);
   Future<Either<EventFailure, Event>> create(Event event);
   Future<Either<EventFailure, Event>> update(Event event);

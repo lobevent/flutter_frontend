@@ -34,19 +34,23 @@ class EventRemoteService {
     return eventDto;
   }
 
-  Future<List<EventDto>> getOwnedEvents() async {
-    return _getEventList(ownedEventsPath);
+  Future<List<EventDto>> getOwnedEvents(DateTime lastEventTime, int amount) async {
+    return _getEventList(_generatePaginatedRoute(
+        "profileEventPath", amount, lastEventTime));
   }
-  Future<List<EventDto>> getEventsFromUser() async {
-    throw UnimplementedError(); //TODO: add profile function parameter
-    return _getEventList(profileEventPath);
+  Future<List<EventDto>> getEventsFromUser(
+      DateTime lastEventTime, int amount, String profileId) async {
+    return _getEventList(_generatePaginatedRoute(
+        "$profileEventPath/$profileId", amount, lastEventTime));
   }
-  Future<List<EventDto>> getAttendingEvents() async {
-    return _getEventList(attendingEventsPath);
+  Future<List<EventDto>> getAttendingEvents(DateTime lastEventTime, int amount, String eventId,{reaction} )  async { //TODO how to see if owner is attending ...reaction
+    return _getEventList(_generatePaginatedRoute(
+        "$profileEventPath/$eventId/${reaction}", amount, lastEventTime));
   }
 
-  Future<List<EventDto>> getUnreactedEvents() async {
-    return _getEventList(unreactedEventsPath);
+  Future<List<EventDto>> getUnreactedEvents(DateTime lastEventTime, int amount, String eventId, {reaction})  async {
+    return _getEventList(_generatePaginatedRoute(
+        "$profileEventPath/$eventId/${reaction}", amount, lastEventTime));
   }
 
   Future<EventDto> createEvent(EventDto eventDto) async {
@@ -65,6 +69,9 @@ class EventRemoteService {
     return _decodeEvent(await client.put(
         "$updatePath${eventDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}",
         jsonEncode(eventDto.toJson())));
+  }
+  String _generatePaginatedRoute(String route, int amount, DateTime lastEventTime){
+    return "$route/$amount/$lastEventTime";
   }
 
   Future<EventDto> _decodeEvent(Response json) async {

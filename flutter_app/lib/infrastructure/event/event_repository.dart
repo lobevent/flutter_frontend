@@ -20,15 +20,16 @@ class EventRepository implements IEventRepository {
 
   @override
   Future<Either<EventFailure, List<Event>>> getList(Operation operation,
+      DateTime lastCommentTime, int amount, {Event event},
       {Profile profile}) async {
     try {
       List<EventDto> eventDtos;
       switch (operation) {
         case Operation.owned:
-          eventDtos = await _eventRemoteService.getOwnedEvents();
+          eventDtos = await _eventRemoteService.getOwnedEvents(lastEventTime, amount);
           break;
         case Operation.fromUser:
-          eventDtos = await _eventRemoteService.getEventsFromUser();
+          eventDtos = await _eventRemoteService.getEventsFromUser(lastEventTime, amount, profile.id.getOrCrash().toString());
           break;
         case Operation.attending:
           eventDtos = await _eventRemoteService.getAttendingEvents();

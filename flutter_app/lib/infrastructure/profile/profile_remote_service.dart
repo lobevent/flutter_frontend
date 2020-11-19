@@ -28,6 +28,9 @@ class ProfileRemoteService {
   Future<ProfileDto> _decodeProfile(Response json) async {
     return ProfileDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
+  String _generatePaginatedRoute(String route, int amount, DateTime lastProfileTime){
+    return "$route/$amount/$lastProfileTime";
+  }
 
   Future<ProfileDto> getSingleProfile(int id) async {
     final String uri = "$_profileIdPath$id";

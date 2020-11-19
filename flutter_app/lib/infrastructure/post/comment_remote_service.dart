@@ -67,7 +67,6 @@ class CommentRemoteService {
             "$updatePath${commentDto.maybeMap((value) => value.id, orElse: ()
             => throw UnexpectedFormatException())}", jsonEncode(commentDto.toJson())));
   }
-  }
 
   Future<List<CommentDto>> _getCommentList(String path) async {
     final Response response = await client.get(path);

@@ -32,7 +32,20 @@ class CommentRemoteService {
     return CommentDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
 
-  Future<List<CommentDto>> getCommentsFromPost() async {
+  Future<List<CommentDto>> getCommentsFromPost(DateTime lastCommentTime, int amount) async {
+    return _getCommentList(_commentsGet);
+  }
+
+  Future<List<CommentDto>> getOwnComments(DateTime lastCommentTime, int amount) async {
+    throw UnimplementedError();
+    return _getCommentList(_commentsGet);
+  }
+  Future<List<CommentDto>> getCommentsFromUser(DateTime lastCommentTime, int amount, String profileId) async {
+    throw UnimplementedError();
+    return _getCommentList(_commentsGet);
+  }
+  Future<List<CommentDto>> getCommentsFromCommentParent(DateTime lastCommentTime, int amount) async {
+    throw UnimplementedError();
     return _getCommentList(_commentsGet);
   }
 
@@ -44,6 +57,8 @@ class CommentRemoteService {
     //CommentDto commentDto = CommentDto.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
     return returnedCommentDto;
   }
+
+
 
   Future<List<CommentDto>> getPaginated() async {
     //TODO

@@ -38,6 +38,7 @@ class EventRemoteService {
     return _getEventList(ownedEventsPath);
   }
   Future<List<EventDto>> getEventsFromUser() async {
+    throw UnimplementedError(); //TODO: add profile function parameter
     return _getEventList(profileEventPath);
   }
   Future<List<EventDto>> getAttendingEvents() async {

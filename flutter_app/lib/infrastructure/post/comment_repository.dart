@@ -68,13 +68,26 @@ class CommentRepository implements ICommentRepository {
   }
 
   @override
-  Future<Either<CommentFailure, Comment>> getSinglePost(Id id) async {
-    throw UnimplementedError();
+  Future<Either<CommentFailure, Comment>> getSingleComment(Id id) async {
+    try {
+      final CommentDto commentDto =
+      await _commentRemoteService.getSingleComment(id.getOrCrash());
+      final Comment comment = commentDto.toDomain();
+      return right(comment);
+    } on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
+    }
   }
 
   @override
   Future<Either<CommentFailure, Comment>> update(Comment comment) async {
-    throw UnimplementedError();
+    try {
+      final commentDto = CommentDto.fromDomain(comment);
+      CommentDto returnedComment = await _commentRemoteService.update(commentDto);
+      return right(returnedComment.toDomain());
+    } on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
+    }
   }
 
   CommentFailure _reactOnCommunicationException(CommunicationException e) {

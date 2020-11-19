@@ -14,7 +14,7 @@ enum Operation{
 
 abstract class ICommentRepository{
   Future <Either<CommentFailure, List<Comment>>> getList(Operation operation, {Profile profile});
-  Future <Either<CommentFailure, Comment>> getSinglePost(Id id);
+  Future <Either<CommentFailure, Comment>> getSingleComment(Id id);
   Future<Either<CommentFailure, Comment>> create(Comment comment);
   Future<Either<CommentFailure, Comment>> update(Comment comment);
   Future<Either<CommentFailure, Comment>> delete(Comment comment);

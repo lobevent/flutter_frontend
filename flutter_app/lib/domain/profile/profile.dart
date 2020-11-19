@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
@@ -13,12 +14,12 @@ abstract class Profile implements _$Profile {
   const Profile._();
 
   const factory Profile({
-    @required int id,
+    @required Id id,
     @required ProfileName name,
   }) = _BaseProfile;
 
   const factory Profile.full({
-    @required int id,
+    @required Id id,
     @required ProfileName name,
     @required List<Event> ownedEvents,
     @required List<Invitation> invitations,

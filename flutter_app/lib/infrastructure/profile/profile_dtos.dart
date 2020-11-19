@@ -1,3 +1,4 @@
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -16,7 +17,7 @@ abstract class ProfileDto with _$ProfileDto {
 
   factory ProfileDto.fromDomain(Profile profile) {
     return ProfileDto(
-      id: profile.id,
+      id: profile.id.getOrCrash(),
       name: profile.name.getOrCrash(),
     );
   }
@@ -26,7 +27,7 @@ abstract class ProfileDto with _$ProfileDto {
 
   Profile toDomain() {
     return Profile(
-      id: id,
+      id: Id.fromUnique(id),
       name: ProfileName(name),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/domain/post/i_comment_repository.dart';
@@ -38,25 +39,34 @@ class CommentRepository implements ICommentRepository {
   }
 
   @override
-  Future<Either<CommentFailure, List<Comment>>> getList(Operation operation, DateTime lastCommentTime, int amount, {Profile profile}) async {
+  Future<Either<CommentFailure, List<Comment>>> getList(Operation operation, DateTime lastCommentTime, int amount, {Profile profile, Comment commentParent, Post postParent}) async {
     //throw UnimplementedError();
     try {
       List<CommentDto> commentDtos;
       switch (operation) {
         case Operation.fromPost:
-          commentDtos = await _commentRemoteService.getCommentsFromPost();
+          commentDtos = await _commentRemoteService.getCommentsFromPost(lastCommentTime, amount, postParent
+              .maybeMap(
+                  (value) => value.id.getOrCrash().toString(),
+              orElse: throw UnexpectedFormatException()));
           break;
         case Operation.fromComment:
-          commentDtos = await _commentRemoteService.getFeed();
+          commentDtos = await _commentRemoteService.getCommentsFromCommentParent(lastCommentTime, amount, commentParent
+              .maybeMap(
+                  (value) => value.id.getOrCrash().toString(),
+              parent: (value) => value.id.getOrCrash().toString(),
+              orElse: throw UnexpectedFormatException()));
           break;
         case Operation.fromUser:
-          commentDtos = await _commentRemoteService.getPostsFromUser();
+          commentDtos = await _commentRemoteService.getCommentsFromUser(lastCommentTime, amount, profile.id.getOrCrash().toString());
           break;
+        case Operation.own:
+          commentDtos = await _commentRemoteService.getOwnComments(lastCommentTime, amount);
       }
       //convert the dto objects to domain Objects
-      final List<Post> posts =
-      postDtos.map((postDto) => postDto.toDomain()).toList();
-      return right(posts);
+      final List<Comment> comments =
+      commentDtos.map((commentDtos) => commentDtos.toDomain()).toList();
+      return right(comments);
     } on CommunicationException catch (e) {
       return left(_reactOnCommunicationException(e));
     }

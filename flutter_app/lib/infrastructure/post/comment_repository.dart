@@ -39,21 +39,19 @@ class CommentRepository implements ICommentRepository {
   }
 
   @override
-  Future<Either<CommentFailure, List<Comment>>> getList(Operation operation,
-      {Profile profile}) async {
-    throw UnimplementedError();
-    /*
+  Future<Either<CommentFailure, List<Comment>>> getList(Operation operation, DateTime lastCommentTime, int amount, {Profile profile}) async {
+    //throw UnimplementedError();
     try {
       List<CommentDto> commentDtos;
       switch (operation) {
-        case Operation.own:
-          commentDtos = await _commentRemoteService.getOwnPosts();
+        case Operation.fromPost:
+          commentDtos = await _commentRemoteService.getCommentsFromPost();
           break;
-        case Operation.feed:
-          postDtos = await _postRemoteService.getFeed();
+        case Operation.fromComment:
+          commentDtos = await _commentRemoteService.getFeed();
           break;
         case Operation.fromUser:
-          postDtos = await _postRemoteService.getPostsFromUser();
+          commentDtos = await _commentRemoteService.getPostsFromUser();
           break;
       }
       //convert the dto objects to domain Objects
@@ -63,8 +61,6 @@ class CommentRepository implements ICommentRepository {
     } on CommunicationException catch (e) {
       return left(_reactOnCommunicationException(e));
     }
-
-     */
   }
 
   @override

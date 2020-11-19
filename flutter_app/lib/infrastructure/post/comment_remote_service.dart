@@ -9,11 +9,11 @@ import 'package:http/http.dart';
 class CommentRemoteService {
   static const String _commentAdd = "/event/post/{postId}/comment/{parentId}";
   static const String _commentsGet = "/event/post/{postId}/comment";
-  static const String _commentIdGet = "/comment";
-  static const String commentsFromPostPath = "/post";
-  static const String ownCommentsPath = "/comment"; //TODO create route for it
-  static const String commentsFromUserPath = "/comment";//TODO create route for it
-  static const String commentsFromCommentParentPath = "/comment";
+  static const String commentIdGet = "/comment/";
+  static const String commentsFromPostPath = "/post/";
+  static const String ownCommentsPath = "/comment/"; //TODO create route for it
+  static const String commentsFromUserPath = "/comment/";//TODO create route for it
+  static const String commentsFromCommentParentPath = "/comment/";
 
   static const String postPath = "/comment";
   static const String deletePath = "/comment";
@@ -34,7 +34,7 @@ class CommentRemoteService {
   }
 
   Future<List<CommentDto>> getCommentsFromPost(DateTime lastCommentTime, int amount, String postId) async {
-    return _getCommentList(_generatePaginatedRoute("$commentsFromPostPath/$postId", amount, lastCommentTime));
+    return _getCommentList(_generatePaginatedRoute("$commentsFromPostPath$postId", amount, lastCommentTime));
   }
   Future<List<CommentDto>> getOwnComments(DateTime lastCommentTime, int amount) async {
     throw UnimplementedError(); //This path is not yet defined properly
@@ -45,12 +45,12 @@ class CommentRemoteService {
     return _getCommentList(commentsFromUserPath);
   }
   Future<List<CommentDto>> getCommentsFromCommentParent(DateTime lastCommentTime, int amount, String parentCommentId) async {
-    return _getCommentList(_generatePaginatedRoute("$commentsFromPostPath/$parentCommentId", amount, lastCommentTime));
+    return _getCommentList(_generatePaginatedRoute("$commentsFromCommentParentPath$parentCommentId", amount, lastCommentTime));
   }
 
   Future<CommentDto> getSingleComment(int id) async {
     // String uri = _postIdPath + id.toString(); // TODO use the dart best practice
-    final String uri = "$_commentIdGet$id";
+    final String uri = "$commentIdGet$id";
     Response response = await client.get(uri);
     CommentDto returnedCommentDto = await _decodeComment(response);
     //CommentDto commentDto = CommentDto.fromJson(jsonDecode(response.body) as Map<String, dynamic>);

@@ -13,10 +13,10 @@ class PostRemoteService {
       "/event/{eventId}/post"; //Path for creating
   static const String postPaginatedPath = "/event/{eventId}/posts/{page}";
   static const String postDeletePath = "/event/post/";
-  static const String ownPostsPath = "/event/post/"; //TODO don't know the path
-  static const String feedPath = "/event/post/"; //TODO don't know the path
+  static const String ownPostsPath = "/post/"; //TODO don't know the path
+  static const String feedPath = "/feed/post/"; //TODO don't know the path
   static const String postsFromUserPath =
-      "/event/post/"; //TODO don't know the path
+      "/profile/post/"; //TODO don't know the path
 
   static const String postPath = "/post";
   static const String deletePath = "/post";
@@ -33,16 +33,16 @@ class PostRemoteService {
     return PostDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
 
-  Future<List<PostDto>> getOwnPosts() async {
-    return _getPostList(ownPostsPath);
+  Future<List<PostDto>> getOwnPosts(DateTime lastCommentTime, int amount) async {
+    return _getPostList(_generatePaginatedRoute(ownPostsPath, amount, lastCommentTime));
   }
 
-  Future<List<PostDto>> getFeed() async {
-    return _getPostList(feedPath);
+  Future<List<PostDto>> getFeed(DateTime lastCommentTime, int amount) async {
+    return _getPostList(_generatePaginatedRoute(feedPath, amount, lastCommentTime));
   }
 
-  Future<List<PostDto>> getPostsFromUser() async {
-    return _getPostList(postsFromUserPath);
+  Future<List<PostDto>> getPostsFromUser(DateTime lastCommentTime, int amount, String profileId) async {
+    return _getPostList(_generatePaginatedRoute("$postsFromUserPath/$profileId", amount, lastCommentTime));
   }
 
   Future<PostDto> getSinglePost(int id) async {
@@ -52,11 +52,6 @@ class PostRemoteService {
     PostDto postDto =
         PostDto.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
     return postDto;
-  }
-
-  Future<PostDto> getPaginated() async {
-    //TODO
-    throw UnimplementedError();
   }
 
   Future<PostDto> create(PostDto postDto) async {
@@ -77,6 +72,10 @@ class PostRemoteService {
         await client.put(
         "$updatePath${postDto.maybeMap((value) => value.id, orElse: ()
         => throw UnexpectedFormatException())}", jsonEncode(postDto.toJson())));
+  }
+
+  String _generatePaginatedRoute(String route, int amount, DateTime lastCommentTime){
+    return "$route/$amount/$lastCommentTime";
   }
 
   Future<List<PostDto>> _getPostList(String path) async {

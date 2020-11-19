@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/i_post_repository.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/post/post_failure.dart';
@@ -37,18 +38,19 @@ class PostRepository implements IPostRepository {
 
   @override
   Future<Either<PostFailure, List<Post>>> getList(Operation operation,
-      {Profile profile}) async {
+      DateTime lastCommentTime, int amount,
+      Event eventParent, {Profile profile}) async {
     try {
       List<PostDto> postDtos;
       switch (operation) {
         case Operation.own:
-          postDtos = await _postRemoteService.getOwnPosts();
+          postDtos = await _postRemoteService.getOwnPosts(lastCommentTime, amount);
           break;
         case Operation.feed:
-          postDtos = await _postRemoteService.getFeed();
+          postDtos = await _postRemoteService.getFeed(lastCommentTime, amount);
           break;
         case Operation.fromUser:
-          postDtos = await _postRemoteService.getPostsFromUser();
+          postDtos = await _postRemoteService.getPostsFromUser(lastCommentTime, amount, profile.id.getOrCrash().toString());
           break;
       }
       //convert the dto objects to domain Objects

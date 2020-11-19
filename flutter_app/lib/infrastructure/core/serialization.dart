@@ -1,13 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart' show compute;
-
-final Map<Type, Function> factoryMap = {
-  // CommentDto : CommentDto.fromJson,
-};
-
-
-
+import 'package:flutter_frontend/infrastructure/core/serialization_factory_map.dart';
 
 List<T> _modelListFromJsonString<T>(String json) {
   final List<dynamic> tmpJsonList = jsonDecode(json) as List<dynamic>;
@@ -33,4 +27,8 @@ class DeserializeWrapper<T> {
   static dynamic _invoke(DeserializeWrapper a) => a.invoke();
 }
 
-Future<List<T>> deserialize<T>(String json) => compute(DeserializeWrapper._invoke, DeserializeWrapper<T>(json)) as Future<List<T>>;
+// await the dynamic result and then cast in the requested type and return it
+Future<List<T>> deserialize<T>(String json) async {
+  dynamic result = await compute(DeserializeWrapper._invoke, DeserializeWrapper<T>(json)); 
+  return result as List<T>;
+} 

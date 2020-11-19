@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 
+import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'comment_dtos.dart';
 import 'package:http/http.dart';
@@ -12,6 +13,10 @@ class CommentRemoteService {
   static const String _commentIdGet = "/comment";
   static const String _commentUpdate = "/comment";
   static const String _commentsPaginated = "/comment";
+
+  static const String postPath = "/comment";
+  static const String deletePath = "/comment";
+  static const String updatePath = "/comment";
 
   //either comment or post as parent
 
@@ -46,22 +51,22 @@ class CommentRemoteService {
   }
 
   Future<CommentDto> create(CommentDto commentDto) async {
-    client.post(_commentAdd, commentDto.toJson());
-    //throw UnimplementedError();
     return _decodeComment(
-        await client.post(_commentAdd, jsonEncode(commentDto.toJson())));
+        await client.post(postPath, jsonEncode(commentDto.toJson())));
   }
 
   Future<CommentDto> delete(CommentDto commentDto) async {
-    throw UnimplementedError();
-    //await client.delete("$_commentDelete${commentDto.id}");
-    return commentDto; //implement this
+    return _decodeComment(
+        await client.delete("$deletePath${commentDto.maybeMap((value) => value.id, orElse: ()
+        => throw UnexpectedFormatException())}"));
   }
 
   Future<CommentDto> update(CommentDto commentDto) async {
-    throw UnimplementedError;
-    await client.put(_commentUpdate, commentDto.toDomain());
-    return commentDto;
+    return _decodeComment(
+        await client.put(
+            "$updatePath${commentDto.maybeMap((value) => value.id, orElse: ()
+            => throw UnexpectedFormatException())}", jsonEncode(commentDto.toJson())));
+  }
   }
 
   Future<List<CommentDto>> _getCommentList(String path) async {

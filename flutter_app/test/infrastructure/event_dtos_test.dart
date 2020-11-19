@@ -10,10 +10,8 @@ import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/testing.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
-import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:http/http.dart' as http;
 
 class MockEvent extends Mock implements Event, http.Client {}

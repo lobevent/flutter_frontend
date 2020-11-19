@@ -1,21 +1,15 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
-import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/infrastructure/post/post_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/post/post_repository.dart';
-import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/post/post_failure.dart';
 import 'package:flutter_frontend/domain/post/i_post_repository.dart';
 import 'package:http/http.dart' as http;
-
-import 'profile_dtos_test.dart';
 
 class MockPost extends Mock implements Profile, http.Client {}
 

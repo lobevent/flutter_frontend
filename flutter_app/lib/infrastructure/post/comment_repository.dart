@@ -47,7 +47,7 @@ class CommentRepository implements ICommentRepository {
         case Operation.fromPost:
           commentDtos = await _commentRemoteService.getCommentsFromPost(lastCommentTime, amount, postParent
               .maybeMap(
-                  (value) => value.id.getOrCrash().toString(),
+                  (value) => value.id.getOrCrash().toString(), //need to be done, as post parent has classes where the id is not included
               orElse: throw UnexpectedFormatException()));
           break;
         case Operation.fromComment:

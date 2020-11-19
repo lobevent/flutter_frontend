@@ -9,14 +9,11 @@ import 'package:http/http.dart';
 class CommentRemoteService {
   static const String _commentAdd = "/event/post/{postId}/comment/{parentId}";
   static const String _commentsGet = "/event/post/{postId}/comment";
-  static const String _commentDelete = "/comment";
   static const String _commentIdGet = "/comment";
-  static const String _commentUpdate = "/comment";
-  static const String _commentsPaginated = "/comment";
-  static const String commentsFromPostPath = "/comment"; //TODO create route for it
+  static const String commentsFromPostPath = "/post";
   static const String ownCommentsPath = "/comment"; //TODO create route for it
   static const String commentsFromUserPath = "/comment";//TODO create route for it
-  static const String commentsFromCommentParentPath = "/comment";//TODO create route for it
+  static const String commentsFromCommentParentPath = "/comment";
 
   static const String postPath = "/comment";
   static const String deletePath = "/comment";
@@ -37,16 +34,18 @@ class CommentRemoteService {
   }
 
   Future<List<CommentDto>> getCommentsFromPost(DateTime lastCommentTime, int amount, String postId) async {
-    return _getCommentList(commentsFromPostPath);
+    return _getCommentList(_generatePaginatedRoute("$commentsFromPostPath/$postId", amount, lastCommentTime));
   }
   Future<List<CommentDto>> getOwnComments(DateTime lastCommentTime, int amount) async {
+    throw UnimplementedError(); //This path is not yet defined properly
     return _getCommentList(ownCommentsPath);
   }
   Future<List<CommentDto>> getCommentsFromUser(DateTime lastCommentTime, int amount, String profileId) async {
+    throw UnimplementedError(); //This path is not yet defined properly
     return _getCommentList(commentsFromUserPath);
   }
   Future<List<CommentDto>> getCommentsFromCommentParent(DateTime lastCommentTime, int amount, String parentCommentId) async {
-    return _getCommentList(commentsFromCommentParentPath);
+    return _getCommentList(_generatePaginatedRoute("$commentsFromPostPath/$parentCommentId", amount, lastCommentTime));
   }
 
   Future<CommentDto> getSingleComment(int id) async {
@@ -59,11 +58,6 @@ class CommentRemoteService {
   }
 
 
-
-  Future<List<CommentDto>> getPaginated() async {
-    //TODO
-    throw UnimplementedError();
-  }
 
   Future<CommentDto> create(CommentDto commentDto) async {
     return _decodeComment(
@@ -81,6 +75,10 @@ class CommentRemoteService {
         await client.put(
             "$updatePath${commentDto.maybeMap((value) => value.id, orElse: ()
             => throw UnexpectedFormatException())}", jsonEncode(commentDto.toJson())));
+  }
+
+  String _generatePaginatedRoute(String route, int amount, DateTime lastCommentTime){
+    return "$route/comments/$amount/$lastCommentTime";
   }
 
   Future<List<CommentDto>> _getCommentList(String path) async {

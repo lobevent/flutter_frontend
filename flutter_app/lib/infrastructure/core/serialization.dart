@@ -16,19 +16,33 @@ List<T> _modelListFromJsonString<T>(String json) {
   return modelList;
 }
 
+T _modelFromJsonString<T>(String json) {
+  // TODO implement 
+  throw UnimplementedError();
+  return json as T;
+}
+
+
+
 class DeserializeWrapper<T> {
   final String json;
   DeserializeWrapper(this.json);
 
-  List<T> invoke() {
+  List<T> deserializeModelList() {
     return _modelListFromJsonString<T>(json);
   }
 
-  static dynamic _invoke(DeserializeWrapper a) => a.invoke();
+  T deserializeModel() {
+    return _modelFromJsonString<T>(json);
+  }
+
+  static dynamic _deserializeModelList(DeserializeWrapper wrapper) => wrapper.deserializeModelList();
+
+  static dynamic _deserializeModel(DeserializeWrapper wrapper) => wrapper.deserializeModel();
 }
 
 // await the dynamic result and then cast in the requested type and return it
 Future<List<T>> deserialize<T>(String json) async {
-  dynamic result = await compute(DeserializeWrapper._invoke, DeserializeWrapper<T>(json)); 
+  dynamic result = await compute(DeserializeWrapper._deserializeModelList, DeserializeWrapper<T>(json)); 
   return result as List<T>;
 } 

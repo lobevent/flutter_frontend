@@ -8,19 +8,15 @@ import 'package:flutter_frontend/infrastructure/auth/user_dto.dart';
 
 void main() {
 
-
-
-
-
   test("Test the base serialization function", () async {
-    final userDto = UserDto(
+    const userDto = UserDto(
       id: "thisIsUniqueUgliness",
       username: "UglyUser",
       emailAddress: "ugly@ugly.com"
     );
     final userJsonString = "[${jsonEncode(userDto.toJson())}]"; // convert to a list of dtos with one single dto
     
-    final List<UserDto> afterSerialization = await deserialize<UserDto>(userJsonString);
+    final List<UserDto> afterSerialization = await deserializeModelList<UserDto>(userJsonString);
     print(afterSerialization);
   });
 }

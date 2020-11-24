@@ -1,22 +1,54 @@
-import 'dart:convert';
-
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_frontend/infrastructure/core/deserialization.dart';
+import 'package:flutter_frontend/infrastructure/core/serilization.dart';
 import 'package:flutter_frontend/infrastructure/auth/user_dto.dart';
+import 'package:flutter_frontend/domain/core/errors.dart';
 
 
 void main() {
-
-  test("Test the base serialization function", () async {
     const userDto = UserDto(
-      id: "thisIsUniqueUgliness",
+      id: "thisIsUniqueUglinessOfAnId",
       username: "UglyUser",
       emailAddress: "ugly@ugly.com"
     );
-    final userJsonString = "[${jsonEncode(userDto.toJson())}]"; // convert to a list of dtos with one single dto
-    
-    final List<UserDto> afterSerialization = await deserializeModelList<UserDto>(userJsonString);
-    print(afterSerialization);
+    //generated with serializeModel(userDto);
+    const String expectedUserDtoString = """{"id":"thisIsUniqueUglinessOfAnId","username":"UglyUser","emailAddress":"ugly@ugly.com"}""";
+    // generated with serializedModelList([userDto, userDto])
+    const String expectedUserDtoListString = """[{"id":"thisIsUniqueUglinessOfAnId","username":"UglyUser","emailAddress":"ugly@ugly.com"},{"id":"thisIsUniqueUglinessOfAnId","username":"UglyUser","emailAddress":"ugly@ugly.com"}]""";
+  
+  test("Test the serializeModel serialization function", () async {
+    final String userJsonString = serializeModel(userDto);    
+    expect(userJsonString, expectedUserDtoString);
+  });
+
+  test("Test the serializedModelList serialization function", () async {
+    final String userJsonListString = serializedModelList([userDto, userDto]);
+    expect(userJsonListString, expectedUserDtoListString);
+  });
+
+  test("Test the deserializeModel deserialization function", () async {
+    final UserDto deserializedUserDto = await deserializeModel<UserDto>(expectedUserDtoString);
+    expect(deserializedUserDto, userDto);
+  });
+
+  test("Test the deserializeModelList deserialization function", () async {
+    final List<UserDto> deserializedUserDtoList = await deserializeModelList<UserDto>(expectedUserDtoListString);
+    expect(deserializedUserDtoList.length, 2);
+    expect(deserializedUserDtoList[0], userDto);
+    expect(deserializedUserDtoList[1], userDto);
+  });
+
+  test("Test the deserializedModelList function on errors", () async {
+    // test if the requested type (in this case dynamic since no 
+    // type was provided for deserializeModel<T>()) is in the
+    // deserialization_factory_map.dart map
+    try {
+      await deserializeModel(expectedUserDtoString);
+    } catch (e) {
+      print(e.runtimeType);
+      expect(e, isInstanceOf<DtoTypeNotFoundInDeserializationFactoryMapError>());
+    }
   });
 }

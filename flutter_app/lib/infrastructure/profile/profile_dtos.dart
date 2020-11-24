@@ -1,17 +1,20 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_dtos.dart';
 import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+
 
 part 'profile_dtos.freezed.dart';
 
 part 'profile_dtos.g.dart';
 
 @freezed
-abstract class ProfileDto with _$ProfileDto {
+abstract class ProfileDto extends BaseDto implements _$ProfileDto {
   const ProfileDto._();
 
   const factory ProfileDto({
@@ -58,6 +61,7 @@ abstract class ProfileDto with _$ProfileDto {
   factory ProfileDto.fromJson(Map<String, dynamic> json) =>
       _$ProfileDtoFromJson(json);
 
+  @override
   Profile toDomain() {
     return map(
         (listViewProfileDto) => Profile(

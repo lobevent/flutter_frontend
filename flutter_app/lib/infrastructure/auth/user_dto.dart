@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/domain/auth/user.dart';
 import 'package:flutter_frontend/domain/auth/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
@@ -9,7 +10,7 @@ part 'user_dto.freezed.dart';
 part 'user_dto.g.dart';
 
 @freezed
-abstract class UserDto implements _$UserDto {
+abstract class UserDto extends BaseDto implements _$UserDto {
   const UserDto._();
 
   const factory UserDto({
@@ -26,6 +27,7 @@ abstract class UserDto implements _$UserDto {
     );
   }
 
+  @override
   User toDomain() {
     return User(
       id: UniqueId.fromUniqueString(id.toString()),

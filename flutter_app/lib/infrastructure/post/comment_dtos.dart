@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/post/value_objects.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
@@ -13,7 +14,7 @@ part 'comment_dtos.g.dart';
 // TODO I will go through infrastructure
 
 @freezed
-abstract class CommentDto with _$CommentDto {
+abstract class CommentDto extends BaseDto implements _$CommentDto {
   const CommentDto._();
 
   const factory CommentDto.parent({
@@ -82,6 +83,7 @@ abstract class CommentDto with _$CommentDto {
   /// Generate dto from domain, respecting the different union cases
   /// Map comment to parent or to full and generate the entity respectively
   // TODO this function does something really really strange! The syntax is a little bit mixed up but also it does not what it should
+  @override
   Comment toDomain() {
     Comment returnedComment;
     map(

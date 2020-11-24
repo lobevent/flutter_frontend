@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/post/value_objects.dart';
@@ -13,7 +14,7 @@ part 'post_dtos.freezed.dart';
 part 'post_dtos.g.dart';
 
 @freezed
-abstract class PostDto implements _$PostDto {
+abstract class PostDto extends BaseDto implements _$PostDto {
   const PostDto._();
 
   const factory PostDto({
@@ -52,6 +53,7 @@ abstract class PostDto implements _$PostDto {
   factory PostDto.fromJson(Map<String, dynamic> json) =>
       _$PostDtoFromJson(json);
 
+  @override
   Post toDomain() {
     return map(
         (value) => Post(

@@ -17,7 +17,7 @@ T _modelFromJsonMap<T>(Map<String, dynamic> jsonMap) {
   if (factoryMap.containsKey(T)) {
     return factoryMap[T](jsonMap) as T;
   } else {
-    throw DtoTypeNotFoundInDeserializationFactoryMap();
+    throw DtoTypeNotFoundInDeserializationFactoryMapError();
   }
 }
 

@@ -1,6 +1,7 @@
-import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
@@ -10,7 +11,7 @@ part 'event_dtos.freezed.dart';
 part 'event_dtos.g.dart';
 
 @freezed
-abstract class EventDto with _$EventDto {
+abstract class EventDto extends BaseDto implements _$EventDto {
   const EventDto._();
 
   const factory EventDto({
@@ -31,7 +32,6 @@ abstract class EventDto with _$EventDto {
     @required DateTime creationDate,
     @required @OwnerConverter() ProfileDto owner,
   }) = EventDtoWithoutId;
-
 
   factory EventDto.fromDomain(Event event) {
     EventDto returnedDto;
@@ -58,6 +58,7 @@ abstract class EventDto with _$EventDto {
   factory EventDto.fromJson(Map<String, dynamic> json) =>
       _$EventDtoFromJson(json);
 
+  @override
   Event toDomain() {
    return map((value) => Event(
       id: Id.fromUnique(value.id),

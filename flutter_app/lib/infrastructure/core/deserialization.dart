@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart' show compute;
-import 'package:flutter_frontend/infrastructure/core/serialization_factory_map.dart';
+import 'package:flutter_frontend/infrastructure/core/deserialization_factory_map.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 
 /// Added this to decode and cast json in one single point.
@@ -17,7 +17,7 @@ T _modelFromJsonMap<T>(Map<String, dynamic> jsonMap) {
   if (factoryMap.containsKey(T)) {
     return factoryMap[T](jsonMap) as T;
   } else {
-    throw DtoTypeNotFoundInSerializationFactoryMap();
+    throw DtoTypeNotFoundInDeserializationFactoryMap();
   }
 }
 

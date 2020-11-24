@@ -20,8 +20,7 @@ class EventRepository implements IEventRepository {
 
   @override
   Future<Either<EventFailure, List<Event>>> getList(Operation operation,
-      DateTime lastCommentTime, int amount, {Event event},
-      {Profile profile}) async {
+      DateTime lastCommentTime, int amount, {Event event, Profile profile}) async {
     try {
       List<EventDto> eventDtos;
       switch (operation) {

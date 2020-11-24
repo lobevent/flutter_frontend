@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:flutter_frontend/infrastructure/core/serialization.dart';
+import 'package:flutter_frontend/infrastructure/core/deserialization.dart';
 import 'package:flutter_frontend/infrastructure/auth/user_dto.dart';
 
 

@@ -32,9 +32,9 @@ abstract class ValueFailure<T> with _$ValueFailure<T> {
   const factory ValueFailure.invalidDate({
     @required T failedValue,
   }) = InvalidDate<T>;
-  const factory ValueFailure.multiline({
+  const factory ValueFailure.multiLine({
     @required T failedValue,
-  }) = Multiline<T>;
+  }) = MultiLine<T>;
 }
 
 /*

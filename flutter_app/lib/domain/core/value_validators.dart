@@ -51,7 +51,7 @@ Either<ValueFailure<String>, String> validateLength(
 Either<ValueFailure<String>, String> validateSingleLine(String input) {
   // check if for example the title of event is a one liner
   if (input.contains('\n')) {
-    return left(ValueFailure.multiline(failedValue: input));
+    return left(ValueFailure.multiLine(failedValue: input));
   } else {
     return right(input);
   }

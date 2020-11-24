@@ -21,7 +21,7 @@ class UnexpectedValueError extends Error {
   }
 }
 
-class DtoTypeNotFoundInSerializationFactoryMap extends Error {
+class DtoTypeNotFoundInDeserializationFactoryMap extends Error {
   static const String explanation = """
     This error indicates that you tried to deserialize a 
     Type that isn't in the serialization factory map which 

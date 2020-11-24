@@ -18,7 +18,7 @@ import 'package:flutter_frontend/domain/post/post_failure.dart';
 import 'package:flutter_frontend/domain/post/i_post_repository.dart';
 import 'package:http/http.dart' as http;
 
-import 'profile_dtos_test.dart';
+import '../profile/profile_dtos_test.dart';
 
 class MockPost extends Mock implements Profile, http.Client {}
 

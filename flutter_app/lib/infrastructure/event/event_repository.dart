@@ -31,10 +31,10 @@ class EventRepository implements IEventRepository {
           eventDtos = await _eventRemoteService.getEventsFromUser(lastEventTime, amount, profile.id.getOrCrash().toString());
           break;
         case Operation.attending:
-          eventDtos = await _eventRemoteService.getAttendingEvents(lastEventTime, amount, profile.id.getOrCrash().toString());
+          eventDtos = await _eventRemoteService.getAttendingEvents(lastEventTime, amount);
           break;
         case Operation.unreacted:
-          eventDtos = await _eventRemoteService.getUnreactedEvents(lastEventTime, amount, profile.id.getOrCrash().toString());
+          eventDtos = await _eventRemoteService.getUnreactedEvents(lastEventTime, amount);
           break;
       }
       //convert the dto objects to domain Objects

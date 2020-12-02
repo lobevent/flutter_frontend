@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,6 +25,15 @@ class MockPost extends Mock implements Profile, http.Client {}
 
 main() {
   const int testId = 3;
+
+  EventDto TestDtoWithId = EventDto(
+      id: testId,
+      name: "EVENT2",
+      public: true,
+      description: "toni stinkt",
+      owner: ProfileDto(id: 0, name: "manfred"),
+      date: DateTime.now(),
+      creationDate: DateTime.now());
 
   PostDto normalPostDto1 = PostDto(
       id: testId,
@@ -92,11 +102,13 @@ main() {
   final client = MockPost();
   final SymfonyCommunicator communicator = SymfonyCommunicator(
       jwt: "lalala",
-      client: client); //SymfonyCommunicator for communication mocking with fake jwt and the mocking client
+      client:
+          client); //SymfonyCommunicator for communication mocking with fake jwt and the mocking client
   final PostRemoteService
       remoteService //we have to pass the communicator, as it has the mocked client
-      = PostRemoteService(communicator:
-      communicator); //remoteService for mocking in the repository
+      = PostRemoteService(
+          communicator:
+              communicator); //remoteService for mocking in the repository
   PostRepository repository = PostRepository(remoteService);
 
   //some often used values
@@ -122,150 +134,203 @@ main() {
   };
 
   //first test
-
   test("Post Convertion", () {
     PostDto convertedTestPostDto = PostDto.fromJson(
         PostDto.fromDomain(normalPostDto1.toDomain()).toJson());
     expect(normalPostDto1, convertedTestPostDto);
   });
 
-  test("Post with 200 response", () async {
-    when(client.post("ourUrl.com/post",
-            headers: authenticationHeader,
-            body: jsonEncode(postDtoWithoutId1.toJson())))
-        .thenAnswer((realInvocation) async =>
-            http.Response(jsonEncode(normalPostDto1.toJson()), 200));
+  //test  CRUD HERE
+  group('CRUD', () {
+    test("get Single Test", () async {
+      when(client.get("ourUrl.com/event/1", headers: authenticationHeader))
+          .thenAnswer((_) async =>
+              http.Response(jsonEncode(postDtoWithoutId1.toJson()), 200));
 
-    Post answer =
-    await repository
-        .create(postDtoWithoutId1.toDomain())
-        .then((value) => value.fold((l) => throw Error(), (r) => r));
-    expect(
-        answer.maybeMap((value) => value.id.getOrCrash(), orElse: () => null),
-        testId);
-    expect(answer = null, false);
-    expect(PostDto.fromDomain(answer), normalPostDto1);
-  });
-
-  test("Delete with 200 response", () async {
-    when(client.delete(
-            SymfonyCommunicator.url +
-                PostRemoteService.deletePath +
-                testId.toString(),
-            headers: authenticationHeader))
-        .thenAnswer((realInvocation) async =>
-            http.Response(jsonEncode(postDtoWithoutId1.toJson()), 200));
-    Post answer = await repository
-        .delete(postDtoWithoutId1.toDomain())
-        .then((value) => value.fold((l) => null, (r) => r));
-    expect(
-        answer.maybeMap((value) => value.id.getOrCrash(), orElse: () => null),
-        testId);
-    expect(answer == null, false);
-    expect(PostDto.fromDomain(answer), postDtoWithoutId1);
-  });
-
-  test("Delete with wrong postdto type (without id)", () async {
-    when(client.delete(
-            SymfonyCommunicator.url +
-                PostRemoteService.deletePath +
-                testId.toString(),
-            headers: authenticationHeader))
-        .thenAnswer((realInvocation) async => http.Response("", 200));
-    final Either<PostFailure, Post> answer = await repository
-        .delete(postDtoWithoutId1.toDomain()); //await answer from repository
-    final PostFailure failure = answer.swap().getOrElse(() =>
-        throw Error()); //swap, so we can use get or else, and throw an error if its not an failure
-    expect(failure, const PostFailure.unexpected());
-  });
-
-  //---------------------UPDATE----------------------
-  test("Put with 200 response", () async {
-    when(client.put(
-            SymfonyCommunicator.url +
-                PostRemoteService.updatePath +
-                testId.toString(),
-            headers: authenticationHeader,
-            body: jsonEncode(postDtoWithoutId1.toJson())))
-        .thenAnswer((realInvocation) async =>
-            http.Response(jsonEncode(postDtoWithoutId1.toJson()), 200));
-
-    Post answer = await repository
-        .update(postDtoWithoutId1.toDomain())
-        .then((value) => value.fold((l) => null, (r) => r));
-    expect(
-        answer.maybeMap((value) => value.id.getOrCrash(), orElse: () => null),
-        testId);
-    expect(answer == null, false);
-    expect(PostDto.fromDomain(answer), normalPostDto1);
-  });
-
-  //-------autogenerated on Http error codes -----------------
-  ///Test crud methods and reaction to the statuscodes
-  ///the tests are generated based on the error codes and the associated errors
-  codesAndFailures.forEach((code, pstFailure) {
-    //Autogenerated tests for the different failures in post
-    test("Post with communicaton errors. Code: $code", () async {
-      //tests for posts
-      when(client.post(SymfonyCommunicator.url + PostRemoteService.postPath,
-              headers: authenticationHeader,
-              body: jsonEncode(postDtoWithoutId1.toJson())))
-          .thenAnswer((realInvocation) async => http.Response("", code));
-      final PostFailure answer = await repository
-          .create(postDtoWithoutId1.toDomain())
-          .then((value) => value.fold((l) => l, (r) => null));
-      expect(answer, pstFailure);
+      expect(
+          await repository.getSinglePost(Id.fromUnique(1)).then(
+              (value) => value.fold((l) => null, (r) => PostDto.fromDomain(r))),
+          postDtoWithoutId1);
     });
 
-    test("Delete with communication errors. Code: $code", () async {
-      //Autogenerated tests for the different failures in delete
+    //testing list chain and convertion
+    listOperations.forEach((operation, path) async {
+      // generate testcases for different operations
+      test("get List Test with 200 response. Operation: $operation", () async {
+        Either<PostFailure, List<Post>> returnedList;
+        when(client.get(SymfonyCommunicator.url + path,
+                headers: authenticationHeader))
+            .thenAnswer((_) async => http.Response(
+                jsonEncode(postList.map((e) => e.toJson()).toList()),
+                200)); // client response configuration
+        if (operation == Operation.fromUser) {
+          returnedList = await repository.getList(
+              operation, DateTime.now(), 5, TestDtoWithId.toDomain(),
+              profile: profileDto
+                  .toDomain()); //the case, when profile must be passed
+        } else {
+          returnedList = await repository.getList(
+              operation, DateTime.now(), 5, TestDtoWithId.toDomain());
+        }
+        expect(
+            returnedList
+                .getOrElse(() => throw Error())
+                .map((e) => PostDto.fromDomain(e))
+                .toList(),
+            postList);
+      });
+    });
+    test("Post with 200 response", () async {
+      when(client.post("ourUrl.com/post/1",
+              body: jsonEncode(postDtoWithoutId1.toJson()),
+              headers: authenticationHeader))
+          .thenAnswer((realInvocation) async =>
+              http.Response(jsonEncode(normalPostDto1.toJson()), 200));
+
+      Post answer = await repository
+          .create(postDtoWithoutId1.toDomain())
+          .then((value) => value.fold((l) => throw Error(), (r) => r));
+      expect(
+          answer.maybeMap((value) => value.id.getOrCrash(), orElse: () => null),
+          testId);
+      expect(answer = null, false);
+      expect(PostDto.fromDomain(answer), normalPostDto1);
+    });
+
+    test("Delete with 200 response", () async {
       when(client.delete(
               SymfonyCommunicator.url +
                   PostRemoteService.deletePath +
                   testId.toString(),
               headers: authenticationHeader))
-          .thenAnswer((realInvocation) async => http.Response("", code));
+          .thenAnswer((realInvocation) async =>
+              http.Response(jsonEncode(postDtoWithoutId1.toJson()), 200));
+      Post answer = await repository
+          .delete(postDtoWithoutId1.toDomain())
+          .then((value) => value.fold((l) => null, (r) => r));
+      expect(
+          answer.maybeMap((value) => value.id.getOrCrash(), orElse: () => null),
+          testId);
+      expect(answer == null, false);
+      expect(PostDto.fromDomain(answer), postDtoWithoutId1);
+    });
+
+    test("Delete with wrong postdto type (without id)", () async {
+      when(client.delete(
+              SymfonyCommunicator.url +
+                  PostRemoteService.deletePath +
+                  testId.toString(),
+              headers: authenticationHeader))
+          .thenAnswer((realInvocation) async => http.Response("", 200));
       final Either<PostFailure, Post> answer = await repository
           .delete(postDtoWithoutId1.toDomain()); //await answer from repository
       final PostFailure failure = answer.swap().getOrElse(() =>
           throw Error()); //swap, so we can use get or else, and throw an error if its not an failure
-      expect(failure, pstFailure);
+      expect(failure, const PostFailure.unexpected());
     });
 
-    test("Put with communication Errors. Code: $code", () async {
+    test("Put with wrong eventdto type (without id)", () async {
       when(client.put(
               SymfonyCommunicator.url +
                   PostRemoteService.updatePath +
                   testId.toString(),
               headers: authenticationHeader,
-              body: jsonEncode(postDtoWithoutId1.toJson())))
-          .thenAnswer((realInvocation) async => http.Response("", code));
+              body: jsonEncode(TestDtoWithId.toJson())))
+          .thenAnswer((realInvocation) async => http.Response("", 200));
       PostFailure failure = await repository
           .update(postDtoWithoutId1.toDomain())
           .then((value) => value.swap().getOrElse(() => throw Error()));
-      expect(failure, pstFailure);
+      expect(failure, const PostFailure.unexpected());
+    });
+    //---------------------UPDATE----------------------
+    test("Put with 200 response without id", () async {
+      when(client.put(
+              SymfonyCommunicator.url +
+                  PostRemoteService.updatePath +
+                  testId.toString(),
+              headers: authenticationHeader,
+              body: jsonEncode(normalPostDto1.toJson())))
+          .thenAnswer((realInvocation) async =>
+              http.Response(jsonEncode(normalPostDto1.toJson()), 200));
+
+      Post answer = await repository
+          .update(normalPostDto1.toDomain())
+          .then((value) => value.fold((l) => null, (r) => r));
+      expect(
+          answer.maybeMap((value) => value.id.getOrCrash(), orElse: () => null),
+          testId);
+      expect(answer == null, false);
+      expect(PostDto.fromDomain(answer), normalPostDto1);
     });
 
-    ///Test for the failures in the get listCalls
-    listOperations.forEach((operation, path) {
-      test(
-          "getList with communication Errors. Operation: $operation. Code: $code",
-          () async {
-        PostFailure returnedFailure;
-        when(client.get(SymfonyCommunicator.url + path,
+    //-------autogenerated on Http error codes -----------------
+    ///Test crud methods and reaction to the statuscodes
+    ///the tests are generated based on the error codes and the associated errors
+    codesAndFailures.forEach((code, pstFailure) {
+      //Autogenerated tests for the different failures in post
+      test("Post with communicaton errors. Code: $code", () async {
+        //tests for posts
+        when(client.post(SymfonyCommunicator.url + PostRemoteService.postPath,
+                headers: authenticationHeader,
+                body: jsonEncode(postDtoWithoutId1.toJson())))
+            .thenAnswer((realInvocation) async => http.Response("", code));
+        final PostFailure answer = await repository
+            .create(postDtoWithoutId1.toDomain())
+            .then((value) => value.fold((l) => l, (r) => null));
+        expect(answer, pstFailure);
+      });
+
+      test("Delete with communication errors. Code: $code", () async {
+        //Autogenerated tests for the different failures in delete
+        when(client.delete(
+                SymfonyCommunicator.url +
+                    PostRemoteService.deletePath +
+                    testId.toString(),
                 headers: authenticationHeader))
-            .thenAnswer((_) async => http.Response(
-                jsonEncode(postList.map((e) => e.toJson()).toList()), code));
-        if (operation == Operation.fromUser) {
-          returnedFailure = await repository
-              .getList(operation, profile: profileDto.toDomain())
-              .then((value) => value.swap().getOrElse(() => throw Error()));
-        } else {
-          returnedFailure = await repository
-              .getList(operation)
-              .then((value) => value.swap().getOrElse(() => throw Error()));
-        }
-        expect(returnedFailure, pstFailure);
+            .thenAnswer((realInvocation) async => http.Response("", code));
+        final Either<PostFailure, Post> answer = await repository.delete(
+            postDtoWithoutId1.toDomain()); //await answer from repository
+        final PostFailure failure = answer.swap().getOrElse(() =>
+            throw Error()); //swap, so we can use get or else, and throw an error if its not an failure
+        expect(failure, pstFailure);
+      });
+
+      test("Put with communication Errors. Code: $code", () async {
+        when(client.put(
+                SymfonyCommunicator.url +
+                    PostRemoteService.updatePath +
+                    testId.toString(),
+                headers: authenticationHeader,
+                body: jsonEncode(postDtoWithoutId1.toJson())))
+            .thenAnswer((realInvocation) async => http.Response("", code));
+        PostFailure failure = await repository
+            .update(postDtoWithoutId1.toDomain())
+            .then((value) => value.swap().getOrElse(() => throw Error()));
+        expect(failure, pstFailure);
+      });
+
+      ///Test for the failures in the get listCalls
+      listOperations.forEach((operation, path) {
+        test(
+            "getList with communication Errors. Operation: $operation. Code: $code",
+            () async {
+          PostFailure returnedFailure;
+          when(client.get(SymfonyCommunicator.url + path,
+                  headers: authenticationHeader))
+              .thenAnswer((_) async => http.Response(
+                  jsonEncode(postList.map((e) => e.toJson()).toList()), code));
+          if (operation == Operation.fromUser) {
+            returnedFailure = await repository
+                .getList(operation, DateTime.now(), 5, TestDtoWithId.toDomain(),
+                    profile: profileDto.toDomain())
+                .then((value) => value.swap().getOrElse(() => throw Error()));
+          } else {
+            returnedFailure = await repository
+                .getList(operation, DateTime.now(), 5, TestDtoWithId.toDomain())
+                .then((value) => value.swap().getOrElse(() => throw Error()));
+          }
+          expect(returnedFailure, pstFailure);
+        });
       });
     });
   });

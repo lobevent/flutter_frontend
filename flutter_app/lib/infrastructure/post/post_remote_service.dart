@@ -23,9 +23,9 @@ class PostRemoteService {
 
   SymfonyCommunicator client;
 
-  PostRemoteService() {
-    client = SymfonyCommunicator(jwt: null); // TODO check on this one
-  }
+  PostRemoteService({SymfonyCommunicator communicator})
+      : client = communicator ??
+            SymfonyCommunicator(jwt: null); // TODO check on this one
 
   //decode the json response for post
   Future<PostDto> _decodePost(Response json) async {

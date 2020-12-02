@@ -10,7 +10,6 @@ import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:json_serializable/type_helper.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:http/http.dart' as http;

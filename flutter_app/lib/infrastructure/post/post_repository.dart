@@ -18,7 +18,7 @@ class PostRepository implements IPostRepository {
   Future<Either<PostFailure, Post>> create(Post post) async {
     try {
       final postDto = PostDto.fromDomain(post);
-      PostDto returnedPostDto = await _postRemoteService.create(postDto);
+      PostDto returnedPostDto = await _postRemoteService.createPost(postDto);
       return right(returnedPostDto.toDomain());
     } on CommunicationException catch (e) {
       return left(_reactOnCommunicationException(e));
@@ -29,7 +29,7 @@ class PostRepository implements IPostRepository {
   Future<Either<PostFailure, Post>> delete(Post post) async {
     try {
       final postDto = PostDto.fromDomain(post);
-      PostDto returnedPostDto = await _postRemoteService.delete(postDto);
+      PostDto returnedPostDto = await _postRemoteService.deletePost(postDto);
       return right(returnedPostDto.toDomain()); //TODO implement with .toDomain
     } on CommunicationException catch (e) {
       return left(_reactOnCommunicationException(e));
@@ -79,7 +79,7 @@ class PostRepository implements IPostRepository {
     try {
       final postDto = PostDto.fromDomain(post);
       PostDto returnedPost;
-      returnedPost = await _postRemoteService.update(postDto);
+      returnedPost = await _postRemoteService.updatePost(postDto);
       return right(returnedPost.toDomain());
     } on CommunicationException catch (e) {
       return left(_reactOnCommunicationException(e));

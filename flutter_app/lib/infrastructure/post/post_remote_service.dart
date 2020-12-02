@@ -21,6 +21,7 @@ class PostRemoteService {
   static const String deletePath = "/post";
   static const String updatePath = "/post";
 
+
   SymfonyCommunicator client;
 
   PostRemoteService({SymfonyCommunicator communicator})
@@ -35,48 +36,45 @@ class PostRemoteService {
   Future<List<PostDto>> getOwnPosts(
       DateTime lastCommentTime, int amount) async {
     return _getPostList(
-        _generatePaginatedRoute(ownPostsPath, amount, lastCommentTime));
+        generatePaginatedRoute(ownPostsPath, amount, lastCommentTime));
   }
 
   Future<List<PostDto>> getFeed(DateTime lastCommentTime, int amount) async {
     return _getPostList(
-        _generatePaginatedRoute(feedPath, amount, lastCommentTime));
+        generatePaginatedRoute(feedPath, amount, lastCommentTime));
   }
 
   Future<List<PostDto>> getPostsFromUser(
       DateTime lastCommentTime, int amount, String profileId) async {
-    return _getPostList(_generatePaginatedRoute(
+    return _getPostList(generatePaginatedRoute(
         "$postsFromUserPath/$profileId", amount, lastCommentTime));
   }
 
   Future<PostDto> getSinglePost(int id) async {
     // String uri = _postIdPath + id.toString(); // TODO use the dart best practice
     final String uri = "$postIdPath$id";
-    Response response = await client.get(uri);
-    PostDto postDto =
-        PostDto.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    final Response response = await client.get(uri);
+    final PostDto postDto = PostDto.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
     return postDto;
   }
 
-  Future<PostDto> create(PostDto postDto) async {
-    client.post(postIdPath, postDto.toJson());
+  Future<PostDto> createPost(PostDto postDto) async {
     return _decodePost(
-        await client.post(postAddPath, jsonEncode(postDto.toJson())));
+        await client.post(postPath, jsonEncode(postDto.toJson())));
   }
 
-  Future<PostDto> delete(PostDto postDto) async {
+  Future<PostDto> deletePost(PostDto postDto) async {
     return _decodePost(await client.delete(
-        "$postDeletePath${postDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}"));
+        "$deletePath${postDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}"));
   }
 
-  Future<PostDto> update(PostDto postDto) async {
+  Future<PostDto> updatePost(PostDto postDto) async {
     return _decodePost(await client.put(
         "$updatePath${postDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}",
         jsonEncode(postDto.toJson())));
   }
 
-  String _generatePaginatedRoute(
-      String route, int amount, DateTime lastCommentTime) {
+  static String generatePaginatedRoute(String route, int amount, DateTime lastCommentTime) {
     return "$route/$amount/$lastCommentTime";
   }
 

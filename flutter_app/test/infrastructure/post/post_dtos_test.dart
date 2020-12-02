@@ -118,6 +118,10 @@ main() {
     "Authentication": "Baerer $jwt"
   };
 
+  const int amount=5;
+  final DateTime lastCommentTime = DateTime.now();
+  final String profileId = profileDto.id.toString();
+
   //HTTP error codes with corresponding eventFailures
   final codesAndFailures = {
     401: const PostFailure.notAuthenticated(),
@@ -128,9 +132,9 @@ main() {
 
   //getList operations with corresponding api paths
   final listOperations = {
-    Operation.own: PostRemoteService.ownPostsPath,
-    Operation.feed: PostRemoteService.feedPath,
-    Operation.fromUser: PostRemoteService.postsFromUserPath,
+    Operation.own: PostRemoteService.generatePaginatedRoute(PostRemoteService.ownPostsPath, amount, lastCommentTime),
+    Operation.feed: PostRemoteService.generatePaginatedRoute(PostRemoteService.feedPath, amount, lastCommentTime),
+    Operation.fromUser: PostRemoteService.generatePaginatedRoute(PostRemoteService.postsFromUserPath, amount, lastCommentTime),
   };
 
   //first test
@@ -143,7 +147,7 @@ main() {
   //test  CRUD HERE
   group('CRUD', () {
     test("get Single Test", () async {
-      when(client.get("ourUrl.com/event/1", headers: authenticationHeader))
+      when(client.get("ourUrl.com/event/1/", headers: authenticationHeader))
           .thenAnswer((_) async =>
               http.Response(jsonEncode(postDtoWithoutId1.toJson()), 200));
 
@@ -181,9 +185,10 @@ main() {
       });
     });
     test("Post with 200 response", () async {
-      when(client.post("ourUrl.com/post/1",
-              body: jsonEncode(postDtoWithoutId1.toJson()),
-              headers: authenticationHeader))
+
+      when(client.post("ourUrl.com/event/3/post",
+          headers: authenticationHeader,
+          body: jsonEncode(postDtoWithoutId1.toJson())))
           .thenAnswer((realInvocation) async =>
               http.Response(jsonEncode(normalPostDto1.toJson()), 200));
 
@@ -204,15 +209,15 @@ main() {
                   testId.toString(),
               headers: authenticationHeader))
           .thenAnswer((realInvocation) async =>
-              http.Response(jsonEncode(postDtoWithoutId1.toJson()), 200));
+              http.Response(jsonEncode(normalPostDto1.toJson()), 200));
       Post answer = await repository
-          .delete(postDtoWithoutId1.toDomain())
+          .delete(normalPostDto1.toDomain())
           .then((value) => value.fold((l) => null, (r) => r));
       expect(
           answer.maybeMap((value) => value.id.getOrCrash(), orElse: () => null),
           testId);
       expect(answer == null, false);
-      expect(PostDto.fromDomain(answer), postDtoWithoutId1);
+      expect(PostDto.fromDomain(answer), normalPostDto1);
     });
 
     test("Delete with wrong postdto type (without id)", () async {
@@ -235,7 +240,7 @@ main() {
                   PostRemoteService.updatePath +
                   testId.toString(),
               headers: authenticationHeader,
-              body: jsonEncode(TestDtoWithId.toJson())))
+              body: jsonEncode(normalPostDto1.toJson())))
           .thenAnswer((realInvocation) async => http.Response("", 200));
       PostFailure failure = await repository
           .update(postDtoWithoutId1.toDomain())
@@ -289,7 +294,7 @@ main() {
                 headers: authenticationHeader))
             .thenAnswer((realInvocation) async => http.Response("", code));
         final Either<PostFailure, Post> answer = await repository.delete(
-            postDtoWithoutId1.toDomain()); //await answer from repository
+            normalPostDto1.toDomain()); //await answer from repository
         final PostFailure failure = answer.swap().getOrElse(() =>
             throw Error()); //swap, so we can use get or else, and throw an error if its not an failure
         expect(failure, pstFailure);
@@ -321,12 +326,12 @@ main() {
                   jsonEncode(postList.map((e) => e.toJson()).toList()), code));
           if (operation == Operation.fromUser) {
             returnedFailure = await repository
-                .getList(operation, DateTime.now(), 5, TestDtoWithId.toDomain(),
+                .getList(operation, lastCommentTime, amount, TestDtoWithId.toDomain(),
                     profile: profileDto.toDomain())
                 .then((value) => value.swap().getOrElse(() => throw Error()));
           } else {
             returnedFailure = await repository
-                .getList(operation, DateTime.now(), 5, TestDtoWithId.toDomain())
+                .getList(operation, lastCommentTime, amount, TestDtoWithId.toDomain())
                 .then((value) => value.swap().getOrElse(() => throw Error()));
           }
           expect(returnedFailure, pstFailure);

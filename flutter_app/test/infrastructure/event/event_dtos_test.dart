@@ -10,6 +10,7 @@ import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:json_serializable/type_helper.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:http/http.dart' as http;
@@ -81,6 +82,9 @@ main() {
   const Map<String, String> authenticationHeader = {
     "Authentication": "Baerer $jwt"
   };
+  const int amount = 5;
+  final DateTime lastEventTime  = DateTime.now();
+  final String profileId = profileDto.id.toString();
 
   //HTTP error codes with corresponding eventFailures
   final codesAndFailures = {
@@ -92,10 +96,10 @@ main() {
 
   //getList operations with corresponding api paths
   final listOperations = {
-    Operation.attending: EventRemoteService.attendingEventsPath,
-    Operation.fromUser: EventRemoteService.profileEventPath,
-    Operation.owned: EventRemoteService.ownedEventsPath,
-    Operation.unreacted: EventRemoteService.unreactedEventsPath
+    Operation.attending: EventRemoteService.generatePaginatedRoute(EventRemoteService.attendingEventsPath, amount, lastEventTime),
+    Operation.fromUser: EventRemoteService.generatePaginatedRoute("${EventRemoteService.profileEventPath}/$profileId", amount, lastEventTime),
+    Operation.owned: EventRemoteService.generatePaginatedRoute(EventRemoteService.ownedEventsPath, amount, lastEventTime),
+    Operation.unreacted: EventRemoteService.generatePaginatedRoute(EventRemoteService.unreactedEventsPath, amount, lastEventTime),
   }; //instantiating map with different operation options
 
   //first test
@@ -129,11 +133,11 @@ main() {
                 jsonEncode(eventList.map((e) => e.toJson()).toList()),
                 200)); // client response configuration
         if (operation == Operation.fromUser) {
-          returnedList = await repository.getList(operation, DateTime.now() , 5,
+          returnedList = await repository.getList(operation, lastEventTime , amount,
               profile: profileDto
                   .toDomain()); //the case, when profile must be passed
         } else {
-          returnedList = await repository.getList(operation, DateTime.now() , 5);
+          returnedList = await repository.getList(operation, lastEventTime , amount);
         }
         expect(
             returnedList
@@ -287,11 +291,11 @@ main() {
                   code));
           if (operation == Operation.fromUser) {
             returnedFailure = await repository
-                .getList(operation, DateTime.now() , 5, profile: profileDto.toDomain())
+                .getList(operation,  lastEventTime , amount, profile: profileDto.toDomain())
                 .then((value) => value.swap().getOrElse(() => throw Error()));
           } else {
             returnedFailure = await repository
-                .getList(operation, DateTime.now() , 5)
+                .getList(operation,  lastEventTime , amount)
                 .then((value) => value.swap().getOrElse(() => throw Error()));
           }
           expect(returnedFailure, evFailure);

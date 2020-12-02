@@ -43,14 +43,14 @@ class EventRemoteService {
     return _getEventList(_generatePaginatedRoute(
         "$profileEventPath/$profileId", amount, lastEventTime));
   }
-  Future<List<EventDto>> getAttendingEvents(DateTime lastEventTime, int amount, String eventId,{reaction} )  async { //TODO how to see if owner is attending ...reaction
+  Future<List<EventDto>> getAttendingEvents(DateTime lastEventTime, int amount, String profileId )  async {
     return _getEventList(_generatePaginatedRoute(
-        "$profileEventPath/$eventId/${reaction}", amount, lastEventTime));
+        "$profileEventPath/$profileId/", amount, lastEventTime));
   }
 
-  Future<List<EventDto>> getUnreactedEvents(DateTime lastEventTime, int amount, String eventId, {reaction})  async {
+  Future<List<EventDto>> getUnreactedEvents(DateTime lastEventTime, int amount, String profileId)  async {
     return _getEventList(_generatePaginatedRoute(
-        "$profileEventPath/$eventId/${reaction}", amount, lastEventTime));
+        "$profileEventPath/$profileId/", amount, lastEventTime));
   }
 
   Future<EventDto> createEvent(EventDto eventDto) async {

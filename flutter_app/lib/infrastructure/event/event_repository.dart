@@ -20,7 +20,7 @@ class EventRepository implements IEventRepository {
 
   @override
   Future<Either<EventFailure, List<Event>>> getList(Operation operation,
-      DateTime lastCommentTime, int amount, {Event event, Profile profile}) async {
+      DateTime lastEventTime, int amount, {Profile profile}) async {
     try {
       List<EventDto> eventDtos;
       switch (operation) {
@@ -31,10 +31,10 @@ class EventRepository implements IEventRepository {
           eventDtos = await _eventRemoteService.getEventsFromUser(lastEventTime, amount, profile.id.getOrCrash().toString());
           break;
         case Operation.attending:
-          eventDtos = await _eventRemoteService.getAttendingEvents();
+          eventDtos = await _eventRemoteService.getAttendingEvents(lastEventTime, amount, profile.id.getOrCrash().toString());
           break;
         case Operation.unreacted:
-          eventDtos = await _eventRemoteService.getUnreactedEvents();
+          eventDtos = await _eventRemoteService.getUnreactedEvents(lastEventTime, amount, profile.id.getOrCrash().toString());
           break;
       }
       //convert the dto objects to domain Objects

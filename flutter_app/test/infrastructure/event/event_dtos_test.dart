@@ -56,7 +56,7 @@ main() {
 
   const ProfileDto profileDto = ProfileDto(id: 0, name: "manfred");
 
-  List<EventDto> evnentList = [
+  List<EventDto> eventList = [
     TestDtoWithId,
     origTestDto2,
     origTestDto3
@@ -126,21 +126,21 @@ main() {
         when(client.get(SymfonyCommunicator.url + path,
                 headers: authenticationHeader))
             .thenAnswer((_) async => http.Response(
-                jsonEncode(evnentList.map((e) => e.toJson()).toList()),
+                jsonEncode(eventList.map((e) => e.toJson()).toList()),
                 200)); // client response configuration
         if (operation == Operation.fromUser) {
-          returnedList = await repository.getList(operation,
+          returnedList = await repository.getList(operation, DateTime.now() , 5,
               profile: profileDto
                   .toDomain()); //the case, when profile must be passed
         } else {
-          returnedList = await repository.getList(operation);
+          returnedList = await repository.getList(operation, DateTime.now() , 5);
         }
         expect(
             returnedList
                 .getOrElse(() => throw Error())
                 .map((e) => EventDto.fromDomain(e))
                 .toList(),
-            evnentList);
+            eventList);
       });
     });
 
@@ -283,15 +283,15 @@ main() {
           when(client.get(SymfonyCommunicator.url + path,
                   headers: authenticationHeader))
               .thenAnswer((_) async => http.Response(
-                  jsonEncode(evnentList.map((e) => e.toJson()).toList()),
+                  jsonEncode(eventList.map((e) => e.toJson()).toList()),
                   code));
           if (operation == Operation.fromUser) {
             returnedFailure = await repository
-                .getList(operation, profile: profileDto.toDomain())
+                .getList(operation, DateTime.now() , 5, profile: profileDto.toDomain())
                 .then((value) => value.swap().getOrElse(() => throw Error()));
           } else {
             returnedFailure = await repository
-                .getList(operation)
+                .getList(operation, DateTime.now() , 5)
                 .then((value) => value.swap().getOrElse(() => throw Error()));
           }
           expect(returnedFailure, evFailure);

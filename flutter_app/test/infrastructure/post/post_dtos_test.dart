@@ -188,7 +188,7 @@ main() {
       });
     });
     test("Post with 200 response", () async {
-      when(client.post("ourUrl.com/event/3/post",
+      when(client.post("ourUrl.com/event/post/",
               headers: authenticationHeader,
               body: jsonEncode(postDtoWithoutId1.toJson())))
           .thenAnswer((realInvocation) async =>

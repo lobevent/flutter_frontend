@@ -82,7 +82,7 @@ main() {
     "Authentication": "Baerer $jwt"
   };
   const int amount = 5;
-  final DateTime lastEventTime  = DateTime.now();
+  final DateTime lastEventTime = DateTime.now();
   final String profileId = profileDto.id.toString();
 
   //HTTP error codes with corresponding eventFailures
@@ -95,10 +95,16 @@ main() {
 
   //getList operations with corresponding api paths
   final listOperations = {
-    Operation.attending: EventRemoteService.generatePaginatedRoute(EventRemoteService.attendingEventsPath, amount, lastEventTime),
-    Operation.fromUser: EventRemoteService.generatePaginatedRoute("${EventRemoteService.profileEventPath}/$profileId", amount, lastEventTime),
-    Operation.owned: EventRemoteService.generatePaginatedRoute(EventRemoteService.ownedEventsPath, amount, lastEventTime),
-    Operation.unreacted: EventRemoteService.generatePaginatedRoute(EventRemoteService.unreactedEventsPath, amount, lastEventTime),
+    Operation.attending: EventRemoteService.generatePaginatedRoute(
+        EventRemoteService.attendingEventsPath, amount, lastEventTime),
+    Operation.fromUser: EventRemoteService.generatePaginatedRoute(
+        "${EventRemoteService.profileEventPath}/$profileId",
+        amount,
+        lastEventTime),
+    Operation.owned: EventRemoteService.generatePaginatedRoute(
+        EventRemoteService.ownedEventsPath, amount, lastEventTime),
+    Operation.unreacted: EventRemoteService.generatePaginatedRoute(
+        EventRemoteService.unreactedEventsPath, amount, lastEventTime),
   }; //instantiating map with different operation options
 
   //first test
@@ -132,11 +138,13 @@ main() {
                 jsonEncode(eventList.map((e) => e.toJson()).toList()),
                 200)); // client response configuration
         if (operation == Operation.fromUser) {
-          returnedList = await repository.getList(operation, lastEventTime , amount,
+          returnedList = await repository.getList(
+              operation, lastEventTime, amount,
               profile: profileDto
                   .toDomain()); //the case, when profile must be passed
         } else {
-          returnedList = await repository.getList(operation, lastEventTime , amount);
+          returnedList =
+              await repository.getList(operation, lastEventTime, amount);
         }
         expect(
             returnedList
@@ -150,7 +158,7 @@ main() {
     test("Post with 200 response", () async {
       //std post with 200 response
 
-      when(client.post("ourUrl.com/event",
+      when(client.post("ourUrl.com/event/",
               headers: authenticationHeader,
               body: jsonEncode(origTestDtoWithoutId.toJson())))
           .thenAnswer((realInvocation) async =>
@@ -286,15 +294,15 @@ main() {
           when(client.get(SymfonyCommunicator.url + path,
                   headers: authenticationHeader))
               .thenAnswer((_) async => http.Response(
-                  jsonEncode(eventList.map((e) => e.toJson()).toList()),
-                  code));
+                  jsonEncode(eventList.map((e) => e.toJson()).toList()), code));
           if (operation == Operation.fromUser) {
             returnedFailure = await repository
-                .getList(operation,  lastEventTime , amount, profile: profileDto.toDomain())
+                .getList(operation, lastEventTime, amount,
+                    profile: profileDto.toDomain())
                 .then((value) => value.swap().getOrElse(() => throw Error()));
           } else {
             returnedFailure = await repository
-                .getList(operation,  lastEventTime , amount)
+                .getList(operation, lastEventTime, amount)
                 .then((value) => value.swap().getOrElse(() => throw Error()));
           }
           expect(returnedFailure, evFailure);

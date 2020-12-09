@@ -18,7 +18,7 @@ class PostRemoteService {
   static const String postsFromUserPath =
       "/profile/post/"; //TODO don't know the path
 
-  static const String postPath = "/post/";
+  static const String postPath = "/event/post/";
   static const String deletePath = "/post/";
   static const String updatePath = "/post/";
 

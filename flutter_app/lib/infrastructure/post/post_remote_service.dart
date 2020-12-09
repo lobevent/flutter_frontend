@@ -8,8 +8,9 @@ import 'package:http/http.dart';
 import 'post_dtos.dart';
 
 class PostRemoteService {
-  static const String postIdPath = "/event/post/{postId}";
-  static const String postAddPath = "/event/{eventId}/post"; //Path for creating
+  static const String postIdPath = "/event/post/";
+  static const String postAddPath =
+      "/event/{eventId}/post/"; //Path for creating
   static const String postPaginatedPath = "/event/{eventId}/posts/{page}";
   static const String postDeletePath = "/event/post/";
   static const String ownPostsPath = "/post/"; //TODO don't know the path
@@ -17,10 +18,9 @@ class PostRemoteService {
   static const String postsFromUserPath =
       "/profile/post/"; //TODO don't know the path
 
-  static const String postPath = "/post";
-  static const String deletePath = "/post";
-  static const String updatePath = "/post";
-
+  static const String postPath = "/post/";
+  static const String deletePath = "/post/";
+  static const String updatePath = "/post/";
 
   SymfonyCommunicator client;
 
@@ -50,11 +50,11 @@ class PostRemoteService {
         "$postsFromUserPath/$profileId", amount, lastCommentTime));
   }
 
-  Future<PostDto> getSinglePost(int id) async {
+  Future<PostDto> getSingle(int id) async {
     // String uri = _postIdPath + id.toString(); // TODO use the dart best practice
     final String uri = "$postIdPath$id";
     final Response response = await client.get(uri);
-    final PostDto postDto = PostDto.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    final PostDto postDto = await _decodePost(response);
     return postDto;
   }
 
@@ -74,7 +74,8 @@ class PostRemoteService {
         jsonEncode(postDto.toJson())));
   }
 
-  static String generatePaginatedRoute(String route, int amount, DateTime lastCommentTime) {
+  static String generatePaginatedRoute(
+      String route, int amount, DateTime lastCommentTime) {
     return "$route/$amount/$lastCommentTime";
   }
 

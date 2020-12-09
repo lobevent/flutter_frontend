@@ -118,7 +118,7 @@ main() {
     "Authentication": "Baerer $jwt"
   };
 
-  const int amount=5;
+  const int amount = 5;
   final DateTime lastCommentTime = DateTime.now();
   final String profileId = profileDto.id.toString();
 
@@ -132,9 +132,12 @@ main() {
 
   //getList operations with corresponding api paths
   final listOperations = {
-    Operation.own: PostRemoteService.generatePaginatedRoute(PostRemoteService.ownPostsPath, amount, lastCommentTime),
-    Operation.feed: PostRemoteService.generatePaginatedRoute(PostRemoteService.feedPath, amount, lastCommentTime),
-    Operation.fromUser: PostRemoteService.generatePaginatedRoute(PostRemoteService.postsFromUserPath, amount, lastCommentTime),
+    Operation.own: PostRemoteService.generatePaginatedRoute(
+        PostRemoteService.ownPostsPath, amount, lastCommentTime),
+    Operation.feed: PostRemoteService.generatePaginatedRoute(
+        PostRemoteService.feedPath, amount, lastCommentTime),
+    Operation.fromUser: PostRemoteService.generatePaginatedRoute(
+        PostRemoteService.postsFromUserPath, amount, lastCommentTime),
   };
 
   //first test
@@ -147,12 +150,12 @@ main() {
   //test  CRUD HERE
   group('CRUD', () {
     test("get Single Test", () async {
-      when(client.get("ourUrl.com/event/1/", headers: authenticationHeader))
+      when(client.get("ourUrl.com/event/post/1", headers: authenticationHeader))
           .thenAnswer((_) async =>
               http.Response(jsonEncode(postDtoWithoutId1.toJson()), 200));
 
       expect(
-          await repository.getSinglePost(Id.fromUnique(1)).then(
+          await repository.getSingle(Id.fromUnique(1)).then(
               (value) => value.fold((l) => null, (r) => PostDto.fromDomain(r))),
           postDtoWithoutId1);
     });
@@ -185,10 +188,9 @@ main() {
       });
     });
     test("Post with 200 response", () async {
-
       when(client.post("ourUrl.com/event/3/post",
-          headers: authenticationHeader,
-          body: jsonEncode(postDtoWithoutId1.toJson())))
+              headers: authenticationHeader,
+              body: jsonEncode(postDtoWithoutId1.toJson())))
           .thenAnswer((realInvocation) async =>
               http.Response(jsonEncode(normalPostDto1.toJson()), 200));
 
@@ -293,8 +295,8 @@ main() {
                     testId.toString(),
                 headers: authenticationHeader))
             .thenAnswer((realInvocation) async => http.Response("", code));
-        final Either<PostFailure, Post> answer = await repository.delete(
-            normalPostDto1.toDomain()); //await answer from repository
+        final Either<PostFailure, Post> answer = await repository
+            .delete(normalPostDto1.toDomain()); //await answer from repository
         final PostFailure failure = answer.swap().getOrElse(() =>
             throw Error()); //swap, so we can use get or else, and throw an error if its not an failure
         expect(failure, pstFailure);
@@ -326,12 +328,14 @@ main() {
                   jsonEncode(postList.map((e) => e.toJson()).toList()), code));
           if (operation == Operation.fromUser) {
             returnedFailure = await repository
-                .getList(operation, lastCommentTime, amount, TestDtoWithId.toDomain(),
+                .getList(operation, lastCommentTime, amount,
+                    TestDtoWithId.toDomain(),
                     profile: profileDto.toDomain())
                 .then((value) => value.swap().getOrElse(() => throw Error()));
           } else {
             returnedFailure = await repository
-                .getList(operation, lastCommentTime, amount, TestDtoWithId.toDomain())
+                .getList(operation, lastCommentTime, amount,
+                    TestDtoWithId.toDomain())
                 .then((value) => value.swap().getOrElse(() => throw Error()));
           }
           expect(returnedFailure, pstFailure);

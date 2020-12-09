@@ -38,19 +38,21 @@ class PostRepository implements IPostRepository {
 
   @override
   Future<Either<PostFailure, List<Post>>> getList(Operation operation,
-      DateTime lastCommentTime, int amount,
-      Event eventParent, {Profile profile}) async {
+      DateTime lastCommentTime, int amount, Event eventParent,
+      {Profile profile}) async {
     try {
       List<PostDto> postDtos;
       switch (operation) {
         case Operation.own:
-          postDtos = await _postRemoteService.getOwnPosts(lastCommentTime, amount);
+          postDtos =
+              await _postRemoteService.getOwnPosts(lastCommentTime, amount);
           break;
         case Operation.feed:
           postDtos = await _postRemoteService.getFeed(lastCommentTime, amount);
           break;
         case Operation.fromUser:
-          postDtos = await _postRemoteService.getPostsFromUser(lastCommentTime, amount, profile.id.getOrCrash().toString());
+          postDtos = await _postRemoteService.getPostsFromUser(
+              lastCommentTime, amount, profile.id.getOrCrash().toString());
           break;
       }
       //convert the dto objects to domain Objects
@@ -63,10 +65,10 @@ class PostRepository implements IPostRepository {
   }
 
   @override
-  Future<Either<PostFailure, Post>> getSinglePost(Id id) async {
+  Future<Either<PostFailure, Post>> getSingle(Id id) async {
     try {
       final PostDto postDto =
-          await _postRemoteService.getSinglePost(id.getOrCrash());
+          await _postRemoteService.getSingle(id.getOrCrash());
       final Post post = postDto.toDomain();
       return right(post);
     } on CommunicationException catch (e) {

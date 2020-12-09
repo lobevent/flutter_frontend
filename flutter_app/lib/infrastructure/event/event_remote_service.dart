@@ -14,7 +14,7 @@ class EventRemoteService {
   static const String unreactedEventsPath = "/event";
 
   // TODO combine it to event path?
-  static const String postPath = "/event";
+  static const String postPath = "/event/";
   static const String deletePath = "/event/";
   static const String updatePath = "/event/";
 
@@ -34,23 +34,28 @@ class EventRemoteService {
     return eventDto;
   }
 
-  Future<List<EventDto>> getOwnedEvents(DateTime lastEventTime, int amount) async {
-    return _getEventList(generatePaginatedRoute(
-        "profileEventPath", amount, lastEventTime));
+  Future<List<EventDto>> getOwnedEvents(
+      DateTime lastEventTime, int amount) async {
+    return _getEventList(
+        generatePaginatedRoute("profileEventPath", amount, lastEventTime));
   }
+
   Future<List<EventDto>> getEventsFromUser(
       DateTime lastEventTime, int amount, String profileId) async {
     return _getEventList(generatePaginatedRoute(
         "$profileEventPath/$profileId", amount, lastEventTime));
   }
-  Future<List<EventDto>> getAttendingEvents(DateTime lastEventTime, int amount)  async {
-    return _getEventList(generatePaginatedRoute(
-        "$profileEventPath", amount, lastEventTime));
+
+  Future<List<EventDto>> getAttendingEvents(
+      DateTime lastEventTime, int amount) async {
+    return _getEventList(
+        generatePaginatedRoute("$profileEventPath", amount, lastEventTime));
   }
 
-  Future<List<EventDto>> getUnreactedEvents(DateTime lastEventTime, int amount)  async {
-    return _getEventList(generatePaginatedRoute(
-        "$profileEventPath", amount, lastEventTime));
+  Future<List<EventDto>> getUnreactedEvents(
+      DateTime lastEventTime, int amount) async {
+    return _getEventList(
+        generatePaginatedRoute("$profileEventPath", amount, lastEventTime));
   }
 
   Future<EventDto> createEvent(EventDto eventDto) async {
@@ -70,7 +75,9 @@ class EventRemoteService {
         "$updatePath${eventDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}",
         jsonEncode(eventDto.toJson())));
   }
-  static String generatePaginatedRoute(String route, int amount, DateTime lastEventTime){
+
+  static String generatePaginatedRoute(
+      String route, int amount, DateTime lastEventTime) {
     return "$route/$amount/$lastEventTime";
   }
 

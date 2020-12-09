@@ -11,12 +11,12 @@ class PostRemoteService {
   static const String postIdPath = "/event/post/";
   static const String postAddPath =
       "/event/{eventId}/post/"; //Path for creating
-  static const String postPaginatedPath = "/event/{eventId}/posts/{page}";
+  static const String postPaginatedPath = "/event/{eventId}/posts/{page}/";
   static const String postDeletePath = "/event/post/";
-  static const String ownPostsPath = "/post/"; //TODO don't know the path
-  static const String feedPath = "/feed/post/"; //TODO don't know the path
+  static const String ownPostsPath = "/post"; //TODO don't know the path
+  static const String feedPath = "/feed/post"; //TODO don't know the path
   static const String postsFromUserPath =
-      "/profile/post/"; //TODO don't know the path
+      "/profile/post"; //TODO don't know the path
 
   static const String postPath = "/event/post/";
   static const String deletePath = "/post/";

@@ -8,9 +8,12 @@ import 'package:http/http.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 
 class CommentRemoteService {
-  static const String _commentAdd = "/event/post/{postId}/comment/{parentId}";
-  static const String _commentsGet = "/event/post/{postId}/comment";
   static const String commentIdGet = "/comment/";
+
+  //commented out unused paths
+  //static const String _commentAdd = "/event/post/{postId}/comment/{parentId}";
+  //static const String _commentsGet = "/event/post/{postId}/comment";
+
 
   //Routes Lists
   static const String ownCommentsPath = "/comments/%amount%/%lastCommentTime%/";

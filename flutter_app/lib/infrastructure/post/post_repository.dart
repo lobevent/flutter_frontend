@@ -38,21 +38,21 @@ class PostRepository implements IPostRepository {
 
   @override
   Future<Either<PostFailure, List<Post>>> getList(Operation operation,
-      DateTime lastCommentTime, int amount, Event eventParent,
+      DateTime lastPostTime, int amount, Event eventParent,
       {Profile profile}) async {
     try {
       List<PostDto> postDtos;
       switch (operation) {
         case Operation.own:
           postDtos =
-              await _postRemoteService.getOwnPosts(lastCommentTime, amount);
+              await _postRemoteService.getOwnPosts(lastPostTime, amount);
           break;
         case Operation.feed:
-          postDtos = await _postRemoteService.getFeed(lastCommentTime, amount);
+          postDtos = await _postRemoteService.getFeed(lastPostTime, amount);
           break;
         case Operation.fromUser:
           postDtos = await _postRemoteService.getPostsFromUser(
-              lastCommentTime, amount, profile.id.getOrCrash().toString());
+              lastPostTime, amount, profile.id.getOrCrash().toString());
           break;
       }
       //convert the dto objects to domain Objects

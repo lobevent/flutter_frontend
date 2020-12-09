@@ -13,7 +13,7 @@ enum Operation { own, feed, fromUser }
 
 abstract class IPostRepository {
   Future<Either<PostFailure, List<Post>>> getList(Operation operation,
-      DateTime lastCommentTime, int amount, Event eventParent,
+      DateTime lastPostTime, int amount, Event eventParent,
       {Profile profile});
   Future<Either<PostFailure, Post>> getSingle(Id id);
   Future<Either<PostFailure, Post>> create(Post post);

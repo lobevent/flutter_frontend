@@ -42,13 +42,13 @@ class CommentRemoteService {
 
   Future<List<CommentDto>> getOwnComments(
       DateTime lastCommentTime, int amount) async {
-    throw UnimplementedError(); //This path is not yet defined properly
-    return _getCommentList(ownCommentsPath);
+    return _getCommentList(_generatePaginatedRoute(
+      commentsFromPostPath, amount, lastCommentTime
+    ));
   }
 
   Future<List<CommentDto>> getCommentsFromUser(
       DateTime lastCommentTime, int amount, String profileId) async {
-    throw UnimplementedError(); //This path is not yet defined properly
     return _getCommentList(commentsFromUserPath);
   }
 
@@ -87,7 +87,7 @@ class CommentRemoteService {
 
   String _generatePaginatedRoute(
       String route, int amount, DateTime lastCommentTime) {
-    return "$route/comments/$amount/$lastCommentTime";
+    return "$route/comments/$amount/$lastCommentTime/";
   }
 
   Future<List<CommentDto>> _getCommentList(String path) async {

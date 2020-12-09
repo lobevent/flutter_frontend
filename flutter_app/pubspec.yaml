@@ -50,6 +50,9 @@ dependencies:
   path_provider: ^1.6.24 #Used to find a suitable location to store the database.
   path: ^1.7.0 # path manipulation library for all platforms
 
+  #string interpolation
+  sprintf: ^5.0.0
+
   flutter:
     sdk: flutter
   flutter_localizations:

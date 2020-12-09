@@ -9,7 +9,7 @@ import 'package:http/http.dart';
 class CommentRemoteService {
   static const String _commentAdd = "/event/post/{postId}/comment/{parentId}";
   static const String _commentsGet = "/event/post/{postId}/comment";
-  static const String commentIdGet = "/comment/";
+  static const String commentIdGet = "/event/post/{postId}/comment/";
   static const String commentsFromPostPath = "/post/";
   static const String ownCommentsPath = "/comment/"; //TODO create route for it
   static const String commentsFromUserPath =
@@ -24,9 +24,9 @@ class CommentRemoteService {
 
   SymfonyCommunicator client;
 
-  CommentRemoteService() {
-    client = SymfonyCommunicator(jwt: null); // TODO check on this one
-  }
+  CommentRemoteService({SymfonyCommunicator communicator})
+      : client = communicator ??
+            SymfonyCommunicator(jwt: null); // TODO check on this one
 
   //decode the json response for post
   //TODO dont know if this is stable, because of cancer childrenconverter
@@ -42,9 +42,8 @@ class CommentRemoteService {
 
   Future<List<CommentDto>> getOwnComments(
       DateTime lastCommentTime, int amount) async {
-    return _getCommentList(_generatePaginatedRoute(
-      commentsFromPostPath, amount, lastCommentTime
-    ));
+    return _getCommentList(
+        _generatePaginatedRoute(commentsFromPostPath, amount, lastCommentTime));
   }
 
   Future<List<CommentDto>> getCommentsFromUser(

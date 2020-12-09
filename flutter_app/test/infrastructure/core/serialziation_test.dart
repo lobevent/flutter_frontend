@@ -43,12 +43,9 @@ void main() {
   test("Test the deserializedModelList function on errors", () async {
     // test if the requested type (in this case dynamic since no 
     // type was provided for deserializeModel<T>()) is in the
-    // deserialization_factory_map.dart map
-    try {
-      await deserializeModel(expectedUserDtoString);
-    } catch (e) {
-      print(e.runtimeType);
-      expect(e, isInstanceOf<DtoTypeNotFoundInDeserializationFactoryMapError>());
-    }
+    // deserialization_factory_map.dart map. This should throw an error of type
+    // DtoTypeNotFoundInDeserializationFactoryMapError since dynamic has no
+    // entry in the deserialization_factory_map.
+    expect(deserializeModel(expectedUserDtoString), throwsException);
   });
 }

@@ -188,7 +188,7 @@ main() {
       });
     });
     test("Post with 200 response", () async {
-      when(client.post("ourUrl.com/event/3/post",
+      when(client.post("ourUrl.com/event/post/",
               headers: authenticationHeader,
               body: jsonEncode(postDtoWithoutId1.toJson())))
           .thenAnswer((realInvocation) async =>
@@ -200,7 +200,7 @@ main() {
       expect(
           answer.maybeMap((value) => value.id.getOrCrash(), orElse: () => null),
           testId);
-      expect(answer = null, false);
+      expect(answer == null, false);
       expect(PostDto.fromDomain(answer), normalPostDto1);
     });
 
@@ -236,7 +236,7 @@ main() {
       expect(failure, const PostFailure.unexpected());
     });
 
-    test("Put with wrong eventdto type (without id)", () async {
+    test("Put with wrong postdto type (without id)", () async {
       when(client.put(
               SymfonyCommunicator.url +
                   PostRemoteService.updatePath +
@@ -250,7 +250,7 @@ main() {
       expect(failure, const PostFailure.unexpected());
     });
     //---------------------UPDATE----------------------
-    test("Put with 200 response without id", () async {
+    test("Put with 200 response", () async {
       when(client.put(
               SymfonyCommunicator.url +
                   PostRemoteService.updatePath +

@@ -61,6 +61,7 @@ class CommentRepository implements ICommentRepository {
           break;
         case Operation.own:
           commentDtos = await _commentRemoteService.getOwnComments(lastCommentTime, amount);
+          break;
       }
       //convert the dto objects to domain Objects
       final List<Comment> comments =

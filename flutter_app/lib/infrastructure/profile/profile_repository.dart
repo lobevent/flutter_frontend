@@ -41,14 +41,44 @@ class ProfileRepository extends IProfileRepository {
   @override
   Future<Either<ProfileFailure, List<Profile>>> getList(
           Operation operation, int amount,{Post post, Profile profile, Event event}) async {
-    // TODO: implement getList
-    throw UnimplementedError();
+    try {
+      List<ProfileDto> profileDtos;
+      switch (operation) {
+        case Operation.search:
+          profileDtos = await _profileRemoteService.getSearchedProfiles( amount, profile.id.getOrCrash().toString());
+          break;
+        case Operation.attendingUsersEvent:
+          profileDtos = await _profileRemoteService.getAttendingUsersToEvent(amount, profile.id.getOrCrash().toString());
+          break;
+        case Operation.follower:
+          profileDtos = await _profileRemoteService.getFollower( amount, profile.id.getOrCrash().toString());
+          break;
+        case Operation.postProfile:
+          profileDtos = await _profileRemoteService.getProfilesToPost(amount, post
+              .maybeMap(
+                  (value) => value.id.getOrCrash().toString(),
+              orElse: throw UnexpectedFormatException()));
+          break;
+      }
+      //convert the dto objects to domain Objects
+      final List<Profile> profiles =
+      profileDtos.map((profileDtos) => profileDtos.toDomain()).toList();
+      return right(profiles);
+    } on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
+    }
   }
 
   @override
   Future<Either<ProfileFailure, Profile>> getSingleProfile(Id id) async {
-    // TODO: implement getSingleProfile
-    throw UnimplementedError();
+    try {
+      final ProfileDto profileDto =
+      await _profileRemoteService.getSingleProfile(id.getOrCrash());
+      final Profile profile = profileDto.toDomain();
+      return right(profile);
+    } on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
+    }
   }
 
   @override

@@ -2,18 +2,22 @@ import 'dart:convert';
 
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
-
+import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:http/http.dart';
 
 class ProfileRemoteService {
   static const String _profileIdPath = ""; //TODO dont know path
-  static const String _searchProfilePath = "/profile/search/{name}";
-  static const String _deleteProfilePicture = "/profile/{id}";
+
+  //commented out unused Routes
+  /*static const String _deleteProfilePicture = "/profile/{id}";
   static const String _changeProfilePicture = "/profile/{id}";
-  static const String _changePassword = "/password";
-  static const String _attendingUsersPath = ""; //TODO no existing path
-  static const String _followerPath = ""; //TODO no existing path
-  static const String _postProfilePath = ""; //TODO no existing path
+  static const String _changePassword = "/password";*/
+
+  //List Routes
+  static const String _searchProfilePath = "/profile/%profileId%/%amount%/";
+  static const String _attendingUsersPath = "/profile/%profileId%/%amount%/";
+  static const String _followerPath = "/profile/%profileId%/%amount%/";
+  static const String _postProfilePath = "/profile/%postId%/%amount%/";
 
   static const String postPath = "/profile";
   static const String deletePath = "/profile";
@@ -27,9 +31,6 @@ class ProfileRemoteService {
 
   Future<ProfileDto> _decodeProfile(Response json) async {
     return ProfileDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
-  }
-  String _generatePaginatedRoute(String route, int amount, DateTime lastProfileTime){
-    return "$route/$amount/$lastProfileTime";
   }
 
   Future<ProfileDto> getSingleProfile(int id) async {
@@ -57,20 +58,28 @@ class ProfileRemoteService {
         "$updatePath${profileDto.id}", jsonEncode(profileDto.toJson())));
   }
 
-  Future<List<ProfileDto>> getSearchedProfile() async {
-    return _getProfileList(_searchProfilePath);
+  Future<List<ProfileDto>> getSearchedProfiles(int amount, String profileId) async {
+    return _getProfileList(
+        _searchProfilePath.interpolate(
+            {"profileId" : profileId, "amount" : amount.toString()}));
+    }
+
+  Future<List<ProfileDto>> getAttendingUsersToEvent(int amount, String profileId) async {
+    return _getProfileList(
+        _attendingUsersPath.interpolate(
+            {"profileId" : profileId, "amount" : amount.toString()}));
   }
 
-  Future<List<ProfileDto>> getAttendingUsersToEvent() async {
-    return _getProfileList(_attendingUsersPath);
+  Future<List<ProfileDto>> getFollower(int amount, String profileId) async {
+    return _getProfileList(
+        _followerPath.interpolate(
+        {"profileId" : profileId, "amount" : amount.toString()}));
   }
 
-  Future<List<ProfileDto>> getFollower() async {
-    return _getProfileList(_followerPath);
-  }
-
-  Future<List<ProfileDto>> getProfilesToPost() async {
-    return _getProfileList(_postProfilePath);
+  Future<List<ProfileDto>> getProfilesToPost(int amount, String postId) async {
+    return _getProfileList(
+        _postProfilePath.interpolate(
+        {"postId" : postId, "amount" : amount.toString()}));
   }
 
   Future<List<ProfileDto>> _getProfileList(String path) async {

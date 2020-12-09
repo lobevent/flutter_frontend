@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/post/post.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/i_profile_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/profile_failure.dart';
@@ -38,7 +40,7 @@ class ProfileRepository extends IProfileRepository {
 
   @override
   Future<Either<ProfileFailure, List<Profile>>> getList(
-      Operation operation) async {
+          Operation operation, int amount,{Post post, Profile profile, Event event}) async {
     // TODO: implement getList
     throw UnimplementedError();
   }

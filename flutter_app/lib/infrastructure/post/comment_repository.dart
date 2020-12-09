@@ -40,7 +40,6 @@ class CommentRepository implements ICommentRepository {
 
   @override
   Future<Either<CommentFailure, List<Comment>>> getList(Operation operation, DateTime lastCommentTime, int amount, {Profile profile, Comment commentParent, Post postParent}) async {
-    //throw UnimplementedError();
     try {
       List<CommentDto> commentDtos;
       switch (operation) {

@@ -5,16 +5,18 @@ import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'comment_dtos.dart';
 import 'package:http/http.dart';
+import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 
 class CommentRemoteService {
   static const String _commentAdd = "/event/post/{postId}/comment/{parentId}";
   static const String _commentsGet = "/event/post/{postId}/comment";
-  static const String commentIdGet = "/event/post/{postId}/comment/";
-  static const String commentsFromPostPath = "/post/";
-  static const String ownCommentsPath = "/comment/"; //TODO create route for it
-  static const String commentsFromUserPath =
-      "/comment/"; //TODO create route for it
-  static const String commentsFromCommentParentPath = "/comment/";
+  static const String commentIdGet = "/comment/";
+
+  //Routes Lists
+  static const String ownCommentsPath = "/comments/%amount%/%lastCommentTime%/";
+  static const String commentsFromUserPath = "/profile/%profileId%/comments/%amount%/%lastCommentTime%/";
+  static const String commentsFromCommentParentPath = "/comment/%parentCommentId%/comments/%amount%/%lastCommentTime%/";
+  static const String commentsFromPostPath ="/post/%postId%/comments/%amount%/%lastCommentTime%/";
 
   static const String postPath = "/comment";
   static const String deletePath = "/comment";
@@ -36,27 +38,26 @@ class CommentRemoteService {
 
   Future<List<CommentDto>> getCommentsFromPost(
       DateTime lastCommentTime, int amount, String postId) async {
-    return _getCommentList(_generatePaginatedRoute(
-        "$commentsFromPostPath$postId", amount, lastCommentTime));
+    return _getCommentList(commentsFromPostPath.interpolate(
+        {"postId" : postId, "amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}));
   }
 
   Future<List<CommentDto>> getOwnComments(
       DateTime lastCommentTime, int amount) async {
-    return _getCommentList(
-        _generatePaginatedRoute(commentsFromPostPath, amount, lastCommentTime));
+    return _getCommentList(commentsFromPostPath.interpolate(
+        {"amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}));
   }
 
   Future<List<CommentDto>> getCommentsFromUser(
       DateTime lastCommentTime, int amount, String profileId) async {
-    return _getCommentList(commentsFromUserPath);
+    return _getCommentList(commentsFromUserPath.interpolate(
+        {"profileId" : profileId, "amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}));
   }
 
   Future<List<CommentDto>> getCommentsFromCommentParent(
       DateTime lastCommentTime, int amount, String parentCommentId) async {
-    return _getCommentList(_generatePaginatedRoute(
-        "$commentsFromCommentParentPath$parentCommentId",
-        amount,
-        lastCommentTime));
+    return _getCommentList(commentsFromCommentParentPath.interpolate(
+        {"parentCommentId" : parentCommentId, "amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}));
   }
 
   Future<CommentDto> getSingleComment(int id) async {
@@ -84,10 +85,11 @@ class CommentRemoteService {
         jsonEncode(commentDto.toJson())));
   }
 
-  String _generatePaginatedRoute(
+  //Not necessery anymore
+  /*String _generatePaginatedRoute(
       String route, int amount, DateTime lastCommentTime) {
     return "$route/comments/$amount/$lastCommentTime/";
-  }
+  }*/
 
   Future<List<CommentDto>> _getCommentList(String path) async {
     final Response response = await client.get(path);

@@ -1,8 +1,8 @@
 extension RouteInterpolation on String {
-  String interpolate(String string, Map<String, String> params) {
+  String interpolate(Map<String, String> params) {
 
-    final String result = string;
-    params.forEach((key, value) => result.replaceAll('%$key\$', value));
+    final String result = this;
+    params.forEach((key, value) => result.replaceAll('%$key%', value));
 
     return result;
   }

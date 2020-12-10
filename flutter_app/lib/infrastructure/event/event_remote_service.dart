@@ -5,13 +5,17 @@ import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:http/http.dart';
+import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
+
 
 class EventRemoteService {
   static const String eventByIdPath = "/event/";
-  static const String ownedEventsPath = "/user/events";
-  static const String profileEventPath = "/user/events";
-  static const String attendingEventsPath = "/user/eventStatus";
-  static const String unreactedEventsPath = "/event";
+
+  //Routes Lists
+  static const String ownedEventsPath = "/event/%amount%/%lastEventTime%/";
+  static const String profileEventPath = "/user/%profileId%/events/%amount%/%lastEventTime%/";
+  static const String attendingEventsPath = "/user/eventStatus/events/%amount%/%lastEventTime%/";//TODO attending?
+  static const String unreactedEventsPath = "/user/events/%amount%/%lastEventTime%/";//TODO reaction?
 
   // TODO combine it to event path?
   static const String postPath = "/event/";
@@ -37,25 +41,30 @@ class EventRemoteService {
   Future<List<EventDto>> getOwnedEvents(
       DateTime lastEventTime, int amount) async {
     return _getEventList(
-        generatePaginatedRoute("profileEventPath", amount, lastEventTime));
+        ownedEventsPath.interpolate(
+            {"amount" : amount.toString(), "lastEventTime" : lastEventTime.toString()}));
+
   }
 
   Future<List<EventDto>> getEventsFromUser(
       DateTime lastEventTime, int amount, String profileId) async {
-    return _getEventList(generatePaginatedRoute(
-        "$profileEventPath/$profileId", amount, lastEventTime));
+    return _getEventList(
+        profileEventPath.interpolate(
+          {"profileId": profileId, "amount" : amount.toString(), "lastEventTime" : lastEventTime.toString()}));
   }
 
-  Future<List<EventDto>> getAttendingEvents(
+  Future<List<EventDto>> getAttendingEvents(//TODO attending events?
       DateTime lastEventTime, int amount) async {
     return _getEventList(
-        generatePaginatedRoute("$profileEventPath", amount, lastEventTime));
+        attendingEventsPath.interpolate(
+        {"amount" : amount.toString(), "lastEventTime" : lastEventTime.toString()}));
   }
 
-  Future<List<EventDto>> getUnreactedEvents(
+  Future<List<EventDto>> getUnreactedEvents( //TODO reaction?
       DateTime lastEventTime, int amount) async {
     return _getEventList(
-        generatePaginatedRoute("$profileEventPath", amount, lastEventTime));
+        unreactedEventsPath.interpolate(
+            {"amount" : amount.toString(), "lastEventTime" : lastEventTime.toString()}));
   }
 
   Future<EventDto> createEvent(EventDto eventDto) async {
@@ -76,10 +85,10 @@ class EventRemoteService {
         jsonEncode(eventDto.toJson())));
   }
 
-  static String generatePaginatedRoute(
+  /*static String generatePaginatedRoute(
       String route, int amount, DateTime lastEventTime) {
     return "$route/$amount/$lastEventTime";
-  }
+  }*/
 
   Future<EventDto> _decodeEvent(Response json) async {
     return EventDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);

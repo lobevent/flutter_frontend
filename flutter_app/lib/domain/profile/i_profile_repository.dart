@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/post/post.dart';
 
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/profile_failure.dart';
@@ -15,7 +17,8 @@ enum Operation{
 }
 
 abstract class IProfileRepository{
-  Future <Either<ProfileFailure, List<Profile>>> getList(Operation operation);
+  Future <Either<ProfileFailure, List<Profile>>> getList(
+      Operation operation, int amount,{ Post post, Profile profile, Event event});
   Future <Either<ProfileFailure, Profile>> getSingleProfile(Id id);
   Future <Either<ProfileFailure, Profile>> create(Profile profile);
   Future <Either<ProfileFailure, Profile>> update(Profile profile);

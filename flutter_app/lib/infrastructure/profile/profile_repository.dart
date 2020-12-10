@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/post/post.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/i_profile_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/profile_failure.dart';
@@ -38,15 +40,45 @@ class ProfileRepository extends IProfileRepository {
 
   @override
   Future<Either<ProfileFailure, List<Profile>>> getList(
-      Operation operation) async {
-    // TODO: implement getList
-    throw UnimplementedError();
+          Operation operation, int amount,{Post post, Profile profile, Event event}) async {
+    try {
+      List<ProfileDto> profileDtos;
+      switch (operation) {
+        case Operation.search:
+          profileDtos = await _profileRemoteService.getSearchedProfiles( amount, profile.id.getOrCrash().toString());
+          break;
+        case Operation.attendingUsersEvent:
+          profileDtos = await _profileRemoteService.getAttendingUsersToEvent(amount, profile.id.getOrCrash().toString());
+          break;
+        case Operation.follower:
+          profileDtos = await _profileRemoteService.getFollower( amount, profile.id.getOrCrash().toString());
+          break;
+        case Operation.postProfile:
+          profileDtos = await _profileRemoteService.getProfilesToPost(amount, post
+              .maybeMap(
+                  (value) => value.id.getOrCrash().toString(),
+              orElse: throw UnexpectedFormatException()));
+          break;
+      }
+      //convert the dto objects to domain Objects
+      final List<Profile> profiles =
+      profileDtos.map((profileDtos) => profileDtos.toDomain()).toList();
+      return right(profiles);
+    } on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
+    }
   }
 
   @override
   Future<Either<ProfileFailure, Profile>> getSingleProfile(Id id) async {
-    // TODO: implement getSingleProfile
-    throw UnimplementedError();
+    try {
+      final ProfileDto profileDto =
+      await _profileRemoteService.getSingleProfile(id.getOrCrash());
+      final Profile profile = profileDto.toDomain();
+      return right(profile);
+    } on CommunicationException catch (e) {
+      return left(_reactOnCommunicationException(e));
+    }
   }
 
   @override

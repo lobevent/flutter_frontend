@@ -38,7 +38,7 @@ class PostRepository implements IPostRepository {
 
   @override
   Future<Either<PostFailure, List<Post>>> getList(Operation operation,
-      DateTime lastPostTime, int amount, Event eventParent,
+      DateTime lastPostTime, int amount, Event eventParent,  //TODO add eventparent
       {Profile profile}) async {
     try {
       List<PostDto> postDtos;

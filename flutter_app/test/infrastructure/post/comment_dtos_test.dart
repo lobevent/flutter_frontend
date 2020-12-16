@@ -109,7 +109,7 @@ main() {
         .interpolate({"parentCommentId" :  x.maybeMap(                          //x commentparent in the test left(x)
                                               (value) => value.id.toString(),
                                               parent: (value) => value.id.toString(),
-                                              orElse: throw UnexpectedFormatException()),
+                                              orElse: () => throw UnexpectedFormatException()),
                       "amount" : amount.toString(),
                       "lastCommentTime" : lastCommentTime.toString()}),
     Operation.fromUser: CommentRemoteService.commentsFromCommentParentPath
@@ -117,9 +117,7 @@ main() {
                       "amount" : amount.toString(),
                       "lastCommentTime" : lastCommentTime.toString()}),
     Operation.fromPost: CommentRemoteService.commentsFromPostPath
-        .interpolate({/*"postId" :   postParent.maybeMap(
-                                          (value) => value.id.getOrCrash().toString(),
-                                          orElse: throw UnexpectedFormatException()));*/
+        .interpolate({"postId" :   1.toString(),
                       "amount" : amount.toString(),
                       "lastCommentTime" : lastCommentTime.toString()}),
   };

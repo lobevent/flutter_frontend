@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_remote_service.dart';
+import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
@@ -97,19 +99,29 @@ main() {
     404: const CommentFailure.notFound(),
     500: const CommentFailure.internalServer()
   };
-
   //getList operations with corresponding api paths
   //placeholder for the listOperations
   final listOperations = {
-    Operation.own: CommentRemoteService.ownCommentsPath.interpolate(
-  { "amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
-    Operation.fromUser:
-        CommentRemoteService.commentsFromUserPath.interpolate(
-  {"parentCommentId" : x.maybeMap(parent: (value) => id., orElse: null), "amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}));,
-    Operation.fromComment: CommentRemoteService.generatePaginatedRoute(
-        CommentRemoteService.feedPath, amount, lastCommentTime),
-    Operation.fromPost: CommentRemoteService.generatePaginatedRoute(
-        CommentRemoteService.feedPath, amount, lastCommentTime),
+    Operation.own: CommentRemoteService.ownCommentsPath
+        .interpolate({"amount" : amount.toString(),
+                      "lastCommentTime" : lastCommentTime.toString()}),
+    Operation.fromComment: CommentRemoteService.commentsFromCommentParentPath
+        .interpolate({"parentCommentId" :  x.maybeMap(                          //x commentparent in the test left(x)
+                                              (value) => value.id.toString(),
+                                              parent: (value) => value.id.toString(),
+                                              orElse: throw UnexpectedFormatException()),
+                      "amount" : amount.toString(),
+                      "lastCommentTime" : lastCommentTime.toString()}),
+    Operation.fromUser: CommentRemoteService.commentsFromCommentParentPath
+        .interpolate({"profileId" : profileId.toString(),
+                      "amount" : amount.toString(),
+                      "lastCommentTime" : lastCommentTime.toString()}),
+    Operation.fromPost: CommentRemoteService.commentsFromPostPath
+        .interpolate({/*"postId" :   postParent.maybeMap(
+                                          (value) => value.id.getOrCrash().toString(),
+                                          orElse: throw UnexpectedFormatException()));*/
+                      "amount" : amount.toString(),
+                      "lastCommentTime" : lastCommentTime.toString()}),
   };
 
 

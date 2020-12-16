@@ -119,15 +119,6 @@ main() {
     expect(testDto, origTestDtoWithoutId);
   });
 
-
-  test("Spritf", (){
-    /*String testString = "Hallo my name is %{lol}% here %{ashole}%";
-    String formattetString = sprintf(testString, {"lol":1, "ashole:"ass"});
-    print(formattetString);*/
-  });
-
-
-
   //testing crud operations here
   group('CRUD', () {
     test("get Single Test", () async {

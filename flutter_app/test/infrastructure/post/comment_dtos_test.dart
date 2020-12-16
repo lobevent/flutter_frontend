@@ -13,6 +13,7 @@ import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/post/comment_failure.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 
 class MockComment extends Mock implements CommentDto, http.Client {}
 
@@ -99,19 +100,19 @@ main() {
 
   //getList operations with corresponding api paths
   //placeholder for the listOperations
-  /*
   final listOperations = {
-    Operation.own: CommentRemoteService.generatePaginatedRoute(
-        CommentRemoteService.ownPostsPath, amount, lastCommentTime),
-    Operation.fromUser: CommentRemoteService.generatePaginatedRoute(
-        CommentRemoteService.commentsFromUserPath, amount, lastCommentTime),
+    Operation.own: CommentRemoteService.ownCommentsPath.interpolate(
+  { "amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
+    Operation.fromUser:
+        CommentRemoteService.commentsFromUserPath.interpolate(
+  {"parentCommentId" : x.maybeMap(parent: (value) => id., orElse: null), "amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}));,
     Operation.fromComment: CommentRemoteService.generatePaginatedRoute(
         CommentRemoteService.feedPath, amount, lastCommentTime),
     Operation.fromPost: CommentRemoteService.generatePaginatedRoute(
         CommentRemoteService.feedPath, amount, lastCommentTime),
   };
 
-   */
+
   //first test
   test("Post Convertion", () {
     CommentDto convertedTestCommentDto = CommentDto.fromJson(
@@ -132,7 +133,7 @@ main() {
               value.fold((l) => null, (r) => CommentDto.fromDomain(r))),
           testCommentDtoWithoutId);
     });
-/*
+
     //testing list chain and convertion
     listOperations.forEach((operation, path) async {
       // generate testcases for different operations
@@ -161,7 +162,6 @@ main() {
       });
     });
 
- */
     test("Post with 200 response", () async {
       when(client.post("ourUrl.com/event/post/1/comment/",
               headers: authenticationHeader,
@@ -293,8 +293,6 @@ main() {
       });
 
       ///Test for the failures in the get listCalls
-
-      /*
       listOperations.forEach((operation, path) {
         test(
             "getList with communication Errors. Operation: $operation. Code: $code",
@@ -320,7 +318,6 @@ main() {
         });
       });
 
-       */
     });
   });
 }

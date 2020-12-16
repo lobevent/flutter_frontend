@@ -133,7 +133,7 @@ main() {
   //test  CRUD HERE
   group('CRUD', () {
     test("get Single Test", () async {
-      when(client.get("ourUrl.com/event/post/{postId}/comment/1",
+      when(client.get("ourUrl.com/comment/1",
               headers: authenticationHeader))
           .thenAnswer((_) async =>
               http.Response(jsonEncode(testCommentDtoWithoutId.toJson()), 200));
@@ -148,27 +148,25 @@ main() {
     listOperations.forEach((operation, path) async {
       // generate testcases for different operations
       test("get List Test with 200 response. Operation: $operation", () async {
-        Either<PostFailure, List<Post>> returnedList;
+        Either<CommentFailure, List<Comment>> returnedList;
         when(client.get(SymfonyCommunicator.url + path,
                 headers: authenticationHeader))
             .thenAnswer((_) async => http.Response(
-                jsonEncode(postList.map((e) => e.toJson()).toList()),
+                jsonEncode(commentList.map((e) => e.toJson()).toList()),
                 200)); // client response configuration
         if (operation == Operation.fromUser) {
           returnedList = await repository.getList(
-              operation, DateTime.now(), 5, TestDtoWithId.toDomain(),
-              profile: profileDto
-                  .toDomain()); //the case, when profile must be passed
+              operation, DateTime.now(), 5); //the case, when profile must be passed
         } else {
           returnedList = await repository.getList(
-              operation, DateTime.now(), 5, TestDtoWithId.toDomain());
+              operation, DateTime.now(), 5);
         }
         expect(
             returnedList
                 .getOrElse(() => throw Error())
-                .map((e) => PostDto.fromDomain(e))
+                .map((e) => CommentDto.fromDomain(e))
                 .toList(),
-            postList);
+            commentList);
       });
     });
 
@@ -307,21 +305,18 @@ main() {
         test(
             "getList with communication Errors. Operation: $operation. Code: $code",
             () async {
-          PostFailure returnedFailure;
+          CommentFailure returnedFailure;
           when(client.get(SymfonyCommunicator.url + path,
                   headers: authenticationHeader))
               .thenAnswer((_) async => http.Response(
-                  jsonEncode(postList.map((e) => e.toJson()).toList()), code));
+                  jsonEncode(commentList.map((e) => e.toJson()).toList()), code));
           if (operation == Operation.fromUser) {
             returnedFailure = await repository
-                .getList(operation, lastCommentTime, amount,
-                    TestDtoWithId.toDomain(),
-                    profile: profileDto.toDomain())
+                .getList(operation, lastCommentTime, amount)
                 .then((value) => value.swap().getOrElse(() => throw Error()));
           } else {
             returnedFailure = await repository
-                .getList(operation, lastCommentTime, amount,
-                    TestDtoWithId.toDomain())
+                .getList(operation, lastCommentTime, amount)
                 .then((value) => value.swap().getOrElse(() => throw Error()));
           }
           expect(returnedFailure, pstFailure);

@@ -17,6 +17,7 @@ import 'package:flutter_frontend/infrastructure/post/post_repository.dart';
 import 'package:flutter_frontend/domain/post/post_failure.dart';
 import 'package:flutter_frontend/domain/post/i_post_repository.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 
 import '../profile/profile_dtos_test.dart';
 
@@ -131,12 +132,12 @@ main() {
 
   //getList operations with corresponding api paths
   final listOperations = {
-    Operation.own: PostRemoteService.generatePaginatedRoute(
-        PostRemoteService.ownPostsPath, amount, lastCommentTime),
-    Operation.feed: PostRemoteService.generatePaginatedRoute(
-        PostRemoteService.feedPath, amount, lastCommentTime),
-    Operation.fromUser: PostRemoteService.generatePaginatedRoute(
-        PostRemoteService.postsFromUserPath, amount, lastCommentTime),
+    Operation.own: PostRemoteService.ownPostsPath.interpolate(
+        {"amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
+    Operation.feed: PostRemoteService.feedPath.interpolate(
+        {"amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
+    Operation.fromUser: PostRemoteService.postsFromUserPath.interpolate(
+        {"profileId": profileId, "amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
   };
 
   //first test

@@ -13,6 +13,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:http/http.dart' as http;
+import 'package:sprintf/sprintf.dart';
+import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 
 class MockEvent extends Mock implements Event, http.Client {}
 
@@ -95,16 +97,19 @@ main() {
 
   //getList operations with corresponding api paths
   final listOperations = {
-    Operation.attending: EventRemoteService.generatePaginatedRoute(
-        EventRemoteService.attendingEventsPath, amount, lastEventTime),
-    Operation.fromUser: EventRemoteService.generatePaginatedRoute(
-        "${EventRemoteService.profileEventPath}/$profileId",
-        amount,
-        lastEventTime),
-    Operation.owned: EventRemoteService.generatePaginatedRoute(
-        EventRemoteService.ownedEventsPath, amount, lastEventTime),
-    Operation.unreacted: EventRemoteService.generatePaginatedRoute(
-        EventRemoteService.unreactedEventsPath, amount, lastEventTime),
+    Operation.attending:
+        EventRemoteService.attendingEventsPath.interpolate(
+            {"profileId": profileId, "amount" : amount.toString(), "lastEventTime" : lastEventTime.toString()}),
+    Operation.fromUser:
+        EventRemoteService.profileEventPath.interpolate(
+            {"profileId": profileId, "amount" : amount.toString(), "lastEventTime" : lastEventTime.toString()}),
+    Operation.owned:
+        EventRemoteService.ownedEventsPath.interpolate(
+            {"profileId": profileId, "amount" : amount.toString(), "lastEventTime" : lastEventTime.toString()}),
+    Operation.unreacted:
+        EventRemoteService.unreactedEventsPath.interpolate(
+            {"profileId": profileId, "amount" : amount.toString(), "lastEventTime" : lastEventTime.toString()})
+    ,
   }; //instantiating map with different operation options
 
   //first test
@@ -301,6 +306,8 @@ main() {
                     profile: profileDto.toDomain())
                 .then((value) => value.swap().getOrElse(() => throw Error()));
           } else {
+            dynamic returnedFailure1 = await repository
+                .getList(operation, lastEventTime, amount);
             returnedFailure = await repository
                 .getList(operation, lastEventTime, amount)
                 .then((value) => value.swap().getOrElse(() => throw Error()));

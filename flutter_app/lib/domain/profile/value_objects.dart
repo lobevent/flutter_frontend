@@ -3,17 +3,18 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_validators.dart';
+import 'package:flutter_frontend/domain/core/constants.dart';
 
 class ProfileName extends ValueObject<String> {
+
   @override
   final Either<ValueFailure<String>, String> value;
 
   factory ProfileName(String input) {
     assert(input != null);
     {
-      return ProfileName._(
-        validateSingleLine(input)
-      );
+      //check single line, and the length of the profilename
+      return ProfileName._(validateSingleLine(input).andThen(validateLength(input, minLength: Constants.minProfilenameLength, maxLength: Constants.maxProfilenameLength)));
     }
   }
   const ProfileName._(this.value);

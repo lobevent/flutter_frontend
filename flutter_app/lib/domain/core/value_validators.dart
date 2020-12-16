@@ -1,7 +1,11 @@
+import 'dart:core';
+
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 
 import 'package:flutter_frontend/domain/core/constants.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 Either<ValueFailure<String>, String> validateEmailAddress(String input) {
   // Maybe not the most robust way of email validation but it's good enough
@@ -16,6 +20,7 @@ Either<ValueFailure<String>, String> validateEmailAddress(String input) {
 
 Either<ValueFailure<String>, String> validatePassword(String input) {
   // You can also add some advanced password checks (uppercase/lowercase, at least 1 number, ...)
+  // Added PW checking, at least 1 uppercase letter and TODO: at least 1 special character
   if (input.length < Constants.minPasswordLength) {
     return left(
       ValueFailure.shortPassword(
@@ -23,10 +28,23 @@ Either<ValueFailure<String>, String> validatePassword(String input) {
         minLength: Constants.minPasswordLength
       )
     );
-  } else {
+
+  } else if(!RegExp("[A-Z]").hasMatch(input)) {
+    return left(
+      const ValueFailure.noBigCaseLetterPassword()
+    );
+  } else if(!RegExp("[*.!@#\$%^&(){}[]:;<>,.?/~_+-=|\\]").hasMatch(input)){
+    return left(
+      const ValueFailure.noSpecialLetterPassword()
+    );
+  }
+  else
+  {
     return right(input);
   }
 }
+
+
 
 Either<ValueFailure<String>, String> validateLength(
   String input, 
@@ -56,6 +74,9 @@ Either<ValueFailure<String>, String> validateSingleLine(String input) {
     return right(input);
   }
 }
+
+
+
 
 // TODO lets make this right tomorrow don't know what this should actually do (all the functions under this comment)
 

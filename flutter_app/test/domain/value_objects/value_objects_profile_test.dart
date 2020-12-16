@@ -1,5 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubit.dart';
+import 'package:flutter_frontend/domain/auth/auth_failure.dart';
+import 'package:flutter_frontend/domain/auth/user.dart';
+import 'package:flutter_frontend/domain/auth/value_objects.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -91,8 +95,8 @@ main() {
       friendships: friendlist,
       posts: postList,
       comments: commentList);
-
-
+  SignInFormState testSignInFormState = SignInFormState(emailAddress: EmailAddress("huso@gmail.com"), password: Password("TestPw!2"), showErrorMessages: true, isSubmitting: true, authFailureOrSuccessOption: none());
+  SignInFormState testSignInFormStateInvalid = SignInFormState(emailAddress: EmailAddress("huso"), password: Password("testpw"), showErrorMessages: true, isSubmitting: true, authFailureOrSuccessOption: none());
   //Test the entities if they can Validate, and when they should not be validate Objects
   test("Profile full valid test", () {
     expect(profileFullValid.failureOption, None<ValueFailure<dynamic>>());
@@ -120,7 +124,13 @@ main() {
     expect(testComment.failureOption,None<ValueFailure<dynamic>>());
   });
   test("Comment invalid test",(){
-    expect(testCommentInvalid.failureOption,Some<ValueFailure<dynamic>>(ValueFailure<String>.exceedingLenght(failedValue: longerThanMaxLength, maxLength: 500)));
+    expect(testCommentInvalid.failureOption, Some<ValueFailure<dynamic>>(ValueFailure<String>.exceedingLenght(failedValue: longerThanMaxLength, maxLength: 500)));
+  });
+  test("SignInFormState Password",(){
+    expect(testSignInFormState.password.failureOrUnit, None<ValueFailure<dynamic>>());
+  });
+  test("SignInFormState Password invalid",(){
+    expect(testSignInFormStateInvalid.password.failureOrUnit, Left<ValueFailure<dynamic>, Unit>(ValueFailure<String>.noBigCaseLetterPassword()));
   });
 
 }

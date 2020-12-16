@@ -29,11 +29,14 @@ class PostRemoteService {
   static const String deletePath = "/post/";
   static const String updatePath = "/post/";
 
-  SymfonyCommunicator client;
+  final SymfonyCommunicator client;
 
   PostRemoteService({SymfonyCommunicator communicator})
       : client = communicator ??
-            SymfonyCommunicator(jwt: null); // TODO check on this one
+      SymfonyCommunicator(
+          jwt:
+          null); // TODO this doesn't work on runtime -> will throw an error!
+
 
   //decode the json response for post
   Future<PostDto> _decodePost(Response json) async {

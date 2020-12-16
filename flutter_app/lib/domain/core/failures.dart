@@ -21,6 +21,8 @@ abstract class ValueFailure<T> with _$ValueFailure<T> {
     @required T failedValue,
     @required int minLength,
   }) = ShortPassword<T>;
+  const factory ValueFailure.noBigCaseLetterPassword() = NoBigCaseLetterPassword;
+  const factory ValueFailure.noSpecialLetterPassword() = NoSpecialLetterPassword;
   const factory ValueFailure.exceedingLenght({
     @required T failedValue,
     @required int maxLength,

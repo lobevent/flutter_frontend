@@ -37,15 +37,22 @@ dependencies:
   # we need to check that the iOS version is at least 13 since 12 won't support apple sign in
   device_info: ^1.0.0
 
-  # firebase releated stuff
+  ###
+  # start firebase related stuff
+  ###
   # not using firebase core since every firebase plugin imports firebase core by itself
   # firebase auth for the authentication with firebase
   firebase_auth: ^0.18.3
-
-  #local sqlite db
+  ###
+  # end firebase related stuff
+  ###
+  # the actual implementation of moor
   moor: ^3.4.0
+
+  # some additional flutter stuff for moor 
   moor_flutter: ^3.1.0
-  #dependencies for moor
+
+  # start dependencies for moor
   sqlite3: ^0.1.7 # Ships the latest sqlite3 version with your Android or iOS app.
   path_provider: ^1.6.24 #Used to find a suitable location to store the database.
   path: ^1.7.0 # path manipulation library for all platforms

@@ -70,7 +70,7 @@ Either<ValueFailure<String>, String> validateDate(String input) {
   }
 }
 
-//glaube nicht das man so die klassen initialisieren sollte für profile.dart List<...>
+//TODO fix this, therefor implement value validators for profile: value_objects
 Either<ValueFailure<String>, String> doNothing(String input) {
   // if u dont need to validate some object
   return right(input);

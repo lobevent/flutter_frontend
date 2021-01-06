@@ -1,3 +1,4 @@
+import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
@@ -21,7 +22,7 @@ abstract class EventDto extends BaseDto implements _$EventDto {
     @required String description,
     @required DateTime date,
     @required DateTime creationDate,
-    @required @OwnerConverter() ProfileDto owner,
+    @required @ProfileConverter() ProfileDto owner,
   }) = EventDtoFull;
 
   const factory EventDto.withoutId({
@@ -30,7 +31,7 @@ abstract class EventDto extends BaseDto implements _$EventDto {
     @required String description,
     @required DateTime date,
     @required DateTime creationDate,
-    @required @OwnerConverter() ProfileDto owner,
+    @required @ProfileConverter() ProfileDto owner,
   }) = EventDtoWithoutId;
 
   factory EventDto.fromDomain(Event event) {
@@ -81,17 +82,3 @@ abstract class EventDto extends BaseDto implements _$EventDto {
   }
 }
 
-class OwnerConverter
-    implements JsonConverter<ProfileDto, Map<String, dynamic>> {
-  const OwnerConverter();
-
-  @override
-  ProfileDto fromJson(Map<String, dynamic> owner) {
-    return ProfileDto.fromJson(owner);
-  }
-
-  @override
-  Map<String, dynamic> toJson(ProfileDto profileDto) {
-    return profileDto.toJson();
-  }
-}

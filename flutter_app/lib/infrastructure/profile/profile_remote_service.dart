@@ -7,7 +7,7 @@ import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:http/http.dart';
 
 class ProfileRemoteService  extends RemoteService<ProfileDto>{
-  static const String _profileIdPath = ""; //TODO dont know path
+  static const String profileIdPath = "/profile"; //TODO dont know path
 
   //commented out unused Routes
   /*static const String _deleteProfilePicture = "/profile/{id}";
@@ -15,10 +15,10 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
   static const String _changePassword = "/password";*/
 
   //List Routes
-  static const String _searchProfilePath = "/profile/%profileId%/%amount%/";
-  static const String _attendingUsersPath = "/profile/%profileId%/%amount%/";
-  static const String _followerPath = "/profile/%profileId%/%amount%/";
-  static const String _postProfilePath = "/profile/%postId%/%amount%/";
+  static const String searchProfilePath = "/profile/%profileId%/%amount%/";
+  static const String attendingUsersPath = "/profile/%profileId%/%amount%/";
+  static const String followerPath = "/profile/%profileId%/%amount%/";
+  static const String postProfilePath = "/profile/%postId%/%amount%/";
 
   static const String postPath = "/profile";
   static const String deletePath = "/profile";
@@ -26,16 +26,18 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
 
   SymfonyCommunicator client;
 
-  ProfileRemoteService() {
-    client = SymfonyCommunicator(jwt: null); // TODO check on this one
-  }
+  ProfileRemoteService({SymfonyCommunicator communicator})
+      : client = communicator ??
+      SymfonyCommunicator(
+          jwt:
+          null); // TODO this doesn't work on runtime -> will throw an error!
 
   Future<ProfileDto> _decodeProfile(Response json) async {
     return ProfileDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
 
   Future<ProfileDto> getSingleProfile(int id) async {
-    final String uri = "$_profileIdPath$id";
+    final String uri = "$profileIdPath$id";
     Response response = await client.get(uri);
     ProfileDto profileDto =
         ProfileDto.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
@@ -61,25 +63,25 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
 
   Future<List<ProfileDto>> getSearchedProfiles(int amount, String profileId) async {
     return _getProfileList(
-        _searchProfilePath.interpolate(
+        searchProfilePath.interpolate(
             {"profileId" : profileId, "amount" : amount.toString()}));
     }
 
   Future<List<ProfileDto>> getAttendingUsersToEvent(int amount, String profileId) async {
     return _getProfileList(
-        _attendingUsersPath.interpolate(
+        attendingUsersPath.interpolate(
             {"profileId" : profileId, "amount" : amount.toString()}));
   }
 
   Future<List<ProfileDto>> getFollower(int amount, String profileId) async {
     return _getProfileList(
-        _followerPath.interpolate(
+        followerPath.interpolate(
         {"profileId" : profileId, "amount" : amount.toString()}));
   }
 
   Future<List<ProfileDto>> getProfilesToPost(int amount, String postId) async {
     return _getProfileList(
-        _postProfilePath.interpolate(
+        postProfilePath.interpolate(
         {"postId" : postId, "amount" : amount.toString()}));
   }
 

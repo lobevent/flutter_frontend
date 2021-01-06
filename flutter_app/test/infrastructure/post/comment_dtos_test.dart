@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
@@ -156,7 +158,7 @@ main() {
                 200)); // client response configuration
         if (operation == Operation.fromUser) {
           returnedList = await repository.getList(
-              operation, DateTime.now(), 5); //the case, when profile must be passed
+              operation, DateTime.now(), 5, profile: Profile(id: Id.fromUnique(1), name: ProfileName("Anita"))); //the case, when profile must be passed
         } else {
           returnedList = await repository.getList(
               operation, DateTime.now(), 5);

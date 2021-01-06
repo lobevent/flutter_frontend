@@ -21,7 +21,7 @@ import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 
 import '../profile/profile_dtos_test.dart';
 
-class MockPost extends Mock implements Profile, http.Client {}
+class MockPost extends Mock implements PostDto, http.Client {}
 
 main() {
   const int testId = 3;

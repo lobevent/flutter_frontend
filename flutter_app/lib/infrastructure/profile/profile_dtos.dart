@@ -61,6 +61,7 @@ abstract class ProfileDto extends BaseDto implements _$ProfileDto {
   factory ProfileDto.fromJson(Map<String, dynamic> json) =>
       _$ProfileDtoFromJson(json);
 
+
   @override
   Profile toDomain() {
     return map(

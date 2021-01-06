@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubit.dart';
 import 'package:flutter_frontend/domain/auth/auth_failure.dart';
 import 'package:flutter_frontend/domain/auth/user.dart';
@@ -15,7 +15,7 @@ import 'package:flutter_frontend/domain/post/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/profile_failure.dart';
-import 'package:flutter_frontend/domain/profile/i_profile_repository.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 

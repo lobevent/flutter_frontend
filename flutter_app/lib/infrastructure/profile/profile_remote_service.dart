@@ -1,11 +1,12 @@
 import 'dart:convert';
 
+import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:http/http.dart';
 
-class ProfileRemoteService {
+class ProfileRemoteService  extends RemoteService<ProfileDto>{
   static const String _profileIdPath = ""; //TODO dont know path
 
   //commented out unused Routes

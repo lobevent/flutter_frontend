@@ -5,6 +5,8 @@ import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile_failure.dart';
 import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
+import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
+import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
 import 'package:flutter_frontend/infrastructure/post/post_repository.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_repository.dart';
@@ -16,6 +18,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
 import 'package:flutter_frontend/domain/profile/i_profile_repository.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
+import 'package:flutter_frontend/domain/post/post.dart';
 
 class MockProfile extends Mock implements Profile, http.Client {}
 
@@ -25,6 +28,20 @@ main() {
   ProfileDto testProfileDto = ProfileDto(id: testId, name: "hans");
 
   ProfileDto testProfileDtoWithoutId = ProfileDto(id: 3, name: "hans");
+
+  PostDto normalPostDto2 = PostDto(
+      id: 2,
+      creationDate: DateTime.now(),
+      postContent: "geiler post yeye 2",
+      owner: ProfileDto(id: 0, name: "manni"),
+      event: EventDto(
+          id: 0,
+          name: "corona event 1",
+          public: false,
+          description: "geile corona party mit 20 mann",
+          date: DateTime.now(),
+          creationDate: DateTime.now(),
+          owner: ProfileDto(id: 1, name: "adolf")));
 
 
   List<ProfileDto> profileDtoList = [testProfileDto,testProfileDtoWithoutId];
@@ -59,6 +76,9 @@ main() {
   const int amount = 5;
   final DateTime lastCommentTime = DateTime.now();
   final String profileId = testProfileDto.id.toString();
+  final String postId = "2";
+
+
 
   //HTTP error codes with corresponding eventFailures
   final codesAndFailures = {
@@ -75,9 +95,9 @@ main() {
    */
   final listOperations = {
     Operation.search: ProfileRemoteService.searchProfilePath.interpolate(
-        {"amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
+        {"profileId": profileId,"amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
     Operation.attendingUsersEvent: ProfileRemoteService.attendingUsersPath.interpolate(
-        {"amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
+        {"profileId": profileId,"amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
     Operation.follower: ProfileRemoteService.followerPath.interpolate(
         {"profileId": profileId, "amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
     Operation.postProfile: ProfileRemoteService.postProfilePath.interpolate(
@@ -96,12 +116,12 @@ main() {
     test("get Single Test", () async {
       when(client.get("ourUrl.com/profile", headers: authenticationHeader))
           .thenAnswer((_) async =>
-          http.Response(jsonEncode(testProfileDtoWithoutId.toJson()), 200));
+          http.Response(jsonEncode(testProfileDto.toJson()), 200));
 
       expect(
           await repository.getSingleProfile(Id.fromUnique(1)).then(
                   (value) => value.fold((l) => null, (r) => ProfileDto.fromDomain(r))),
-          testProfileDtoWithoutId);
+          testProfileDto);
     });
 
     //testing list chain and convertion
@@ -125,12 +145,12 @@ main() {
     test("Post with 200 response", () async {
       when(client.post("ourUrl.com/profile",
           headers: authenticationHeader,
-          body: jsonEncode(testProfileDtoWithoutId.toJson())))
+          body: jsonEncode(testProfileDto.toJson())))
           .thenAnswer((realInvocation) async =>
           http.Response(jsonEncode(testProfileDto.toJson()), 200));
 
       Profile answer = await repository
-          .create(testProfileDtoWithoutId.toDomain())
+          .create(testProfileDto.toDomain())
           .then((value) => value.fold((l) => throw Error(), (r) => r));
       expect(
           answer.maybeMap((value) => value.id.getOrCrash(), orElse: () => null),
@@ -157,33 +177,7 @@ main() {
       expect(ProfileDto.fromDomain(answer), testProfileDto);
     });
 
-    test("Delete with wrong postdto type (without id)", () async {
-      when(client.delete(
-          SymfonyCommunicator.url +
-              ProfileRemoteService.deletePath +
-              testId.toString(),
-          headers: authenticationHeader))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
-      final Either<ProfileFailure, Profile> answer = await repository
-          .delete(testProfileDtoWithoutId.toDomain()); //await answer from repository
-      final ProfileFailure failure = answer.swap().getOrElse(() =>
-      throw Error()); //swap, so we can use get or else, and throw an error if its not an failure
-      expect(failure, const ProfileFailure.unexpected());
-    });
 
-    test("Put with wrong postdto type (without id)", () async {
-      when(client.put(
-          SymfonyCommunicator.url +
-              ProfileRemoteService.updatePath +
-              testId.toString(),
-          headers: authenticationHeader,
-          body: jsonEncode(testProfileDto.toJson())))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
-      ProfileFailure failure = await repository
-          .update(testProfileDtoWithoutId.toDomain())
-          .then((value) => value.swap().getOrElse(() => throw Error()));
-      expect(failure, const ProfileFailure.unexpected());
-    });
     //---------------------UPDATE----------------------
     test("Put with 200 response", () async {
       when(client.put(

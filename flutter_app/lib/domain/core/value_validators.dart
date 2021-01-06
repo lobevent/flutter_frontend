@@ -33,6 +33,7 @@ Either<ValueFailure<String>, String> validatePassword(String input) {
     return left(
       const ValueFailure.noBigCaseLetterPassword()
     );
+    //TODO: this regexp doesnt does its job, maybe somebody can fix it
   } else if(!RegExp("[*.!@#\$%^&(){}[]:;<>,.?/~_+-=|\\]").hasMatch(input)){
     return left(
       const ValueFailure.noSpecialLetterPassword()

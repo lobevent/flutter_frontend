@@ -2,13 +2,14 @@ import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
+import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:http/http.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 
 
-class EventRemoteService {
+class EventRemoteService extends RemoteService<EventDto>{
   static const String eventByIdPath = "/event/";
 
   //Routes Lists
@@ -96,18 +97,7 @@ class EventRemoteService {
 
   Future<List<EventDto>> _getEventList(String path) async {
     final Response response = await client.get(path);
-    List<EventDto> events;
-    try {
-      events = ((jsonDecode(response.body) as List)
-              .map((e) => e as Map<String, dynamic>))
-          .toList() // TODO one liners are nice for the flex xD but you already use a variable then I think it is easier to just put it into the next line
-          .map((e) => EventDto.fromJson(e))
-          .toList(); // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
-    } on Exception {
-      throw UnexpectedFormatException();
-    }
-
-    return events;
+    return convertList(response);
   }
 
 //  Future<List<EventDto>> getViewableEventsFromProfile(int ProfileId){

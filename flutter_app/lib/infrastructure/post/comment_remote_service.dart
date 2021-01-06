@@ -2,12 +2,13 @@ import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
+import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'comment_dtos.dart';
 import 'package:http/http.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 
-class CommentRemoteService {
+class CommentRemoteService extends RemoteService<CommentDto>{
   static const String commentIdGet = "/comment/";
 
   //commented out unused paths
@@ -96,15 +97,6 @@ class CommentRemoteService {
 
   Future<List<CommentDto>> _getCommentList(String path) async {
     final Response response = await client.get(path);
-
-    final List<
-        Map<String,
-            dynamic>> commentsJsonList = jsonDecode(response.body) as List<
-        Map<
-            String, // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
-            dynamic>>; // TODO same stuff with one variable and bit cleaner still we will have to rewrite it because of the json transformation
-    return commentsJsonList
-        .map((commentJsonMap) => CommentDto.fromJson(commentJsonMap))
-        .toList();
+    return convertList(response);
   }
 }

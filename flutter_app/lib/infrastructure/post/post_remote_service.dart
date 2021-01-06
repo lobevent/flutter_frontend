@@ -94,12 +94,23 @@ class PostRemoteService {
 
   Future<List<PostDto>> _getPostList(String path) async {
     final Response response = await client.get(path);
-    final List<Map<String, dynamic>> postsJsonList = jsonDecode(response.body) as List<
-        Map<
-            String, // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
-            dynamic>>; // TODO same stuff with one variable and bit cleaner still we will have to rewrite it because of the json transformation
-    return postsJsonList
-        .map((postJsonMap) => PostDto.fromJson(postJsonMap))
-        .toList();
+
+
+
+    List<PostDto> posts;
+    try {
+      posts = ((jsonDecode(response.body) as List)
+          .map((e) => e as Map<String, dynamic>))
+          .toList() // TODO one liners are nice for the flex xD but you already use a variable then I think it is easier to just put it into the next line
+          .map((e) => PostDto.fromJson(e))
+          .toList(); // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
+    } on Exception {
+      throw UnexpectedFormatException();
+    }
+
+    return posts;
   }
+
+
+
 }

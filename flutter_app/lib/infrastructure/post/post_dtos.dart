@@ -4,6 +4,8 @@ import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/post/value_objects.dart';
+import 'package:flutter_frontend/infrastructure/core/event_converter.dart';
+import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -69,33 +71,6 @@ abstract class PostDto extends BaseDto implements _$PostDto {
             owner: value.owner.toDomain(),
             event: value.event.toDomain(),
             comments: <Comment>[]));
-  }
-}
-
-class ProfileConverter
-    implements JsonConverter<ProfileDto, Map<String, dynamic>> {
-  const ProfileConverter();
-  @override
-  ProfileDto fromJson(Map<String, dynamic> owner) {
-    return ProfileDto.fromJson(owner);
-  }
-
-  @override
-  Map<String, dynamic> toJson(ProfileDto profileDto) {
-    return profileDto.toJson();
-  }
-}
-
-class EventConverter implements JsonConverter<EventDto, Map<String, dynamic>> {
-  const EventConverter();
-  @override
-  EventDto fromJson(Map<String, dynamic> event) {
-    return EventDto.fromJson(event);
-  }
-
-  @override
-  Map<String, dynamic> toJson(EventDto EventDto) {
-    return EventDto.toJson();
   }
 }
 

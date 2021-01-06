@@ -6,29 +6,29 @@ import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_validators.dart';
 import 'package:flutter_frontend/domain/core/constants.dart';
 
-class EventName extends ValueObject<String> {
+class TodoListName extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
 
-  factory EventName(String input) {
+  factory TodoListName(String input) {
     assert(input != null);
     {
-      return EventName._(validateSingleLine(input));
+      return TodoListName._(validateSingleLine(input));
     }
   }
-  const EventName._(this.value);
+  const TodoListName._(this.value);
 }
 
-class EventDescription extends ValueObject<String> {
+class ItemName extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
 
   static int maxLength = Constants.maxTextLength;
-  factory EventDescription(String input) {
+  factory ItemName(String input) {
     assert(input != null);
     {
-      return EventDescription._(validateLength(input, maxLength: maxLength));
+      return ItemName._(validateLength(input, maxLength: maxLength));
     }
   }
-  const EventDescription._(this.value);
+  const ItemName._(this.value);
 }

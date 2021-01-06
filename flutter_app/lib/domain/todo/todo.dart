@@ -11,6 +11,6 @@ abstract class Todo implements _$Todo {
   const factory Todo({
     @required Id id,
     @required Item item,
-    Event event,
+    @required Event event,
   }) = _Todo;
 }

@@ -19,7 +19,7 @@ enum Operation{
 
 abstract class IItemRepository{
   Future <Either<ItemFailure, List<Item>>> getList(
-      Operation operation, int amount,{Todo todo});
+      Operation operation, int amount,Item item, Todo todo);
   Future <Either<ItemFailure, Item>> getSingleItem(Id id);
   Future <Either<ItemFailure, Item>> create(Item item);
   Future <Either<ItemFailure, Item>> update(Item item);

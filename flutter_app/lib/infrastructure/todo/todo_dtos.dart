@@ -1,4 +1,5 @@
 import 'package:flutter_frontend/domain/todo/todo.dart';
+import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/core/event_converter.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/todo/item_dtos.dart';
@@ -17,6 +18,7 @@ abstract class TodoDto extends BaseDto implements _$TodoDto {
 
   const factory TodoDto({
     @required int id,
+    @required String todoListName,
     @required ItemDto item,
     @required @EventConverter() EventDto event,
   }) = _TodoDto;
@@ -24,6 +26,7 @@ abstract class TodoDto extends BaseDto implements _$TodoDto {
   factory TodoDto.fromDomain(Todo todo) {
     return TodoDto(
           id: todo.id.getOrCrash(),
+          todoListName: todo.todoListName.getOrCrash(),
           item: ItemDto.fromDomain(todo.item),
           event: EventDto.fromDomain(todo.event),
         );
@@ -36,6 +39,7 @@ abstract class TodoDto extends BaseDto implements _$TodoDto {
   Todo toDomain() {
     return Todo(
       id: Id.fromUnique(id),
+      todoListName: TodoListName(todoListName),
       item: item.toDomain(),
       event: event.toDomain(),
     );

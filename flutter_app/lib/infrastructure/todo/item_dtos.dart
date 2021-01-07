@@ -1,4 +1,5 @@
 import 'package:flutter_frontend/domain/todo/item.dart';
+import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -17,7 +18,7 @@ abstract class ItemDto extends BaseDto implements _$ItemDto {
   const factory ItemDto({
     @required int id,
     @required @ProfileConverter() ProfileDto profile,
-    @required String element,
+    @required String itemContent,
     @required bool checkMark,
   }) = _ItemDtos;
 
@@ -25,7 +26,7 @@ abstract class ItemDto extends BaseDto implements _$ItemDto {
     return ItemDto(
       id: item.id.getOrCrash(),
       profile: ProfileDto.fromDomain(item.profile),
-      element: item.element,
+      itemContent: item.itemContent.getOrCrash(),
       checkMark: item.checkMark,
     );
   }
@@ -38,7 +39,7 @@ abstract class ItemDto extends BaseDto implements _$ItemDto {
     return Item(
       id: Id.fromUnique(id),
       profile: profile.toDomain(),
-      element: element,
+      itemContent: ItemContent(itemContent),
       checkMark: checkMark,
     );
   }

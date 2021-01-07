@@ -19,16 +19,17 @@ class TodoListName extends ValueObject<String> {
   const TodoListName._(this.value);
 }
 
-class ItemName extends ValueObject<String> {
+class ItemContent extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
 
   static int maxLength = Constants.maxTextLength;
-  factory ItemName(String input) {
+  //check with maxLength, which is defined in the class constants.dart
+  factory ItemContent(String input) {
     assert(input != null);
     {
-      return ItemName._(validateLength(input, maxLength: maxLength));
+      return ItemContent._(validateLength(input, maxLength: maxLength));
     }
   }
-  const ItemName._(this.value);
+  const ItemContent._(this.value);
 }

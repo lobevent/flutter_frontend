@@ -1,12 +1,24 @@
 import 'package:flutter_frontend/domain/core/failures.dart';
 
-class CommunicationError extends Error {}
+abstract class CommunicationError extends Error {}
+abstract class AuthError extends Error {}
+
+class UnexpectedTypeError extends Error {}
 
 class NotAuthenticatedError extends CommunicationError {}
 class NotAuthorizedError extends CommunicationError {}
 class NotFoundError extends CommunicationError {}
 class InternalServerError extends CommunicationError {}
-class UnexpectedTypeError extends Error {}
+
+class PhoneVerificationNotStarted extends AuthError {
+  @override
+  String toString() {
+    const String explanation =
+        "This indicates error indicates that [_lastPhoneVerificationId] wasn't set yet. Most of the time this indicates that you didn't call [startPhoneNumberSignInFlow] before [signInWithReceivedSmsCode]";
+    return Error.safeToString(explanation);
+  }
+}
+
 
 class UnexpectedValueError extends Error {
   final ValueFailure valueFailure;
@@ -16,7 +28,7 @@ class UnexpectedValueError extends Error {
   @override
   String toString() {
     const String explanation =
-        'Encountered a ValueFailure at an unrecoverable point. Terminating.';
+        "Encountered a ValueFailure at an unrecoverable point. Terminating.";
     return Error.safeToString('$explanation Failure was: $valueFailure');
   }
 }

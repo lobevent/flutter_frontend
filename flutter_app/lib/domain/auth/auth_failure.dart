@@ -9,5 +9,10 @@ abstract class AuthFailure with _$AuthFailure {
   const factory AuthFailure.serverError() = ServerError;
   const factory AuthFailure.emailAlreadyInUse() = EmailAlreadyInUse;
   const factory AuthFailure.invalidEmailAndPasswordCombination() =
-      InvalidEmailAndPasswordCombination;
+    InvalidEmailAndPasswordCombination;
+
+  const factory AuthFailure.autoPhoneAuthFailed() = AutoPhoneAuthFailed;
+  const factory AuthFailure.badPhoneNumber() = BadPhoneNumber;
+  const factory AuthFailure.unknownFirebaseAuthException() = 
+    UnknownFirebaseAuthException;
 }

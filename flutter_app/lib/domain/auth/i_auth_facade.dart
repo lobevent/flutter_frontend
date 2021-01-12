@@ -10,6 +10,7 @@ abstract class IAuthFacade {
   Future<Either<AuthFailure, Unit>> startPhoneNumberSignInFlow({
     @required String phoneNumber
   });
+  Future<Either<AuthFailure, Unit>> resendSmsCode();
   Future<Either<AuthFailure, Unit>> signInWithReceivedSmsCode({
     @required String smsCode
   });

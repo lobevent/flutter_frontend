@@ -15,6 +15,7 @@ abstract class IAuthFacade {
     @required String smsCode
   });
   Future<Either<AuthFailure, Unit>> signInWithGoogle();
+  Future<bool> signInWithAppleAvailable();
   Future<Either<AuthFailure, Unit>> signInWithApple();
   Future<void> signOut();
 }

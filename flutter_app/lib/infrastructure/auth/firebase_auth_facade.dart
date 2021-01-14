@@ -59,6 +59,24 @@ class FirebaseAuthFacade implements IAuthFacade {
   /// probably never resolves when the auth process was cancelled (for example
   /// by closing the chrome tab). By calling the function again all previously 
   /// returned futures will be terminated and a new sign in flow will be started
+  /// 
+  /// Failures:
+  ///   - AppleSignInNotSupported: is returned when Apple sign in isn't
+  ///                              supported on the current platform
+  ///   - AppleSignInAuthError: is returned when some error during the auth 
+  ///                           process occurred (keep different behavior on 
+  ///                           different platforms in mind!)
+  ///   - CancelledByUser: is returned when the auth process was closed by the
+  ///                      user (normally should only work on iOS and macOS - 
+  ///                      again keep different behavior on different platforms
+  ///                      in mind!)
+  ///   - InvalidCredential: is returned when firebase rejects the auth
+  ///                        credential
+  ///   - UnknownFirebaseAuthException: is returned when FirebaseAuth
+  ///                                   throws an error that isn't mapped to
+  ///                                   a specific failure currently. The code
+  ///                                   property provides additional info.
+  ///                                   (lookup FirebaseAuthException codes)
   @override
   Future<Either<AuthFailure, Unit>> signInWithApple() async {
     AuthorizationCredentialAppleID authorizationCredentialAppleID;
@@ -71,13 +89,13 @@ class FirebaseAuthFacade implements IAuthFacade {
         ),
       );
     } on SignInWithAppleNotSupportedException {
-      return left(const AppleSignInNotSupported());
+      return left(const AuthFailure.appleSignInNotSupported());
     } catch (_) {
-      return left(const AppleSignInAuthError());
+      return left(const AuthFailure.appleSignInAuthError());
     }
 
     if (authorizationCredentialAppleID == null) {
-      return left(const CancelledByUser());
+      return left(const AuthFailure.cancelledByUser());
     }
 
     final OAuthProvider oAuthProvider = OAuthProvider("apple.com");
@@ -89,6 +107,20 @@ class FirebaseAuthFacade implements IAuthFacade {
     return _signInWithCredential(credential);
   }
 
+  /// Sign in with Google. Should work on all platforms in pretty much the same
+  /// way.
+  /// 
+  /// Failures:
+  ///   - CancelledByUser: is returned when the user cancelled the auth process
+  ///   - ServerError: something went wrong during auth process on the server
+  ///                  side (in this case google.com - probably timed out)
+  ///   - InvalidCredential: is returned when firebase rejects the auth
+  ///                        credential
+  ///   - UnknownFirebaseAuthException: is returned when FirebaseAuth
+  ///                                   throws an error that isn't mapped to
+  ///                                   a specific failure currently. The code
+  ///                                   property provides additional info.
+  ///                                   (lookup FirebaseAuthException codes)
   @override
   Future<Either<AuthFailure, Unit>> signInWithGoogle() async {
     AuthCredential credential;
@@ -111,7 +143,7 @@ class FirebaseAuthFacade implements IAuthFacade {
         accessToken: googleSignInAuthentication.accessToken,
       );
     } on PlatformException {
-      return left(const ServerError());
+      return left(const AuthFailure.serverError());
     }
 
     return _signInWithCredential(credential);
@@ -133,9 +165,20 @@ class FirebaseAuthFacade implements IAuthFacade {
   /// On both devices you should direct the user instantly to the SMS code 
   /// entering page and listen in the background for the return value of this
   /// function if it returns:
-  ///   - AutoPhoneAuthFailed use [signInWithReceivedSmsCode]
-  ///   - Unit than user is logged in
+  ///   - [AutoPhoneAuthFailed] use [signInWithReceivedSmsCode] with the SMS code
+  ///   - [Unit] than user is logged in
   ///   - other Failures handle them properly
+  /// 
+  /// Failures: 
+  ///   - BadPhoneNumber: the phone number is in a bad state (like wrong
+  ///                     formatted or it's just not valid)
+  ///   - UnknownFirebaseAuthException: is returned when FirebaseAuth
+  ///                                   throws an error that isn't mapped to
+  ///                                   a specific failure currently. The code
+  ///                                   property provides additional info.
+  ///                                   (lookup FirebaseAuthException codes)
+  ///   - AutoPhoneAuthFailed: only on Android (check further up explanation and
+  ///                          how to handle this case)
   @override
   Future<Either<AuthFailure, Unit>> startPhoneNumberSignInFlow({String phoneNumber}) async {
 
@@ -153,10 +196,15 @@ class FirebaseAuthFacade implements IAuthFacade {
       verificationFailed: (FirebaseAuthException phoneAuthException) {
         switch (phoneAuthException.code) {
           case "invalid-phone-number":
-            loginResultCompleter.complete(left(const BadPhoneNumber()));
+            loginResultCompleter.complete(
+              left(const AuthFailure.badPhoneNumber()));
             break;
           default:
-            loginResultCompleter.complete(left(const UnknownFirebaseAuthException()));
+            loginResultCompleter.complete(
+              left(AuthFailure.unknownFirebaseAuthException(
+                code: phoneAuthException.code
+              ))
+            );
         }
       }, 
       codeSent: (String phoneVerificationId, int resendToken) {
@@ -165,7 +213,9 @@ class FirebaseAuthFacade implements IAuthFacade {
       }, 
       codeAutoRetrievalTimeout: (String phoneVerificationId) {
         _lastPhoneVerificationId = some(phoneVerificationId);
-        loginResultCompleter.complete(left(const AutoPhoneAuthFailed()));
+        loginResultCompleter.complete(
+          left(const AuthFailure.autoPhoneAuthFailed())
+        );
       },
       forceResendingToken: _lastPhoneResendToken.getOrElse(() => null),
     );
@@ -173,6 +223,15 @@ class FirebaseAuthFacade implements IAuthFacade {
     return loginResultCompleter.future;
   }
 
+  /// Restart phone auth process. Internally calls [startPhoneNumberSignInFlow]
+  /// just with some special ResendToken.
+  /// 
+  /// Errors:
+  ///   - PhoneVerificationNotStarted: This is an Error which is thrown! 
+  ///                                  This app state should never be reached!
+  ///                                  Happens if this method was called before
+  ///                                  [startPhoneNumberSignInFlow] was called
+  ///                                  once.
   @override
   Future<Either<AuthFailure, Unit>> resendSmsCode() {
     final String phoneNumber = _lastPhoneNumber.getOrElse(() {
@@ -182,6 +241,16 @@ class FirebaseAuthFacade implements IAuthFacade {
     return startPhoneNumberSignInFlow(phoneNumber: phoneNumber);
   }
 
+  /// Use this function to complete the phone number auth process with the 
+  /// received SMS code. Normally this is needed on iOS and sometimes on Android
+  /// (if auto phone auth fails look up in [startPhoneNumberSignInFlow])
+  /// 
+  /// Failures and Errors:
+  ///   - PhoneVerificationNotStarted: This is an Error which is thrown! 
+  ///                                  This app state should never be reached!
+  ///                                  Happens if this method was called before
+  ///                                  [startPhoneNumberSignInFlow] was called
+  ///                                  once.
   @override
   Future<Either<AuthFailure, Unit>> signInWithReceivedSmsCode({@required String smsCode}) async {
     final String phoneVerificationId = _lastPhoneVerificationId.getOrElse(() {
@@ -202,16 +271,12 @@ class FirebaseAuthFacade implements IAuthFacade {
     } on FirebaseAuthException catch (firebaseAuthException) {
       switch (firebaseAuthException.code) {
         case "invalid-credential":
-          return left(const InvalidCredential());
-          break;
-        case "invalid-verification-code":
-          return left(const InvalidVerificationCode());
-          break;
-        case "invalid-verification-id":
-          return left(const InvalidVerificationId());
+          return left(const AuthFailure.invalidCredential());
           break;
         default: 
-          return left(const UnknownFirebaseAuthException());
+          return left(AuthFailure.unknownFirebaseAuthException(
+            code: firebaseAuthException.code
+           ));
       }
     }
 
@@ -229,6 +294,9 @@ class FirebaseAuthFacade implements IAuthFacade {
     _lastPhoneResendToken = none();
   }
 
+  /// Sign out of firebase and google sign in.
+  /// Doesn't throw anything if google wasn't used.
+  /// Sign in with Apple has no look out capability.
   @override
   Future<void> signOut() async {
     return Future.any([

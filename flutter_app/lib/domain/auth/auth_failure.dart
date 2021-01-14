@@ -5,15 +5,14 @@ part 'auth_failure.freezed.dart';
 
 @freezed
 abstract class AuthFailure with _$AuthFailure {
-  const factory AuthFailure.cancelledByUser() = CancelledByUser;
-  const factory AuthFailure.serverError() = ServerError;
-  const factory AuthFailure.appleSignInNotSupported() = AppleSignInNotSupported;
-  const factory AuthFailure.appleSignInAuthError() = AppleSignInAuthError;
-  const factory AuthFailure.invalidCredential() = InvalidCredential;
-  const factory AuthFailure.invalidVerificationCode() = InvalidVerificationCode;
-  const factory AuthFailure.invalidVerificationId() = InvalidVerificationId;
-  const factory AuthFailure.autoPhoneAuthFailed() = AutoPhoneAuthFailed;
-  const factory AuthFailure.badPhoneNumber() = BadPhoneNumber;
-  const factory AuthFailure.unknownFirebaseAuthException() = 
-    UnknownFirebaseAuthException;
+  const factory AuthFailure.cancelledByUser() = _CancelledByUser;
+  const factory AuthFailure.serverError() = _ServerError;
+  const factory AuthFailure.appleSignInNotSupported() = _AppleSignInNotSupported;
+  const factory AuthFailure.appleSignInAuthError() = _AppleSignInAuthError;
+  const factory AuthFailure.invalidCredential() = _InvalidCredential;
+  const factory AuthFailure.autoPhoneAuthFailed() = _AutoPhoneAuthFailed;
+  const factory AuthFailure.badPhoneNumber() = _BadPhoneNumber;
+  const factory AuthFailure.unknownFirebaseAuthException({
+    @required String code,
+  }) = _UnknownFirebaseAuthException;
 }

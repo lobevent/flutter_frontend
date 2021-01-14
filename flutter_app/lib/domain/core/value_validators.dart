@@ -57,9 +57,9 @@ Either<ValueFailure<String>, String> validateLength(
     );
   }
   if (maxLength != null) {
-    if (input.length > maxLength) { // check if the string is longer than maxlength
+    if (input.length > maxLength) { // check if the string is longer than max length
       return left(
-        ValueFailure.exceedingLenght(failedValue: input, maxLength: maxLength)
+        ValueFailure.exceedingLength(failedValue: input, maxLength: maxLength)
       );
     }
   }

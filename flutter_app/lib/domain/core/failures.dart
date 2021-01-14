@@ -3,14 +3,6 @@ import 'package:flutter/foundation.dart';
 
 part 'failures.freezed.dart';
 
-/*
-@freezed
-abstract class ValueFailure<T> with _$ValueFailure<T> {
-  const factory ValueFailure.auth(AuthValueFailure<T> f) = _Auth<T>;
-  const factory ValueFailure.event(EventValueFailure<T> f) = _Event<T>;
-}
- */
-
 @freezed
 abstract class ValueFailure<T> with _$ValueFailure<T> {
   const factory ValueFailure.invalidEmail({
@@ -23,7 +15,7 @@ abstract class ValueFailure<T> with _$ValueFailure<T> {
   }) = ShortPassword<T>;
   const factory ValueFailure.noBigCaseLetterPassword() = NoBigCaseLetterPassword;
   const factory ValueFailure.noSpecialLetterPassword() = NoSpecialLetterPassword;
-  const factory ValueFailure.exceedingLenght({
+  const factory ValueFailure.exceedingLength({
     @required T failedValue,
     @required int maxLength,
   }) = ExceedingLength<T>;
@@ -38,15 +30,3 @@ abstract class ValueFailure<T> with _$ValueFailure<T> {
     @required T failedValue,
   }) = MultiLine<T>;
 }
-
-/*
-@freezed
-abstract class EventValueFailure<T> with _$EventValueFailure<T> {
-  const factory EventValueFailure.invalidEmail({
-    @required T failedValue,
-  }) = InvalidEmail<T>;
-  const factory EventValueFailure.shortPassword({
-    @required T failedValue,
-  }) = ShortPassword<T>;
-}
-*/

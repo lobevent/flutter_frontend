@@ -6,6 +6,7 @@ import 'package:flutter_frontend/domain/auth/user.dart';
 import 'auth_failure.dart';
 
 abstract class IAuthFacade {
+  Future<bool> isSignedIn();
   Option<User> getSignedInUser();
   Future<Either<AuthFailure, Unit>> startPhoneNumberSignInFlow({
     @required String phoneNumber

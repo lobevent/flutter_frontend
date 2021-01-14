@@ -30,6 +30,11 @@ class FirebaseAuthFacade implements IAuthFacade {
   );
 
   @override
+  Future<bool> isSignedIn() async {
+    return _firebaseAuth.currentUser != null;
+  }
+
+  @override
   Option<User> getSignedInUser() 
     => optionOf(UserDto.fromFirebase(_firebaseAuth.currentUser).toDomain());
 
@@ -95,7 +100,7 @@ class FirebaseAuthFacade implements IAuthFacade {
       if (googleSignInAccount == null) {
         return left(const AuthFailure.cancelledByUser());
       }
-
+      
       // this field holds all the tokens required for the authentication process
       // again firebase uses them to get access to the google account
       final GoogleSignInAuthentication googleSignInAuthentication =
@@ -225,10 +230,11 @@ class FirebaseAuthFacade implements IAuthFacade {
   }
 
   @override
-  Future<void> signOut() {
-    // TODO implement
-    throw UnimplementedError();
+  Future<void> signOut() async {
+    return Future.any([
+      _firebaseAuth.signOut(),
+      _googleSignIn.signOut(),
+    ]);
   }
 
 }
-

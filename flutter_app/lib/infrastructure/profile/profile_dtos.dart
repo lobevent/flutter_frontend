@@ -18,12 +18,12 @@ abstract class ProfileDto extends BaseDto implements _$ProfileDto {
   const ProfileDto._();
 
   const factory ProfileDto({
-    @required int id,
+    @required String id,
     @required String name,
   }) = _ProfileDto;
 
   const factory ProfileDto.full({
-    @required int id,
+    @required String id,
     @required String name,
     @required List<EventDto> ownedEvents,
     @required List<EventDto> invitations,

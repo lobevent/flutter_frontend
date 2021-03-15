@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
+import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 
@@ -30,15 +31,15 @@ abstract class Event implements _$Event {
     @required bool public,
   }) = _EventWithoutId;
 
-  factory Event.empty({
+  factory Event.empty() => Event(
     id: Id(),
     name: EventName(''),
-    date: DateTime(),
-    description: EventDescription(),
-    creationDate: DateTime(),
-    owner: Profile(),
+    date: DateTime.now(),
+    description: EventDescription(''),
+    creationDate: DateTime.now(),
+    owner: Profile(id: Id(), name: ProfileName("sss")), //TODO: Implement logged in profile fetching
     public: false,
-  }) = _emptyEvent;
+  );
 
   //check if the whole object is no failure
   // TODO I would go with Either<ValueFailure<dynamic>, Unit> since Option indicates that a value is ready to use or absent. But in this case there is always some kind of value even if it's just a value that indicates a failure

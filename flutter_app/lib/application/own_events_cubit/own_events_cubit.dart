@@ -17,7 +17,7 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
   Future<void> _getOwnEvents() async {
     try {
       emit(OwnEventsState.loading());
-      final movies = await repository.getMovies();
+      final movies = await repository.getOwnEvents();
       emit(OwnEventsState.loaded());
     } catch (e) {
       emit(OwnEventsState.error());

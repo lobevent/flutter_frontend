@@ -13,26 +13,29 @@ part 'own_events_state.freezed.dart';
 @freezed
 abstract class OwnEventsState with _$OwnEventsState {
   const factory OwnEventsState({
-    @required OwnEventsList ownEventsList,
+    @required List<Event> ownEventsList,
   }) = _OwnEventsState;
 
 
   factory OwnEventsState.initial() => OwnEventsState(
-      OwnEventsList: ownEventsList,
+      ownEventsList: null,
   );
 
+
   factory OwnEventsState.loading() => OwnEventsState(
-    OwnEventsList: ownEventsList,
+    ownEventsList: null,
   );
 
   factory OwnEventsState.loaded() => OwnEventsState(
-    OwnEventsList: ownEventsList,
+    ownEventsList: null ,
   );
 
   factory OwnEventsState.error() => OwnEventsState(
-      OwnEventsList: ownEventsList,
+     ownEventsList: null ,
   );
 }
+
+
 
 
 

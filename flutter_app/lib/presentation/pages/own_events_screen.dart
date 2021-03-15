@@ -16,9 +16,15 @@ class OwnEventsPage extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 16),
         alignment: Alignment.center,
         child: BlocBuilder<OwnEventsCubit, OwnEventsState>(
+
           builder: (context, state) {
-            if (state is OwnEventsState().initial()) {
-              return buildInitialInput;
+             state.map((value) => buildInitialInput(),
+                initial:  buildInitialInput(),
+                loading: buildLoading(),
+                loaded: buildColumnWithData(event),
+                error: null)
+            if (state is OwnEventsState.initial()) {
+              return buildInitialInput();
             } else if (state is OwnEventsState.loading()) {
               return buildLoading();
             } else if (state is OwnEventsState.loaded()) {
@@ -47,7 +53,7 @@ class OwnEventsPage extends StatelessWidget {
     final OwnEventMap=OwnEventList.asMap();
     final children = <Widget>[];
     for (var i = 0; i < OwnEventList.length; i++) {
-      children.add(new Text(OwnEventList[i].name);
+      children.add(new Text(OwnEventList[i].name.getOrCrash()));
     }
     return new Column(
       children: children,

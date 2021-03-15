@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class FeedScreen extends StatelessWidget {
   @override
@@ -9,7 +11,10 @@ class FeedScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          ElevatedButton(onPressed:() {Navigator.pushNamed(context, '/addEvent');}, child: Text("Button1"))
+          ElevatedButton(onPressed:() {
+            ExtendedNavigator.of(context).popUntil(
+                (route) => route.settings.name == Routes.eventFormPage,
+          );}, child: Text("Button1"))
         ],
       )
     );

@@ -1,15 +1,4 @@
-import 'package:dartz/dartz.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_frontend/domain/auth/auth_failure.dart';
-import 'package:flutter_frontend/domain/auth/value_objects.dart';
-import 'package:flutter_frontend/domain/event/event.dart';
-import 'package:flutter_frontend/domain/event/event_failure.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-
-//part of 'event_form_cubit.dart';
-part 'event_form_state.freezed.dart';
-
+part of 'event_form_cubit.dart';
 
 
 @freezed
@@ -17,25 +6,22 @@ abstract class EventFormState with _$EventFormState {
 
   const factory EventFormState({
     @required Event event,
-    @required bool idEditing,
+    @required bool showErrorMessages,
+    @required bool isEditing,
+    @required bool isSaving,
+    @required bool isLoading,
+    @required Option<Either<EventFailure, Unit>> saveFailureOrSuccessOption
   }) = _EventFormState;
 
 
   factory EventFormState.initial() => EventFormState(
     event: Event.empty(),
-    idEditing: false,
+    isEditing: false,
+    isSaving: false,
+    isLoading: false,
+    showErrorMessages: false,
+    saveFailureOrSuccessOption: none()
   );
 
-  factory EventFormState.loading() => EventFormState(
-    event: Event.empty(),
-    idEditing: false,
-  );
-
-  factory EventFormState.loaded(Event event) => EventFormState(
-    event: event,
-    idEditing: true,
-  );
-
-  factory EventFormState.error(EventFailure eventFailure) = _LoadFailure;
 }
 

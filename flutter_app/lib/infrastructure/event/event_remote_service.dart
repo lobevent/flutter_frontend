@@ -31,7 +31,7 @@ class EventRemoteService extends RemoteService<EventDto>{
                 jwt:
                     null); // TODO this doesn't work on runtime -> will throw an error!
 
-  Future<EventDto> getSingle(int id) async {
+  Future<EventDto> getSingle(String id) async {
     final String uri = "$eventByIdPath$id";
     final Response response = await client.get(uri);
     final EventDto eventDto = await _decodeEvent(

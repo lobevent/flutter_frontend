@@ -18,7 +18,7 @@ abstract class PostDto extends BaseDto implements _$PostDto {
   const PostDto._();
 
   const factory PostDto({
-    @required int id,
+    @required String id,
     @required DateTime creationDate,
     @required String postContent,
     @required @ProfileConverter() ProfileDto owner,

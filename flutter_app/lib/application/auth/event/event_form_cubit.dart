@@ -1,26 +1,33 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter_frontend/application/auth/event/event_form_state.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/event/event_failure.dart';
 
 
+part 'event_form_cubit.freezed.dart';
+part 'event_form_state.dart';
 
-part 'event_form_state.dart.dart';
-part 'event_add_cubit.freezed.dart';
+class EventFormCubit extends Cubit<EventFormState> {
+  EventFormCubit({this.repository}) : super(EventFormState.initial()) {emit(EventFormState.initial());}
 
-class EventAddCubit extends Cubit<EventAddState> {
-  EventAddCubit({this.repository}) : super(EventAddState.initial()) {
-    _getTrendingMovies();
+  final EventRepository repository;
+
+  Future<Either<EventFailure, int>> saveEvent() async {
+    return await right(1);
+
   }
 
-  final MovieRepository repository;
 
-  Future<void> _getTrendingMovies() async {
-    try {
-      emit(EventAddState.loading());
-      final movies = await repository.getMovies();
-      emit(EventAddState.loaded());
-    } catch (e) {
-      emit(EventAddState.error());
-    }
-  }
+//  Future<void> _getTrendingMovies() async {
+//    try {
+//      emit(EventFormState.loading());
+//      final movies = await repository.getSingle(Id());
+//      emit(EventFormState.loaded(Event.empty()));
+//    } catch (e) {
+//      emit(EventFormState.error(EventFailure.unexpected()));
+//    }
+//  }
 }

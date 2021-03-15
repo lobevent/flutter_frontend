@@ -18,11 +18,11 @@ abstract class CommentDto extends BaseDto implements _$CommentDto {
   const CommentDto._();
 
   const factory CommentDto.parent({
-    @required int id,
+    @required String id,
   }) = _CommentParentDto;
 
   const factory CommentDto({
-    @required int id,
+    @required String id,
     @required String commentContent,
     @required DateTime creationDate,
     @required ProfileDto profile, //TODO: make it an integer
@@ -167,7 +167,7 @@ class ParentConverter
   //if not it reurns the unit type
   // TODO same problem as in ChildConverter
   Either<CommentDto, Unit> fromJson(Object json) {
-    if (json is int) {
+    if (json is String) {
       return left(CommentDto.parent(id: json));
     } else if (json == null) {
       return right(unit);

@@ -5,7 +5,8 @@ import 'package:flutter_frontend/domain/auth/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 
-part of 'event_add_cubit.dart';
+//part of 'event_add_cubit.dart';
+part 'event_add_state.freezed.dart';
 
 
 

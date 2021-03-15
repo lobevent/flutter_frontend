@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/domain/auth/auth_failure.dart';
 import 'package:flutter_frontend/domain/auth/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/event/event_failure.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 
@@ -16,45 +17,25 @@ abstract class EventFormState with _$EventFormState {
 
   const factory EventFormState({
     @required Event event,
-    @required EmailAddress emailAddress,
-    @required Password password,
-    @required bool showErrorMessages,
-    @required bool isSubmitting,
-    @required Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption,
+    @required bool idEditing,
   }) = _EventFormState;
 
 
   factory EventFormState.initial() => EventFormState(
     event: Event.empty(),
-    emailAddress: EmailAddress(''),
-    password: Password(''),
-    showErrorMessages: false,
-    isSubmitting: false,
-    authFailureOrSuccessOption: none(),
+    idEditing: false,
   );
 
   factory EventFormState.loading() => EventFormState(
-      emailAddress: EmailAddress(''),
-      password: Password(''),
-      showErrorMessages: false,
-      isSubmitting: false,
-      authFailureOrSuccessOption: none(),
+    event: Event.empty(),
+    idEditing: false,
   );
 
-  factory EventFormState.loaded() => EventFormState(
-    emailAddress: EmailAddress(''),
-    password: Password(''),
-    showErrorMessages: false,
-    isSubmitting: false,
-    authFailureOrSuccessOption: none(),
+  factory EventFormState.loaded(Event event) => EventFormState(
+    event: event,
+    idEditing: true,
   );
 
-  factory EventFormState.error() => EventFormState(
-    emailAddress: EmailAddress(''),
-    password: Password(''),
-    showErrorMessages: false,
-    isSubmitting: false,
-    authFailureOrSuccessOption: none(),
-  );
+  factory EventFormState.error(EventFailure eventFailure) = _LoadFailure;
 }
 

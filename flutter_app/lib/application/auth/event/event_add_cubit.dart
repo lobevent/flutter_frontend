@@ -8,7 +8,7 @@ part 'event_add_state.dart.dart';
 part 'event_add_cubit.freezed.dart';
 
 class EventAddCubit extends Cubit<EventAddState> {
-  EventAddCubit({this.repository}) : super(EventAddState.loading()) {
+  EventAddCubit({this.repository}) : super(EventAddState.initial()) {
     _getTrendingMovies();
   }
 

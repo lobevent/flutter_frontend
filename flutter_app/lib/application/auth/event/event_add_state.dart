@@ -44,5 +44,13 @@ abstract class EventAddState with _$EventAddState {
     isSubmitting: false,
     authFailureOrSuccessOption: none(),
   );
+
+  factory EventAddState.error() => EventAddState(
+    emailAddress: EmailAddress(''),
+    password: Password(''),
+    showErrorMessages: false,
+    isSubmitting: false,
+    authFailureOrSuccessOption: none(),
+  );
 }
 

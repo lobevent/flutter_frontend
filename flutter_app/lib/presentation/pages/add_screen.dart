@@ -7,7 +7,7 @@ class AddScreen extends StatelessWidget{
         appBar: AppBar(
           title: Text("Feed"),
         ),
-        body: Text("blabla")
+        body: Text("blabla"),
     );
   }
 }

@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter_frontend/application/auth/event/event_add_state.dart';
+import 'package:flutter_frontend/application/auth/event/event_form_state.dart';
 
 
 
-part 'event_add_state.dart.dart';
+part 'event_form_state.dart.dart';
 part 'event_add_cubit.freezed.dart';
 
 class EventAddCubit extends Cubit<EventAddState> {

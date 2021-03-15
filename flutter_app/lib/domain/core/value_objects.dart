@@ -39,17 +39,22 @@ abstract class ValueObject<T>{
   String toString() => 'Value($value)';
 }
 
-class Id extends ValueObject<int> {
+class Id extends ValueObject<String> {
   @override
-  final Either<ValueFailure<int>, int> value;
+  final Either<ValueFailure<String>, String> value;
 
-  factory Id.fromUnique(int uniqueId) {
+  factory Id.fromUnique(String uniqueId) {
     //assert(uniqueId != null);
     return Id._(
       right(uniqueId),
     );
   }
 
+  factory Id() {
+    return Id._(
+      right(Uuid().v4()),
+    );
+  }
   const Id._(this.value);
 }
 

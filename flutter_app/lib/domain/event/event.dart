@@ -30,6 +30,16 @@ abstract class Event implements _$Event {
     @required bool public,
   }) = _EventWithoutId;
 
+  factory Event.empty({
+    id: Id(),
+    name: EventName(''),
+    date: DateTime(),
+    description: EventDescription(),
+    creationDate: DateTime(),
+    owner: Profile(),
+    public: false,
+  }) = _emptyEvent;
+
   //check if the whole object is no failure
   // TODO I would go with Either<ValueFailure<dynamic>, Unit> since Option indicates that a value is ready to use or absent. But in this case there is always some kind of value even if it's just a value that indicates a failure
   Option<ValueFailure<dynamic>> get failureOption {

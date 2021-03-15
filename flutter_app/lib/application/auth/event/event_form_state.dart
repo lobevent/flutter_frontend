@@ -2,26 +2,30 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/domain/auth/auth_failure.dart';
 import 'package:flutter_frontend/domain/auth/value_objects.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 
-//part of 'event_add_cubit.dart';
-part 'event_add_state.freezed.dart';
+//part of 'event_form_cubit.dart';
+part 'event_form_state.freezed.dart';
 
 
 
 @freezed
-abstract class EventAddState with _$EventAddState {
-  const factory EventAddState({
+abstract class EventFormState with _$EventFormState {
+
+  const factory EventFormState({
+    @required Event event,
     @required EmailAddress emailAddress,
     @required Password password,
     @required bool showErrorMessages,
     @required bool isSubmitting,
     @required Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption,
-  }) = _SignInFormState;
+  }) = _EventFormState;
 
 
-  factory EventAddState.initial() => EventAddState(
+  factory EventFormState.initial() => EventFormState(
+    event: Event.empty(),
     emailAddress: EmailAddress(''),
     password: Password(''),
     showErrorMessages: false,
@@ -29,7 +33,7 @@ abstract class EventAddState with _$EventAddState {
     authFailureOrSuccessOption: none(),
   );
 
-  factory EventAddState.loading() => EventAddState(
+  factory EventFormState.loading() => EventFormState(
       emailAddress: EmailAddress(''),
       password: Password(''),
       showErrorMessages: false,
@@ -37,7 +41,7 @@ abstract class EventAddState with _$EventAddState {
       authFailureOrSuccessOption: none(),
   );
 
-  factory EventAddState.loaded() => EventAddState(
+  factory EventFormState.loaded() => EventFormState(
     emailAddress: EmailAddress(''),
     password: Password(''),
     showErrorMessages: false,
@@ -45,7 +49,7 @@ abstract class EventAddState with _$EventAddState {
     authFailureOrSuccessOption: none(),
   );
 
-  factory EventAddState.error() => EventAddState(
+  factory EventFormState.error() => EventFormState(
     emailAddress: EmailAddress(''),
     password: Password(''),
     showErrorMessages: false,

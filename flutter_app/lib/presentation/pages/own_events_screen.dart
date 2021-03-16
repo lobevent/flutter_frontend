@@ -21,7 +21,7 @@ class OwnEventsPage extends StatelessWidget {
               return state.map((value) => buildInitialInput(),
                   initial: (_) => buildInitialInput(),
                   loading: (_) => buildLoading(),
-                  loaded: (List<Event> ownEventsList) => buildColumnWithData(List<Event> ownEventsList),
+                  loaded: (value) => buildColumnWithData(value.events),
                   error: null);
             }
         ),

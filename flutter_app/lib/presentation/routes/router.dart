@@ -5,8 +5,8 @@ import 'package:flutter_frontend/presentation/pages/feed.dart';
 @MaterialAutoRouter(
   generateNavigationHelperExtension: true,
   routes: <AutoRoute>[
-    MaterialRoute(page: FeedScreen, initial: true),
-    MaterialRoute(page: EventFormPage)
+    AutoRoute(page: FeedScreen, initial: true),
+    AutoRoute(page: EventFormPage)
   ],
 )
 class $Router {}

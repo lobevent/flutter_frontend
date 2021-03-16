@@ -12,8 +12,9 @@ class FeedScreen extends StatelessWidget {
       body: Column(
         children: [
           ElevatedButton(onPressed:() {
-            ExtendedNavigator.of(context).popUntil(
-                (route) => route.settings.name == Routes.eventFormPage,
+            ExtendedNavigator.root.push(Routes.eventFormPage
+            // ExtendedNavigator.of(context).popUntil(
+            //     (route) => route.settings.name == Routes.eventFormPage,
           );}, child: Text("Button1"))
         ],
       )

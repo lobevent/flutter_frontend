@@ -17,7 +17,9 @@ class EventFormPage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<EventFormCubit, EventFormState>(
+    return
+
+      BlocConsumer<EventFormCubit, EventFormState>(
         listenWhen: (p, c) =>
         p.saveFailureOrSuccessOption != c.saveFailureOrSuccessOption,
         listener: (context, state) {
@@ -128,19 +130,19 @@ class NoteFormPageScaffold extends StatelessWidget {
     );
   }
 
-
-//  Widget build(BuildContext context) {
-//    return Scaffold(
-//        appBar: AppBar(
-//          title: Text("Add Event"),
-//        ),
-//        body: Form(
-//            child: Column(
-//              children: [
-//
-//              ],
-//          ),
-//        )
-//    );
-//  }
+  // @override
+  //  Widget build(BuildContext context) {
+  //    return Scaffold(
+  //        appBar: AppBar(
+  //          title: Text("Add Event"),
+  //        ),
+  //        body: Form(
+  //            child: Column(
+  //              children: [
+  //
+  //              ],
+  //          ),
+  //        )
+  //    );
+  //  }
 }

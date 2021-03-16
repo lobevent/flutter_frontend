@@ -11,7 +11,7 @@ abstract class EventFormState with _$EventFormState {
     @required bool isSaving,
     @required bool isLoading,
     @required Option<Either<EventFailure, Unit>> saveFailureOrSuccessOption
-  }) = _EventFormState;
+  }) = _EventFormStateMain;
 
 
   factory EventFormState.initial() => EventFormState(

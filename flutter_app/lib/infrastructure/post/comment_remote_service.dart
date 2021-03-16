@@ -64,7 +64,7 @@ class CommentRemoteService extends RemoteService<CommentDto>{
         {"parentCommentId" : parentCommentId, "amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}));
   }
 
-  Future<CommentDto> getSingleComment(int id) async {
+  Future<CommentDto> getSingleComment(String id) async {
     // String uri = _postIdPath + id.toString(); // TODO use the dart best practice
     final String uri = "$commentIdGet$id";
     Response response = await client.get(uri);

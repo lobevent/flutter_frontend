@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/infrastructure/event/event_local_service.dart';
+import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartz/dartz.dart';
@@ -11,9 +13,11 @@ part 'event_form_cubit.freezed.dart';
 part 'event_form_state.dart';
 
 class EventFormCubit extends Cubit<EventFormState> {
-  EventFormCubit({this.repository}) : super(EventFormState.initial()) {emit(EventFormState.initial());}
+  EventFormCubit() : super(EventFormState.initial()) {
+    repository = EventRepository(EventRemoteService(), EventLocalService());
+    emit(EventFormState.initial());}
 
-  final EventRepository repository;
+  EventRepository repository;
 
   Future<Either<EventFailure, int>> saveEvent() async {
     return await right(1);

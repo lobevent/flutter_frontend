@@ -64,7 +64,7 @@ class PostRemoteService extends RemoteService<PostDto>{
             {"profileId": profileId, "amount" : amount.toString(), "lastPostTime" : lastPostTime.toString()}));
   }
 
-  Future<PostDto> getSingle(int id) async {
+  Future<PostDto> getSingle(String id) async {
     // String uri = _postIdPath + id.toString(); // TODO use the dart best practice
     final String uri = "$postIdPath$id";
     final Response response = await client.get(uri);

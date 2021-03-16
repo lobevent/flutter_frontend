@@ -18,8 +18,9 @@ class EventFormPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return
-
-      BlocConsumer<EventFormCubit, EventFormState>(
+    BlocProvider(create:
+    (context) => EventFormCubit(),
+    child: BlocConsumer<EventFormCubit, EventFormState>(
         listenWhen: (p, c) =>
         p.saveFailureOrSuccessOption != c.saveFailureOrSuccessOption,
         listener: (context, state) {
@@ -60,6 +61,7 @@ class EventFormPage extends StatelessWidget{
             ],
           );
         },
+    )
     );
   }
 }

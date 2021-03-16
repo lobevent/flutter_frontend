@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/own_events_cubit/own_events_cubit.dart';
 import 'package:flutter_frontend/application/own_events_cubit/own_events_state.dart' as oes;
+import 'package:flutter_frontend/application/own_events_cubit/own_events_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 
 
@@ -21,7 +21,7 @@ class OwnEventsPage extends StatelessWidget {
               return state.map((value) => buildInitialInput(),
                   initial: (_) => buildInitialInput(),
                   loading: (_) => buildLoading(),
-                  loaded: (List<Event> event) => buildColumnWithData(event),
+                  loaded: (List<Event> ownEventsList) => buildColumnWithData(List<Event> ownEventsList),
                   error: null);
             }
         ),
@@ -42,14 +42,15 @@ class OwnEventsPage extends StatelessWidget {
     );
   }
 
-  Column buildColumnWithData(List<Event> OwnEventList) {
-    final OwnEventMap = OwnEventList.asMap();
+  Widget buildColumnWithData(List<Event> OwnEventList) {
     final children = <Widget>[];
     for (var i = 0; i < OwnEventList.length; i++) {
       children.add(new Text(OwnEventList[i].name.getOrCrash()));
     }
-    return new Column(
+    return new Center(
+      child: new Column(
       children: children,
+    ),
     );
   }
 }

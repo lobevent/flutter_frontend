@@ -9,6 +9,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../../domain/event/event.dart';
 import '../pages/event_form.dart';
 import '../pages/feed.dart';
 
@@ -38,8 +39,12 @@ class Router extends RouterBase {
       );
     },
     EventFormPage: (data) {
+      final args = data.getArgs<EventFormPageArguments>(nullOk: false);
       return MaterialPageRoute<dynamic>(
-        builder: (context) => EventFormPage(),
+        builder: (context) => EventFormPage(
+          key: args.key,
+          editedEvent: args.editedEvent,
+        ),
         settings: data,
       );
     },
@@ -53,5 +58,23 @@ class Router extends RouterBase {
 extension RouterExtendedNavigatorStateX on ExtendedNavigatorState {
   Future<dynamic> pushFeedScreen() => push<dynamic>(Routes.feedScreen);
 
-  Future<dynamic> pushEventFormPage() => push<dynamic>(Routes.eventFormPage);
+  Future<dynamic> pushEventFormPage({
+    Key key,
+    @required Event editedEvent,
+  }) =>
+      push<dynamic>(
+        Routes.eventFormPage,
+        arguments: EventFormPageArguments(key: key, editedEvent: editedEvent),
+      );
+}
+
+/// ************************************************************************
+/// Arguments holder classes
+/// *************************************************************************
+
+/// EventFormPage arguments holder class
+class EventFormPageArguments {
+  final Key key;
+  final Event editedEvent;
+  EventFormPageArguments({this.key, @required this.editedEvent});
 }

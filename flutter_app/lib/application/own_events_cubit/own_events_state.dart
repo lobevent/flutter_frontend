@@ -23,15 +23,10 @@ abstract class OwnEventsState with _$OwnEventsState {
 
   factory OwnEventsState.loading() = _LoadInProgress;
 
-  factory OwnEventsState.loaded(List<Event> event) => OwnEventsState(
-    ownEventsList: event ,
-  );
+  factory OwnEventsState.loaded({@required List<Event> event}) = _Loaded;
 
   factory OwnEventsState.error(EventFailure eventFailure) = _LoadFailure;
 }
-
-
-
 
 
 

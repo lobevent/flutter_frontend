@@ -129,7 +129,23 @@ class EventFormPageScaffold extends StatelessWidget {
           )
         ],
       ),
-
+    body: BlocBuilder<NoteFormBloc, NoteFormState>(
+      buildWhen: (p, c) => p.showErrorMessages != c.showErrorMessages,
+    builder: (context, state) {
+    return ChangeNotifierProvider(
+    create: (_) => FormTodos(),
+    child: Form(
+    autovalidate: state.showErrorMessages,
+    child: SingleChildScrollView(
+    child: Column(
+    children: [
+    const BodyField(),
+    const ColorField(),
+    const TodoList(),
+    const AddTodoTile(),
+    ],
+    ),
+    ),
     );
   }
 

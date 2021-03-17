@@ -27,7 +27,7 @@ class EventDescription extends ValueObject<String> {
   factory EventDescription(String input) {
     assert(input != null);
     {
-      return EventDescription._(validateLength(input, maxLength: maxLength));
+      return EventDescription._(validateLength(input, maxLength: maxLength).flatMap(validateStringNotEmpty));
     }
   }
   const EventDescription._(this.value);

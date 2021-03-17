@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/event/event_local_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
@@ -24,7 +25,11 @@ class EventFormCubit extends Cubit<EventFormState> {
     Either<EventFailure, int> ret1 =  await right(1);
     emit(state.copyWith(isSaving: false));
     return ret1;
+  }
 
+
+  void changeBody(String body) async {
+    emit(state.copyWith(event: state.event.copyWith(description: EventDescription(body))));
   }
 
 

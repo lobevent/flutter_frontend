@@ -23,6 +23,9 @@ abstract class ValueFailure<T> with _$ValueFailure<T> {
     @required T failedValue,
     @required int minLength,
   }) = LengthTooShort<T>;
+  const factory ValueFailure.empty({
+    @required T failedValue,
+  }) = Empty<T>;
   const factory ValueFailure.invalidDate({
     @required T failedValue,
   }) = InvalidDate<T>;

@@ -82,13 +82,16 @@ class OwnEventsScreen extends StatelessWidget {
       child: BlocConsumer<OwnEventsCubit,OwnEventsState>(
         listener: (context, state){
           state.maybeMap((error) => null,
+              loading: (_) =>const Center(child: CircularProgressIndicator(),),
               orElse: null);
 
         },
         builder: (context, state){
-          return state.map((
-              _) => Center(),
-              initial: (_)=> const Center(child: Text('Rload')),
+          return state.map(
+                  (_) => Center(),
+              initial: (_){
+                    context.bloc<OwnEventsCubit>().getOwnEvents();
+                    return Center(child: Text('Rload')); },
               loading: (_)=> const Center(child: CircularProgressIndicator(),),
               loaded: (state){
             return ListView.builder(itemBuilder: (context, index) {

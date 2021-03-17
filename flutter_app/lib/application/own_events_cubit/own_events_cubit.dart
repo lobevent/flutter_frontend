@@ -23,13 +23,16 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
   EventRepository repository;
 
 
-  Future<void> _getOwnEvents() async {
+  Future<void> getOwnEvents() async {
     Option<Either<EventFailure, Unit>> saveFailureOrSuccessOption;
     List<Event> ownEventsList = null;
     try {
       emit(OwnEventsState.loading());
-      final ownEventsList = await repository.getList(Operation.owned, DateTime.now(), 5);
-      emit(OwnEventsState.loaded(events: ownEventsList.fold((l) => throw EventFailure, (r) => r)));
+      final Either<List<Event>, EventFailure> ownEventsList = await Future.delayed(Duration(seconds: 5), () {
+        return left([Event(id: null, name: null, date: null, description: null, creationDate: null, owner: null, public: true)]);
+      });
+       //await repository.getList(Operation.owned, DateTime.now(), 5);
+      emit(OwnEventsState.loaded(events: ownEventsList.fold((l) => throw EventFailure, (r) => null)));
     } catch (e) {
       emit(OwnEventsState.error(saveFailureOrSuccessOption: saveFailureOrSuccessOption));
     }

@@ -2,7 +2,7 @@ import 'package:flushbar/flushbar_helper.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/auth/event/event_form_cubit.dart';
+import 'package:flutter_frontend/application/event/EventForm/event_form_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 

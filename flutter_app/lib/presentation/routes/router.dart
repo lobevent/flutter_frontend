@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route_annotations.dart';
-import 'file:///D:/Programming/Flutter/flutter_frontend/flutter_app/lib/presentation/pages/Event/Event_Form/event_form.dart';
+import 'package:flutter_frontend/presentation/pages/Event/Event_Form/event_form.dart';
 import 'package:flutter_frontend/presentation/pages/feed.dart';
 
 @MaterialAutoRouter(

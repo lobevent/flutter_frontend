@@ -9,11 +9,13 @@ import 'package:flutter_frontend/domain/core/constants.dart';
 class EventName extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
+  static int maxLength = Constants.maxNameLength;
 
   factory EventName(String input) {
+
     assert(input != null);
     {
-      return EventName._(validateSingleLine(input));
+      return EventName._(validateLength(input, maxLength: maxLength).flatMap(validateStringNotEmpty).flatMap(validateSingleLine));
     }
   }
   const EventName._(this.value);

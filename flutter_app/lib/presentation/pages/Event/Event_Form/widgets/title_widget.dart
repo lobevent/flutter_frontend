@@ -5,18 +5,18 @@ import 'package:flutter_frontend/application/event/EventForm/event_form_cubit.da
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 
 
-class DescriptionField extends StatefulWidget{
-  const DescriptionField({
+class EventNameField extends StatefulWidget{
+  const EventNameField({
     Key key,
   }) : super(key: key);
 
 
   @override
-  _DescriptionFieldState createState() => _DescriptionFieldState();
+  _EventNameFieldState createState() => _EventNameFieldState();
 
 }
 
-class _DescriptionFieldState extends State<DescriptionField> {
+class _EventNameFieldState extends State<EventNameField> {
 
 
   @override
@@ -27,23 +27,22 @@ class _DescriptionFieldState extends State<DescriptionField> {
     return BlocListener<EventFormCubit, EventFormState>(
       listenWhen: (p, c) => p.isEditing != c.isEditing,
       listener: (context, state) {
-        textEditingController.text = state.event.description.getOrCrash();
+        textEditingController.text = state.event.name.getOrCrash();
       },
       child: Padding(
           padding: const EdgeInsets.all(10),
           child: TextFormField(
-           controller: textEditingController,
+            controller: textEditingController,
             decoration: const InputDecoration(
-              labelText: 'Event description',
+              labelText: 'Event Name',
               //counterText: '',
             ),
-            maxLength: EventDescription.maxLength,
-            maxLines: null,
-            minLines: 5,
+            maxLength: EventName.maxLength,
+            maxLines: 1,
             onChanged: (value) => {
-             context.bloc<EventFormCubit>()..changeBody(value)}
+              context.bloc<EventFormCubit>()..changeTitle(value)}
             ,
-            validator: (_) => context.bloc<EventFormCubit>().state.event.description.value
+            validator: (_) => context.bloc<EventFormCubit>().state.event.name.value
                 .fold(
                   (f) => f.maybeMap(
                 empty: (f) => 'Cannot be empty',

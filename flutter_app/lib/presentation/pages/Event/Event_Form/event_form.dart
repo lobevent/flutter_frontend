@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/event/EventForm/event_form_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/pages/Event/Event_Form/widgets/description_body_widged.dart';
+import 'package:flutter_frontend/presentation/pages/Event/Event_Form/widgets/title_widget.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class EventFormPage extends StatelessWidget {
@@ -135,6 +136,7 @@ class EventFormPageScaffold extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    const EventNameField(),
                     const DescriptionField(),
                   ],
                 ),

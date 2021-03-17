@@ -12,13 +12,16 @@ import 'package:flutter/material.dart';
 import '../../domain/event/event.dart';
 import '../pages/Event/Event_Form/event_form.dart';
 import '../pages/feed.dart';
+import '../pages/own_events_screen.dart';
 
 class Routes {
   static const String feedScreen = '/';
   static const String eventFormPage = '/event-form-page';
+  static const String ownEventsScreen = '/own-events-screen';
   static const all = <String>{
     feedScreen,
     eventFormPage,
+    ownEventsScreen,
   };
 }
 
@@ -28,6 +31,7 @@ class Router extends RouterBase {
   final _routes = <RouteDef>[
     RouteDef(Routes.feedScreen, page: FeedScreen),
     RouteDef(Routes.eventFormPage, page: EventFormPage),
+    RouteDef(Routes.ownEventsScreen, page: OwnEventsScreen),
   ];
   @override
   Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
@@ -45,6 +49,12 @@ class Router extends RouterBase {
           key: args.key,
           editedEvent: args.editedEvent,
         ),
+        settings: data,
+      );
+    },
+    OwnEventsScreen: (data) {
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => const OwnEventsScreen(),
         settings: data,
       );
     },
@@ -66,6 +76,9 @@ extension RouterExtendedNavigatorStateX on ExtendedNavigatorState {
         Routes.eventFormPage,
         arguments: EventFormPageArguments(key: key, editedEvent: editedEvent),
       );
+
+  Future<dynamic> pushOwnEventsScreen() =>
+      push<dynamic>(Routes.ownEventsScreen);
 }
 
 /// ************************************************************************

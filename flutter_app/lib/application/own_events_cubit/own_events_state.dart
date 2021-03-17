@@ -1,13 +1,4 @@
-import 'package:dartz/dartz.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_frontend/domain/auth/auth_failure.dart';
-import 'package:flutter_frontend/domain/auth/value_objects.dart';
-import 'package:flutter_frontend/domain/event/event_failure.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter_frontend/domain/event/event.dart';
-
-
-part 'own_events_state.freezed.dart';
+part of 'own_events_cubit.dart';
 
 
 
@@ -15,6 +6,9 @@ part 'own_events_state.freezed.dart';
 abstract class OwnEventsState with _$OwnEventsState {
   const factory OwnEventsState({
     @required List<Event> ownEventsList,
+    @required bool showErrorMessages,
+    @required bool isLoading,
+    @required Option<Either<EventFailure, Unit>> saveFailureOrSuccessOption
   }) = _OwnEventsState;
 
 
@@ -25,7 +19,7 @@ abstract class OwnEventsState with _$OwnEventsState {
 
   factory OwnEventsState.loaded({@required List<Event> events}) = _Loaded;
 
-  factory OwnEventsState.error(EventFailure eventFailure) = _LoadFailure;
+  factory OwnEventsState.error({@required  Option<Either<EventFailure, Unit>> saveFailureOrSuccessOption}) = _LoadFailure;
 }
 
 

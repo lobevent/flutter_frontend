@@ -56,7 +56,7 @@ class EventFormPage extends StatelessWidget{
         builder: (context, state) {
           return Stack(
             children: <Widget>[
-              const NoteFormPageScaffold(),
+              const EventFormPageScaffold(),
               SavingInProgressOverlay(isSaving: state.isSaving)
             ],
           );
@@ -105,8 +105,8 @@ class SavingInProgressOverlay extends StatelessWidget {
   }
 }
 
-class NoteFormPageScaffold extends StatelessWidget {
-  const NoteFormPageScaffold({
+class EventFormPageScaffold extends StatelessWidget {
+  const EventFormPageScaffold({
     Key key,
   }) : super(key: key);
 
@@ -129,6 +129,7 @@ class NoteFormPageScaffold extends StatelessWidget {
           )
         ],
       ),
+
     );
   }
 

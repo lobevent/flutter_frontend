@@ -18,8 +18,10 @@ class DescriptionField extends StatefulWidget{
 
 class _DescriptionFieldState extends State<DescriptionField> {
 
+
   @override
   Widget build(BuildContext context) {
+    int lenght = EventDescription.maxLength;
     //final textEditingController = useTextEditingController();
     final textEditingController = TextEditingController();
 
@@ -34,14 +36,15 @@ class _DescriptionFieldState extends State<DescriptionField> {
            controller: textEditingController,
             decoration: const InputDecoration(
               labelText: 'Note',
-              counterText: '',
+              //counterText: '',
             ),
-            maxLength: EventDescription.maxLength,
+            maxLength: lenght,
             maxLines: null,
             minLines: 5,
-            onChanged: (value) => context
-                .watch<EventFormCubit>().changeBody(value),
-            validator: (_) => context.read<EventFormCubit>().state.event.description.value
+            onChanged: (value) => {
+             context.bloc<EventFormCubit>()..changeBody(value)}
+            ,
+            validator: (_) => context.bloc<EventFormCubit>().state.event.description.value
                 .fold(
                   (f) => f.maybeMap(
                 empty: (f) => 'Cannot be empty',

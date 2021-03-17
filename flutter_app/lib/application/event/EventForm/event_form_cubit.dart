@@ -20,15 +20,15 @@ class EventFormCubit extends Cubit<EventFormState> {
 
   EventRepository repository;
 
-  Future<Either<EventFailure, int>> saveEvent() async {
+  Future<Either<EventFailure, Unit>> saveEvent() async {
     emit(state.copyWith(isSaving: true));
-    Either<EventFailure, int> ret1 =  await right(1);
-    emit(state.copyWith(isSaving: false));
+    Either<EventFailure, Unit> ret1 =  await right(unit);
+    emit(state.copyWith(isSaving: false, saveFailureOrSuccessOption: optionOf(right(unit))));
     return ret1;
   }
 
 
-  void changeBody(String body) async {
+  void changeBody(String body) {
     emit(state.copyWith(event: state.event.copyWith(description: EventDescription(body))));
   }
 

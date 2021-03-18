@@ -24,56 +24,23 @@ class OwnEventsScreenScaffold extends StatelessWidget {
         alignment: Alignment.center,
         child: OwnEventsScreen(),
 
-        /*child: BlocBuilder<OwnEventsCubit, OwnEventsState>(
-
-            builder: (context, state) {
-              return state.map((value) => buildInitialInput(),
-                  initial: (_) => buildInitialInput(),
-                  loading: (_) => buildLoading(),
-                  loaded: (value) => null,
-                  //buildColumnWithData(value.events),
-                  error: null);
-            }
-        ),
-
-         */
       ),);
   }
 }
 
-/*
-// more code here...
-  Widget buildInitialInput() {
-    return Center(
-      child: Text('Nothing here'),
-    );
-  }
 
-  Widget buildLoading() {
-    return Center(
-      child: CircularProgressIndicator(),
-    );
-  }
-
-  Widget buildColumnWithData(List<Event> OwnEventList) {
-    final children = <Widget>[];
-    for (var i = 0; i < OwnEventList.length; i++) {
-      children.add(new Text(OwnEventList[i].name.getOrCrash()));
-    }
-    return new Center(
-      child: new Column(
-      children: children,
-    ),
-    );
-  }
+class OwnEventsScreen extends StatefulWidget{
+  const OwnEventsScreen({
+      Key key
+    }) : super(key: key);
+  @override
+  _OwnEventsScreenState createState() => _OwnEventsScreenState();
 }
 
- */
-class OwnEventsScreen extends StatelessWidget {
 
-  const OwnEventsScreen({
-    Key key
-  }) : super(key: key);
+class _OwnEventsScreenState extends State<OwnEventsScreen> {
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -81,17 +48,18 @@ class OwnEventsScreen extends StatelessWidget {
       create: (context) =>OwnEventsCubit(),
       child: BlocConsumer<OwnEventsCubit,OwnEventsState>(
         listener: (context, state){
-          state.maybeMap((error) => null,
-              loading: (_) =>const Center(child: CircularProgressIndicator(),),
-              orElse: null);
-
+          print("asdasdasdasdasd");
+          state.maybeMap((_) => null,
+              error: (value) => FlushbarHelper.createError(message: value.error),
+              initial: (_) => context.bloc<OwnEventsCubit>().getOwnEvents() ,
+              orElse:  null );
         },
         builder: (context, state){
           return state.map(
                   (_) => Center(),
               initial: (_){
-                    context.bloc<OwnEventsCubit>().getOwnEvents();
-                    return Center(child: Text('Rload')); },
+                    return const Center(child: Text("Rload"));
+              },
               loading: (_)=> const Center(child: CircularProgressIndicator(),),
               loaded: (state){
             return ListView.builder(itemBuilder: (context, index) {

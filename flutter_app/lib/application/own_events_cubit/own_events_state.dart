@@ -11,7 +11,7 @@ abstract class OwnEventsState with _$OwnEventsState {
   }) = _OwnEventsState;
 
 
-  factory OwnEventsState.initial() = _Initial;
+  factory OwnEventsState.initial()  = _Initial;
 
   factory OwnEventsState.loading() = _LoadInProgress;
 

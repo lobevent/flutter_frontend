@@ -19,6 +19,7 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
   OwnEventsCubit() : super(OwnEventsState.initial()) {
     var repository = EventRepository(EventRemoteService(), EventLocalService());
     emit(OwnEventsState.initial());
+    getOwnEvents();
   }
   EventRepository repository;
 
@@ -27,11 +28,11 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
     List<Event> ownEventsList = null;
     try {
       emit(OwnEventsState.loading());
-      final Either<List<Event>, EventFailure> ownEventsList = await Future.delayed(Duration(seconds: 5), () {
-        return left([Event(id: null, name: null, date: null, description: null, creationDate: null, owner: null, public: true)]);
-      });
-       //await repository.getList(Operation.owned, DateTime.now(), 5);
-      emit(OwnEventsState.loaded(events: ownEventsList.fold((l) => throw EventFailure, (r) => null)));
+      // final Either<List<Event>, EventFailure> ownEventsList = await Future.delayed(Duration(seconds: 5), () {
+      //   return left([Event(id: null, name: null, date: null, description: null, creationDate: null, owner: null, public: true)]);
+      // });
+      //  //await repository.getList(Operation.owned, DateTime.now(), 5);
+      // emit(OwnEventsState.loaded(events: ownEventsList.fold((l) => throw EventFailure, (r) => null)));
     } catch (e) {
       emit(OwnEventsState.error(error: e.toString()));
     }

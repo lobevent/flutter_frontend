@@ -52,7 +52,7 @@ class _OwnEventsScreenState extends State<OwnEventsScreen> {
           state.maybeMap((_) => null,
               error: (value) => FlushbarHelper.createError(message: value.error),
               initial: (_) => context.bloc<OwnEventsCubit>().getOwnEvents() ,
-              orElse:  null );
+              orElse:  () => print ("asd"));
         },
         builder: (context, state){
           return state.map(
@@ -68,13 +68,13 @@ class _OwnEventsScreenState extends State<OwnEventsScreen> {
                 return Container(color: Colors.red, width: 100, height: 100);
               }
               else
-                return Container(color: Colors.green, width: 100, height: 100);
+                return Container(color: Colors.green, width: 100, height: 100, child: Text(state.events.first.name.getOrCrash()),);
             },
             itemCount: state.events.length
             );
 
               },
-              error: (value)=> const Center());
+              error: (value)=> Center(child: Text(value.error)));
           return Stack(
             children: <Widget>[
               const OwnEventsScreenScaffold(),

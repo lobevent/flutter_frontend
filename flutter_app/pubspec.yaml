@@ -13,16 +13,16 @@ dependencies:
   flushbar: ^1.10.0
 
   # annotations for json code generation
-  json_annotation: ^3.1.0
+  json_annotation: ^4.0.0
 
   # annotations for freezed data and union classes code generation
-  freezed_annotation: ^0.12.0
+  freezed_annotation: ^0.14.1
 
   # dartz for a ton of useful utils (like Either type and so on)
   dartz: ^0.9.2
 
   # standard dart http library
-  http: ^0.12.2
+  http: ^0.13.0
 
   # bloc library in general (Cubit and Bloc)
   bloc: ^6.0.3
@@ -40,26 +40,28 @@ dependencies:
   sign_in_with_apple: ^2.5.4
 
   # we need to check that the iOS version is at least 13 since 12 won't support apple sign in
-  device_info: ^1.0.0
+  device_info: ^2.0.0
 
   ###
   # start firebase related stuff
   ###
   # not using firebase core since every firebase plugin imports firebase core by itself
   # firebase auth for the authentication with firebase
-  firebase_auth: ^0.18.3
+  firebase_auth: ^1.0.1
   ###
   # end firebase related stuff
   ###
+  
+  # moor really got some dependency problems rn
   # the actual implementation of moor
-  moor: ^3.4.0
+  #moor: ^3.0.0
 
   # some additional flutter stuff for moor 
-  moor_flutter: ^3.1.0
+  #moor_flutter: ^3.1.0
 
   # start dependencies for moor
-  sqlite3: ^0.1.7 # Ships the latest sqlite3 version with your Android or iOS app.
-  path_provider: ^1.6.24 #Used to find a suitable location to store the database.
+  sqlite3: ^1.0.0 # Ships the latest sqlite3 version with your Android or iOS app.
+  path_provider: ^2.0.1 #Used to find a suitable location to store the database.
   path: ^1.7.0 # path manipulation library for all platforms
 
   #string interpolation
@@ -76,15 +78,16 @@ dev_dependencies:
   build_runner: ^1.10.3
 
   # data and union classes generator
-  freezed: ^0.12.2
+  freezed: ^0.14.1
 
   # json serializable code generation
-  json_serializable: ^3.5.0
+  json_serializable: ^4.0.0
 
-  #moor generater
-  moor_generator: ^3.4.0
+  # moor generater
+  # currently got some problems with other dependencies
+  #moor_generator: ^3.4.0
 
-  #mock libary to mock dependencies
+  # mock libary to mock dependencies
   mockito: ^4.1.3
 
 

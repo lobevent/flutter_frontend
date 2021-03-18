@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/auth/user.dart';
+import 'package:flutter_frontend/domain/auth/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/event_failure.dart';
 import 'package:flutter_frontend/domain/event/i_event_repository.dart';
+import 'package:flutter_frontend/infrastructure/auth/user_dto.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
@@ -19,13 +22,13 @@ import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 class MockEvent extends Mock implements Event, http.Client {}
 
 main() {
-  const int testId = 2;
+  const String testId = "abc";
 
   EventDto origTestDtoWithoutId = EventDto.withoutId(
       name: "EVENT1",
       public: true,
       description: "kleines event",
-      owner: ProfileDto(id: 0, name: "manfred"),
+      owner: ProfileDto(id: "abc", name: "manfred"),
       date: DateTime.now(),
       creationDate: DateTime.now());
 
@@ -34,29 +37,29 @@ main() {
       name: "EVENT2",
       public: true,
       description: "toni stinkt",
-      owner: ProfileDto(id: 0, name: "manfred"),
+      owner: ProfileDto(id: "abc", name: "manfred"),
       date: DateTime.now(),
       creationDate: DateTime.now());
 
   EventDto origTestDto2 = EventDto(
-      id: 4,
+      id: "4",
       name: "EVENT3",
       public: true,
       description: "tom stinkt",
-      owner: ProfileDto(id: 0, name: "manfred"),
+      owner: ProfileDto(id: "abc", name: "manfred"),
       date: DateTime.now(),
       creationDate: DateTime.now());
 
   EventDto origTestDto3 = EventDto(
-      id: 5,
+      id: "5",
       name: "EVENT5",
       public: false,
       description: "tom stinkt sehr",
-      owner: ProfileDto(id: 0, name: "manfred"),
+      owner: ProfileDto(id: "abc", name: "manfred"),
       date: DateTime.now(),
       creationDate: DateTime.now());
 
-  const ProfileDto profileDto = ProfileDto(id: 0, name: "manfred");
+  const ProfileDto profileDto = ProfileDto(id: "abc", name: "manfred");
 
   List<EventDto> eventList = [
     TestDtoWithId,
@@ -95,6 +98,18 @@ main() {
     500: const EventFailure.internalServer()
   };
 
+  test("User test", (){
+    print(jsonEncode((UserDto(id: "asasd", username: "asdad")).toJson()));
+  });
+
+
+  test("Event from Jeson", (){
+    final Map<String, dynamic> test = jsonDecode('{"id":"fe093476-fa55-4ca9-b201-1fd894947abb","name":"dsfsdf","public":false,"description":"sdfsdf","date":"2021-03-17T22:38:08.078172","creationDate":"2021-03-17T22:38:08.078184","owner":{"id":"57bec063-7193-4ac9-924e-797fdee634c9","name":"ssss"}}') as Map<String, dynamic>;
+    EventDto event = EventDto.fromJson(test);
+    print(event.runtimeType);
+
+  });
+  
   //getList operations with corresponding api paths
   final listOperations = {
     Operation.attending:
@@ -127,7 +142,7 @@ main() {
               http.Response(jsonEncode(origTestDtoWithoutId.toJson()), 200));
 
       expect(
-          await repository.getSingle(Id.fromUnique(1)).then((value) =>
+          await repository.getSingle(Id.fromUnique("1")).then((value) =>
               value.fold((l) => null, (r) => EventDto.fromDomain(r))),
           origTestDtoWithoutId);
     });

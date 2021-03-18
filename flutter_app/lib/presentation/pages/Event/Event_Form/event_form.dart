@@ -27,7 +27,7 @@ class EventFormPage extends StatelessWidget {
             state.saveFailureOrSuccessOption.fold(
               () {},
               (either) {
-                either.fold(
+                either.fold( //TODO: the flashbar is only shown oncegngfh
                   (failure) {
                     FlushbarHelper.createError(
                       message: failure.map(
@@ -37,9 +37,9 @@ class EventFormPage extends StatelessWidget {
                             "Couldn't update the note. Was it deleted from another device?",
                         unexpected: (_) =>
                             'Unexpected error occured, please contact support.',
-                        notFound: (_) => "dd",
-                        notAuthenticated: (_) => "dd",
-                        internalServer: (_) => "dd", //TODO: localization
+                        notFound: (_) => "Not Found",
+                        notAuthenticated: (_) => "Not Authenticated",
+                        internalServer: (_) => "Internal Server", //TODO: localization
                       ),
                     ).show(context);
                   },

@@ -19,7 +19,7 @@ class EventRemoteService extends RemoteService<EventDto>{
   static const String unreactedEventsPath = "/user/events/%amount%/%lastEventTime%/";//TODO reaction?
 
   // TODO combine it to event path?
-  static const String postPath = "/event/";
+  static const String postPath = "/event";
   static const String deletePath = "/event/";
   static const String updatePath = "/event/";
 
@@ -69,6 +69,7 @@ class EventRemoteService extends RemoteService<EventDto>{
   }
 
   Future<EventDto> createEvent(EventDto eventDto) async {
+    dynamic test = eventDto.toJson();
     return _decodeEvent(
         await client.post(postPath, jsonEncode(eventDto.toJson())));
   }
@@ -77,12 +78,12 @@ class EventRemoteService extends RemoteService<EventDto>{
     // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive
 
     return _decodeEvent(await client.delete(
-        "$deletePath${eventDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}"));
+        "$deletePath${eventDto.id ?? {throw UnexpectedFormatException()}}"));
   }
 
   Future<EventDto> updateEvent(EventDto eventDto) async {
     return _decodeEvent(await client.put(
-        "$updatePath${eventDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}",
+        "$updatePath${eventDto.id ?? {throw UnexpectedFormatException()}}",
         jsonEncode(eventDto.toJson())));
   }
 
@@ -91,7 +92,9 @@ class EventRemoteService extends RemoteService<EventDto>{
     return "$route/$amount/$lastEventTime";
   }*/
 
-  Future<EventDto> _decodeEvent(Response json) async {
+  EventDto _decodeEvent(Response json) {
+    dynamic test1= jsonDecode(json.body);
+    EventDto test = EventDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
     return EventDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
 

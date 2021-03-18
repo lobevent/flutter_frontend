@@ -24,35 +24,19 @@ abstract class EventDto extends BaseDto implements _$EventDto {
     @required @OwnerConverter() ProfileDto owner,
   }) = EventDtoFull;
 
-  const factory EventDto.withoutId({
-    @required String name,
-    @required bool public,
-    @required String description,
-    @required DateTime date,
-    @required DateTime creationDate,
-    @required @OwnerConverter() ProfileDto owner,
-  }) = EventDtoWithoutId;
 
   factory EventDto.fromDomain(Event event) {
     EventDto returnedDto;
 
-    return event.map(
-        (value) => EventDto(
-              id: value.id.getOrCrash(),
-              name: value.name.getOrCrash(),
-              public: value.public,
-              date: value.date,
-              description: value.description.getOrCrash(),
-              creationDate: value.creationDate,
-              owner: ProfileDto.fromDomain(value.owner),
-            ),
-        withoutId: (value) => EventDto.withoutId(
-            name: value.name.getOrCrash(),
-            public: value.public,
-            date: value.date,
-            description: value.description.getOrCrash(),
-            creationDate: value.creationDate,
-            owner: ProfileDto.fromDomain(value.owner)));
+    return EventDto(
+              id: event.id.getOrCrash(),
+              name: event.name.getOrCrash(),
+              public: event.public,
+              date: event.date,
+              description: event.description.getOrCrash(),
+              creationDate: event.creationDate,
+              owner: ProfileDto.fromDomain(event.owner),
+    );
   }
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>
@@ -60,26 +44,20 @@ abstract class EventDto extends BaseDto implements _$EventDto {
 
   @override
   Event toDomain() {
-   return map((value) => Event(
-      id: Id.fromUnique(value.id),
-      name: EventName(value.name),
-      date: value.date,
-      description: EventDescription(value.description),
-      owner: value.owner.toDomain(),
-      //TODO: don't forget this one!
-      public: value.public,
-      creationDate: value.creationDate,
-    ), withoutId: (value) =>  Event.withoutId(
-      name: EventName(value.name),
-      date: value.date,
+   return Event(
+      id: Id.fromUnique(id),
+      name: EventName(name),
+      date: date,
       description: EventDescription(description),
-      owner: value.owner.toDomain(),
+      owner: owner.toDomain(),
       //TODO: don't forget this one!
-      public: value.public,
-      creationDate: value.creationDate,
-    ));
+      public: public,
+      creationDate: creationDate,
+    );
   }
 }
+
+
 
 class OwnerConverter
     implements JsonConverter<ProfileDto, Map<String, dynamic>> {

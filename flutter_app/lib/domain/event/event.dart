@@ -22,14 +22,6 @@ abstract class Event implements _$Event {
     @required bool public,
   }) = EventFull;
 
-  const factory Event.withoutId({
-    @required EventName name,
-    @required DateTime date,
-    @required EventDescription description,
-    @required DateTime creationDate,
-    @required Profile owner,
-    @required bool public,
-  }) = _EventWithoutId;
 
   factory Event.empty() => Event(
     id: Id(),
@@ -37,7 +29,7 @@ abstract class Event implements _$Event {
     date: DateTime.now(),
     description: EventDescription(''),
     creationDate: DateTime.now(),
-    owner: Profile(id: Id(), name: ProfileName("sss")), //TODO: Implement logged in profile fetching
+    owner: Profile(id: Id(), name: ProfileName("ssss")), //TODO: !!!!!!!IIIIIIMMMMMMMMPPPPPPOOOOORTANT!!!!!!!! Implement logged in profile fetching
     public: false,
   );
 

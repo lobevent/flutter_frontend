@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart';
 
@@ -7,12 +8,13 @@ import 'exceptions.dart';
 
 class SymfonyCommunicator{
   Client client;
-  static const String url = "ourUrl.com";
+  static const String url = "http://10.0.2.2:8000";
   final Map<String, String> headers;
+
 
   SymfonyCommunicator({@required String jwt, Client client})
     : //assert(jwt != null, "jwt must be given"),
-      headers = {"Authentication": "Baerer $jwt"},
+      headers = {"Authorization": "Bearer ${jwt ?? CurrentLogin.jwt}"},
       client = client ?? Client();
 
 

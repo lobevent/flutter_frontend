@@ -6,6 +6,7 @@ import 'package:flutter_frontend/application/event/EventForm/event_form_cubit.da
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/pages/Event/Event_Form/widgets/description_body_widged.dart';
 import 'package:flutter_frontend/presentation/pages/Event/Event_Form/widgets/title_widget.dart';
+import 'package:flutter_frontend/presentation/pages/core/Widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class EventFormPage extends StatelessWidget {
@@ -57,7 +58,7 @@ class EventFormPage extends StatelessWidget {
             return Stack(
               children: <Widget>[
                 const EventFormPageScaffold(),
-                SavingInProgressOverlay(isSaving: state.isSaving)
+                LoadingOverlay(isLoading: state.isSaving, text: "Saving")
               ],
             );
           },
@@ -65,44 +66,6 @@ class EventFormPage extends StatelessWidget {
   }
 }
 
-class SavingInProgressOverlay extends StatelessWidget {
-  final bool isSaving;
-
-  const SavingInProgressOverlay({
-    Key key,
-    @required this.isSaving,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-      ignoring: !isSaving,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        color: isSaving ? Colors.black.withOpacity(0.8) : Colors.transparent,
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Visibility(
-          visible: isSaving,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const CircularProgressIndicator(),
-              const SizedBox(height: 8),
-              Text(
-                'Saving',
-                style: Theme.of(context).textTheme.bodyText2.copyWith(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class EventFormPageScaffold extends StatelessWidget {
   const EventFormPageScaffold({
@@ -146,19 +109,4 @@ class EventFormPageScaffold extends StatelessWidget {
     );
   }
 
-  // @override
-  //  Widget build(BuildContext context) {
-  //    return Scaffold(
-  //        appBar: AppBar(
-  //          title: Text("Add Event"),
-  //        ),
-  //        body: Form(
-  //            child: Column(
-  //              children: [
-  //
-  //              ],
-  //          ),
-  //        )
-  //    );
-  //  }
 }

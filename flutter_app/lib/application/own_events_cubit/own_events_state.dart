@@ -8,18 +8,16 @@ abstract class OwnEventsState with _$OwnEventsState {
     @required List<Event> ownEventsList,
     @required bool showErrorMessages,
     @required bool isLoading,
-    @required Option<Either<EventFailure, Unit>> saveFailureOrSuccessOption
   }) = _OwnEventsState;
 
 
   factory OwnEventsState.initial() = _Initial;
 
-
   factory OwnEventsState.loading() = _LoadInProgress;
 
   factory OwnEventsState.loaded({@required List<Event> events}) = _Loaded;
 
-  factory OwnEventsState.error({@required  Option<Either<EventFailure, Unit>> saveFailureOrSuccessOption}) = _LoadFailure;
+  factory OwnEventsState.error({@required  String error}) = _LoadFailure;
 }
 
 

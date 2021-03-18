@@ -24,7 +24,6 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
 
 
   Future<void> getOwnEvents() async {
-    Option<Either<EventFailure, Unit>> saveFailureOrSuccessOption;
     List<Event> ownEventsList = null;
     try {
       emit(OwnEventsState.loading());
@@ -34,7 +33,7 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
        //await repository.getList(Operation.owned, DateTime.now(), 5);
       emit(OwnEventsState.loaded(events: ownEventsList.fold((l) => throw EventFailure, (r) => null)));
     } catch (e) {
-      emit(OwnEventsState.error(saveFailureOrSuccessOption: saveFailureOrSuccessOption));
+      emit(OwnEventsState.error(error: e.toString()));
     }
   }
 }

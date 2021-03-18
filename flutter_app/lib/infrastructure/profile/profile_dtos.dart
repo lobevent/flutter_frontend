@@ -22,6 +22,10 @@ abstract class ProfileDto extends BaseDto implements _$ProfileDto {
     @required String name,
   }) = _ProfileDto;
 
+  const factory ProfileDto.justId({
+    @required String id,
+}) = _JustIdProfile;
+
   const factory ProfileDto.full({
     @required String id,
     @required String name,
@@ -83,6 +87,10 @@ abstract class ProfileDto extends BaseDto implements _$ProfileDto {
                 .toList(),
             posts: detailedProfileDto.posts.map((e) => e.toDomain()).toList(),
             comments:
-                detailedProfileDto.comments.map((e) => e.toDomain()).toList()));
+                detailedProfileDto.comments.map((e) => e.toDomain()).toList()),
+        justId: (justIdPDto) => Profile(
+          id: Id.fromUnique(justIdPDto.id),
+          name: ProfileName(justIdPDto.id),
+        ));
   }
 }

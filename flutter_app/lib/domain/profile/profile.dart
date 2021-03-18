@@ -18,6 +18,7 @@ abstract class Profile implements _$Profile {
     @required ProfileName name,
   }) = _BaseProfile;
 
+
   const factory Profile.full({
     @required Id id,
     @required ProfileName name,
@@ -27,6 +28,9 @@ abstract class Profile implements _$Profile {
     @required List<Post> posts,
     @required List<Comment> comments,
   }) = _FullProfile;
+
+
+
 
 
 

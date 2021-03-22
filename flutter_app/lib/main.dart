@@ -14,19 +14,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp
-    //     .router(
-    //     routerDelegate: _appRouter.delegate(),
-    //     routeInformationParser: _appRouter.defaultRouteParser()
-    // );
-      (
-      title: 'Material App',
-      builder: ExtendedNavigator.builder<app_router.Router>(router: app_router.Router()),
+        .router(
+        routerDelegate: _appRouter.delegate(),
+        routeInformationParser: _appRouter.defaultRouteParser()
+    );
+    //   (
+    //   title: 'Material App',
+    //   builder: ExtendedNavigator.builder<app_router.Router>(router: app_router.Router()),
       //home: FeedScreen(),
 //      BlocProvider(
 //        create: (context) => SignInFormCubit(null),
 //        child: LoginScreen(),
       //),
-    );
+   // );
   }
 }
 

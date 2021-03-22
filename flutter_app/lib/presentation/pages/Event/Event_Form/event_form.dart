@@ -10,11 +10,11 @@ import 'package:flutter_frontend/presentation/pages/core/Widgets/loading_overlay
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class EventFormPage extends StatelessWidget {
-  final Event editedEvent;
+  final String? editedEventId;
 
   const EventFormPage({
     Key? key,
-    required this.editedEvent,
+    this.editedEventId,
   }) : super(key: key);
 
   @override

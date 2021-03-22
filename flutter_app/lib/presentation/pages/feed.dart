@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:auto_route/auto_route.dart';
+import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter_frontend/presentation/pages/own_events_screen.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
@@ -14,13 +14,13 @@ class FeedScreen extends StatelessWidget {
         children: [
           ElevatedButton(onPressed:() {
 
-
-            ExtendedNavigator.root!.push(Routes.eventFormPage, arguments: EventFormPageArguments(editedEvent: "")
+            //router = context.router;
+            ExtendedNavigator.root!.push(EventFormPageRoute.name, arguments: EventFormPageRouteArgs(editedEventId: "")
             // ExtendedNavigator.of(context).popUntil(
             //     (route) => route.settings.name == Routes.eventFormPage,
           );}, child: Text("Button1")),
           ElevatedButton(onPressed:() {
-            ExtendedNavigator.root!.push(Routes.ownEventsScreen, arguments: OwnEventsScreen()
+            ExtendedNavigator.root!.push(OwnEventsScreenRoute.name, arguments: OwnEventsScreen()
               // ExtendedNavigator.of(context).popUntil(
               //     (route) => route.settings.name == Routes.eventFormPage,
             );}, child: Text("Button2"))

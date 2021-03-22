@@ -24,25 +24,25 @@ class SymfonyCommunicator{
   /// The id (if needed) should be in the uri.
   /// Uri has to start with an backslash "/".
   Future<Response> get(String uri) async{
-    return _handleExceptions( await client.get("$url$uri", headers: headers));
+    return _handleExceptions( await client.get(Uri.parse("$url$uri"), headers: headers));
   }
 
   /// Post to an resource with uri.
   /// Throws [NotAuthenticatedException], [NotAuthorizedException], [NotFoundException], [InternalServerException]
   /// The id (if needed) should be in the uri.
   /// Uri has to start with an backslash "/".
-  Future<Response> post(String uri, dynamic body, [Encoding encoding]) async{
+  Future<Response> post(String uri, dynamic body, [Encoding? encoding]) async{
     encoding ??= Encoding.getByName("text/plain");
-    return _handleExceptions( await client.post("$url$uri", headers: headers, body: body, encoding: encoding));
+    return _handleExceptions( await client.post(Uri.parse("$url$uri"), headers: headers, body: body, encoding: encoding));
   }
 
   /// Put an resource with uri.
   /// Throws [NotAuthenticatedException], [NotAuthorizedException], [NotFoundException], [InternalServerException]
   /// The id (if needed) should be in the uri.
   /// Uri has to start with an backslash "/".
-  Future<Response> put(String uri, dynamic body, [Encoding encoding]) async{
+  Future<Response> put(String uri, dynamic body, [Encoding? encoding]) async{
     encoding ??= Encoding.getByName("text/plain");
-    return _handleExceptions( await client.put("$url$uri", headers: headers, body: body, encoding: encoding)) ;
+    return _handleExceptions( await client.put(Uri.parse("$url$uri"), headers: headers, body: body, encoding: encoding)) ;
   }
 
   /// Delete resource with uri.
@@ -50,7 +50,7 @@ class SymfonyCommunicator{
   /// The id (if needed) should be in the uri.
   /// Uri has to start with an backslash "/".
   Future<Response> delete(String uri) async {
-    return _handleExceptions( await client.delete("$url$uri", headers: headers));
+    return _handleExceptions( await client.delete(Uri.parse("$url$uri"), headers: headers));
   }
 
 

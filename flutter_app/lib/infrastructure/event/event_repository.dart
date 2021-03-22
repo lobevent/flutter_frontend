@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/event_failure.dart';
@@ -20,7 +21,7 @@ class EventRepository implements IEventRepository {
 
   @override
   Future<Either<EventFailure, List<Event>>> getList(Operation operation,
-      DateTime lastEventTime, int amount, {Profile profile}) async {
+      DateTime lastEventTime, int amount, {Profile? profile}) async {
     try {
       List<EventDto> eventDtos;
       switch (operation) {
@@ -28,6 +29,9 @@ class EventRepository implements IEventRepository {
           eventDtos = await _eventRemoteService.getOwnedEvents(lastEventTime, amount);
           break;
         case Operation.fromUser:
+          if (profile == null) {
+            throw UnexpectedTypeError();
+          }
           eventDtos = await _eventRemoteService.getEventsFromUser(lastEventTime, amount, profile.id.getOrCrash().toString());
           break;
         case Operation.attending:

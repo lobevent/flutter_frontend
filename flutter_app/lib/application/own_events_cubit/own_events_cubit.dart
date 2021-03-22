@@ -22,11 +22,10 @@ part 'own_events_state.dart';
 
 class OwnEventsCubit extends Cubit<OwnEventsState> {
    OwnEventsCubit() : super(OwnEventsState.initial()) {
-    repository = EventRepository(EventRemoteService(), EventLocalService());
     emit(OwnEventsState.initial());
     getOwnEvents();
   }
-  EventRepository repository;
+  EventRepository repository = EventRepository(EventRemoteService(), EventLocalService());
 
 
   Future<void> getOwnEvents() async {

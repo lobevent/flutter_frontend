@@ -15,13 +15,12 @@ part 'event_form_state.dart';
 
 class EventFormCubit extends Cubit<EventFormState> {
   EventFormCubit() : super(EventFormState.initial()) {
-    repository = EventRepository(EventRemoteService(), EventLocalService());
     emit(EventFormState.initial());}
 
-  EventRepository repository;
+  EventRepository repository = EventRepository(EventRemoteService(), EventLocalService());
 
   Future<void> saveEvent() async {
-    Either<EventFailure, Unit> failureOrSuccess;
+    Either<EventFailure, Unit> failureOrSuccess = right(unit);
     emit(state.copyWith(isSaving: true));
     if(state.event.failureOption.isNone()){
       //failureOrSuccess =  await right(unit);

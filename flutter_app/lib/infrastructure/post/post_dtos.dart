@@ -18,18 +18,18 @@ class PostDto extends BaseDto implements _$PostDto {
   const PostDto._();
 
   const factory PostDto({
-    @required String id,
-    @required DateTime creationDate,
-    @required String postContent,
-    @required @ProfileConverter() ProfileDto owner,
-    @required @EventConverter() EventDto event,
+    required String id,
+    required DateTime creationDate,
+    required String postContent,
+    required @ProfileConverter() ProfileDto owner,
+    required @EventConverter() EventDto event,
   }) = _PostDto;
 
   const factory PostDto.WithoutId({
-    @required DateTime creationDate,
-    @required String postContent,
-    @required @ProfileConverter() ProfileDto owner,
-    @required @EventConverter() EventDto event,
+    required DateTime creationDate,
+    required String postContent,
+    required @ProfileConverter() ProfileDto owner,
+    required @EventConverter() EventDto event,
   }) = _PostDtoWithoutId;
 
   factory PostDto.fromDomain(Post post) {

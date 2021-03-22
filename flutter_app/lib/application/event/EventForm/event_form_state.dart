@@ -5,12 +5,12 @@ part of 'event_form_cubit.dart';
 class EventFormState with _$EventFormState {
 
   const factory EventFormState({
-    @required Event event,
-    @required bool showErrorMessages,
-    @required bool isEditing,
-    @required bool isSaving,
-    @required bool isLoading,
-    @required Option<Either<EventFailure, Unit>> saveFailureOrSuccessOption
+    required Event event,
+    required bool showErrorMessages,
+    required bool isEditing,
+    required bool isSaving,
+    required bool isLoading,
+    required Option<Either<EventFailure, Unit>> saveFailureOrSuccessOption
   }) = _EventFormStateMain;
 
 

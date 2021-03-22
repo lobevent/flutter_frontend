@@ -15,13 +15,13 @@ class EventDto extends BaseDto implements _$EventDto {
   const EventDto._();
 
   const factory EventDto({
-    @required String id,
-    @required String name,
-    @required bool public,
-    @required String description,
-    @required DateTime date,
-    @required DateTime creationDate,
-    @required @OwnerConverter() ProfileDto owner,
+    required String id,
+    required String name,
+    required bool public,
+    required String description,
+    required DateTime date,
+    required DateTime creationDate,
+    required @OwnerConverter() ProfileDto owner,
   }) = EventDtoFull;
 
 

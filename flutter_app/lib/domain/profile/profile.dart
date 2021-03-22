@@ -14,19 +14,19 @@ class Profile implements _$Profile {
   const Profile._();
 
   const factory Profile({
-    @required Id id,
-    @required ProfileName name,
+    required Id id,
+    required ProfileName name,
   }) = _BaseProfile;
 
 
   const factory Profile.full({
-    @required Id id,
-    @required ProfileName name,
-    @required List<Event> ownedEvents,
-    @required List<Event> invitations,
-    @required List<Profile> friendships,
-    @required List<Post> posts,
-    @required List<Comment> comments,
+    required Id id,
+    required ProfileName name,
+    required List<Event> ownedEvents,
+    required List<Event> invitations,
+    required List<Profile> friendships,
+    required List<Post> posts,
+    required List<Comment> comments,
   }) = _FullProfile;
 
 

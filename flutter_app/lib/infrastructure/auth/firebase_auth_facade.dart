@@ -252,7 +252,7 @@ class FirebaseAuthFacade implements IAuthFacade {
   ///                                  [startPhoneNumberSignInFlow] was called
   ///                                  once.
   @override
-  Future<Either<AuthFailure, Unit>> signInWithReceivedSmsCode({@required String smsCode}) async {
+  Future<Either<AuthFailure, Unit>> signInWithReceivedSmsCode({required String smsCode}) async {
     final String phoneVerificationId = _lastPhoneVerificationId.getOrElse(() {
       throw PhoneVerificationNotStarted();
     });

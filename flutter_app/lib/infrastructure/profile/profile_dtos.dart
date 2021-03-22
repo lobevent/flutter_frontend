@@ -18,22 +18,22 @@ class ProfileDto extends BaseDto implements _$ProfileDto {
   const ProfileDto._();
 
   const factory ProfileDto({
-    @required String id,
-    @required String name,
+    required String id,
+    required String name,
   }) = _ProfileDto;
 
   const factory ProfileDto.justId({
-    @required String id,
+    required String id,
 }) = _JustIdProfile;
 
   const factory ProfileDto.full({
-    @required String id,
-    @required String name,
-    @required List<EventDto> ownedEvents,
-    @required List<EventDto> invitations,
-    @required List<ProfileDto> friendships,
-    @required List<PostDto> posts,
-    @required List<CommentDto> comments,
+    required String id,
+    required String name,
+    required List<EventDto> ownedEvents,
+    required List<EventDto> invitations,
+    required List<ProfileDto> friendships,
+    required List<PostDto> posts,
+    required List<CommentDto> comments,
   }) = _FullProfile;
 
   factory ProfileDto.fromDomain(Profile profile) {

@@ -13,39 +13,39 @@ class Comment implements _$Comment {
   const Comment._();
 
   const factory Comment({
-    @required Id id,
-    @required DateTime creationDate,
-    @required CommentContent commentContent,
-    @required Profile owner,
-    @required int post,
+    required Id id,
+    required DateTime creationDate,
+    required CommentContent commentContent,
+    required Profile owner,
+    required int post,
     //TODO change this, all kid comments are comments. lazy loading from application layer (cubit)
     Either<CommentParent, Unit> commentParent,
     Comment commentChildren, // TODO find some solution for this one
   }) = CommentFull;
 
   const factory Comment.withoutId({
-    @required DateTime creationDate,
-    @required CommentContent commentContent,
-    @required Profile owner,
-    @required int post,
+    required DateTime creationDate,
+    required CommentContent commentContent,
+    required Profile owner,
+    required int post,
     //TODO change this, all kid comments are comments. lazy loading from application layer (cubit)
     Either<CommentParent, Unit> commentParent,
     Comment commentChildren, // TODO find some solution for this one
   }) = CommentWithoutId;
 
   const factory Comment.parent({
-    @required Id id,
+    required Id id,
   }) = CommentParent;
 
   const factory Comment.childLess() = CommentChildLess;
 
   const factory Comment.childCount(
-    @required int count,
+    required int count,
   ) = CommentChildCount;
 
   const factory Comment.children({
-    @required int count,
-    @required List<Comment> commentChildren,
+    required int count,
+    required List<Comment> commentChildren,
   }) = CommentChildren;
 
   // check if the whole object is no failure

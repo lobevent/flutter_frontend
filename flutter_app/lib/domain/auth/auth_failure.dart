@@ -13,6 +13,6 @@ class AuthFailure with _$AuthFailure {
   const factory AuthFailure.autoPhoneAuthFailed() = _AutoPhoneAuthFailed;
   const factory AuthFailure.badPhoneNumber() = _BadPhoneNumber;
   const factory AuthFailure.unknownFirebaseAuthException({
-    @required String code,
+    required String code,
   }) = _UnknownFirebaseAuthException;
 }

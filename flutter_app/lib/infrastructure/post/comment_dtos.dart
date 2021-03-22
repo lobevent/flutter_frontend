@@ -18,32 +18,32 @@ class CommentDto extends BaseDto implements _$CommentDto {
   const CommentDto._();
 
   const factory CommentDto.parent({
-    @required String id,
+    required String id,
   }) = _CommentParentDto;
 
   const factory CommentDto({
-    @required String id,
-    @required String commentContent,
-    @required DateTime creationDate,
-    @required ProfileDto profile, //TODO: make it an integer
-    @required @ParentConverter() Either<CommentDto, Unit> commentParent,
-    @required int post,
+    required String id,
+    required String commentContent,
+    required DateTime creationDate,
+    required ProfileDto profile, //TODO: make it an integer
+    required @ParentConverter() Either<CommentDto, Unit> commentParent,
+    required int post,
     @ChildrenConverter() Either<int, Unit> commentChildren,
   }) = _CommentDto;
 
   const factory CommentDto.WithoutId({
-    @required String commentContent,
-    @required DateTime creationDate,
-    @required ProfileDto profile, //TODO: make it an integer
-    @required @ParentConverter() Either<CommentDto, Unit> commentParent,
-    @required int post,
+    required String commentContent,
+    required DateTime creationDate,
+    required ProfileDto profile, //TODO: make it an integer
+    required @ParentConverter() Either<CommentDto, Unit> commentParent,
+    required int post,
     @ChildrenConverter() Either<int, Unit> commentChildren,
   }) = _CommentDtoWithoutId;
 
   //TODO: is this intager usefull? Determine that shit!
   const factory CommentDto.children({
-    @required int count,
-    @required List<CommentDto> children,
+    required int count,
+    required List<CommentDto> children,
   }) = _CommentChildrenDto;
 
   /// Generate dto from domain, respecting the different union cases

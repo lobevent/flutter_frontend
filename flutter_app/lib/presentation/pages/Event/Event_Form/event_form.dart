@@ -14,7 +14,7 @@ class EventFormPage extends StatelessWidget {
 
   const EventFormPage({
     Key key,
-    @required this.editedEvent,
+    required this.editedEvent,
   }) : super(key: key);
 
   @override

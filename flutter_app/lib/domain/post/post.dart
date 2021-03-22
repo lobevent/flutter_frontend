@@ -15,20 +15,20 @@ class Post implements _$Post {
   const Post._();
 
   const factory Post({
-    @required Id id,
-    @required DateTime creationDate,
-    @required PostContent postContent,
-    @required Profile owner,
-    @required Event event,
-    @required List<Comment> comments,
+    required Id id,
+    required DateTime creationDate,
+    required PostContent postContent,
+    required Profile owner,
+    required Event event,
+    required List<Comment> comments,
   }) = _Post;
 
   const factory Post.WithoutId({
-    @required DateTime creationDate,
-    @required PostContent postContent,
-    @required Profile owner,
-    @required Event event,
-    @required List<Comment> comments,
+    required DateTime creationDate,
+    required PostContent postContent,
+    required Profile owner,
+    required Event event,
+    required List<Comment> comments,
   }) = PostWithoutId;
 
   //check if the whole object is no failure

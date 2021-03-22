@@ -12,7 +12,7 @@ class SymfonyCommunicator{
   final Map<String, String> headers;
 
 
-  SymfonyCommunicator({@required String jwt, Client client})
+  SymfonyCommunicator({required String jwt, Client client})
     : //assert(jwt != null, "jwt must be given"),
       headers = {"Authorization": "Bearer ${jwt ?? CurrentLogin.jwt}"},
       client = client ?? Client();

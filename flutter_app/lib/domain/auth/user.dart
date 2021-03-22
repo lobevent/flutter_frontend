@@ -8,8 +8,8 @@ part 'user.freezed.dart';
 @freezed
 class User with _$User {
   const factory User({
-    @required UniqueId id,
-    @required Username username,
+    required UniqueId id,
+    required Username username,
     EmailAddress email,
     // TODO add more parameters as needed and create ValueObjects or Entities accordingly
     // String phoneNumber, 

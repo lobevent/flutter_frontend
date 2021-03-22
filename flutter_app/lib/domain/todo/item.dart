@@ -8,10 +8,10 @@ class Item implements _$Item {
   const Item._();
 
   const factory Item({
-    @required Id id,
-    @required Profile profile,
-    @required String element,
-    @required bool checkMark,
+    required Id id,
+    required Profile profile,
+    required String element,
+    required bool checkMark,
   }) = _Item;
 
 }

@@ -13,13 +13,13 @@ class Event implements _$Event {
   const Event._();
 
   const factory Event({
-    @required Id id,
-    @required EventName name,
-    @required DateTime date,
-    @required EventDescription description,
-    @required DateTime creationDate,
-    @required Profile owner,
-    @required bool public,
+    required Id id,
+    required EventName name,
+    required DateTime date,
+    required EventDescription description,
+    required DateTime creationDate,
+    required Profile owner,
+    required bool public,
   }) = EventFull;
 
 

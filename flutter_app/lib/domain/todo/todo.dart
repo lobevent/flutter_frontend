@@ -9,8 +9,8 @@ class Todo implements _$Todo {
   const Todo._();
 
   const factory Todo({
-    @required Id id,
-    @required Item item,
+    required Id id,
+    required Item item,
     Event event,
   }) = _Todo;
 }

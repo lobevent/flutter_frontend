@@ -9,11 +9,11 @@ abstract class IAuthFacade {
   Future<bool> isSignedIn();
   Option<User> getSignedInUser();
   Future<Either<AuthFailure, Unit>> startPhoneNumberSignInFlow({
-    @required String phoneNumber
+    required String phoneNumber
   });
   Future<Either<AuthFailure, Unit>> resendSmsCode();
   Future<Either<AuthFailure, Unit>> signInWithReceivedSmsCode({
-    @required String smsCode
+    required String smsCode
   });
   Future<Either<AuthFailure, Unit>> signInWithGoogle();
   Future<bool> signInWithAppleAvailable();

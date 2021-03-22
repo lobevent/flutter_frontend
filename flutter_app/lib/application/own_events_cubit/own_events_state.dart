@@ -5,9 +5,9 @@ part of 'own_events_cubit.dart';
 @freezed
 class OwnEventsState with _$OwnEventsState {
   const factory OwnEventsState({
-    @required List<Event> ownEventsList,
-    @required bool showErrorMessages,
-    @required bool isLoading,
+    required List<Event> ownEventsList,
+    required bool showErrorMessages,
+    required bool isLoading,
   }) = _OwnEventsState;
 
 
@@ -15,9 +15,9 @@ class OwnEventsState with _$OwnEventsState {
 
   factory OwnEventsState.loading() = _LoadInProgress;
 
-  factory OwnEventsState.loaded({@required List<Event> events}) = _Loaded;
+  factory OwnEventsState.loaded({required List<Event> events}) = _Loaded;
 
-  factory OwnEventsState.error({@required  String error}) = _LoadFailure;
+  factory OwnEventsState.error({required  String error}) = _LoadFailure;
 }
 
 

@@ -19,7 +19,7 @@ abstract class BaseDto<T> {
 //   const TestDto._();
 
 //   const factory TestDto({
-//     @required String someTestString,
+//     required String someTestString,
 //   }) = _TestDto;
 
 //   factory TestDto.fromJson(Map<String, dynamic> json) => _$TestDtoFromJson(json);

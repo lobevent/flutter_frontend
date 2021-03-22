@@ -87,7 +87,7 @@ class EventFormPageScaffold extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.check),
             onPressed: () {
-              context.watch<EventFormCubit>().saveEvent();
+              context.read<EventFormCubit>().saveEvent();
             },
           )
         ],

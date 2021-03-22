@@ -41,7 +41,7 @@ class _DescriptionFieldState extends State<DescriptionField> {
             maxLines: null,
             minLines: 5,
             onChanged: (value) => {
-             context.watch<EventFormCubit>()..changeBody(value)}
+             context.read<EventFormCubit>().changeBody(value)}
             ,
             validator: (_) => context.read<EventFormCubit>().state.event.description.value
                 .fold(

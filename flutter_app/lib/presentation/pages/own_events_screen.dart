@@ -1,5 +1,3 @@
-import 'package:flushbar/flushbar.dart';
-import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/own_events_cubit/own_events_cubit.dart';
@@ -45,8 +43,8 @@ class _OwnEventsScreenState extends State<OwnEventsScreen> {
         listener: (context, state){
           print("asdasdasdasdasd");
           state.maybeMap((_) => null,
-              error: (value) => FlushbarHelper.createError(message: value.error),
-              initial: (_) => context.bloc<OwnEventsCubit>().getOwnEvents() ,
+              //error: (value) => FlushbarHelper.createError(message: value.error),
+              initial: (_) => context.read().bloc<OwnEventsCubit>().getOwnEvents() ,
               orElse:  () => print ("asd"));
         },
         builder: (context, state){

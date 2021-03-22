@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'item.freezed.dart';
 @freezed
-class Item implements _$Item {
+class Item with _$Item {
   const Item._();
 
   const factory Item({

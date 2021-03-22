@@ -20,7 +20,7 @@ class EventFormCubit extends Cubit<EventFormState> {
   EventRepository repository = EventRepository(EventRemoteService(), EventLocalService());
 
   Future<void> saveEvent() async {
-    Either<EventFailure, Unit> failureOrSuccess = right(unit);
+    Either<EventFailure, Unit>? failureOrSuccess;
     emit(state.copyWith(isSaving: true));
     if(state.event.failureOption.isNone()){
       //failureOrSuccess =  await right(unit);

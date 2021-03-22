@@ -26,7 +26,7 @@ class Comment with _$Comment {
 
   const factory Comment.parent({
     required Id id,
-  }) = _CommentParent;
+  }) = CommentParent;
 
   const factory Comment.childLess() = CommentChildLess;
 

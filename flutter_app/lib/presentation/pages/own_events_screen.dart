@@ -10,7 +10,7 @@ import 'package:path/path.dart';
 class OwnEventsScreenScaffold extends StatelessWidget {
 
   const OwnEventsScreenScaffold({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -31,7 +31,7 @@ class OwnEventsScreenScaffold extends StatelessWidget {
 
 class OwnEventsScreen extends StatefulWidget{
   const OwnEventsScreen({
-      Key key
+      Key? key
     }) : super(key: key);
   @override
   _OwnEventsScreenState createState() => _OwnEventsScreenState();

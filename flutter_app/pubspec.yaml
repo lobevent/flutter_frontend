@@ -12,6 +12,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  auto_route: ^1.0.2
+
   # annotations for json code generation
   json_annotation: ^4.0.1
 

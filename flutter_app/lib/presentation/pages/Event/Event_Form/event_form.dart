@@ -13,7 +13,7 @@ class EventFormPage extends StatelessWidget {
   final Event editedEvent;
 
   const EventFormPage({
-    Key key,
+    Key? key,
     required this.editedEvent,
   }) : super(key: key);
 
@@ -69,7 +69,7 @@ class EventFormPage extends StatelessWidget {
 
 class EventFormPageScaffold extends StatelessWidget {
   const EventFormPageScaffold({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

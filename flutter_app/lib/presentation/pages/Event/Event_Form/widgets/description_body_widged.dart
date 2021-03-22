@@ -7,7 +7,7 @@ import 'package:flutter_frontend/domain/event/value_objects.dart';
 
 class DescriptionField extends StatefulWidget{
   const DescriptionField({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
 
@@ -48,9 +48,9 @@ class _DescriptionFieldState extends State<DescriptionField> {
                   (f) => f.maybeMap(
                 empty: (f) => 'Cannot be empty',
                 exceedingLength: (f) => 'Exceeding length, max: ${f.maxLength}',
-                orElse: () => null,
+                orElse: () => "",
               ),
-                  (r) => null,
+                  (r) => "",
             ),
           )),
     );

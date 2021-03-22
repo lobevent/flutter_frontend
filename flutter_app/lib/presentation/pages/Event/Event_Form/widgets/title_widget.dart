@@ -7,7 +7,7 @@ import 'package:flutter_frontend/domain/event/value_objects.dart';
 
 class EventNameField extends StatefulWidget{
   const EventNameField({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
 
@@ -40,16 +40,16 @@ class _EventNameFieldState extends State<EventNameField> {
             maxLength: EventName.maxLength,
             maxLines: 1,
             onChanged: (value) => {
-              context.bloc<EventFormCubit>()..changeTitle(value)}
+              context.read<EventFormCubit>()..changeTitle(value)}
             ,
-            validator: (_) => context.bloc<EventFormCubit>().state.event.name.value
+            validator: (_) => context.read<EventFormCubit>().state.event.name.value
                 .fold(
                   (f) => f.maybeMap(
                 empty: (f) => 'Cannot be empty',
                 exceedingLength: (f) => 'Exceeding length, max: ${f.maxLength}',
-                orElse: () => null,
+                orElse: () => "",
               ),
-                  (r) => null,
+                  (r) => "",
             ),
           )),
     );

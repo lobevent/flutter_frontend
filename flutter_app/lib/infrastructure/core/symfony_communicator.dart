@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:html';
 
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:meta/meta.dart';
@@ -12,7 +13,7 @@ class SymfonyCommunicator{
   final Map<String, String> headers;
 
 
-  SymfonyCommunicator({required String jwt, Client client})
+  SymfonyCommunicator({required String jwt, required Client client})
     : //assert(jwt != null, "jwt must be given"),
       headers = {"Authorization": "Bearer ${jwt ?? CurrentLogin.jwt}"},
       client = client ?? Client();

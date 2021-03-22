@@ -6,7 +6,7 @@ class LoadingOverlay extends StatelessWidget {
   final String text;
 
   const LoadingOverlay({
-    Key key,
+    Key? key,
     required this.isLoading,
     String this.text = "loading"
   }) : super(key: key);

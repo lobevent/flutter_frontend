@@ -16,7 +16,7 @@ class UserDto extends BaseDto implements _$UserDto {
   const factory UserDto({
     required String id,
     required String username,
-    @JsonKey(includeIfNull: false) String emailAddress,
+    @Default("") @JsonKey(includeIfNull: true) String emailAddress, //TODO: Make this either
   }) = _UserDto;
 
   factory UserDto.fromDomain(User user) {

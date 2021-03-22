@@ -19,8 +19,8 @@ class Comment implements _$Comment {
     required Profile owner,
     required int post,
     //TODO change this, all kid comments are comments. lazy loading from application layer (cubit)
-    Either<CommentParent, Unit> commentParent,
-    Comment commentChildren, // TODO find some solution for this one
+    required Either<CommentParent, Unit> commentParent,
+    required Comment commentChildren, // TODO find some solution for this one
   }) = CommentFull;
 
   const factory Comment.withoutId({
@@ -29,8 +29,8 @@ class Comment implements _$Comment {
     required Profile owner,
     required int post,
     //TODO change this, all kid comments are comments. lazy loading from application layer (cubit)
-    Either<CommentParent, Unit> commentParent,
-    Comment commentChildren, // TODO find some solution for this one
+    required Either<CommentParent, Unit> commentParent,
+    required Comment commentChildren, // TODO find some solution for this one
   }) = CommentWithoutId;
 
   const factory Comment.parent({

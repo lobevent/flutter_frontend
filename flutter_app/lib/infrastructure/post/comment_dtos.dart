@@ -37,7 +37,7 @@ class CommentDto extends BaseDto implements _$CommentDto {
     required ProfileDto profile, //TODO: make it an integer
     @ParentConverter() required Either<CommentDto, Unit> commentParent,
     required int post,
-    @ChildrenConverter() Either<int, Unit> required commentChildren,
+    @ChildrenConverter() required Either<int, Unit> commentChildren,
   }) = _CommentDtoWithoutId;
 
   //TODO: is this intager usefull? Determine that shit!

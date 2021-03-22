@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
@@ -28,17 +29,9 @@ class CommentDto extends BaseDto with _$CommentDto {
     required ProfileDto profile, //TODO: make it an integer
     @ParentConverter() required Either<CommentDto, Unit> commentParent,
     required int post,
-    @ChildrenConverter()  Either<int, Unit>? commentChildren,
+    @ChildrenConverter() required Either<int, Unit> commentChildren,
   }) = _CommentDto;
 
-  const factory CommentDto.WithoutId({
-    required String commentContent,
-    required DateTime creationDate,
-    required ProfileDto profile, //TODO: make it an integer
-    @ParentConverter() required Either<CommentDto, Unit> commentParent,
-    required int post,
-    @ChildrenConverter() required Either<int, Unit> commentChildren,
-  }) = _CommentDtoWithoutId;
 
   //TODO: is this intager usefull? Determine that shit!
   const factory CommentDto.children({
@@ -51,7 +44,7 @@ class CommentDto extends BaseDto with _$CommentDto {
   ///
   // TODO this function does something really really strange! The syntax is a little bit mixed up but also it does not what it should
   factory CommentDto.fromDomain(Comment comment) {
-    CommentDto returnedDto;
+    CommentDto? returnedDto;
     //distinguish between the two Comment options
     comment.maybeMap(
         (CommentFull comment) => {
@@ -64,7 +57,7 @@ class CommentDto extends BaseDto with _$CommentDto {
                 post: comment.post,
                 //fold for the Either type
                 commentParent: comment.commentParent.fold(
-                    (l) => left(CommentDto.fromDomain(l)), (r) => right(r)),
+                    (l) => left(CommentDto.fromDomain(l)), (r) => right(r)), commentChildren: right(unit),
                 //leave out children, as they arent used in to Api communication
               ),
             },
@@ -74,7 +67,7 @@ class CommentDto extends BaseDto with _$CommentDto {
             },
         orElse: () {});
 
-    return returnedDto;
+    return returnedDto!;
   }
 
   factory CommentDto.fromJson(Map<String, dynamic> json) =>
@@ -85,7 +78,7 @@ class CommentDto extends BaseDto with _$CommentDto {
   // TODO this function does something really really strange! The syntax is a little bit mixed up but also it does not what it should
   @override
   Comment toDomain() {
-    Comment returnedComment;
+    Comment? returnedComment;
     map(
         (_CommentDto value) => {
               returnedComment = Comment(
@@ -99,6 +92,9 @@ class CommentDto extends BaseDto with _$CommentDto {
                     .fold((l) => Comment.childCount(l),
                         (r) => const Comment.childLess()),
                 post: value.post,
+                commentParent: value.commentParent.fold(
+                        (l) => left(Comment.parent(id: Id.fromUnique(l.id.toString()))),
+                        (r) => right(unit)),
               )
             }, parent: (_CommentParentDto value) {
       returnedComment = Comment.parent(id: Id.fromUnique(value.id));
@@ -108,20 +104,8 @@ class CommentDto extends BaseDto with _$CommentDto {
           commentChildren: value.children
               .map((commentDto) => commentDto.toDomain())
               .toList());
-    }, WithoutId: (_CommentDtoWithoutId value) {
-      returnedComment = CommentWithoutId(
-        creationDate: value.creationDate,
-        commentContent: CommentContent(value.commentContent),
-        owner: value.profile.toDomain(),
-        commentChildren: value.commentChildren
-            //left(left()) because of the complex Either type
-            //where the list isn`t used here yet
-            .fold(
-                (l) => Comment.childCount(l), (r) => const Comment.childLess()),
-        post: value.post,
-      );
     });
-    return returnedComment;
+    return returnedComment!;
   }
 }
 

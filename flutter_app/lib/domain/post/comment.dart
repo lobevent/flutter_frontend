@@ -19,23 +19,14 @@ class Comment with _$Comment {
     required Profile owner,
     required int post,
     //TODO change this, all kid comments are comments. lazy loading from application layer (cubit)
-    required Either<CommentParent, Unit> commentParent,
+    required Either<Comment, Unit> commentParent,
     required Comment commentChildren, // TODO find some solution for this one
   }) = CommentFull;
 
-  const factory Comment.withoutId({
-    required DateTime creationDate,
-    required CommentContent commentContent,
-    required Profile owner,
-    required int post,
-    //TODO change this, all kid comments are comments. lazy loading from application layer (cubit)
-    required Either<CommentParent, Unit> commentParent,
-    required Comment commentChildren, // TODO find some solution for this one
-  }) = CommentWithoutId;
 
   const factory Comment.parent({
     required Id id,
-  }) = CommentParent;
+  }) = _CommentParent;
 
   const factory Comment.childLess() = CommentChildLess;
 

@@ -41,9 +41,9 @@ class _DescriptionFieldState extends State<DescriptionField> {
             maxLines: null,
             minLines: 5,
             onChanged: (value) => {
-             context.bloc<EventFormCubit>()..changeBody(value)}
+             context.watch<EventFormCubit>()..changeBody(value)}
             ,
-            validator: (_) => context.bloc<EventFormCubit>().state.event.description.value
+            validator: (_) => context.read<EventFormCubit>().state.event.description.value
                 .fold(
                   (f) => f.maybeMap(
                 empty: (f) => 'Cannot be empty',

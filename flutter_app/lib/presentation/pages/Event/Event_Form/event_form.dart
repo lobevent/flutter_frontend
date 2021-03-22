@@ -22,37 +22,38 @@ class EventFormPage extends StatelessWidget {
     return BlocProvider(
         create: (context) => EventFormCubit(),
         child: BlocConsumer<EventFormCubit, EventFormState>(
-          listenWhen: (p, c) =>
-              p.saveFailureOrSuccessOption != c.saveFailureOrSuccessOption,
-          listener: (context, state) {
-            state.saveFailureOrSuccessOption.fold(
-              () {},
-              (either) {
-                either.fold( //TODO: the flashbar is only shown oncegngfh
-                  (failure) {
-                    FlushbarHelper.createError(
-                      message: failure.map(
-                        insufficientPermissions: (_) =>
-                            'Insufficient permissions ❌',
-                        unableToUpdate: (_) =>
-                            "Couldn't update the note. Was it deleted from another device?",
-                        unexpected: (_) =>
-                            'Unexpected error occured, please contact support.',
-                        notFound: (_) => "Not Found",
-                        notAuthenticated: (_) => "Not Authenticated",
-                        internalServer: (_) => "Internal Server", //TODO: localization
-                      ),
-                    ).show(context);
-                  },
-                  (_) {
-                    ExtendedNavigator.of(context).popUntil(
-                      (route) => route.settings.name == Routes.feedScreen,
-                    );
-                  },
-                );
-              },
-            );
-          },
+        listener: (context, state) {}
+          // listenWhen: (p, c) =>
+          //     p.saveFailureOrSuccessOption != c.saveFailureOrSuccessOption,
+          // listener: (context, state) {
+          //   state.saveFailureOrSuccessOption.fold(
+          //     () {},
+          //     (either) {
+          //       either.fold( //TODO: the flashbar is only shown oncegngfh
+          //         (failure) {
+          //           FlushbarHelper.createError(
+          //             message: failure.map(
+          //               insufficientPermissions: (_) =>
+          //                   'Insufficient permissions ❌',
+          //               unableToUpdate: (_) =>
+          //                   "Couldn't update the note. Was it deleted from another device?",
+          //               unexpected: (_) =>
+          //                   'Unexpected error occured, please contact support.',
+          //               notFound: (_) => "Not Found",
+          //               notAuthenticated: (_) => "Not Authenticated",
+          //               internalServer: (_) => "Internal Server", //TODO: localization
+          //             ),
+          //           ).show(context);
+          //         },
+          //         (_) {
+          //           ExtendedNavigator.of(context).popUntil(
+          //             (route) => route.settings.name == Routes.feedScreen,
+          //           );
+          //         },
+          //       );
+          //     },
+          //   );
+          // },
           buildWhen: (p, c) => p.isSaving != c.isSaving,
           builder: (context, state) {
             return Stack(

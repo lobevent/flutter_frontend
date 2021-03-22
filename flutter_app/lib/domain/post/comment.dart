@@ -39,9 +39,9 @@ class Comment implements _$Comment {
 
   const factory Comment.childLess() = CommentChildLess;
 
-  const factory Comment.childCount(
+  const factory Comment.childCount({
     required int count,
-  ) = CommentChildCount;
+  }) = CommentChildCount;
 
   const factory Comment.children({
     required int count,

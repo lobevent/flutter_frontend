@@ -21,7 +21,7 @@ class EventDto extends BaseDto implements _$EventDto {
     required String description,
     required DateTime date,
     required DateTime creationDate,
-    required @OwnerConverter() ProfileDto owner,
+    @OwnerConverter() required ProfileDto owner,
   }) = EventDtoFull;
 
 

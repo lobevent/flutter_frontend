@@ -26,7 +26,7 @@ class CommentDto extends BaseDto implements _$CommentDto {
     required String commentContent,
     required DateTime creationDate,
     required ProfileDto profile, //TODO: make it an integer
-    required @ParentConverter() Either<CommentDto, Unit> commentParent,
+    @ParentConverter() required Either<CommentDto, Unit> commentParent,
     required int post,
     @ChildrenConverter() Either<int, Unit> commentChildren,
   }) = _CommentDto;
@@ -35,7 +35,7 @@ class CommentDto extends BaseDto implements _$CommentDto {
     required String commentContent,
     required DateTime creationDate,
     required ProfileDto profile, //TODO: make it an integer
-    required @ParentConverter() Either<CommentDto, Unit> commentParent,
+    @ParentConverter() required Either<CommentDto, Unit> commentParent,
     required int post,
     @ChildrenConverter() Either<int, Unit> commentChildren,
   }) = _CommentDtoWithoutId;

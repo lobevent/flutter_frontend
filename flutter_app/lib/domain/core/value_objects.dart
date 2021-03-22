@@ -64,12 +64,11 @@ class UniqueId extends ValueObject<String> {
 
   factory UniqueId() {
     return UniqueId._(
-      right(Uuid().v4()),
+      right(const Uuid().v4()),
     );
   }
 
   factory UniqueId.fromUniqueString(String uniqueId) {
-    assert(uniqueId != null);
     return UniqueId._(
       right(uniqueId),
     );

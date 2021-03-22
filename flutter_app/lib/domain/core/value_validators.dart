@@ -55,10 +55,7 @@ Either<ValueFailure<String>, String> validateStringNotEmpty(String input) {
 }
 
 
-Either<ValueFailure<String>, String> validateLength(
-  String input, 
-  {int minLength=0, int maxLength}
-  ) {
+Either<ValueFailure<String>, String> validateLength(String input, {int minLength=0, int? maxLength}) {
   if (input.length < minLength) {
     return left(
       ValueFailure.lengthTooShort(failedValue: input, minLength: minLength)

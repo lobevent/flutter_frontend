@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart' hide User;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-import 'package:flutter_frontend/domain/auth/user.dart';
+import 'package:flutter_frontend/domain/auth/user.dart' as user;
 import 'package:flutter_frontend/domain/auth/auth_failure.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/auth/i_auth_facade.dart';
@@ -34,8 +34,14 @@ class FirebaseAuthFacade implements IAuthFacade {
   }
 
   @override
-  Option<User> getSignedInUser() 
-    => optionOf(UserDto.fromFirebase(_firebaseAuth.currentUser).toDomain());
+  Option<user.User> getSignedInUser() {
+    final User? firebaseUser = _firebaseAuth.currentUser;
+    if (firebaseUser != null) {
+      return some(UserDto.fromFirebase(firebaseUser).toDomain());
+    } else {
+      return none();
+    }
+  }
 
   @override
   Future<bool> signInWithAppleAvailable() async {
@@ -126,7 +132,7 @@ class FirebaseAuthFacade implements IAuthFacade {
     try {
       // this fields hold additional info about the google account
       // normally firebase should add them to the firebase user
-      final GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
 
       if (googleSignInAccount == null) {
         return left(const AuthFailure.cancelledByUser());
@@ -179,8 +185,8 @@ class FirebaseAuthFacade implements IAuthFacade {
   ///   - AutoPhoneAuthFailed: only on Android (check further up explanation and
   ///                          how to handle this case)
   @override
-  Future<Either<AuthFailure, Unit>> startPhoneNumberSignInFlow({String phoneNumber}) async {
-
+  Future<Either<AuthFailure, Unit>> startPhoneNumberSignInFlow({required String phoneNumber}) async {
+    
     _lastPhoneNumber = some(phoneNumber);
 
     final Completer<Either<AuthFailure, Unit>> loginResultCompleter = Completer();
@@ -206,9 +212,9 @@ class FirebaseAuthFacade implements IAuthFacade {
             );
         }
       }, 
-      codeSent: (String phoneVerificationId, int resendToken) {
+      codeSent: (String phoneVerificationId, int? resendToken) {
         _lastPhoneVerificationId = some(phoneVerificationId);
-        _lastPhoneResendToken = some(resendToken);
+        _lastPhoneResendToken = optionOf(resendToken);
       }, 
       codeAutoRetrievalTimeout: (String phoneVerificationId) {
         _lastPhoneVerificationId = some(phoneVerificationId);
@@ -216,7 +222,7 @@ class FirebaseAuthFacade implements IAuthFacade {
           left(const AuthFailure.autoPhoneAuthFailed())
         );
       },
-      forceResendingToken: _lastPhoneResendToken.getOrElse(() => null),
+      forceResendingToken: _lastPhoneResendToken.fold(() => null, (token) => token),
     );
 
     return loginResultCompleter.future;
@@ -233,9 +239,13 @@ class FirebaseAuthFacade implements IAuthFacade {
   ///                                  once.
   @override
   Future<Either<AuthFailure, Unit>> resendSmsCode() {
-    final String phoneNumber = _lastPhoneNumber.getOrElse(() {
-      throw PhoneVerificationNotStarted();
-    });
+    final String phoneNumber = _lastPhoneNumber.fold(() {
+        throw PhoneVerificationNotStarted();
+      }, 
+      (phoneNumber) => phoneNumber,
+    );
+
+    
 
     return startPhoneNumberSignInFlow(phoneNumber: phoneNumber);
   }

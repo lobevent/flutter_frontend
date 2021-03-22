@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'package:flutter_frontend/l10n/constants.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:dartz/dartz.dart';
 
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/domain/auth/user.dart';
@@ -10,20 +12,23 @@ part 'user_dto.freezed.dart';
 part 'user_dto.g.dart';
 
 @freezed
-class UserDto extends BaseDto implements _$UserDto {
+class UserDto extends BaseDto with _$UserDto {
   const UserDto._();
 
   const factory UserDto({
     required String id,
     required String username,
-    @Default("") @JsonKey(includeIfNull: true) String emailAddress, //TODO: Make this either
+    String? emailAddress,
   }) = _UserDto;
 
   factory UserDto.fromDomain(User user) {
     return UserDto(
       id: user.id.getOrCrash(),
       username: user.username.getOrCrash(),
-      emailAddress: user.email.getOrCrash(),
+      emailAddress: user.email.fold(
+        () => null, 
+        (EmailAddress emailAddress) => emailAddress.getOrCrash()
+      ),
     );
   }
 
@@ -32,7 +37,7 @@ class UserDto extends BaseDto implements _$UserDto {
     return User(
       id: UniqueId.fromUniqueString(id.toString()),
       username: Username(username),
-      email: emailAddress == null ? EmailAddress.notProvided() : EmailAddress(emailAddress)
+      email: some(EmailAddress("")), // emailAddress.fold(() => none(), (String emailAddress) => some(EmailAdress(emailAddress))),
     );
   }
 
@@ -41,7 +46,7 @@ class UserDto extends BaseDto implements _$UserDto {
   factory UserDto.fromFirebase(firebase.User firebaseUser) {
     return UserDto(
       id: firebaseUser.uid,
-      username: firebaseUser.displayName,
+      username: firebaseUser.displayName ?? noUsernameError,
       emailAddress: firebaseUser.email,
     );
   }

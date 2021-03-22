@@ -42,7 +42,6 @@ class Username extends ValueObject<String> {
   final Either<ValueFailure<String>, String> value;
 
   factory Username(String username) {
-    assert(username != null);
     return Username._(
       validateLength(username, minLength: Constants.minUsernameLength)
     );

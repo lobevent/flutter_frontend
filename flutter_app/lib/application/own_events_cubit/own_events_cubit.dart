@@ -22,7 +22,7 @@ part 'own_events_state.dart';
 
 class OwnEventsCubit extends Cubit<OwnEventsState> {
    OwnEventsCubit() : super(OwnEventsState.initial()) {
-    EventRepository repository = EventRepository(EventRemoteService(), EventLocalService());
+    repository = EventRepository(EventRemoteService(), EventLocalService());
     emit(OwnEventsState.initial());
     getOwnEvents();
   }
@@ -39,7 +39,7 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
         ]);
       });
        //await repository.getList(Operation.owned, DateTime.now(), 5);
-      emit(OwnEventsState.loaded(events: ownEventsList.fold((l) =>l, (r) => null)));
+      emit(OwnEventsState.loaded(events: ownEventsList.fold((l) =>l, (r) => throw Exception)));
     } catch (e) {
       print ("test 11111111111111111");
       emit(OwnEventsState.error(error: e.toString()));

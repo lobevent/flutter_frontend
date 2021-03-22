@@ -93,7 +93,7 @@ class CommentDto extends BaseDto with _$CommentDto {
                         (r) => const Comment.childLess()),
                 post: value.post,
                 commentParent: value.commentParent.fold(
-                        (l) => left(Comment.parent(id: Id.fromUnique(l.id.toString()))),
+                        (l) => left(Comment.parent(id: Id.fromUnique((l as _CommentParentDto).id))),
                         (r) => right(unit)),
               )
             }, parent: (_CommentParentDto value) {

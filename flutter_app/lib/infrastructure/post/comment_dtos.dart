@@ -27,7 +27,7 @@ class CommentDto extends BaseDto with _$CommentDto {
     required String commentContent,
     required DateTime creationDate,
     required ProfileDto profile, //TODO: make it an integer
-    @ParentConverter() required Either<_CommentChildrenDto, Unit> commentParent,
+    @ParentConverter() required Either<CommentDto, Unit> commentParent,
     required int post,
     @ChildrenConverter() required Either<int, Unit> commentChildren,
   }) = _CommentDto;
@@ -89,7 +89,7 @@ class CommentDto extends BaseDto with _$CommentDto {
                 commentChildren: value.commentChildren
                     //left(left()) because of the complex Either type
                     //where the list isn`t used here yet
-                    .fold((l) => Comment.childCount(count: value.commentChildren.fold((l) => null, (r) => null)),
+                    .fold((l) => Comment.childCount(count: value.commentChildren.fold((l) => l, (r) => 0)),
                         (r) => const Comment.childLess()),
                 post: value.post,
                 commentParent: value.commentParent.fold(

@@ -12,7 +12,7 @@ part 'sign_in_form_cubit.freezed.dart';
 class SignInFormCubit extends Cubit<SignInFormState> {
   final IAuthFacade _authFacade;
 //todo
-  SignInFormCubit(this._authFacade) : super(null);
+  SignInFormCubit(this._authFacade) : super(SignInFormState.initial());
   
 
   @override
@@ -33,7 +33,7 @@ class SignInFormCubit extends Cubit<SignInFormState> {
     );
   }
   Future<void> registerWithEmailAndPasswordPressed() async{
-    Either<AuthFailure, Unit> failureOrSuccess;
+    Either<AuthFailure, Unit>? failureOrSuccess;
 
     final isEmailValid = state.emailAddress.isValid();
     final isPasswordValid = state.password.isValid();
@@ -58,7 +58,7 @@ class SignInFormCubit extends Cubit<SignInFormState> {
     );
   }
   Future<void> signInWithEmailAndPasswordPressed() async{
-    Either<AuthFailure, Unit> failureOrSuccess;
+    Either<AuthFailure, Unit>? failureOrSuccess;
 
     final isEmailValid = state.emailAddress.isValid();
     final isPasswordValid = state.password.isValid();

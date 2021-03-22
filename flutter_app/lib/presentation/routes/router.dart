@@ -11,4 +11,4 @@ import 'package:flutter_frontend/presentation/pages/own_events_screen.dart';
     AutoRoute(page: OwnEventsScreen)
   ],
 )
-class $Router {}
+class $Router{}

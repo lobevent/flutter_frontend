@@ -10,11 +10,17 @@ import 'package:flutter_frontend/presentation/pages/login_screen.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  final _appRouter = app_router.Router();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp
+    //     .router(
+    //     routerDelegate: _appRouter.delegate(),
+    //     routeInformationParser: _appRouter.defaultRouteParser()
+    // );
+      (
       title: 'Material App',
-      builder: ExtendedNavigator.builder(router: app_router.Router()),
+      builder: ExtendedNavigator.builder<app_router.Router>(router: app_router.Router()),
       //home: FeedScreen(),
 //      BlocProvider(
 //        create: (context) => SignInFormCubit(null),

@@ -1,4 +1,4 @@
-import 'package:flushbar/flushbar_helper.dart';
+//import 'package:flushbar/flushbar_helper.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +22,7 @@ class EventFormPage extends StatelessWidget {
     return BlocProvider(
         create: (context) => EventFormCubit(),
         child: BlocConsumer<EventFormCubit, EventFormState>(
-        listener: (context, state) {}
+        listener: (context, state) {},
           // listenWhen: (p, c) =>
           //     p.saveFailureOrSuccessOption != c.saveFailureOrSuccessOption,
           // listener: (context, state) {
@@ -87,7 +87,7 @@ class EventFormPageScaffold extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.check),
             onPressed: () {
-              context.bloc<EventFormCubit>().saveEvent();
+              context.watch<EventFormCubit>().saveEvent();
             },
           )
         ],

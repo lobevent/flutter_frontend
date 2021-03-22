@@ -13,12 +13,14 @@ class FeedScreen extends StatelessWidget {
       body: Column(
         children: [
           ElevatedButton(onPressed:() {
-            ExtendedNavigator.root.push(Routes.eventFormPage, arguments: EventFormPageArguments(editedEvent: "")
+
+
+            ExtendedNavigator.root!.push(Routes.eventFormPage, arguments: EventFormPageArguments(editedEvent: "")
             // ExtendedNavigator.of(context).popUntil(
             //     (route) => route.settings.name == Routes.eventFormPage,
           );}, child: Text("Button1")),
           ElevatedButton(onPressed:() {
-            ExtendedNavigator.root.push(Routes.ownEventsScreen, arguments: OwnEventsScreen()
+            ExtendedNavigator.root!.push(Routes.ownEventsScreen, arguments: OwnEventsScreen()
               // ExtendedNavigator.of(context).popUntil(
               //     (route) => route.settings.name == Routes.eventFormPage,
             );}, child: Text("Button2"))

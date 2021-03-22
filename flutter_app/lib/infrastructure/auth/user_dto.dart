@@ -18,7 +18,7 @@ class UserDto extends BaseDto with _$UserDto {
   const factory UserDto({
     required String id,
     required String username,
-    String? emailAddress,
+    @JsonKey(includeIfNull: false) String? emailAddress,
   }) = _UserDto;
 
   factory UserDto.fromDomain(User user) {
@@ -37,7 +37,7 @@ class UserDto extends BaseDto with _$UserDto {
     return User(
       id: UniqueId.fromUniqueString(id.toString()),
       username: Username(username),
-      email: some(EmailAddress("")), // emailAddress.fold(() => none(), (String emailAddress) => some(EmailAdress(emailAddress))),
+      email: emailAddress == null ? none() : some(EmailAddress(emailAddress!)),
     );
   }
 

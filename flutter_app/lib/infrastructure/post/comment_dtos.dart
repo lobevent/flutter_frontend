@@ -27,9 +27,9 @@ class CommentDto extends BaseDto with _$CommentDto {
     required String commentContent,
     required DateTime creationDate,
     required ProfileDto profile, //TODO: make it an integer
-    @ParentConverter() required Either<CommentDto, Unit> commentParent,
+    @ParentConverter() required Option<CommentDto> commentParent,
     required int post,
-    @ChildrenConverter() required Either<int, Unit> commentChildren,
+    @ChildrenConverter() required Option<int> commentChildren,
   }) = _CommentDto;
 
 
@@ -56,8 +56,8 @@ class CommentDto extends BaseDto with _$CommentDto {
                 commentContent: comment.commentContent.getOrCrash(),
                 post: comment.post,
                 //fold for the Either type
-                commentParent: comment.commentParent.fold(
-                    (l) => left(CommentDto.fromDomain(l)), (r) => right(r)), commentChildren: right(unit),
+                commentParent: comment.commentParent.fold((l) => some(CommentDto.fromDomain(l)), (r) => none()),
+                commentChildren: none(), //TODO: I dont know if this is important, but its worth a second look
                 //leave out children, as they arent used in to Api communication
               ),
             },
@@ -86,15 +86,16 @@ class CommentDto extends BaseDto with _$CommentDto {
                 creationDate: value.creationDate,
                 commentContent: CommentContent(value.commentContent),
                 owner: value.profile.toDomain(),
-                commentChildren: value.commentChildren
+                commentChildren: value.commentChildren.fold(() => Comment.childLess(), (a) => Comment.childCount(count: a)),
                     //left(left()) because of the complex Either type
                     //where the list isn`t used here yet
-                    .fold((l) => Comment.childCount(count: value.commentChildren.fold((l) => l, (r) => 0)),
-                        (r) => const Comment.childLess()),
+                    // .fold((l) => Comment.childCount(count: value.commentChildren.fold((l) => l, (r) => 0)),
+                    //     (r) => const Comment.childLess()),
                 post: value.post,
-                commentParent: value.commentParent.fold(
-                        (l) => left(Comment.parent(id: Id.fromUnique((l as _CommentParentDto).id))),
-                        (r) => right(unit)),
+                commentParent: value.commentParent.fold(() => right(unit), (a) => left(Comment.parent(id: Id.fromUnique((a as _CommentParentDto).id))))
+                    // .fold(
+                    //     (l) => left(Comment.parent(id: Id.fromUnique((l as _CommentParentDto).id))),
+                    //     (r) => right(unit)),
               )
             }, parent: (_CommentParentDto value) {
       returnedComment = Comment.parent(id: Id.fromUnique(value.id));
@@ -111,7 +112,7 @@ class CommentDto extends BaseDto with _$CommentDto {
 
 ///converts the Either type from and to json for comment children
 // TODO change the return type to left failure and right success
-class ChildrenConverter implements JsonConverter<Either<int, Unit>, Object> {
+class ChildrenConverter implements JsonConverter<Option<int>, Object> {
   const ChildrenConverter();
 
   @override
@@ -122,11 +123,11 @@ class ChildrenConverter implements JsonConverter<Either<int, Unit>, Object> {
   ///
   /// throws [UnexpectedTypeError] if the type isn`t an integer
   // TODO problematic in many ways. Since json is normally of tpye Map<String, dynamic> this would always fail or at least in the raw form it's a string and Object as input is a little bit wide spread. And also the problem of json decoding must be handled (like in the other cases mentioned earlier i.e. /infrastructure/event/event_remote_service.dart)
-  Either<int, Unit> fromJson(Object json) {
+  Option<int> fromJson(Object json) {
     if (json is int && json > 0) {
-      return left(json);
+      return some(json);
     } else if (json == 0) {
-      return right(unit);
+      return none();
     }
     throw UnexpectedTypeError();
   }
@@ -134,7 +135,7 @@ class ChildrenConverter implements JsonConverter<Either<int, Unit>, Object> {
   @override
 
   ///dont need that, as the api does not accept children
-  Object toJson(Either<dynamic, dynamic> object) {
+  Object toJson(Option<int> object) {
     // TODO: implement toJson (can't be handled here -> see problem above)
     throw UnimplementedError();
   }
@@ -143,28 +144,25 @@ class ChildrenConverter implements JsonConverter<Either<int, Unit>, Object> {
 ///converts the Either type from and to json for comment parent
 // TODO change the return type to left failure and right success
 class ParentConverter
-    implements JsonConverter<Either<CommentDto, Unit>, Object> {
+    implements JsonConverter<Option<CommentDto>, Object> {
   const ParentConverter();
 
   @override
   //calls parent factory if an parent id is included in the api request
   //if not it reurns the unit type
   // TODO same problem as in ChildConverter
-  Either<CommentDto, Unit> fromJson(Object json) {
+  Option<CommentDto> fromJson(Object json) {
     if (json is String) {
-      return left(CommentDto.parent(id: json));
+      return some(CommentDto.parent(id: json));
     } else if (json == null) {
-      return right(unit);
+      return none();
     }
     throw UnexpectedTypeError();
   }
 
   //converts parent unit type to null if no id is given
   @override
-  Object toJson(Either<CommentDto, Unit> object) {
-    return object.fold(
-      (l) => left(l),
-      (r) => right(null),
-    );
+  Object toJson(Option<CommentDto> object) {
+    return object.fold(() => "", (a) => a);
   }
 }

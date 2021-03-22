@@ -14,7 +14,9 @@ class LoginScreen extends StatelessWidget {
         alignment: Alignment.center,
         child: BlocBuilder<SignInFormCubit, SignInFormState>(
           // ignore: missing_return
-          builder: (context, state) {},
+          builder: (context, state) {
+            return Text("hallo");
+            },
         ),
       ),
     );

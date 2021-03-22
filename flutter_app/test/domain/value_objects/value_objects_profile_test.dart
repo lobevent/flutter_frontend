@@ -58,14 +58,14 @@ main() {
       creationDate: DateTime.now(),
       commentContent: CommentContent("ihhhhhhhhhhhhh"),
       owner: profileBaseValid,
-      post: 2);
+      post: 2, commentChildren: Comment.children(count: 0, commentChildren: []), commentParent: );
 
   Comment testCommentInvalid = Comment(
       id: Id.fromUnique(3),
       creationDate: DateTime.now(),
       commentContent: CommentContent(longerThanMaxLength),
       owner: profileBaseValid,
-      post: 2);
+      post: 2, commentChildren: Comment.children(count: 0, commentChildren: []));
 
   List<Comment> commentList = [testComment];
 

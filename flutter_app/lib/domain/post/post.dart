@@ -11,7 +11,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'post.freezed.dart';
 
 @freezed
-abstract class Post implements _$Post {
+class Post implements _$Post {
   const Post._();
 
   const factory Post({

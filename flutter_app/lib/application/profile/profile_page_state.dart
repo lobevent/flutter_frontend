@@ -1,7 +1,7 @@
 part of 'profile_page_cubit.dart';
 
 @freezed
-abstract class ProfilePageState with _$ProfilePageState {
+class ProfilePageState with _$ProfilePageState {
   const factory ProfilePageState({
     @required Profile profile,
     @required bool showErrorMessages,

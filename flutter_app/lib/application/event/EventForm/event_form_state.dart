@@ -2,7 +2,7 @@ part of 'event_form_cubit.dart';
 
 
 @freezed
-abstract class EventFormState with _$EventFormState {
+class EventFormState with _$EventFormState {
 
   const factory EventFormState({
     @required Event event,

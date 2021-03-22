@@ -5,7 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'todo.freezed.dart';
 @freezed
-abstract class Todo implements _$Todo {
+class Todo implements _$Todo {
   const Todo._();
 
   const factory Todo({

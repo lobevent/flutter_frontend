@@ -9,7 +9,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'comment.freezed.dart';
 
 @freezed
-abstract class Comment implements _$Comment {
+class Comment implements _$Comment {
   const Comment._();
 
   const factory Comment({

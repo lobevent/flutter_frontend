@@ -9,7 +9,7 @@ import 'package:flutter_frontend/domain/profile/profile.dart';
 part 'event.freezed.dart';
 
 @freezed
-abstract class Event implements _$Event {
+class Event implements _$Event {
   const Event._();
 
   const factory Event({

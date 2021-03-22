@@ -11,7 +11,7 @@ part 'event_dtos.freezed.dart';
 part 'event_dtos.g.dart';
 
 @freezed
-abstract class EventDto extends BaseDto implements _$EventDto {
+class EventDto extends BaseDto implements _$EventDto {
   const EventDto._();
 
   const factory EventDto({

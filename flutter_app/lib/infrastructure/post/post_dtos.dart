@@ -14,7 +14,7 @@ part 'post_dtos.freezed.dart';
 part 'post_dtos.g.dart';
 
 @freezed
-abstract class PostDto extends BaseDto implements _$PostDto {
+class PostDto extends BaseDto implements _$PostDto {
   const PostDto._();
 
   const factory PostDto({

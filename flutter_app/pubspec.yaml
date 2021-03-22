@@ -4,40 +4,40 @@ description: The frontend for the lobevent app written in flutter
 version: 0.0.1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  auto_route_generator: ^0.6.10
-
-
-  flushbar: ^1.10.0
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # annotations for json code generation
-  json_annotation: ^4.0.0
+  json_annotation: ^4.0.1
 
   # annotations for freezed data and union classes code generation
   freezed_annotation: ^0.14.1
 
   # dartz for a ton of useful utils (like Either type and so on)
-  dartz: ^0.9.2
+  dartz: ^0.10.0-nullsafety.1  
 
   # standard dart http library
-  http: ^0.13.0
+  http: ^0.13.1
 
   # bloc library in general (Cubit and Bloc)
-  bloc: ^6.0.3
+  bloc: ^7.0.0
 
   # flutter bloc specific widgets like BlocConsumer
-  flutter_bloc: ^6.0.6
+  flutter_bloc: ^7.0.0
 
   # uuid for the user objects (and probably more later)
-  uuid: ^2.2.2
+  uuid: ^3.0.2
 
   # this plugin will handle the google part of signing in with google
-  google_sign_in: ^4.5.6
+  google_sign_in: ^5.0.1
 
   # this plugin will handle the apple part of signing in with apple
-  sign_in_with_apple: ^2.5.4
+  sign_in_with_apple: ^3.0.0
 
   # we need to check that the iOS version is at least 13 since 12 won't support apple sign in
   device_info: ^2.0.0
@@ -51,46 +51,26 @@ dependencies:
   ###
   # end firebase related stuff
   ###
-  
-  # moor really got some dependency problems rn
-  # the actual implementation of moor
-  #moor: ^3.0.0
-
-  # some additional flutter stuff for moor 
-  #moor_flutter: ^3.1.0
-
-  # start dependencies for moor
-  sqlite3: ^1.0.0 # Ships the latest sqlite3 version with your Android or iOS app.
-  path_provider: ^2.0.1 #Used to find a suitable location to store the database.
-  path: ^1.7.0 # path manipulation library for all platforms
 
   #string interpolation
-  sprintf: ^5.0.0
-
-  flutter:
-    sdk: flutter
-  flutter_localizations:
-    sdk: flutter
+  sprintf: ^6.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^1.10.3
+  build_runner: ^1.12.2
 
   # data and union classes generator
-  freezed: ^0.14.1
+  freezed: ^0.14.1+1
 
   # json serializable code generation
-  json_serializable: ^4.0.0
-
-  # moor generater
-  # currently got some problems with other dependencies
-  #moor_generator: ^3.4.0
+  json_serializable: ^4.1.0
 
   # mock libary to mock dependencies
-  mockito: ^4.1.3
+  mockito: ^5.0.2
 
-
+dependency_overrides:
+  source_gen: ^1.0.0
 
 flutter:
   uses-material-design: true

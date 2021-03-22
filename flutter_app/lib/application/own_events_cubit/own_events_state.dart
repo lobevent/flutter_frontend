@@ -3,7 +3,7 @@ part of 'own_events_cubit.dart';
 
 
 @freezed
-abstract class OwnEventsState with _$OwnEventsState {
+class OwnEventsState with _$OwnEventsState {
   const factory OwnEventsState({
     @required List<Event> ownEventsList,
     @required bool showErrorMessages,

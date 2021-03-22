@@ -10,7 +10,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'profile.freezed.dart';
 
 @freezed
-abstract class Profile implements _$Profile {
+class Profile implements _$Profile {
   const Profile._();
 
   const factory Profile({

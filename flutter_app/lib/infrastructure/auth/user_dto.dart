@@ -10,7 +10,7 @@ part 'user_dto.freezed.dart';
 part 'user_dto.g.dart';
 
 @freezed
-abstract class UserDto extends BaseDto implements _$UserDto {
+class UserDto extends BaseDto implements _$UserDto {
   const UserDto._();
 
   const factory UserDto({

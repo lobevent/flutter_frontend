@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -40,20 +41,32 @@ class ProfileRepository extends IProfileRepository {
 
   @override
   Future<Either<ProfileFailure, List<Profile>>> getList(
-          Operation operation, int amount,{Post post, Profile profile, Event event}) async {
+          Operation operation, int amount,{Post? post, Profile? profile, Event? event}) async {
     try {
       List<ProfileDto> profileDtos;
       switch (operation) {
         case Operation.search:
+          if (profile == null) {
+            throw UnexpectedTypeError();
+          }
           profileDtos = await _profileRemoteService.getSearchedProfiles( amount, profile.id.getOrCrash().toString());
           break;
         case Operation.attendingUsersEvent:
+          if (profile == null) {
+            throw UnexpectedTypeError();
+          }
           profileDtos = await _profileRemoteService.getAttendingUsersToEvent(amount, profile.id.getOrCrash().toString());
           break;
         case Operation.follower:
+          if (profile == null) {
+            throw UnexpectedTypeError();
+          }
           profileDtos = await _profileRemoteService.getFollower( amount, profile.id.getOrCrash().toString());
           break;
         case Operation.postProfile:
+          if (post == null) {
+            throw UnexpectedTypeError();
+          }
           profileDtos = await _profileRemoteService.getProfilesToPost(amount, post
               .maybeMap(
                   (value) => value.id.getOrCrash().toString(),

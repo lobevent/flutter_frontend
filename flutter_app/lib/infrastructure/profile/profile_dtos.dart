@@ -14,7 +14,7 @@ part 'profile_dtos.freezed.dart';
 part 'profile_dtos.g.dart';
 
 @freezed
-class ProfileDto extends BaseDto implements _$ProfileDto {
+class ProfileDto extends BaseDto with _$ProfileDto {
   const ProfileDto._();
 
   const factory ProfileDto({

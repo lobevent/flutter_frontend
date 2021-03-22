@@ -14,7 +14,7 @@ part 'comment_dtos.g.dart';
 // TODO I will go through infrastructure
 
 @freezed
-class CommentDto extends BaseDto implements _$CommentDto {
+class CommentDto extends BaseDto with _$CommentDto {
   const CommentDto._();
 
   const factory CommentDto.parent({

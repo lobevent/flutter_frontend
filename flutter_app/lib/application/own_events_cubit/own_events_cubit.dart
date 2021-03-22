@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event_failure.dart';
 import 'package:flutter_frontend/domain/event/i_event_repository.dart';
@@ -20,8 +21,8 @@ part 'own_events_state.dart';
 
 
 class OwnEventsCubit extends Cubit<OwnEventsState> {
-  OwnEventsCubit() : super(OwnEventsState.initial()) {
-    var repository = EventRepository(EventRemoteService(), EventLocalService());
+   OwnEventsCubit() : super(OwnEventsState.initial()) {
+    EventRepository repository = EventRepository(EventRemoteService(), EventLocalService());
     emit(OwnEventsState.initial());
     getOwnEvents();
   }
@@ -29,7 +30,6 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
 
 
   Future<void> getOwnEvents() async {
-    List<Event> ownEventsList = null;
     try {
       emit(OwnEventsState.loading());
       final Either<List<Event>, EventFailure> ownEventsList = await Future.delayed(Duration(seconds: 2), () {

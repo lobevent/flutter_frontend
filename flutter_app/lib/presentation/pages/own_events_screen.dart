@@ -19,12 +19,7 @@ class OwnEventsScreenScaffold extends StatelessWidget {
       appBar: AppBar(
         title: Text("Owned Events"),
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: 16),
-        alignment: Alignment.center,
-        child: OwnEventsScreen(),
-
-      ),);
+    );
   }
 }
 

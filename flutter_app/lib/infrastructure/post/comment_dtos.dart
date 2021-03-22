@@ -28,7 +28,7 @@ class CommentDto extends BaseDto with _$CommentDto {
     required ProfileDto profile, //TODO: make it an integer
     @ParentConverter() required Either<CommentDto, Unit> commentParent,
     required int post,
-    @ChildrenConverter() required Either<int, Unit> commentChildren,
+    @ChildrenConverter()  Either<int, Unit>? commentChildren,
   }) = _CommentDto;
 
   const factory CommentDto.WithoutId({

@@ -30,9 +30,8 @@ class CommentRemoteService extends RemoteService<CommentDto>{
 
   SymfonyCommunicator client;
 
-  CommentRemoteService({SymfonyCommunicator communicator})
-      : client = communicator ??
-            SymfonyCommunicator(jwt: null); // TODO check on this one
+  CommentRemoteService({required SymfonyCommunicator communicator})
+      : client = communicator; // TODO check on this one
 
   //decode the json response for post
   //TODO dont know if this is stable, because of cancer childrenconverter

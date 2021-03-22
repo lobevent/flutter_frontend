@@ -32,11 +32,8 @@ class PostRemoteService extends RemoteService<PostDto>{
 
   final SymfonyCommunicator client;
 
-  PostRemoteService({SymfonyCommunicator communicator})
-      : client = communicator ??
-      SymfonyCommunicator(
-          jwt:
-          null); // TODO this doesn't work on runtime -> will throw an error!
+  PostRemoteService({required SymfonyCommunicator communicator})
+      : client = communicator; // TODO this doesn't work on runtime -> will throw an error!
 
 
   //decode the json response for post

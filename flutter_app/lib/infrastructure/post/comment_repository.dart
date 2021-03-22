@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
@@ -39,17 +40,23 @@ class CommentRepository implements ICommentRepository {
   }
 
   @override
-  Future<Either<CommentFailure, List<Comment>>> getList(Operation operation, DateTime lastCommentTime, int amount, {Profile profile, Comment commentParent, Post postParent}) async {
+  Future<Either<CommentFailure, List<Comment>>> getList(Operation operation, DateTime lastCommentTime, int amount, {Profile? profile, Comment? commentParent, Post? postParent}) async {
     try {
       List<CommentDto> commentDtos;
       switch (operation) {
         case Operation.fromPost:
+          if(postParent == null){
+            throw UnexpectedTypeError();
+          }
           commentDtos = await _commentRemoteService.getCommentsFromPost(lastCommentTime, amount, postParent
               .maybeMap(
                   (value) => value.id.getOrCrash().toString(), //need to be done, as post parent has classes where the id is not included
               orElse: throw UnexpectedFormatException()));
           break;
         case Operation.fromComment:
+          if(commentParent == null){
+            throw UnexpectedTypeError();
+          }
           commentDtos = await _commentRemoteService.getCommentsFromCommentParent(lastCommentTime, amount, commentParent
               .maybeMap(
                   (value) => value.id.getOrCrash().toString(),
@@ -57,6 +64,9 @@ class CommentRepository implements ICommentRepository {
               orElse: throw UnexpectedFormatException()));
           break;
         case Operation.fromUser:
+          if(profile == null){
+            throw UnexpectedTypeError();
+          }
           commentDtos = await _commentRemoteService.getCommentsFromUser(lastCommentTime, amount, profile.id.getOrCrash().toString());
           break;
         case Operation.own:

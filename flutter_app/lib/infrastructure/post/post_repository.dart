@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/i_post_repository.dart';
@@ -39,7 +40,7 @@ class PostRepository implements IPostRepository {
   @override
   Future<Either<PostFailure, List<Post>>> getList(Operation operation,
       DateTime lastPostTime, int amount, Event eventParent,  //TODO add eventparent
-      {Profile profile}) async {
+      {Profile? profile}) async {
     try {
       List<PostDto> postDtos;
       switch (operation) {
@@ -51,6 +52,9 @@ class PostRepository implements IPostRepository {
           postDtos = await _postRemoteService.getFeed(lastPostTime, amount);
           break;
         case Operation.fromUser:
+          if(profile == null){
+            throw UnexpectedTypeError();
+          }
           postDtos = await _postRemoteService.getPostsFromUser(
               lastPostTime, amount, profile.id.getOrCrash().toString());
           break;

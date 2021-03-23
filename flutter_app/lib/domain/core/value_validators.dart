@@ -3,7 +3,7 @@ import 'dart:core';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_frontend/domain/core/constants.dart';
+import 'package:flutter_frontend/constants.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 

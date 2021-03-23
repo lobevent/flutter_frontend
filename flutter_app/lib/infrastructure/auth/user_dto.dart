@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
-import 'package:flutter_frontend/l10n/constants.dart';
+import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartz/dartz.dart';
 

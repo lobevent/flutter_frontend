@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubit.dart';
 
@@ -9,16 +11,22 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Weather Search"),
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: 16),
-        alignment: Alignment.center,
-        child: BlocBuilder<SignInFormCubit, SignInFormState>(
-          // ignore: missing_return
-          builder: (context, state) {
-            return Text("hallo");
-            },
-        ),
+      body: ListView(
+        children: [
+          SignInWithAppleButton(
+            onPressed: onAppleSignInPressed,
+          ),
+
+        ],
       ),
     );
+  }
+
+  void onAppleSignInPressed() {
+
+  }
+
+  void onGoogleSignInPressed() {
+    
   }
 }

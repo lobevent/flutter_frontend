@@ -4,7 +4,7 @@ import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_validators.dart';
-import 'package:flutter_frontend/domain/core/constants.dart';
+import 'package:flutter_frontend/constants.dart';
 
 class ProfileName extends ValueObject<String> {
 

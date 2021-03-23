@@ -5,7 +5,7 @@ as app_router;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/feed.dart';
-import 'package:flutter_frontend/presentation/pages/login_screen.dart';
+import 'package:flutter_frontend/presentation/pages/login/login_screen.dart';
 
 void main() => runApp(MyApp());
 

@@ -9,13 +9,9 @@ class OwnEventsBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OwnEventsCubit, OwnEventsState>(builder: (context, state)
     {
-      return state.map((_) => Center(),
-          initial: (_) {
-            return const Center(child: Text("Rload"));
-          },
-          loading: (_) => const Center(
-            child: CircularProgressIndicator(),
-          ),
+      return state.map((_) => EventListView(events: []),
+          initial: (_) => EventListView(events: []),
+          loading: (_) => EventListView(events: []),
           loaded: (state) {
             return EventListView(events: state.events);
           },
@@ -36,8 +32,6 @@ class EventListView extends StatelessWidget {
 
 
 
-
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -46,13 +40,13 @@ class EventListView extends StatelessWidget {
           final event = events[index];
           if (event.failureOption.isSome()) {
             return Container(
-                color: Colors.red, width: 100, height: 100);
+                color: Colors.red, width: 100, height: 100,
+            child: Text(event.failureOption.fold(() => "", (a) => a.toString())),);
+
           } else {
-            return Container(
-              color: Colors.green,
-              width: 100,
-              height: 100,
-              child: Text(events.first.name.getOrCrash()),
+            return ListTile(
+
+              title: Text(events.first.name.getOrCrash()),
             );
           }
         },

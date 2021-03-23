@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/own_events_cubit/own_events_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/pages/Event/OwnEvents/widgets/own_events_body.dart';
+import 'package:flutter_frontend/presentation/pages/core/Widgets/loading_overlay.dart';
 import 'package:path/path.dart';
 
 class OwnEventsScreenScaffold extends StatelessWidget {
@@ -32,22 +33,28 @@ class _OwnEventsScreenState extends State<OwnEventsScreen> {
     return BlocProvider(
       create: (context) => OwnEventsCubit(),
       child: BlocConsumer<OwnEventsCubit, OwnEventsState>(
-          listener: (context, state) {
-        print("asdasdasdasdasd");
-        state.maybeMap((_) => null,
-            //error: (value) => FlushbarHelper.createError(message: value.error),
-            initial: (_) =>
-                context.read().bloc<OwnEventsCubit>().getOwnEvents(),
-            orElse: () => print("asd"));
-      }, builder: (context, state) {
-        return Scaffold(
-            body: OwnEventsBody());
-        // return Stack(
-        //   children: <Widget>[
-        //     const OwnEventsScreenScaffold(),
-        //   ],
-        // );
-      }),
+          listener: (context, state) {},
+          builder: (context, state) {
+            bool isLoading = state.maybeMap((_) => false,
+                loading: (_) => true, orElse: () => false);
+            return Stack(children: <Widget>[
+              OwnEventScreenHolder(),
+              LoadingOverlay(isLoading: isLoading)
+            ]);
+          }),
     );
+  }
+}
+
+class OwnEventScreenHolder extends StatelessWidget {
+  OwnEventScreenHolder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Own Events"),
+        ),
+        body: OwnEventsBody());
   }
 }

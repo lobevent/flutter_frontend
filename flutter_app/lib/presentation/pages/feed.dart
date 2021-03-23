@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart' hide Router;
-import 'file:///D:/Programming/Flutter/flutter_frontend/flutter_app/lib/presentation/pages/Event/OwnEvents/own_events_screen.dart';
+import 'package:flutter_frontend/presentation/pages/event/own_events/own_events_screen.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class FeedScreen extends StatelessWidget {

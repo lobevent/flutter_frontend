@@ -46,7 +46,7 @@ class UserDto extends BaseDto with _$UserDto {
   factory UserDto.fromFirebase(firebase.User firebaseUser) {
     return UserDto(
       id: firebaseUser.uid,
-      username: firebaseUser.displayName ?? noUsernameError,
+      username: firebaseUser.displayName ?? AppStrings.noUsernameError,
       emailAddress: firebaseUser.email,
     );
   }

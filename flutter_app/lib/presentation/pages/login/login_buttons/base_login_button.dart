@@ -3,21 +3,29 @@ import 'package:flutter_frontend/constants.dart';
 
 import 'package:flutter_frontend/l10n/app_strings.dart';
 
-class GoogleLoginButton extends StatelessWidget {
+class BaseLoginButton extends StatelessWidget {
+  final String text;
+
+  /// set an icon as front logo
+  final IconData? icon;
+
+  /// set an image as front logo
+  final Widget? image;
+
   final double fontSize;
 
   /// backgroundColor is required but textColor is default to `Colors.white`
   /// splashColor is defalt to `Colors.white30`
-  final Color textColor,
-      iconColor,
-      backgroundColor,
-      splashColor,
-      highlightColor;
+  final Color textColor;
+  final Color iconColor;
+  final Color backgroundColor;
+  final Color splashColor;
+  final Color highlightColor;
 
   /// onPressed should be specified as a required field to indicate the callback.
   final Function onPressed;
 
-  /// elevation has defalt value of 2.0
+  /// elevation has default value of 2.0
   final double elevation;
 
   /// the height of the button
@@ -31,9 +39,12 @@ class GoogleLoginButton extends StatelessWidget {
   /// on material button, hence, comment out.
   final ShapeBorder? shape;
 
-  const GoogleLoginButton({
+  const BaseLoginButton({
     Key? key,
+    required this.text,
     required this.onPressed,
+    this.icon,
+    this.image,
     this.backgroundColor = Colors.white,
     this.textColor = const Color.fromRGBO(0, 0, 0, 0.54),
     this.iconColor = Colors.white,
@@ -42,11 +53,11 @@ class GoogleLoginButton extends StatelessWidget {
     this.elevation = 2.0,
     this.height = 36.0,
     this.width = 220,
-    this.shape,
     this.fontSize = 14.0,
-  }) : super(key: key);
+    this.shape,
+  }) : assert(icon != null || image != null, "At least an icon or an image must be provided!"),
+       super(key: key);
 
-  /// The build funtion will be help user to build the signin button widget.
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
@@ -54,7 +65,7 @@ class GoogleLoginButton extends StatelessWidget {
       elevation: elevation,
       padding: const EdgeInsets.all(0),
       color: backgroundColor,
-      onPressed: onPressed as void Function()?,
+      onPressed: onPressed as VoidCallback?,
       splashColor: splashColor,
       highlightColor: highlightColor,
       shape: shape ?? ButtonTheme.of(context).shape,
@@ -71,14 +82,9 @@ class GoogleLoginButton extends StatelessWidget {
       child: Center(
         child: Row(
           children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: const Image(
-                image: AssetImage(Constants.googleLogoPath),
-              ),
-            ),
+            _iconOrImage(),
             Text(
-              signInWithGoogle,
+              text,
               style: TextStyle(
                 color: textColor,
                 fontSize: fontSize,
@@ -89,5 +95,20 @@ class GoogleLoginButton extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _iconOrImage() {
+    if (icon != null) {
+      return Icon(
+        icon,
+        size: 20,
+        color: iconColor,
+      );
+    } else {
+      return Container(
+        padding: const EdgeInsets.only(left: 10.0),
+        child: image
+      );
+    }
   }
 }

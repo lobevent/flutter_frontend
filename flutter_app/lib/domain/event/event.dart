@@ -13,7 +13,7 @@ class Event with _$Event {
   const Event._();
 
   const factory Event({
-    required Id id,
+    required UniqueId id,
     required EventName name,
     required DateTime date,
     required EventDescription description,
@@ -24,12 +24,12 @@ class Event with _$Event {
 
 
   factory Event.empty() => Event(
-    id: Id(),
+    id: UniqueId(),
     name: EventName(''),
     date: DateTime.now(),
     description: EventDescription(''),
     creationDate: DateTime.now(),
-    owner: Profile(id: Id(), name: ProfileName("ssss")), //TODO: !!!!!!!IIIIIIMMMMMMMMPPPPPPOOOOORTANT!!!!!!!! Implement logged in profile fetching
+    owner: Profile(id: UniqueId(), name: ProfileName("ssss")), //TODO: !!!!!!!IIIIIIMMMMMMMMPPPPPPOOOOORTANT!!!!!!!! Implement logged in profile fetching
     public: false,
   );
 

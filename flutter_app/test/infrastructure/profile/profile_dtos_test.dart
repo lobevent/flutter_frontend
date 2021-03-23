@@ -119,7 +119,7 @@ main() {
           http.Response(jsonEncode(testProfileDto.toJson()), 200));
 
       expect(
-          await repository.getSingleProfile(Id.fromUnique(1)).then(
+          await repository.getSingleProfile(UniqueId.fromUniqueString(1)).then(
                   (value) => value.fold((l) => null, (r) => ProfileDto.fromDomain(r))),
           testProfileDto);
     });

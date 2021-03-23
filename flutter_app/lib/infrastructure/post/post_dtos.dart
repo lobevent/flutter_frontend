@@ -57,7 +57,7 @@ class PostDto extends BaseDto with _$PostDto {
   Post toDomain() {
     return map(
         (value) => Post(
-            id: Id.fromUnique(value.id),
+            id: UniqueId.fromUniqueString(value.id),
             creationDate: value.creationDate,
             postContent: PostContent(value.postContent),
             owner: value.owner.toDomain(),

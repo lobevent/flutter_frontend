@@ -8,7 +8,7 @@ class Item with _$Item {
   const Item._();
 
   const factory Item({
-    required Id id,
+    required UniqueId id,
     required Profile profile,
     required String element,
     required bool checkMark,

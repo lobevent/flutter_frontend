@@ -83,7 +83,7 @@ class CommentRepository implements ICommentRepository {
   }
 
   @override
-  Future<Either<CommentFailure, Comment>> getSingleComment(Id id) async {
+  Future<Either<CommentFailure, Comment>> getSingleComment(UniqueId id) async {
     try {
       final CommentDto commentDto =
       await _commentRemoteService.getSingleComment(id.getOrCrash());

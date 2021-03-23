@@ -12,7 +12,7 @@ class ProfilePageState with _$ProfilePageState {
 
   factory ProfilePageState.initial() =>
       ProfilePageState(
-        profile: Profile(id: Id(), name: ProfileName("")), //todo
+        profile: Profile(id: UniqueId(), name: ProfileName("")), //todo
         showErrorMessages: false,
         isSubmitting: false,
         showFailureOrSuccessOption: none(),

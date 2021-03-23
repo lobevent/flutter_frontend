@@ -142,7 +142,7 @@ main() {
               http.Response(jsonEncode(origTestDtoWithoutId.toJson()), 200));
 
       expect(
-          await repository.getSingle(Id.fromUnique("1")).then((value) =>
+          await repository.getSingle(UniqueId.fromUniqueString("1")).then((value) =>
               value.fold((l) => null, (r) => EventDto.fromDomain(r))),
           origTestDtoWithoutId);
     });

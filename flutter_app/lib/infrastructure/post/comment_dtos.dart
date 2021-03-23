@@ -82,7 +82,7 @@ class CommentDto extends BaseDto with _$CommentDto {
     map(
         (_CommentDto value) => {
               returnedComment = Comment(
-                id: Id.fromUnique(value.id),
+                id: UniqueId.fromUniqueString(value.id),
                 creationDate: value.creationDate,
                 commentContent: CommentContent(value.commentContent),
                 owner: value.profile.toDomain(),
@@ -92,13 +92,13 @@ class CommentDto extends BaseDto with _$CommentDto {
                     // .fold((l) => Comment.childCount(count: value.commentChildren.fold((l) => l, (r) => 0)),
                     //     (r) => const Comment.childLess()),
                 post: value.post,
-                commentParent: value.commentParent.fold(() => right(unit), (a) => left(Comment.parent(id: Id.fromUnique((a as _CommentParentDto).id))))
+                commentParent: value.commentParent.fold(() => right(unit), (a) => left(Comment.parent(id: UniqueId.fromUniqueString((a as _CommentParentDto).id))))
                     // .fold(
                     //     (l) => left(Comment.parent(id: Id.fromUnique((l as _CommentParentDto).id))),
                     //     (r) => right(unit)),
               )
             }, parent: (_CommentParentDto value) {
-      returnedComment = Comment.parent(id: Id.fromUnique(value.id));
+      returnedComment = Comment.parent(id: UniqueId.fromUniqueString(value.id));
     }, children: (_CommentChildrenDto value) {
       returnedComment = Comment.children(
           count: value.count,

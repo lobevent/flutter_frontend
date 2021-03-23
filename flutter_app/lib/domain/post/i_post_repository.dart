@@ -15,7 +15,7 @@ abstract class IPostRepository {
   Future<Either<PostFailure, List<Post>>> getList(Operation operation,
       DateTime lastPostTime, int amount, Event eventParent,
       {Profile profile});
-  Future<Either<PostFailure, Post>> getSingle(Id id);
+  Future<Either<PostFailure, Post>> getSingle(UniqueId id);
   Future<Either<PostFailure, Post>> create(Post post);
   Future<Either<PostFailure, Post>> update(Post post);
   Future<Either<PostFailure, Post>> delete(Post post);

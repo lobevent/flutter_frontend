@@ -13,7 +13,7 @@ class Comment with _$Comment {
   const Comment._();
 
   const factory Comment({
-    required Id id,
+    required UniqueId id,
     required DateTime creationDate,
     required CommentContent commentContent,
     required Profile owner,
@@ -25,7 +25,7 @@ class Comment with _$Comment {
 
 
   const factory Comment.parent({
-    required Id id,
+    required UniqueId id,
   }) = CommentParent;
 
   const factory Comment.childLess() = CommentChildLess;

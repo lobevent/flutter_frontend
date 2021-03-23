@@ -45,7 +45,7 @@ class EventDto extends BaseDto with _$EventDto {
   @override
   Event toDomain() {
    return Event(
-      id: Id.fromUnique(id),
+      id: UniqueId.fromUniqueString(id),
       name: EventName(name),
       date: date,
       description: EventDescription(description),

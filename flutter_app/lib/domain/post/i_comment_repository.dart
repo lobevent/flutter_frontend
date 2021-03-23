@@ -11,7 +11,7 @@ abstract class ICommentRepository {
   Future<Either<CommentFailure, List<Comment>>> getList(
       Operation operation, DateTime lastCommentTime, int amount,
       {Profile profile, Comment commentParent, Post postParent});
-  Future<Either<CommentFailure, Comment>> getSingleComment(Id id);
+  Future<Either<CommentFailure, Comment>> getSingleComment(UniqueId id);
   Future<Either<CommentFailure, Comment>> create(Comment comment);
   Future<Either<CommentFailure, Comment>> update(Comment comment);
   Future<Either<CommentFailure, Comment>> delete(Comment comment);

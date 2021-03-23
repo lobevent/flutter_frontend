@@ -14,13 +14,13 @@ class Profile with _$Profile {
   const Profile._();
 
   const factory Profile({
-    required Id id,
+    required UniqueId id,
     required ProfileName name,
   }) = _BaseProfile;
 
 
   const factory Profile.full({
-    required Id id,
+    required UniqueId id,
     required ProfileName name,
     required List<Event> ownedEvents,
     required List<Event> invitations,

@@ -9,7 +9,7 @@ class Todo with _$Todo {
   const Todo._();
 
   const factory Todo({
-    required Id id,
+    required UniqueId id,
     required Item item,
     required Event event,
   }) = _Todo;

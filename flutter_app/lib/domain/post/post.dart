@@ -15,7 +15,7 @@ class Post with _$Post {
   const Post._();
 
   const factory Post({
-    required Id id,
+    required UniqueId id,
     required DateTime creationDate,
     required PostContent postContent,
     required Profile owner,

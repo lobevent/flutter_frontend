@@ -33,7 +33,7 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
       emit(OwnEventsState.loading());
       final Either<List<Event>, EventFailure> ownEventsList = await Future.delayed(Duration(seconds: 2), () {
         return left([
-          Event(id: Id(), name: EventName("test"), date: DateTime.now(), description: EventDescription("lalal"), creationDate: DateTime.now(), owner: Profile(id: Id(), name: ProfileName("ssss")), public: true),
+          Event(id: UniqueId(), name: EventName("test"), date: DateTime.now(), description: EventDescription("lalal"), creationDate: DateTime.now(), owner: Profile(id: UniqueId(), name: ProfileName("ssss")), public: true),
         //Event.empty()
         ]);
       });

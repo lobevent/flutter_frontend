@@ -50,7 +50,7 @@ class EventRepository implements IEventRepository {
   }
 
   @override
-  Future<Either<EventFailure, Event>> getSingle(Id id) async {
+  Future<Either<EventFailure, Event>> getSingle(UniqueId id) async {
     try {
       final EventDto eventDto =
           await _eventRemoteService.getSingle(id.getOrCrash());

@@ -69,7 +69,7 @@ class PostRepository implements IPostRepository {
   }
 
   @override
-  Future<Either<PostFailure, Post>> getSingle(Id id) async {
+  Future<Either<PostFailure, Post>> getSingle(UniqueId id) async {
     try {
       final PostDto postDto =
           await _postRemoteService.getSingle(id.getOrCrash());

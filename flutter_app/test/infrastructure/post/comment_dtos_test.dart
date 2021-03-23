@@ -141,7 +141,7 @@ main() {
               http.Response(jsonEncode(testCommentDtoWithoutId.toJson()), 200));
 
       expect(
-          await repository.getSingleComment(Id.fromUnique(1)).then((value) =>
+          await repository.getSingleComment(UniqueId.fromUniqueString(1)).then((value) =>
               value.fold((l) => null, (r) => CommentDto.fromDomain(r))),
           testCommentDtoWithoutId);
     });
@@ -158,7 +158,7 @@ main() {
                 200)); // client response configuration
         if (operation == Operation.fromUser) {
           returnedList = await repository.getList(
-              operation, DateTime.now(), 5, profile: Profile(id: Id.fromUnique(1), name: ProfileName("Anita"))); //the case, when profile must be passed
+              operation, DateTime.now(), 5, profile: Profile(id: UniqueId.fromUniqueString(1), name: ProfileName("Anita"))); //the case, when profile must be passed
         } else {
           returnedList = await repository.getList(
               operation, DateTime.now(), 5);

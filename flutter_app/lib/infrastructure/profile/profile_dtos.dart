@@ -70,11 +70,11 @@ class ProfileDto extends BaseDto with _$ProfileDto {
   Profile toDomain() {
     return map(
         (listViewProfileDto) => Profile(
-              id: Id.fromUnique(listViewProfileDto.id),
+              id: UniqueId.fromUniqueString(listViewProfileDto.id),
               name: ProfileName(listViewProfileDto.name),
             ),
         full: (detailedProfileDto) => Profile.full(
-            id: Id.fromUnique(detailedProfileDto.id),
+            id: UniqueId.fromUniqueString(detailedProfileDto.id),
             name: new ProfileName(detailedProfileDto.name),
             ownedEvents: detailedProfileDto.ownedEvents
                 .map((e) => e.toDomain())
@@ -89,7 +89,7 @@ class ProfileDto extends BaseDto with _$ProfileDto {
             comments:
                 detailedProfileDto.comments.map((e) => e.toDomain()).toList()),
         justId: (justIdPDto) => Profile(
-          id: Id.fromUnique(justIdPDto.id),
+          id: UniqueId.fromUniqueString(justIdPDto.id),
           name: ProfileName(justIdPDto.id),
         ));
   }

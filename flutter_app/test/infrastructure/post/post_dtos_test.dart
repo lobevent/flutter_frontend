@@ -155,7 +155,7 @@ main() {
               http.Response(jsonEncode(postDtoWithoutId1.toJson()), 200));
 
       expect(
-          await repository.getSingle(Id.fromUnique(1)).then(
+          await repository.getSingle(UniqueId.fromUniqueString(1)).then(
               (value) => value.fold((l) => null, (r) => PostDto.fromDomain(r))),
           postDtoWithoutId1);
     });

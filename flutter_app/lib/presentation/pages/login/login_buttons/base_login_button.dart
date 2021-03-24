@@ -17,7 +17,7 @@ class BaseLoginButton extends StatelessWidget {
   /// backgroundColor is required but textColor is default to `Colors.white`
   /// splashColor is defalt to `Colors.white30`
   final Color textColor;
-  final Color iconColor;
+  final Color? iconColor;
   final Color backgroundColor;
   final Color splashColor;
   final Color highlightColor;
@@ -32,7 +32,7 @@ class BaseLoginButton extends StatelessWidget {
   final double height;
 
   /// width is default to be 1/1.5 of the screen
-  final double width;
+  final double? width;
 
   /// shape is to specify the custom shape of the widget.
   /// However the flutter widgets contains restriction or bug
@@ -47,13 +47,13 @@ class BaseLoginButton extends StatelessWidget {
     this.image,
     this.backgroundColor = Colors.white,
     this.textColor = const Color.fromRGBO(0, 0, 0, 0.54),
-    this.iconColor = Colors.white,
+    this.iconColor,
     this.splashColor = Colors.white30,
     this.highlightColor = Colors.white30,
     this.elevation = 2.0,
-    this.height = 36.0,
-    this.width = 220,
-    this.fontSize = 14.0,
+    this.fontSize = 44.0 * 0.43,
+    this.height = 44.0,
+    this.width,
     this.shape,
   }) : assert(icon != null || image != null, "At least an icon or an image must be provided!"),
        super(key: key);
@@ -66,9 +66,11 @@ class BaseLoginButton extends StatelessWidget {
       padding: const EdgeInsets.all(0),
       color: backgroundColor,
       onPressed: onPressed as VoidCallback?,
-      splashColor: splashColor,
-      highlightColor: highlightColor,
-      shape: shape ?? ButtonTheme.of(context).shape,
+      //splashColor: splashColor,
+      // highlightColor: highlightColor,
+      shape: shape ?? RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+      ),
       child: _getButtonChild(context),
     );
   }
@@ -76,39 +78,40 @@ class BaseLoginButton extends StatelessWidget {
   /// Get the inner content of a button
   Container _getButtonChild(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(
-        maxWidth: width,
-      ),
-      child: Center(
-        child: Row(
-          children: <Widget>[
-            _iconOrImage(),
-            Text(
-              text,
-              style: TextStyle(
-                color: textColor,
-                fontSize: fontSize,
-                backgroundColor: Color.fromRGBO(0, 0, 0, 0),
-              ),
+      width: width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: _iconOrImage()
+          ),
+          Text(
+            text,
+            style: TextStyle(
+              color: textColor,
+              fontSize: fontSize,
+              backgroundColor: Color.fromRGBO(0, 0, 0, 0),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _iconOrImage() {
+    Widget? innerWidget = image;
     if (icon != null) {
-      return Icon(
+      innerWidget = Icon(
         icon,
         size: 20,
-        color: iconColor,
-      );
-    } else {
-      return Container(
-        padding: const EdgeInsets.only(left: 10.0),
-        child: image
+        color: iconColor ?? textColor,
       );
     }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: innerWidget,
+    );
   }
 }

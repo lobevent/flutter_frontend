@@ -11,10 +11,12 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.withOpacity(0.6),
       appBar: AppBar(
-        title: Text("Weather Search"),
+        title: Text("Weather Seaerch"),
       ),
       body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
         children: [
           SignInWithAppleButton(
             onPressed: onAppleSignInPressed,
@@ -24,6 +26,9 @@ class LoginScreen extends StatelessWidget {
           ),
           GoogleSignInButton(
             onPressed: onGoogleSignInPressed,
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
           ),
           PhoneNumberSignInButton(
             onPressed: onPhoneSignInPressed,

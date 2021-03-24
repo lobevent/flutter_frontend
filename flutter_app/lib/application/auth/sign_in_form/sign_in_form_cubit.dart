@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'package:flutter_frontend/domain/auth/auth_failure.dart';
 import 'package:flutter_frontend/domain/auth/i_auth_facade.dart';
 import 'package:flutter_frontend/domain/auth/value_objects.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:meta/meta.dart';
 
 part 'sign_in_form_state.dart';
 part 'sign_in_form_cubit.freezed.dart';
@@ -13,10 +13,6 @@ class SignInFormCubit extends Cubit<SignInFormState> {
   final IAuthFacade _authFacade;
 //todo
   SignInFormCubit(this._authFacade) : super(SignInFormState.initial());
-  
-
-  @override
-  SignInFormState get initialState => SignInFormState.initial();
 
   Future<void> emailChanged(String emailStr) async{
     emit(state.copyWith(

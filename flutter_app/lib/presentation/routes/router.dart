@@ -7,10 +7,10 @@ import 'package:flutter_frontend/presentation/pages/login/login_screen.dart';
 
 @MaterialAutoRouter(
   routes: <AutoRoute>[
-    AutoRoute(page: FeedScreen, initial: true),
+    AutoRoute(page: FeedScreen),
     AutoRoute(page: EventFormPage),
     AutoRoute(page: OwnEventsScreen),
-    AutoRoute(page: LoginScreen)
+    AutoRoute(page: LoginScreen, initial: true)
   ],
 )
 class $Router{}

@@ -11,85 +11,19 @@ part 'sign_in_form_cubit.freezed.dart';
 
 class SignInFormCubit extends Cubit<SignInFormState> {
   final IAuthFacade _authFacade;
-//todo
-  SignInFormCubit(this._authFacade) : super(SignInFormState.initial());
 
-  Future<void> emailChanged(String emailStr) async{
-    emit(state.copyWith(
-      emailAddress: EmailAddress(emailStr),
-      authFailureOrSuccessOption: none(),
-    )
-    );
+  SignInFormCubit({required IAuthFacade authFacade}) 
+    : _authFacade = authFacade,
+      super(SignInFormState.initial());
+
+  Future<void> startGoogleSignIn() async {
+    emit(state.copyWith(isSubmitting: true));
+    Either<AuthFailure, Unit> result = await _authFacade.signInWithGoogle();
   }
-  Future<void> passwordChanged(String passwordStr) async{
-    emit(state.copyWith(
-      password: Password(passwordStr),
-      authFailureOrSuccessOption: none(),
-    )
-    );
-  }
-  Future<void> registerWithEmailAndPasswordPressed() async{
-    Either<AuthFailure, Unit>? failureOrSuccess;
 
-    final isEmailValid = state.emailAddress.isValid();
-    final isPasswordValid = state.password.isValid();
-
-    if (isEmailValid && isPasswordValid) {
-      emit (state.copyWith(
-        isSubmitting: true,
-        authFailureOrSuccessOption: none(),
-      )
-      );
-
-      // failureOrSuccess = await _authFacade.registerWithEmailAndPassword(
-      //   emailAddress: state.emailAddress,
-      //   password: state.password,
-      // );
-    }
-    emit (state.copyWith(
-      isSubmitting: false,
-      showErrorMessages: true,
-      authFailureOrSuccessOption: optionOf(failureOrSuccess),
-    )
-    );
-  }
-  Future<void> signInWithEmailAndPasswordPressed() async{
-    Either<AuthFailure, Unit>? failureOrSuccess;
-
-    final isEmailValid = state.emailAddress.isValid();
-    final isPasswordValid = state.password.isValid();
-
-    if (isEmailValid && isPasswordValid) {
-      emit (state.copyWith(
-        isSubmitting: true,
-        authFailureOrSuccessOption: none(),
-      )
-      );
-
-      // failureOrSuccess = await _authFacade.signInWithEmailAndPassword(
-      //   emailAddress: state.emailAddress,
-      //   password: state.password,
-      // );
-    }
-    emit (state.copyWith(
-      isSubmitting: false,
-      showErrorMessages: true,
-      authFailureOrSuccessOption: optionOf(failureOrSuccess),
-    )
-    );
-  }
-  Future<void> signInWithGooglePressed() async{
-    emit(state.copyWith(
-      isSubmitting: true,
-      authFailureOrSuccessOption: none(),
-      )
-    );
-    final failureOrSuccess = await _authFacade.signInWithGoogle();
-    emit (state.copyWith(
-        isSubmitting: false,
-        authFailureOrSuccessOption: some(failureOrSuccess)
-        )
-    );
+  Future<void> startAppleSignIn() async {
+    emit(state.copyWith(isSubmitting: true));
+    Either<AuthFailure, Unit> result = await _authFacade.signInWithApple();
   }
 }
 

@@ -15,6 +15,7 @@ import 'package:flutter_frontend/infrastructure/auth/user_dto.dart';
 /// Class for the Auth API calls. 
 class FirebaseAuthFacade implements IAuthFacade {
   final FirebaseAuth _firebaseAuth;
+
   /// The field [_googleSignIn] should be initialized with the scopes
   /// "email" and "profile"
   final GoogleSignIn _googleSignIn;
@@ -25,7 +26,7 @@ class FirebaseAuthFacade implements IAuthFacade {
 
   FirebaseAuthFacade(
       this._firebaseAuth,
-      this._googleSignIn
+      this._googleSignIn,
   );
 
   @override
@@ -129,6 +130,7 @@ class FirebaseAuthFacade implements IAuthFacade {
   @override
   Future<Either<AuthFailure, Unit>> signInWithGoogle() async {
     AuthCredential credential;
+    
     try {
       // this fields hold additional info about the google account
       // normally firebase should add them to the firebase user

@@ -48,7 +48,9 @@ dependencies:
   ###
   # start firebase related stuff
   ###
-  # not using firebase core since every firebase plugin imports firebase core by itself
+  # use firebase core to initialize app
+  firebase_core: ^1.0.2
+  
   # firebase auth for the authentication with firebase
   firebase_auth: ^1.0.1
   ###

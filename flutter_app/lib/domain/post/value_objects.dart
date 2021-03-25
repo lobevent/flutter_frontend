@@ -3,7 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_validators.dart';
-import 'package:flutter_frontend/constants.dart';
+import 'package:flutter_frontend/data/constants.dart';
 
 class PostContent extends ValueObject<String> {
   @override

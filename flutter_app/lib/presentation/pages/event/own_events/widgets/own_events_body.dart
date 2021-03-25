@@ -39,14 +39,18 @@ class EventListView extends StatelessWidget {
 
           final event = events[index];
           if (event.failureOption.isSome()) {
-            return Container(
-                color: Colors.red, width: 100, height: 100,
-            child: Text(event.failureOption.fold(() => "", (a) => a.toString())),);
+            return Ink(
+              color: Colors.red,
+                child: ListTile(
+                  title: Text(event.failureOption.fold(() => "", (a) => a.toString())),)
+            );
+
+
 
           } else {
             return ListTile(
 
-              title: Text(events.first.name.getOrCrash()),
+              title: Text(events[index].name.getOrCrash()),
             );
           }
         },

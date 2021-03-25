@@ -50,6 +50,6 @@ class LoginScreen extends StatelessWidget {
   }
 
   void onPhoneSignInPressed(BuildContext context) {
-    context.router.push(PhoneScreenRoute());
+    //context.router.push(PhoneScreenRoute());
   }
 }

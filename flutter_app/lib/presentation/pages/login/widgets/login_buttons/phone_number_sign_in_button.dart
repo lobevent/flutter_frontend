@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
-import 'package:flutter_frontend/presentation/pages/login/login_buttons/base_login_button.dart';
+import 'package:flutter_frontend/presentation/pages/login/widgets/login_buttons/base_login_button.dart';
 
 class PhoneNumberSignInButton extends StatelessWidget {
   final VoidCallback onPressed;

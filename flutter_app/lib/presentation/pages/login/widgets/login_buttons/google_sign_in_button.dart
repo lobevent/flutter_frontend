@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/data/constants.dart';
 
 import 'package:flutter_frontend/l10n/app_strings.dart';
-import 'package:flutter_frontend/presentation/pages/login/login_buttons/base_login_button.dart';
+import 'package:flutter_frontend/presentation/pages/login/widgets/login_buttons/base_login_button.dart';
 
 class GoogleSignInButton extends StatelessWidget {
   final VoidCallback onPressed;

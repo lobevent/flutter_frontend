@@ -8,7 +8,7 @@ import 'package:flutter_frontend/presentation/pages/login/widgets/login_buttons/
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubit.dart';
-
+/*
 class LoginScreen extends StatelessWidget {
 
   @override
@@ -53,3 +53,5 @@ class LoginScreen extends StatelessWidget {
     context.router.push(PhoneScreenRoute());
   }
 }
+
+ */

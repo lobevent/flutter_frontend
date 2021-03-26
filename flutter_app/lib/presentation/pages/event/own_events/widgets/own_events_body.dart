@@ -36,18 +36,24 @@ class EventListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
         itemBuilder: (context, index) {
-
           final event = events[index];
           if (event.failureOption.isSome()) {
             return Ink(
-              color: Colors.red,
+                color: Colors.red,
                 child: ListTile(
-                  title: Text(event.failureOption.fold(() => "", (a) => a.toString())),)
+                  title: Text(
+                      event.failureOption.fold(() => "", (a) => a.toString())),)
             );
+          }
+          if (events.isEmpty) {
+            return Ink(
+                color: Colors.red,
+                child: ListTile(
+                  title: Text("No own events available")
+            ));
+          }
 
-
-
-          } else {
+          else{
             return ListTile(
 
               title: Text(events[index].name.getOrCrash()),

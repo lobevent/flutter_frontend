@@ -13,7 +13,7 @@ class EventRemoteService extends RemoteService<EventDto>{
   static const String eventByIdPath = "/event/";
 
   //Routes Lists
-  static const String ownedEventsPath = "/event/%amount%/%lastEventTime%/";
+  static const String ownedEventsPath = "/user/events/%amount%/%lastEventTime%/";
   static const String profileEventPath = "/user/%profileId%/events/%amount%/%lastEventTime%/";
   static const String attendingEventsPath = "/user/eventStatus/events/%amount%/%lastEventTime%/";//TODO attending?
   static const String unreactedEventsPath = "/user/events/%amount%/%lastEventTime%/";//TODO reaction?
@@ -40,6 +40,7 @@ class EventRemoteService extends RemoteService<EventDto>{
   }
 
   Future<List<EventDto>> getOwnedEvents(
+      //"%bla%"
       DateTime lastEventTime, int amount) async {
     return _getEventList(
         ownedEventsPath.interpolate(
@@ -69,7 +70,6 @@ class EventRemoteService extends RemoteService<EventDto>{
   }
 
   Future<EventDto> createEvent(EventDto eventDto) async {
-    dynamic test = eventDto.toJson();
     return _decodeEvent(
         await client.post(postPath, jsonEncode(eventDto.toJson())));
   }
@@ -93,8 +93,6 @@ class EventRemoteService extends RemoteService<EventDto>{
   }*/
 
   EventDto _decodeEvent(Response json) {
-    dynamic test1= jsonDecode(json.body);
-    EventDto test = EventDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
     return EventDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
 

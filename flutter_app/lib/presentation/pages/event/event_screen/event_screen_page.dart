@@ -4,26 +4,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/event/event_screen/event_screen_cubit.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 
 import '../../core/widgets/loading_overlay.dart';
 
 class EventScreenPage extends StatelessWidget {
 
-  const EventScreenPage({Key? key}): super(key: key);
+  final UniqueId eventId;
+  const EventScreenPage({Key? key, required this.eventId}): super(key: key);
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => EventScreenCubit(),
+        create: (context) => EventScreenCubit(eventId),
         child: BlocConsumer<EventScreenCubit, EventScreenState>(
-          //listener: (context, state) {},
-
           listener: (context, state) {},
           builder: (context, state) {
             return Stack(
-              children: const <Widget>[
+              children: <Widget>[
                 EventScreenBody(),
-                LoadingOverlay(isLoading: false, text: "Saving")
+                LoadingOverlay(isLoading: state is LoadInProgress, text: "Saving")
               ],
             );
           },

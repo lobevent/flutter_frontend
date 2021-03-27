@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart' hide Router;
+import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/event_screen_page.dart';
 import 'package:flutter_frontend/presentation/pages/event/own_events/own_events_screen.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
@@ -22,7 +24,10 @@ class FeedScreen extends StatelessWidget {
           );}, child: Text("Button1")),
           ElevatedButton(onPressed:() {
             context.router.push(OwnEventsScreenRoute());
-            }, child: Text("Button2"))
+            }, child: Text("Button2")),
+          ElevatedButton(onPressed:() {
+            context.router.push(EventScreenPageRoute(eventId: UniqueId()));
+          }, child: Text("Button3"))
         ],
       )
     );

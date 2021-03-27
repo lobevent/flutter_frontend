@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/event_form.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/event_screen_page.dart';
 import 'package:flutter_frontend/presentation/pages/event/own_events/own_events_screen.dart';
 import 'package:flutter_frontend/presentation/pages/feed.dart';
 import 'package:flutter_frontend/presentation/pages/login/login_screen.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_frontend/presentation/pages/login/login_screen.dart';
     AutoRoute(page: EventFormPage),
     AutoRoute(page: OwnEventsScreen),
     AutoRoute(page: LoginScreen),
+    AutoRoute(page: EventScreenPage)
   ],
 )
 class $Router{}

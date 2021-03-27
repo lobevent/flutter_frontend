@@ -13,15 +13,33 @@ part 'event_screen_state.dart';
 part 'event_screen_cubit.freezed.dart';
 
 class EventScreenCubit extends Cubit<EventScreenState> {
-  EventScreenCubit(UniqueId id) : super(EventScreenState.initial()){
-    emit(EventScreenState.initial());
+  EventScreenCubit(UniqueId id) : super(EventScreenState.loading()) {
+    emit(EventScreenState.loading());
     getEvent(id);
   }
 
-  EventRepository repository = EventRepository(EventRemoteService(), EventLocalService());
+  EventRepository repository =
+      EventRepository(EventRemoteService(), EventLocalService());
 
   Future<void> getEvent(UniqueId id) async {
-    repository.getSingle(id);
+
+    final Event ownEventsList= await Future.delayed(Duration(seconds: 2), () {
+      return
+        Event.empty();
+    });
+
+    emit(EventScreenState.loaded(event: ownEventsList));
+
+
+    repository.getSingle(id).then((eventOrFailure) =>
+        eventOrFailure.fold(
+            (failure) => emit(EventScreenState.error(failure: failure)),
+            (event) => emit(EventScreenState.loaded(event: event)
+            )
+        )
+    );
   }
+
+
 
 }

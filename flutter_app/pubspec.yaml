@@ -75,10 +75,7 @@ dev_dependencies:
   json_serializable: ^4.1.0
 
   # mock libary to mock dependencies
-  mockito: ^5.0.2
-
-dependency_overrides:
-  source_gen: ^1.0.0
+  mockito: ^5.0.3
 
 flutter:
   uses-material-design: true

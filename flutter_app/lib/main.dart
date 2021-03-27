@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
+    return
+      MultiBlocProvider(
       providers: [
         BlocProvider<SignInFormCubit>(
           create: (context) => SignInFormCubit(

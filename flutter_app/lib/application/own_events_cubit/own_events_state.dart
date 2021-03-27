@@ -7,7 +7,6 @@ class OwnEventsState with _$OwnEventsState {
   const factory OwnEventsState({
     required List<Event> ownEventsList,
     required bool showErrorMessages,
-    required bool isLoading,
   }) = _OwnEventsState;
 
 

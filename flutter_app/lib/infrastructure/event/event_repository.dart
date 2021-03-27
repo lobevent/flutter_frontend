@@ -49,6 +49,7 @@ class EventRepository implements IEventRepository {
     }
   }
 
+
   @override
   Future<Either<EventFailure, Event>> getSingle(UniqueId id) async {
     try {

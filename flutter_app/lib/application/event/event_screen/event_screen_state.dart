@@ -1,6 +1,11 @@
 part of 'event_screen_cubit.dart';
 
-@immutable
-abstract class EventScreenState {}
+@freezed
+class EventScreenState with _$EventScreenState{
 
-class EventScreenInitial extends EventScreenState {}
+  factory EventScreenState.initial()= _Initial;
+  factory EventScreenState.loading()= _LoadInProgress;
+  factory EventScreenState.loaded({required Event event})= _Loaded;
+  factory EventScreenState.error({required EventFailure failure})= _LoadFailure;
+
+}

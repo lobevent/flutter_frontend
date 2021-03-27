@@ -1,3 +1,5 @@
+import 'package:flutter_frontend/domain/core/failures.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_failure.freezed.dart';

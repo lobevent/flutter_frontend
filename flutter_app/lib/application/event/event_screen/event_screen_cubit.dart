@@ -3,6 +3,9 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/event_failure.dart';
+import 'package:flutter_frontend/domain/event/value_objects.dart';
+import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/event/event_local_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
@@ -25,10 +28,8 @@ class EventScreenCubit extends Cubit<EventScreenState> {
 
     final Event ownEventsList= await Future.delayed(Duration(seconds: 2), () {
       return
-        Event.empty();
+        Event(id: UniqueId(), name: EventName("test"), date: DateTime.now(), description: EventDescription("lalal"), creationDate: DateTime.now(), owner: Profile(id: UniqueId(), name: ProfileName("ssss")), public: true);
     });
-
-    emit(EventScreenState.loaded(event: ownEventsList));
 
 
     repository.getSingle(id).then((eventOrFailure) =>

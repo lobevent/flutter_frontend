@@ -26,7 +26,7 @@ class FeedScreen extends StatelessWidget {
             context.router.push(OwnEventsScreenRoute());
             }, child: Text("Button2")),
           ElevatedButton(onPressed:() {
-            context.router.push(EventScreenPageRoute(eventId: UniqueId()));
+            context.router.push(EventScreenPageRoute(eventId: UniqueId.fromUniqueString("a6544031-fe7d-4293-8328-0599e643e714")));
           }, child: Text("Button3"))
         ],
       )

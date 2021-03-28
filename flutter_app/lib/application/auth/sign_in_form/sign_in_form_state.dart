@@ -3,16 +3,14 @@ part of 'sign_in_form_cubit.dart';
 @freezed
 class SignInFormState with _$SignInFormState {
   const factory SignInFormState({
-    required EmailAddress emailAddress,
-    required Password password,
+    required PhoneNumber phoneNumber,
     required bool showErrorMessages,
     required bool isSubmitting,
     required Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption,
   }) = _SignInFormState;
 
   factory SignInFormState.initial() => SignInFormState(
-    emailAddress: EmailAddress(''),
-    password: Password(''),
+    phoneNumber: PhoneNumber("", ""),
     showErrorMessages: false,
     isSubmitting: false,
     authFailureOrSuccessOption: none(),

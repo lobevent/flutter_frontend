@@ -10,6 +10,7 @@ part 'sign_in_form_state.dart';
 part 'sign_in_form_cubit.freezed.dart';
 
 class SignInFormCubit extends Cubit<SignInFormState> {
+  String? s;
   final IAuthFacade _authFacade;
 
   SignInFormCubit({required IAuthFacade authFacade}) 
@@ -24,6 +25,18 @@ class SignInFormCubit extends Cubit<SignInFormState> {
   Future<void> startAppleSignIn() async {
     emit(state.copyWith(isSubmitting: true));
     Either<AuthFailure, Unit> result = await _authFacade.signInWithApple();
+  }
+
+  Future<void> startPhoneNumberSignIn() async {
+
+  }
+
+  void changeCountryCode() {
+
+  }
+
+  void phoneNumberChanged() {
+    
   }
 }
 

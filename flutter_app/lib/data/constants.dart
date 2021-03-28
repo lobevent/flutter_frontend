@@ -9,4 +9,9 @@ class Constants {
 
   // asset paths
   static const String googleLogoPath = 'assets/logos/google_light.png';
+
+  // static map keys
+  static const String countryDataName = 'name';
+  static const String countryDataCode = 'code';
+  static const String countryDataDialCode = 'dial_code';
 }

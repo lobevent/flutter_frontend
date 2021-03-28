@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubit.dart';
 
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
+import 'package:flutter_frontend/presentation/pages/login/widgets/phone_number_text_field.dart';
 
 class PhoneNumberSignInScreen extends StatefulWidget {
 
@@ -30,34 +32,31 @@ class _PhoneNumberSignInScreenState extends State<PhoneNumberSignInScreen> {
                     padding: const EdgeInsets.only(top: 75.0),
                     child: const Text(
                       AppStrings.phoneNumberVerificationTitle,
-                      style: AppTextStyles.loginTitle
+                      style: AppTextStyles.loginText
                     ),
                   ),
 
                   Padding(
                     padding: const EdgeInsets.only(top: 25.0),
-                    child: 
+                    child: PhoneNumberTextField(),
                   ),
 
                   Expanded(
                     child: Container(
                       alignment: Alignment.bottomCenter,
                       padding: const EdgeInsets.only(bottom: 20.0),
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50.0)
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: AppColors.lightGrey,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
                         ),
-                        color: AppColors.lightGrey,
-                        onPressed: () => _sendVerificationCode(context),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        onPressed: () => _startPhoneVerification(context),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
                             AppStrings.sendPhoneNumberVerification,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.0,
-                            ),
+                            style: AppTextStyles.loginText
                           ),
                         ),
                       ),
@@ -70,5 +69,9 @@ class _PhoneNumberSignInScreenState extends State<PhoneNumberSignInScreen> {
         ],
       ),
     );
+  }
+
+  void _startPhoneVerification(BuildContext context) {
+    context.read<SignInFormCubit>().startPhoneNumberSignIn();
   }
 }

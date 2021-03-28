@@ -7,23 +7,33 @@ import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_validators.dart';
 
-class PhoneNumber extends ValueObject<String> {
-  final String prefixValue;
-  final String phoneValue;
-  
+
+class PhoneNumberPrefix extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
 
-  factory PhoneNumber(String prefixValue, String phoneValue) {
-    return PhoneNumber._(
+  factory PhoneNumberPrefix(String value) {
+    return PhoneNumberPrefix._(
       // TODO add some verification;
-      prefixValue,
-      phoneValue,
-      right(prefixValue + phoneValue)
+      right(value)
     );
   }
 
-  const PhoneNumber._(this.prefixValue, this.phoneValue, this.value);
+  const PhoneNumberPrefix._(this.value);
+}
+
+class PhoneNumber extends ValueObject<String> {
+  @override
+  final Either<ValueFailure<String>, String> value;
+
+  factory PhoneNumber(String value) {
+    return PhoneNumber._(
+      // TODO add some verification;
+      right(value)
+    );
+  }
+
+  const PhoneNumber._(this.value);
 }
 
 

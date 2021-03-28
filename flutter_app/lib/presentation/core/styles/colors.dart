@@ -5,6 +5,7 @@ class AppColors {
   static const black = Colors.black;
 
   static const lightGrey = Colors.grey;
+  static const darkGrey = Colors.black54;
 
   static const mainIcon = Colors.grey;
 }

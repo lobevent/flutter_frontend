@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/data/constants.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutter_frontend/domain/auth/auth_failure.dart';
@@ -10,7 +11,6 @@ part 'sign_in_form_state.dart';
 part 'sign_in_form_cubit.freezed.dart';
 
 class SignInFormCubit extends Cubit<SignInFormState> {
-  String? s;
   final IAuthFacade _authFacade;
 
   SignInFormCubit({required IAuthFacade authFacade}) 
@@ -31,8 +31,13 @@ class SignInFormCubit extends Cubit<SignInFormState> {
 
   }
 
-  void changeCountryCode() {
-
+  void changeCountryCode(Map<String, String> countryData) {
+    final String phoneNumberPrefix = countryData[Constants.countryDataDialCode]!;
+    emit(
+      state.copyWith(
+        phoneNumberPrefix: PhoneNumberPrefix(phoneNumberPrefix)
+      )
+    );
   }
 
   void phoneNumberChanged() {

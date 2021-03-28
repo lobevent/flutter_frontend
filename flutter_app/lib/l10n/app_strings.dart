@@ -12,4 +12,10 @@ class AppStrings {
 
   static const String countryCodeTitle = "Select your country";
   static const String countryCodeSearchBar = "Search countries";
+
+  static const String deleteEventDialogTitle = "Are you sure?";
+  static const String deleteEventDialogText = "You are about to delete an event. Please confirm!";
+  static const String deleteEventDialogConfirm = "Delete";
+  static const String deleteEventDialogAbort = "Abort";
+
 }

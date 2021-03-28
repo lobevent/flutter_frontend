@@ -14,8 +14,11 @@ part 'event_form_cubit.freezed.dart';
 part 'event_form_state.dart';
 
 class EventFormCubit extends Cubit<EventFormState> {
-  EventFormCubit() : super(EventFormState.initial()) {
-    emit(EventFormState.initial());}
+  final Option<String> eventId;
+  EventFormCubit(this.eventId) : super(EventFormState.initial()) {
+    eventId.fold(() => emit(EventFormState.initial()), (id) => loadEvent(id))
+    ;
+  }
 
   EventRepository repository = EventRepository(EventRemoteService(), EventLocalService());
 
@@ -38,6 +41,14 @@ class EventFormCubit extends Cubit<EventFormState> {
 
   void changeBody(String body) {
     emit(state.copyWith(event: state.event.copyWith(description: EventDescription(body))));
+  }
+
+  void loadEvent(String id) {
+    repository.getSingle(UniqueId.fromUniqueString(id)).then(
+            (value) => value.fold(
+                    (failure) => emit(EventFormState.error(failure)),
+                    (event) => emit(EventFormState.loaded(event)))
+    );
   }
 
 

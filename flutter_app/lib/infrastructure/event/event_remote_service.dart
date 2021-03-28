@@ -13,7 +13,7 @@ class EventRemoteService extends RemoteService<EventDto>{
   static const String eventByIdPath = "/event/";
 
   //Routes Lists
-  static const String ownedEventsPath = "/user/events/%amount%/%lastEventTime%/";
+  static const String ownedEventsPath = "/user/events/%amount%/%lastEventTime%/%descending%";
   static const String profileEventPath = "/user/%profileId%/events/%amount%/%lastEventTime%/";
   static const String attendingEventsPath = "/user/eventStatus/events/%amount%/%lastEventTime%/";//TODO attending?
   static const String unreactedEventsPath = "/user/events/%amount%/%lastEventTime%/";//TODO reaction?
@@ -40,10 +40,10 @@ class EventRemoteService extends RemoteService<EventDto>{
   }
 
   Future<List<EventDto>> getOwnedEvents(
-      DateTime lastEventTime, int amount) async {
+      DateTime lastEventTime, int amount, [bool descending = false]) async {
     return _getEventList(
         ownedEventsPath.interpolate(
-            {"amount" : amount.toString(), "lastEventTime" : lastEventTime.toString()}));
+            {"amount" : amount.toString(), "lastEventTime" : lastEventTime.toString(), "descending" : descending.toString()}));
 
   }
 

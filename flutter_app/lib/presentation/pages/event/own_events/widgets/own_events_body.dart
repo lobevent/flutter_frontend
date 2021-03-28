@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/own_events_cubit/own_events_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles.dart';
 
 class OwnEventsBody extends StatelessWidget {
   @override
@@ -54,10 +55,11 @@ class EventListView extends StatelessWidget {
           }
 
           else{
-            return ListTile(
-
-              title: Text(events[index].name.getOrCrash()),
-            );
+            return EventListTiles(event: events[index], allowEdit: true);
+            // return ListTile(
+            //
+            //   title: Text(events[index].name.getOrCrash()),
+            // );
           }
         },
         itemCount: events.length);

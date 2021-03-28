@@ -32,7 +32,7 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
     try {
       emit(OwnEventsState.loading());
 
-      final Either<EventFailure,List<Event>> ownEventsList= await repository.getList(Operation.owned, DateTime.now(), 5);
+      final Either<EventFailure,List<Event>> ownEventsList= await repository.getList(Operation.owned, DateTime.now(), 30, descending: true);
       /*
       await Future.delayed(Duration(seconds: 2), () {
         return left([
@@ -49,7 +49,6 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
 
       emit(OwnEventsState.loaded(events: ownEventsList.fold((l) => throw Exception, (r) => r)));
     } catch (e) {
-      print ("test 11111111111111111");
       emit(OwnEventsState.error(error: e.toString()));
     }
   }

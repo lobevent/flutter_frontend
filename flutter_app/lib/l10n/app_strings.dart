@@ -9,4 +9,9 @@ class AppStrings {
   static const String phoneNumberVerificationTitle = "Verify yourself with your phone number.";
   static const String sendPhoneNumberVerification = "Send verification code";
   static const String phoneNumberTextFieldHint = "Phone Number";
+
+  static const String deleteEventDialogTitle = "Are you sure?";
+  static const String deleteEventDialogText = "You are about to delete an event. Please confirm!";
+  static const String deleteEventDialogConfirm = "Delete";
+  static const String deleteEventDialogAbort = "Abort";
 }

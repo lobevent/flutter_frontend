@@ -1,5 +1,6 @@
 //import 'package:flushbar/flushbar_helper.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/event/EventForm/event_form_cubit.dart';
@@ -20,7 +21,7 @@ class EventFormPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => EventFormCubit(),
+        create: (context) => EventFormCubit(optionOf(editedEventId)),
         child: BlocConsumer<EventFormCubit, EventFormState>(
         //listener: (context, state) {},
           listenWhen: (p, c) =>

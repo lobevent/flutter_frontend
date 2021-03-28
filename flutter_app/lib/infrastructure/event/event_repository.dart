@@ -21,12 +21,12 @@ class EventRepository implements IEventRepository {
 
   @override
   Future<Either<EventFailure, List<Event>>> getList(Operation operation,
-      DateTime lastEventTime, int amount, {Profile? profile}) async {
+      DateTime lastEventTime, int amount, {Profile? profile, bool descending = false}) async {
     try {
       List<EventDto> eventDtos;
       switch (operation) {
         case Operation.owned:
-          eventDtos = await _eventRemoteService.getOwnedEvents(lastEventTime, amount);
+          eventDtos = await _eventRemoteService.getOwnedEvents(lastEventTime, amount, descending);
           break;
         case Operation.fromUser:
           if (profile == null) {

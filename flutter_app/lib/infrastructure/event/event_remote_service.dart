@@ -40,7 +40,6 @@ class EventRemoteService extends RemoteService<EventDto>{
   }
 
   Future<List<EventDto>> getOwnedEvents(
-      //"%bla%"
       DateTime lastEventTime, int amount) async {
     return _getEventList(
         ownedEventsPath.interpolate(

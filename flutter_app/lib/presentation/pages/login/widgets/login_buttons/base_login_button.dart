@@ -56,6 +56,7 @@ class BaseLoginButton extends StatelessWidget {
     this.width,
     this.shape,
   }) : assert(icon != null || image != null, "At least an icon or an image must be provided!"),
+       assert(!((icon != null) ^ (iconColor != null)), "If an icon is set, an iconColor must be provided!"),
        super(key: key);
 
   @override
@@ -105,7 +106,7 @@ class BaseLoginButton extends StatelessWidget {
       innerWidget = Icon(
         icon,
         size: 20,
-        color: iconColor ?? textColor,
+        color: iconColor,
       );
     }
 

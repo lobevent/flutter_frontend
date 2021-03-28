@@ -2,6 +2,7 @@ import 'package:flutter_frontend/domain/core/failures.dart';
 
 abstract class CommunicationError extends Error {}
 abstract class AuthError extends Error {}
+abstract class BadPresentationState extends Error {}
 
 class UnexpectedTypeError extends Error {}
 
@@ -41,3 +42,5 @@ class DtoTypeNotFoundInDeserializationFactoryMapError extends Error {
     return Error.safeToString(explanation);
   }
 }
+
+class PhoneNumberPrefixShouldBeSetProperly extends BadPresentationState {}

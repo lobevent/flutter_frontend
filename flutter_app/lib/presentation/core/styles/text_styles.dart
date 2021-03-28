@@ -6,7 +6,7 @@ class AppTextStyles {
     color: AppColors.black,
   );
 
-  static const loginTitle = TextStyle(
+  static const loginText = TextStyle(
     color: AppColors.white,
     fontWeight: FontWeight.bold,
     fontSize: 25.0,
@@ -14,6 +14,6 @@ class AppTextStyles {
 
   static const TextStyle loginTextField = TextStyle(
     fontSize: 20.0,
-    color: AppColors.white
+    color: AppColors.black
   );
 }

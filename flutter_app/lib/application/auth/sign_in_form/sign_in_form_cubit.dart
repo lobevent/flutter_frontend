@@ -27,10 +27,6 @@ class SignInFormCubit extends Cubit<SignInFormState> {
     Either<AuthFailure, Unit> result = await _authFacade.signInWithApple();
   }
 
-  Future<void> startPhoneNumberSignIn() async {
-
-  }
-
   void changeCountryCode(Map<String, String> countryData) {
     final String phoneNumberPrefix = countryData[Constants.countryDataDialCode]!;
     emit(
@@ -40,8 +36,20 @@ class SignInFormCubit extends Cubit<SignInFormState> {
     );
   }
 
-  void phoneNumberChanged() {
+  void phoneNumberChanged(String phoneNumber) {
     
+  }
+
+  Future<void> startPhoneNumberSignIn() async {
+
+  }
+
+  void verificationCodeChanged(String verificationCode) {
+
+  }
+
+  Future<void> verifyPhoneCode() async {
+
   }
 }
 

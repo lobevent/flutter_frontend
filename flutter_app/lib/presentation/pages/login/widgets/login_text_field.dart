@@ -6,7 +6,9 @@ import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/pages/login/widgets/country_code_selection_button.dart';
 
 
-class PhoneNumberTextField extends StatelessWidget {
+class LoginTextField extends StatelessWidget {
+  final String hintText;
+  final ValueChanged<String> onChanged;
 
   final UnderlineInputBorder underlineInputBorder = const UnderlineInputBorder(
     borderSide: BorderSide(
@@ -14,13 +16,14 @@ class PhoneNumberTextField extends StatelessWidget {
     ),
   );
 
+  const LoginTextField({required this.hintText, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       decoration: InputDecoration(
         prefixIcon: CountryCodeSelectionButton(),
-        hintText: AppStrings.phoneNumberTextFieldHint,
+        hintText: hintText,
         hintStyle: AppTextStyles.loginTextField,
         contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
         disabledBorder: underlineInputBorder,
@@ -31,6 +34,7 @@ class PhoneNumberTextField extends StatelessWidget {
       ),
       style: AppTextStyles.loginTextField,
       keyboardType: TextInputType.number,
+      onChanged: onChanged,
     );
   }
 }

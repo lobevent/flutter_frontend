@@ -4,18 +4,15 @@ import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubi
 
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
-import 'package:flutter_frontend/presentation/pages/login/widgets/phone_number_text_field.dart';
+import 'package:flutter_frontend/presentation/pages/login/widgets/login_text_field.dart';
 
-class PhoneNumberSignInScreen extends StatefulWidget {
-
-  @override
-  _PhoneNumberSignInScreenState createState() => _PhoneNumberSignInScreenState();
-}
-
-class _PhoneNumberSignInScreenState extends State<PhoneNumberSignInScreen> {
+class PhoneNumberSignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Weather Seaerch"),
+      ),
       body: Stack(
         children: <Widget>[
           GestureDetector(
@@ -38,7 +35,10 @@ class _PhoneNumberSignInScreenState extends State<PhoneNumberSignInScreen> {
 
                   Padding(
                     padding: const EdgeInsets.only(top: 25.0),
-                    child: PhoneNumberTextField(),
+                    child: LoginTextField(
+                      hintText: AppStrings.phoneNumberTextFieldHint,
+                      onChanged: (phoneNumber) => _onPhoneNumberChanged(context, phoneNumber),
+                    ),
                   ),
 
                   Expanded(
@@ -73,5 +73,9 @@ class _PhoneNumberSignInScreenState extends State<PhoneNumberSignInScreen> {
 
   void _startPhoneVerification(BuildContext context) {
     context.read<SignInFormCubit>().startPhoneNumberSignIn();
+  }
+
+  void _onPhoneNumberChanged(BuildContext context, String phoneNumber) {
+    context.read<SignInFormCubit>().phoneNumberChanged(phoneNumber);
   }
 }

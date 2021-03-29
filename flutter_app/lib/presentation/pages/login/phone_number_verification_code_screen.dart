@@ -12,6 +12,7 @@ class PhoneNumberVerificationCodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.withOpacity(0.6),
       appBar: AppBar(
         title: Text("Weather Seaerch"),
       ),

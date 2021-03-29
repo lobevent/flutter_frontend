@@ -11,7 +11,7 @@ class SignInFormState with _$SignInFormState {
   }) = _SignInFormState;
 
   factory SignInFormState.initial() => SignInFormState(
-    phoneNumberPrefix: PhoneNumberPrefix(""),
+    phoneNumberPrefix: PhoneNumberPrefix("+49"),
     phoneNumber: PhoneNumber(""),
     showErrorMessages: false,
     isSubmitting: false,

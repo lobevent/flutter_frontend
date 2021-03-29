@@ -33,6 +33,9 @@ dependencies:
   # flutter bloc specific widgets like BlocConsumer
   flutter_bloc: ^7.0.0
 
+  # get_it dependency injection for flutter
+  get_it: ^6.0.0
+
   # uuid for the user objects (and probably more later)
   uuid: ^3.0.2
 

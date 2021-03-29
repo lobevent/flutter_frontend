@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_frontend/l10n/app_strings.dart';
-
 import 'package:flutter_frontend/presentation/core/style.dart';
-import 'package:flutter_frontend/presentation/pages/login/widgets/country_code_selection_button.dart';
-
 
 class LoginTextField extends StatelessWidget {
-  final String hintText;
+  final String? hintText;
+  final Widget? prefixIcon;
   final ValueChanged<String> onChanged;
 
   final UnderlineInputBorder underlineInputBorder = const UnderlineInputBorder(
@@ -16,13 +13,17 @@ class LoginTextField extends StatelessWidget {
     ),
   );
 
-  const LoginTextField({required this.hintText, required this.onChanged});
+  const LoginTextField({
+    this.hintText,
+    this.prefixIcon,
+    required this.onChanged
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       decoration: InputDecoration(
-        prefixIcon: CountryCodeSelectionButton(),
+        prefixIcon: prefixIcon,
         hintText: hintText,
         hintStyle: AppTextStyles.loginTextField,
         contentPadding: const EdgeInsets.symmetric(vertical: 15.0),

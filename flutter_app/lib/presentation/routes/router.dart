@@ -6,16 +6,18 @@ import 'package:flutter_frontend/presentation/pages/feed.dart';
 import 'package:flutter_frontend/presentation/pages/login/country_code_selection_screen.dart';
 import 'package:flutter_frontend/presentation/pages/login/login_screen.dart';
 import 'package:flutter_frontend/presentation/pages/login/phone_number_sign_in_screen.dart';
+import 'package:flutter_frontend/presentation/pages/login/phone_number_verification_code_screen.dart';
 
 
 @MaterialAutoRouter(
   routes: <AutoRoute>[
-    AutoRoute(page: FeedScreen, initial: true),
+    AutoRoute(page: FeedScreen),
     AutoRoute(page: EventFormPage),
     AutoRoute(page: OwnEventsScreen),
-    AutoRoute(page: LoginScreen),
+    AutoRoute(page: LoginScreen, initial: true),
     AutoRoute(page: PhoneNumberSignInScreen),
     AutoRoute(page: CountryCodeSelectionScreen),
+    AutoRoute(page: PhoneNumberVerificationCodeScreen),
     AutoRoute(page: EventScreenPage)
   ],
 )

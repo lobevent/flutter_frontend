@@ -18,9 +18,6 @@ class CountryCodeSelectionScreen extends StatefulWidget {
 }
 
 class _CountryCodeSelectionScreenState extends State<CountryCodeSelectionScreen> {
-
-  final TextEditingController searchBarTextEditingController = TextEditingController();
-
   List<Map<String,String>> countryCodeListItems = [];
 
   @override
@@ -33,14 +30,18 @@ class _CountryCodeSelectionScreenState extends State<CountryCodeSelectionScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
+      backgroundColor: Colors.grey.withOpacity(0.6),
+      appBar: AppBar(
+        title: Text("Weather Seaerch 1"),
+      ),
+      body: Column(
         children: <Widget>[
           Container(
             padding: const EdgeInsets.only(bottom: 15.0),
             child: const Text(
               AppStrings.countryCodeTitle,
               textAlign: TextAlign.center,
-              style: AppTextStyles.basic,
+              style: AppTextStyles.loginText,
             ),
           ),
 
@@ -86,7 +87,6 @@ class _CountryCodeSelectionScreenState extends State<CountryCodeSelectionScreen>
     );
 
     return TextFormField(
-      controller: searchBarTextEditingController,
       onChanged: _searchCountryCodes,
       decoration: InputDecoration(
         prefixIcon: const Icon(

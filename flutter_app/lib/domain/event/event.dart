@@ -20,6 +20,8 @@ class Event with _$Event {
     required DateTime creationDate,
     required Profile owner,
     required bool public,
+    required double longitude,
+    required double latitude
   }) = EventFull;
 
 
@@ -31,6 +33,8 @@ class Event with _$Event {
     creationDate: DateTime.now(),
     owner: Profile(id: UniqueId(), name: ProfileName("ssss")), //TODO: !!!!!!!IIIIIIMMMMMMMMPPPPPPOOOOORTANT!!!!!!!! Implement logged in profile fetching
     public: false,
+    longitude: 0,
+    latitude: 0
   );
 
   //check if the whole object is no failure

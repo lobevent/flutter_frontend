@@ -45,6 +45,23 @@ Either<ValueFailure<String>, String> validatePassword(String input) {
   }
 }
 
+Either<ValueFailure<double>,double> validateLongitude(double input){
+  if (input<180 && input>-180) {
+    return right(input);
+  } else {
+    return left(ValueFailure.empty(failedValue: input));
+  }
+
+}
+
+Either<ValueFailure<double>,double> validateLatitude(double input){
+  if(input<90 && input>-90){
+    return right(input);
+  }else {
+    return left(ValueFailure.empty(failedValue: input));
+  }
+}
+
 
 Either<ValueFailure<String>, String> validateStringNotEmpty(String input) {
   if (input.isNotEmpty) {

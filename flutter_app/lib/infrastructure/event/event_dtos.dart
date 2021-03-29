@@ -1,3 +1,4 @@
+import 'package:flutter_frontend/domain/core/value_validators.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
@@ -22,6 +23,8 @@ class EventDto extends BaseDto with _$EventDto {
     required DateTime date,
     required DateTime creationDate,
     @OwnerConverter() required ProfileDto owner,
+    required double longitude,
+    required double latitude
   }) = EventDtoFull;
 
 
@@ -36,6 +39,8 @@ class EventDto extends BaseDto with _$EventDto {
               description: event.description.getOrCrash(),
               creationDate: event.creationDate,
               owner: ProfileDto.fromDomain(event.owner),
+      longitude: event.longitude,
+      latitude: event.latitude
     );
   }
 
@@ -53,6 +58,8 @@ class EventDto extends BaseDto with _$EventDto {
       //TODO: don't forget this one!
       public: public,
       creationDate: creationDate,
+     longitude: longitude,
+     latitude: latitude
     );
   }
 }

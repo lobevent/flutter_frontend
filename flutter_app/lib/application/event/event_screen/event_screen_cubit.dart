@@ -28,7 +28,7 @@ class EventScreenCubit extends Cubit<EventScreenState> {
 
     final Event ownEventsList= await Future.delayed(Duration(seconds: 2), () {
       return
-        Event(id: UniqueId(), name: EventName("test"), date: DateTime.now(), description: EventDescription("lalal"), creationDate: DateTime.now(), owner: Profile(id: UniqueId(), name: ProfileName("ssss")), public: true);
+        Event(id: UniqueId(), name: EventName("test"), date: DateTime.now(), description: EventDescription("lalal"), creationDate: DateTime.now(), owner: Profile(id: UniqueId(), name: ProfileName("ssss")), public: true,longitude: 0,latitude: 0);
     });
 
 

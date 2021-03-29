@@ -34,6 +34,13 @@ class EventFormCubit extends Cubit<EventFormState> {
   }
 
 
+  Future<void> submit() async{
+    if(state.isEditing){
+      updateEvent();
+      return;
+    }
+    saveEvent();
+  }
 
   void changeTitle(String title){
     emit(state.copyWith(event: state.event.copyWith(name: EventName(title))));
@@ -43,7 +50,7 @@ class EventFormCubit extends Cubit<EventFormState> {
     emit(state.copyWith(event: state.event.copyWith(description: EventDescription(body))));
   }
 
-  void loadEvent(String id) {
+  Future<void> loadEvent(String id) async {
     repository.getSingle(UniqueId.fromUniqueString(id)).then(
             (value) => value.fold(
                     (failure) => emit(EventFormState.error(failure)),
@@ -51,6 +58,17 @@ class EventFormCubit extends Cubit<EventFormState> {
     );
   }
 
+
+  Future<void> updateEvent() async {
+    Either<EventFailure, Unit>? failureOrSuccess;
+    emit(state.copyWith(isSaving: true));
+    if(state.event.failureOption.isNone()){
+      //failureOrSuccess =  await right(unit);
+      //failureOrSuccess =  await left(EventFailure.insufficientPermissions());
+      failureOrSuccess = (await repository.update(state.event)).fold((l) => left(l), (r) => right(unit));
+    }
+    emit(state.copyWith(isSaving: false, showErrorMessages: true, saveFailureOrSuccessOption: optionOf(failureOrSuccess)));
+  }
 
 //  Future<void> _getTrendingMovies() async {
 //    try {

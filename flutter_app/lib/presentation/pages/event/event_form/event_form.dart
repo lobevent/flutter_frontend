@@ -60,7 +60,8 @@ class EventFormPage extends StatelessWidget {
             return Stack(
               children: <Widget>[
                 const EventFormPageScaffold(),
-                LoadingOverlay(isLoading: state.isSaving, text: "Saving")
+                LoadingOverlay(isLoading: state.isSaving, text: "Saving"),
+                LoadingOverlay(isLoading: state.isLoading, text: "Loading")
               ],
             );
           },
@@ -88,7 +89,7 @@ class EventFormPageScaffold extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.check),
             onPressed: () {
-              context.read<EventFormCubit>().saveEvent();
+              context.read<EventFormCubit>().submit();
             },
           )
         ],

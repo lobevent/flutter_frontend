@@ -21,7 +21,7 @@ class EventRemoteService extends RemoteService<EventDto>{
   // TODO combine it to event path?
   static const String postPath = "/event";
   static const String deletePath = "/event/";
-  static const String updatePath = "/event/";
+  static const String updatePath = "/event/edit/";
 
   final SymfonyCommunicator client;
 
@@ -82,7 +82,7 @@ class EventRemoteService extends RemoteService<EventDto>{
 
   Future<EventDto> updateEvent(EventDto eventDto) async {
     return _decodeEvent(await client.put(
-        "$updatePath${eventDto.id ?? {throw UnexpectedFormatException()}}",
+        "$updatePath${eventDto.id}",
         jsonEncode(eventDto.toJson())));
   }
 

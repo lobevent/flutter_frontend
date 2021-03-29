@@ -5,7 +5,7 @@ class Constants {
   static const int minPasswordLength = 6;
   static const int minUsernameLength = 6;
   static const int minProfilenameLength = 4;
-  static const int maxProfilenameLength = 20;
+  static const int maxProfilenameLength = 40;
 
   // asset paths
   static const String googleLogoPath = 'assets/logos/google_light.png';

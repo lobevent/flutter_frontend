@@ -45,6 +45,17 @@ class EventFormState with _$EventFormState {
       saveFailureOrSuccessOption: none()
   );
 
+  factory EventFormState.loading() => EventFormState(
+      event: Event.empty(),
+      isEditing: false,
+      isSaving: false,
+      isLoading: true,
+      showErrorMessages: false,
+      eventFailure: none(),
+      saveFailureOrSuccessOption: none()
+  );
+
+
 
 
 }

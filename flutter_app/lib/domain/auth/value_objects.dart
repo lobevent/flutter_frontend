@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:dartz/dartz.dart';
 
 import 'package:flutter_frontend/data/constants.dart';

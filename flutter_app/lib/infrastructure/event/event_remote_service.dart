@@ -78,7 +78,7 @@ class EventRemoteService extends RemoteService<EventDto>{
     // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive
 
     return _decodeEvent(await client.delete(
-        "$deletePath${eventDto.id ?? {throw UnexpectedFormatException()}}"));
+        "$deletePath${eventDto.id}"));
   }
 
   Future<EventDto> updateEvent(EventDto eventDto) async {

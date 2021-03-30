@@ -11,10 +11,10 @@ import 'package:flutter_frontend/presentation/pages/login/phone_number_verificat
 
 @MaterialAutoRouter(
   routes: <AutoRoute>[
-    AutoRoute(page: FeedScreen),
+    AutoRoute(page: FeedScreen, initial: true),
     AutoRoute(page: EventFormPage),
     AutoRoute(page: OwnEventsScreen),
-    AutoRoute(page: LoginScreen, initial: true),
+    AutoRoute(page: LoginScreen),
     AutoRoute(page: PhoneNumberSignInScreen),
     AutoRoute(page: CountryCodeSelectionScreen),
     AutoRoute(page: PhoneNumberVerificationCodeScreen),

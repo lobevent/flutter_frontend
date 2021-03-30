@@ -28,9 +28,7 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
 
   ProfileRemoteService({SymfonyCommunicator? communicator})
       : client = communicator ??
-      SymfonyCommunicator(
-          jwt:
-          null); // TODO this doesn't work on runtime -> will throw an error!
+      SymfonyCommunicator(); // TODO this doesn't work on runtime -> will throw an error!
 
   Future<ProfileDto> _decodeProfile(Response json) async {
     return ProfileDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);

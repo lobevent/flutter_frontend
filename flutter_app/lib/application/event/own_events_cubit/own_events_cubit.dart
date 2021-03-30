@@ -12,6 +12,7 @@ import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart'
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:get_it/get_it.dart';
 
 
 
@@ -25,7 +26,7 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
     emit(OwnEventsState.initial());
     getOwnEvents();
   }
-  EventRepository repository = EventRepository(EventRemoteService(), EventLocalService());
+  EventRepository repository = GetIt.I<EventRepository>();
 
 
   Future<void> getOwnEvents() async {

@@ -8,6 +8,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/event_failure.dart';
+import 'package:get_it/get_it.dart';
 
 
 part 'event_form_cubit.freezed.dart';
@@ -20,7 +21,7 @@ class EventFormCubit extends Cubit<EventFormState> {
     ;
   }
 
-  EventRepository repository = EventRepository(EventRemoteService(), EventLocalService());
+  EventRepository repository = GetIt.I<EventRepository>();
 
   Future<void> saveEvent() async {
     Either<EventFailure, Unit>? failureOrSuccess;

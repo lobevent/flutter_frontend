@@ -10,6 +10,7 @@ import 'package:flutter_frontend/infrastructure/event/event_local_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 
 part 'event_screen_state.dart';
@@ -21,8 +22,7 @@ class EventScreenCubit extends Cubit<EventScreenState> {
     getEvent(id);
   }
 
-  EventRepository repository =
-      EventRepository(EventRemoteService(), EventLocalService());
+  EventRepository repository = GetIt.I<EventRepository>();
 
   Future<void> getEvent(UniqueId id) async {
 

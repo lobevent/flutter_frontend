@@ -17,26 +17,29 @@ class PhoneNumberVerificationCodeScreen extends StatelessWidget {
         title: Text("Weather Seaerch"),
       ),
       body: Stack(
-        alignment: AlignmentDirectional.topCenter,
         children: <Widget>[
           GestureDetector(
             onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
           ),
 
-          LoginTextField(
-            hintText: AppStrings.verificationCodeTextFieldHint, 
-            onChanged: (verificationCode) => _onVerificationCodeChanged(context, verificationCode),
-          ),
+          Column(
+            children: [
+              LoginTextField(
+                hintText: AppStrings.verificationCodeTextFieldHint, 
+                onChanged: (verificationCode) => _onVerificationCodeChanged(context, verificationCode),
+              ),
 
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-            ),
-            onPressed: () => _verifySmsCode(context),
-            child: Text(
-              AppStrings.verificationCodeButton,
-              style: AppTextStyles.loginText,
-            ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                ),
+                onPressed: () => _verifySmsCode(context),
+                child: Text(
+                  AppStrings.verificationCodeButton,
+                  style: AppTextStyles.loginText,
+                ),
+              ),
+            ],
           )
         ],
       ),

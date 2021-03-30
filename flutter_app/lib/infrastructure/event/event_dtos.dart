@@ -23,8 +23,8 @@ class EventDto extends BaseDto with _$EventDto {
     required DateTime date,
     required DateTime creationDate,
     @OwnerConverter() required ProfileDto owner,
-    required double longitude,
-    required double latitude
+    double? longitude,
+    double? latitude
   }) = EventDtoFull;
 
 

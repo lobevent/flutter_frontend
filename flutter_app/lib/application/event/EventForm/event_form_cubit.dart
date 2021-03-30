@@ -51,6 +51,7 @@ class EventFormCubit extends Cubit<EventFormState> {
   }
 
   Future<void> loadEvent(String id) async {
+    emit(EventFormState.loading());
     repository.getSingle(UniqueId.fromUniqueString(id)).then(
             (value) => value.fold(
                     (failure) => emit(EventFormState.error(failure)),

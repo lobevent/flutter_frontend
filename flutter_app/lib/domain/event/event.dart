@@ -20,8 +20,8 @@ class Event with _$Event {
     required DateTime creationDate,
     required Profile owner,
     required bool public,
-    required double longitude,
-    required double latitude
+    double? longitude,
+    double? latitude
   }) = EventFull;
 
 

@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class InjectionContainer {
   // get an instance of the GetIt singleton to use for injection
   static final GetIt getIt = GetIt.I; // equal to: GetIt.instance;

@@ -18,7 +18,7 @@ class FeedScreen extends StatelessWidget {
 
             //router = context.router;
 
-            context.router.push(EventFormPageRoute(editedEventId: ""),
+            context.router.push(EventFormPageRoute(),
             // ExtendedNavigator.of(context).popUntil(
             //     (route) => route.settings.name == Routes.eventFormPage,
           );}, child: Text("Button1")),

@@ -55,7 +55,7 @@ class EventFormPage extends StatelessWidget {
               },
             );
           },
-          buildWhen: (p, c) => p.isSaving != c.isSaving,
+          //buildWhen: (p, c) => p.isSaving != c.isSaving /*|| p.isLoading != c.isLoading*/,
           builder: (context, state) {
             return Stack(
               children: <Widget>[
@@ -80,7 +80,7 @@ class EventFormPageScaffold extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: BlocBuilder<EventFormCubit, EventFormState>(
-          buildWhen: (p, c) => p.isEditing != c.isEditing,
+          //buildWhen: (p, c) => p.isEditing != c.isEditing,
           builder: (context, state) {
             return Text(state.isEditing ? 'Edit a Event' : 'Create a Event');
           },
@@ -95,7 +95,7 @@ class EventFormPageScaffold extends StatelessWidget {
         ],
       ),
       body: BlocBuilder<EventFormCubit, EventFormState>(
-          buildWhen: (p, c) => p.showErrorMessages != c.showErrorMessages,
+          //buildWhen: (p, c) => p.showErrorMessages != c.showErrorMessages,
           builder: (context, state) {
             return Form(
               autovalidateMode: state.showErrorMessages? AutovalidateMode.always : AutovalidateMode.disabled,

@@ -47,7 +47,7 @@ class EventFormState with _$EventFormState {
 
   factory EventFormState.loading() => EventFormState(
       event: Event.empty(),
-      isEditing: false,
+      isEditing: true,
       isSaving: false,
       isLoading: true,
       showErrorMessages: false,

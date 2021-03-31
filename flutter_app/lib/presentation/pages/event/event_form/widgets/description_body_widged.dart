@@ -25,7 +25,7 @@ class _DescriptionFieldState extends State<DescriptionField> {
     final textEditingController = TextEditingController();
 
     return BlocListener<EventFormCubit, EventFormState>(
-      listenWhen: (p, c) => p.isEditing != c.isEditing,
+      listenWhen: (p, c) => p.isLoading != c.isLoading,
       listener: (context, state) {
         textEditingController.text = state.event.description.getOrCrash();
       },

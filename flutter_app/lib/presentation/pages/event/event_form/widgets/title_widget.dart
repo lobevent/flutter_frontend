@@ -25,7 +25,7 @@ class _EventNameFieldState extends State<EventNameField> {
     final textEditingController = TextEditingController();
 
     return BlocListener<EventFormCubit, EventFormState>(
-      listenWhen: (p, c) => p.isEditing != c.isEditing,
+      listenWhen: (p, c) => p.isLoading != c.isLoading,
       listener: (context, state) {
         textEditingController.text = state.event.name.getOrCrash();
       },
@@ -40,7 +40,7 @@ class _EventNameFieldState extends State<EventNameField> {
             maxLength: EventName.maxLength,
             maxLines: 1,
             onChanged: (value) => {
-              context.read<EventFormCubit>()..changeTitle(value)}
+              context.read<EventFormCubit>().changeTitle(value)} // For value error validaton
             ,
             validator: (_) => context.read<EventFormCubit>().state.event.name.value
                 .fold(

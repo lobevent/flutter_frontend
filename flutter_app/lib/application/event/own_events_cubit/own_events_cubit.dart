@@ -53,4 +53,8 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
       emit(OwnEventsState.error(error: e.toString()));
     }
   }
+
+  void deleteEvent() {
+    print("true");
+  }
 }

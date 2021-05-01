@@ -14,7 +14,6 @@ class Item with _$Item {
     required ItemMaxProfiles maxprofiles,
     required ItemName name,
     required ItemDescription description,
-    required bool checkMark,
   }) = _Item;
 
 }

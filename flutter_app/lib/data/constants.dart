@@ -7,6 +7,8 @@ class Constants {
   static const int minProfilenameLength = 4;
   static const int maxProfilenameLength = 40;
 
+  static const int maximumProfilesTodoLength = 500;
+
   // asset paths
   static const String googleLogoPath = 'assets/logos/google_light.png';
 

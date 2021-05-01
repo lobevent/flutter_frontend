@@ -35,4 +35,7 @@ class ValueFailure<T> with _$ValueFailure<T> {
   const factory ValueFailure.exceedingMinMax({
     required T failedValue,
 }) = ExceedingMinMax <T>;
+  const factory ValueFailure.outOfRange({
+    required T failedValue,
+}) = OutOfRange<T>;
 }

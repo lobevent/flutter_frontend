@@ -1,5 +1,6 @@
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'item.freezed.dart';
@@ -9,8 +10,10 @@ class Item with _$Item {
 
   const factory Item({
     required UniqueId id,
-    required Profile profile,
-    required String element,
+    required List<Profile> profiles,
+    required ItemMaxProfiles maxprofiles,
+    required ItemName name,
+    required ItemDescription description,
     required bool checkMark,
   }) = _Item;
 

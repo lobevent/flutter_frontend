@@ -1,6 +1,7 @@
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
+import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'todo.freezed.dart';
@@ -10,7 +11,9 @@ class Todo with _$Todo {
 
   const factory Todo({
     required UniqueId id,
-    required Item item,
+    required List<Item> item,
     required Event event,
+    required TodoDescription description,
+    required TodoName name
   }) = _Todo;
 }

@@ -41,15 +41,15 @@ class ProfileRepository extends IProfileRepository {
 
   @override
   Future<Either<ProfileFailure, List<Profile>>> getList(
-          Operation operation, int amount,{Post? post, Profile? profile, Event? event}) async {
+          Operation operation, int amount,{Post? post, Profile? profile, Event? event, String? searchString}) async {
     try {
       List<ProfileDto> profileDtos;
       switch (operation) {
         case Operation.search:
-          if (profile == null) {
+          if (searchString == null) {
             throw UnexpectedTypeError();
           }
-          profileDtos = await _profileRemoteService.getSearchedProfiles( amount, profile.id.getOrCrash().toString());
+          profileDtos = await _profileRemoteService.getSearchedProfiles( amount, searchString);
           break;
         case Operation.attendingUsersEvent:
           if (profile == null) {

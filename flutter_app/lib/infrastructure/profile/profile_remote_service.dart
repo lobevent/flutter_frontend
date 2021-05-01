@@ -59,10 +59,10 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
         "$updatePath${profileDto.id}", jsonEncode(profileDto.toJson())));
   }
 
-  Future<List<ProfileDto>> getSearchedProfiles(int amount, String profileId) async {
+  Future<List<ProfileDto>> getSearchedProfiles(int amount, String searchString) async {
     return _getProfileList(
         searchProfilePath.interpolate(
-            {"profileId" : profileId, "amount" : amount.toString()}));
+            {"needle" : searchString, "amount" : amount.toString()}));
     }
 
   Future<List<ProfileDto>> getAttendingUsersToEvent(int amount, String profileId) async {

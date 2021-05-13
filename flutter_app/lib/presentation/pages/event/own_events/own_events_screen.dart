@@ -33,7 +33,7 @@ class _OwnEventsScreenState extends State<OwnEventsScreen> {
     return BlocProvider(
       create: (context) => OwnEventsCubit(),
       child: BlocConsumer<OwnEventsCubit, OwnEventsState>(
-          listener: (context, state) {},
+        listener: (context, state) => {},
           builder: (context, state) {
             bool isLoading = state.maybeMap((_) => false,
                 loading: (_) => true, orElse: () => false);

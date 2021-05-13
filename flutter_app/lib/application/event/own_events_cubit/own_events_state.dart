@@ -17,6 +17,8 @@ class OwnEventsState with _$OwnEventsState {
   factory OwnEventsState.loaded({required List<Event> events}) = _Loaded;
 
   factory OwnEventsState.error({required  String error}) = _LoadFailure;
+
+  factory OwnEventsState.deleted({required Event event}) = _deletedEvent;
 }
 
 

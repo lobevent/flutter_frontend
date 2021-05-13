@@ -54,7 +54,20 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
     }
   }
 
-  void deleteEvent() {
-    print("true");
+  Future<bool> deleteEvent(Event event) async{
+
+    //final Either<EventFailure, Event> deletedEvent = await repository.delete(event);
+
+    //TODO ADD Errorhandling
+
+    this.state.maybeMap((value) => null, loaded: (state) => {
+      state.events.remove(event),
+      emit(state)
+      //state.events.remove(event),
+      //emit(OwnEventsState.deleted(event: event)),
+      //state.copyWith(events: state.events.remove(event));
+    }, orElse: () => throw Exception('LogicError'));
+
+    return true;
   }
 }

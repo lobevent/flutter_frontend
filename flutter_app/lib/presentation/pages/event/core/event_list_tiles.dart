@@ -11,23 +11,25 @@ class EventListTiles extends StatelessWidget {
   final Event event;
   final bool allowEdit;
 
-  const EventListTiles({Key? key, required this.event, required this.allowEdit}): super(key: key);
+  const EventListTiles({required ObjectKey key, required this.event, required this.allowEdit}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
         leading: Icon(Icons.event),
-        title: Text(event.description.getOrCrash()),
+        title: Text(event.name.getOrCrash()),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             IconButton(icon: Icon(Icons.delete), onPressed: () {
-              if(deleteEvent(context)){
-                context.read<OwnEventsCubit>().deleteEvent();
-              }
-              print("falseee");
+               deleteEvent(context).then((value) async => {
+                  if (value)
+                    context.read<OwnEventsCubit>().deleteEvent(event)
+                  else
+                    print("falseeeee")
+               });
 
             } ),
             IconButton(
@@ -45,10 +47,10 @@ class EventListTiles extends StatelessWidget {
     context.router.push(EventFormPageRoute(editedEventId: event.id.getOrCrash()));
   }
 
-  bool deleteEvent(BuildContext context){
+  Future<bool> deleteEvent(BuildContext context) async{
     bool answer =false;
     //Not yet implemented
-    showDialog<void>(
+     await showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
@@ -81,7 +83,7 @@ class EventListTiles extends StatelessWidget {
             );
           },
     );
-    return answer;
+     return answer;
   }
 
 

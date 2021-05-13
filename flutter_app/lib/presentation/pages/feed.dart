@@ -21,13 +21,13 @@ class FeedScreen extends StatelessWidget {
             context.router.push(EventFormPageRoute(),
             // ExtendedNavigator.of(context).popUntil(
             //     (route) => route.settings.name == Routes.eventFormPage,
-          );}, child: Text("Button1")),
+          );}, child: Text("EventForm")),
           ElevatedButton(onPressed:() {
             context.router.push(OwnEventsScreenRoute());
-            }, child: Text("Button2")),
+            }, child: Text("OwnEvents")),
           ElevatedButton(onPressed:() {
             context.router.push(EventScreenPageRoute(eventId: UniqueId.fromUniqueString("a6544031-fe7d-4293-8328-0599e643e714")));
-          }, child: Text("Button3")),
+          }, child: Text("EventScreen")),
           ElevatedButton(onPressed:() {
             context.router.push(LoginScreenRoute());
           }, child: Text("Login"))

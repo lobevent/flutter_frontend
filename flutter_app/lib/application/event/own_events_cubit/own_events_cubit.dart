@@ -56,16 +56,24 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
 
   Future<bool> deleteEvent(Event event) async{
 
-    //final Either<EventFailure, Event> deletedEvent = await repository.delete(event);
+    final Either<EventFailure, Event> deletedEvent = await repository.delete(event);
 
+    deletedEvent.fold(
+            (failure) {
+              emit(OwnEventsState.error(error: "Error deleteing event!"));
+              return false;
+            },
+            (event) => null);
     //TODO ADD Errorhandling
 
-    this.state.maybeMap((value) => null, loaded: (state) => {
-      state.events.remove(event),
-      emit(state)
-      //state.events.remove(event),
-      //emit(OwnEventsState.deleted(event: event)),
-      //state.copyWith(events: state.events.remove(event));
+    this.state.maybeMap((value) => null, loaded: (state)  {
+      state.events.remove(event);
+      List<Event> events = state.events;
+      //this one is for the listview but
+      emit(OwnEventsState.deleted(event: event));
+      // we want to have the events in the state, so we emit the events again!
+      emit(OwnEventsState.loaded(events: events));
+
     }, orElse: () => throw Exception('LogicError'));
 
     return true;

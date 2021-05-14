@@ -14,61 +14,25 @@ class OwnEventsBodyState extends State<OwnEventsBody> {
   List<Event> events = [];
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OwnEventsCubit, OwnEventsState>(
 
-        builder: (context, state)
-    {
-      return state.map((_) => EventListView(), // TODO: Simplify to maybemap
-          initial: (_) => EventListView(),
-          loading: (_) => EventListView(),
-          deleted: (_) => EventListView(),
-          loaded: (state) {
-            EventListView object = EventListView();
-            return object;
-          },
-          error: (value) => Center(child: Text(value.error)));
-    });
-  }
-
-}
-
-class EventListView extends StatefulWidget{
-
-  @override
-  EventListViewState createState() => EventListViewState();
-
-
-}
-
-class EventListViewState extends State<EventListView> {
-
-  List<Event> events = [];
-
-
-
-  @override
-  Widget build(BuildContext context) {
-
-    List<Event> events = this.events;
-    return
-      BlocListener<OwnEventsCubit, OwnEventsState>(
+    return BlocListener<OwnEventsCubit, OwnEventsState>(
         listener: (context, state) => {
           //this is the deletion and loading
           state.maybeMap(
                   (value) => {},
               loaded: (state) => {
-                    this.events = state.events,
-                    setState((){})
+                this.events = state.events,
+                setState((){})
               },
               deleted: (state) => {
-                    //this is for updating the listview when deleting
+                //this is for updating the listview when deleting
                 this.events.remove(state.event),
                 setState(() {})
               },
               orElse: () => {})
         },
         child:
-          ListView.builder(
+        ListView.builder(
             itemBuilder: (context, index) {
               final event = this.events[index];
               if (event.failureOption.isSome()) {
@@ -83,8 +47,8 @@ class EventListViewState extends State<EventListView> {
                 return Ink(
                     color: Colors.red,
                     child: ListTile(
-                      title: Text("No own events available")
-                ));
+                        title: Text("No own events available")
+                    ));
               }
 
               else{
@@ -92,7 +56,7 @@ class EventListViewState extends State<EventListView> {
               }
             },
             itemCount: this.events.length)
-      ,);
+        ,);
   }
 
 }

@@ -57,14 +57,11 @@ class EventListViewState extends State<EventListView> {
           state.maybeMap(
                   (value) => {},
               loaded: (state) => {
-                    if(this.events.isEmpty || true)
-                      this.events = state.events
-                    else
-                      this.events.remove(this.events.toSet().difference(state.events.toSet()).toList()[0]),
-                    //this.events = state.events,
+                    this.events = state.events,
                     setState((){})
               },
               deleted: (state) => {
+                    //this is for updating the listview when deleting
                 this.events.remove(state.event),
                 setState(() {})
               },

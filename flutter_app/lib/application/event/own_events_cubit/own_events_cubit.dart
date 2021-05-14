@@ -64,8 +64,8 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
               return false;
             },
             (event) => null);
-    //TODO ADD Errorhandling
 
+    // map because of our states
     this.state.maybeMap((value) => null, loaded: (state)  {
       state.events.remove(event);
       List<Event> events = state.events;

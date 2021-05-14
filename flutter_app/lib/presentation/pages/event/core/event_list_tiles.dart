@@ -17,7 +17,10 @@ class EventListTiles extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: Icon(Icons.event),
+        leading: IconButton(
+            icon: Icon(Icons.event),
+          onPressed: () => showEvent(context),
+        ),
         title: Text(event.name.getOrCrash()),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
@@ -45,6 +48,10 @@ class EventListTiles extends StatelessWidget {
 
   void editEvent(BuildContext context){
     context.router.push(EventFormPageRoute(editedEventId: event.id.getOrCrash()));
+  }
+
+  void showEvent(BuildContext context){
+    context.router.push(EventScreenPageRoute(eventId: event.id));
   }
 
   Future<bool> deleteEvent(BuildContext context) async{

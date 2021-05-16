@@ -83,10 +83,10 @@ class ProfileRepository extends IProfileRepository {
   }
 
   @override
-  Future<Either<ProfileFailure, Profile>> getSingleProfile(int id) async {
+  Future<Either<ProfileFailure, Profile>> getSingleProfile(UniqueId id) async {
     try {
       final ProfileDto profileDto =
-      await _profileRemoteService.getSingleProfile(id);
+      await _profileRemoteService.getSingleProfile(id.getOrCrash());
       final Profile profile = profileDto.toDomain();
       return right(profile);
     } on CommunicationException catch (e) {

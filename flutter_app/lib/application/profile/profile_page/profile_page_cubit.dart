@@ -24,8 +24,12 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
   ProfileRepository repository = GetIt.I<ProfileRepository>();
 
 
-  loadProfile(UniqueId profileId){
-    //repository.getSingleProfile(id)
+  Future<void> loadProfile(UniqueId profileId) async{
+    Either<ProfileFailure, Profile> response = await repository.getSingleProfile(profileId);
+
+    response.fold(
+            (ProfileFailure f) => emit(ProfilePageState.error(error: f.toString())),
+            (Profile pro) => emit(ProfilePageState.loaded(profile: pro)));
   }
 
 

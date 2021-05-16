@@ -19,7 +19,7 @@ enum Operation{
 abstract class IProfileRepository{
   Future <Either<ProfileFailure, List<Profile>>> getList(
       Operation operation, int amount,{ Post post, Profile profile, Event event});
-  Future <Either<ProfileFailure, Profile>> getSingleProfile(int id); //todo uuid
+  Future <Either<ProfileFailure, Profile>> getSingleProfile(UniqueId id); //todo uuid
   Future <Either<ProfileFailure, Profile>> create(Profile profile);
   Future <Either<ProfileFailure, Profile>> update(Profile profile);
   Future <Either<ProfileFailure, Profile>> delete(Profile profile);

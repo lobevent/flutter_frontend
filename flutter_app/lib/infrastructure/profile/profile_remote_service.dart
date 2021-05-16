@@ -34,7 +34,7 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
     return ProfileDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
 
-  Future<ProfileDto> getSingleProfile(int id) async {
+  Future<ProfileDto> getSingleProfile(String id) async {
     final String uri = "$profileIdPath$id";
     Response response = await client.get(uri);
     ProfileDto profileDto =

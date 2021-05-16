@@ -11,6 +11,9 @@ import 'package:http/http.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import 'infrastructure/profile/profile_remote_service.dart';
+import 'infrastructure/profile/profile_repository.dart';
+
 // ignore: avoid_classes_with_only_static_members
 class InjectionContainer {
   // get an instance of the GetIt singleton to use for injection
@@ -39,5 +42,7 @@ class InjectionContainer {
     getIt.registerLazySingleton(() => EventRepository(
         EventRemoteService(communicator: communicator),
         EventLocalService()));
+
+    getIt.registerLazySingleton(() => ProfileRepository(ProfileRemoteService()));
   }
 }

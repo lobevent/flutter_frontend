@@ -34,19 +34,6 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
       emit(OwnEventsState.loading());
 
       final Either<EventFailure,List<Event>> ownEventsList= await repository.getList(Operation.owned, DateTime.now(), 30, descending: true);
-      /*
-      await Future.delayed(Duration(seconds: 2), () {
-        return left([
-          Event(id: UniqueId(), name: EventName("test"), date: DateTime.now(), description: EventDescription("lalal"), creationDate: DateTime.now(), owner: Profile(id: UniqueId(), name: ProfileName("ssss")), public: true),
-          Event(id: UniqueId(), name: EventName("test2"+ "\n" +"yeye"), date: DateTime.now(), description: EventDescription("lalal"), creationDate: DateTime.now(), owner: Profile(id: UniqueId(), name: ProfileName("ssss")), public: true),
-          Event(id: UniqueId(), name: EventName("test3"), date: DateTime.now(), description: EventDescription("lalal"), creationDate: DateTime.now(), owner: Profile(id: UniqueId(), name: ProfileName("ssss")), public: true),
-        //Event.empty()
-        ]);*/
-
-       /* final Either<EventFailure, List<Event>> ownEventsList = await Future.delayed(Duration(seconds: 2), () {
-        return repository.getList(Operation.owned, DateTime.now(), 5);
-      });
-        */
 
       emit(OwnEventsState.loaded(events: ownEventsList.fold((l) => throw Exception, (r) => r)));
     } catch (e) {

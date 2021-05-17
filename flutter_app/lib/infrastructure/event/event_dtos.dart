@@ -72,7 +72,7 @@ class OwnerConverter
 
   @override
   ProfileDto fromJson(Map<String, dynamic> owner) {
-    owner["runtimeType"] = "justId";
+   //owner["runtimeType"] = "justId";
     return ProfileDto.fromJson(owner);
   }
 

@@ -16,35 +16,27 @@ part 'profile_dtos.g.dart';
 @freezed
 class ProfileDto extends BaseDto with _$ProfileDto {
   const ProfileDto._();
+  
 
   const factory ProfileDto({
     required String id,
-    required String name,
+    required String username,
+    List<EventDto>? ownedEvents,
+    List<EventDto>? invitations,
+    List<ProfileDto>? friendships,
+    List<PostDto>? posts,
+    List<CommentDto>? comments,
   }) = _ProfileDto;
-
-  const factory ProfileDto.justId({
-    required String id,
-}) = _JustIdProfile;
-
-  const factory ProfileDto.full({
-    required String id,
-    required String name,
-    required List<EventDto> ownedEvents,
-    required List<EventDto> invitations,
-    required List<ProfileDto> friendships,
-    required List<PostDto> posts,
-    required List<CommentDto> comments,
-  }) = _FullProfile;
 
   factory ProfileDto.fromDomain(Profile profile) {
     return profile.map(
         (value) => ProfileDto(
               id: profile.id.getOrCrash(),
-              name: profile.name.getOrCrash(),
+          username: profile.name.getOrCrash(),
             ),
-        full: (detailedProfile) => ProfileDto.full(
+        full: (detailedProfile) => ProfileDto(
             id: detailedProfile.id.getOrCrash(),
-            name: detailedProfile.name.getOrCrash(),
+            username: detailedProfile.name.getOrCrash(),
             ownedEvents: detailedProfile.ownedEvents
                 .map((e) => EventDto.fromDomain(e))
                 .toList(),
@@ -68,29 +60,27 @@ class ProfileDto extends BaseDto with _$ProfileDto {
 
   @override
   Profile toDomain() {
-    return map(
-        (listViewProfileDto) => Profile(
-              id: UniqueId.fromUniqueString(listViewProfileDto.id),
-              name: ProfileName(listViewProfileDto.name),
-            ),
-        full: (detailedProfileDto) => Profile.full(
-            id: UniqueId.fromUniqueString(detailedProfileDto.id),
-            name: new ProfileName(detailedProfileDto.name),
-            ownedEvents: detailedProfileDto.ownedEvents
-                .map((e) => e.toDomain())
-                .toList(),
-            invitations: detailedProfileDto.invitations
-                .map((e) => e.toDomain())
-                .toList(),
-            friendships: detailedProfileDto.friendships
-                .map((e) => e.toDomain())
-                .toList(),
-            posts: detailedProfileDto.posts.map((e) => e.toDomain()).toList(),
-            comments:
-                detailedProfileDto.comments.map((e) => e.toDomain()).toList()),
-        justId: (justIdPDto) => Profile(
-          id: UniqueId.fromUniqueString(justIdPDto.id),
-          name: ProfileName(justIdPDto.id),
-        ));
+    if(posts == null) {
+      return Profile(
+          id: UniqueId.fromUniqueString(id), name: ProfileName(username));
+    }
+    else{
+      return Profile.full(
+          id: UniqueId.fromUniqueString(id),
+          name: new ProfileName(username!),
+          ownedEvents: ownedEvents!
+              .map((e) => e.toDomain())
+              .toList(),
+          invitations: invitations!
+              .map((e) => e.toDomain())
+              .toList(),
+          friendships: friendships!
+              .map((e) => e.toDomain())
+              .toList(),
+          posts: posts!.map((e) => e.toDomain()).toList(),
+          comments:
+          comments!.map((e) => e.toDomain()).toList());
+    }
+
   }
 }

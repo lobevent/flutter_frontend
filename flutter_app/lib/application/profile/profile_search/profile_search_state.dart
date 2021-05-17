@@ -22,7 +22,7 @@ class ProfileSearchState with _$ProfileSearchState{
 
   factory ProfileSearchState.loaded({required List<Profile> profiles}) = _Loaded;
 
-  factory ProfileSearchState.error({required String error}) = _LoadFailure;
+  factory ProfileSearchState.error({required ProfileFailure failure}) = _LoadFailure;
 
 
 

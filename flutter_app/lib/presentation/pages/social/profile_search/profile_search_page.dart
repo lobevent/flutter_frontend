@@ -7,6 +7,20 @@ import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/profile_list_tiles.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
+class ProfileSearchScreenScaffold extends StatelessWidget {
+  const ProfileSearchScreenScaffold({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ProfileSearchPage(),
+    );
+    throw UnimplementedError();
+  }
+}
+
 class ProfileSearchPage extends StatefulWidget {
   @override
   _ProfileSearchState createState() => _ProfileSearchState();
@@ -18,7 +32,7 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
 
   //searchhistory with 5 last searched terms
   static const historyLength = 5;
-  List<String> _searchHistory = [];
+  static List<String> _searchHistory = [];
   List<String>? filteredSearchHistory;
   String selectedTerm = "";
 
@@ -63,17 +77,22 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
     return BlocProvider(
       create: (context) => ProfileSearchCubit(),
       child: BlocConsumer<ProfileSearchCubit, ProfileSearchState>(
-        listener: (context, state) => {},
+        listener: (context, state) => {
+          //loading
+          state.maybeMap((value) => {},
+              loaded: (state) =>
+                  {this.profiles = state.profiles, setState(() {})},
+              orElse: () => {})
+        },
         builder: (context, state) {
-          bool isLoading = state.maybeMap((_) => false,
-              loading: (_) => true, orElse: () => false);
           return Scaffold(
               body: FloatingSearchBar(
             controller: controller,
-            body: const FloatingSearchBarScrollNotifier(
-                child: SearchResultsListView(
-              searchTerm: "",
-            )),
+            body: FloatingSearchBarScrollNotifier(
+              child: SearchResultsListView(
+                searchTerm: selectedTerm,
+              ),
+            ),
             transition: CircularFloatingSearchBarTransition(),
             physics: BouncingScrollPhysics(),
             title: Text('Search this'),
@@ -86,10 +105,6 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
               setState(() {
                 filteredSearchHistory = filterSearchTerms(filter: query);
               });
-              state.maybeMap((value) => {},
-                  loading: (state) =>
-                      {this.profileSearch = state.profileName, setState(() {})},
-                  orElse: () => {});
             },
             onSubmitted: (query) {
               setState(() {
@@ -97,7 +112,6 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
                 selectedTerm = query;
               });
               context.read<ProfileSearchCubit>().searchByProfileName(query);
-              controller.close();
             },
             builder: (context, transition) {
               return ClipRRect(
@@ -106,6 +120,7 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
                   color: Colors.white,
                   elevation: 4,
                   child: ListView.builder(
+                      shrinkWrap: true,
                       itemBuilder: (context, index) {
                         final profile = this.profiles[index];
                         if (profile.failureOption.isSome()) {
@@ -142,7 +157,7 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
   void initState() {
     super.initState();
     controller = FloatingSearchBarController();
-    //filteredSearchHistory = filterSearchTerms(filter: null);
+    filteredSearchHistory = filterSearchTerms(filter: "");
   }
 
   @override
@@ -182,8 +197,9 @@ class SearchResultsListView extends StatelessWidget {
     final fsb = FloatingSearchBar.of(context);
 
     return ListView(
+      padding: EdgeInsets.only(top: 10),
       children: List.generate(
-        50,
+        5,
         (index) => ListTile(
           title: Text('$searchTerm search result'),
           subtitle: Text(index.toString()),

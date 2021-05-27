@@ -21,7 +21,7 @@ import 'package:flutter_frontend/presentation/pages/social/profile_search/profil
     AutoRoute(page: PhoneNumberVerificationCodeScreen),
     AutoRoute(page: EventScreenPage),
     AutoRoute(page: ProfilePage),
-    AutoRoute(page: ProfileSearchPage)
+    AutoRoute(page: ProfileSearchScreenScaffold)
   ],
 )
 class $Router {}

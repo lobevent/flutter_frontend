@@ -51,7 +51,7 @@ class FeedScreen extends StatelessWidget {
                 child: Text("Login")),
             ElevatedButton(
                 onPressed: () {
-                  context.router.push(ProfileSearchPageRoute());
+                  context.router.push(ProfileSearchScreenScaffoldRoute());
                 },
                 child: Text("ProfileSearch")),
           ],

@@ -49,31 +49,15 @@ class TodoRemoteSetvice extends RemoteService<TodoDto>{
 
 
 
-
-
-  Future<EventDto> updateEvent(EventDto eventDto) async {
+  Future<TodoDto> updateTodo(TodoDto todoDto) async {
     return _decodeTodo(await client.put(
-        "$updatePath${eventDto.id}",
-        jsonEncode(eventDto.toJson())));
+        "$updatePath${todoDto.id}",
+        jsonEncode(todoDto.toJson())));
   }
-
-  /*static String generatePaginatedRoute(
-      String route, int amount, DateTime lastEventTime) {
-    return "$route/$amount/$lastEventTime";
-  }*/
 
   TodoDto _decodeTodo(Response json) {
     return TodoDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
 
-  Future<List<EventDto>> _getEventList(String path) async {
-    final Response response = await client.get(path);
-    return convertList(response);
-  }
-
-
-//  Future<List<EventDto>> getViewableEventsFromProfile(int ProfileId){
-//
-//  }
 
 }

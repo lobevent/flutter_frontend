@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/todo/todo_failure.dart';
 import 'package:get_it/get_it.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -22,7 +23,7 @@ class TodoCubit extends Cubit<TodoState> {
   TodoRepository repository = GetIt.I<TodoRepository>();
 
   Future<void> loadTodoList(Event event) async{
-    Either<TodoFailure, Todo> response = await repository.getTodoList(event);
+    Either<NetWorkFailure, Todo> response = await repository.getTodoList(event);
 
     response.fold(
             (todoFailure) => emit(TodoState.error(error: todoFailure.toString())),

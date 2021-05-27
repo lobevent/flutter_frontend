@@ -21,7 +21,7 @@ class TodoRepository extends ITodoRepository{
   }
 
   @override
-  Future<Either<NetWorkFailure, Todo>> getTodoList(Event event) {
+  Future<Either<NetWorkFailure, Todo>>getTodoList(Event event) {
     // TODO: implement getTodoList
     throw UnimplementedError();
   }

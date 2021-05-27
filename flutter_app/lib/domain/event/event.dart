@@ -26,7 +26,7 @@ class Event with _$Event {
 
 
   factory Event.empty() => Event(
-    id: UniqueId(),
+    id: UniqueId.fromUniqueString('e6837df8-9e99-4f00-a40d-0e798834e9da'),
     name: EventName(''),
     date: DateTime.now(),
     description: EventDescription(''),

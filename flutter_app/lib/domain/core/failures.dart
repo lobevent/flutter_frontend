@@ -39,3 +39,17 @@ class ValueFailure<T> with _$ValueFailure<T> {
     required T failedValue,
 }) = OutOfRange<T>;
 }
+
+class NetWorkFailure<T> with _$NetWorkFailure<T> {
+  const factory NetWorkFailure.unexpected() = Unexpected<T>;
+
+  const factory NetWorkFailure.insufficientPermissions() = InsufficientPermissions<T>;
+
+  const factory NetWorkFailure.unableToUpdate() = UnableToUpdate<T>;
+
+  const factory NetWorkFailure.notAuthenticated() = NotAuthenticated<T>;
+
+  const factory NetWorkFailure.notFound() = NotFound<T>;
+
+  const factory NetWorkFailure.internalServer() = InternalServer<T>;
+}

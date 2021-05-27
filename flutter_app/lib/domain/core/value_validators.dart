@@ -114,7 +114,7 @@ Either<ValueFailure<String>, String> validateDate(String input) {
   }
 }
 
-Either<ValueFailure<T>, T> validateNumberRange<T extends num>(T input, {required T max, required T min}) {
+Either<ValueFailure<int>, int> validateNumberRange(int input, {required int max, required int min}) {
   // check if the date is in valid format
 
   if (input <= max && input >= min) {

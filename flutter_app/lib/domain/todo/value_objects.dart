@@ -46,7 +46,7 @@ class ItemMaxProfiles extends ValueObject<int>{
 
     assert(input != null);
     {
-      return ItemMaxProfiles._(validateNumberRange<int>(input, max: Constants.maximumProfilesTodoLength, min: 0).flatMap(validateNonNegative));
+      return ItemMaxProfiles._(validateNumberRange(input, max: Constants.maximumProfilesTodoLength, min: 0).flatMap(validateNonNegative));
     }
   }
   const ItemMaxProfiles._(this.value);

@@ -27,17 +27,23 @@ class ProfileSearchPage extends StatefulWidget {
 }
 
 class _ProfileSearchState extends State<ProfileSearchPage> {
-  List<Profile> profiles = [];
   String? profileSearch;
+  List<Profile> profiles = [];
 
   //searchhistory with 5 last searched terms
   static const historyLength = 5;
-  static List<String> _searchHistory = [];
+  static List<String> _searchHistory = [
+    "gunther",
+    "spast",
+    "boss",
+    "thb",
+    "mongo"
+  ];
   List<String>? filteredSearchHistory;
-  String selectedTerm = "";
+  String? selectedTerm;
 
   List<String> filterSearchTerms({
-    required String filter,
+    required String? filter,
   }) {
     if (filter != null && filter.isNotEmpty) {
       return _searchHistory.reversed
@@ -59,12 +65,12 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
       _searchHistory.removeRange(0, _searchHistory.length - historyLength);
     }
 
-    filteredSearchHistory = filterSearchTerms(filter: "");
+    filteredSearchHistory = filterSearchTerms(filter: null);
   }
 
   void deleteSearchTerm(String term) {
     _searchHistory.removeWhere((t) => t == term);
-    filteredSearchHistory = filterSearchTerms(filter: "");
+    filteredSearchHistory = filterSearchTerms(filter: null);
   }
 
   void putSearchTermFirst(String term) {
@@ -91,6 +97,7 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
             body: FloatingSearchBarScrollNotifier(
               child: SearchResultsListView(
                 searchTerm: selectedTerm,
+                profiles: profiles,
               ),
             ),
             transition: CircularFloatingSearchBarTransition(),
@@ -115,35 +122,73 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
             },
             builder: (context, transition) {
               return ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Material(
-                  color: Colors.white,
-                  elevation: 4,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        final profile = this.profiles[index];
-                        if (profile.failureOption.isSome()) {
-                          return Ink(
-                              color: Colors.red,
-                              child: ListTile(
-                                title: Text(profile.failureOption
-                                    .fold(() => "", (a) => a.toString())),
-                              ));
-                        }
-                        if (this.profiles.isEmpty) {
-                          return Ink(
-                              color: Colors.red,
-                              child: ListTile(title: Text("No User found")));
+                  borderRadius: BorderRadius.circular(8),
+                  child: Material(
+                    color: Colors.white,
+                    elevation: 4,
+                    child: Builder(
+                      builder: (context) {
+                        //if query and history is empty, return the Start Searching Site
+                        if (filteredSearchHistory!.isEmpty &&
+                            controller.query.isEmpty) {
+                          return Container(
+                            height: 56,
+                            width: double.infinity,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Start Searching',
+                              maxLines: 1,
+                            ),
+                          );
+                        } else if (filteredSearchHistory!.isEmpty) {
+                          // if empty add query and show query as tile
+                          return ListTile(
+                            title: Text(controller.query),
+                            leading: const Icon(Icons.search),
+                            onTap: () {
+                              setState(() {
+                                addSearchTerm(controller.query);
+                                selectedTerm = controller.query;
+                              });
+                              controller.close();
+                            },
+                          );
                         } else {
-                          return ProfileListTiles(
-                              key: ObjectKey(profile),
-                              profile: this.profiles[index]);
+                          //return the previous search history results
+                          return Column(
+                            children: filteredSearchHistory!
+                                .map(
+                                  (term) => ListTile(
+                                    title: Text(
+                                      term,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    leading: const Icon(Icons.history),
+                                    trailing: IconButton(
+                                      icon: const Icon(Icons.clear),
+                                      onPressed: () {
+                                        setState(() {
+                                          deleteSearchTerm(term);
+                                        });
+                                      },
+                                    ),
+                                    onTap: () {
+                                      setState(() {
+                                        putSearchTermFirst(term);
+                                        selectedTerm = term;
+                                      });
+                                      controller.close();
+                                    },
+                                  ),
+                                )
+                                .toList(),
+                          );
                         }
                       },
-                      itemCount: this.profiles.length),
-                ),
-              );
+                      //itemCount: this.profiles.length),
+                    ),
+                  ));
             },
           ));
         },
@@ -157,7 +202,7 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
   void initState() {
     super.initState();
     controller = FloatingSearchBarController();
-    filteredSearchHistory = filterSearchTerms(filter: "");
+    filteredSearchHistory = filterSearchTerms(filter: null);
   }
 
   @override
@@ -168,11 +213,11 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
 }
 
 class SearchResultsListView extends StatelessWidget {
-  final String searchTerm;
+  final String? searchTerm;
+  final List<Profile> profiles;
 
-  const SearchResultsListView({
-    required this.searchTerm,
-  });
+  const SearchResultsListView(
+      {required this.searchTerm, required this.profiles});
 
   @override
   Widget build(BuildContext context) {
@@ -195,16 +240,49 @@ class SearchResultsListView extends StatelessWidget {
     }
 
     final fsb = FloatingSearchBar.of(context);
+    if (profiles != null) {
+      return ListView.builder(
+        itemBuilder: (context, index) {
+          final profile = this.profiles[index];
 
+          if (profile.failureOption.isSome()) {
+            return Ink(
+              color: Colors.red,
+              child: ListTile(
+                  title: Text(profile.failureOption
+                      .fold(() => "", (a) => a.toString()))),
+            );
+          }
+          if (this.profiles.isEmpty) {
+            return Ink(
+                color: Colors.red,
+                child: ListTile(title: Text("No own events available")));
+          } else {
+            return ProfileListTiles(
+                key: ObjectKey(profile), profile: this.profiles[index]);
+          }
+        },
+        itemCount: this.profiles.length,
+      );
+    } else {
+      return ListTile(
+        title: Text("No events found"),
+      );
+    }
+
+    /*
     return ListView(
       padding: EdgeInsets.only(top: 10),
       children: List.generate(
-        5,
-        (index) => ListTile(
+        10,
+        (index) =>
+            ListTile(
           title: Text('$searchTerm search result'),
           subtitle: Text(index.toString()),
         ),
       ),
     );
+
+     */
   }
 }

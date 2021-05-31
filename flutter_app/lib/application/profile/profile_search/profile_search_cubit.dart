@@ -1,4 +1,3 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
@@ -25,7 +24,7 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
     try {
       emit(ProfileSearchState.loading(profileName: profileName));
       final Either<ProfileFailure, List<Profile>> profiles =
-          await repository.getList(Operation.search, 30);
+          await repository.getList(Operation.search, 10);
     } catch (e) {
       emit(ProfileSearchState.error(error: e.toString()));
     }

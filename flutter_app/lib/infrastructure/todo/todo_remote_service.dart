@@ -10,18 +10,18 @@ import 'package:http/http.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 
 
-class TodoRemoteSetvice extends RemoteService<TodoDto>{
+class TodoRemoteService extends RemoteService<TodoDto>{
   static const String orgalistByEventId = "/orgalist/event/";
 
 
   // TODO combine it to event path?
-  static const String postPath = "/event";
-  static const String deletePath = "/event/";
-  static const String updatePath = "/event/edit/";
+  static const String postPath = "/orgalist/event/";
+  static const String deletePath = "/orgalist/";
+  static const String updatePath = "/orgalist/";
 
   final SymfonyCommunicator client;
 
-  TodoRemoteSetvice({SymfonyCommunicator? communicator})
+  TodoRemoteService({SymfonyCommunicator? communicator})
       : client = communicator ??
       SymfonyCommunicator(); // TODO this doesn't work on runtime -> will throw an error!
 
@@ -36,18 +36,16 @@ class TodoRemoteSetvice extends RemoteService<TodoDto>{
     return todoDto;
   }
 
+
   Future<TodoDto> createTodo(String eventId, TodoDto todo) async {
     return _decodeTodo(
-        await client.post("$orgalistByEventId$eventId", jsonEncode(todo.toJson())));
+        await client.post("$postPath$eventId", jsonEncode(todo.toJson())));
   }
 
-  Future<TodoDto> deleteTodo(TodoDto todoDto) async {
-    // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive
+  Future<TodoDto> deleteTodo(String todoId) async {
     return _decodeTodo(await client.delete(
-        "$deletePath${todoDto.id}"));
+        "$deletePath${todoId}"));
   }
-
-
 
   Future<TodoDto> updateTodo(TodoDto todoDto) async {
     return _decodeTodo(await client.put(
@@ -58,6 +56,7 @@ class TodoRemoteSetvice extends RemoteService<TodoDto>{
   TodoDto _decodeTodo(Response json) {
     return TodoDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
+
 
 
 }

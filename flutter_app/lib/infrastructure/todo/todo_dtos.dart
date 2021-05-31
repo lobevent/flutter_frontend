@@ -1,5 +1,6 @@
 import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/domain/todo/value_objects.dart';
+import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
@@ -26,13 +27,13 @@ class TodoDto extends BaseDto with _$TodoDto {
     required String id,
     required String name,
     String? description,
-    required List<ItemDto> items,
+    @ItemsConverter() required List<ItemDto> orgalistItems,
 
   }) = _TodoDto;
 
   factory TodoDto.fromDomain(Todo todo) {
     return TodoDto(id: todo.id.getOrCrash(), name: todo.name.getOrCrash(),
-        items: todo.items.map((item) => ItemDto.fromDomain(item)).toList());
+        orgalistItems: todo.items.map((item) => ItemDto.fromDomain(item)).toList());
   }
 
   factory TodoDto.fromJson(Map<String, dynamic> json) =>
@@ -42,8 +43,13 @@ class TodoDto extends BaseDto with _$TodoDto {
   @override
   Todo toDomain() {
     return Todo(id: UniqueId.fromUniqueString(id),
-        items: items.map((idto) => idto.toDomain()).toList(),
+        items: orgalistItems.map((idto) => idto.toDomain()).toList(),
          description: TodoDescription(description!), name: TodoName(name));
 
   }
+
+}
+
+class ItemsConverter extends ListConverter<ItemDto> {
+  const ItemsConverter(): super();
 }

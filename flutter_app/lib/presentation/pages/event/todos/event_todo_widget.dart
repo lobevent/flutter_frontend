@@ -4,7 +4,7 @@ import 'package:flutter_frontend/application/todo/todo_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
 
-class EventTodoWidget extends StatelessWidget{
+class EventTodoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -12,11 +12,10 @@ class EventTodoWidget extends StatelessWidget{
       child: BlocBuilder<TodoCubit, TodoState>(
         builder: (context, state) {
           return state.maybeMap(
-            loaded: (state) => Text(state.todo.name.getOrCrash()),
+              loaded: (state) => Text(state.todo.name.getOrCrash()),
               orElse: () => Text("error"));
         },
       ),
     );
   }
-
 }

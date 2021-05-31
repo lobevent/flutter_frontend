@@ -7,7 +7,9 @@ import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/domain/todo/todo_failure.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
+import 'package:flutter_frontend/infrastructure/todo/item_dtos.dart';
 import 'package:flutter_frontend/infrastructure/todo/item_remote_service.dart';
+import 'package:flutter_frontend/infrastructure/todo/todo_dtos.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_remote_service.dart';
 
 class TodoRepository extends ITodoRepository{
@@ -17,39 +19,56 @@ class TodoRepository extends ITodoRepository{
   TodoRepository(this._itemRemoteService, this._todoRemoteService);
 
 
+  ///  posts an todolist to the server
   @override
-  Future<Either<NetWorkFailure, Todo>> create(Todo todo) {
-    // TODO: implement create
-    throw UnimplementedError();
+  Future<Either<NetWorkFailure, Todo>> create(Todo todo, Event event) async{
+    try{ //try if the request can be made, if not we will get an NetworkFailure
+      return right((await _todoRemoteService.createTodo(event.id.getOrCrash(), TodoDto.fromDomain(todo))).toDomain()) ;
+    }on CommunicationException catch (e){
+    return left(_reactOnCommunicationException(e));
+    }
+  }
+
+  /// deletes Todolist
+  @override
+  Future<Either<NetWorkFailure, Todo>> delete(Todo todo) async{
+    try{//try if the request can be made, if not we will get an NetworkFailure
+      return right((await _todoRemoteService.deleteTodo(todo.id.getOrCrash())).toDomain()) ;
+    }on CommunicationException catch (e){
+    return left(_reactOnCommunicationException(e));
+    }
   }
 
   @override
-  Future<Either<NetWorkFailure, Todo>> delete(Todo todo) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<Either<NetWorkFailure, Todo>>getTodoList(Event event) async{
+    try{//try if the request can be made, if not we will get an NetworkFailure
+      return right((await _todoRemoteService.getSingle(event.id.getOrCrash())).toDomain()) ;
+    }on CommunicationException catch (e){
+      return left(_reactOnCommunicationException(e));
+    }
   }
 
   @override
-  Future<Either<NetWorkFailure, Todo>>getTodoList(Event event) {
-    // TODO: implement getTodoList
-    throw UnimplementedError();
+  Future<Either<NetWorkFailure, Todo>> update(Todo todo) async{
+    try{//try if the request can be made, if not we will get an NetworkFailure
+      return right((await _todoRemoteService.updateTodo(TodoDto.fromDomain(todo))).toDomain()) ;
+    }on CommunicationException catch (e){
+      return left(_reactOnCommunicationException(e));
+    }
   }
 
   @override
-  Future<Either<NetWorkFailure, Todo>> update(Todo todo) {
-    // TODO: implement update
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<NetWorkFailure, Item>> addItem(Todo todo, Item item) {
-    // TODO: implement addItem
-    throw UnimplementedError();
+  Future<Either<NetWorkFailure, Item>> addItem(Todo todo, Item item) async{
+    try{//try if the request can be made, if not we will get an NetworkFailure
+      return right((await _itemRemoteService.addItem( ItemDto.fromDomain(item), todo.id.getOrCrash())).toDomain()) ;
+    }on CommunicationException catch (e){
+      return left(_reactOnCommunicationException(e));
+    }
   }
 
   @override
   Future<Either<NetWorkFailure, Item>> addProfileToItem(Item item, Profile profile)async {
-    try{
+    try{//try if the request can be made, if not we will get an NetworkFailure
       return right((await _itemRemoteService.assignProfile(item.id.getOrCrash(), profile.id.getOrCrash())).toDomain()) ;
     }on CommunicationException catch (e){
       return left(_reactOnCommunicationException(e));
@@ -58,7 +77,7 @@ class TodoRepository extends ITodoRepository{
 
   @override
   Future<Either<NetWorkFailure, Item>> deleteItem(Item item) async{
-    try{
+    try{//try if the request can be made, if not we will get an NetworkFailure
       return right((await _itemRemoteService.deleteItem(item.id.getOrCrash())).toDomain()) ;
     }on CommunicationException catch (e){
       return left(_reactOnCommunicationException(e));
@@ -73,8 +92,8 @@ class TodoRepository extends ITodoRepository{
 
   @override
   Future<Either<NetWorkFailure, Item>> updateItem(Item item) async{
-    try{
-      return right((await _itemRemoteService.updateItem(item.id.getOrCrash())).toDomain()) ;
+    try{//try if the request can be made, if not we will get an NetworkFailure
+      return right((await _itemRemoteService.updateItem(ItemDto.fromDomain(item))).toDomain()) ;
     }on CommunicationException catch (e){
     return left(_reactOnCommunicationException(e));
     }

@@ -15,11 +15,10 @@ import 'item_dtos.dart';
 
 class ItemRemoteService extends RemoteService<ItemDto> {
 
-  static const String postPath = "/orgalist/addItem/";
+  static const String postPath = "/orgalist/item/";
   static const String assignProfPath = "orgalist/item/add/";
-  static const String deletePath = "/event/";
-  static const String updatePath = "/event/edit/";
-  static const String assignPath = "/event/";
+  static const String deletePath = "/orgalist/item/";
+  static const String updatePath = "/orgalist/item/";
 
   final SymfonyCommunicator client;
 
@@ -47,7 +46,7 @@ class ItemRemoteService extends RemoteService<ItemDto> {
   }
 
 
-  Future<ItemDto> updateItem(String itemId) async {
+  Future<ItemDto> updateItem(ItemDto itemDto) async {
     return _decodeItem(await client.put(
         "$updatePath${itemDto.id}",
         jsonEncode(itemDto.toJson())));

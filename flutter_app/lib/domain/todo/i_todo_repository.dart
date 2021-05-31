@@ -11,7 +11,7 @@ import 'package:flutter_frontend/domain/todo/todo_failure.dart';
 
 abstract class ITodoRepository{
   Future <Either<NetWorkFailure, Todo>> getTodoList(Event event);
-  Future <Either<NetWorkFailure, Todo>> create(Todo todo);
+  Future <Either<NetWorkFailure, Todo>> create(Todo todo, Event event);
   Future <Either<NetWorkFailure, Todo>> update(Todo todo);
   Future <Either<NetWorkFailure, Todo>> delete(Todo todo);
   Future <Either<NetWorkFailure, Item>> addItem(Todo todo, Item item);

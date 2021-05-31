@@ -42,9 +42,9 @@ class TodoRemoteService extends RemoteService<TodoDto>{
         await client.post("$postPath$eventId", jsonEncode(todo.toJson())));
   }
 
-  Future<TodoDto> deleteTodo(TodoDto todoDto) async {
+  Future<TodoDto> deleteTodo(String todoId) async {
     return _decodeTodo(await client.delete(
-        "$deletePath${todoDto.id}"));
+        "$deletePath${todoId}"));
   }
 
   Future<TodoDto> updateTodo(TodoDto todoDto) async {

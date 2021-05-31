@@ -33,6 +33,12 @@ dependencies:
   # flutter bloc specific widgets like BlocConsumer
   flutter_bloc: ^7.0.0
 
+  # safe state of bloc/cubit
+  hydrated_bloc: ^7.0.0
+
+  # safe on local
+  path_provider: ^2.0.2
+
   # get_it dependency injection for flutter
   get_it: ^6.0.0
 
@@ -64,6 +70,9 @@ dependencies:
   sprintf: ^6.0.0
   #searching bar
   material_floating_search_bar: ^0.3.4
+
+  # Equality Comparisons of objects
+  equatable: ^2.0.2
 
 dev_dependencies:
   flutter_test:

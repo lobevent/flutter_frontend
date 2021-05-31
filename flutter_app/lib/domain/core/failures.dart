@@ -13,8 +13,10 @@ class ValueFailure<T> with _$ValueFailure<T> {
     required T failedValue,
     required int minLength,
   }) = ShortPassword<T>;
-  const factory ValueFailure.noBigCaseLetterPassword() = NoBigCaseLetterPassword;
-  const factory ValueFailure.noSpecialLetterPassword() = NoSpecialLetterPassword;
+  const factory ValueFailure.noBigCaseLetterPassword() =
+      NoBigCaseLetterPassword;
+  const factory ValueFailure.noSpecialLetterPassword() =
+      NoSpecialLetterPassword;
   const factory ValueFailure.exceedingLength({
     required T failedValue,
     required int maxLength,
@@ -34,17 +36,18 @@ class ValueFailure<T> with _$ValueFailure<T> {
   }) = MultiLine<T>;
   const factory ValueFailure.exceedingMinMax({
     required T failedValue,
-}) = ExceedingMinMax <T>;
+  }) = ExceedingMinMax<T>;
   const factory ValueFailure.outOfRange({
     required T failedValue,
-}) = OutOfRange<T>;
+  }) = OutOfRange<T>;
 }
 
 @freezed
 class NetWorkFailure<T> with _$NetWorkFailure<T> {
   const factory NetWorkFailure.unexpected() = Unexpected<T>;
 
-  const factory NetWorkFailure.insufficientPermissions() = InsufficientPermissions<T>;
+  const factory NetWorkFailure.insufficientPermissions() =
+      InsufficientPermissions<T>;
 
   const factory NetWorkFailure.unableToUpdate() = UnableToUpdate<T>;
 

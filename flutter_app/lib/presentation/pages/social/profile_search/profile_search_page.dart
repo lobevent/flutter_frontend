@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -222,29 +221,14 @@ class SearchResultsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (searchTerm == null) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.search,
-              size: 64,
-            ),
-            Text(
-              'Start searching',
-              style: Theme.of(context).textTheme.headline5,
-            )
-          ],
-        ),
-      );
+      _generateSearchBody(context);
     }
-
     final fsb = FloatingSearchBar.of(context);
     if (profiles != null) {
       return ListView.builder(
         itemBuilder: (context, index) {
           final profile = this.profiles[index];
-
+          /*
           if (profile.failureOption.isSome()) {
             return Ink(
               color: Colors.red,
@@ -253,6 +237,8 @@ class SearchResultsListView extends StatelessWidget {
                       .fold(() => "", (a) => a.toString()))),
             );
           }
+
+           */
           if (this.profiles.isEmpty) {
             return Ink(
                 color: Colors.red,
@@ -266,7 +252,7 @@ class SearchResultsListView extends StatelessWidget {
       );
     } else {
       return ListTile(
-        title: Text("No events found"),
+        title: Text("No profiles found"),
       );
     }
 
@@ -284,5 +270,23 @@ class SearchResultsListView extends StatelessWidget {
     );
 
      */
+  }
+
+  Widget _generateSearchBody(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.search,
+            size: 64,
+          ),
+          Text(
+            'Start searching',
+            style: Theme.of(context).textTheme.headline5,
+          )
+        ],
+      ),
+    );
   }
 }

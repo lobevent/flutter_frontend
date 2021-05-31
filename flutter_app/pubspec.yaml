@@ -74,6 +74,9 @@ dependencies:
   # Equality Comparisons of objects
   equatable: ^2.0.2
 
+  # postion calculation
+  geolocator: ^7.0.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

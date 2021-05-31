@@ -40,6 +40,7 @@ class ValueFailure<T> with _$ValueFailure<T> {
 }) = OutOfRange<T>;
 }
 
+@freezed
 class NetWorkFailure<T> with _$NetWorkFailure<T> {
   const factory NetWorkFailure.unexpected() = Unexpected<T>;
 

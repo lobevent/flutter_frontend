@@ -3,6 +3,8 @@ import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_dtos.dart';
 import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
+import 'package:flutter_frontend/infrastructure/todo/item_dtos.dart';
+import 'package:flutter_frontend/infrastructure/todo/todo_dtos.dart';
 
 // import 'package:flutter_frontend/infrastructure/';
 
@@ -14,4 +16,6 @@ final Map<Type, dynamic> factoryMap = {
   CommentDto : (Map<String, dynamic> json) => CommentDto.fromJson(json),
   PostDto : (Map<String, dynamic> json) => PostDto.fromJson(json),
   ProfileDto : (Map<String, dynamic> json) => ProfileDto.fromJson(json),
+  TodoDto : (Map<String, dynamic> json) => TodoDto.fromJson(json),
+  ItemDto : (Map<String, dynamic> json) => ItemDto.fromJson(json),
 };

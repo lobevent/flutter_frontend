@@ -44,7 +44,7 @@ class EventScreenPage extends StatelessWidget {
 }
 
 class EventScreenBody extends StatelessWidget {
-  final  Option<Either<Event, EventFailure>> eventFailureOption;
+  final Option<Either<Event, EventFailure>> eventFailureOption;
   const EventScreenBody({
     required this.eventFailureOption,
     Key? key

@@ -1,28 +1,19 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_frontend/domain/core/value_objects.dart';
-import 'package:flutter_frontend/domain/event/event_failure.dart';
-import 'package:flutter_frontend/domain/event/i_event_repository.dart';
-import 'package:flutter_frontend/domain/event/value_objects.dart';
-import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:flutter_frontend/domain/profile/value_objects.dart';
-import 'package:flutter_frontend/infrastructure/event/event_local_service.dart';
-import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
-import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:get_it/get_it.dart';
 
-
-
+import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/event/event_failure.dart';
+import 'package:flutter_frontend/domain/event/i_event_repository.dart';
+import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 
 part 'own_events_cubit.freezed.dart';
 part 'own_events_state.dart';
 
 
 class OwnEventsCubit extends Cubit<OwnEventsState> {
-   OwnEventsCubit() : super(OwnEventsState.initial()) {
+  OwnEventsCubit() : super(OwnEventsState.initial()) {
     emit(OwnEventsState.initial());
     getOwnEvents();
   }
@@ -47,9 +38,9 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
 
     deletedEvent.fold(
             (failure) {
-              emit(OwnEventsState.error(error: "Error deleteing event!"));
-              return false;
-            },
+          emit(OwnEventsState.error(error: "Error deleteing event!"));
+          return false;
+        },
             (event) => null);
 
     // map because of our states

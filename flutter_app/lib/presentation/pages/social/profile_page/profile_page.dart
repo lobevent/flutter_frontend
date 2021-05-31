@@ -14,9 +14,8 @@ class ProfilePage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => ProfilePageCubit(profileId: profileId),
-       child: _generateBody(),
-
+      create: (context) => ProfilePageCubit(profileId: profileId),
+      child: _generateBody(),
     );
   }
 
@@ -24,9 +23,9 @@ class ProfilePage extends StatelessWidget{
   Widget _generateBody(){
     return Scaffold(
         appBar: AppBar(
-        title: Text("Own Events"),
-    ),
-    body: BlocBuilder<ProfilePageCubit, ProfilePageState>(
+          title: Text("Own Events"),
+        ),
+        body: BlocBuilder<ProfilePageCubit, ProfilePageState>(
         builder: (context, state) {
           return state.map(loaded: (state) => Text(state.profile.name.getOrCrash()),
           initial: (state) => Text("loading"),

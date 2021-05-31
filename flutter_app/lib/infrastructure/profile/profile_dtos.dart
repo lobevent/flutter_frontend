@@ -67,7 +67,7 @@ class ProfileDto extends BaseDto with _$ProfileDto {
     else{
       return Profile.full(
           id: UniqueId.fromUniqueString(id),
-          name: new ProfileName(username!),
+          name: ProfileName(username),
           ownedEvents: ownedEvents!
               .map((e) => e.toDomain())
               .toList(),

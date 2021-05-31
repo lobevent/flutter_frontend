@@ -16,7 +16,7 @@ class EventTodoWidget extends StatelessWidget{
               orElse: () => Text("error"));
         },
       ),
-    )
+    );
   }
 
 }

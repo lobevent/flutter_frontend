@@ -1,15 +1,50 @@
 
 import 'package:flutter/material.dart';
 
-class LoadingOverlay extends StatelessWidget {
+import 'package:flutter/cupertino.dart';
+
+/// this class is meant to be the main loading overlay
+class LoadingOverlay extends StatelessWidget{
+
+  final Widget child;
+  final bool isLoading;
+
+  /// take child widget as input, as well as an boolean, to decide whether
+  /// to show the loading overlay or the child widget
+  LoadingOverlay({Key? key, required this.child, required this.isLoading}): super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+
+    ///use stack to put the overlay above
+    return Stack(
+        children: <Widget>[
+            child,
+            LoadingIndicator(isLoading: isLoading)
+        ]
+    );
+  }
+
+
+}
+
+
+
+
+
+
+
+
+class LoadingIndicator extends StatelessWidget {
   final bool isLoading;
   final String text;
 
-  const LoadingOverlay({
+  const LoadingIndicator({
     Key? key,
     required this.isLoading,
     String this.text = "loading"
   }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {

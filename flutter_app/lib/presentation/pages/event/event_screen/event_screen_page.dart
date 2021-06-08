@@ -14,7 +14,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.d
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_screen.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/event_screen_description.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/header_visual.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/text_content.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/event_content.dart';
 
 import '../../core/widgets/loading_overlay.dart';
 
@@ -67,8 +67,9 @@ class EventScreenPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: const [
+              /// the Header with the pictures etc
               HeaderVisual(),
-              TextContent(),
+              EventContent(),
             ],
           ),
       ),

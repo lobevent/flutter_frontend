@@ -77,6 +77,9 @@ dependencies:
   # postion calculation
   geolocator: ^7.0.3
 
+  # nice colorfull safearea
+  colorful_safe_area: ^0.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,6 +1,7 @@
 
 
 
+import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,15 +62,17 @@ class EventScreenPage extends StatelessWidget {
   /// content widgets
   Widget ContentContainer(){
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: const [
-            HeaderVisual(),
-            TextContent(),
-          ],
-        ),
+      body: ColorfulSafeArea(
+        color: Colors.yellow,
+        child: SingleChildScrollView(
+          child: Column(
+            children: const [
+              HeaderVisual(),
+              TextContent(),
+            ],
+          ),
       ),
-    );
+    ));
   }
 
 
@@ -80,6 +83,7 @@ class EventScreenPage extends StatelessWidget {
 
 
 
+/*
 
 
 class EventScreenPage2 extends StatelessWidget {
@@ -136,4 +140,4 @@ class EventScreenBody extends StatelessWidget {
     );
   }
 
-}
+}*/

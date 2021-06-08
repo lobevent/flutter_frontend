@@ -8,7 +8,7 @@ import 'package:flutter_frontend/presentation/pages/login/login_screen.dart';
 import 'package:flutter_frontend/presentation/pages/login/phone_number_sign_in_screen.dart';
 import 'package:flutter_frontend/presentation/pages/login/phone_number_verification_code_screen.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/profile_page.dart';
-
+import 'package:flutter_frontend/presentation/pages/social/profile_search/profile_search_page.dart';
 
 @MaterialAutoRouter(
   routes: <AutoRoute>[
@@ -20,7 +20,8 @@ import 'package:flutter_frontend/presentation/pages/social/profile_page/profile_
     AutoRoute(page: CountryCodeSelectionScreen),
     AutoRoute(page: PhoneNumberVerificationCodeScreen),
     AutoRoute(page: EventScreenPage),
-    AutoRoute(page: ProfilePage)
+    AutoRoute(page: ProfilePage),
+    AutoRoute(page: ProfileSearchScreenScaffold)
   ],
 )
-class $Router{}
+class $Router {}

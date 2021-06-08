@@ -11,9 +11,9 @@ class Todo with _$Todo {
 
   const factory Todo({
     required UniqueId id,
-    required List<Item> item,
-    required Event event,
-    required TodoDescription description,
+    required List<Item> items,
+    Event? event,
+    TodoDescription? description,
     required TodoName name
   }) = _Todo;
 }

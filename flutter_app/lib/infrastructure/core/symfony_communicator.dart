@@ -11,6 +11,7 @@ import 'exceptions.dart';
 class SymfonyCommunicator{
   Client client;
   static const String url = "http://10.0.2.2:8000";
+  //static const String url = "http://localhost:8000";
   final Map<String, String> headers;
 
 

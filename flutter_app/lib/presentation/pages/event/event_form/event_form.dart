@@ -7,7 +7,7 @@ import 'package:flutter_frontend/application/event/event_form/event_form_cubit.d
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/pages/Event/Event_Form/widgets/description_body_widged.dart';
 import 'package:flutter_frontend/presentation/pages/Event/Event_Form/widgets/title_widget.dart';
-import 'package:flutter_frontend/presentation/pages/core/Widgets/loading_overlay.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class EventFormPage extends StatelessWidget {
@@ -57,13 +57,12 @@ class EventFormPage extends StatelessWidget {
           },
           //buildWhen: (p, c) => p.isSaving != c.isSaving /*|| p.isLoading != c.isLoading*/,
           builder: (context, state) {
-            return Stack(
-              children: <Widget>[
-                const EventFormPageScaffold(),
-                LoadingOverlay(isLoading: state.isSaving, text: "Saving"),
-                LoadingOverlay(isLoading: state.isLoading, text: "Loading")
-              ],
-            );
+           String text = state.isSaving? "Saving": "Loading";
+            return LoadingOverlay(
+                child: EventFormPageScaffold(),
+                isLoading: state.isSaving || state.isLoading,
+                text: text);
+
           },
         ));
   }

@@ -1,14 +1,14 @@
-
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/event/event_screen/event_screen_cubit.dart';
 
-class TextContent extends StatelessWidget{
+class EventContent extends StatelessWidget{
 
   ///the color used to display the text on this page
   final Color textColor = Colors.black38;
 
-  const TextContent({Key? key}): super(key: key);
+  const EventContent({Key? key}): super(key: key);
 
 
   @override
@@ -19,15 +19,25 @@ class TextContent extends StatelessWidget{
         return state.maybeMap(
             loaded: (state) {
               return Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   /// at first the title of course
                   TitleText(state.event.name.getOrCrash()),
 
                   /// Used as space
-                  Text(''),
+                  const SizedBox(height: 20),
 
                   /// the date of the event
-                  DateView(state.event.date)
+                  DateView(state.event.date),
+
+
+                  /// Used as space
+                  const SizedBox(height: 20),
+
+
+                  DescriptionWidget(state.event.description.getOrCrash())
+
 
 
                 ],
@@ -47,7 +57,7 @@ class TextContent extends StatelessWidget{
     return PaddingWidget(
         children: [
           Icon(Icons.date_range),
-          Text(date.toString())
+          Text(DateFormat('EEEE, MMM d, yyyy').format(date), style: TextStyle(color: textColor),)
         ]);
   }
 
@@ -68,17 +78,16 @@ class TextContent extends StatelessWidget{
 
   Widget DescriptionWidget(String description){
     return PaddingWidget(children: [
-      Text(description)
+      Flexible(child: Text(description))
     ]);
   }
 
   /// Widget used for making padding with a row, so the children start on the
   /// correct side and is padded from the side
   Widget PaddingWidget({required List<Widget> children}){
-    return Padding(padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-        child:  Row(
-            children: children
-        ));
+    return Padding(padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
+        child: Row(children: children),
+        );
   }
 
 

@@ -79,6 +79,7 @@ dependencies:
 
   # nice colorfull safearea
   colorful_safe_area: ^0.3.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

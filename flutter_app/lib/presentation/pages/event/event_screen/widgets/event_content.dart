@@ -29,14 +29,14 @@ class EventContent extends StatelessWidget{
                   const SizedBox(height: 20),
 
                   /// the date of the event
-                  DateView(state.event.date),
+                  MetaView(state.event.date, state.event.owner.name.getOrCrash()),
 
 
                   /// Used as space
                   const SizedBox(height: 20),
 
-
-                  DescriptionWidget(state.event.description.getOrCrash())
+                  /// Contains the description of the event
+                  DescriptionWidget(state.event.description.getOrCrash()),
 
 
 
@@ -52,12 +52,16 @@ class EventContent extends StatelessWidget{
 
 
 
-  /// A Widged used to show dates
-  Widget DateView(DateTime date){
+  /// contains different metadata for the event, like owner or the date
+  Widget MetaView(DateTime date, String username){
     return PaddingWidget(
         children: [
           Icon(Icons.date_range),
-          Text(DateFormat('EEEE, MMM d, yyyy').format(date), style: TextStyle(color: textColor),)
+          /// Format the date
+          Text(DateFormat('EEEE, MMM d, yyyy').format(date), style: TextStyle(color: textColor),),
+          Spacer(),
+          Icon(Icons.supervised_user_circle),
+          Text(username, style:  TextStyle(color: textColor),)
         ]);
   }
 
@@ -66,19 +70,17 @@ class EventContent extends StatelessWidget{
   Widget TitleText(String title){
     return PaddingWidget(
       children: [
-          Text(title,
-              style: TextStyle(
-                  height: 2,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: textColor))
+          Text(title, style: TextStyle(height: 2, fontSize: 30,
+              fontWeight: FontWeight.bold, color: textColor))
         ]
       );
   }
 
   Widget DescriptionWidget(String description){
     return PaddingWidget(children: [
-      Flexible(child: Text(description))
+      /// the flexible widget is used for the text wrap property, overflowing text
+      /// wraps to next line
+      Flexible(child: Text(description)),
     ]);
   }
 

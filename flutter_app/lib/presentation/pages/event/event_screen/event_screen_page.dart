@@ -41,6 +41,8 @@ class EventScreenPage extends StatelessWidget {
       /// this part of the class therefore contains logic
       child: BlocBuilder<EventScreenCubit, EventScreenState>(
         builder: (context, state) {
+
+          ///the loading Overlay wraps the whole tree
           return LoadingOverlay(
             isLoading: state is LoadInProgress,
             child: state.maybeMap(
@@ -61,7 +63,7 @@ class EventScreenPage extends StatelessWidget {
   /// the content Container should contain no logic, but should only call the
   /// content widgets
   Widget ContentContainer(){
-    return Scaffold(
+    return  Scaffold(
       body: ColorfulSafeArea(
         color: Colors.yellow,
         child: SingleChildScrollView(
@@ -79,66 +81,3 @@ class EventScreenPage extends StatelessWidget {
 
 }
 
-
-
-
-
-
-/*
-
-
-class EventScreenPage2 extends StatelessWidget {
-
-  final UniqueId eventId;
-  const EventScreenPage2({Key? key, required this.eventId}): super(key: key);
-
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (context) => EventScreenCubit(eventId),
-        child: BlocConsumer<EventScreenCubit, EventScreenState>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            return LoadingOverlay(isLoading: state is LoadInProgress,
-                  child:  state.maybeMap(
-                      loaded: (loadState) =>  EventScreenBody(eventFailureOption: some(left(loadState.event))),
-                      error: (errState) => EventScreenBody(eventFailureOption: some(right(errState.failure))),
-                      orElse: () => EventScreenBody(eventFailureOption: none())));
-
-          },
-        ));
-  }
-}
-
-class EventScreenBody extends StatelessWidget {
-  final Option<Either<Event, EventFailure>> eventFailureOption;
-  const EventScreenBody({
-    required this.eventFailureOption,
-    Key? key
-  }): super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Event")
-      ),
-      body: eventFailureOption.fold(
-              () => Center(),
-              (some) => some.fold((event) =>
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        EventScreenDescription(description: event.description),
-                      ],
-                    ),
-                  ),
-               (failure) => ErrorScreen(fail: failure.runtimeType.toString()))
-      )
-    );
-  }
-
-}*/

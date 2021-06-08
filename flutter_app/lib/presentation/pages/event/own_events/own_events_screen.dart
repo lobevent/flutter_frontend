@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/event/own_events_cubit/own_events_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/pages/Event/own_events/widgets/own_events_body.dart';
-import 'package:flutter_frontend/presentation/pages/core/Widgets/loading_overlay.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 
 
 class OwnEventsScreenScaffold extends StatelessWidget {
@@ -37,10 +37,7 @@ class _OwnEventsScreenState extends State<OwnEventsScreen> {
           builder: (context, state) {
             bool isLoading = state.maybeMap((_) => false,
                 loading: (_) => true, orElse: () => false);
-            return Stack(children: <Widget>[
-              OwnEventScreenHolder(),
-              LoadingOverlay(isLoading: isLoading)
-            ]);
+            return LoadingOverlay(child: OwnEventScreenHolder(), isLoading: isLoading);
           }),
     );
   }

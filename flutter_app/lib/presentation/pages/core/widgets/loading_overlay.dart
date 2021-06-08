@@ -8,10 +8,11 @@ class LoadingOverlay extends StatelessWidget{
 
   final Widget child;
   final bool isLoading;
+  final String? text;
 
   /// take child widget as input, as well as an boolean, to decide whether
   /// to show the loading overlay or the child widget
-  LoadingOverlay({Key? key, required this.child, required this.isLoading}): super(key: key);
+  LoadingOverlay({Key? key, required this.child, required this.isLoading, this.text}): super(key: key);
 
   @override
   Widget build(BuildContext context) {

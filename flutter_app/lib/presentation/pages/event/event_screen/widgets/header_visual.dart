@@ -14,7 +14,7 @@ class HeaderVisual extends StatelessWidget{
       decoration: const BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: AssetImage("partypeople.jpg"),
+          image: AssetImage("assets/images/partypeople.jpg"),
         ),
       ),
     );

@@ -13,6 +13,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.d
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_screen.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/event_screen_description.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/header_visual.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/text_content.dart';
 
 import '../../core/widgets/loading_overlay.dart';
 
@@ -36,6 +37,7 @@ class EventScreenPage extends StatelessWidget {
 
       ///the blocbuilder is needed to determine the state class
       ///to determine what to show (errormessage, loadingoverlay or content)
+      /// this part of the class therefore contains logic
       child: BlocBuilder<EventScreenCubit, EventScreenState>(
         builder: (context, state) {
           return LoadingOverlay(
@@ -55,12 +57,15 @@ class EventScreenPage extends StatelessWidget {
 
 
 
+  /// the content Container should contain no logic, but should only call the
+  /// content widgets
   Widget ContentContainer(){
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: const [
-            HeaderVisual()
+            HeaderVisual(),
+            TextContent(),
           ],
         ),
       ),

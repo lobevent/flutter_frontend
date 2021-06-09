@@ -1,3 +1,4 @@
+import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,7 @@ class EventContent extends StatelessWidget{
                 // Row is used so the button can contain icon and text
                 child: Row(children: [
                     Icon(Icons.supervised_user_circle),
-                    Text(profile.name.getOrCrash() , style:  TextStyle(color: textColor),)]
+                    Text(profile.name.getOrCrash() , style:  TextStyle(color: textColor),)] // TODO: maybe change textsize dynamicaly: https://stackoverflow.com/questions/50751226/how-to-dynamically-resize-text-in-flutter
                 )))
           )
         ]);
@@ -99,11 +100,12 @@ class EventContent extends StatelessWidget{
       );
   }
 
+  /// returns widget, that ist padded and expands
   Widget DescriptionWidget(String description){
     return PaddingWidget(children: [
-      /// the flexible widget is used for the text wrap property, overflowing text
-      /// wraps to next line
-      Flexible(child: Text(description)),
+      // the flexible widget is used for the text wrap property, overflowing text
+      // wraps to next line
+      Flexible(child: ExpandText(description, maxLines: 3, style: const TextStyle(color: Color(0xFF2F1919)),)),
     ]);
   }
 

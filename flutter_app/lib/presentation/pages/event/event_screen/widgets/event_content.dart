@@ -1,7 +1,10 @@
+import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/event/event_screen/event_screen_cubit.dart';
+import 'package:auto_route/auto_route.dart' hide Router;
+import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class EventContent extends StatelessWidget{
 
@@ -29,7 +32,7 @@ class EventContent extends StatelessWidget{
                   const SizedBox(height: 20),
 
                   /// the date of the event
-                  MetaView(state.event.date, state.event.owner.name.getOrCrash()),
+                  MetaView(state.event.date, state.event.owner, context),
 
 
                   /// Used as space
@@ -53,15 +56,35 @@ class EventContent extends StatelessWidget{
 
 
   /// contains different metadata for the event, like owner or the date
-  Widget MetaView(DateTime date, String username){
+  Widget MetaView(DateTime date, Profile profile, BuildContext context){
     return PaddingWidget(
         children: [
           Icon(Icons.date_range),
           /// Format the date
           Text(DateFormat('EEEE, MMM d, yyyy').format(date), style: TextStyle(color: textColor),),
           Spacer(),
-          Icon(Icons.supervised_user_circle),
-          Text(username, style:  TextStyle(color: textColor),)
+          /// We want to be able to navigate to the owner of the event
+          OutlinedButton(
+              onPressed: ()=>context.router.push(ProfilePageRoute(
+                profileId: profile.id
+              )),
+          child:
+                // this looks cancer, and maybe you are right
+                // feel free to correct this
+          // used to hide overflow
+            ClipRect(
+              // overflow is alowed, so no overflowerror arises
+              child: SizedOverflowBox(
+                //the alignment of the content should be on the left side and
+                // vertical it should be centered
+                alignment: Alignment.centerLeft,
+                size: Size(MediaQuery.of(context).size.width*0.2, 30),
+                // Row is used so the button can contain icon and text
+                child: Row(children: [
+                    Icon(Icons.supervised_user_circle),
+                    Text(profile.name.getOrCrash() , style:  TextStyle(color: textColor),)]
+                )))
+          )
         ]);
   }
 
@@ -87,10 +110,12 @@ class EventContent extends StatelessWidget{
   /// Widget used for making padding with a row, so the children start on the
   /// correct side and is padded from the side
   Widget PaddingWidget({required List<Widget> children}){
-    return Padding(padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
+    return Padding(padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
         child: Row(children: children),
         );
   }
+
+
 
 
 

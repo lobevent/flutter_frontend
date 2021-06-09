@@ -13,7 +13,18 @@ part 'event_dtos.g.dart';
 
 @freezed
 class EventDto extends BaseDto with _$EventDto {
+
+
   const EventDto._();
+
+  static const Map dtoToDomainStatus = {
+  0: EventStatus.notAttending,
+  1: EventStatus.attending,
+  2: EventStatus.interested,
+  };
+
+  static final Map domainToDtoStatus = dtoToDomainStatus.map((key, value) => MapEntry(value, key));
+
 
   const factory EventDto({
     required String id,
@@ -22,14 +33,17 @@ class EventDto extends BaseDto with _$EventDto {
     required String description,
     required DateTime date,
     required DateTime creationDate,
+    required int attendingUsers,
     @OwnerConverter() required ProfileDto owner,
     double? longitude,
-    double? latitude
+    double? latitude,
+    int? ownStatus,
   }) = EventDtoFull;
 
 
   factory EventDto.fromDomain(Event event) {
     EventDto returnedDto;
+
 
     return EventDto(
               id: event.id.getOrCrash(),
@@ -39,6 +53,8 @@ class EventDto extends BaseDto with _$EventDto {
               description: event.description.getOrCrash(),
               creationDate: event.creationDate,
               owner: ProfileDto.fromDomain(event.owner),
+      attendingUsers: event.attending,
+      ownStatus:  domainToDtoStatus[event.status] as int?,
       longitude: event.longitude,
       latitude: event.latitude
     );
@@ -58,8 +74,10 @@ class EventDto extends BaseDto with _$EventDto {
       //TODO: don't forget this one!
       public: public,
       creationDate: creationDate,
-     longitude: longitude,
-     latitude: latitude
+      attending: attendingUsers,
+      status: dtoToDomainStatus[ownStatus] as EventStatus?,
+      longitude: longitude,
+      latitude: latitude
     );
   }
 }

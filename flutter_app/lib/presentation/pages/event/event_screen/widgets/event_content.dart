@@ -1,5 +1,7 @@
 import 'package:expand_widget/expand_widget.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,8 +34,14 @@ class EventContent extends StatelessWidget{
                   /// Used as space
                   const SizedBox(height: 20),
 
+                  AttendingAndOwnStatus(state.event.attending, state.event.status),
+
+
+                  /// Used as space
+                  const SizedBox(height: 20),
+
                   /// the date of the event
-                  MetaView(state.event.date, state.event.owner, context),
+                  DateAndOwner(state.event.date, state.event.owner, context),
 
 
                   /// Used as space
@@ -54,10 +62,33 @@ class EventContent extends StatelessWidget{
   }
 
 
+  Widget AttendingAndOwnStatus(int attending, EventStatus? status){
+    IconData icon;
+    String text;
+
+    switch (status){
+      case EventStatus.attending: icon = Icons.check; text = AppStrings.attending; break;
+      case EventStatus.notAttending: icon = Icons.block; text = AppStrings.notAttending; break;
+      case EventStatus.interested: icon = Icons.lightbulb; text = AppStrings.interested; break;
+      default: icon = Icons.lightbulb; text = AppStrings.interested; break;
+    }
+
+    return PaddingWidget(
+      children: [
+        Icon(Icons.group),
+        Text(AppStrings.participants + ':' + attending.toString(), style: TextStyle(color: textColor),),
+        Spacer(),
+        Icon(icon),
+        Text(text, style: TextStyle(color: textColor),)
+      ],
+    );
 
 
-  /// contains different metadata for the event, like owner or the date
-  Widget MetaView(DateTime date, Profile profile, BuildContext context){
+  }
+
+
+  /// contains owner and the date
+  Widget DateAndOwner(DateTime date, Profile profile, BuildContext context){
     return PaddingWidget(
         children: [
           Icon(Icons.date_range),

@@ -8,6 +8,12 @@ import 'package:flutter_frontend/domain/profile/profile.dart';
 
 part 'event.freezed.dart';
 
+enum EventStatus{
+  attending,
+  notAttending,
+  interested
+}
+
 @freezed
 class Event with _$Event {
   const Event._();
@@ -20,6 +26,8 @@ class Event with _$Event {
     required DateTime creationDate,
     required Profile owner,
     required bool public,
+    required int attending,
+    EventStatus? status,
     double? longitude,
     double? latitude
   }) = EventFull;
@@ -33,6 +41,8 @@ class Event with _$Event {
     creationDate: DateTime.now(),
     owner: Profile(id: UniqueId(), name: ProfileName("ssss")), //TODO: !!!!!!!IIIIIIMMMMMMMMPPPPPPOOOOORTANT!!!!!!!! Implement logged in profile fetching
     public: false,
+    attending: 0,
+    status: EventStatus.attending,
     longitude: 0,
     latitude: 0
   );

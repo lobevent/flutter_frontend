@@ -32,18 +32,6 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
 
   }
 
-  Future<void> searchByProfileName2(String profileName) async{
-    try {
-      emit(ProfileSearchState.loading());
-      List<Profile> profileTestList = [Profile(id: UniqueId(), name: ProfileName("name1")),Profile(id: UniqueId(), name: ProfileName("name2")),Profile(id: UniqueId(), name: ProfileName("name3")),Profile(id: UniqueId(), name: ProfileName("name4")),Profile(id: UniqueId(), name: ProfileName("name5"))];
-      final Either<ProfileFailure, List<Profile>> profileList = await Future.delayed(Duration(seconds: 2));
-      emit(ProfileSearchState.loaded(profiles: profileList.fold((l) => throw Exception, (r) => profileTestList)));
-    } catch(e){
-      emit(ProfileSearchState.error(error: e.toString()));
-    }
-
-  }
-
   Future<void> loadProfile(String id) async{
     repository.getSingleProfile(UniqueId.fromUniqueString(id)).then(
             (value) => value.fold(

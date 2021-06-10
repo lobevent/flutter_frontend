@@ -66,14 +66,8 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ProfileSearchCubit(),
-      child: BlocConsumer<ProfileSearchCubit, ProfileSearchState>(
-        listenWhen: (p,c) =>
-        p != c,
-        listener: (context, state){
-
-        },
-        builder: (context, state){
-            return FloatingSearchBar(
+      child: Scaffold(
+          body: FloatingSearchBar(
               controller: controller,
               body: FloatingSearchBarScrollNotifier(
                 child: SearchResultsListView(),
@@ -96,7 +90,7 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
                   if (query != "") {
                     addSearchTerm(query);
                     selectedTerm = query;
-                    context.read<ProfileSearchCubit>().searchByProfileName2(query);
+                    //context.read<ProfileSearchCubit>().searchByProfileName(query);
                   }
                 });
               },
@@ -169,12 +163,9 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
                         //itemCount: this.profiles.length),
                       ),
                     ));
-              });
-        },
-      ),
-
-    );
-  }
+                }
+                )),);
+    }
 
   late FloatingSearchBarController controller;
 

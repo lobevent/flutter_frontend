@@ -30,29 +30,30 @@ class _DescriptionFieldState extends State<DescriptionField> {
         textEditingController.text = state.event.description.getOrCrash();
       },
       child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10), //TODO: the textfield does not count emojis. we need to fix that
           child: TextFormField(
-           controller: textEditingController,
-            decoration: const InputDecoration(
-              labelText: 'Event description',
-              //counterText: '',
-            ),
-            maxLength: EventDescription.maxLength,
-            maxLines: null,
-            minLines: 5,
-            onChanged: (value) => {
-             context.read<EventFormCubit>().changeBody(value)}
-            ,
-            validator: (_) => context.read<EventFormCubit>().state.event.description.value
-                .fold(
-                  (f) => f.maybeMap(
-                empty: (f) => 'Cannot be empty',
-                exceedingLength: (f) => 'Exceeding length, max: ${f.maxLength}',
-                orElse: () => "",
+             controller: textEditingController,
+              decoration: const InputDecoration(
+                labelText: 'Event description',
+                //counterText: '',
               ),
-                  (r) => "",
-            ),
-          )),
+              maxLength: EventDescription.maxLength -1,
+              maxLines: null,
+              minLines: 5,
+              onChanged: (value) => {
+               context.read<EventFormCubit>().changeBody(value)}
+              ,
+              validator: (_) => context.read<EventFormCubit>().state.event.description.value
+                  .fold(
+                    (f) => f.maybeMap(
+                  empty: (f) => 'Cannot be empty',
+                  exceedingLength: (f) => 'Exceeding length, max: ${f.maxLength}',
+                  orElse: () => "",
+                ),
+                    (r) => "",
+              ),
+          )
+      ),
     );
   }
 }

@@ -81,6 +81,9 @@ dependencies:
   colorful_safe_area: ^0.3.0
   intl: ^0.17.0
 
+  # nice widget, that implements expandable visualisation
+  expand_widget: ^2.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

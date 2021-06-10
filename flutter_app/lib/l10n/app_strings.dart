@@ -20,4 +20,9 @@ class AppStrings {
   static const String deleteEventDialogText = "You are about to delete an event. Please confirm!";
   static const String deleteEventDialogConfirm = "Delete";
   static const String deleteEventDialogAbort = "Abort";
+
+  static const String attending = "attending";
+  static const String notAttending = "not attending";
+  static const String interested = "interested";
+  static const String participants = "Participants";
 }

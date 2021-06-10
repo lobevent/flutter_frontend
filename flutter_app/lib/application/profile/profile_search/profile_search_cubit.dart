@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
@@ -7,34 +5,49 @@ import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/i_profile_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/profile_failure.dart';
+import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_repository.dart';
+import 'package:get_it/get_it.dart';
 
 part 'profile_search_state.dart';
 part 'profile_search_cubit.freezed.dart';
 
 class ProfileSearchCubit extends Cubit<ProfileSearchState> {
-  ProfileSearchCubit() :super(ProfileSearchState.initial());
+  ProfileSearchCubit() : super(ProfileSearchState.initial());
 
-
-  ProfileRepository repository = ProfileRepository(ProfileRemoteService());
+  ProfileRepository repository = GetIt.I<ProfileRepository>();
 
   Future<void> searchByProfileName(String profileName) async{
-      emit(ProfileSearchState.loading(profileName: profileName));
-      Either<ProfileFailure,List<Profile>> failureOrSuccess;
-      failureOrSuccess = await repository.getList(Operation.search, 10);
-      failureOrSuccess.fold(
-              (failure) =>emit(ProfileSearchState.error(failure: failure)),
-              (profiles) => emit(ProfileSearchState.loaded(profiles: profiles)));
+    try {
+      emit(ProfileSearchState.loading());
+      final Either<ProfileFailure, List<Profile>> profileList = await repository.getList(Operation.search, 10);
+      emit(ProfileSearchState.loaded(profiles: profileList.fold((l) => throw Exception, (r) => r)));
+    } catch(e){
+      emit(ProfileSearchState.error(error: e.toString()));
+    }
+
+  }
+
+  Future<void> searchByProfileName2(String profileName) async{
+    try {
+      emit(ProfileSearchState.loading());
+      List<Profile> profileTestList = [Profile(id: UniqueId(), name: ProfileName("name1")),Profile(id: UniqueId(), name: ProfileName("name2")),Profile(id: UniqueId(), name: ProfileName("name3")),Profile(id: UniqueId(), name: ProfileName("name4")),Profile(id: UniqueId(), name: ProfileName("name5"))];
+      final Either<ProfileFailure, List<Profile>> profileList = await Future.delayed(Duration(seconds: 2));
+      emit(ProfileSearchState.loaded(profiles: profileList.fold((l) => throw Exception, (r) => profileTestList)));
+    } catch(e){
+      emit(ProfileSearchState.error(error: e.toString()));
+    }
+
   }
 
   Future<void> loadProfile(String id) async{
     repository.getSingleProfile(UniqueId.fromUniqueString(id)).then(
             (value) => value.fold(
-                    (failure) => emit(ProfileSearchState.error(failure: failure)),
+                    (failure) => emit(ProfileSearchState.error(error: failure.toString())),
                     (profile) => profile)); //todo emit to profilepage
   }
 

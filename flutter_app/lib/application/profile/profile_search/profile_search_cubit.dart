@@ -24,7 +24,7 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
   Future<void> searchByProfileName(String profileName) async{
     try {
       emit(ProfileSearchState.loading());
-      final Either<ProfileFailure, List<Profile>> profileList = await repository.getList(Operation.search, 10);
+      final Either<ProfileFailure, List<Profile>> profileList = await repository.getList(Operation.search, 10, searchString: profileName);
       emit(ProfileSearchState.loaded(profiles: profileList.fold((l) => throw Exception, (r) => r)));
     } catch(e){
       emit(ProfileSearchState.error(error: e.toString()));

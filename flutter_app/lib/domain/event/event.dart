@@ -26,7 +26,7 @@ class Event with _$Event {
     required DateTime creationDate,
     required Profile owner,
     required bool public,
-    required int attending,
+    int? attending,
     EventStatus? status,
     double? longitude,
     double? latitude

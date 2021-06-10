@@ -33,7 +33,7 @@ class EventDto extends BaseDto with _$EventDto {
     required String description,
     required DateTime date,
     required DateTime creationDate,
-    required int attendingUsers,
+    int? attendingUsers,
     @OwnerConverter() required ProfileDto owner,
     double? longitude,
     double? latitude,

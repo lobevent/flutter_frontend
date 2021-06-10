@@ -33,11 +33,11 @@ class ProfilePage extends StatelessWidget{
         builder: (context, state){
           return Stack(
             children: <Widget>[
-            //   state.maybeMap(
-            //     loaded: (loadState) =>  ProfilePageBody(profileFailureOption: some(left(loadState.profile))),
-            //     error: (errState) => ProfilePageBody(profileFailureOption: some(right(errState.error)),
-            //     orElse: () => ProfilePageBody(profileFailureOption: none())),
-            // LoadingOverlay(isLoading: state is LoadInProgress, text: "Loading")
+              state.maybeMap(
+                loaded: (loadState) =>  ProfilePageBody(profileFailureOption: some(left(loadState.profile))),
+                error: (errState) => ProfilePageBody(profileFailureOption: some(right(errState.error))),
+                orElse: () => ProfilePageBody(profileFailureOption: none())),
+            LoadingOverlay(isLoading: state is LoadInProgress, child: Text("loading"),)
           ],
         );
         },

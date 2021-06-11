@@ -15,7 +15,8 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
   static const String _changePassword = "/password";*/
 
   //List Routes
-  static const String searchProfilePath = "/profile/search/%needle%/%amount%";
+  ///TODO: change the searchProfilepath page 0
+  static const String searchProfilePath = "/profile/search/%needle%/%amount%/0";
   static const String attendingUsersPath = "/profile/%profileId%/%amount%/";
   static const String followerPath = "/profile/%profileId%/%amount%/";
   static const String postProfilePath = "/profile/%postId%/%amount%/";

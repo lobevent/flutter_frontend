@@ -85,6 +85,7 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
                           addSearchTerm(query);
                           selectedTerm = query;
                           context.read<ProfileSearchCubit>().searchByProfileName(query);
+                          controller.close();
                         }
                       });
                     },
@@ -216,8 +217,11 @@ class SearchResultsListViewState extends State<SearchResultsListView> {
   String? searchTerm;
   List<Profile> profiles = [];
 
+
   @override
   Widget build(BuildContext context) {
+
+
     //return normal search overlay
     /*if(searchTerm==null){
       return Center(
@@ -237,6 +241,7 @@ class SearchResultsListViewState extends State<SearchResultsListView> {
       );
     }
      */
+    final fsb = FloatingSearchBar.of(context);
     return BlocListener<ProfileSearchCubit, ProfileSearchState>(
       listener: (context, state) => {
         state.maybeMap(
@@ -245,38 +250,38 @@ class SearchResultsListViewState extends State<SearchResultsListView> {
             orElse: () => {})
       },
       child:
-          /*ListView(
-          children: List.generate(
-            profiles.length, (index) => ProfileListTiles(
-            profile: Profile(id: UniqueId(), name: ProfileName("gunther")),
-            key: ObjectKey(null),
-          ),
-          ),
-        )
-
-         */
           ListView.builder(
+            // build under the floatingsearchbar
+            padding: EdgeInsets.only(top: fsb!.value.height + fsb.value.margins.vertical),
               itemBuilder: (context, index) {
                 final profile = this.profiles[index];
                 if (profile.failureOption.isSome()) {
-                  return Ink(
-                    color: Colors.red,
-                    child: ListTile(
-                      title: Text(profile.failureOption
-                          .fold(() => "", (a) => a.toString())),
+                  //red tile if profile failure
+                  return ClipRect(
+                    child: Ink(
+                      color: Colors.red,
+                      child: ListTile(
+                        title: Text(profile.failureOption
+                            .fold(() => "", (a) => a.toString())),
+                      ),
                     ),
                   );
                 }
                 if (this.profiles.isEmpty) {
-                  return Ink(
-                    color: Colors.red,
-                    child: ListTile(
-                      title: Text("No profiles Found"),
+                  return ClipRect(
+                    child:Ink(
+                      color: Colors.red,
+                      child: ListTile(
+                        title: Text("No profiles Found"),
+                      ),
                     ),
                   );
                 } else {
-                  return ProfileListTiles(
-                      key: ObjectKey(profile), profile: this.profiles[index]);
+                  ///return profilelisttiles as searched
+                  return ClipRect(
+                    child: ProfileListTiles(
+                        key: ObjectKey(profile), profile: this.profiles[index]),
+                  );
                 }
               },
               itemCount: this.profiles.length),

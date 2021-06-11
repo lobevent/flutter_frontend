@@ -102,6 +102,9 @@ dev_dependencies:
   # mock libary to mock dependencies
   mockito: ^5.0.3
 
+  # mocktails to easy mock with nullsafety support
+  mocktail: ^0.1.4
+
 flutter:
   uses-material-design: true
 

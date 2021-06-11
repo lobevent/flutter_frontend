@@ -62,6 +62,7 @@ class EventContent extends StatelessWidget{
   }
 
 
+  /// this contains the attending paritcipants and the own attending status view for this event
   Widget AttendingAndOwnStatus(int attending, EventStatus? status){
     IconData icon;
     String text;

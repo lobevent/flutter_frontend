@@ -33,7 +33,7 @@ class ProfilePage extends StatelessWidget {
         builder: (context, state) {
           ///the loading Overlay wraps the whole tree
           return LoadingOverlay(
-              isLoading: state is LoadInProgress,
+              isLoading: state is ProfileLoadInProgress,
               child:
                 /// check if an error has occured and show error message in that case
                 /// wrapped in a list to match closure context

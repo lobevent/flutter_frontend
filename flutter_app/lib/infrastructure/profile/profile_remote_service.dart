@@ -7,7 +7,7 @@ import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:http/http.dart';
 
 class ProfileRemoteService  extends RemoteService<ProfileDto>{
-  static const String profileIdPath = "/profile"; //TODO dont know path
+  static const String profileIdPath = "/profile/"; //TODO dont know path
 
   //commented out unused Routes
   /*static const String _deleteProfilePicture = "/profile/{id}";

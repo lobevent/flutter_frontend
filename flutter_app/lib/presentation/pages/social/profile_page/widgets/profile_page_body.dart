@@ -12,18 +12,13 @@ class ProfilePageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            title: Text("Profile")
-        ),
-        body:
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      //ProfileScreenName(name: profile.name),
-                    ],
-                  ),
-                ),
+    return BlocBuilder<ProfilePageCubit, ProfilePageState>(
+      builder: (context, state){
+          return state.maybeMap(
+              loaded: (st) => Text(st.profile.name.getOrCrash()),
+              orElse: () => Text('')
+          );
+      },
     );
   }
 }

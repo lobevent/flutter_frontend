@@ -2,6 +2,7 @@ import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/content_widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -144,9 +145,7 @@ class EventContent extends StatelessWidget{
   /// Widget used for making padding with a row, so the children start on the
   /// correct side and is padded from the side
   Widget PaddingWidget({required List<Widget> children}){
-    return Padding(padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-        child: Row(children: children),
-        );
+    return PaddingRowWidget(children: children);
   }
 
 

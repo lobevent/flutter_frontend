@@ -11,7 +11,8 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/content_widgets
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_screen.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
-import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_body.dart';
+import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_content.dart';
+import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_header_visual.dart';
 
 /// the page for displaying profile information in social context
 /// (not settings page)
@@ -43,8 +44,9 @@ class ProfilePage extends StatelessWidget {
                       /// if the error state is not active, load the contents
                         error: (errState) =>[ErrorMessage(errorText: errState.error)],
                         orElse: () =>
-                        [
-                          ProfilePageBody(),
+                        const [
+                          ProfilePageHeaderVisual(),
+                          ProfilePageContent(),
                         ]
                     )
                 )

@@ -8,18 +8,15 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/error_screen.da
 import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_name.dart';
 
 class ProfilePageBody extends StatelessWidget {
-  final Option<Either<Profile, String>> profileFailureOption;
-  const ProfilePageBody( {Key? key, required this.profileFailureOption}) : super(key: key);
+  const ProfilePageBody( {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Text("Event")
+            title: Text("Profile")
         ),
-        body: profileFailureOption.fold(
-                () => Center(),
-                (some) => some.fold((profile) =>
+        body:
                 SingleChildScrollView(
                   child: Column(
                     children: [
@@ -27,8 +24,6 @@ class ProfilePageBody extends StatelessWidget {
                     ],
                   ),
                 ),
-                    (failure) => ErrorScreen(fail: failure.runtimeType.toString()))
-        )
     );
   }
 }

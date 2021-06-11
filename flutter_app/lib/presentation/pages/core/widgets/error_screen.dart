@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/cupertino.dart';
 
 class ErrorScreen extends StatelessWidget{
@@ -12,4 +13,4 @@ class ErrorScreen extends StatelessWidget{
   }
 
 
-}
+}*/

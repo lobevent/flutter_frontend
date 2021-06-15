@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_frontend/domain/profile/profile.dart';
 
 class ItemElementWidget extends StatelessWidget {
@@ -15,6 +16,10 @@ class ItemElementWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return ListTile(
+      leading: const FlutterLogo(), //Todo Userlogos displayed here
+      title: Text(name),
+      subtitle: Text(description),
+    );
   }
 }

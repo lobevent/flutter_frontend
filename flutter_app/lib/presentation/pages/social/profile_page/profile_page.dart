@@ -45,6 +45,7 @@ class ProfilePage extends StatelessWidget {
                         error: (errState) =>[ErrorMessage(errorText: errState.error)],
                         orElse: () =>
                         const [
+                          // the profile image
                           ProfilePageHeaderVisual(),
                           ProfilePageContent(),
                         ]

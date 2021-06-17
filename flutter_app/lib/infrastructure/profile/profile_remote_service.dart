@@ -25,6 +25,8 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
   static const String deletePath = "/profile";
   static const String updatePath = "/profile";
 
+  static const String sendFriendShipPath = "/friend/request/%id%/";
+
   SymfonyCommunicator client;
 
   ProfileRemoteService({SymfonyCommunicator? communicator})
@@ -87,5 +89,12 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
   Future<List<ProfileDto>> _getProfileList(String path) async {
     final Response response = await client.get(path);
     return convertList(response);
+  }
+
+
+  Future<String> sendFriendship (String id) async{
+    final Response response = await client.post(sendFriendShipPath.interpolate(
+        {"id": id}), id);
+    return response.body;
   }
 }

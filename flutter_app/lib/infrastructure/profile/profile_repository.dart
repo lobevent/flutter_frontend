@@ -94,6 +94,15 @@ class ProfileRepository extends IProfileRepository {
     }
   }
 
+  Future<String>sendFriendRequest(UniqueId id) async{
+    try{
+      final  success = await _profileRemoteService.sendFriendship(id.getOrCrash());
+      return success;
+    }on CommunicationException catch (e){
+      return e.toString();
+    }
+  }
+
   @override
   Future<Either<ProfileFailure, Profile>> update(Profile profile) async {
     try {

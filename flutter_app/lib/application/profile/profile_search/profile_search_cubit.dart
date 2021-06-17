@@ -39,6 +39,11 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
                     (profile) => profile)); //todo emit to profilepage
   }
 
+  Future<String> sendFriendship(UniqueId id) async{
+    final String answer = await repository.sendFriendRequest(id);
+    return answer;
+  }
+
 
 
 }

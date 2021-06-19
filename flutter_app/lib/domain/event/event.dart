@@ -23,7 +23,7 @@ class Event with _$Event {
     required EventName name,
     required DateTime date,
     required EventDescription? description,
-    DateTime? creationDate,
+    required DateTime creationDate,
     required Profile owner,
     required bool public,
     int? attending,

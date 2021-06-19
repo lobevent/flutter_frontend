@@ -49,7 +49,7 @@ class EventDto extends BaseDto with _$EventDto {
               id: event.id.getOrCrash(),
               name: event.name.getOrCrash(),
               public: event.public,
-              date: event.date!,
+              date: event.date,
               description: event.description!.getOrCrash(),
               creationDate: event.creationDate,
               owner: ProfileDto.fromDomain(event.owner),
@@ -68,7 +68,7 @@ class EventDto extends BaseDto with _$EventDto {
    return Event(
       id: UniqueId.fromUniqueString(id),
       name: EventName(name),
-      date: date!,
+      date: date,
       description: EventDescription(description!),
       owner: owner.toDomain(),
       //TODO: don't forget this one!

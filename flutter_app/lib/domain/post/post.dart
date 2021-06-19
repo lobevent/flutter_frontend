@@ -18,16 +18,16 @@ class Post with _$Post {
     required UniqueId id,
     required DateTime creationDate,
     required PostContent postContent,
-    required Profile owner,
-    required Event event,
-    required List<Comment> comments,
+    Profile? owner,
+    Event? event,
+    List<Comment>? comments,
   }) = _Post;
 
   const factory Post.WithoutId({
     required DateTime creationDate,
     required PostContent postContent,
-    required Profile owner,
-    required Event event,
+    required Profile? owner,
+    required Event? event,
     required List<Comment> comments,
   }) = PostWithoutId;
 

@@ -81,6 +81,6 @@ class ProfileDto extends BaseDto with _$ProfileDto {
           comments:
           comments!.map((e) => e.toDomain()).toList());
     }
-
   }
+
 }

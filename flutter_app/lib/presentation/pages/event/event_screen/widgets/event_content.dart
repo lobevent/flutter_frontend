@@ -49,7 +49,7 @@ class EventContent extends StatelessWidget{
                   const SizedBox(height: 20),
 
                   /// Contains the description of the event
-                  DescriptionWidget(state.event.description.getOrCrash()),
+                  DescriptionWidget(state.event.description!.getOrCrash()),
 
 
 

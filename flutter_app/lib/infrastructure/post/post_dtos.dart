@@ -18,19 +18,13 @@ class PostDto extends BaseDto with _$PostDto {
   const PostDto._();
 
   const factory PostDto({
-    required String id,
+    String? id,
     required DateTime creationDate,
     required String postContent,
-    @ProfileConverter() required  ProfileDto owner,
-    @EventConverter() required EventDto event,
+    @ProfileConverter()  ProfileDto? owner,
+    @EventConverter() EventDto? event,
   }) = _PostDto;
 
-  const factory PostDto.WithoutId({
-    required DateTime creationDate,
-    required String postContent,
-    @ProfileConverter() required ProfileDto owner,
-    @EventConverter() required EventDto event,
-  }) = _PostDtoWithoutId;
 
   factory PostDto.fromDomain(Post post) {
     PostDto returnedDto;
@@ -40,14 +34,14 @@ class PostDto extends BaseDto with _$PostDto {
               id: value.id.getOrCrash(),
               creationDate: value.creationDate,
               postContent: value.postContent.getOrCrash(),
-              owner: ProfileDto.fromDomain(post.owner),
-              event: EventDto.fromDomain(post.event),
+              owner: ProfileDto.fromDomain(value.owner!),
+              event: EventDto.fromDomain(value.event!),
             ),
-        WithoutId: (value) => PostDto.WithoutId(
+        WithoutId: (value) => PostDto(
             creationDate: value.creationDate,
             postContent: value.postContent.getOrCrash(),
-            owner: ProfileDto.fromDomain(value.owner),
-            event: EventDto.fromDomain(value.event)));
+            owner: ProfileDto.fromDomain(value.owner!),
+            event: EventDto.fromDomain(value.event!)));
   }
 
   factory PostDto.fromJson(Map<String, dynamic> json) =>
@@ -55,20 +49,21 @@ class PostDto extends BaseDto with _$PostDto {
 
   @override
   Post toDomain() {
-    return map(
-        (value) => Post(
-            id: UniqueId.fromUniqueString(value.id),
-            creationDate: value.creationDate,
-            postContent: PostContent(value.postContent),
-            owner: value.owner.toDomain(),
-            event: value.event.toDomain(),
-            comments: <Comment>[]),
-        WithoutId: (value) => Post.WithoutId(
-            creationDate: value.creationDate,
-            postContent: PostContent(value.postContent),
-            owner: value.owner.toDomain(),
-            event: value.event.toDomain(),
-            comments: <Comment>[]));
+    if(id != null) {
+      return Post(
+          id: UniqueId.fromUniqueString(id!),
+          creationDate: creationDate,
+          postContent: PostContent(postContent),
+          owner: owner!.toDomain(),
+          event: event!.toDomain(),
+          comments: <Comment>[]);
+    }
+      return Post.WithoutId(
+            creationDate: creationDate,
+            postContent: PostContent(postContent),
+            owner: owner!.toDomain(),
+            event: event!.toDomain(),
+            comments: <Comment>[]);
   }
 }
 

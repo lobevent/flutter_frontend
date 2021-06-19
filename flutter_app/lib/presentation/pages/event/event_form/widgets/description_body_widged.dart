@@ -27,7 +27,7 @@ class _DescriptionFieldState extends State<DescriptionField> {
     return BlocListener<EventFormCubit, EventFormState>(
       listenWhen: (p, c) => p.isLoading != c.isLoading,
       listener: (context, state) {
-        textEditingController.text = state.event.description.getOrCrash();
+        textEditingController.text = state.event.description!.getOrCrash();
       },
       child: Padding(
           padding: const EdgeInsets.all(10), //TODO: the textfield does not count emojis. we need to fix that
@@ -43,7 +43,7 @@ class _DescriptionFieldState extends State<DescriptionField> {
               onChanged: (value) => {
                context.read<EventFormCubit>().changeBody(value)}
               ,
-              validator: (_) => context.read<EventFormCubit>().state.event.description.value
+              validator: (_) => context.read<EventFormCubit>().state.event.description!.value
                   .fold(
                     (f) => f.maybeMap(
                   empty: (f) => 'Cannot be empty',

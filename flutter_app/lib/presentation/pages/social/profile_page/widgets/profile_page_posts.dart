@@ -21,7 +21,7 @@ class ProfilePagePosts extends StatelessWidget{
                       (value) => Text(""),
                   // if we have the correct full profile, build the list
                   full: (profile) {
-                        return PostList(profile.posts);
+                        return PostList(profile.posts!);
                   });
             },
             orElse: () => Text(""));

@@ -19,8 +19,8 @@ class PostDto extends BaseDto with _$PostDto {
 
   const factory PostDto({
     String? id,
-    required DateTime creationDate,
-    required String postContent,
+    required DateTime date,
+    required String content,
     @ProfileConverter()  ProfileDto? owner,
     @EventConverter() EventDto? event,
   }) = _PostDto;
@@ -32,14 +32,14 @@ class PostDto extends BaseDto with _$PostDto {
     return post.map(
         (value) => PostDto(
               id: value.id.getOrCrash(),
-              creationDate: value.creationDate,
-              postContent: value.postContent.getOrCrash(),
+              date: value.creationDate,
+              content: value.postContent.getOrCrash(),
               owner: ProfileDto.fromDomain(value.owner!),
               event: EventDto.fromDomain(value.event!),
             ),
         WithoutId: (value) => PostDto(
-            creationDate: value.creationDate,
-            postContent: value.postContent.getOrCrash(),
+            date: value.creationDate,
+            content: value.postContent.getOrCrash(),
             owner: ProfileDto.fromDomain(value.owner!),
             event: EventDto.fromDomain(value.event!)));
   }
@@ -52,17 +52,17 @@ class PostDto extends BaseDto with _$PostDto {
     if(id != null) {
       return Post(
           id: UniqueId.fromUniqueString(id!),
-          creationDate: creationDate,
-          postContent: PostContent(postContent),
-          owner: owner!.toDomain(),
-          event: event!.toDomain(),
+          creationDate: date,
+          postContent: PostContent(content),
+          owner: owner?.toDomain(),
+          event: event?.toDomain(),
           comments: <Comment>[]);
     }
       return Post.WithoutId(
-            creationDate: creationDate,
-            postContent: PostContent(postContent),
-            owner: owner!.toDomain(),
-            event: event!.toDomain(),
+            creationDate: date,
+            postContent: PostContent(content),
+            owner: owner?.toDomain(),
+            event: event?.toDomain(),
             comments: <Comment>[]);
   }
 }

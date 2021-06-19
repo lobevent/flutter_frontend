@@ -42,7 +42,7 @@ class EventContent extends StatelessWidget{
                   const SizedBox(height: 20),
 
                   /// the date of the event
-                  DateAndOwner(state.event.date, state.event.owner, context),
+                  DateAndOwner(state.event.date, state.event.owner!, context),
 
 
                   /// Used as space

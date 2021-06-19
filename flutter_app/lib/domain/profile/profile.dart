@@ -22,11 +22,11 @@ class Profile with _$Profile {
   const factory Profile.full({
     required UniqueId id,
     required ProfileName name,
-    required List<Event> ownedEvents,
-    required List<Event> invitations,
-    required List<Profile> friendships,
-    required List<Post> posts,
-    required List<Comment> comments,
+    List<Event>? ownedEvents,
+    List<Event>? invitations,
+    List<Profile>? friendships,
+    List<Post>? posts,
+    List<Comment>? comments,
   }) = _FullProfile;
 
 

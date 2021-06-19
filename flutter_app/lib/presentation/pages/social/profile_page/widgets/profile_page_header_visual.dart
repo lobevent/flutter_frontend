@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/content_widgets.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 
 class ProfilePageHeaderVisual extends StatelessWidget{
   final String? imagePath;

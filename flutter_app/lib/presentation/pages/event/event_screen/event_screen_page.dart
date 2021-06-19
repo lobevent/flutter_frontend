@@ -10,7 +10,7 @@ import 'package:flutter_frontend/application/event/event_screen/event_screen_cub
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/event_failure.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/content_widgets.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_screen.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/event_screen_description.dart';

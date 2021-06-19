@@ -4,15 +4,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/profile/profile_page/profile_page_cubit.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/profile_failure.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/content_widgets.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_screen.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_name.dart';
 
-class ProfilePageContent extends StatelessWidget {
+class ProfilePageMeta extends StatelessWidget {
   ///the color used to display the text on this page
   final Color textColor = Colors.black38;
 
-  const ProfilePageContent( {Key? key}) : super(key: key);
+  const ProfilePageMeta( {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

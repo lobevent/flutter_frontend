@@ -7,12 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/event/event_screen/event_screen_cubit.dart';
 import 'package:flutter_frontend/application/profile/profile_page/profile_page_cubit.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/content_widgets.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_screen.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
-import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_content.dart';
+import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_meta.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_header_visual.dart';
+import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_posts.dart';
 
 /// the page for displaying profile information in social context
 /// (not settings page)
@@ -47,7 +48,8 @@ class ProfilePage extends StatelessWidget {
                         const [
                           // the profile image
                           ProfilePageHeaderVisual(),
-                          ProfilePageContent(),
+                          ProfilePageMeta(),
+                          ProfilePagePosts(),
                         ]
                     )
                 )

@@ -32,11 +32,12 @@ class ProfilePagePosts extends StatelessWidget{
 
   /// generate list of posts
   Widget PostList(List<Post> posts){
-    return ListView.builder(
-      itemCount: posts.length,
-      itemBuilder: (context, index){
-          return PostWidget(post: posts[index]);
+    return Container(
+        child: ListView.builder(
+          itemCount: posts.length,
+          itemBuilder: (context, index){
+              return PostWidget(post: posts[index]);
       },
-    );
+    ));
   }
 }

@@ -94,4 +94,5 @@ class PostRemoteService extends RemoteService<PostDto>{
     final Response response = await client.get(path);
     return convertList(response);
   }
+
 }

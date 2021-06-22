@@ -25,7 +25,10 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
   static const String deletePath = "/profile";
   static const String updatePath = "/profile";
 
-  static const String sendFriendShipPath = "/friend/request/%id%/";
+  static const String getOpenFriendRequestsPath = "/friend/requests";
+  static const String sendFriendShipPath = "/friend/request/%profileId%/";
+  static const String acceptFriendShipPath = "/friend/accept/%profileId%/";
+  static const String deleteFriendShipPath = "/friend/delete/%profileId%/";
 
   SymfonyCommunicator client;
 
@@ -91,10 +94,26 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
     return convertList(response);
   }
 
-
-  Future<String> sendFriendship (String id) async{
+  ///Friendship functionalities (maybe put them in a seperate class)
+  Future<String> sendFriendship (String profileId) async{
     final Response response = await client.post(sendFriendShipPath.interpolate(
-        {"id": id}), id);
+        {"profileId": profileId}), profileId);
     return response.body;
   }
+
+  Future<String> acceptFriendRequest(String profileId) async{
+    final Response response = await client.post(acceptFriendShipPath, profileId);
+    return response.body;
+  }
+
+  Future<String> deleteFriendRequest(String profileId) async{
+    final Response response = await client.delete(deleteFriendShipPath);
+    return response.body;
+
+  }
+  Future<List<ProfileDto>> getOpenFriendRequests() async{
+    final Response response = await client.get(getOpenFriendRequestsPath);
+    return convertList(response);
+  }
+
 }

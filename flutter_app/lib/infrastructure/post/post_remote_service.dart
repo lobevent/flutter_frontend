@@ -76,12 +76,12 @@ class PostRemoteService extends RemoteService<PostDto>{
 
   Future<PostDto> deletePost(PostDto postDto) async {
     return _decodePost(await client.delete(
-        "$deletePath${postDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}"));
+        "$deletePath${postDto.id}"));
   }
 
   Future<PostDto> updatePost(PostDto postDto) async {
     return _decodePost(await client.put(
-        "$updatePath${postDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}",
+        "$updatePath${postDto.id}",
         jsonEncode(postDto.toJson())));
   }
 
@@ -94,4 +94,5 @@ class PostRemoteService extends RemoteService<PostDto>{
     final Response response = await client.get(path);
     return convertList(response);
   }
+
 }

@@ -10,7 +10,7 @@ class HeaderVisual extends StatelessWidget{
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 100,
+      height: 150,
       decoration: const BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,

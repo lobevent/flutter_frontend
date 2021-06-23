@@ -37,21 +37,23 @@ class ProfileDto extends BaseDto with _$ProfileDto {
         full: (detailedProfile) => ProfileDto(
             id: detailedProfile.id.getOrCrash(),
             username: detailedProfile.name.getOrCrash(),
-            ownedEvents: detailedProfile.ownedEvents
-                .map((e) => EventDto.fromDomain(e))
-                .toList(),
-            invitations: detailedProfile.invitations
-                .map((e) => EventDto.fromDomain(e))
-                .toList(),
-            friendships: detailedProfile.friendships
-                .map((e) => ProfileDto.fromDomain(e))
-                .toList(),
-            posts: detailedProfile.posts
-                .map((e) => PostDto.fromDomain(e))
-                .toList(),
-            comments: detailedProfile.comments
+            ownedEvents: detailedProfile.ownedEvents != null?
+                detailedProfile.ownedEvents!.map((e) => EventDto.fromDomain(e))
+                .toList(): null,
+            invitations: detailedProfile.invitations != null?
+                detailedProfile.invitations!.map((e) => EventDto.fromDomain(e))
+                .toList(): null,
+            friendships: detailedProfile.friendships != null?
+                detailedProfile.friendships!.map((e) => ProfileDto.fromDomain(e))
+                .toList(): null,
+            posts: detailedProfile.posts != null?
+                detailedProfile.posts!.map((e) => PostDto.fromDomain(e))
+                .toList(): null,
+            comments:
+            detailedProfile.comments != null?
+            detailedProfile.comments!
                 .map((e) => CommentDto.fromDomain(e))
-                .toList()));
+                .toList(): null));
   }
 
   factory ProfileDto.fromJson(Map<String, dynamic> json) =>
@@ -68,19 +70,19 @@ class ProfileDto extends BaseDto with _$ProfileDto {
       return Profile.full(
           id: UniqueId.fromUniqueString(id),
           name: ProfileName(username),
-          ownedEvents: ownedEvents!
+          ownedEvents: ownedEvents != null?
+              ownedEvents!.map((e) => e.toDomain())
+              .toList() : null,
+          invitations: invitations != null ? invitations!
               .map((e) => e.toDomain())
-              .toList(),
-          invitations: invitations!
+              .toList(): null,
+          friendships: friendships != null ? friendships!
               .map((e) => e.toDomain())
-              .toList(),
-          friendships: friendships!
-              .map((e) => e.toDomain())
-              .toList(),
-          posts: posts!.map((e) => e.toDomain()).toList(),
+              .toList(): null,
+          posts: posts != null ? posts!.map((e) => e.toDomain()).toList(): null,
           comments:
-          comments!.map((e) => e.toDomain()).toList());
+          comments != null ? comments!.map((e) => e.toDomain()).toList(): null);
     }
-
   }
+
 }

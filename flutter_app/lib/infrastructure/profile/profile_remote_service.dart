@@ -7,7 +7,7 @@ import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:http/http.dart';
 
 class ProfileRemoteService  extends RemoteService<ProfileDto>{
-  static const String profileIdPath = "/profile"; //TODO dont know path
+  static const String profileIdPath = "/profile/"; //TODO dont know path
 
   //commented out unused Routes
   /*static const String _deleteProfilePicture = "/profile/{id}";
@@ -15,7 +15,8 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
   static const String _changePassword = "/password";*/
 
   //List Routes
-  static const String searchProfilePath = "/profile/%profileId%/%amount%/";
+  ///TODO: change the searchProfilepath page 0
+  static const String searchProfilePath = "/profile/search/%needle%/%amount%/0";
   static const String attendingUsersPath = "/profile/%profileId%/%amount%/";
   static const String followerPath = "/profile/%profileId%/%amount%/";
   static const String postProfilePath = "/profile/%postId%/%amount%/";
@@ -23,6 +24,11 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
   static const String postPath = "/profile";
   static const String deletePath = "/profile";
   static const String updatePath = "/profile";
+
+  static const String getOpenFriendRequestsPath = "/friend/requests";
+  static const String sendFriendShipPath = "/friend/request/%profileId%/";
+  static const String acceptFriendShipPath = "/friend/accept/%profileId%/";
+  static const String deleteFriendShipPath = "/friend/delete/%profileId%/";
 
   SymfonyCommunicator client;
 
@@ -87,4 +93,27 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
     final Response response = await client.get(path);
     return convertList(response);
   }
+
+  ///Friendship functionalities (maybe put them in a seperate class)
+  Future<String> sendFriendship (String profileId) async{
+    final Response response = await client.post(sendFriendShipPath.interpolate(
+        {"profileId": profileId}), profileId);
+    return response.body;
+  }
+
+  Future<String> acceptFriendRequest(String profileId) async{
+    final Response response = await client.post(acceptFriendShipPath, profileId);
+    return response.body;
+  }
+
+  Future<String> deleteFriendRequest(String profileId) async{
+    final Response response = await client.delete(deleteFriendShipPath);
+    return response.body;
+
+  }
+  Future<List<ProfileDto>> getOpenFriendRequests() async{
+    final Response response = await client.get(getOpenFriendRequestsPath);
+    return convertList(response);
+  }
+
 }

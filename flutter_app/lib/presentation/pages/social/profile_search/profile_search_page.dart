@@ -7,6 +7,7 @@ import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/profile_list_tiles.dart';
+import 'package:flutter_frontend/presentation/pages/social/profile_search/profile_search_results.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 class ProfileSearchPage extends StatefulWidget {
@@ -85,6 +86,7 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
                           addSearchTerm(query);
                           selectedTerm = query;
                           context.read<ProfileSearchCubit>().searchByProfileName(query);
+                          controller.close();
                         }
                       });
                     },
@@ -180,106 +182,4 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
   }
 }
 
-class SearchResultsListViewHolder extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    /*if(searchTerm==null){
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.search,
-              size: 64,
-            ),
-            Text(
-              'Start searching',
-              style: Theme.of(context).textTheme.headline5,
-            )
-          ],
-        ),
-      );
-    }else return
-  }
 
-     */
-    return Scaffold(body: SearchResultsListView());
-  }
-}
-
-class SearchResultsListView extends StatefulWidget {
-  @override
-  SearchResultsListViewState createState() => SearchResultsListViewState();
-}
-
-class SearchResultsListViewState extends State<SearchResultsListView> {
-  String? searchTerm;
-  List<Profile> profiles = [];
-
-  @override
-  Widget build(BuildContext context) {
-    //return normal search overlay
-    /*if(searchTerm==null){
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.search,
-              size: 64,
-            ),
-            Text(
-              'Start searching',
-              style: Theme.of(context).textTheme.headline5,
-            )
-          ],
-        ),
-      );
-    }
-     */
-    return BlocListener<ProfileSearchCubit, ProfileSearchState>(
-      listener: (context, state) => {
-        state.maybeMap(
-            loaded: (state) =>
-                {this.profiles = state.profiles, setState(() {})},
-            orElse: () => {})
-      },
-      child:
-          /*ListView(
-          children: List.generate(
-            profiles.length, (index) => ProfileListTiles(
-            profile: Profile(id: UniqueId(), name: ProfileName("gunther")),
-            key: ObjectKey(null),
-          ),
-          ),
-        )
-
-         */
-          ListView.builder(
-              itemBuilder: (context, index) {
-                final profile = this.profiles[index];
-                if (profile.failureOption.isSome()) {
-                  return Ink(
-                    color: Colors.red,
-                    child: ListTile(
-                      title: Text(profile.failureOption
-                          .fold(() => "", (a) => a.toString())),
-                    ),
-                  );
-                }
-                if (this.profiles.isEmpty) {
-                  return Ink(
-                    color: Colors.red,
-                    child: ListTile(
-                      title: Text("No profiles Found"),
-                    ),
-                  );
-                } else {
-                  return ProfileListTiles(
-                      key: ObjectKey(profile), profile: this.profiles[index]);
-                }
-              },
-              itemCount: this.profiles.length),
-    );
-  }
-}

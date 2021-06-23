@@ -2,6 +2,7 @@ import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,14 +42,14 @@ class EventContent extends StatelessWidget{
                   const SizedBox(height: 20),
 
                   /// the date of the event
-                  DateAndOwner(state.event.date, state.event.owner, context),
+                  DateAndOwner(state.event.date, state.event.owner!, context),
 
 
                   /// Used as space
                   const SizedBox(height: 20),
 
                   /// Contains the description of the event
-                  DescriptionWidget(state.event.description.getOrCrash()),
+                  DescriptionWidget(state.event.description!.getOrCrash()),
 
 
 
@@ -62,6 +63,7 @@ class EventContent extends StatelessWidget{
   }
 
 
+  /// this contains the attending paritcipants and the own attending status view for this event
   Widget AttendingAndOwnStatus(int attending, EventStatus? status){
     IconData icon;
     String text;
@@ -143,9 +145,7 @@ class EventContent extends StatelessWidget{
   /// Widget used for making padding with a row, so the children start on the
   /// correct side and is padded from the side
   Widget PaddingWidget({required List<Widget> children}){
-    return Padding(padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-        child: Row(children: children),
-        );
+    return PaddingRowWidget(children: children);
   }
 
 

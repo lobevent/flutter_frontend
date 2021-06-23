@@ -10,6 +10,7 @@ import 'package:flutter_frontend/application/event/event_screen/event_screen_cub
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/event_failure.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_screen.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/event_screen_description.dart';
@@ -45,38 +46,28 @@ class EventScreenPage extends StatelessWidget {
           ///the loading Overlay wraps the whole tree
           return LoadingOverlay(
             isLoading: state is LoadInProgress,
-            child: state.maybeMap(
-                /// check if an error has occured and show error message in that case
-                error: (failure) => ErrorMessage(errorText: failure.toString(),),
+            child:
+              BasicContentContainer(
+                children:
+                  state.maybeMap(
+                      /// check if an error has occured and show error message in that case
+                      /// wrapped in a list to match closure context
+                      error: (failure) => [ErrorMessage(errorText: failure.toString(),)],
 
-                /// if the error state is not active, load the content container
-                orElse: () => ContentContainer()),
+                      /// if the error state is not active, load the contentS
+                      orElse: () => [
+                        /// the Header with the pictures etc
+                        HeaderVisual(),
+                        /// the event contents and information
+                        EventContent(),
+                      ]),
+              )
           );
         },
       )
     );
   }
 
-
-
-
-  /// the content Container should contain no logic, but should only call the
-  /// content widgets
-  Widget ContentContainer(){
-    return  Scaffold(
-      body: ColorfulSafeArea(
-        color: Colors.yellow,
-        child: SingleChildScrollView(
-          child: Column(
-            children: const [
-              /// the Header with the pictures etc
-              HeaderVisual(),
-              EventContent(),
-            ],
-          ),
-      ),
-    ));
-  }
 
 
 }

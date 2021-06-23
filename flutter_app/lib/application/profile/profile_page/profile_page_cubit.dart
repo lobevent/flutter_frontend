@@ -16,8 +16,8 @@ part 'profile_page_cubit.freezed.dart';
 class ProfilePageCubit extends Cubit<ProfilePageState> {
   final UniqueId profileId;
 
-  ProfilePageCubit({required UniqueId this.profileId}) : super(ProfilePageState.initial()){
-    emit(ProfilePageState.initial());
+  ProfilePageCubit({required UniqueId this.profileId}) : super(ProfilePageState.loading()){
+
     loadProfile(profileId);
   }
 
@@ -25,6 +25,7 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
 
 
   Future<void> loadProfile(UniqueId profileId) async{
+    emit(ProfilePageState.loading());
     Either<ProfileFailure, Profile> response = await repository.getSingleProfile(profileId);
 
     response.fold(

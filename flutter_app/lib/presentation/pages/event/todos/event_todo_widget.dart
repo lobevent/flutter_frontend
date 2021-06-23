@@ -1,41 +1,49 @@
-import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/event/event_screen/event_screen_cubit.dart';
-import 'package:flutter_frontend/application/todo/todo_cubit.dart';
-import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
-import 'package:flutter_frontend/presentation/pages/event/todos/widgets/todo_content.dart';
+import 'package:flutter_frontend/presentation/pages/event/todos/widgets/item_element_widget.dart';
 
 class EventTodoWidget extends StatelessWidget {
+  final Todo todo;
+
+  const EventTodoWidget({Key? key, required this.todo}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TodoCubit(event: Event.empty()), //TODO Event
-        child: BlocBuilder<TodoCubit, TodoState>(
-          builder: (context, state) {
-            return LoadingOverlay(
-              isLoading: state is LoadInProgress,
-                child: state.maybeMap(
-                    error: (failure) => ErrorMessage(errorText: failure.toString(),),
-                    orElse: () => ContentContainer()),
-            );
-            },
-        ),
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(todo.name.getOrCrash()),
+
+        /// Used as space
+        const SizedBox(height: 20),
+
+        TodoItemList(todo.items),
+      ],
     );
   }
 
-  Widget ContentContainer(){
-    return const Scaffold(
-        body: ColorfulSafeArea(
-          color: Colors.yellow,
-          child: SingleChildScrollView(
-            child: TodoContent(),
-          ),
-        ),
+  Widget TodoItemList (List<Item> items){
+    return ListView(
+      children: <Widget> [
+        ...getTodoItems(items)
+      ],
     );
+  }
+
+  List<Widget> getTodoItems(List<Item> items){
+    final List<Widget> itemElements = [];
+
+    items.forEach((element) {
+      final Widget elements = ItemElementWidget(
+        name: element.name.toString(),
+        profiles: element.profiles,
+        description: element.description.toString(),
+      );
+      itemElements.add(elements);
+    });
+    return itemElements;
   }
 }

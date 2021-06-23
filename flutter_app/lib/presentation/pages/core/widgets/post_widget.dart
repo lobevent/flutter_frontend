@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 
 /// this is the post widget, which should be used everywhere
@@ -9,7 +10,7 @@ class PostWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Card(
       child: Text(post.postContent.getOrCrash()),);
   }
 

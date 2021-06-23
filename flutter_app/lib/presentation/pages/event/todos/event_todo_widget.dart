@@ -26,7 +26,7 @@ class EventTodoWidget extends StatelessWidget {
   }
 
   Widget TodoItemList (List<Item> items){
-    return ListView(
+    return Column(
       children: <Widget> [
         ...getTodoItems(items)
       ],

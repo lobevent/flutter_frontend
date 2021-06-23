@@ -20,25 +20,37 @@ class EventRepository implements IEventRepository {
   EventRepository(this._eventRemoteService, this._eventLocalService);
 
   @override
-  Future<Either<EventFailure, List<Event>>> getList(Operation operation,
-      DateTime lastEventTime, int amount, {Profile? profile, bool descending = false}) async {
+  Future<Either<EventFailure, List<Event>>> getList(
+      Operation operation, DateTime lastEventTime, int amount,
+      {Profile? profile, bool descending = false, String? searchString}) async {
     try {
       List<EventDto> eventDtos;
       switch (operation) {
+        case Operation.search:
+          if (searchString == null) {
+            throw UnexpectedTypeError();
+          }
+          eventDtos = await _eventRemoteService.getSearchedEvents(
+              searchString, amount, lastEventTime);
+          break;
         case Operation.owned:
-          eventDtos = await _eventRemoteService.getOwnedEvents(lastEventTime, amount, descending);
+          eventDtos = await _eventRemoteService.getOwnedEvents(
+              lastEventTime, amount, descending);
           break;
         case Operation.fromUser:
           if (profile == null) {
             throw UnexpectedTypeError();
           }
-          eventDtos = await _eventRemoteService.getEventsFromUser(lastEventTime, amount, profile.id.getOrCrash().toString());
+          eventDtos = await _eventRemoteService.getEventsFromUser(
+              lastEventTime, amount, profile.id.getOrCrash().toString());
           break;
         case Operation.attending:
-          eventDtos = await _eventRemoteService.getAttendingEvents(lastEventTime, amount);
+          eventDtos = await _eventRemoteService.getAttendingEvents(
+              lastEventTime, amount);
           break;
         case Operation.unreacted:
-          eventDtos = await _eventRemoteService.getUnreactedEvents(lastEventTime, amount);
+          eventDtos = await _eventRemoteService.getUnreactedEvents(
+              lastEventTime, amount);
           break;
       }
       //convert the dto objects to domain Objects
@@ -48,7 +60,6 @@ class EventRepository implements IEventRepository {
       return left(_reactOnCommunicationException(e));
     }
   }
-
 
   @override
   Future<Either<EventFailure, Event>> getSingle(UniqueId id) async {

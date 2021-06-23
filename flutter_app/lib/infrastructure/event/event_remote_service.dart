@@ -8,15 +8,20 @@ import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:http/http.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 
-
-class EventRemoteService extends RemoteService<EventDto>{
+class EventRemoteService extends RemoteService<EventDto> {
   static const String eventByIdPath = "/event/";
 
   //Routes Lists
-  static const String ownedEventsPath = "/user/events/%amount%/%lastEventTime%/%descending%";
-  static const String profileEventPath = "/user/%profileId%/events/%amount%/%lastEventTime%/";
-  static const String attendingEventsPath = "/user/eventStatus/events/%amount%/%lastEventTime%/";//TODO attending?
-  static const String unreactedEventsPath = "/user/events/%amount%/%lastEventTime%/";//TODO reaction?
+  static const String ownedEventsPath =
+      "/user/events/%amount%/%lastEventTime%/%descending%";
+  static const String profileEventPath =
+      "/user/%profileId%/events/%amount%/%lastEventTime%/";
+  static const String attendingEventsPath =
+      "/user/eventStatus/events/%amount%/%lastEventTime%/"; //TODO attending?
+  static const String unreactedEventsPath =
+      "/user/events/%amount%/%lastEventTime%/"; //TODO reaction?
+  static const String searchEventsPath = "/event/%needle%/%amount%/%last%/";
+  //event search name maxresults last
 
   // TODO combine it to event path?
   static const String postPath = "/event";
@@ -29,9 +34,6 @@ class EventRemoteService extends RemoteService<EventDto>{
       : client = communicator ??
             SymfonyCommunicator(); // TODO this doesn't work on runtime -> will throw an error!
 
-
-
-
   Future<EventDto> getSingle(String id) async {
     final String uri = "$eventByIdPath$id";
     final Response response = await client.get(uri);
@@ -40,33 +42,51 @@ class EventRemoteService extends RemoteService<EventDto>{
     return eventDto;
   }
 
-  Future<List<EventDto>> getOwnedEvents(
-      DateTime lastEventTime, int amount, [bool descending = false]) async {
-    return _getEventList(
-        ownedEventsPath.interpolate(
-            {"amount" : amount.toString(), "lastEventTime" : lastEventTime.toString(), "descending" : descending.toString()}));
+  Future<List<EventDto>> getOwnedEvents(DateTime lastEventTime, int amount,
+      [bool descending = false]) async {
+    return _getEventList(ownedEventsPath.interpolate({
+      "amount": amount.toString(),
+      "lastEventTime": lastEventTime.toString(),
+      "descending": descending.toString()
+    }));
+  }
 
+  Future<List<EventDto>> getSearchedEvents(
+      String searchString, int amount, DateTime last) async {
+    return _getEventList(searchEventsPath.interpolate({
+      "needle": searchString,
+      "amount": amount.toString(),
+      "last": last.toString()
+    }));
   }
 
   Future<List<EventDto>> getEventsFromUser(
       DateTime lastEventTime, int amount, String profileId) async {
-    return _getEventList(
-        profileEventPath.interpolate(
-          {"profileId": profileId, "amount" : amount.toString(), "lastEventTime" : lastEventTime.toString()}));
+    return _getEventList(profileEventPath.interpolate({
+      "profileId": profileId,
+      "amount": amount.toString(),
+      "lastEventTime": lastEventTime.toString()
+    }));
   }
 
-  Future<List<EventDto>> getAttendingEvents(//TODO attending events?
-      DateTime lastEventTime, int amount) async {
-    return _getEventList(
-        attendingEventsPath.interpolate(
-        {"amount" : amount.toString(), "lastEventTime" : lastEventTime.toString()}));
+  Future<List<EventDto>> getAttendingEvents(
+      //TODO attending events?
+      DateTime lastEventTime,
+      int amount) async {
+    return _getEventList(attendingEventsPath.interpolate({
+      "amount": amount.toString(),
+      "lastEventTime": lastEventTime.toString()
+    }));
   }
 
-  Future<List<EventDto>> getUnreactedEvents( //TODO reaction?
-      DateTime lastEventTime, int amount) async {
-    return _getEventList(
-        unreactedEventsPath.interpolate(
-            {"amount" : amount.toString(), "lastEventTime" : lastEventTime.toString()}));
+  Future<List<EventDto>> getUnreactedEvents(
+      //TODO reaction?
+      DateTime lastEventTime,
+      int amount) async {
+    return _getEventList(unreactedEventsPath.interpolate({
+      "amount": amount.toString(),
+      "lastEventTime": lastEventTime.toString()
+    }));
   }
 
   Future<EventDto> createEvent(EventDto eventDto) async {
@@ -77,14 +97,12 @@ class EventRemoteService extends RemoteService<EventDto>{
   Future<EventDto> deleteEvent(EventDto eventDto) async {
     // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive
 
-    return _decodeEvent(await client.delete(
-        "$deletePath${eventDto.id}"));
+    return _decodeEvent(await client.delete("$deletePath${eventDto.id}"));
   }
 
   Future<EventDto> updateEvent(EventDto eventDto) async {
     return _decodeEvent(await client.put(
-        "$updatePath${eventDto.id}",
-        jsonEncode(eventDto.toJson())));
+        "$updatePath${eventDto.id}", jsonEncode(eventDto.toJson())));
   }
 
   /*static String generatePaginatedRoute(
@@ -100,7 +118,6 @@ class EventRemoteService extends RemoteService<EventDto>{
     final Response response = await client.get(path);
     return convertList(response);
   }
-
 
 //  Future<List<EventDto>> getViewableEventsFromProfile(int ProfileId){
 //

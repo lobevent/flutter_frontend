@@ -1,4 +1,6 @@
 import 'package:flutter_frontend/domain/core/value_validators.dart';
+import 'package:flutter_frontend/domain/todo/item.dart';
+import 'package:flutter_frontend/infrastructure/todo/todo_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
@@ -34,6 +36,7 @@ class EventDto extends BaseDto with _$EventDto {
     required DateTime date,
     required DateTime creationDate,
     int? attendingUsers,
+    @TodoConverter() TodoDto? todo,
     @OwnerConverter() ProfileDto? owner,
     double? longitude,
     double? latitude,
@@ -46,13 +49,14 @@ class EventDto extends BaseDto with _$EventDto {
 
 
     return EventDto(
-              id: event.id.getOrCrash(),
-              name: event.name.getOrCrash(),
-              public: event.public,
-              date: event.date,
-              description: event.description!.getOrCrash(),
-              creationDate: event.creationDate,
-              owner: ProfileDto.fromDomain(event.owner!),
+      id: event.id.getOrCrash(),
+      name: event.name.getOrCrash(),
+      public: event.public,
+      date: event.date,
+      description: event.description!.getOrCrash(),
+      todo: TodoDto.fromDomain(event.todo!),
+      creationDate: event.creationDate,
+      owner: ProfileDto.fromDomain(event.owner!),
       attendingUsers: event.attending,
       ownStatus:  domainToDtoStatus[event.status] as int?,
       longitude: event.longitude,
@@ -70,6 +74,7 @@ class EventDto extends BaseDto with _$EventDto {
       name: EventName(name),
       date: date,
       description: description  == null ? null: EventDescription(description!),
+      todo: todo?.toDomain(),
       owner: owner?.toDomain(),
       //TODO: don't forget this one!
       public: public,
@@ -84,8 +89,7 @@ class EventDto extends BaseDto with _$EventDto {
 
 
 
-class OwnerConverter
-    implements JsonConverter<ProfileDto, Map<String, dynamic>> {
+class OwnerConverter implements JsonConverter<ProfileDto, Map<String, dynamic>> {
   const OwnerConverter();
 
   @override
@@ -97,5 +101,19 @@ class OwnerConverter
   @override
   Map<String, dynamic> toJson(ProfileDto profileDto) {
     return profileDto.toJson();
+  }
+}
+
+class TodoConverter implements JsonConverter<TodoDto, Map<String, dynamic>>{
+  const TodoConverter();
+
+  @override
+  TodoDto fromJson(Map<String, dynamic> todo) {
+    return TodoDto.fromJson(todo);
+  }
+
+  @override
+  Map<String, dynamic> toJson(TodoDto todoDto) {
+    return todoDto.toJson();
   }
 }

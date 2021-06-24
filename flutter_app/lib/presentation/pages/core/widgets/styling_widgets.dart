@@ -98,4 +98,30 @@ class PaddingContainer extends StatelessWidget{
   }
 }
 
+/// class primary for texts, that could overflow
+class OverflowSafeString extends StatelessWidget{
+  final Widget child;
+  const OverflowSafeString({Key? key, required this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+   return ClipRect(
+        // overflow is alowed, so no overflowerror arises
+        child: SizedOverflowBox(
+        //the alignment of the content should be on the left side and
+        // vertical it should be centered
+          alignment: Alignment.centerLeft,
+          size: Size(MediaQuery.of(context).size.width*0.2, 30),
+            child: child,
+        )
+    );
+  }
+
+
+
+
+}
+
+
+
 

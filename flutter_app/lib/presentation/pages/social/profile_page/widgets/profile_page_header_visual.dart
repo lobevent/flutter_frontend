@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/image_classes.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 
 class ProfilePageHeaderVisual extends StatelessWidget{
@@ -16,21 +17,14 @@ class ProfilePageHeaderVisual extends StatelessWidget{
           const Spacer(),
           // circle Avatar is from flutter, its a Round image
           CircleAvatar(radius: 90,
-          backgroundImage: _getAssetOrNetwork(imagePath),),
+          backgroundImage: ProfileImage.getAssetOrNetwork(imagePath),),
           const Spacer(),
         ]
     );
   }
 
 
-  /// check if an image string is given, and if not give back an image from assets
-  ImageProvider _getAssetOrNetwork(String? imagePath){
-    if(imagePath != null){
-      return NetworkImage(imagePath);
-    }else{
-      return AssetImage("assets/images/partypeople.jpg",);
-    }
-  }
+
 
 
 }

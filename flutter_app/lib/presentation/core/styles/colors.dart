@@ -8,6 +8,8 @@ class AppColors {
   static const darkGrey = Colors.black54;
 
   static const mainIcon = Colors.grey;
+
+  static const Color stdTextColor = Colors.black38;
 }
 
 

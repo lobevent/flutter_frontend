@@ -32,6 +32,20 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
   ];
   List<String>? filteredSearchHistory;
   String? selectedTerm;
+  int tabIndex = SearchResultsListViewState().getSelectedIndex();
+
+  @override
+  void initState() {
+    super.initState();
+    controller = FloatingSearchBarController();
+    filteredSearchHistory = filterSearchTerms(filter: null);
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   List<String> filterSearchTerms({required String? filter}) {
     if (filter != null && filter.isNotEmpty) {
@@ -186,17 +200,4 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
   }
 
   late FloatingSearchBarController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = FloatingSearchBarController();
-    filteredSearchHistory = filterSearchTerms(filter: null);
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
 }

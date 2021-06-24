@@ -37,12 +37,7 @@ class SearchResultsListViewState extends State<SearchResultsListView>
   @override
   void initState() {
     tabController = getTabController();
-    tabController.addListener(() {
-      setState(() {
-        selectedIndex = tabController.index;
-      });
-    });
-    print("index $selectedIndex");
+    //tabController.addListener();
     super.initState();
   }
 
@@ -54,7 +49,9 @@ class SearchResultsListViewState extends State<SearchResultsListView>
     return TabController(length: tabs.length, vsync: this);
   }
 
-  void handleTabs() {}
+  void handleTabSection() {
+    if (tabController.indexIsChanging) {}
+  }
 
   @override
   void dispose() {
@@ -65,24 +62,40 @@ class SearchResultsListViewState extends State<SearchResultsListView>
   //generate list for events and profiles
   //List<Widget> generateTiles(List<>)
 
-  //generate list for profiles
+  ///generate list for profiles
   List<Widget> generateProfileTiles(List<Profile> profiles) {
-    return profiles
-        .map((e) =>
-            ClipRect(child: ProfileListTiles(key: ObjectKey(e.id), profile: e)))
-        .toList();
+    if (profiles.isEmpty) {
+      return [
+        Center(
+          child: Text("No profiles found"),
+        )
+      ];
+    } else {
+      return profiles
+          .map((e) => ClipRect(
+              child: ProfileListTiles(key: ObjectKey(e.id), profile: e)))
+          .toList();
+    }
   }
 
-  //generate list for events
+  ///generate list for events
   List<Widget> generateEventTiles(List<Event> events) {
-    return events
-        .map((e) => ClipRect(
-                child: EventListTiles(
-              key: ObjectKey(e.id),
-              event: e,
-              allowEdit: false,
-            )))
-        .toList();
+    if (events.isEmpty) {
+      return [
+        Center(
+          child: Text("No events found"),
+        )
+      ];
+    } else {
+      return events
+          .map((e) => ClipRect(
+                  child: EventListTiles(
+                key: ObjectKey(e.id),
+                event: e,
+                allowEdit: false,
+              )))
+          .toList();
+    }
   }
 
   @override

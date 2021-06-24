@@ -6,7 +6,7 @@ import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:http/http.dart';
 
-class ProfileRemoteService  extends RemoteService<ProfileDto>{
+class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String profileIdPath = "/profile/"; //TODO dont know path
 
   //commented out unused Routes
@@ -26,7 +26,7 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
   static const String updatePath = "/profile";
 
   static const String getOpenFriendRequestsPath = "/friend/requests";
-  static const String sendFriendShipPath = "/friend/request/%profileId%/";
+  static const String sendFriendShipPath = "/friend/request/%profileId%";
   static const String acceptFriendShipPath = "/friend/accept/%profileId%/";
   static const String deleteFriendShipPath = "/friend/delete/%profileId%/";
 
@@ -34,7 +34,7 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
 
   ProfileRemoteService({SymfonyCommunicator? communicator})
       : client = communicator ??
-      SymfonyCommunicator(); // TODO this doesn't work on runtime -> will throw an error!
+            SymfonyCommunicator(); // TODO this doesn't work on runtime -> will throw an error!
 
   Future<ProfileDto> _decodeProfile(Response json) async {
     return ProfileDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
@@ -54,39 +54,34 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
   }
 
   Future<ProfileDto> delete(ProfileDto profileDto) async {
-    return _decodeProfile(
-    await client.delete("$deletePath${profileDto.id}"));
-
+    return _decodeProfile(await client.delete("$deletePath${profileDto.id}"));
   }
 
   Future<ProfileDto> update(ProfileDto profileDto) async {
-    return _decodeProfile(
-    await client.put(
+    return _decodeProfile(await client.put(
         "$updatePath${profileDto.id}", jsonEncode(profileDto.toJson())));
   }
 
-  Future<List<ProfileDto>> getSearchedProfiles(int amount, String searchString) async {
-    return _getProfileList(
-        searchProfilePath.interpolate(
-            {"needle" : searchString, "amount" : amount.toString()}));
-    }
+  Future<List<ProfileDto>> getSearchedProfiles(
+      int amount, String searchString) async {
+    return _getProfileList(searchProfilePath
+        .interpolate({"needle": searchString, "amount": amount.toString()}));
+  }
 
-  Future<List<ProfileDto>> getAttendingUsersToEvent(int amount, String profileId) async {
-    return _getProfileList(
-        attendingUsersPath.interpolate(
-            {"profileId" : profileId, "amount" : amount.toString()}));
+  Future<List<ProfileDto>> getAttendingUsersToEvent(
+      int amount, String profileId) async {
+    return _getProfileList(attendingUsersPath
+        .interpolate({"profileId": profileId, "amount": amount.toString()}));
   }
 
   Future<List<ProfileDto>> getFollower(int amount, String profileId) async {
-    return _getProfileList(
-        followerPath.interpolate(
-        {"profileId" : profileId, "amount" : amount.toString()}));
+    return _getProfileList(followerPath
+        .interpolate({"profileId": profileId, "amount": amount.toString()}));
   }
 
   Future<List<ProfileDto>> getProfilesToPost(int amount, String postId) async {
-    return _getProfileList(
-        postProfilePath.interpolate(
-        {"postId" : postId, "amount" : amount.toString()}));
+    return _getProfileList(postProfilePath
+        .interpolate({"postId": postId, "amount": amount.toString()}));
   }
 
   Future<List<ProfileDto>> _getProfileList(String path) async {
@@ -95,25 +90,25 @@ class ProfileRemoteService  extends RemoteService<ProfileDto>{
   }
 
   ///Friendship functionalities (maybe put them in a seperate class)
-  Future<String> sendFriendship (String profileId) async{
-    final Response response = await client.post(sendFriendShipPath.interpolate(
-        {"profileId": profileId}), profileId);
+  Future<String> sendFriendship(String profileId) async {
+    final Response response = await client.post(
+        sendFriendShipPath.interpolate({"profileId": profileId}), profileId);
     return response.body;
   }
 
-  Future<String> acceptFriendRequest(String profileId) async{
-    final Response response = await client.post(acceptFriendShipPath, profileId);
+  Future<String> acceptFriendRequest(String profileId) async {
+    final Response response =
+        await client.post(acceptFriendShipPath, profileId);
     return response.body;
   }
 
-  Future<String> deleteFriendRequest(String profileId) async{
+  Future<String> deleteFriendRequest(String profileId) async {
     final Response response = await client.delete(deleteFriendShipPath);
     return response.body;
-
   }
-  Future<List<ProfileDto>> getOpenFriendRequests() async{
+
+  Future<List<ProfileDto>> getOpenFriendRequests() async {
     final Response response = await client.get(getOpenFriendRequestsPath);
     return convertList(response);
   }
-
 }

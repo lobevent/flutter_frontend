@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/profile/profile_page/profile_page_cubit.dart';
+import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/profile_failure.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
@@ -19,10 +20,18 @@ class ProfilePageMeta extends StatelessWidget {
     return BlocBuilder<ProfilePageCubit, ProfilePageState>(
       builder: (context, state){
           return state.maybeMap(
-              loaded: (st) => PaddingRowWidget(
-                children: [
-                  TitleText(st.profile.name.getOrCrash())
-                ],
+              loaded: (st) =>
+              Column(
+                  children: [
+                    PaddingRowWidget(
+                      children: [
+                        TitleText(st.profile.name.getOrCrash())
+                      ],
+                    ),
+                    st.profile.map((value) => throw UnexpectedTypeError(), full: (profile) =>
+                      EventAndFriends(profile.friendships?.length, profile.ownedEvents?.length)
+                    )
+              ]
               ),
               orElse: () => Text('')
           );
@@ -40,6 +49,19 @@ class ProfilePageMeta extends StatelessWidget {
               fontWeight: FontWeight.bold, color: textColor))
         ]
     );
+  }
+
+
+  Widget EventAndFriends(int? friendscount, int? eventcount){
+    return PaddingRowWidget(
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(border:Border.all(width: 2.0, color:  Color(Colors.black.value))),
+            child: Text(friendscount?.toString()?? 0.toString()),),
+          Spacer(),
+          Text(eventcount?.toString()?? 0.toString())
+
+    ]);
   }
 }
 

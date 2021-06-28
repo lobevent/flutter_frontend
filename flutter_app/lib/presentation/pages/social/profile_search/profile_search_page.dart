@@ -23,16 +23,9 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
 
   //searchhistory with 5 last searched terms
   static const historyLength = 5;
-  static List<String> _searchHistory = [
-    "gunther",
-    "spast",
-    "boss",
-    "thb",
-    "mongo"
-  ];
+  static List<String> _searchHistory = [];
   List<String>? filteredSearchHistory;
   String? selectedTerm;
-  int tabIndex = SearchResultsListViewState().getSelectedIndex();
 
   @override
   void initState() {
@@ -109,20 +102,8 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
                       if (query != "") {
                         addSearchTerm(query);
                         selectedTerm = query;
-                        switch (
-                            SearchResultsListViewState().getSelectedIndex()) {
-                          case 0:
-                            context
-                                .read<ProfileSearchCubit>()
-                                .searchByProfileName(query);
-                            controller.close();
-                            break;
-                          case 1:
-                            context
-                                .read<ProfileSearchCubit>()
-                                .searchByEventName(query);
-                            break;
-                        }
+                        context.read<ProfileSearchCubit>().searchByBothName(query);
+                        controller.close();
                       }
                     });
                   },
@@ -134,62 +115,16 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
                           elevation: 4,
                           child: Builder(
                             builder: (context) {
-                              //if query and history is empty, return the Start Searching Site
+                              //if query empty and history empty, return the Start Searching Site
                               if (filteredSearchHistory!.isEmpty &&
                                   controller.query.isEmpty) {
-                                return Container(
-                                  height: 56,
-                                  width: double.infinity,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Start Searching',
-                                    maxLines: 1,
-                                  ),
-                                );
+                                return buildQueryContainerInitial(context);
                               } else if (filteredSearchHistory!.isEmpty) {
                                 // if empty add query and show query as tile
-                                return ListTile(
-                                  title: Text(controller.query),
-                                  leading: const Icon(Icons.search),
-                                  onTap: () {
-                                    setState(() {
-                                      addSearchTerm(controller.query);
-                                      selectedTerm = controller.query;
-                                    });
-                                    controller.close();
-                                  },
-                                );
+                                return buildQueryListTile(context);
                               } else {
                                 //return the previous search history results
-                                return Column(
-                                  children: filteredSearchHistory!
-                                      .map(
-                                        (term) => ListTile(
-                                          title: Text(
-                                            term,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          leading: const Icon(Icons.history),
-                                          trailing: IconButton(
-                                            icon: const Icon(Icons.clear),
-                                            onPressed: () {
-                                              setState(() {
-                                                deleteSearchTerm(term);
-                                              });
-                                            },
-                                          ),
-                                          onTap: () {
-                                            setState(() {
-                                              putSearchTermFirst(term);
-                                              selectedTerm = term;
-                                            });
-                                            controller.close();
-                                          },
-                                        ),
-                                      )
-                                      .toList(),
-                                );
+                                return buildPreviousQuerys(context);
                               }
                             },
                             //itemCount: this.profiles.length),
@@ -197,6 +132,69 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
                         ));
                   }));
         }));
+  }
+
+  ///builds the initial floatingbar (where there is no history)
+  Container buildQueryContainerInitial(BuildContext context){
+    return Container(
+      height: 56,
+      width: double.infinity,
+      alignment: Alignment.center,
+      child: Text(
+        'Start Searching',
+        maxLines: 1,
+      ),
+    );
+  }
+
+  ///builds the querylisttile (duplicates input as tile)
+  ListTile buildQueryListTile(BuildContext context){
+    return ListTile(
+      title: Text(controller.query),
+      leading: const Icon(Icons.search),
+      onTap: () {
+        setState(() {
+          addSearchTerm(controller.query);
+          selectedTerm = controller.query;
+          context.read<ProfileSearchCubit>().searchByBothName(controller.query);
+        });
+        controller.close();
+      },
+    );
+  }
+
+  ///builds the history tiles in the floatingsearchbar, to click on previous results
+  Column buildPreviousQuerys(BuildContext conteyt){
+    return Column(
+      children: filteredSearchHistory!
+          .map(
+            (term) => ListTile(
+          title: Text(
+            term,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          leading: const Icon(Icons.history),
+          trailing: IconButton(
+            icon: const Icon(Icons.clear),
+            onPressed: () {
+              setState(() {
+                deleteSearchTerm(term);
+              });
+            },
+          ),
+          onTap: () {
+            setState(() {
+              putSearchTermFirst(term);
+              selectedTerm = term;
+            });
+            controller.close();
+          },
+        ),
+      )
+          .toList(),
+    );
+
   }
 
   late FloatingSearchBarController controller;

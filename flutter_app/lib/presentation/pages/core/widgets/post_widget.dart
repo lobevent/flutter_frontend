@@ -17,26 +17,38 @@ class PostWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Column(
+      // constrained Box for min height
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minHeight: 150.0,
+          minWidth: 50.0,
+        ),
+        // column contains the content
+        child: Column(
         children: [
+          // Add header information (date, author, etc.)
           MetaHeadWidget(date: post.creationDate),
+          // content of the post
           ContentWidget(post.postContent.getOrCrash()),
         ],
+      )
       )
     );
   }
 
 
+  /// contains the content of the post
   Widget ContentWidget(String content){
     return PaddingRowWidget(children:
     [
+
       Text(content,
         style: const TextStyle(color: Color(0xFF400909)),)
     ]);
   }
 
+  /// the head meta wiget displays metadata for the post
   Widget MetaHeadWidget({Profile? author = null, required DateTime date}){
-
     return PaddingRowWidget(
       // the top padding should be less than the content padding
       paddinfLeft: paddingLeftConst - 15,
@@ -50,6 +62,7 @@ class PostWidget extends StatelessWidget{
           ),
         ),
         Spacer(),
+        // if author is null, just user a spacer instead
         author == null ? Spacer() : AuthorWidget(author),
       ],
     );
@@ -57,10 +70,12 @@ class PostWidget extends StatelessWidget{
 
   /// the widget for displaying the author (Overflow Safe)
   Widget AuthorWidget(Profile profile){
+    // row so we can display multiple things
     return Row(
       children: [
         // get avatar image or from assets
         CircleAvatar(backgroundImage: ProfileImage.getAssetOrNetwork(null), radius: 10,),
+        // sized box for little distance
         SizedBox(width: 20,),
         // overflow safe
         OverflowSafeString(child:

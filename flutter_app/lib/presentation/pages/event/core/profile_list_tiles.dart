@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/profile/profile_search/profile_search_cubit.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:auto_route/auto_route.dart' hide Router;
+import 'package:flutter_frontend/presentation/pages/core/widgets/image_classes.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 
@@ -11,8 +12,9 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class ProfileListTiles extends StatelessWidget {
   final Profile profile;
+  final String? imagePath;
 
-  const ProfileListTiles({required ObjectKey key, required this.profile})
+  const ProfileListTiles({required ObjectKey key, required this.profile, String? this.imagePath})
       : super(key: key);
 
   @override
@@ -23,7 +25,8 @@ class ProfileListTiles extends StatelessWidget {
               child: ListTile(
 
                 leading: IconButton(
-                  icon: Icon(Icons.add_a_photo_rounded),
+                  icon: CircleAvatar(radius: 30,
+                    backgroundImage: ProfileImage.getAssetOrNetwork(imagePath),),
                   onPressed: () => showProfile(context),
                 ),
                 title: Text(profile.name.getOrCrash()),

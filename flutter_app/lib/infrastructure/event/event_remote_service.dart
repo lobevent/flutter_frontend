@@ -20,7 +20,7 @@ class EventRemoteService extends RemoteService<EventDto> {
       "/user/eventStatus/events/%amount%/%lastEventTime%/"; //TODO attending?
   static const String unreactedEventsPath =
       "/user/events/%amount%/%lastEventTime%/"; //TODO reaction?
-  static const String searchEventsPath = "/event/%needle%/%amount%/%last%/";
+  static const String searchEventsPath = "/event/search/%needle%/%amount%/%last%/";
   //event search name maxresults last
 
   // TODO combine it to event path?

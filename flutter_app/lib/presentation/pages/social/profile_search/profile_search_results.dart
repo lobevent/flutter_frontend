@@ -10,13 +10,13 @@ import 'package:flutter_frontend/presentation/pages/event/core/profile_list_tile
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 class SearchResultsListView extends StatefulWidget {
+
   @override
   SearchResultsListViewState createState() => SearchResultsListViewState();
 }
 
 class SearchResultsListViewState extends State<SearchResultsListView>
     with TickerProviderStateMixin {
-  String? searchTerm;
   List<Profile> profiles = [];
   List<Event> events = [];
   int selectedIndex = 0;
@@ -62,23 +62,28 @@ class SearchResultsListViewState extends State<SearchResultsListView>
   //generate list for events and profiles
   //List<Widget> generateTiles(List<>)
 
+
   ///generate list for profiles
   List<Widget> generateProfileTiles(List<Profile> profiles) {
-    if (profiles.isEmpty) {
-      return [
-        Center(
-          child: Text("No profiles found"),
-        )
-      ];
-    } else {
-      return profiles
-          .map((e) => ClipRect(
-              child: ProfileListTiles(key: ObjectKey(e.id), profile: e)))
-          .toList();
-    }
+        if(profiles.isEmpty){
+          return [
+            Center(
+              child: Text("No profiles found"),
+            )
+          ];
+        }else
+          {
+            return profiles
+                .map((e) => ClipRect(
+                child: ProfileListTiles(
+                  key: ObjectKey(e.id),
+                  profile: e,
+                )))
+                .toList();
+          }
   }
 
-  ///generate list for events
+  ///generate list for events but both are preloaded ^^
   List<Widget> generateEventTiles(List<Event> events) {
     if (events.isEmpty) {
       return [
@@ -98,33 +103,43 @@ class SearchResultsListViewState extends State<SearchResultsListView>
     }
   }
 
+  ///build initial search screen in tabs, TODO
+  Widget buildStartSearching(BuildContext context){
+    return Center(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.search, size: 64,),
+        Text('Start searching', style: Theme.of(context).textTheme.headline5,)
+      ],
+    ),
+  );
+
+
+  }
+
+  ///build the searchresults, so profiletiles or eventtiles, and show them dependently on the selected tab
   @override
   Widget build(BuildContext context) {
-    //return normal search overlay
-    /*if(searchTerm==null){
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.search,
-              size: 64,
-            ),
-            Text(
-              'Start searching',
-              style: Theme.of(context).textTheme.headline5,
-            )
-          ],
-        ),
-      );
-    }
-     */
     final fsb = FloatingSearchBar.of(context);
     return BlocListener<ProfileSearchCubit, ProfileSearchState>(
       listener: (context, state) => {
         state.maybeMap(
-            loaded: (state) =>
-                {this.profiles = state.profiles, setState(() {})},
+          //map depending on tab index?
+          loadedEvents: (state)=>
+            {
+              this.events = state.events,
+              setState((){})
+            },
+            loadedProfiles: (state) =>{
+        this.profiles = state.profiles,
+        setState((){})
+        },
+            loadedBoth: (state) =>
+                {
+                  this.profiles = state.profiles,
+                  this.events = state.events,
+                  setState(() {})},
             orElse: () => {})
       },
       child: Padding(
@@ -140,7 +155,8 @@ class SearchResultsListViewState extends State<SearchResultsListView>
               tabs: tabs,
             ),
             //decide if  it builds profiles or events, depending on the clicked tab
-            body: TabBarView(controller: tabController, children: [
+            body:
+            TabBarView(controller: tabController, children: [
               ListView(children: generateProfileTiles(profiles)),
               ListView(children: generateEventTiles(events))
             ]

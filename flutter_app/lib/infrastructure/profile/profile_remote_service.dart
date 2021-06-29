@@ -5,6 +5,7 @@ import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:http/http.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String profileIdPath = "/profile/"; //TODO dont know path
@@ -26,6 +27,7 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String updatePath = "/profile";
 
   static const String getOpenFriendRequestsPath = "/friend/requests";
+  static const String getAcceptedFriendshipsPath = "/friend";
   static const String sendFriendShipPath = "/friend/request/%profileId%";
   static const String acceptFriendShipPath = "/friend/accept/%profileId%/";
   static const String deleteFriendShipPath = "/friend/delete/%profileId%/";
@@ -110,5 +112,11 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   Future<List<ProfileDto>> getOpenFriendRequests() async {
     final Response response = await client.get(getOpenFriendRequestsPath);
     return convertList(response);
+  }
+
+  Future<Response> getAcceptedFriendships() async {
+    final Response response = await client.get(getAcceptedFriendshipsPath);
+
+    return response;
   }
 }

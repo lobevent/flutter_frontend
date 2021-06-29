@@ -80,4 +80,13 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
     final String answer = await repository.sendFriendRequest(id);
     return answer;
   }
+
+  Future<String> getAcceptedFriendships() async{
+    final String response = await repository.getFriends();
+    return response;
+  }
+
+  Future<bool> isFriend(UniqueId id) async {
+    return true;
+  }
 }

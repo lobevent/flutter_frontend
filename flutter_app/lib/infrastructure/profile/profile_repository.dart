@@ -137,4 +137,14 @@ class ProfileRepository extends IProfileRepository {
       return e.toString();
     }
   }
+
+  Future<String>getFriends() async{
+    try{
+      final  response  = await _profileRemoteService.getAcceptedFriendships();
+      return response.body;
+    }on CommunicationException catch (e){
+      return e.toString();
+    }
+  }
+
 }

@@ -78,14 +78,19 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
         create: (context) => ProfileSearchCubit(),
         child: BlocBuilder<ProfileSearchCubit, ProfileSearchState>(
             builder: (context, state) {
+              //loadingoverlay mapping
+              final bool isLoading = state.maybeMap(
+                initial: (_) => false,
+                loading: (_) => true,
+                  orElse: ()=>false);
           return Scaffold(
               body: FloatingSearchBar(
                   controller: controller,
                   body: FloatingSearchBarScrollNotifier(
-                    child: SearchResultsListView(),
+                    child: LoadingOverlay(child: SearchResultsListView(), isLoading: isLoading,) ,
                   ),
                   transition: CircularFloatingSearchBarTransition(),
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   title: Text(selectedTerm ?? "Search"),
                   hint: 'Search and find out',
                   actions: [

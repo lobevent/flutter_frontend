@@ -35,8 +35,7 @@ class EventRemoteService extends RemoteService<EventDto>{
   Future<EventDto> getSingle(String id) async {
     final String uri = "$eventByIdPath$id";
     final Response response = await client.get(uri);
-    final EventDto eventDto = await _decodeEvent(
-        response); // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
+    final EventDto eventDto = await _decodeEvent(response); // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
     return eventDto;
   }
 

@@ -119,25 +119,6 @@
 //     ,
 //   }; //instantiating map with different operation options
 //
-//   //first test
-//   test("Event Convertion", () {
-//     EventDto testDto = EventDto.fromJson(
-//         EventDto.fromDomain(origTestDtoWithoutId.toDomain()).toJson());
-//     expect(testDto, origTestDtoWithoutId);
-//   });
-//
-//   //testing crud operations here
-//   group('CRUD', () {
-//     test("get Single Test", () async {
-//       when(client.get("ourUrl.com/event/1", headers: authenticationHeader))
-//           .thenAnswer((_) async =>
-//               http.Response(jsonEncode(origTestDtoWithoutId.toJson()), 200));
-//
-//       expect(
-//           await repository.getSingle(UniqueId.fromUniqueString("1")).then((value) =>
-//               value.fold((l) => null, (r) => EventDto.fromDomain(r))),
-//           origTestDtoWithoutId);
-//     });
 //
 //     //testing list chain and convertion
 //     listOperations.forEach((operation, path) async {
@@ -145,7 +126,7 @@
 //       test("get List Test with 200 response. Operation: $operation", () async {
 //         Either<EventFailure, List<Event>> returnedList;
 //         when(client.get(SymfonyCommunicator.url + path,
-//                 headers: authenticationHeader))
+//                 headers: authenticationHeader)) //Todo Need to check the response now
 //             .thenAnswer((_) async => http.Response(
 //                 jsonEncode(eventList.map((e) => e.toJson()).toList()),
 //                 200)); // client response configuration

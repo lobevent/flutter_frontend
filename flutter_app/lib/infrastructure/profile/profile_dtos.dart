@@ -23,7 +23,7 @@ class ProfileDto extends BaseDto with _$ProfileDto {
     required String username,
     List<EventDto>? ownedEvents,
     List<EventDto>? invitations,
-    List<ProfileDto>? friendships,
+    int? friendshipCount,
     List<PostDto>? posts,
     List<CommentDto>? comments,
   }) = _ProfileDto;
@@ -43,9 +43,7 @@ class ProfileDto extends BaseDto with _$ProfileDto {
             invitations: detailedProfile.invitations != null?
                 detailedProfile.invitations!.map((e) => EventDto.fromDomain(e))
                 .toList(): null,
-            friendships: detailedProfile.friendships != null?
-                detailedProfile.friendships!.map((e) => ProfileDto.fromDomain(e))
-                .toList(): null,
+            friendshipCount: detailedProfile.friendshipCount,
             posts: detailedProfile.posts != null?
                 detailedProfile.posts!.map((e) => PostDto.fromDomain(e))
                 .toList(): null,
@@ -76,9 +74,7 @@ class ProfileDto extends BaseDto with _$ProfileDto {
           invitations: invitations != null ? invitations!
               .map((e) => e.toDomain())
               .toList(): null,
-          friendships: friendships != null ? friendships!
-              .map((e) => e.toDomain())
-              .toList(): null,
+          friendshipCount: friendshipCount,
           posts: posts != null ? posts!.map((e) => e.toDomain()).toList(): null,
           comments:
           comments != null ? comments!.map((e) => e.toDomain()).toList(): null);

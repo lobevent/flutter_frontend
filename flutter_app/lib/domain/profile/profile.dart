@@ -24,7 +24,7 @@ class Profile with _$Profile {
     required ProfileName name,
     List<Event> ? ownedEvents,
     List<Event>? invitations,
-    List<Profile>? friendships,
+    int? friendshipCount,
     List<Post>? posts,
     List<Comment>? comments,
   }) = _FullProfile;

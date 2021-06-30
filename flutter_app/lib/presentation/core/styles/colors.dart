@@ -10,6 +10,8 @@ class AppColors {
   static const mainIcon = Colors.grey;
 
   static const Color stdTextColor = Colors.black38;
+
+  static const Color stdButtonBackground = Color(0x2ABBBBBB);
 }
 
 

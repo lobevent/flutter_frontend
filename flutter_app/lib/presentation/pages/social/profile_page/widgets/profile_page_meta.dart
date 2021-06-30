@@ -36,7 +36,7 @@ class ProfilePageMeta extends StatelessWidget {
                         ],
                       ),
                       st.profile.map((value) => throw UnexpectedTypeError(), full: (profile) =>
-                        EventAndFriends(profile.friendships?.length, profile.ownedEvents?.length)
+                        EventAndFriends(profile.friendshipCount?? 0, profile.ownedEvents?.length)
                       )
                 ]
                 )
@@ -60,22 +60,15 @@ class ProfilePageMeta extends StatelessWidget {
   }
 
 
+  /// Widget displays
   Widget EventAndFriends(int? friendscount, int? eventcount){
     return PaddingRowWidget(
         children: [
-          DecoratedBox(
-              decoration: BoxDecoration(
-                  color: Color(0x2ABBBBBB),
-               /*   border:Border.all(width: 2.0,
-                  color:  Color(0x6BBBBBBB)),*/
-                  borderRadius: BorderRadius.circular(10)),
-              child: TextButton(
-                style: ButtonStyle(overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent)),
-                onPressed: () => null,
-                child: Row(children: [
-                  Text("Friends: ", style: TextStyle(color: AppColors.stdTextColor),),
-                  Text(friendscount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
-                ],)))
+          StdTextButton(
+            child: Row(children: [
+              Text("Friends: ", style: TextStyle(color: AppColors.stdTextColor),),
+              Text(friendscount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
+            ],),)
 
           ,
           Spacer(),

@@ -117,7 +117,26 @@ class OverflowSafeString extends StatelessWidget{
     );
   }
 
+}
 
+
+class StdTextButton extends StatelessWidget{
+  final Widget child;
+  const StdTextButton({Key? key, required this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+        decoration: BoxDecoration(
+            color: Color(0x2ABBBBBB),
+            /*   border:Border.all(width: 2.0,
+                  color:  Color(0x6BBBBBBB)),*/
+            borderRadius: BorderRadius.circular(10)),
+        child: TextButton(
+            style: ButtonStyle(overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent)),
+            onPressed: () => null,
+            child: child));
+  }
 
 
 }

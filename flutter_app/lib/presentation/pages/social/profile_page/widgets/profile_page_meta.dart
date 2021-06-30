@@ -5,6 +5,7 @@ import 'package:flutter_frontend/application/profile/profile_page/profile_page_c
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/profile_failure.dart';
+import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_screen.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_name.dart';
@@ -21,17 +22,24 @@ class ProfilePageMeta extends StatelessWidget {
       builder: (context, state){
           return state.maybeMap(
               loaded: (st) =>
-              Column(
-                  children: [
-                    PaddingRowWidget(
-                      children: [
-                        TitleText(st.profile.name.getOrCrash())
-                      ],
-                    ),
-                    st.profile.map((value) => throw UnexpectedTypeError(), full: (profile) =>
-                      EventAndFriends(profile.friendships?.length, profile.ownedEvents?.length)
-                    )
-              ]
+              ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minHeight: 150.0,
+                    minWidth: 50.0,
+                  ),
+              child:
+                Column(
+                    children: [
+                      PaddingRowWidget(
+                        children: [
+                          TitleText(st.profile.name.getOrCrash())
+                        ],
+                      ),
+                      st.profile.map((value) => throw UnexpectedTypeError(), full: (profile) =>
+                        EventAndFriends(profile.friendships?.length, profile.ownedEvents?.length)
+                      )
+                ]
+                )
               ),
               orElse: () => Text('')
           );
@@ -56,8 +64,20 @@ class ProfilePageMeta extends StatelessWidget {
     return PaddingRowWidget(
         children: [
           DecoratedBox(
-            decoration: BoxDecoration(border:Border.all(width: 2.0, color:  Color(Colors.black.value))),
-            child: Text(friendscount?.toString()?? 0.toString()),),
+              decoration: BoxDecoration(
+                  color: Color(0x2ABBBBBB),
+               /*   border:Border.all(width: 2.0,
+                  color:  Color(0x6BBBBBBB)),*/
+                  borderRadius: BorderRadius.circular(10)),
+              child: TextButton(
+                style: ButtonStyle(overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent)),
+                onPressed: () => null,
+                child: Row(children: [
+                  Text("Friends: ", style: TextStyle(color: AppColors.stdTextColor),),
+                  Text(friendscount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
+                ],)))
+
+          ,
           Spacer(),
           Text(eventcount?.toString()?? 0.toString())
 

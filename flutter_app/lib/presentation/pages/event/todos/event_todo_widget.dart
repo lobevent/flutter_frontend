@@ -15,7 +15,7 @@ class EventTodoWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(todo!.name.getOrCrash()),
+        Text('TodoName: ${todo!.name.getOrCrash()}'),
 
         /// Used as space
         const SizedBox(height: 20),
@@ -38,9 +38,9 @@ class EventTodoWidget extends StatelessWidget {
 
     items.forEach((element) {
       final Widget elements = ItemElementWidget(
-        name: element.name.toString(),
+        name: element.name.getOrCrash(),
         profiles: element.profiles,
-        description: element.description.toString(),
+        description: element.description.getOrCrash(),
       );
       itemElements.add(elements);
     });

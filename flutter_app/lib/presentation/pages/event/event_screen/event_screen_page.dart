@@ -47,7 +47,7 @@ class EventScreenPage extends StatelessWidget {
                         /// the event contents and information
                         EventContent(),
                         /// todoevents list
-                        //TodoWidget(),
+                        TodoWidget(),
                       ]),
               )
           );

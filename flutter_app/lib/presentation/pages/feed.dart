@@ -3,6 +3,7 @@ import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/event_screen_page.dart';
 import 'package:flutter_frontend/presentation/pages/event/own_events/own_events_screen.dart';
+import 'package:flutter_frontend/presentation/pages/social/profile_friends/profile_friends_page.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_search/profile_search_page.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
@@ -54,6 +55,11 @@ class FeedScreen extends StatelessWidget {
                   context.router.push(ProfileSearchPageRoute());
                 },
                 child: Text("ProfileSearch")),
+            ElevatedButton(
+                onPressed: () {
+                  context.router.push(ProfileFriendsScreenRoute());
+                },
+                child: Text("Friends")),
           ],
         ));
   }

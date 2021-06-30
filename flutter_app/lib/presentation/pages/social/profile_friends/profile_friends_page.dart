@@ -34,7 +34,7 @@ class ProfileFriendsScreenHolder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Own Events"),
+          title: Text("Your Friends"),
         ),
         body: ProfileFriendsBody());
   }

@@ -43,8 +43,9 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
   Future<void> searchByEventName(String eventName) async {
     try {
       emit(ProfileSearchState.loading());
-      final Either<EventFailure, List<Event>> eventList = await eventRepository
-          .getList(ev.Operation.search, DateTime.now(), 10, searchString: eventName);
+      final Either<EventFailure, List<Event>> eventList =
+          await eventRepository.getList(ev.Operation.search, DateTime.now(), 10,
+              searchString: eventName);
       emit(ProfileSearchState.loadedEvents(
           events: eventList.fold((l) => throw Exception, (r) => r)));
     } catch (e) {
@@ -55,18 +56,18 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
   Future<void> searchByBothName(String queryName) async {
     try {
       emit(ProfileSearchState.loading());
-      final Either<EventFailure, List<Event>> eventList = await eventRepository
-          .getList(ev.Operation.search, DateTime.now(), 10, searchString: queryName);
+      final Either<EventFailure, List<Event>> eventList =
+          await eventRepository.getList(ev.Operation.search, DateTime.now(), 10,
+              searchString: queryName);
       final Either<ProfileFailure, List<Profile>> profileList = await repository
           .getList(Operation.search, 10, searchString: queryName);
       emit(ProfileSearchState.loadedBoth(
-          profiles: profileList.fold((l) => throw Exception, (r) => r), events: eventList.fold((l) => throw Exception, (r) => r)));
+          profiles: profileList.fold((l) => throw Exception, (r) => r),
+          events: eventList.fold((l) => throw Exception, (r) => r)));
     } catch (e) {
       emit(ProfileSearchState.error(error: e.toString()));
     }
   }
-
-
 
   Future<void> loadProfile(String id) async {
     repository.getSingleProfile(UniqueId.fromUniqueString(id)).then((value) =>
@@ -79,11 +80,6 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
   Future<String> sendFriendship(UniqueId id) async {
     final String answer = await repository.sendFriendRequest(id);
     return answer;
-  }
-
-  Future<String> getAcceptedFriendships() async{
-    final String response = await repository.getFriends();
-    return response;
   }
 
   Future<bool> isFriend(UniqueId id) async {

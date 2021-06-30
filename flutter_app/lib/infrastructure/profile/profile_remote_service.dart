@@ -104,9 +104,10 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
     return response.body;
   }
 
-  Future<String> deleteFriendRequest(String profileId) async {
-    final Response response = await client.delete(deleteFriendShipPath);
-    return response.body;
+  ///TODO this cast is not safe i guess, rework it
+  Future<bool> deleteFriendRequest(String profileId) async {
+    final bool response = (await client.delete(deleteFriendShipPath)) as bool;
+    return response;
   }
 
   Future<List<ProfileDto>> getOpenFriendRequests() async {
@@ -114,9 +115,9 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
     return convertList(response);
   }
 
-  Future<Response> getAcceptedFriendships() async {
+  ///TODO Paginate the query to make use of the parentfunction with amount
+  Future<List<ProfileDto>> getAcceptedFriendships() async {
     final Response response = await client.get(getAcceptedFriendshipsPath);
-
-    return response;
+    return convertList(response);
   }
 }

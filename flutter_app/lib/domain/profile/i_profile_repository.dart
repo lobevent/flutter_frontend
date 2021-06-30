@@ -9,18 +9,21 @@ import 'package:flutter_frontend/domain/profile/profile_failure.dart';
 // TODO rename this one since it's duplicated in domain/event/i_event_repository.dart -> really confusing
 /// For dertermination of the List to load
 /// for example for showing created posts or feed
-enum Operation{
+enum Operation {
   search,
   attendingUsersEvent,
   follower,
   postProfile,
+  friends,
 }
 
-abstract class IProfileRepository{
-  Future <Either<ProfileFailure, List<Profile>>> getList(
-      Operation operation, int amount,{ Post post, Profile profile, Event event});
-  Future <Either<ProfileFailure, Profile>> getSingleProfile(UniqueId id); // todo profile object instead of id
-  Future <Either<ProfileFailure, Profile>> create(Profile profile);
-  Future <Either<ProfileFailure, Profile>> update(Profile profile);
-  Future <Either<ProfileFailure, Profile>> delete(Profile profile);
+abstract class IProfileRepository {
+  Future<Either<ProfileFailure, List<Profile>>> getList(
+      Operation operation, int amount,
+      {Post post, Profile profile, Event event});
+  Future<Either<ProfileFailure, Profile>> getSingleProfile(
+      UniqueId id); // todo profile object instead of id
+  Future<Either<ProfileFailure, Profile>> create(Profile profile);
+  Future<Either<ProfileFailure, Profile>> update(Profile profile);
+  Future<Either<ProfileFailure, Profile>> delete(Profile profile);
 }

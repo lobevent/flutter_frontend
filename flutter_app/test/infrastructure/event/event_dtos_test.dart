@@ -13,31 +13,23 @@
 // import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
 // import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 // import 'package:flutter_test/flutter_test.dart';
-// import 'package:mockito/mockito.dart';
 // import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 // import 'package:http/http.dart' as http;
 // import 'package:sprintf/sprintf.dart';
 // import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
+// import 'package:mocktail/mocktail.dart';
 //
 // class MockEvent extends Mock implements Event, http.Client {}
 //
 // main() {
 //   const String testId = "abc";
 //
-//   EventDto origTestDtoWithoutId = EventDto.withoutId(
-//       name: "EVENT1",
-//       public: true,
-//       description: "kleines event",
-//       owner: ProfileDto(id: "abc", name: "manfred"),
-//       date: DateTime.now(),
-//       creationDate: DateTime.now());
-//
 //   EventDto TestDtoWithId = EventDto(
 //       id: testId,
 //       name: "EVENT2",
 //       public: true,
 //       description: "toni stinkt",
-//       owner: ProfileDto(id: "abc", name: "manfred"),
+//       owner: ProfileDto(id: "abc", username: "manfred"),
 //       date: DateTime.now(),
 //       creationDate: DateTime.now());
 //
@@ -46,7 +38,7 @@
 //       name: "EVENT3",
 //       public: true,
 //       description: "tom stinkt",
-//       owner: ProfileDto(id: "abc", name: "manfred"),
+//       owner: ProfileDto(id: "abc", username: "manfred"),
 //       date: DateTime.now(),
 //       creationDate: DateTime.now());
 //
@@ -55,11 +47,11 @@
 //       name: "EVENT5",
 //       public: false,
 //       description: "tom stinkt sehr",
-//       owner: ProfileDto(id: "abc", name: "manfred"),
+//       owner: ProfileDto(id: "abc", username: "manfred"),
 //       date: DateTime.now(),
 //       creationDate: DateTime.now());
 //
-//   const ProfileDto profileDto = ProfileDto(id: "abc", name: "manfred");
+//   const ProfileDto profileDto = ProfileDto(id: "abc", username: "manfred");
 //
 //   List<EventDto> eventList = [
 //     TestDtoWithId,
@@ -127,25 +119,6 @@
 //     ,
 //   }; //instantiating map with different operation options
 //
-//   //first test
-//   test("Event Convertion", () {
-//     EventDto testDto = EventDto.fromJson(
-//         EventDto.fromDomain(origTestDtoWithoutId.toDomain()).toJson());
-//     expect(testDto, origTestDtoWithoutId);
-//   });
-//
-//   //testing crud operations here
-//   group('CRUD', () {
-//     test("get Single Test", () async {
-//       when(client.get("ourUrl.com/event/1", headers: authenticationHeader))
-//           .thenAnswer((_) async =>
-//               http.Response(jsonEncode(origTestDtoWithoutId.toJson()), 200));
-//
-//       expect(
-//           await repository.getSingle(UniqueId.fromUniqueString("1")).then((value) =>
-//               value.fold((l) => null, (r) => EventDto.fromDomain(r))),
-//           origTestDtoWithoutId);
-//     });
 //
 //     //testing list chain and convertion
 //     listOperations.forEach((operation, path) async {
@@ -153,7 +126,7 @@
 //       test("get List Test with 200 response. Operation: $operation", () async {
 //         Either<EventFailure, List<Event>> returnedList;
 //         when(client.get(SymfonyCommunicator.url + path,
-//                 headers: authenticationHeader))
+//                 headers: authenticationHeader)) //Todo Need to check the response now
 //             .thenAnswer((_) async => http.Response(
 //                 jsonEncode(eventList.map((e) => e.toJson()).toList()),
 //                 200)); // client response configuration

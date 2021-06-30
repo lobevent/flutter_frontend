@@ -3,6 +3,8 @@ import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
+import 'package:flutter_frontend/domain/todo/todo.dart';
+import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 
@@ -24,6 +26,7 @@ class Event with _$Event {
     required DateTime date,
     EventDescription? description,
     required DateTime creationDate,
+    Todo? todo,
     Profile? owner,
     required bool public,
     int? attending,
@@ -39,6 +42,7 @@ class Event with _$Event {
     name: EventName(''),
     date: DateTime.now(),
     description: EventDescription(''),
+    todo: Todo(id: UniqueId.fromUniqueString('e6837df8-9e99-4f00-a40d-0e798834e9da'),items: [],name: TodoName('lool'), ),
     creationDate: DateTime.now(),
     owner: Profile(id: UniqueId(), name: ProfileName("ssss")), //TODO: !!!!!!!IIIIIIMMMMMMMMPPPPPPOOOOORTANT!!!!!!!! Implement logged in profile fetching
     public: false,

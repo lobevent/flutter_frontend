@@ -1,21 +1,49 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/todo/todo_cubit.dart';
-import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
+import 'package:flutter_frontend/presentation/pages/event/todos/widgets/item_element_widget.dart';
 
 class EventTodoWidget extends StatelessWidget {
+  final Todo? todo;
+
+  const EventTodoWidget({Key? key, required this.todo}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TodoCubit(event: Event.empty()),
-      child: BlocBuilder<TodoCubit, TodoState>(
-        builder: (context, state) {
-          return state.maybeMap(
-              loaded: (state) => Text(state.todo.name.getOrCrash()),
-              orElse: () => Text("error"));
-        },
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text('TodoName: ${todo!.name.getOrCrash()}'),
+
+        /// Used as space
+        const SizedBox(height: 20),
+
+        TodoItemList(todo!.items),
+      ],
     );
+  }
+
+  Widget TodoItemList (List<Item> items){
+    return Column(
+      children: <Widget> [
+        ...getTodoItems(items)
+      ],
+    );
+  }
+
+  List<Widget> getTodoItems(List<Item> items){
+    final List<Widget> itemElements = [];
+
+    items.forEach((element) {
+      final Widget elements = ItemElementWidget(
+        name: element.name.getOrCrash(),
+        profiles: element.profiles,
+        description: element.description.getOrCrash(),
+      );
+      itemElements.add(elements);
+    });
+    return itemElements;
   }
 }

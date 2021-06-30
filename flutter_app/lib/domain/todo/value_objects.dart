@@ -17,7 +17,7 @@ class TodoDescription extends ValueObject<String> {
     assert(input != null);
     {
       //check single line, and the length of the profilename
-      return TodoDescription._(validateSingleLine(input).andThen(validateLength(input, minLength: Constants.maxTextLength)));
+      return TodoDescription._(validateSingleLine(input).andThen(validateLength(input, minLength: 0)));
     }
   }
   const TodoDescription._(this.value);
@@ -77,7 +77,7 @@ class ItemDescription extends ValueObject<String> {
     assert(input != null);
     {
       //check single line, and the length of the profilename
-      return ItemDescription._(validateSingleLine(input).andThen(validateLength(input, minLength: Constants.maxTextLength)));
+      return ItemDescription._(validateSingleLine(input).andThen(validateLength(input, minLength: 0)));
     }
   }
   const ItemDescription._(this.value);

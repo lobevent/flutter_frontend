@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,16 +67,33 @@ class ProfilePageMeta extends StatelessWidget {
     return PaddingRowWidget(
         children: [
           StdTextButton(
+            onPressed: null,
             child: Row(children: [
-              Text("Friends: ", style: TextStyle(color: AppColors.stdTextColor),),
+              const Icon(
+                Icons.emoji_people_outlined,
+                color: AppColors.stdTextColor,
+              ),
+              Text(" Friends: ", style: TextStyle(color: AppColors.stdTextColor),),
               Text(friendscount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
             ],),)
 
           ,
           Spacer(),
-          Text(eventcount?.toString()?? 0.toString())
+          StdTextButton(
+            onPressed: null,
+            child: Row(children: [
+              const Icon(
+                Icons.tapas_outlined,
+                color: AppColors.stdTextColor,
+              ),
+              Text(" Events: ", style: TextStyle(color: AppColors.stdTextColor),),
+              Text(eventcount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
+            ],),)
+
 
     ]);
   }
+
+
 }
 

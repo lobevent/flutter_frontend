@@ -122,7 +122,8 @@ class OverflowSafeString extends StatelessWidget{
 
 class StdTextButton extends StatelessWidget{
   final Widget child;
-  const StdTextButton({Key? key, required this.child}) : super(key: key);
+  final VoidCallback? onPressed;
+  const StdTextButton({Key? key, required this.child, required this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +135,7 @@ class StdTextButton extends StatelessWidget{
             borderRadius: BorderRadius.circular(10)),
         child: TextButton(
             style: ButtonStyle(overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent)),
-            onPressed: () => null,
+            onPressed: () => onPressed,
             child: child));
   }
 

@@ -40,6 +40,7 @@ class ProfilePage extends StatelessWidget {
                 /// check if an error has occured and show error message in that case
                 /// wrapped in a list to match closure context
                 BasicContentContainer(
+                    scrollable: false,
                     children:
                     state.maybeMap(
                       /// if the error state is not active, load the contents

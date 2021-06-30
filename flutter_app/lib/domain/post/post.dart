@@ -21,6 +21,7 @@ class Post with _$Post {
     Profile? owner,
     Event? event,
     List<Comment>? comments,
+    int? commentCount,
   }) = _Post;
 
   const factory Post.WithoutId({

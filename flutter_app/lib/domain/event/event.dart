@@ -24,7 +24,7 @@ class Event with _$Event {
     required UniqueId id,
     required EventName name,
     required DateTime date,
-    required EventDescription? description,
+    EventDescription? description,
     required DateTime creationDate,
     Todo? todo,
     Profile? owner,
@@ -34,6 +34,7 @@ class Event with _$Event {
     double? longitude,
     double? latitude
   }) = EventFull;
+
 
 
   factory Event.empty() => Event(

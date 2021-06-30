@@ -9,16 +9,13 @@ import 'package:flutter_frontend/domain/event/event_failure.dart';
 
 /// For determination of the lists to load
 /// For example an list of owned events, an list of an user or an feed
-enum Operation{
-  owned,
-  fromUser,
-  attending,
-  unreacted,
-}
+enum Operation { owned, fromUser, attending, unreacted, search }
 
 abstract class IEventRepository {
-  Future <Either<EventFailure, List<Event>>> getList(Operation operation, DateTime lastEventTime, int amount, {Profile profile});
-  Future <Either<EventFailure, Event>> getSingle(UniqueId id);
+  Future<Either<EventFailure, List<Event>>> getList(
+      Operation operation, DateTime lastEventTime, int amount,
+      {Profile profile});
+  Future<Either<EventFailure, Event>> getSingle(UniqueId id);
   Future<Either<EventFailure, Event>> create(Event event);
   Future<Either<EventFailure, Event>> update(Event event);
   Future<Either<EventFailure, Event>> delete(Event event);

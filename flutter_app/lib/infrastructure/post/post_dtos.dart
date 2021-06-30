@@ -21,6 +21,7 @@ class PostDto extends BaseDto with _$PostDto {
     String? id,
     required DateTime date,
     required String content,
+    int? commentCount,
     @ProfileConverter()  ProfileDto? owner,
     @EventConverter() EventDto? event,
   }) = _PostDto;
@@ -36,6 +37,7 @@ class PostDto extends BaseDto with _$PostDto {
               content: value.postContent.getOrCrash(),
               owner: ProfileDto.fromDomain(value.owner!),
               event: EventDto.fromDomain(value.event!),
+              commentCount: value.commentCount
             ),
         WithoutId: (value) => PostDto(
             date: value.creationDate,
@@ -56,7 +58,9 @@ class PostDto extends BaseDto with _$PostDto {
           postContent: PostContent(content),
           owner: owner?.toDomain(),
           event: event?.toDomain(),
-          comments: <Comment>[]);
+          comments: <Comment>[],
+          commentCount: commentCount
+      );
     }
       return Post.WithoutId(
             creationDate: date,

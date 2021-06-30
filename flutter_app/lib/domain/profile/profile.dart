@@ -22,7 +22,7 @@ class Profile with _$Profile {
   const factory Profile.full({
     required UniqueId id,
     required ProfileName name,
-    List<Event>? ownedEvents,
+    List<Event> ? ownedEvents,
     List<Event>? invitations,
     List<Profile>? friendships,
     List<Post>? posts,

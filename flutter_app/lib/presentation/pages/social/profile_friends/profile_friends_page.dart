@@ -18,10 +18,11 @@ class _ProfileFriendsScreenState extends State<ProfileFriendsScreen> {
       child: BlocConsumer<ProfileFriendsCubit, ProfileFriendsState>(
           listener: (context, state) => {},
           builder: (context, state) {
-            bool isLoading = state.maybeMap((_) => false,
+            bool isLoading = state.maybeMap((initial) => false,
                 loading: (_) => true, orElse: () => false);
             return LoadingOverlay(
-                child: ProfileFriendsScreenHolder(), isLoading: isLoading);
+                isLoading: isLoading,
+                child: ProfileFriendsScreenHolder());
           }),
     );
   }

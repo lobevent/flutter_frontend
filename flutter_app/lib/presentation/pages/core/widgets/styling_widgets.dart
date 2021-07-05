@@ -135,7 +135,8 @@ class StdTextButton extends StatelessWidget{
             borderRadius: BorderRadius.circular(10)),
         child: TextButton(
             style: ButtonStyle(overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent)),
-            onPressed: () => onPressed,
+            onPressed: ()
+            => onPressed,
             child: child));
   }
 

@@ -11,18 +11,15 @@ class ProfileFriendsBody extends StatefulWidget {
 
 class ProfileFriendsBodyState extends State<ProfileFriendsBody> {
   List<Profile> friends = [];
+
   @override
   Widget build(BuildContext context) {
-
     return BlocListener<ProfileFriendsCubit, ProfileFriendsState>(
       listener: (context, state) => {
         //this is the deletion and loading
-        state.maybeMap(
-                (value) => {},
+        state.maybeMap((value) => {},
             loaded: (state) =>
-                {
-                  this.friends = state.friendList,
-                  setState(() {})},
+                {this.friends = state.friendList, setState(() {})},
             deleted: (state) => {
                   //this is for updating the listview when deleting
                   this.friends.remove(state.profile),
@@ -46,8 +43,10 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody> {
                   color: Colors.red,
                   child: ListTile(title: Text("No friends available :(")));
             } else {
-              return ProfileListTiles(
-                  key: ObjectKey(friend), profile: this.friends[index]);
+              return FriendListTiles(
+                key: ObjectKey(friend),
+                profile: this.friends[index],
+              );
               //EventListTiles(key: ObjectKey(event), event: this.events[index], allowEdit: true);
             }
           },

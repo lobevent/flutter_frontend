@@ -5,7 +5,6 @@ import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:http/http.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String profileIdPath = "/profile/"; //TODO dont know path

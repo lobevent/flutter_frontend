@@ -83,6 +83,7 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
                 initial: (_) => false,
                 loading: (_) => true,
                   orElse: ()=>false);
+              //for the tapable history tiles
           return Scaffold(
               body: FloatingSearchBar(
                   controller: controller,
@@ -155,21 +156,25 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
   ///builds the querylisttile (duplicates input as tile)
   ListTile buildQueryListTile(BuildContext context){
     return ListTile(
-      title: Text(controller.query),
-      leading: const Icon(Icons.search),
-      onTap: () {
-        setState(() {
-          addSearchTerm(controller.query);
-          selectedTerm = controller.query;
-          context.read<ProfileSearchCubit>().searchByBothName(controller.query);
-        });
-        controller.close();
-      },
-    );
+        title: Text(controller.query),
+        leading: const Icon(Icons.search),
+        onTap: () {
+          setState(() {
+            //we need the context of this, idk if this could be done better
+            BlocProvider(
+              create: (context) => ProfileSearchCubit(),
+            );
+            addSearchTerm(controller.query);
+            selectedTerm = controller.query;
+            context.read<ProfileSearchCubit>().searchByBothName(controller.query);
+          });
+          controller.close();
+          },
+      );
   }
 
   ///builds the history tiles in the floatingsearchbar, to click on previous results
-  Column buildPreviousQuerys(BuildContext conteyt){
+  Column buildPreviousQuerys(BuildContext context){
     return Column(
       children: filteredSearchHistory!
           .map(
@@ -189,9 +194,13 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
             },
           ),
           onTap: () {
+            BlocProvider(
+              create: (context) => ProfileSearchCubit(),
+            );
             setState(() {
               putSearchTermFirst(term);
               selectedTerm = term;
+              context.read<ProfileSearchCubit>().searchByBothName(controller.query);
             });
             controller.close();
           },

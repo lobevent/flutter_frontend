@@ -32,7 +32,10 @@ class ProfileListTiles extends StatelessWidget {
         ),
         title: Text(profile.name.getOrCrash()),
         trailing: Row(
-          children: [buildFriendButton(context)],
+          children: [IconButton(
+            onPressed: () =>
+              context.read<ProfileSearchCubit>().sendFriendship(profile.id),
+          icon: Icon(Icons.person_add_alt_1_rounded))],
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ),

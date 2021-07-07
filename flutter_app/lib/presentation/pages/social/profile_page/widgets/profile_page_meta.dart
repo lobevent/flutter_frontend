@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/profile_failure.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_screen.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_name.dart';
@@ -36,7 +39,7 @@ class ProfilePageMeta extends StatelessWidget {
                         ],
                       ),
                       st.profile.map((value) => throw UnexpectedTypeError(), full: (profile) =>
-                        EventAndFriends(profile.friendshipCount?? 0, profile.ownedEvents?.length)
+                        EventAndFriends(profile.friendshipCount?? 0, profile.ownedEvents?.length, context)
                       )
                 ]
                 )
@@ -61,20 +64,49 @@ class ProfilePageMeta extends StatelessWidget {
 
 
   /// Widget displays
-  Widget EventAndFriends(int? friendscount, int? eventcount){
+  Widget EventAndFriends(int? friendscount, int? eventcount, BuildContext context){
     return PaddingRowWidget(
         children: [
           StdTextButton(
+            onPressed: () => showDialog<void>(context: context, builder: (context) =>  FriendsDialog()),
             child: Row(children: [
-              Text("Friends: ", style: TextStyle(color: AppColors.stdTextColor),),
+              const Icon(
+                Icons.emoji_people_outlined,
+                color: AppColors.stdTextColor,
+              ),
+              Text(" Friends: ", style: TextStyle(color: AppColors.stdTextColor),),
               Text(friendscount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
             ],),)
 
           ,
           Spacer(),
-          Text(eventcount?.toString()?? 0.toString())
+          StdTextButton(
+            onPressed: null,
+            child: Row(children: [
+              const Icon(
+                Icons.tapas_outlined,
+                color: AppColors.stdTextColor,
+              ),
+              Text(" Events: ", style: TextStyle(color: AppColors.stdTextColor),),
+              Text(eventcount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
+            ],),)
+
 
     ]);
+  }
+
+  Widget FriendsDialog(){
+      return BlocBuilder<ProfilePageCubit, ProfilePageState>(builder: (context, state){
+        context.read<ProfilePageCubit>().loadFriends();
+       return LoadingOverlay(isLoading: state is ProfileLoadMetaInProgress,
+          child:  SimpleDialog(
+            title: const Text('Select assignment'),
+        children: <Widget>[
+          state.maybeMap(orElse: () =>Text(""), loaded: (state) => Text(state.friends![0].name.getOrCrash()))
+        ],
+        ),);
+
+      });
   }
 }
 

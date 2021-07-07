@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/profile/i_profile_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/profile_failure.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
@@ -31,6 +32,15 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
     response.fold(
             (ProfileFailure f) => emit(ProfilePageState.error(error: f.toString())),
             (Profile pro) => emit(ProfilePageState.loaded(profile: pro)));
+  }
+
+  Future<void> loadFriends() async{
+    Profile? profile = state.maybeMap(orElse: () => null, loaded: (state) => state.profile);
+    emit(ProfilePageState.loadingMeta());
+    (await repository.getList(Operation.friends, 20)).fold((f) => emit(ProfilePageState.error(error: f.toString())), (friends) => emit(ProfilePageState.loaded(profile: profile!, friends: friends)));
+
+
+
   }
 
 

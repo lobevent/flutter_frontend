@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/profile/profile_friends/profile_friends_cubit.dart';
@@ -14,12 +13,16 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody> {
   List<Profile> friends = [];
   @override
   Widget build(BuildContext context) {
+
     return BlocListener<ProfileFriendsCubit, ProfileFriendsState>(
       listener: (context, state) => {
         //this is the deletion and loading
-        state.maybeMap((value) => {},
+        state.maybeMap(
+                (value) => {},
             loaded: (state) =>
-                {this.friends = state.friendList, setState(() {})},
+                {
+                  this.friends = state.friendList,
+                  setState(() {})},
             deleted: (state) => {
                   //this is for updating the listview when deleting
                   this.friends.remove(state.profile),

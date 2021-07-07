@@ -27,6 +27,7 @@ class ProfilePageMeta extends StatelessWidget {
       builder: (context, state){
           return state.maybeMap(
               loaded: (st) =>
+              // ConstrainedBox is for fin height of the Meta
               ConstrainedBox(
                   constraints: const BoxConstraints(
                     minHeight: 150.0,
@@ -71,19 +72,22 @@ class ProfilePageMeta extends StatelessWidget {
 
     return PaddingRowWidget(
         children: [
-          StdTextButton(
+          // The Friends Button
+          StdTextButton(// On Pressed Navigate to the FriendsScreenRoute
             onPressed: () =>  context.router.push(ProfileFriendsScreenRoute()),
             child: Row(children: [
               const Icon(
                 Icons.emoji_people_outlined,
                 color: AppColors.stdTextColor,
               ),
+              // divide in two texts, as count could be null, and the whole thing isnt diplayed
               Text(" Friends: ", style: TextStyle(color: AppColors.stdTextColor),),
               Text(friendscount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
             ],),)
 
           ,
           Spacer(),
+          // The Events Button
           StdTextButton(
             onPressed: null,
             child: Row(children: [
@@ -91,6 +95,7 @@ class ProfilePageMeta extends StatelessWidget {
                 Icons.tapas_outlined,
                 color: AppColors.stdTextColor,
               ),
+              // divide in two texts, as count could be null, and the whole thing isnt diplayed
               Text(" Events: ", style: TextStyle(color: AppColors.stdTextColor),),
               Text(eventcount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
             ],),)

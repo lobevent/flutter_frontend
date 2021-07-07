@@ -1,5 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/errors.dart';
+import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 
@@ -12,27 +15,51 @@ part 'own_events_cubit.freezed.dart';
 part 'own_events_state.dart';
 
 
+enum EventScreenOptions { owned, fromUser, ownAttending, unreacted }
+
 class OwnEventsCubit extends Cubit<OwnEventsState> {
-  OwnEventsCubit() : super(OwnEventsState.initial()) {
+  EventScreenOptions option = EventScreenOptions.owned;
+  Profile? profile;
+  OwnEventsCubit({this.option = EventScreenOptions.owned, this.profile}) : super(OwnEventsState.initial()) {
     emit(OwnEventsState.initial());
-    getOwnEvents();
+    getEvents();
   }
   EventRepository repository = GetIt.I<EventRepository>();
 
 
-  Future<void> getOwnEvents() async {
+  /// gets events from backend, swiches on the options
+  Future<void> getEvents() async {
+    final Either<EventFailure,List<Event>> eventsList;
     try {
       emit(OwnEventsState.loading());
-
-      final Either<EventFailure,List<Event>> ownEventsList= await repository.getList(Operation.owned, DateTime.now(), 30, descending: true);
-
-      emit(OwnEventsState.loaded(events: ownEventsList.fold((l) => throw Exception, (r) => r)));
+      switch(this.option){
+        case EventScreenOptions.owned:
+          eventsList= await repository.getList(Operation.owned, DateTime.now(), 30, descending: true);
+          break;
+        case EventScreenOptions.fromUser:
+          if(profile == null){ // profile must be set for this!
+            throw UnexpectedTypeError();
+          }
+          eventsList= await repository.getList(Operation.fromUser, DateTime.now(), 30, descending: true, profile: profile);
+          break;
+        case EventScreenOptions.ownAttending:
+          eventsList= await repository.getList(Operation.attending, DateTime.now(), 30, descending: true);
+          break;
+        case EventScreenOptions.unreacted:
+          eventsList= await repository.getList(Operation.unreacted, DateTime.now(), 30, descending: true);
+          break;
+      }
+      emit(OwnEventsState.loaded(events: eventsList.fold((l) => throw Exception, (r) => r)));
     } catch (e) {
       emit(OwnEventsState.error(error: e.toString()));
     }
   }
 
+  /// deletes Event if its own event list
   Future<bool> deleteEvent(Event event) async{
+    if(option != EventScreenOptions.owned) {
+      return false;
+    }
 
     final Either<EventFailure, Event> deletedEvent = await repository.delete(event);
 

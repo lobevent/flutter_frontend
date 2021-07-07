@@ -12,58 +12,78 @@ class ItemCreateWidget extends StatefulWidget {
 }
 
 class _ItemCreateWidgetState extends State<ItemCreateWidget> {
-  late String itemName;
-  late String itemDescription;
-  final myController = TextEditingController();
+  String itemName = '';
+  String itemDescription = '';
+  final itemNameController = TextEditingController();
+  final itemDescriptionController = TextEditingController();
 
-  void postItem({required String itemName, required String itemDescription}) async{
+  @override
+  void initState() {
+    super.initState();
+
+    // Start listening to changes.
+    // itemNameController.addListener();
+    // itemDescriptionController.addListener();
+  }
+
+
+  Future<void> postItem({required String itemName, required String itemDescription}) async{
     this.itemName = itemName;
     this.itemDescription = itemDescription;
     try {
       await GetIt.I.get<EventScreenCubit>().postItem(itemName: itemName, itemDescription: itemDescription );
     } catch (e) {
-      Text('Error');
+      const Text('Error');
     }
   }
 
-  _showPostItemDialog() {
+  Future<bool?> _showPostItemDialog({required String itemName, required String itemDescription}) {
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: Text('Create Item'),
-        content: Text('Do want to create the Item?'),
+        title: const Text('Create Item'),
+        content: const Text('Do want to create the Item?'),
         actions: <Widget>[
           TextButton(
             onPressed: () {
               postItem(itemName: itemName, itemDescription: itemDescription );
+              dispose();
               Navigator.pop(context);
               Navigator.pop(context);},
-            child: Text('Yes'),
+            child: const Text('Yes'),
           ),
           TextButton(
-            child: Text('Cancel'),
             onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
           ),
           TextButton(
-            child: Text('Save and Create next Item'),
             onPressed: () {
               postItem(itemName: itemName, itemDescription: itemDescription );
-
+              dispose();
               Navigator.pop(context);},
+            child: const Text('Save and Create next Item'),
           ),
         ],
       ),
     );
   }
   @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    itemNameController.dispose();
+    itemDescriptionController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Item Creation"),
+        title: const Text("Item Creation"),
       ),
       body: Column(
         children: [
-          Text('Create Item'),
+          const Text('Create Item'),
 
           const SizedBox(height: 20),
 
@@ -74,9 +94,7 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
               border: UnderlineInputBorder(),
                 hintText: 'Enter the Itemname'
             ),
-            onChanged: (itemName) {
-              itemName: String itemName;
-            },
+            controller: itemNameController,
           ),
           const SizedBox(height: 40),
 
@@ -88,15 +106,13 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
                 border: UnderlineInputBorder(),
                 hintText: 'Enter the Itemdescription'
             ),
-            onChanged: (itemDescription) {
-              itemDescription: String itemDescription;
-            },
+            controller: itemDescriptionController,
           ),
 
           MaterialButton(
             color: Colors.blue,
             textColor: Colors.white,
-            onPressed: ()=>_showPostItemDialog(),
+            onPressed: ()=>_showPostItemDialog(itemName: itemNameController.text ,itemDescription: itemDescriptionController.text),
             child: const Text('Create Item')),
         ],
       ),

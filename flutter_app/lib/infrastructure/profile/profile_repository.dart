@@ -72,10 +72,7 @@ class ProfileRepository extends IProfileRepository {
               amount, profile.id.getOrCrash().toString());
           break;
         case Operation.friends:
-          if (profile == null) {
-            throw UnexpectedTypeError();
-          }
-          profileDtos = await _profileRemoteService.getAcceptedFriendships();
+          profileDtos = await _profileRemoteService.getAcceptedFriendships(profile?.id.getOrCrash());
           break;
         case Operation.postProfile:
           if (post == null) {

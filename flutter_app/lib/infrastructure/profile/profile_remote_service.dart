@@ -115,7 +115,7 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   }
 
   ///TODO Paginate the query to make use of the parentfunction with amount
-  Future<List<ProfileDto>> getAcceptedFriendships() async {
+  Future<List<ProfileDto>> getAcceptedFriendships(String? profileId) async {
     final Response response = await client.get(getAcceptedFriendshipsPath);
     return convertList(response);
   }

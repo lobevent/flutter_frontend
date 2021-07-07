@@ -4,6 +4,7 @@ import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/i_profile_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/profile_failure.dart';
+import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_repository.dart';
@@ -12,7 +13,9 @@ part 'profile_friends_cubit.freezed.dart';
 part 'profile_friends_state.dart';
 
 class ProfileFriendsCubit extends Cubit<ProfileFriendsState> {
-  ProfileFriendsCubit() : super(ProfileFriendsState.initial()) {
+  final UniqueId? profileId;
+
+  ProfileFriendsCubit(this.profileId) : super(ProfileFriendsState.initial()) {
     emit(ProfileFriendsState.initial());
     getFriends();
   }
@@ -23,7 +26,11 @@ class ProfileFriendsCubit extends Cubit<ProfileFriendsState> {
       emit(ProfileFriendsState.loading());
 
       final Either<ProfileFailure, List<Profile>> friendList =
-          await repository.getList(Operation.friends, 0);
+          await repository.getList(Operation.friends, 0,
+              // here a fake Profile Object is created, because only profileId is needed and available, but name must be in the Profile Object
+              // if no profile id is given "profile" is set to null
+              profile: profileId == null ? null :Profile(name:ProfileName("thisNameIsFake"), id: profileId!)
+          );
       emit(ProfileFriendsState.loaded(
           friendList: friendList.fold((l) => throw Exception(), (r) => r)));
     } catch (e) {

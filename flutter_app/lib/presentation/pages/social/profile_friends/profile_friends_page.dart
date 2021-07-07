@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/profile/profile_friends/profile_friends_cubit.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_friends/widgets/profile_friends_body.dart';
 
-class ProfileFriendsScreen extends StatefulWidget {
-  const ProfileFriendsScreen({Key? key}) : super(key: key);
-  @override
-  _ProfileFriendsScreenState createState() => _ProfileFriendsScreenState();
-}
+class ProfileFriendsScreen extends StatelessWidget {
+  final UniqueId? profileId;
 
-class _ProfileFriendsScreenState extends State<ProfileFriendsScreen> {
+  const ProfileFriendsScreen({Key? key, this.profileId}) : super(key: key);
+
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProfileFriendsCubit(),
+      create: (context) => ProfileFriendsCubit(profileId),
       child: BlocConsumer<ProfileFriendsCubit, ProfileFriendsState>(
           listener: (context, state) => {},
           builder: (context, state) {

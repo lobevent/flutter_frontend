@@ -26,7 +26,7 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String updatePath = "/profile";
 
   static const String getOpenFriendRequestsPath = "/friend/requests";
-  static const String getAcceptedFriendshipsPath = "/friend";
+  static const String getAcceptedFriendshipsPath = "/friend/%profileId%";
   static const String sendFriendShipPath = "/friend/request/%profileId%";
   static const String acceptFriendShipPath = "/friend/accept/%profileId%/";
   static const String deleteFriendShipPath = "/friend/delete/%profileId%/";
@@ -116,7 +116,13 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
 
   ///TODO Paginate the query to make use of the parentfunction with amount
   Future<List<ProfileDto>> getAcceptedFriendships(String? profileId) async {
-    final Response response = await client.get(getAcceptedFriendshipsPath);
+    final Response response;
+    if (profileId == null) {
+      response = await client.get(getAcceptedFriendshipsPath);
+    } else {
+      response = await client.get(
+          getAcceptedFriendshipsPath.interpolate({"profileId:": profileId}));
+    }
     return convertList(response);
   }
 }

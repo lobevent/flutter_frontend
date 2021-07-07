@@ -136,7 +136,7 @@ class StdTextButton extends StatelessWidget{
         child: TextButton(
             style: ButtonStyle(overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent)),
             onPressed: ()
-            => onPressed,
+            => onPressed == null? null : onPressed!(),
             child: child));
   }
 

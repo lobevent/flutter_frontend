@@ -12,6 +12,8 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_screen.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_name.dart';
+import 'package:auto_route/auto_route.dart' hide Router;
+import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class ProfilePageMeta extends StatelessWidget {
   ///the color used to display the text on this page
@@ -63,12 +65,14 @@ class ProfilePageMeta extends StatelessWidget {
   }
 
 
-  /// Widget displays
+  /// Widget displays tags with the count of events and friends
   Widget EventAndFriends(int? friendscount, int? eventcount, BuildContext context){
+
+
     return PaddingRowWidget(
         children: [
           StdTextButton(
-            onPressed: () => showDialog<void>(context: context, builder: (context) =>  FriendsDialog()),
+            onPressed: () =>  context.router.push(ProfileFriendsScreenRoute()),
             child: Row(children: [
               const Icon(
                 Icons.emoji_people_outlined,
@@ -93,20 +97,6 @@ class ProfilePageMeta extends StatelessWidget {
 
 
     ]);
-  }
-
-  Widget FriendsDialog(){
-      return BlocBuilder<ProfilePageCubit, ProfilePageState>(builder: (context, state){
-        context.read<ProfilePageCubit>().loadFriends();
-       return LoadingOverlay(isLoading: state is ProfileLoadMetaInProgress,
-          child:  SimpleDialog(
-            title: const Text('Select assignment'),
-        children: <Widget>[
-          state.maybeMap(orElse: () =>Text(""), loaded: (state) => Text(state.friends![0].name.getOrCrash()))
-        ],
-        ),);
-
-      });
   }
 }
 

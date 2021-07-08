@@ -8,13 +8,13 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay
 
 
 class OwnEventsScreen extends StatelessWidget {
-  final EventScreenOptions option;
+  final EventScreenOptions? option;
   final Profile? profile;
-  const OwnEventsScreen({Key? key, this.option = EventScreenOptions.owned, this.profile}) : super(key: key);
+  OwnEventsScreen({Key? key,  this.profile, this.option = EventScreenOptions.owned}) : super(key: key);
 
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => OwnEventsCubit(option: option),
+      create: (context) => OwnEventsCubit(option: option?? EventScreenOptions.owned, profile: profile),
       child: BlocConsumer<OwnEventsCubit, OwnEventsState>(
         listener: (context, state) => {},
           builder: (context, state) {
@@ -41,7 +41,7 @@ class OwnEventScreenHolder extends StatelessWidget {
         appBarText = "Own events";
         break;
       case EventScreenOptions.fromUser:
-        appBarText = "Events from $profile";
+        appBarText = "Events from ${profile?.name.getOrCrash() ?? ""}";
         break;
       case EventScreenOptions.ownAttending:
         appBarText = "Own Attending Events";

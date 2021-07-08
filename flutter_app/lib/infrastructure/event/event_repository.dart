@@ -42,7 +42,7 @@ class EventRepository implements IEventRepository {
             throw UnexpectedTypeError();
           }
           eventDtos = await _eventRemoteService.getEventsFromUser(
-              lastEventTime, amount, profile.id.getOrCrash().toString());
+              lastEventTime, amount, profile.id.getOrCrash().toString(), descending);
           break;
         case Operation.attending:
           eventDtos = await _eventRemoteService.getAttendingEvents(

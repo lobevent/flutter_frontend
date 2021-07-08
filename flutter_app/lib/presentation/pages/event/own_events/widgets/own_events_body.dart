@@ -16,6 +16,7 @@ class OwnEventsBodyState extends State<OwnEventsBody> {
   Widget build(BuildContext context) {
 
     return BlocListener<OwnEventsCubit, OwnEventsState>(
+      // listener used here for deleting events
         listener: (context, state) => {
           //this is the deletion and loading
           state.maybeMap(
@@ -35,6 +36,7 @@ class OwnEventsBodyState extends State<OwnEventsBody> {
         ListView.builder(
             itemBuilder: (context, index) {
               final event = this.events[index];
+              // Errors
               if (event.failureOption.isSome()) {
                 return Ink(
                     color: Colors.red,
@@ -47,12 +49,12 @@ class OwnEventsBodyState extends State<OwnEventsBody> {
                 return Ink(
                     color: Colors.red,
                     child: ListTile(
-                        title: Text("No own events available")
+                        title: Text("No events available")
                     ));
               }
 
               else{
-                return EventListTiles(key: ObjectKey(event), event: this.events[index], allowEdit: true);
+                return EventListTiles(key: ObjectKey(event), event: this.events[index], allowEdit: context.read<OwnEventsCubit>().option == EventScreenOptions.owned);
               }
             },
             itemCount: this.events.length)

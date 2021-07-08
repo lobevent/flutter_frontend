@@ -25,24 +25,32 @@ class EventListTiles extends StatelessWidget {
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            IconButton(icon: Icon(Icons.delete), onPressed: () {
-               deleteEvent(context).then((value) async => {
-                  if (value)
-                    context.read<OwnEventsCubit>().deleteEvent(event)
-                  else
-                    print("falseeeee")
-               });
-
-            } ),
-            IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () => {editEvent(context)}
-                ),
-          ],
+          children: actionButtons(allowEdit, context),
       ),
       ),
     );
+  }
+
+  /// action buttons for the event, can be made invisible, if its not own events
+  List<Widget> actionButtons(bool visible, BuildContext context){
+    if(visible){
+      return <Widget>[
+        IconButton(icon: Icon(Icons.delete), onPressed: () {
+          deleteEvent(context).then((value) async => {
+            if (value)
+              context.read<OwnEventsCubit>().deleteEvent(event)
+            else
+              print("falseeeee")
+          });
+
+        } ),
+        IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () => {editEvent(context)}
+        ),
+      ];
+    }
+    return <Widget>[];
   }
 
 
@@ -54,6 +62,7 @@ class EventListTiles extends StatelessWidget {
     context.router.push(EventScreenPageRoute(eventId: event.id));
   }
 
+  /// an delete event function with an alert dialog to submit
   Future<bool> deleteEvent(BuildContext context) async{
     bool answer =false;
     //Not yet implemented

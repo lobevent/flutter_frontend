@@ -54,14 +54,16 @@ class ProfileFriendsCubit extends Cubit<ProfileFriendsState> {
     final success = await repository.deleteFriend(profile.id);
 
     this.state.maybeMap((value) => null,
-        loaded: (state) {
+        loadedBoth: (state) {
           state.friendList.remove(profile);
           List<Profile> friends = state.friendList;
+          List<Profile> pendingFriends = state.pendingFriendsList;
 
           //update the listview
           emit(ProfileFriendsState.deleted(profile: profile));
           //emit state again to have the new list
-          emit(ProfileFriendsState.loaded(friendList: friends));
+          emit(ProfileFriendsState.loadedBoth(
+              friendList: friends, pendingFriendsList: pendingFriends));
         },
         orElse: () => throw Exception('LogicError'));
 

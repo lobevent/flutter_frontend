@@ -50,7 +50,7 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody>
         state.maybeMap((value) => {},
             loadedBoth: (state) => {
                   this.friends = state.friendList,
-                  this.pendingFriends = pendingFriends,
+                  this.pendingFriends = state.pendingFriendsList,
                   setState(() {})
                 },
             deleted: (state) => {

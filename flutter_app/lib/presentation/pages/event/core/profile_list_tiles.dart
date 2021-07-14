@@ -34,7 +34,7 @@ class ProfileListTiles extends StatelessWidget {
         ),
         title: Text(profile.name.getOrCrash()),
         trailing: Row(
-          children: [buildFriendButton(context)],
+          children: [buildFriendButton(context, "ProfileSearch")],
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ),
@@ -44,7 +44,7 @@ class ProfileListTiles extends StatelessWidget {
   }
 
   //build the send frienrequest button (in that case)
-  Widget buildFriendButton(BuildContext context) {
+  Widget buildFriendButton(BuildContext context, String type) {
     return IconButton(
         onPressed: () =>
             context.read<ProfileSearchCubit>().sendFriendship(profile.id),

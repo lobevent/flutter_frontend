@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/profile/profile_friends/profile_friends_cubit.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/alert_dialog.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/profile_list_tiles.dart';
 
 class ProfileFriendsBody extends StatefulWidget {

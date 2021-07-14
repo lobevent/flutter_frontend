@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
+import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -29,7 +30,7 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
 
   /// gets events from backend, swiches on the options
   Future<void> getEvents() async {
-    final Either<EventFailure,List<Event>> eventsList;
+    final Either<NetWorkFailure,List<Event>> eventsList;
     try {
       emit(EventsMultilistState.loading());
       switch(this.option){
@@ -61,7 +62,7 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
       return false;
     }
 
-    final Either<EventFailure, Event> deletedEvent = await repository.delete(event);
+    final Either<NetWorkFailure, Event> deletedEvent = await repository.delete(event);
 
     deletedEvent.fold(
             (failure) {

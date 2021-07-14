@@ -31,7 +31,7 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
   Future<void> searchByProfileName(String profileName) async {
     try {
       emit(ProfileSearchState.loading());
-      final Either<ProfileFailure, List<Profile>> profileList = await repository
+      final Either<NetWorkFailure, List<Profile>> profileList = await repository
           .getList(Operation.search, 10, searchString: profileName);
       emit(ProfileSearchState.loadedProfiles(
           profiles: profileList.fold((l) => throw Exception, (r) => r)));
@@ -43,9 +43,9 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
   Future<void> searchByEventName(String eventName) async {
     try {
       emit(ProfileSearchState.loading());
-      final Either<EventFailure, List<Event>> eventList =
-          await eventRepository.getList(ev.Operation.search, DateTime.now(), 10,
-              searchString: eventName);
+      final Either<NetWorkFailure, List<Event>> eventList =
+      await eventRepository.getList(ev.Operation.search, DateTime.now(), 10,
+          searchString: eventName);
       emit(ProfileSearchState.loadedEvents(
           events: eventList.fold((l) => throw Exception, (r) => r)));
     } catch (e) {
@@ -56,10 +56,10 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
   Future<void> searchByBothName(String queryName) async {
     try {
       emit(ProfileSearchState.loading());
-      final Either<EventFailure, List<Event>> eventList =
-          await eventRepository.getList(ev.Operation.search, DateTime.now(), 10,
-              searchString: queryName);
-      final Either<ProfileFailure, List<Profile>> profileList = await repository
+      final Either<NetWorkFailure, List<Event>> eventList =
+      await eventRepository.getList(ev.Operation.search, DateTime.now(), 10,
+          searchString: queryName);
+      final Either<NetWorkFailure, List<Profile>> profileList = await repository
           .getList(Operation.search, 10, searchString: queryName);
       emit(ProfileSearchState.loadedBoth(
           profiles: profileList.fold((l) => throw Exception, (r) => r),
@@ -72,9 +72,9 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
   Future<void> loadProfile(String id) async {
     repository.getSingleProfile(UniqueId.fromUniqueString(id)).then((value) =>
         value.fold(
-            (failure) =>
+                (failure) =>
                 emit(ProfileSearchState.error(error: failure.toString())),
-            (profile) => profile)); //todo emit to profilepage
+                (profile) => profile)); //todo emit to profilepage
   }
 
   Future<String> sendFriendship(UniqueId id) async {

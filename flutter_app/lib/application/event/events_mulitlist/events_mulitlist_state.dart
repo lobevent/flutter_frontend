@@ -16,7 +16,7 @@ class EventsMultilistState with _$EventsMultilistState {
 
   factory EventsMultilistState.loaded({required List<Event> events}) = _Loaded;
 
-  factory EventsMultilistState.error({required  String error}) = _LoadFailure;
+  factory EventsMultilistState.error({required String error}) = _LoadFailure;
 
   factory EventsMultilistState.deleted({required Event event}) = _deletedEvent;
 

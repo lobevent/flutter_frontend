@@ -5,6 +5,7 @@ import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 
 import 'package:flutter_frontend/domain/profile/profile.dart';
+
 // TODO rename this one since it's duplicated in domain/event/i_event_repository.dart -> really confusing
 /// For dertermination of the List to load
 /// for example for showing created posts or feed
@@ -14,6 +15,7 @@ enum Operation {
   follower,
   postProfile,
   friends,
+  pendingFriends
 }
 
 abstract class IProfileRepository {

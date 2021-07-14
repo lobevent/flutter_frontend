@@ -103,7 +103,6 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
     return response.body;
   }
 
-  ///TODO this cast is not safe i guess, rework it
   Future<bool> deleteFriendRequest(String profileId) async {
     final Response response = await client
         .delete(deleteFriendShipPath.interpolate({"profileId": profileId}));

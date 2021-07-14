@@ -12,7 +12,6 @@ import 'package:flutter_frontend/presentation/pages/event/core/profile_list_tile
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 class SearchResultsListView extends StatefulWidget {
-
   @override
   SearchResultsListViewState createState() => SearchResultsListViewState();
 }
@@ -64,23 +63,24 @@ class SearchResultsListViewState extends State<SearchResultsListView>
   //generate list for events and profiles
   //List<Widget> generateTiles(List<>)
 
-
   ///generate list for profiles
   List<Widget> generateProfileTiles(List<Profile> profiles) {
     if (profiles.isEmpty) {
-      return [Center(child: const Text("No profiles found"),),];
+      return [
+        Center(
+          child: const Text("No profiles found"),
+        ),
+      ];
     } else {
       return profiles
-          .map((e) =>
-          ClipRect(
-              child: ProfileListTiles(
+          .map((e) => ClipRect(
+                  child: ProfileListTiles(
                 key: ObjectKey(e.id),
                 profile: e,
               )))
           .toList();
     }
   }
-
 
   ///generate list for events but both are preloaded ^^
   List<Widget> generateEventTiles(List<Event> events) {
@@ -92,9 +92,8 @@ class SearchResultsListViewState extends State<SearchResultsListView>
       ];
     } else {
       return events
-          .map((e) =>
-          ClipRect(
-              child: EventListTiles(
+          .map((e) => ClipRect(
+                  child: EventListTiles(
                 key: ObjectKey(e.id),
                 event: e,
                 allowEdit: false,
@@ -109,11 +108,14 @@ class SearchResultsListViewState extends State<SearchResultsListView>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.search, size: 64,),
-          Text('Start searching $eventProfile', style: Theme
-              .of(context)
-              .textTheme
-              .headline5,)
+          Icon(
+            Icons.search,
+            size: 64,
+          ),
+          Text(
+            'Start searching $eventProfile',
+            style: Theme.of(context).textTheme.headline5,
+          )
         ],
       ),
     );
@@ -125,28 +127,22 @@ class SearchResultsListViewState extends State<SearchResultsListView>
     final fsb = FloatingSearchBar.of(context);
     bool isInit = true;
     return BlocListener<ProfileSearchCubit, ProfileSearchState>(
-      listener: (context, state) =>
-      {
+      listener: (context, state) => {
         state.maybeMap(
-          //map depending on tab index?
+            //map depending on tab index?
             loadedEvents: (state) =>
-            {
-              this.events = state.events,
-              isInit = false,
-              setState(() {})
-            },
-            loadedProfiles: (state) =>
-            {
-              this.profiles = state.profiles,
-              isInit = false,
-              setState(() {})
-            },
-            loadedBoth: (state) =>
-            {
-              this.profiles = state.profiles,
-              this.events = state.events,
-              isInit = false,
-              setState(() {})},
+                {this.events = state.events, isInit = false, setState(() {})},
+            loadedProfiles: (state) => {
+                  this.profiles = state.profiles,
+                  isInit = false,
+                  setState(() {})
+                },
+            loadedBoth: (state) => {
+                  this.profiles = state.profiles,
+                  this.events = state.events,
+                  isInit = false,
+                  setState(() {})
+                },
             orElse: () => {})
       },
       child: Padding(
@@ -156,41 +152,36 @@ class SearchResultsListViewState extends State<SearchResultsListView>
           length: tabs.length,
           child: Scaffold(
             appBar: TabBar(
-                controller: tabController,
-                unselectedLabelColor: Colors.black,
-                labelColor: Colors.red,
-                tabs: tabs,
-              ),
-    //decide if  it builds profiles or events, depending on the clicked tab
-              body: BlocBuilder<ProfileSearchCubit, ProfileSearchState>(
-                  builder: (context, state){
-                    bool init= state.maybeMap(
-                        initial: (_) => true,
-                        loading: (_) => true,
-                        orElse: () => false);
-                    if(init){
-                      return TabBarView(
-                        controller: tabController,
-                        children: [
-                          ListView(children: [buildStartSearching(context, "users")]),
-                          ListView(children: [buildStartSearching(context, "events")])],);
-                    }else{
-                    return TabBarView(
-                    controller: tabController,
-                    children: [
+              controller: tabController,
+              unselectedLabelColor: Colors.black,
+              labelColor: Colors.red,
+              tabs: tabs,
+            ),
+            //decide if  it builds profiles or events, depending on the clicked tab
+            body: BlocBuilder<ProfileSearchCubit, ProfileSearchState>(
+                builder: (context, state) {
+              bool init = state.maybeMap(
+                  initial: (_) => true,
+                  loading: (_) => true,
+                  orElse: () => false);
+              if (init) {
+                return TabBarView(
+                  controller: tabController,
+                  children: [
+                    ListView(children: [buildStartSearching(context, "users")]),
+                    ListView(children: [buildStartSearching(context, "events")])
+                  ],
+                );
+              } else {
+                return TabBarView(
+                  controller: tabController,
+                  children: [
                     ListView(children: generateProfileTiles(profiles)),
-                    ListView(children: generateEventTiles(events)),],);
-                    }
-
-                  }
-
-
-              ),
-
-
-
-
-
+                    ListView(children: generateEventTiles(events)),
+                  ],
+                );
+              }
+            }),
 
             /*ListView.builder(
                   // build under the floatingsearchbar
@@ -232,6 +223,7 @@ class SearchResultsListViewState extends State<SearchResultsListView>
                  */
           ),
         ),
-      ),);
+      ),
+    );
   }
 }

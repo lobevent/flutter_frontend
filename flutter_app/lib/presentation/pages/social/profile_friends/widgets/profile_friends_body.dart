@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/profile/profile_friends/profile_friends_cubit.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/alert_dialog.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/profile_list_tiles.dart';
 
 class ProfileFriendsBody extends StatefulWidget {
@@ -12,6 +12,7 @@ class ProfileFriendsBody extends StatefulWidget {
 
 class ProfileFriendsBodyState extends State<ProfileFriendsBody> {
   List<Profile> friends = [];
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<ProfileFriendsCubit, ProfileFriendsState>(
@@ -43,8 +44,10 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody> {
                   color: Colors.red,
                   child: ListTile(title: Text("No friends available :(")));
             } else {
-              return ProfileListTiles(
-                  key: ObjectKey(friend), profile: this.friends[index]);
+              return FriendListTiles(
+                key: ObjectKey(friend),
+                profile: this.friends[index],
+              );
               //EventListTiles(key: ObjectKey(event), event: this.events[index], allowEdit: true);
             }
           },

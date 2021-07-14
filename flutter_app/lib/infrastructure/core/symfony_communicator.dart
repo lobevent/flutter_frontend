@@ -1,6 +1,7 @@
 import 'dart:convert';
 //import 'dart:html';
 
+import 'package:flutter_frontend/data/local_config.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart';
@@ -10,7 +11,8 @@ import 'exceptions.dart';
 
 class SymfonyCommunicator{
   Client client;
-  static const String url = "http://192.168.1.25:8000";
+  static const String url = adress;
+  //static const String url = "http://192.168.1.25:8000";
   //static const String url = "http://localhost:8000";
   final Map<String, String> headers;
 

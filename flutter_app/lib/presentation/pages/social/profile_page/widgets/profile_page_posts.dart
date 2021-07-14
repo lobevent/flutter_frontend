@@ -34,6 +34,9 @@ class ProfilePagePosts extends StatelessWidget{
 
   /// generate list of posts
   Widget PostList(List<Post> posts){
+    if(posts.isEmpty){
+      return Text("Nothing here yet");
+    }
     // Expanded because if you leave it, it expands infinitely and throws errors
     return Expanded(
       // building the list of post widgets

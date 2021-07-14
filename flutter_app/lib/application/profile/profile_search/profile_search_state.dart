@@ -4,7 +4,8 @@ part of 'profile_search_cubit.dart';
 class ProfileSearchState with _$ProfileSearchState {
 
 
-  factory ProfileSearchState.initial() = _Initial;
+  factory ProfileSearchState.initial() =
+  _Init;
 
   factory ProfileSearchState.loading() =
       _LoadingProgress;

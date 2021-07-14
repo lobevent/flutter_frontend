@@ -49,4 +49,4 @@ app.*.map.json
 *.gr.dart
 
 
-# lib/data/local_config.dart
+lib/data/local_config.dart

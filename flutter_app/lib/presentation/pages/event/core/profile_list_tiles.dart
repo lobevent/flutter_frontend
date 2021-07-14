@@ -41,7 +41,7 @@ class ProfileListTiles extends StatelessWidget {
     });
   }
 
-  IconButton buildFriendButton(BuildContext context) {
+  Widget buildFriendButton(BuildContext context) {
     return IconButton(
         onPressed: () =>
             context.read<ProfileSearchCubit>().sendFriendship(profile.id),
@@ -55,14 +55,41 @@ class ProfileListTiles extends StatelessWidget {
 
 //this class is for friendsoverview, so u can delete friends on this page, with the buildFriendButton method
 
-class FriendListTiles extends ProfileListTiles {
-  FriendListTiles(
-      {required ObjectKey key, required Profile profile, String? imagePath})
-      : super(profile: profile, key: key, imagePath: imagePath);
+class FriendListTiles extends StatelessWidget {
+  final Profile profile;
+  final String? imagePath;
+
+  const FriendListTiles(
+      {required ObjectKey key, required this.profile, String? this.imagePath})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileFriendsCubit, ProfileFriendsState>(
+        builder: (context, state) {
+      return Card(
+          child: ListTile(
+        leading: IconButton(
+          icon: CircleAvatar(
+            radius: 30,
+            backgroundImage: ProfileImage.getAssetOrNetwork(imagePath),
+          ),
+          onPressed: () => showProfile(context),
+        ),
+        title: Text(profile.name.getOrCrash()),
+        trailing: Row(
+          children: [buildFriendButton(context)],
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        ),
+      ));
+      throw UnimplementedError();
+    });
+  }
 
   ///build delete friendbutton
   @override
-  IconButton buildFriendButton(BuildContext context) {
+  Widget buildFriendButton(BuildContext context) {
     return IconButton(
         onPressed: () => CustomAlertDialog(
             title: "Delete Friend",
@@ -73,5 +100,9 @@ class FriendListTiles extends ProfileListTiles {
                 context.read<ProfileFriendsCubit>().deleteFriendship(profile),
             accept: "Delete friend"),
         icon: Icon(Icons.delete_forever));
+  }
+
+  void showProfile(BuildContext context) {
+    context.router.push(ProfilePageRoute(profileId: profile.id));
   }
 }

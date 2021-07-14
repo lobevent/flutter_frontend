@@ -80,6 +80,23 @@ class PostConverter implements JsonConverter<PostDto,Map<String, dynamic>> {
   }
 }
 
+class CommentConverter implements JsonConverter<CommentDto,Map<String, dynamic>> {
+
+  const CommentConverter();
+
+  @override
+  CommentDto fromJson(Map<String, dynamic> comment) {
+    return CommentDto.fromJson(comment);
+  }
+
+  @override
+  Map<String, dynamic> toJson(CommentDto commentDto) {
+    return commentDto.toJson();
+  }
+}
+
+
+
 // class DatetimeConverter implements JsonConverter<DateTime, String>{
 //   @override
 //   DateTime fromJson(String json) {

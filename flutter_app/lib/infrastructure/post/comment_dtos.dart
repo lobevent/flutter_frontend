@@ -25,9 +25,9 @@ class CommentDto extends BaseDto with _$CommentDto {
     String? id,
     required String commentContent,
     required DateTime creationDate,
-    required ProfileDto profile, //TODO: make it an integer
-    CommentDto? commentParent,
-    required PostDto post,
+    @ProfileConverter() required ProfileDto profile, //TODO: make it an integer
+    @CommentConverter() CommentDto? commentParent,
+    @PostConverter() required PostDto post,
     @CommentsConverter() List<CommentDto>? comments,
   }) = _CommentDto;
 

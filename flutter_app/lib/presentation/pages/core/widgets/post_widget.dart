@@ -30,6 +30,7 @@ class PostWidget extends StatelessWidget{
           MetaHeadWidget(date: post.creationDate),
           // content of the post
           ContentWidget(post.postContent.getOrCrash()),
+
         ],
       )
       )

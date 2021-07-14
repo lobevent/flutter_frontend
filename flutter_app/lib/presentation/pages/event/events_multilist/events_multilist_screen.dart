@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/event/own_events_cubit/own_events_cubit.dart';
+import 'package:flutter_frontend/application/event/events_mulitlist/events_mulitlist_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:flutter_frontend/presentation/pages/Event/own_events/widgets/own_events_body.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
+import 'package:flutter_frontend/presentation/pages/event/events_multilist/widgets/events_multilist_body.dart';
 
 
-class OwnEventsScreen extends StatelessWidget {
+class EventsMultilistScreen extends StatelessWidget {
   final EventScreenOptions? option;
   final Profile? profile;
-  OwnEventsScreen({Key? key,  this.profile, this.option = EventScreenOptions.owned}) : super(key: key);
+  EventsMultilistScreen({Key? key,  this.profile, this.option = EventScreenOptions.owned}) : super(key: key);
 
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => OwnEventsCubit(option: option?? EventScreenOptions.owned, profile: profile),
-      child: BlocConsumer<OwnEventsCubit, OwnEventsState>(
+      create: (context) => EventsMultilistCubit(option: option?? EventScreenOptions.owned, profile: profile),
+      child: BlocConsumer<EventsMultilistCubit, EventsMultilistState>(
         listener: (context, state) => {},
           builder: (context, state) {
             bool isLoading = state.maybeMap((_) => false,
@@ -36,7 +36,7 @@ class OwnEventScreenHolder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String appBarText = "";
-    switch(context.read<OwnEventsCubit>().option){
+    switch(context.read<EventsMultilistCubit>().option){
       case EventScreenOptions.owned:
         appBarText = "Own events";
         break;
@@ -54,6 +54,6 @@ class OwnEventScreenHolder extends StatelessWidget {
         appBar: AppBar(
           title: Text(appBarText),
         ),
-        body: OwnEventsBody());
+        body: EventsMultilistBody());
   }
 }

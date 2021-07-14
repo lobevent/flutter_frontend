@@ -11,17 +11,17 @@ import 'package:flutter_frontend/domain/event/event_failure.dart';
 import 'package:flutter_frontend/domain/event/i_event_repository.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 
-part 'own_events_cubit.freezed.dart';
-part 'own_events_state.dart';
+part 'events_mulitlist_cubit.freezed.dart';
+part 'events_mulitlist_state.dart';
 
 
 enum EventScreenOptions { owned, fromUser, ownAttending, unreacted }
 
-class OwnEventsCubit extends Cubit<OwnEventsState> {
+class EventsMultilistCubit extends Cubit<EventsMultilistState> {
   EventScreenOptions option = EventScreenOptions.owned;
   Profile? profile;
-  OwnEventsCubit({this.option = EventScreenOptions.owned, this.profile}) : super(OwnEventsState.initial()) {
-    emit(OwnEventsState.initial());
+  EventsMultilistCubit({this.option = EventScreenOptions.owned, this.profile}) : super(EventsMultilistState.initial()) {
+    emit(EventsMultilistState.initial());
     getEvents();
   }
   EventRepository repository = GetIt.I<EventRepository>();
@@ -31,7 +31,7 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
   Future<void> getEvents() async {
     final Either<EventFailure,List<Event>> eventsList;
     try {
-      emit(OwnEventsState.loading());
+      emit(EventsMultilistState.loading());
       switch(this.option){
         case EventScreenOptions.owned:
           eventsList= await repository.getList(Operation.owned, DateTime.now(), 30, descending: true);
@@ -49,9 +49,9 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
           eventsList= await repository.getList(Operation.unreacted, DateTime.now(), 30, descending: true);
           break;
       }
-      emit(OwnEventsState.loaded(events: eventsList.fold((l) => throw Exception, (r) => r)));
+      emit(EventsMultilistState.loaded(events: eventsList.fold((l) => throw Exception, (r) => r)));
     } catch (e) {
-      emit(OwnEventsState.error(error: e.toString()));
+      emit(EventsMultilistState.error(error: e.toString()));
     }
   }
 
@@ -65,7 +65,7 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
 
     deletedEvent.fold(
             (failure) {
-          emit(OwnEventsState.error(error: "Error deleteing event!"));
+          emit(EventsMultilistState.error(error: "Error deleteing event!"));
           return false;
         },
             (event) => null);
@@ -75,9 +75,9 @@ class OwnEventsCubit extends Cubit<OwnEventsState> {
       state.events.remove(event);
       List<Event> events = state.events;
       //this one is for the listview but
-      emit(OwnEventsState.deleted(event: event));
+      emit(EventsMultilistState.deleted(event: event));
       // we want to have the events in the state, so we emit the events again!
-      emit(OwnEventsState.loaded(events: events));
+      emit(EventsMultilistState.loaded(events: events));
 
     }, orElse: () => throw Exception('LogicError'));
 

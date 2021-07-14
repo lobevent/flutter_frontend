@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/event/own_events_cubit/own_events_cubit.dart';
+import 'package:flutter_frontend/application/event/events_mulitlist/events_mulitlist_cubit.dart';
 import 'package:flutter_frontend/application/profile/profile_page/profile_page_cubit.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
@@ -90,7 +90,7 @@ class ProfilePageMeta extends StatelessWidget {
           Spacer(),
           // The Events Button
           StdTextButton(
-            onPressed: () => context.router.push(OwnEventsScreenRoute(option: EventScreenOptions.fromUser, profile: profile )),
+            onPressed: () => context.router.push(EventsMultilistScreenRoute(option: EventScreenOptions.fromUser, profile: profile )),
             child: Row(children: [
               const Icon(
                 Icons.tapas_outlined,

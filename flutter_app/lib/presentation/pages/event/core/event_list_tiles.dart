@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/event/own_events_cubit/own_events_cubit.dart';
+import 'package:flutter_frontend/application/event/events_mulitlist/events_mulitlist_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
@@ -38,7 +38,7 @@ class EventListTiles extends StatelessWidget {
         IconButton(icon: Icon(Icons.delete), onPressed: () {
           deleteEvent(context).then((value) async => {
             if (value)
-              context.read<OwnEventsCubit>().deleteEvent(event)
+              context.read<EventsMultilistCubit>().deleteEvent(event)
             else
               print("falseeeee")
           });

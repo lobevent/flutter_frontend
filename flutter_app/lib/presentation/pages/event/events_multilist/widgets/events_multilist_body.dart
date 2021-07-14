@@ -1,21 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/event/own_events_cubit/own_events_cubit.dart';
+import 'package:flutter_frontend/application/event/events_mulitlist/events_mulitlist_cubit.dart';
+
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles.dart';
 
-class OwnEventsBody extends StatefulWidget{
+class EventsMultilistBody extends StatefulWidget{
   @override
-  OwnEventsBodyState createState() => OwnEventsBodyState();
+  EventsMultilistBodyState createState() => EventsMultilistBodyState();
 }
 
-class OwnEventsBodyState extends State<OwnEventsBody> {
+class EventsMultilistBodyState extends State<EventsMultilistBody> {
   List<Event> events = [];
   @override
   Widget build(BuildContext context) {
 
-    return BlocListener<OwnEventsCubit, OwnEventsState>(
+    return BlocListener<EventsMultilistCubit, EventsMultilistState>(
       // listener used here for deleting events
         listener: (context, state) => {
           //this is the deletion and loading
@@ -54,7 +55,7 @@ class OwnEventsBodyState extends State<OwnEventsBody> {
               }
 
               else{
-                return EventListTiles(key: ObjectKey(event), event: this.events[index], allowEdit: context.read<OwnEventsCubit>().option == EventScreenOptions.owned);
+                return EventListTiles(key: ObjectKey(event), event: this.events[index], allowEdit: context.read<EventsMultilistCubit>().option == EventScreenOptions.owned);
               }
             },
             itemCount: this.events.length)

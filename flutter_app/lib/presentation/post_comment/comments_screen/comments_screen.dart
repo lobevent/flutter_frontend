@@ -8,6 +8,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.d
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
+import 'package:flutter_frontend/presentation/post_comment/comments_screen/widgets/comment_container.dart';
 
 class CommentsScreen extends StatelessWidget {
 
@@ -30,7 +31,7 @@ class CommentsScreen extends StatelessWidget {
                         error: (errState) =>[ErrorMessage(errorText: errState.error)],
                         orElse: () =>
                         const [
-
+                          CommentContainer(),
                         ]
                     ),
             )

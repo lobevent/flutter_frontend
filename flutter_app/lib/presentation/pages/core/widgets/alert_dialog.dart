@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class CustomAlertDialog extends StatelessWidget {
   final String title;
   final String description;
-  final String cancel;
-  final String accept;
+  final String? cancel;
+  final String? accept;
   final Future acceptFunction;
 
   const CustomAlertDialog(
@@ -13,8 +13,8 @@ class CustomAlertDialog extends StatelessWidget {
       required this.title,
       required this.description,
       required this.cancel,
-      required this.acceptFunction,
-      required this.accept})
+      required this.accept,
+      required this.acceptFunction})
       : super(key: key);
 
   ///returns custom alertdialog, pass the textstrings and the function that has to be submitted
@@ -23,16 +23,16 @@ class CustomAlertDialog extends StatelessWidget {
       onPressed: () => showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: Text('$title'),
-          content: Text('$description'),
+          title: Text(title),
+          content: Text(description),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('$cancel'),
+              child: Text(cancel ?? "Cancel"),
             ),
             TextButton(
               onPressed: () => acceptFunction,
-              child: Text('$accept'),
+              child: Text(accept ?? "Ok"),
             ),
           ],
         ),

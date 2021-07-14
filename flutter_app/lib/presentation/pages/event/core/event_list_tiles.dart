@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/event/own_events_cubit/own_events_cubit.dart';
+import 'package:flutter_frontend/application/event/events_mulitlist/events_mulitlist_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
@@ -25,24 +25,32 @@ class EventListTiles extends StatelessWidget {
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            IconButton(icon: Icon(Icons.delete), onPressed: () {
-               deleteEvent(context).then((value) async => {
-                  if (value)
-                    context.read<OwnEventsCubit>().deleteEvent(event)
-                  else
-                    print("falseeeee")
-               });
-
-            } ),
-            IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () => {editEvent(context)}
-                ),
-          ],
+          children: actionButtons(allowEdit, context),
       ),
       ),
     );
+  }
+
+  /// action buttons for the event, can be made invisible, if its not own events
+  List<Widget> actionButtons(bool visible, BuildContext context){
+    if(visible){
+      return <Widget>[
+        IconButton(icon: Icon(Icons.delete), onPressed: () {
+          deleteEvent(context).then((value) async => {
+            if (value)
+              context.read<EventsMultilistCubit>().deleteEvent(event)
+            else
+              print("falseeeee")
+          });
+
+        } ),
+        IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () => {editEvent(context)}
+        ),
+      ];
+    }
+    return <Widget>[];
   }
 
 
@@ -54,6 +62,7 @@ class EventListTiles extends StatelessWidget {
     context.router.push(EventScreenPageRoute(eventId: event.id));
   }
 
+  /// an delete event function with an alert dialog to submit
   Future<bool> deleteEvent(BuildContext context) async{
     bool answer =false;
     //Not yet implemented

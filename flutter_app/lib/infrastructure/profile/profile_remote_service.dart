@@ -26,10 +26,10 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String updatePath = "/profile";
 
   static const String getOpenFriendRequestsPath = "/friend/requests";
-  static const String getAcceptedFriendshipsPath = "/friend";
+  static const String getAcceptedFriendshipsPath = "/friend/%profileId%";
   static const String sendFriendShipPath = "/friend/request/%profileId%";
   static const String acceptFriendShipPath = "/friend/accept/%profileId%/";
-  static const String deleteFriendShipPath = "/friend/delete/%profileId%/";
+  static const String deleteFriendShipPath = "/friend/delete/%profileId%";
 
   SymfonyCommunicator client;
 
@@ -105,8 +105,9 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
 
   ///TODO this cast is not safe i guess, rework it
   Future<bool> deleteFriendRequest(String profileId) async {
-    final bool response = (await client.delete(deleteFriendShipPath)) as bool;
-    return response;
+    final Response response = await client
+        .delete(deleteFriendShipPath.interpolate({"profileId": profileId}));
+    return response.body.isNotEmpty;
   }
 
   Future<List<ProfileDto>> getOpenFriendRequests() async {
@@ -115,8 +116,15 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   }
 
   ///TODO Paginate the query to make use of the parentfunction with amount
-  Future<List<ProfileDto>> getAcceptedFriendships() async {
-    final Response response = await client.get(getAcceptedFriendshipsPath);
+  Future<List<ProfileDto>> getAcceptedFriendships(String? profileId) async {
+    final Response response;
+    if (profileId == null) {
+      response = await client
+          .get(getAcceptedFriendshipsPath.interpolate({"profileId": ""}));
+    } else {
+      response = await client.get(
+          getAcceptedFriendshipsPath.interpolate({"profileId": profileId}));
+    }
     return convertList(response);
   }
 }

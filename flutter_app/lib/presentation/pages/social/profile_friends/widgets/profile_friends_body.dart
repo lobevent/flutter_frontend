@@ -11,6 +11,7 @@ class ProfileFriendsBody extends StatefulWidget {
 
 class ProfileFriendsBodyState extends State<ProfileFriendsBody> {
   List<Profile> friends = [];
+
   @override
   Widget build(BuildContext context) {
 
@@ -46,8 +47,10 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody> {
                   color: Colors.red,
                   child: ListTile(title: Text("No friends available :(")));
             } else {
-              return ProfileListTiles(
-                  key: ObjectKey(friend), profile: this.friends[index]);
+              return FriendListTiles(
+                key: ObjectKey(friend),
+                profile: this.friends[index],
+              );
               //EventListTiles(key: ObjectKey(event), event: this.events[index], allowEdit: true);
             }
           },

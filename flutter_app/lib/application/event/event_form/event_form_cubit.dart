@@ -1,8 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
-import 'package:flutter_frontend/infrastructure/event/event_local_service.dart';
-import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartz/dartz.dart';
@@ -24,7 +23,7 @@ class EventFormCubit extends Cubit<EventFormState> {
   EventRepository repository = GetIt.I<EventRepository>();
 
   Future<void> saveEvent() async {
-    Either<EventFailure, Unit>? failureOrSuccess;
+    Either<NetWorkFailure, Unit>? failureOrSuccess;
     emit(state.copyWith(isSaving: true));
     if(state.event.failureOption.isNone()){
       //failureOrSuccess =  await right(unit);
@@ -62,7 +61,7 @@ class EventFormCubit extends Cubit<EventFormState> {
 
 
   Future<void> updateEvent() async {
-    Either<EventFailure, Unit>? failureOrSuccess;
+    Either<NetWorkFailure, Unit>? failureOrSuccess;
     emit(state.copyWith(isSaving: true));
     if(state.event.failureOption.isNone()){
       //failureOrSuccess =  await right(unit);

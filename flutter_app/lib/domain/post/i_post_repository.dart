@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 
@@ -12,11 +13,11 @@ import 'package:flutter_frontend/domain/post/post.dart';
 enum Operation { own, feed, fromUser }
 
 abstract class IPostRepository {
-  Future<Either<PostFailure, List<Post>>> getList(Operation operation,
+  Future<Either<NetWorkFailure, List<Post>>> getList(Operation operation,
       DateTime lastPostTime, int amount, Event eventParent,
       {Profile profile});
-  Future<Either<PostFailure, Post>> getSingle(UniqueId id);
-  Future<Either<PostFailure, Post>> create(Post post);
-  Future<Either<PostFailure, Post>> update(Post post);
-  Future<Either<PostFailure, Post>> delete(Post post);
+  Future<Either<NetWorkFailure, Post>> getSingle(UniqueId id);
+  Future<Either<NetWorkFailure, Post>> create(Post post);
+  Future<Either<NetWorkFailure, Post>> update(Post post);
+  Future<Either<NetWorkFailure, Post>> delete(Post post);
 }

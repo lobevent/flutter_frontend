@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/application/event/events_mulitlist/events_mulitlist_cubit.dart';
 import 'package:flutter_frontend/application/profile/profile_page/profile_page_cubit.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
@@ -12,6 +13,8 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_screen.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_name.dart';
+import 'package:auto_route/auto_route.dart' hide Router;
+import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class ProfilePageMeta extends StatelessWidget {
   ///the color used to display the text on this page
@@ -25,6 +28,7 @@ class ProfilePageMeta extends StatelessWidget {
       builder: (context, state){
           return state.maybeMap(
               loaded: (st) =>
+              // ConstrainedBox is for fin height of the Meta
               ConstrainedBox(
                   constraints: const BoxConstraints(
                     minHeight: 150.0,
@@ -39,7 +43,7 @@ class ProfilePageMeta extends StatelessWidget {
                         ],
                       ),
                       st.profile.map((value) => throw UnexpectedTypeError(), full: (profile) =>
-                        EventAndFriends(profile.friendshipCount?? 0, profile.ownedEvents?.length, context)
+                        EventAndFriends(profile.friendshipCount?? 0, profile.ownedEvents?.length, profile, context)
                       )
                 ]
                 )
@@ -63,50 +67,42 @@ class ProfilePageMeta extends StatelessWidget {
   }
 
 
-  /// Widget displays
-  Widget EventAndFriends(int? friendscount, int? eventcount, BuildContext context){
+  /// Widget displays tags with the count of events and friends
+  Widget EventAndFriends(int? friendscount, int? eventcount, Profile profile, BuildContext context){
+
+
     return PaddingRowWidget(
         children: [
-          StdTextButton(
-            onPressed: () => showDialog<void>(context: context, builder: (context) =>  FriendsDialog()),
+          // The Friends Button
+          StdTextButton(// On Pressed Navigate to the FriendsScreenRoute
+            onPressed: () =>  context.router.push(ProfileFriendsScreenRoute()),
             child: Row(children: [
               const Icon(
                 Icons.emoji_people_outlined,
                 color: AppColors.stdTextColor,
               ),
+              // divide in two texts, as count could be null, and the whole thing isnt diplayed
               Text(" Friends: ", style: TextStyle(color: AppColors.stdTextColor),),
               Text(friendscount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
             ],),)
 
           ,
           Spacer(),
+          // The Events Button
           StdTextButton(
-            onPressed: null,
+            onPressed: () => context.router.push(EventsMultilistScreenRoute(option: EventScreenOptions.fromUser, profile: profile )),
             child: Row(children: [
               const Icon(
                 Icons.tapas_outlined,
                 color: AppColors.stdTextColor,
               ),
+              // divide in two texts, as count could be null, and the whole thing isnt diplayed
               Text(" Events: ", style: TextStyle(color: AppColors.stdTextColor),),
               Text(eventcount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
             ],),)
 
 
     ]);
-  }
-
-  Widget FriendsDialog(){
-      return BlocBuilder<ProfilePageCubit, ProfilePageState>(builder: (context, state){
-        context.read<ProfilePageCubit>().loadFriends();
-       return LoadingOverlay(isLoading: state is ProfileLoadMetaInProgress,
-          child:  SimpleDialog(
-            title: const Text('Select assignment'),
-        children: <Widget>[
-          state.maybeMap(orElse: () =>Text(""), loaded: (state) => Text(state.friends![0].name.getOrCrash()))
-        ],
-        ),);
-
-      });
   }
 }
 

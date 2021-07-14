@@ -78,17 +78,18 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
         create: (context) => ProfileSearchCubit(),
         child: BlocBuilder<ProfileSearchCubit, ProfileSearchState>(
             builder: (context, state) {
-              //loadingoverlay mapping
-              final bool isLoading = state.maybeMap(
-                initial: (_) => false,
-                loading: (_) => true,
-                  orElse: ()=>false);
-              //for the tapable history tiles
+          //loadingoverlay mapping
+          final bool isLoading = state.maybeMap(
+              initial: (_) => false, loading: (_) => true, orElse: () => false);
+          //for the tapable history tiles
           return Scaffold(
               body: FloatingSearchBar(
                   controller: controller,
                   body: FloatingSearchBarScrollNotifier(
-                    child: LoadingOverlay(child: SearchResultsListView(), isLoading: isLoading,) ,
+                    child: LoadingOverlay(
+                      child: SearchResultsListView(),
+                      isLoading: isLoading,
+                    ),
                   ),
                   transition: CircularFloatingSearchBarTransition(),
                   physics: const BouncingScrollPhysics(),
@@ -108,7 +109,9 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
                       if (query != "") {
                         addSearchTerm(query);
                         selectedTerm = query;
-                        context.read<ProfileSearchCubit>().searchByBothName(query);
+                        context
+                            .read<ProfileSearchCubit>()
+                            .searchByBothName(query);
                         controller.close();
                       }
                     });
@@ -141,7 +144,7 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
   }
 
   ///builds the initial floatingbar (where there is no history)
-  Container buildQueryContainerInitial(BuildContext context){
+  Container buildQueryContainerInitial(BuildContext context) {
     return Container(
       height: 56,
       width: double.infinity,
@@ -154,61 +157,62 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
   }
 
   ///builds the querylisttile (duplicates input as tile)
-  ListTile buildQueryListTile(BuildContext context){
+  ListTile buildQueryListTile(BuildContext context) {
     return ListTile(
-        title: Text(controller.query),
-        leading: const Icon(Icons.search),
-        onTap: () {
-          setState(() {
-            //we need the context of this, idk if this could be done better
-            BlocProvider(
-              create: (context) => ProfileSearchCubit(),
-            );
-            addSearchTerm(controller.query);
-            selectedTerm = controller.query;
-            context.read<ProfileSearchCubit>().searchByBothName(controller.query);
-          });
-          controller.close();
-          },
-      );
+      title: Text(controller.query),
+      leading: const Icon(Icons.search),
+      onTap: () {
+        setState(() {
+          //we need the context of this, idk if this could be done better
+          BlocProvider(
+            create: (context) => ProfileSearchCubit(),
+          );
+          addSearchTerm(controller.query);
+          selectedTerm = controller.query;
+          context.read<ProfileSearchCubit>().searchByBothName(controller.query);
+        });
+        controller.close();
+      },
+    );
   }
 
   ///builds the history tiles in the floatingsearchbar, to click on previous results
-  Column buildPreviousQuerys(BuildContext context){
+  Column buildPreviousQuerys(BuildContext context) {
     return Column(
       children: filteredSearchHistory!
           .map(
             (term) => ListTile(
-          title: Text(
-            term,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          leading: const Icon(Icons.history),
-          trailing: IconButton(
-            icon: const Icon(Icons.clear),
-            onPressed: () {
-              setState(() {
-                deleteSearchTerm(term);
-              });
-            },
-          ),
-          onTap: () {
-            BlocProvider(
-              create: (context) => ProfileSearchCubit(),
-            );
-            setState(() {
-              putSearchTermFirst(term);
-              selectedTerm = term;
-              context.read<ProfileSearchCubit>().searchByBothName(controller.query);
-            });
-            controller.close();
-          },
-        ),
-      )
+              title: Text(
+                term,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              leading: const Icon(Icons.history),
+              trailing: IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  setState(() {
+                    deleteSearchTerm(term);
+                  });
+                },
+              ),
+              onTap: () {
+                setState(() {
+                  BlocProvider(
+                    create: (context) => ProfileSearchCubit(),
+                  );
+                  putSearchTermFirst(term);
+                  selectedTerm = term;
+                  context
+                      .read<ProfileSearchCubit>()
+                      .searchByBothName(controller.query);
+                });
+                controller.close();
+              },
+            ),
+          )
           .toList(),
     );
-
   }
 
   late FloatingSearchBarController controller;

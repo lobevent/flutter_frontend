@@ -22,6 +22,7 @@ class ProfileFriendsCubit extends Cubit<ProfileFriendsState> {
   }
   ProfileRepository repository = GetIt.I<ProfileRepository>();
 
+  //loading the friends and the pending friendrequests
   Future<void> getFriends() async {
     try {
       emit(ProfileFriendsState.loading());
@@ -37,8 +38,13 @@ class ProfileFriendsCubit extends Cubit<ProfileFriendsState> {
           profile: profileId == null
               ? null
               : Profile(name: ProfileName("thisNameIsFake"), id: profileId!));
-      emit(ProfileFriendsState.loaded(
-          friendList: friendList.fold((l) => throw Exception(), (r) => r)));
+      //load the pending friends and mapping
+      final Either<NetWorkFailure, List<Profile>> pendingFriendsList =
+          await repository.getList(Operation.pendingFriends, 0);
+      emit(ProfileFriendsState.loadedBoth(
+          friendList: friendList.fold((l) => throw Exception(), (r) => r),
+          pendingFriendsList:
+              pendingFriendsList.fold((l) => throw Exception(), (r) => r)));
     } catch (e) {
       emit(ProfileFriendsState.error(error: e.toString()));
     }

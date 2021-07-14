@@ -133,8 +133,9 @@ class ProfileRepository extends IProfileRepository {
 
   Future<bool> deleteFriend(UniqueId id) async {
     try {
-      final bool success =
-          await _profileRemoteService.deleteFriendRequest(id.getOrCrash());
+      //TODO ugly cast
+      final bool success = (await _profileRemoteService
+          .deleteFriendRequest(id.getOrCrash())) as bool;
       return success;
     } on CommunicationException catch (e) {
       return false;

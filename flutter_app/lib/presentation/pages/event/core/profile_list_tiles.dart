@@ -5,7 +5,7 @@ import 'package:flutter_frontend/application/profile/profile_friends/profile_fri
 import 'package:flutter_frontend/application/profile/profile_search/profile_search_cubit.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:auto_route/auto_route.dart' hide Router;
-import 'package:flutter_frontend/presentation/pages/core/widgets/alert_dialog.dart';
+import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/image_classes.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
@@ -13,6 +13,7 @@ class ProfileListTiles extends StatelessWidget {
   final Profile profile;
   final String? imagePath;
 
+  //profile list tiles for searching profiles
   const ProfileListTiles(
       {required ObjectKey key, required this.profile, String? this.imagePath})
       : super(key: key);
@@ -24,6 +25,7 @@ class ProfileListTiles extends StatelessWidget {
       return Card(
           child: ListTile(
         leading: IconButton(
+          //load the avatar
           icon: CircleAvatar(
             radius: 30,
             backgroundImage: ProfileImage.getAssetOrNetwork(imagePath),
@@ -41,6 +43,7 @@ class ProfileListTiles extends StatelessWidget {
     });
   }
 
+  //build the send frienrequest button (in that case)
   Widget buildFriendButton(BuildContext context) {
     return IconButton(
         onPressed: () =>
@@ -54,7 +57,6 @@ class ProfileListTiles extends StatelessWidget {
 }
 
 //this class is for friendsoverview, so u can delete friends on this page, with the buildFriendButton method
-
 class FriendListTiles extends StatelessWidget {
   final Profile profile;
   final String? imagePath;
@@ -87,19 +89,61 @@ class FriendListTiles extends StatelessWidget {
     });
   }
 
-  ///build delete friendbutton
+  ///build delete friend button
   @override
   Widget buildFriendButton(BuildContext context) {
     return IconButton(
-        onPressed: () => CustomAlertDialog(
-            title: "Delete Friend",
-            description:
-                "Do you really want to delete this friend :( he will be alone",
-            cancel: "Cancel",
-            acceptFunction:
-                context.read<ProfileFriendsCubit>().deleteFriendship(profile),
-            accept: "Delete friend"),
-        icon: Icon(Icons.delete_forever));
+        icon: Icon(Icons.delete_forever),
+        onPressed: () {
+          deleteFriend(context).then((value) async => {
+                if (value)
+                  context.read<ProfileFriendsCubit>().deleteFriendship(profile)
+                else
+                  print("falseee"),
+              });
+        });
+  }
+
+  ///ask for submition
+  Future<bool> deleteFriend(BuildContext context) async {
+    bool answer = false;
+
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppStrings.deleteFriendDialogTitle),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(AppStrings.deleteFriendDialogText),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              //Cpnfirmation
+              child: Text(AppStrings.deleteFriendDialogConfirm),
+              onPressed: () {
+                Navigator.of(context).pop();
+                //context.read<OwnEventsCubit>().deleteEvent();
+                answer = true;
+              },
+            ),
+            TextButton(
+              //Abortion
+              child: Text(AppStrings.deleteFriendDialogAbort),
+              onPressed: () {
+                Navigator.of(context).pop();
+                answer = false;
+              },
+            ),
+          ],
+        );
+      },
+    );
+    return answer;
   }
 
   void showProfile(BuildContext context) {

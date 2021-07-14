@@ -6,7 +6,10 @@ import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/image_classes.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
+import 'package:flutter_frontend/presentation/post_comment/comments_screen/comments_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:auto_route/auto_route.dart' hide Router;
+import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 /// this is the post widget, which should be used everywhere
 class PostWidget extends StatelessWidget{
@@ -31,7 +34,7 @@ class PostWidget extends StatelessWidget{
           // content of the post
           ContentWidget(post.postContent.getOrCrash()),
           // actions like comments and likes
-          ActionWidgets(),
+          ActionWidgets(context),
 
         ],
       )
@@ -89,9 +92,13 @@ class PostWidget extends StatelessWidget{
     );
   }
 
-  Widget ActionWidgets() {
-    PaddingRowWidget(children: [
-
+  Widget ActionWidgets(BuildContext context) {
+    return PaddingRowWidget(children: [
+      StdTextButton(
+          onPressed: () => context.router.push(CommentsScreenRoute(postId: post.id)),
+          child: Row(
+            children: [Icon(Icons.comment), Text(post.commentCount.toString(), style: TextStyle(color: AppColors.stdTextColor))],
+          ))
     ],);
   }
 }

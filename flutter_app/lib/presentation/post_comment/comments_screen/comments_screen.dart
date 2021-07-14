@@ -14,7 +14,7 @@ class CommentsScreen extends StatelessWidget {
 
   final UniqueId? postId;
   final UniqueId? parentCommentId;
-  const CommentsScreen({Key? key, required this.postId, this.parentCommentId}) : super(key: key);
+  const CommentsScreen({Key? key, this.postId, this.parentCommentId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

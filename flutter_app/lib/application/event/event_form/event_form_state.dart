@@ -10,8 +10,8 @@ class EventFormState with _$EventFormState {
     required bool isEditing,
     required bool isSaving,
     required bool isLoading,
-    required Option<EventFailure> eventFailure,
-    required Option<Either<EventFailure, Unit>> saveFailureOrSuccessOption
+    required Option<NetWorkFailure> eventFailure,
+    required Option<Either<NetWorkFailure, Unit>> saveFailureOrSuccessOption
   }) = _EventFormStateMain;
 
 
@@ -35,7 +35,7 @@ class EventFormState with _$EventFormState {
       saveFailureOrSuccessOption: none()
   );
 
-  factory EventFormState.error(EventFailure failure) => EventFormState(
+  factory EventFormState.error(NetWorkFailure failure) => EventFormState(
       event: Event.empty(),
       isEditing: true,
       isSaving: false,

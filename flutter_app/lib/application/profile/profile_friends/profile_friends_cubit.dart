@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/i_profile_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
@@ -26,7 +27,7 @@ class ProfileFriendsCubit extends Cubit<ProfileFriendsState> {
       emit(ProfileFriendsState.loading());
 
       final Either<
-          ProfileFailure,
+          NetWorkFailure,
           List<
               Profile>> friendList = await repository.getList(
           Operation.friends, 0,

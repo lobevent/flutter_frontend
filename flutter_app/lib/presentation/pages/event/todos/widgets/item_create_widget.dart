@@ -22,8 +22,9 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
     super.initState();
 
     // Start listening to changes.
-    // itemNameController.addListener();
-    // itemDescriptionController.addListener();
+
+    // itemNameController.addListener(_printLatestValue);
+    // itemDescriptionController.addListener(_printLatestValue);
   }
 
 
@@ -31,13 +32,24 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
     this.itemName = itemName;
     this.itemDescription = itemDescription;
     try {
-      await GetIt.I.get<EventScreenCubit>().postItem(itemName: itemName, itemDescription: itemDescription );
+      await context.state.postItem(itemName: itemName, itemDescription: itemDescription );
     } catch (e) {
       const Text('Error');
     }
   }
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    itemNameController.dispose();
+    itemDescriptionController.dispose();
+    super.dispose();
+  }
 
   Future<bool?> _showPostItemDialog({required String itemName, required String itemDescription}) {
+    print(itemDescription);
+    print(itemName);
+
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -47,7 +59,7 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
           TextButton(
             onPressed: () {
               postItem(itemName: itemName, itemDescription: itemDescription );
-              dispose();
+              //dispose();
               Navigator.pop(context);
               Navigator.pop(context);},
             child: const Text('Yes'),
@@ -67,14 +79,7 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
       ),
     );
   }
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is removed from the
-    // widget tree.
-    itemNameController.dispose();
-    itemDescriptionController.dispose();
-    super.dispose();
-  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -35,15 +35,6 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
             (Profile pro) => emit(ProfilePageState.loaded(profile: pro)));
   }
 
-  Future<void> loadFriends() async{
-    Profile? profile = state.maybeMap(orElse: () => null, loaded: (state) => state.profile);
-    emit(ProfilePageState.loadingMeta());
-    (await repository.getList(Operation.friends, 20)).fold((f) => emit(ProfilePageState.error(error: f.toString())), (friends) => emit(ProfilePageState.loaded(profile: profile!, friends: friends)));
-
-
-
-  }
-
 
 
 

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/event_failure.dart';
@@ -34,27 +35,27 @@ class EventScreenCubit extends Cubit<EventScreenState> {
     );
   }
   Future<void> postItem({required String itemName, required String itemDescription}) async{
-    //EventFailure eventFailure;
-    //try{
-        _Loaded myCastedState = state as _Loaded;
-        final Item newItem = Item(id: UniqueId(), profiles: [], name: ItemName(itemName), description: ItemDescription(itemDescription));
-        todoRepository.addItem(myCastedState.event.todo!, newItem).then((eventOrFailure) =>
-            eventOrFailure.fold(
-                    (failure) => emit(EventScreenState.error(failure: failure)),
-                    (event) {
-                      myCastedState.event.todo?.items.add(newItem);
-                      emit(myCastedState);
-                    }
-                )
-            )
-        );
-        //emit newState
-
-    // }
-    // catch (e) {
-    //   emit(EventScreenState.error(failure: eventFailure));
-    // }
-  }
+  //   //EventFailure eventFailure;
+  //   //try{
+  //       _Loaded myCastedState = state as _Loaded;
+  //       final Item newItem = Item(id: UniqueId(), profiles: [], name: ItemName(itemName), description: ItemDescription(itemDescription));
+  //       todoRepository.addItem(myCastedState.event.todo!, newItem).then((eventOrFailure) =>
+  //           eventOrFailure.fold(
+  //                   (failure) => emit(EventScreenState.error(failure: failure)),
+  //                   (event) {
+  //                     myCastedState.event.todo?.items.add(newItem);
+  //                     emit(myCastedState);
+  //                   }
+  //               )
+  //           )
+  //       );
+  //       //emit newState
+  //
+  //   // }
+  //   // catch (e) {
+  //   //   emit(EventScreenState.error(failure: eventFailure));
+  //   // }
+  // }
 
 
 

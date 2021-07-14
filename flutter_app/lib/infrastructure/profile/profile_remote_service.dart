@@ -118,10 +118,10 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   Future<List<ProfileDto>> getAcceptedFriendships(String? profileId) async {
     final Response response;
     if (profileId == null) {
-      response = await client.get(getAcceptedFriendshipsPath);
+      response = await client.get(getAcceptedFriendshipsPath.interpolate({"profileId": ""}));
     } else {
       response = await client.get(
-          getAcceptedFriendshipsPath.interpolate({"profileId:": profileId}));
+          getAcceptedFriendshipsPath.interpolate({"profileId": profileId}));
     }
     return convertList(response);
   }

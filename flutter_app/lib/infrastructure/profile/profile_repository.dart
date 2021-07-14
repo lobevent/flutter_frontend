@@ -135,7 +135,7 @@ class ProfileRepository extends IProfileRepository {
     try {
       //TODO ugly cast
       final bool success = (await _profileRemoteService
-          .deleteFriendRequest(id.getOrCrash())) as bool;
+          .deleteFriendRequest(id.getOrCrash()));
       return success;
     } on CommunicationException catch (e) {
       return false;

@@ -79,12 +79,12 @@ class CommentRemoteService extends RemoteService<CommentDto>{
 
   Future<CommentDto> delete(CommentDto commentDto) async {
     return _decodeComment(await client.delete(
-        "$deletePath${commentDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}"));
+        "$deletePath${commentDto.id}"));
   }
 
   Future<CommentDto> update(CommentDto commentDto) async {
     return _decodeComment(await client.put(
-        "$updatePath${commentDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}",
+        "$updatePath${commentDto.id}",
         jsonEncode(commentDto.toJson())));
   }
 

@@ -45,23 +45,16 @@ class CommentRepository implements ICommentRepository {
       List<CommentDto> commentDtos;
       switch (operation) {
         case Operation.fromPost:
-          if(postParent == null){
+          if(postParent == null || postParent.id == null){
             throw UnexpectedTypeError();
           }
-          commentDtos = await _commentRemoteService.getCommentsFromPost(lastCommentTime, amount, postParent
-              .maybeMap(
-                  (value) => value.id.getOrCrash().toString(), //need to be done, as post parent has classes where the id is not included
-              orElse: throw UnexpectedFormatException()));
+          commentDtos = await _commentRemoteService.getCommentsFromPost(lastCommentTime, amount, postParent.id!.getOrCrash().toString());
           break;
         case Operation.fromComment:
-          if(commentParent == null){
+          if(commentParent == null || commentParent.id == null){
             throw UnexpectedTypeError();
           }
-          commentDtos = await _commentRemoteService.getCommentsFromCommentParent(lastCommentTime, amount, commentParent
-              .maybeMap(
-                  (value) => value.id.getOrCrash().toString(),
-              parent: (value) => value.id.getOrCrash().toString(),
-              orElse: throw UnexpectedFormatException()));
+          commentDtos = await _commentRemoteService.getCommentsFromCommentParent(lastCommentTime, amount, commentParent.id.getOrCrash().toString());
           break;
         case Operation.fromUser:
           if(profile == null){

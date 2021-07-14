@@ -76,13 +76,12 @@ class ProfileRepository extends IProfileRepository {
               .getAcceptedFriendships(profile?.id.getOrCrash().toString());
           break;
         case Operation.postProfile:
-          if (post == null) {
+          if (post == null || post.id == null) {
             throw UnexpectedTypeError();
           }
           profileDtos = await _profileRemoteService.getProfilesToPost(
               amount,
-              post.maybeMap((value) => value.id.getOrCrash().toString(),
-                  orElse: throw UnexpectedFormatException()));
+              post.id!.getOrCrash().toString());
           break;
       }
       //convert the dto objects to domain Objects

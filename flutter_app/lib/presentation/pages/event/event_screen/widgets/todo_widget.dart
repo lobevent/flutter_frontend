@@ -12,7 +12,7 @@ class TodoWidget extends StatelessWidget {
     return BlocBuilder<EventScreenCubit, EventScreenState>(
         builder: (context, state) {
           return state.maybeMap(
-              loaded: (state) {
+              loaded: (state) { //check if todoList existed; else create one
                 return EventTodoWidget(todo: state.event.todo!, event: state.event);
               },
               orElse: () {

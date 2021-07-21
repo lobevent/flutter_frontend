@@ -3,6 +3,7 @@ import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
 
 import '../../event/todos/widgets/item_element_widget.dart';
+
 class TodoList extends StatelessWidget {
   final Todo? todo;
   const TodoList({Key? key, required this.todo}) : super(key: key);
@@ -11,21 +12,20 @@ class TodoList extends StatelessWidget {
   Widget build(BuildContext context) {
     return TodoItemList(todo!.items);
   }
-  Widget TodoItemList (List<Item> items){
+
+  Widget TodoItemList(List<Item> items) {
     return Column(
-      children: <Widget> [
-        ...getTodoItems(items)
-      ],
+      children: <Widget>[...getTodoItems(items)],
     );
   }
 
-  List<Widget> getTodoItems(List<Item> items){
+  List<Widget> getTodoItems(List<Item> items) {
     final List<Widget> itemElements = [];
 
     items.forEach((element) {
       final Widget elements = ItemElementWidget(
         name: element.name.getOrCrash(),
-        profiles: element.profiles,
+        profiles: element.profiles!,
         description: element.description.getOrCrash(),
       );
       itemElements.add(elements);
@@ -33,4 +33,3 @@ class TodoList extends StatelessWidget {
     return itemElements;
   }
 }
-

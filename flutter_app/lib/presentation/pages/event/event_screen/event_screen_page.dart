@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/event/event_screen/event_screen_cubit.dart';
+import 'package:flutter_frontend/application/todo/todo_cubit.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
@@ -45,21 +46,17 @@ class EventScreenPage extends StatelessWidget {
 
                       /// if the error state is not active, load the contentS
                       orElse: () => [
-                        /// the Header with the pictures etc
-                        HeaderVisual(),
-                        /// the event contents and information
-                        EventContent(),
-                        /// todoevents list
-                        TodoWidget(),
-                      ]),
-              )
-          );
-        },
-      )
-    );
+                            /// the Header with the pictures etc
+                            HeaderVisual(),
+
+                            /// the event contents and information
+                            EventContent(),
+
+                            /// todoevents list
+                            TodoWidget()
+                          ]),
+                ));
+          },
+        ));
   }
-
-
-
 }
-

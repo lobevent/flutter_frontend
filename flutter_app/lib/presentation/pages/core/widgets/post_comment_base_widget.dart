@@ -21,24 +21,25 @@ class PostCommentBaseWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       // constrained Box for min height
-        child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              minHeight: 150.0,
-              minWidth: 50.0,
-            ),
-            // column contains the content
-            child: Column(
-              children: [
-                // Add header information (date, author, etc.)
-                MetaHeadWidget(date: date, author: autor),
-                // content of the post
-                ContentWidget(content),
-                // actions like comments and likes
-               actionButtonsWidgets,
+        child:
+          ConstrainedBox(
+              constraints: const BoxConstraints(
+                minHeight: 150.0,
+                minWidth: 50.0,
+              ),
+              // column contains the content
+              child: Column(
+                children: [
+                  // Add header information (date, author, etc.)
+                  MetaHeadWidget(date: date, author: autor),
+                  // content of the post
+                  ContentWidget(content),
+                  // actions like comments and likes
+                  actionButtonsWidgets,
 
-              ],
-            )
-        )
+                ],
+              )
+          )
     );
   }
 
@@ -91,6 +92,7 @@ class PostCommentBaseWidget extends StatelessWidget {
       ],
     );
   }
+
 
 
 }

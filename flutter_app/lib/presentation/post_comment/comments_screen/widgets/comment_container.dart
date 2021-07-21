@@ -17,6 +17,7 @@ class CommentContainer extends StatelessWidget {
     return BlocBuilder<CommentScreenCubit, CommentScreenState>(
       builder: (context, state){
         return Column(children: state.maybeMap(
+          //Display post-/coment widget at the top and than a comment list with padded Comments
             loadedComment: (loadedComment) => [ CommentWidget(comment: loadedComment.comment, context: context), CommentList(loadedComment.comment.commentChildren?? [], context)],
             loadedPost: (loadedPost) => [PostWidget(post: loadedPost.post), CommentList(loadedPost.post.comments?? [], context)],
             orElse: () => [Text("")]),);
@@ -29,6 +30,9 @@ class CommentContainer extends StatelessWidget {
   }
 
 
+
+  /// generates the list with the comments
+  /// this is not scrollable
   Widget CommentList(List<Comment> comments, BuildContext context){
     return ListView.builder(
       physics: NeverScrollableScrollPhysics(),
@@ -40,6 +44,8 @@ class CommentContainer extends StatelessWidget {
 
   }
 
+  /// comment widget is the main widget to display comments
+  /// as long as it only is used here, it will not be exportet
   Widget CommentWidget({required Comment comment, required BuildContext context}){
     return Container(child:
       PostCommentBaseWidget(date: comment.creationDate, content: comment.commentContent.getOrCrash(), actionButtonsWidgets: ActionWidgets(context, comment), autor: comment.owner,),
@@ -48,6 +54,7 @@ class CommentContainer extends StatelessWidget {
 
   }
 
+  /// generate the widget with the action buttons (like load children etc.)
   Widget ActionWidgets(BuildContext context, Comment comment) {
     return PaddingRowWidget(children: [
       StdTextButton(

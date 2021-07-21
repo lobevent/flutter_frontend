@@ -9,12 +9,12 @@ class CommentContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocBuilder<CommentScreenCubit, CommentScreenState>(
+    return BlocBuilder<CommentScreenCubit, CommentScreenState>(
       builder: (context, state){
         return Column(children: state.maybeMap(
-            loadedComment: (loadedComment) => [CommentWidget(comment: loadedComment.comment), CommentList([])],
+            loadedComment: (loadedComment) => [ CommentWidget(comment: loadedComment.comment), Spacer(), CommentList([])],
             loadedPost: (loadedPost) => [PostWidget(post: loadedPost.post), CommentList(loadedPost.post.comments?? [])],
-            orElse: () => [Text("")]),);
+            orElse: () => [Text("orelse")]),);
 
       }
     );
@@ -26,6 +26,8 @@ class CommentContainer extends StatelessWidget {
 
   Widget CommentList(List<Comment> comments){
     return ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
       itemCount: comments.length,
       itemBuilder: (context, index){
         return CommentWidget(comment: comments[index]);
@@ -34,7 +36,9 @@ class CommentContainer extends StatelessWidget {
   }
 
   Widget CommentWidget({required Comment comment}){
-    return Text("test");
+    Card()
+
+    return Text(comment.commentContent.getOrCrash() );
   }
 
 

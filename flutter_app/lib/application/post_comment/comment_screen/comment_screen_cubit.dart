@@ -30,7 +30,7 @@ class CommentScreenCubit extends Cubit<CommentScreenState> {
 
     try {
       if (post != null) {
-        commentsErrorHandler(await repository.getList(
+        comments = commentsErrorHandler(await repository.getList(
             Operation.fromPost, DateTime.now(), 30, postParent: post)) as List<
             Comment>?;
         if (comments != null) {

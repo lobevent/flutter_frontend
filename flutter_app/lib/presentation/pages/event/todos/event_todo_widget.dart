@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/presentation/pages/event/todos/widgets/todo_list.dart';
 
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
@@ -27,30 +28,10 @@ class EventTodoWidget extends StatelessWidget {
         /// Used as space
         const SizedBox(height: 20),
 
-        TodoItemList(todo!.items),
+        TodoList(todo: todo),
       ],
     );
   }
 
-  Widget TodoItemList (List<Item> items){
-    return Column(
-      children: <Widget> [
-        ...getTodoItems(items)
-      ],
-    );
-  }
 
-  List<Widget> getTodoItems(List<Item> items){
-    final List<Widget> itemElements = [];
-
-    items.forEach((element) {
-      final Widget elements = ItemElementWidget(
-        name: element.name.getOrCrash(),
-        profiles: element.profiles,
-        description: element.description.getOrCrash(),
-      );
-      itemElements.add(elements);
-    });
-    return itemElements;
-  }
 }

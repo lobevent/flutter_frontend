@@ -25,6 +25,7 @@ class CommentDto extends BaseDto with _$CommentDto {
     String? id,
     required String content,
     required DateTime date,
+    int? children,
     @ProfileConverter() required ProfileDto profile, //TODO: make it an integer
     @CommentConverter() CommentDto? commentParent,
     @PostConverter() required PostDto post,
@@ -42,7 +43,7 @@ class CommentDto extends BaseDto with _$CommentDto {
   /// Generate dto from domain, respecting the different union cases
   @override
   Comment toDomain(){
-    return Comment(id: UniqueId.fromUniqueString(this.id!), creationDate: date, commentContent: CommentContent(content), owner: profile.toDomain(), post: post.toDomain(), commentParent: commentParent?.toDomain());
+    return Comment(id: UniqueId.fromUniqueString(this.id!), creationDate: date, commentContent: CommentContent(content), owner: profile.toDomain(), post: post.toDomain(), commentParent: commentParent?.toDomain(), childCount: children);
   }
 
 

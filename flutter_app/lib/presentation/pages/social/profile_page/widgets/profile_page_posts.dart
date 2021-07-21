@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/profile/profile_page/profile_page_cubit.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
+import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 
@@ -23,7 +24,7 @@ class ProfilePagePosts extends StatelessWidget{
                       (value) => Text(""),
                   // if we have the correct full profile, build the list
                   full: (profile) {
-                        return PostList(profile.posts!);
+                        return PostList(profile.posts!, profile);
                   });
             },
             orElse: () => Text(""));
@@ -33,7 +34,7 @@ class ProfilePagePosts extends StatelessWidget{
 
 
   /// generate list of posts
-  Widget PostList(List<Post> posts){
+  Widget PostList(List<Post> posts, Profile profile){
     if(posts.isEmpty){
       return Text("Nothing here yet");
     }
@@ -48,7 +49,7 @@ class ProfilePagePosts extends StatelessWidget{
           scrollDirection: Axis.vertical,
           itemCount: posts.length,
           itemBuilder: (context, index){
-            return PostWidget(post: posts[index]);
+            return PostWidget(post: posts[index].copyWith(owner: profile), showAuthor: false,);
       },
     ));
   }

@@ -95,7 +95,7 @@ class PostWidget extends StatelessWidget{
   Widget ActionWidgets(BuildContext context) {
     return PaddingRowWidget(children: [
       StdTextButton(
-          onPressed: () => context.router.push(CommentsScreenRoute(postId: post.id)),
+          onPressed: () => context.router.push(CommentsScreenRoute(post: post)),
           child: Row(
             children: [Icon(Icons.comment), Text(post.commentCount.toString(), style: TextStyle(color: AppColors.stdTextColor))],
           ))

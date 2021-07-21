@@ -12,14 +12,14 @@ import 'package:flutter_frontend/presentation/post_comment/comments_screen/widge
 
 class CommentsScreen extends StatelessWidget {
 
-  final UniqueId? postId;
-  final UniqueId? parentCommentId;
-  const CommentsScreen({Key? key, this.postId, this.parentCommentId}) : super(key: key);
+  final Post? post;
+  final Comment? parentComment;
+  const CommentsScreen({Key? key, this.post, this.parentComment}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => CommentScreenCubit(postId: postId, parentCommentId: parentCommentId),
+        create: (context) => CommentScreenCubit(post: post, parentComment: parentComment),
         child: BlocBuilder<CommentScreenCubit, CommentScreenState>(
           builder: (context, state){
             return LoadingOverlay(

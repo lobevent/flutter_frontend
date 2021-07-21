@@ -23,8 +23,8 @@ class CommentDto extends BaseDto with _$CommentDto {
 
   const factory CommentDto({
     String? id,
-    required String commentContent,
-    required DateTime creationDate,
+    required String content,
+    required DateTime date,
     @ProfileConverter() required ProfileDto profile, //TODO: make it an integer
     @CommentConverter() CommentDto? commentParent,
     @PostConverter() required PostDto post,
@@ -33,7 +33,7 @@ class CommentDto extends BaseDto with _$CommentDto {
 
 
   factory CommentDto.fromDomain(Comment comment){
-    return CommentDto(commentContent: comment.commentContent.getOrCrash(), creationDate: comment.creationDate, profile: ProfileDto.fromDomain(comment.owner), post: PostDto.fromDomain(comment.post));
+    return CommentDto(content: comment.commentContent.getOrCrash(), date: comment.creationDate, profile: ProfileDto.fromDomain(comment.owner), post: PostDto.fromDomain(comment.post));
   }
 
   factory CommentDto.fromJson(Map<String, dynamic> json) =>
@@ -42,7 +42,7 @@ class CommentDto extends BaseDto with _$CommentDto {
   /// Generate dto from domain, respecting the different union cases
   @override
   Comment toDomain(){
-    return Comment(id: UniqueId.fromUniqueString(this.id!), creationDate: creationDate, commentContent: CommentContent(commentContent), owner: profile.toDomain(), post: post.toDomain(), commentParent: commentParent?.toDomain());
+    return Comment(id: UniqueId.fromUniqueString(this.id!), creationDate: date, commentContent: CommentContent(content), owner: profile.toDomain(), post: post.toDomain(), commentParent: commentParent?.toDomain());
   }
 
 

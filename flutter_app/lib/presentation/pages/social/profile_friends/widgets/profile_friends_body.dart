@@ -50,7 +50,7 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody>
         state.maybeMap((value) => {},
             loadedBoth: (state) => {
                   this.friends = state.friendList,
-                  this.pendingFriends = pendingFriends,
+                  this.pendingFriends = state.pendingFriendsList,
                   setState(() {})
                 },
             deleted: (state) => {
@@ -90,9 +90,10 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody>
                             child: ListTile(
                                 title: Text("No friends available :(")));
                       } else {
-                        return FriendListTiles(
+                        return ProfileListTiles(
                           key: ObjectKey(friend),
                           profile: this.friends[index],
+                          buttonCase: TileButton.deleteFriendButton,
                         );
                         //EventListTiles(key: ObjectKey(event), event: this.events[index], allowEdit: true);
                       }
@@ -115,9 +116,10 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody>
                             child: ListTile(
                                 title: Text("No friends available :(")));
                       } else {
-                        return FriendListTiles(
+                        return ProfileListTiles(
                           key: ObjectKey(friend),
                           profile: this.pendingFriends[index],
+                          buttonCase: TileButton.acceptDeclineFriendButton,
                         );
                         //EventListTiles(key: ObjectKey(event), event: this.events[index], allowEdit: true);
                       }

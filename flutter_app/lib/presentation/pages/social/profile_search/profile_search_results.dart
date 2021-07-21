@@ -77,6 +77,7 @@ class SearchResultsListViewState extends State<SearchResultsListView>
                   child: ProfileListTiles(
                 key: ObjectKey(e.id),
                 profile: e,
+                buttonCase: TileButton.sendFriendButton,
               )))
           .toList();
     }

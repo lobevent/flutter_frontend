@@ -133,6 +133,16 @@ class ProfileRepository extends IProfileRepository {
     }
   }
 
+  Future<bool> acceptFriend(UniqueId id) async {
+    try {
+      final bool success =
+          (await _profileRemoteService.acceptFriendRequest(id.getOrCrash()));
+      return success;
+    } on CommunicationException catch (e) {
+      return false;
+    }
+  }
+
   Future<bool> deleteFriend(UniqueId id) async {
     try {
       final bool success =

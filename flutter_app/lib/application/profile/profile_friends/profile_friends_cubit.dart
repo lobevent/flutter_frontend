@@ -22,7 +22,7 @@ class ProfileFriendsCubit extends Cubit<ProfileFriendsState> {
   }
   ProfileRepository repository = GetIt.I<ProfileRepository>();
 
-  //loading the friends and the pending friendrequests
+  ///loading the friends and the pending friendrequests
   Future<void> getFriends() async {
     try {
       emit(ProfileFriendsState.loading());
@@ -50,18 +50,28 @@ class ProfileFriendsCubit extends Cubit<ProfileFriendsState> {
     }
   }
 
+  ///accept the friendship and wait for backendresponse, maybe update the listview here too?
+  Future<bool> acceptFriendship(Profile profile) async {
+    final success = await repository.acceptFriend(profile.id);
+
+    return success;
+  }
+
+  ///delete the friendship and update the listview, 2 lists for the tabs
   Future<bool> deleteFriendship(Profile profile) async {
     final success = await repository.deleteFriend(profile.id);
 
     this.state.maybeMap((value) => null,
-        loaded: (state) {
+        loadedBoth: (state) {
           state.friendList.remove(profile);
           List<Profile> friends = state.friendList;
+          List<Profile> pendingFriends = state.pendingFriendsList;
 
           //update the listview
           emit(ProfileFriendsState.deleted(profile: profile));
           //emit state again to have the new list
-          emit(ProfileFriendsState.loaded(friendList: friends));
+          emit(ProfileFriendsState.loadedBoth(
+              friendList: friends, pendingFriendsList: pendingFriends));
         },
         orElse: () => throw Exception('LogicError'));
 

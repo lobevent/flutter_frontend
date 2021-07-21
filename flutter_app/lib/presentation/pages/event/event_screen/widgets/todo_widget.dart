@@ -5,8 +5,7 @@ import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/event/todos/event_todo_widget.dart';
 
 class TodoWidget extends StatelessWidget {
-  final UniqueId eventId;
-  const TodoWidget({Key? key, required this.eventId}) : super(key: key);
+  const TodoWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +13,7 @@ class TodoWidget extends StatelessWidget {
         builder: (context, state) {
           return state.maybeMap(
               loaded: (state) {
-                return EventTodoWidget(todo: state.event.todo!, eventId: eventId);
+                return EventTodoWidget(todo: state.event.todo!, event: state.event);
               },
               orElse: () {
                 return const Text('');

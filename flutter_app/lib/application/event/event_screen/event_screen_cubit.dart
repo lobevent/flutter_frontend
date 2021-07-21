@@ -34,18 +34,5 @@ class EventScreenCubit extends Cubit<EventScreenState> {
         )
     );
   }
-  Future<void> postItem({required String itemName, required String itemDescription}) async{
 
-    _Loaded myCastedState = state as _Loaded;
-    final Item newItem = Item(id: UniqueId(), profiles: [], name: ItemName(itemName), description: ItemDescription(itemDescription));
-    todoRepository.addItem(myCastedState.event.todo!, newItem).then((itemOrFailure) =>
-        itemOrFailure.fold(
-                (failure) => emit(EventScreenState.error(failure: failure)),
-                (item) {
-                  myCastedState.event.todo?.items.add(newItem);
-                  emit(myCastedState);
-                }
-            )
-        );
-  }
 }

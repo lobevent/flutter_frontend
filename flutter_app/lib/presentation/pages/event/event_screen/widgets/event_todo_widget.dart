@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
-import 'package:flutter_frontend/presentation/pages/event/todos/widgets/todo_list.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/todo_list.dart';
 
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
-import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
-import 'package:flutter_frontend/presentation/pages/event/todos/widgets/item_element_widget.dart';
 
 class EventTodoWidget extends StatelessWidget {
   final Todo? todo;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
 
-import 'item_element_widget.dart';
+import '../../event/todos/widgets/item_element_widget.dart';
 class TodoList extends StatelessWidget {
   final Todo? todo;
   const TodoList({Key? key, required this.todo}) : super(key: key);

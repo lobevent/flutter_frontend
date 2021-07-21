@@ -48,49 +48,52 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => TodoCubit(event: event),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Item Creation"),
-        ),
-        body: Column(
-          children: [
-            const Text('Create Item'),
-
-            const SizedBox(height: 20),
-
-            const Text('Itemname:'),
-            const SizedBox(height: 20),
-            TextField(
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                  hintText: 'Enter the Itemname'
-              ),
-              controller: itemNameController,
+        child: BlocBuilder<TodoCubit, TodoState>(
+          builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text("Item Creation"),
             ),
-            const SizedBox(height: 40),
+            body: Column(
+              children: [
+                const Text('Create Item'),
 
-            const Text('Itemdescription:'),
-            const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-            TextField(
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  hintText: 'Enter the Itemdescription'
-              ),
-              controller: itemDescriptionController,
+                const Text('Itemname:'),
+                const SizedBox(height: 20),
+                TextField(
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                      hintText: 'Enter the Itemname'
+                  ),
+                  controller: itemNameController,
+                ),
+                const SizedBox(height: 40),
+
+                const Text('Itemdescription:'),
+                const SizedBox(height: 20),
+
+                TextField(
+                  decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      hintText: 'Enter the Itemdescription'
+                  ),
+                  controller: itemDescriptionController,
+                ),
+
+                MaterialButton(
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                  onPressed: () =>
+                      context.read<TodoCubit>().postItem(itemName: itemNameController.text, itemDescription: itemDescriptionController.text),
+                  //dispose();
+                  child: const Text('Create Item')),
+              ],
             ),
-
-            MaterialButton(
-              color: Colors.blue,
-              textColor: Colors.white,
-              onPressed: () async =>
-              await context.read<TodoCubit>().postItem(itemName: itemNameController.text, itemDescription: itemDescriptionController.text),
-              //postItem(itemName: itemName, itemDescription: itemDescription, );
-              //dispose();
-              child: const Text('Create Item')),
-          ],
-        ),
-      ),
+          );
+      }
+    ),
     );
   }
 }

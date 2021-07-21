@@ -97,10 +97,10 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
     return response.body;
   }
 
-  Future<String> acceptFriendRequest(String profileId) async {
+  Future<bool> acceptFriendRequest(String profileId) async {
     final Response response =
         await client.post(acceptFriendShipPath, profileId);
-    return response.body;
+    return response.body.isNotEmpty;
   }
 
   Future<bool> deleteFriendRequest(String profileId) async {

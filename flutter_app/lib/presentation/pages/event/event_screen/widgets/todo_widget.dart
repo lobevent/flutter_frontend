@@ -8,6 +8,10 @@ import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/e
 class TodoWidget extends StatelessWidget {
   const TodoWidget({Key? key}) : super(key: key);
 
+  Widget buildWithoutTodo() {
+    return IconButton(onPressed: null, icon: Icon(Icons.add_circle));
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EventScreenCubit, EventScreenState>(
@@ -18,7 +22,7 @@ class TodoWidget extends StatelessWidget {
           if (state.event.todo != null) {
             return EventTodoWidget(todo: state.event.todo!, event: state.event);
           } else
-            return Text("No todos for this event yet");
+            return buildWithoutTodo();
         },
         orElse: () {
           return const Text('');

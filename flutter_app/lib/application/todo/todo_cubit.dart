@@ -50,4 +50,11 @@ class TodoCubit extends Cubit<TodoState> {
           emit(myCastedState);
         }));
   }
+
+  Future<void> createTodo(Todo todo, Event event) async {
+    Either<NetWorkFailure, Todo> failureOrSuccess =
+        await repository.create(todo, event);
+    emit(TodoState.loaded(
+        todo: failureOrSuccess.fold((l) => throw Exception(), (r) => r)));
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/event/event_screen/event_screen_cubit.dart';
@@ -11,15 +12,18 @@ class TodoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<EventScreenCubit, EventScreenState>(
         builder: (context, state) {
-          return state.maybeMap(
-              loaded: (state) { //check if todoList existed; else create one
-                return EventTodoWidget(todo: state.event.todo!, event: state.event);
-              },
-              orElse: () {
-                return const Text('');
-              },
-          );
-        }
-    );
+      return state.maybeMap(
+        loaded: (state) {
+          //check if todoList existed; else create one
+          if (state.event.todo != null) {
+            return EventTodoWidget(todo: state.event.todo!, event: state.event);
+          } else
+            return Text("No todos for this event yet");
+        },
+        orElse: () {
+          return const Text('');
+        },
+      );
+    });
   }
 }

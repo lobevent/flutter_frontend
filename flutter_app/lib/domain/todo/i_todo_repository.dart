@@ -1,13 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
-import 'package:flutter_frontend/domain/core/failures.dart';
-import 'package:flutter_frontend/domain/core/failures.dart';
-import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
-import 'package:flutter_frontend/domain/todo/todo_failure.dart';
 
 abstract class ITodoRepository{
   Future <Either<NetWorkFailure, Todo>> getTodoList(Event event);

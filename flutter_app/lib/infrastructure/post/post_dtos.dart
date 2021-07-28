@@ -4,7 +4,9 @@ import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/post/value_objects.dart';
+import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
+import 'package:flutter_frontend/infrastructure/post/comment_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
@@ -22,6 +24,7 @@ class PostDto extends BaseDto with _$PostDto {
     required DateTime date,
     required String content,
     int? commentCount,
+    @CommentsConverter() List<CommentDto>? comments,
     @ProfileConverter()  ProfileDto? owner,
     @EventConverter() EventDto? event,
   }) = _PostDto;
@@ -30,20 +33,15 @@ class PostDto extends BaseDto with _$PostDto {
   factory PostDto.fromDomain(Post post) {
     PostDto returnedDto;
     //distinguish between both PostDto cases
-    return post.map(
-        (value) => PostDto(
-              id: value.id.getOrCrash(),
-              date: value.creationDate,
-              content: value.postContent.getOrCrash(),
-              owner: ProfileDto.fromDomain(value.owner!),
-              event: EventDto.fromDomain(value.event!),
-              commentCount: value.commentCount
-            ),
-        WithoutId: (value) => PostDto(
-            date: value.creationDate,
-            content: value.postContent.getOrCrash(),
-            owner: ProfileDto.fromDomain(value.owner!),
-            event: EventDto.fromDomain(value.event!)));
+    return PostDto(
+              id: post.id?.getOrCrash(),
+              date: post.creationDate,
+              content: post.postContent.getOrCrash(),
+              owner: ProfileDto.fromDomain(post.owner!),
+              event: EventDto.fromDomain(post.event!),
+              commentCount: post.commentCount
+            );
+
   }
 
   factory PostDto.fromJson(Map<String, dynamic> json) =>
@@ -51,7 +49,6 @@ class PostDto extends BaseDto with _$PostDto {
 
   @override
   Post toDomain() {
-    if(id != null) {
       return Post(
           id: UniqueId.fromUniqueString(id!),
           creationDate: date,
@@ -61,29 +58,9 @@ class PostDto extends BaseDto with _$PostDto {
           comments: <Comment>[],
           commentCount: commentCount
       );
-    }
-      return Post.WithoutId(
-            creationDate: date,
-            postContent: PostContent(content),
-            owner: owner?.toDomain(),
-            event: event?.toDomain(),
-            comments: <Comment>[]);
   }
 }
 
-class ProfileConverter
-    implements JsonConverter<ProfileDto, Map<String, dynamic>> {
-  const ProfileConverter();
-  @override
-  ProfileDto fromJson(Map<String, dynamic> owner) {
-    return ProfileDto.fromJson(owner);
-  }
-
-  @override
-  Map<String, dynamic> toJson(ProfileDto profileDto) {
-    return profileDto.toJson();
-  }
-}
 
 class EventConverter implements JsonConverter<EventDto, Map<String, dynamic>> {
   const EventConverter();

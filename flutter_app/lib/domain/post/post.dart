@@ -15,7 +15,7 @@ class Post with _$Post {
   const Post._();
 
   const factory Post({
-    required UniqueId id,
+    UniqueId? id,
     required DateTime creationDate,
     required PostContent postContent,
     Profile? owner,
@@ -24,13 +24,13 @@ class Post with _$Post {
     int? commentCount,
   }) = _Post;
 
-  const factory Post.WithoutId({
+/*  const factory Post.WithoutId({
     required DateTime creationDate,
     required PostContent postContent,
     required Profile? owner,
     required Event? event,
     required List<Comment> comments,
-  }) = PostWithoutId;
+  }) = PostWithoutId;*/
 
   //check if the whole object is no failure
   // TODO same as in domain/event/event.dart

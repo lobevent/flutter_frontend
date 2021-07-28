@@ -17,10 +17,10 @@ class CommentRemoteService extends RemoteService<CommentDto>{
 
 
   //Routes Lists
-  static const String ownCommentsPath = "/comments/%amount%/%lastCommentTime%/";
-  static const String commentsFromUserPath = "/profile/%profileId%/comments/%amount%/%lastCommentTime%/";
-  static const String commentsFromCommentParentPath = "/comment/%parentCommentId%/comments/%amount%/%lastCommentTime%/";
-  static const String commentsFromPostPath ="/post/%postId%/comments/%amount%/%lastCommentTime%/";
+  static const String ownCommentsPath = "/comments/%amount%/%lastCommentTime%";
+  static const String commentsFromUserPath = "/profile/%profileId%/comments/%amount%/%lastCommentTime%";
+  static const String commentsFromCommentParentPath = "/comment/%parentCommentId%/comment/%amount%/%lastCommentTime%";
+  static const String commentsFromPostPath ="/event/post/%postId%/comment/%amount%/%lastCommentTime%";
 
   static const String postPath = "/comment";
   static const String deletePath = "/comment";
@@ -79,12 +79,12 @@ class CommentRemoteService extends RemoteService<CommentDto>{
 
   Future<CommentDto> delete(CommentDto commentDto) async {
     return _decodeComment(await client.delete(
-        "$deletePath${commentDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}"));
+        "$deletePath${commentDto.id}"));
   }
 
   Future<CommentDto> update(CommentDto commentDto) async {
     return _decodeComment(await client.put(
-        "$updatePath${commentDto.maybeMap((value) => value.id, orElse: () => throw UnexpectedFormatException())}",
+        "$updatePath${commentDto.id}",
         jsonEncode(commentDto.toJson())));
   }
 

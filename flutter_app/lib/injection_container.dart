@@ -5,6 +5,8 @@ import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/event/event_local_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
+import 'package:flutter_frontend/infrastructure/post/comment_remote_service.dart';
+import 'package:flutter_frontend/infrastructure/post/comment_repository.dart';
 import 'package:flutter_frontend/infrastructure/todo/item_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_repository.dart';
@@ -49,6 +51,11 @@ class InjectionContainer {
     getIt.registerLazySingleton(() => TodoRepository(
       ItemRemoteService(communicator: communicator),
       TodoRemoteService(communicator: communicator),
+      ),
+    );
+
+    getIt.registerLazySingleton(() => CommentRepository(
+      CommentRemoteService(communicator: communicator),
       ),
     );
 

@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
+import 'package:flutter_frontend/infrastructure/post/comment_dtos.dart';
+import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 
@@ -42,6 +44,10 @@ class ListConverter<DTO extends BaseDto> implements JsonConverter<List<DTO>, Lis
 }
 
 
+class CommentsConverter extends ListConverter<CommentDto>{
+  const CommentsConverter() :super();
+}
+
 
 class ProfileConverter implements JsonConverter<ProfileDto,Map<String, dynamic>> {
 
@@ -57,6 +63,39 @@ class ProfileConverter implements JsonConverter<ProfileDto,Map<String, dynamic>>
     return profileDto.toJson();
   }
 }
+
+
+class PostConverter implements JsonConverter<PostDto,Map<String, dynamic>> {
+
+  const PostConverter();
+
+  @override
+  PostDto fromJson(Map<String, dynamic> post) {
+    return PostDto.fromJson(post);
+  }
+
+  @override
+  Map<String, dynamic> toJson(PostDto postDto) {
+    return postDto.toJson();
+  }
+}
+
+class CommentConverter implements JsonConverter<CommentDto,Map<String, dynamic>> {
+
+  const CommentConverter();
+
+  @override
+  CommentDto fromJson(Map<String, dynamic> comment) {
+    return CommentDto.fromJson(comment);
+  }
+
+  @override
+  Map<String, dynamic> toJson(CommentDto commentDto) {
+    return commentDto.toJson();
+  }
+}
+
+
 
 // class DatetimeConverter implements JsonConverter<DateTime, String>{
 //   @override

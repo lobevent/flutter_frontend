@@ -11,6 +11,7 @@ import 'package:flutter_frontend/presentation/pages/login/phone_number_verificat
 import 'package:flutter_frontend/presentation/pages/social/profile_friends/profile_friends_page.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/profile_page.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_search/profile_search_page.dart';
+import 'package:flutter_frontend/presentation/post_comment/comments_screen/comments_screen.dart';
 
 @MaterialAutoRouter(
   routes: <AutoRoute>[
@@ -25,7 +26,8 @@ import 'package:flutter_frontend/presentation/pages/social/profile_search/profil
     AutoRoute(page: EventScreenPage),
     AutoRoute(page: ProfilePage),
     AutoRoute(page: ProfileSearchPage),
-    AutoRoute(page: ProfileFriendsScreen)
+    AutoRoute(page: ProfileFriendsScreen),
+    AutoRoute(page: CommentsScreen)
   ],
 )
 class $Router {}

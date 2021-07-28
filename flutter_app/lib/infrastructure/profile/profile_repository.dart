@@ -77,6 +77,9 @@ class ProfileRepository extends IProfileRepository {
           profileDtos = await _profileRemoteService
               .getAcceptedFriendships(profile?.id.getOrCrash().toString());
           break;
+        case Operation.pendingFriends:
+          profileDtos = await _profileRemoteService.getOpenFriendRequests();
+          break;
         case Operation.postProfile:
           if (post == null) {
             throw UnexpectedTypeError();
@@ -131,11 +134,20 @@ class ProfileRepository extends IProfileRepository {
     }
   }
 
+  Future<bool> acceptFriend(UniqueId id) async {
+    try {
+      final bool success =
+          (await _profileRemoteService.acceptFriendRequest(id.getOrCrash()));
+      return success;
+    } on CommunicationException catch (e) {
+      return false;
+    }
+  }
+
   Future<bool> deleteFriend(UniqueId id) async {
     try {
-      //TODO ugly cast
-      final bool success = (await _profileRemoteService
-          .deleteFriendRequest(id.getOrCrash()));
+      final bool success =
+          (await _profileRemoteService.deleteFriendRequest(id.getOrCrash()));
       return success;
     } on CommunicationException catch (e) {
       return false;

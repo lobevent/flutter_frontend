@@ -28,7 +28,7 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String getOpenFriendRequestsPath = "/friend/requests";
   static const String getAcceptedFriendshipsPath = "/friend/%profileId%";
   static const String sendFriendShipPath = "/friend/request/%profileId%";
-  static const String acceptFriendShipPath = "/friend/accept/%profileId%/";
+  static const String acceptFriendShipPath = "/friend/accept/%profileId%";
   static const String deleteFriendShipPath = "/friend/delete/%profileId%";
 
   SymfonyCommunicator client;
@@ -97,13 +97,12 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
     return response.body;
   }
 
-  Future<String> acceptFriendRequest(String profileId) async {
-    final Response response =
-        await client.post(acceptFriendShipPath, profileId);
-    return response.body;
+  Future<bool> acceptFriendRequest(String profileId) async {
+    final Response response = await client.post(
+        acceptFriendShipPath.interpolate({"profileId": profileId}), profileId);
+    return response.body.isNotEmpty;
   }
 
-  ///TODO this cast is not safe i guess, rework it
   Future<bool> deleteFriendRequest(String profileId) async {
     final Response response = await client
         .delete(deleteFriendShipPath.interpolate({"profileId": profileId}));

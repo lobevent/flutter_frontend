@@ -60,7 +60,7 @@ main() {
       creationDate: DateTime.now(),
       commentContent: CommentContent("ihhhhhhhhhhhhh"),
       owner: profileBaseValid,
-      post: 2, commentChildren: Comment.children(count: 0, commentChildren: []), commentParent: );
+      post: 2, commentChildren: Comment.children(count: 0, commentChildren: []));
 
   Comment testCommentInvalid = Comment(
       id: UniqueId.fromUniqueString('3'),

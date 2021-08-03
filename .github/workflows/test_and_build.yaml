@@ -11,7 +11,7 @@ jobs:
       - name: Checkout the git repository
         uses: actions/checkout@v2
       - name: Install flutter using the stable channel
-        uses: subosito/flutter-action@v1.3.2
+        uses: subosito/flutter-action@v1
         with:
           channel: stable
       - name: Run dartanalyzer, pub get, tests and build for Android & iOS

@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/event/event_form/event_form_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
-import 'package:flutter_frontend/presentation/pages/Event/Event_Form/widgets/description_body_widged.dart';
-import 'package:flutter_frontend/presentation/pages/Event/Event_Form/widgets/title_widget.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/description_body_widged.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/title_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 

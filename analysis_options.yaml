@@ -17,6 +17,8 @@ analyzer:
     - "*.freezed.dart"
     # exclude the auto router file from analysis
     - "*.gr.dart"
+    # TODO: Fix skipped tests and remove this exclude again
+    - "flutter_app/test/skipped/**/*"
 
   errors:
     # treat missing required parameters as a error (not a hint)

@@ -35,8 +35,5 @@ jobs:
         run: flutter analyze --no-fatal-infos
       - name: Run tests
         run: flutter test
-      - name: Build for Android
-        run: flutter build appbundle
-      - name: Build for iOS
-        if: matrix.os == 'macos-latest'
+      - name: Build app
         run: flutter build ${{ matrix.build-target }}

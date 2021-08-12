@@ -76,6 +76,14 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody>
                 ListView.builder(
                     itemBuilder: (context, index) {
                       final friend = this.friends[index];
+                      if (friends.isEmpty) {
+                        return Ink(
+                            color: Colors.red,
+                            child: Center(
+                              child: ListTile(
+                                  title: Text("No friends available :(")),
+                            ));
+                      }
                       if (friend.failureOption.isSome()) {
                         return Ink(
                             color: Colors.red,
@@ -83,19 +91,12 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody>
                               title: Text(friend.failureOption
                                   .fold(() => "", (a) => a.toString())),
                             ));
-                      }
-                      if (this.friends.isEmpty) {
-                        return Ink(
-                            color: Colors.red,
-                            child: ListTile(
-                                title: Text("No friends available :(")));
                       } else {
                         return ProfileListTiles(
                           key: ObjectKey(friend),
                           profile: this.friends[index],
                           buttonCase: TileButton.deleteFriendButton,
                         );
-                        //EventListTiles(key: ObjectKey(event), event: this.events[index], allowEdit: true);
                       }
                     },
                     itemCount: this.friends.length),
@@ -113,8 +114,10 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody>
                       if (this.pendingFriends.isEmpty) {
                         return Ink(
                             color: Colors.red,
-                            child: ListTile(
-                                title: Text("No friends available :(")));
+                            child: Center(
+                              child: ListTile(
+                                  title: Text("No friends available :(")),
+                            ));
                       } else {
                         return ProfileListTiles(
                           key: ObjectKey(friend),

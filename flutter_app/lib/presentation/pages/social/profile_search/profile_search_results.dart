@@ -6,6 +6,7 @@ import 'package:flutter_frontend/application/event/event_screen/event_screen_cub
 import 'package:flutter_frontend/application/profile/profile_search/profile_search_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/profile_list_tiles.dart';
@@ -68,7 +69,7 @@ class SearchResultsListViewState extends State<SearchResultsListView>
     if (profiles.isEmpty) {
       return [
         Center(
-          child: const Text("No profiles found"),
+          child: const Text(AppStrings.noProfilesFound),
         ),
       ];
     } else {
@@ -88,7 +89,7 @@ class SearchResultsListViewState extends State<SearchResultsListView>
     if (events.isEmpty) {
       return [
         Center(
-          child: Text("No events found"),
+          child: Text(AppStrings.noEventsFound),
         )
       ];
     } else {
@@ -103,7 +104,7 @@ class SearchResultsListViewState extends State<SearchResultsListView>
     }
   }
 
-  ///build initial search screen in tabs, TODO
+  ///build initial search screen in tabs
   Widget buildStartSearching(BuildContext context, String eventProfile) {
     return Center(
       child: Column(
@@ -166,6 +167,7 @@ class SearchResultsListViewState extends State<SearchResultsListView>
                   loading: (_) => true,
                   orElse: () => false);
               if (init) {
+                //on initial build the big search initial screen
                 return TabBarView(
                   controller: tabController,
                   children: [
@@ -183,45 +185,6 @@ class SearchResultsListViewState extends State<SearchResultsListView>
                 );
               }
             }),
-
-            /*ListView.builder(
-                  // build under the floatingsearchbar
-                  itemBuilder: (context, index) {
-                    final profile = this.profiles[index];
-                    if (profile.failureOption.isSome()) {
-                      //red tile if profile failure
-                      return ClipRect(
-                        child: Ink(
-                          color: Colors.red,
-                          child: ListTile(
-                            title: Text(profile.failureOption
-                                .fold(() => "", (a) => a.toString())),
-                          ),
-                        ),
-                      );
-                    }
-                    if (this.profiles.isEmpty) {
-                      return ClipRect(
-                        child: Ink(
-                          color: Colors.red,
-                          child: ListTile(
-                            title: Text("No profiles Found"),
-                          ),
-                        ),
-                      );
-                    } else {
-                      ///return profilelisttiles as searched
-                      return ClipRect(
-                        child: ProfileListTiles(
-                            key: ObjectKey(profile),
-                            profile: this.profiles[index]),
-                      );
-                    }
-                  },
-                  itemCount: this.profiles.length),
-            ),
-
-                 */
           ),
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/application/like/like_cubit.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
@@ -149,6 +150,17 @@ class ProfileRepository extends IProfileRepository {
           (await _profileRemoteService.deleteFriendRequest(id.getOrCrash()));
       return success;
     } on CommunicationException catch (e) {
+      return false;
+    }
+  }
+
+  ///Like functionalities
+  Future<bool> like(UniqueId objectId, LikeTypeOption option) async{
+    try{
+      final bool success=
+      (await _profileRemoteService.like(objectId.getOrCrash(), option));
+      return success;
+    } on CommunicationException catch(e){
       return false;
     }
   }

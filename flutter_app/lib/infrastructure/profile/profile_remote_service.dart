@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_frontend/application/like/like_cubit.dart';
 import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
@@ -30,6 +31,12 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String sendFriendShipPath = "/friend/request/%profileId%";
   static const String acceptFriendShipPath = "/friend/accept/%profileId%";
   static const String deleteFriendShipPath = "/friend/delete/%profileId%";
+
+  static const String getProfilesWhichLikedPath = "/likes/%objectId%";
+  static const String eventLikePath = "/event/%objectId%/like";
+  static const String postLikePath = "/post/%objectId%/like";
+  static const String commentLikePath = "/comment/%objectId%/like";
+  static const String unlikePath = "/unlike/%objectId%";
 
   SymfonyCommunicator client;
 
@@ -125,5 +132,36 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
           getAcceptedFriendshipsPath.interpolate({"profileId": profileId}));
     }
     return convertList(response);
+  }
+
+  ///Like functionalities
+
+  ///returns a list of profiles, which liked an entity (event,post,comment)
+  Future<List<ProfileDto>> getProfilesWhichLiked(String objectId) async{
+    final Response response;
+
+    response = await client.get(
+      getProfilesWhichLikedPath.interpolate({"objectId": objectId}));
+    return convertList(response);
+  }
+
+  Future<bool> like(String objectId, LikeTypeOption option) async{
+    final Response response;
+    //switch between the different routes for the different entity types
+    switch(option){
+      case LikeTypeOption.Event:
+        response = await client.post(
+            eventLikePath.interpolate({"objectId": objectId}), objectId);
+        break;
+      case LikeTypeOption.Post:
+        response = await client.post(
+            postLikePath.interpolate({"objectId": objectId}), objectId);
+        break;
+      case LikeTypeOption.Comment:
+        response = await client.post(
+            commentLikePath.interpolate({"objectId": objectId}), objectId);
+        break;
+    }
+    return response.body.isNotEmpty;
   }
 }

@@ -164,4 +164,24 @@ class ProfileRepository extends IProfileRepository {
       return false;
     }
   }
+
+  Future<bool> unlike(UniqueId objectId, LikeTypeOption option) async{
+    try{
+      final bool success=
+      (await _profileRemoteService.unlike(objectId.getOrCrash(), option));
+      return success;
+    } on CommunicationException catch(e){
+      return false;
+    }
+  }
+
+  Future<bool> checkLikeStatus(UniqueId objectId) async{
+    try{
+      final bool success=
+      (await _profileRemoteService.getOwnLikeStatus(objectId.getOrCrash().toString()));
+      return success;
+    }on CommunicationException catch (e){
+      return false;
+    }
+  }
 }

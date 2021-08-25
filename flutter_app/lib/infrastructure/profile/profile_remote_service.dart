@@ -32,11 +32,19 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String acceptFriendShipPath = "/friend/accept/%profileId%";
   static const String deleteFriendShipPath = "/friend/delete/%profileId%";
 
+
   static const String getProfilesWhichLikedPath = "/likes/%objectId%";
+  static const String ownLikeStatusPath = "/like/%objectId%";
+
   static const String eventLikePath = "/event/%objectId%/like";
   static const String postLikePath = "/post/%objectId%/like";
   static const String commentLikePath = "/comment/%objectId%/like";
-  static const String unlikePath = "/unlike/%objectId%";
+
+  static const String eventUnLikePath = "/event/%objectId%/like";
+  static const String postUnLikePath = "/post/%objectId%/like";
+  static const String commentUnLikePath = "/comment/%objectId%/like";
+
+
 
   SymfonyCommunicator client;
 
@@ -145,6 +153,16 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
     return convertList(response);
   }
 
+  ///get own like status for showing indicator if already liked
+  Future<bool> getOwnLikeStatus(String objectId) async{
+    final Response response;
+
+    response = await client.get(
+      ownLikeStatusPath.interpolate({"objectId": objectId}));
+
+    return response.body.isNotEmpty;
+  }
+
   Future<bool> like(String objectId, LikeTypeOption option) async{
     final Response response;
     //switch between the different routes for the different entity types
@@ -160,6 +178,26 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
       case LikeTypeOption.Comment:
         response = await client.post(
             commentLikePath.interpolate({"objectId": objectId}), objectId);
+        break;
+    }
+    return response.body.isNotEmpty;
+  }
+
+  Future<bool> unlike(String objectId, LikeTypeOption option) async{
+    final Response response;
+    //switch between the different routes for the different entity types
+    switch(option){
+      case LikeTypeOption.Event:
+        response = await client.post(
+            eventUnLikePath.interpolate({"objectId": objectId}), objectId);
+        break;
+      case LikeTypeOption.Post:
+        response = await client.post(
+            postUnLikePath.interpolate({"objectId": objectId}), objectId);
+        break;
+      case LikeTypeOption.Comment:
+        response = await client.post(
+            commentUnLikePath.interpolate({"objectId": objectId}), objectId);
         break;
     }
     return response.body.isNotEmpty;

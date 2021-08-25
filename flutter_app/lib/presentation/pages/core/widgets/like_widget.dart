@@ -21,11 +21,34 @@ class LikeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LikeCubit,LikeState>(
       builder: (context, state){
-        return IconButton(
+        /*return IconButton(
             onPressed: (){
               context.read<LikeCubit>().like(objectId, option!);
             }, icon: const Icon(Icons.radio_button_unchecked_rounded));
+
+         */
+        if(likeStatus!){
+          return IconButton(
+              onPressed: (){
+                context.read<LikeCubit>().like(objectId, option!);
+              },
+              icon: Icon(Icons.map));
+        }else{
+          return IconButton(onPressed: null, icon: Icon(Icons.ac_unit));
+        }
       },
     );
+  }
+
+  IconButton buildLikeWithStatus(BuildContext context){
+    if(likeStatus!){
+      return IconButton(
+          onPressed: (){
+            context.read<LikeCubit>().like(objectId, option!);
+            },
+          icon: Icon(Icons.map));
+    }else{
+      return IconButton(onPressed: null, icon: Icon(Icons.ac_unit));
+    }
   }
 }

@@ -1,4 +1,4 @@
-part of 'event_form_cubit.dart';
+  part of 'event_form_cubit.dart';
 
 
 @freezed

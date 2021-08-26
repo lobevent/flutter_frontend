@@ -15,10 +15,13 @@ const stdPadding = EdgeInsets.fromLTRB(paddingLeftConst, paddingTopConst, paddin
 class BasicContentContainer extends StatelessWidget{
   final List<Widget> children;
   final bool scrollable;
-  const BasicContentContainer({Key? key, required this.children, this.scrollable = true}): super(key: key);
+  final Widget? bottomNavigationBar;
+  const BasicContentContainer({Key? key, required this.children, this.bottomNavigationBar,  this.scrollable = true}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+
     if(!scrollable) {
       return Scaffold(
           body: ColorfulSafeArea(
@@ -27,6 +30,7 @@ class BasicContentContainer extends StatelessWidget{
                 children: children,
               ),
             ),
+        bottomNavigationBar: bottomNavigationBar,
           );
     }
     return Scaffold(
@@ -37,7 +41,9 @@ class BasicContentContainer extends StatelessWidget{
               children: children,
             ),
           ),
-        ));
+        ),
+      bottomNavigationBar: bottomNavigationBar,
+    );
   }
 }
 

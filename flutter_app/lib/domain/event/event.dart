@@ -42,7 +42,7 @@ class Event with _$Event {
     name: EventName(''),
     date: DateTime.now(),
     description: EventDescription(''),
-    todo: Todo(id: UniqueId.fromUniqueString('e6837df8-9e99-4f00-a40d-0e798834e9da'),items: [],name: TodoName('lool'), ),
+    //todo: Todo(id: UniqueId.fromUniqueString('e6837df8-9e99-4f00-a40d-0e798834e9da'),items: [],name: TodoName('lool'), ),
     creationDate: DateTime.now(),
     owner: Profile(id: UniqueId(), name: ProfileName("ssss")), //TODO: !!!!!!!IIIIIIMMMMMMMMPPPPPPOOOOORTANT!!!!!!!! Implement logged in profile fetching
     public: false,

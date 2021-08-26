@@ -50,7 +50,7 @@ class _DatePickerState extends State<DatePicker> {
                     setState(() {});
 
                     /// set the date in the cubit
-                    context.read<EventFormCubit>().changeDate(date!);
+                    context.read<EventFormCubit>().changeDate(date!.toLocal());
                   }
                 })),
             Spacer(),
@@ -63,16 +63,16 @@ class _DatePickerState extends State<DatePicker> {
                     if(date != null){
                       date = DateTime(date!.year, date!.month, date!.day, value.hour, value.minute);
                     }else{
-                      DateTime now = DateTime.now();
+                      DateTime now = DateTime.now().toLocal();
                       date = DateTime(now.year, now.month, now.day, value.hour, value.minute);
                     }
                     /// set the button string
                     timeButtonText = formatDateOrTime(dateTime: date!, time: true);
                     // set the state for the stateless widget
                     setState(() {});
-
+                    date = date!.toLocal();
                     /// set the date in the cubit
-                    context.read<EventFormCubit>().changeDate(date!);
+                    context.read<EventFormCubit>().changeDate(date!.toLocal());
                   }
                 }))
 
@@ -109,12 +109,12 @@ class _DatePickerState extends State<DatePicker> {
 
 
   Future<TimeOfDay?> selectTime(BuildContext context) {
-    TimeOfDay initialTime =  date != null ? TimeOfDay.fromDateTime(date!) : TimeOfDay.now();
+    TimeOfDay initialTime =  date != null ? TimeOfDay.fromDateTime(date!.toLocal()) : TimeOfDay.now();
 
     // https://api.flutter.dev/flutter/material/showTimePicker.html
     //this method shows the date Picker
     return showTimePicker(
-      initialTime: TimeOfDay.now(),
+      initialTime: initialTime,
       context: context,
     );
   }

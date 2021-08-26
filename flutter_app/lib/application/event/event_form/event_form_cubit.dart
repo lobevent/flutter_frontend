@@ -51,7 +51,7 @@ class EventFormCubit extends Cubit<EventFormState> {
   }
 
   void changeDate(DateTime date){
-    emit(state.copyWith(event: state.event.copyWith(date: date)));
+    emit(state.copyWith(event: state.event.copyWith(date: date.toUtc())));
   }
 
   Future<void> loadEvent(String id) async {

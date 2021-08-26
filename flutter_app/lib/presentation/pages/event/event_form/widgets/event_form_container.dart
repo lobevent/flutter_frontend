@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/date_picker.dart';
 
 import 'description_body_widged.dart';
 import 'title_widget.dart';
@@ -21,6 +22,8 @@ class EventFormContainer extends StatelessWidget{
 
             /// the input filed with the decription
             DescriptionField(),
+
+            DatePicker(),
           ],
         ),
       ),

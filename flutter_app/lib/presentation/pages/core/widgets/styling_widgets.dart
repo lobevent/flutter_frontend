@@ -15,6 +15,7 @@ const stdPadding = EdgeInsets.fromLTRB(paddingLeftConst, paddingTopConst, paddin
 class BasicContentContainer extends StatelessWidget{
   final List<Widget> children;
   final bool scrollable;
+  // https://stackoverflow.com/questions/54114221/flutter-fixed-button-in-customscrollview
   final Widget? bottomNavigationBar;
   const BasicContentContainer({Key? key, required this.children, this.bottomNavigationBar,  this.scrollable = true}): super(key: key);
 

@@ -2,6 +2,7 @@
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 const double paddingLeftConst  = 30;
 const double paddingTopConst = 0;
 const double paddingRightConst  = 30;
@@ -147,6 +148,34 @@ class StdTextButton extends StatelessWidget{
             child: child));
   }
 
+
+}
+
+
+/// A simple Button for displaying text, and an icon
+class TextWithIconButton extends StatelessWidget{
+  final String text;
+  final VoidCallback? onPressed;
+  final IconData icon;
+  const TextWithIconButton({Key? key, required this.onPressed, required this.text, required this.icon}) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return
+      StdTextButton(
+        // the call of the on pressed. With the nullcheck, because not every button needs an onpressed
+        onPressed: () => onPressed == null? null : onPressed!(),
+        child: Row(children: [
+          // button and text are Prestyled
+          Icon(
+            icon,
+            color: AppColors.stdTextColor,
+          ),
+          Text(text, style: TextStyle(color: AppColors.stdTextColor),),
+        ],),);
+
+    }
 
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/checkbox_area.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/date_picker.dart';
 
 import 'description_body_widged.dart';
@@ -24,6 +25,8 @@ class EventFormContainer extends StatelessWidget{
             DescriptionField(),
 
             DatePicker(),
+
+            CheckBoxArea(),
           ],
         ),
       ),

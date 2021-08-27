@@ -54,6 +54,10 @@ class EventFormCubit extends Cubit<EventFormState> {
     emit(state.copyWith(event: state.event.copyWith(date: date.toUtc())));
   }
 
+  void changePublic(bool public){
+    emit(state.copyWith(event: state.event.copyWith(public: public)));
+  }
+
   Future<void> loadEvent(String id) async {
     emit(EventFormState.loading());
     repository.getSingle(UniqueId.fromUniqueString(id)).then(

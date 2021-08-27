@@ -32,9 +32,12 @@ class _DatePickerState extends State<DatePicker> {
 
         }
         return
+        // as there are two buttons, the paddingrowwidget is the natural choice
           PaddingRowWidget(children: [
-            StdTextButton(
-                child: Text(dateButtonText, style: TextStyle(color: AppColors.stdTextColor)),
+            // the date button; opens datepicker
+            TextWithIconButton(
+              icon: Icons.calendar_today_outlined,
+                text: dateButtonText,
                 onPressed: () => selectDate(context).then((value) {
                   if (value != null) {
                     /// merge the date and the time
@@ -55,8 +58,10 @@ class _DatePickerState extends State<DatePicker> {
                 })),
             Spacer(),
 
-            StdTextButton(
-                child: Text(timeButtonText, style: TextStyle(color: AppColors.stdTextColor)),
+            // the time button; opens time picker
+            TextWithIconButton(
+              icon: Icons.access_time,
+                text: timeButtonText,
                 onPressed: () => selectTime(context).then((value) {
                   if (value != null) {
                     /// merge the date and the time

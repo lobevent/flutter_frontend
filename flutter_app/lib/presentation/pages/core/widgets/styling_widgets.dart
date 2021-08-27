@@ -156,8 +156,8 @@ class StdTextButton extends StatelessWidget{
 class TextWithIconButton extends StatelessWidget{
   final String text;
   final VoidCallback? onPressed;
-  final IconData icon;
-  const TextWithIconButton({Key? key, required this.onPressed, required this.text, required this.icon}) : super(key: key);
+  final IconData? icon;
+  const TextWithIconButton({Key? key, required this.onPressed, required this.text, this.icon}) : super(key: key);
 
 
   @override

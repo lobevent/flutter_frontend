@@ -6,7 +6,11 @@ import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:intl/intl.dart';
 
+/// The Datepicker widget contains two buttons
+/// an button for date and one for time picking
+/// they are opening an datepicker and timepicker respectively
 class DatePicker extends StatefulWidget {
+  //TODO: Fix localization problem
 
   const DatePicker({Key? key}) : super(key: key);
 
@@ -23,63 +27,25 @@ class _DatePickerState extends State<DatePicker> {
   Widget build(BuildContext context) {
     return BlocBuilder<EventFormCubit, EventFormState>(
       builder: (context, state) {
+        // if its editing, there should be a date, then
         if(state.isEditing){
           date = state.event.date;
-          /// set the button string
-          dateButtonText = formatDateOrTime(dateTime: date!);
-          /// set the button string
-          timeButtonText = formatDateOrTime(dateTime: date!, time: true);
+          // set the button string
+          dateButtonText = _formatDateOrTime(dateTime: date!);
+          // set the button string
+          timeButtonText = _formatDateOrTime(dateTime: date!, time: true);
 
         }
         return
         // as there are two buttons, the paddingrowwidget is the natural choice
           PaddingRowWidget(children: [
             // the date button; opens datepicker
-            TextWithIconButton(
-              icon: Icons.calendar_today_outlined,
-                text: dateButtonText,
-                onPressed: () => selectDate(context).then((value) {
-                  if (value != null) {
-                    /// merge the date and the time
-                    if(date != null){
-                      date = DateTime(value.year, value.month, value.day, date!.hour, date!.minute);
-                    }else{
-                      date = value;
-                    }
+            _DateButton(context),
 
-                    /// set the button string
-                    dateButtonText = formatDateOrTime(dateTime: date!);
-                    // set the state for the stateless widget
-                    setState(() {});
-
-                    /// set the date in the cubit
-                    context.read<EventFormCubit>().changeDate(date!.toLocal());
-                  }
-                })),
             Spacer(),
 
             // the time button; opens time picker
-            TextWithIconButton(
-              icon: Icons.access_time,
-                text: timeButtonText,
-                onPressed: () => selectTime(context).then((value) {
-                  if (value != null) {
-                    /// merge the date and the time
-                    if(date != null){
-                      date = DateTime(date!.year, date!.month, date!.day, value.hour, value.minute);
-                    }else{
-                      DateTime now = DateTime.now().toLocal();
-                      date = DateTime(now.year, now.month, now.day, value.hour, value.minute);
-                    }
-                    /// set the button string
-                    timeButtonText = formatDateOrTime(dateTime: date!, time: true);
-                    // set the state for the stateless widget
-                    setState(() {});
-                    date = date!.toLocal();
-                    /// set the date in the cubit
-                    context.read<EventFormCubit>().changeDate(date!.toLocal());
-                  }
-                }))
+            _TimeButton(context)
 
 
           ]);
@@ -88,7 +54,59 @@ class _DatePickerState extends State<DatePicker> {
     );
   }
 
-  String formatDateOrTime({required DateTime dateTime, bool time = false}){
+  /// the time button; opens time picker
+  Widget _TimeButton(BuildContext context){
+    return TextWithIconButton(
+        icon: Icons.access_time,
+        text: timeButtonText,
+        onPressed: () => _selectTime(context).then((value) {
+          if (value != null) {
+            /// merge the date and the time
+            if(date != null){
+              date = DateTime(date!.year, date!.month, date!.day, value.hour, value.minute);
+            }else{
+              DateTime now = DateTime.now().toLocal();
+              date = DateTime(now.year, now.month, now.day, value.hour, value.minute);
+            }
+            /// set the button string
+            timeButtonText = _formatDateOrTime(dateTime: date!, time: true);
+            // set the state for the stateless widget
+            setState(() {});
+            date = date!.toLocal();
+            /// set the date in the cubit
+            context.read<EventFormCubit>().changeDate(date!.toLocal());
+          }
+        }));
+  }
+
+  /// the date button; opens datepicker
+  Widget _DateButton(BuildContext context){
+    return TextWithIconButton(
+        icon: Icons.calendar_today_outlined,
+        text: dateButtonText,
+        onPressed: () => _selectDate(context).then((value) {
+          if (value != null) {
+            /// merge the date and the time
+            if(date != null){
+              date = DateTime(value.year, value.month, value.day, date!.hour, date!.minute);
+            }else{
+              date = value;
+            }
+
+            /// set the button string
+            dateButtonText = _formatDateOrTime(dateTime: date!);
+            // set the state for the stateless widget
+            setState(() {});
+
+            /// set the date in the cubit
+            context.read<EventFormCubit>().changeDate(date!.toLocal());
+          }
+        }));
+  }
+
+
+
+  String _formatDateOrTime({required DateTime dateTime, bool time = false}){
     if(time){
       return TimeOfDay.fromDateTime(dateTime).format(context);
     }else{
@@ -96,7 +114,7 @@ class _DatePickerState extends State<DatePicker> {
     }
   }
 
-  Future<DateTime?> selectDate(BuildContext context) {
+  Future<DateTime?> _selectDate(BuildContext context) {
     DateTime initialDate = date != null ? date! : DateTime.now();
     DateTime firstDate = DateTime.now();
     DateTime lastDate = DateTime.now().add(Duration(days: 365 * 10));
@@ -113,7 +131,7 @@ class _DatePickerState extends State<DatePicker> {
   }
 
 
-  Future<TimeOfDay?> selectTime(BuildContext context) {
+  Future<TimeOfDay?> _selectTime(BuildContext context) {
     TimeOfDay initialTime =  date != null ? TimeOfDay.fromDateTime(date!.toLocal()) : TimeOfDay.now();
 
     // https://api.flutter.dev/flutter/material/showTimePicker.html

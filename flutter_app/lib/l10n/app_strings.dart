@@ -35,4 +35,7 @@ class AppStrings {
 
   static const String noProfilesFound = "No profiles found";
   static const String noEventsFound = "No events found";
+
+  static const String publicEvent = "Public";
+  static const String visibleWithoutLoginEvent = "Without Login";
 }

@@ -58,6 +58,10 @@ class EventFormCubit extends Cubit<EventFormState> {
     emit(state.copyWith(event: state.event.copyWith(public: public)));
   }
 
+  void changeVisibleWithoutLogin(bool vwl){
+    emit(state.copyWith(event: state.event.copyWith(visibleWithoutLogin: vwl)));
+  }
+
   Future<void> loadEvent(String id) async {
     emit(EventFormState.loading());
     repository.getSingle(UniqueId.fromUniqueString(id)).then(

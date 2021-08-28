@@ -20,7 +20,6 @@ class EventFormContainer extends StatelessWidget{
           children: const [
             /// the input field, where the name is typed
             EventNameField(),
-
             /// the input filed with the decription
             DescriptionField(),
 

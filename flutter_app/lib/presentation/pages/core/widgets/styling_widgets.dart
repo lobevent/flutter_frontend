@@ -181,9 +181,13 @@ class TextWithIconButton extends StatelessWidget{
 
 
 /// checkbox with text widget
+/// its statefull, because the text and the checkbox are covered by a button
+/// the button is useful because you dont have to hit the checkbox directly to toggle
 class TextCheckbox extends StatefulWidget {
+  // not a child, because I only want text in this boxes
   final String? text;
   final bool value;
+  // the checkbox on changed function
   final void Function(bool)? onChanged;
 
 
@@ -202,32 +206,63 @@ class _TextCheckBoxState extends State<TextCheckbox>{
   bool value = false;
 
 
+  /// this is used to set the initial value of the checkbox
+  /// but thats not enough
+  /// because if the state is not yet loaded in the bloc, the value wont change afterwards
+  /// thats why we have to override: didUpdateWidget
+  @override
+  void initState() {
+    value = widget.value;
+
+    super.initState();
+  }
+
+  /// this override is used, if the widged is changed externaly, so we have to
+  /// update the value
+  @override
+  void didUpdateWidget(covariant TextCheckbox oldWidget) {
+    // TODO: implement didUpdateWidget
+    value = widget.value;
+  }
 
 
   @override
   Widget build(BuildContext context) {
-      Color getColor(Set<MaterialState> states) {
-        return AppColors.checkboxColor;
-      }
-      value = widget.value;
+    Color getColor(Set<MaterialState> states) {
+      return AppColors.checkboxColor;
+    }
 
+    // As button, the Standard textbutton is used of cource
     return StdTextButton(
 
-        onPressed: () {
+        onPressed: () { // when the button is hit, the checkbox value gets triggered!
           value = !value;
+          callOnChanged(value);
           setState(() {});
         },
         child:
           Row(
             children: [
               Checkbox(
+                // the fill color is set by an material stateproperty, the states are
+                // similar to css pseudo classes like hover etc!
+                // more info: https://api.flutter.dev/flutter/material/Checkbox-class.html
                 fillColor: MaterialStateProperty.resolveWith(getColor),
-                onChanged: (bool? value)=> widget.onChanged == null? null : widget.onChanged!(value!),
+                // if the checkbox is toggled (Not if value is changed externaly!!!; see callOnChanged)
+                onChanged: (bool? value)=> callOnChanged(value),
                 value: value,
               ),
+              // the text in this checkbox, with styling
               Text(widget.text != null ? widget.text! : '', style: TextStyle(color: AppColors.stdTextColor)),
             ],
           ));
+  }
+
+  // because the checkbox' on changed is not called if value is changed externaly
+  // and we are using button to change it, the given on changed function has to be called
+  // from the button AND the checkbox, so this is an auxiliary function, to avoid code dupplication
+  void callOnChanged(bool? value){
+    widget.onChanged == null? null : widget.onChanged!(value!);
   }
 }
 

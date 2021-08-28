@@ -29,6 +29,7 @@ class Event with _$Event {
     Todo? todo,
     Profile? owner,
     required bool public,
+    required bool visibleWithoutLogin,
     int? attending,
     EventStatus? status,
     double? longitude,
@@ -49,7 +50,8 @@ class Event with _$Event {
     attending: 0,
     status: EventStatus.attending,
     longitude: 0,
-    latitude: 0
+    latitude: 0,
+    visibleWithoutLogin: false,
   );
 
   //check if the whole object is no failure

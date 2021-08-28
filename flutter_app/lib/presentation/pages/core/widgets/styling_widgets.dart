@@ -181,16 +181,27 @@ class TextWithIconButton extends StatelessWidget{
 
 
 /// checkbox with text widget
-class TextCheckbox extends StatelessWidget{
+class TextCheckbox extends StatefulWidget {
   final String? text;
   final bool value;
   final void Function(bool)? onChanged;
 
 
-  const TextCheckbox({Key? key,
+  TextCheckbox({Key? key,
     required this.onChanged,
     this.text,
     required this.value}) : super(key: key);
+
+  @override
+  _TextCheckBoxState createState() => _TextCheckBoxState();
+
+}
+
+class _TextCheckBoxState extends State<TextCheckbox>{
+
+  bool value = false;
+
+
 
 
   @override
@@ -198,25 +209,25 @@ class TextCheckbox extends StatelessWidget{
       Color getColor(Set<MaterialState> states) {
         return AppColors.checkboxColor;
       }
+      value = widget.value;
 
+    return StdTextButton(
 
-    return DecoratedBox(
-        decoration: BoxDecoration(
-            color: Color(0x2ABBBBBB),
-            /*   border:Border.all(width: 2.0,
-                  color:  Color(0x6BBBBBBB)),*/
-            borderRadius: BorderRadius.circular(10)),
-        child: Row(
-          children: [
-            Checkbox(
-              fillColor: MaterialStateProperty.resolveWith(getColor),
-              onChanged: (bool? value)=> onChanged == null? null : onChanged!(value!),
-              value: value,
-            ),
-            Text(text != null ? text! : '', style: TextStyle(color: AppColors.stdTextColor)),
-          ],
-        )
-    );
+        onPressed: () {
+          value = !value;
+          setState(() {});
+        },
+        child:
+          Row(
+            children: [
+              Checkbox(
+                fillColor: MaterialStateProperty.resolveWith(getColor),
+                onChanged: (bool? value)=> widget.onChanged == null? null : widget.onChanged!(value!),
+                value: value,
+              ),
+              Text(widget.text != null ? widget.text! : '', style: TextStyle(color: AppColors.stdTextColor)),
+            ],
+          ));
   }
 }
 

@@ -30,9 +30,11 @@ class _CheckBoxAreaState extends State<CheckBoxArea>{
             text: "public?   ",
             value: isPublic,
             onChanged: (bool? value) {
-              context.read<EventFormCubit>().changePublic(value!);
-              isPublic = value;
-              setState(() {});
+              if(value != null){
+                context.read<EventFormCubit>().changePublic(value!);
+                isPublic = value;
+                setState(() {});
+              }
             }),
       ]);
     });

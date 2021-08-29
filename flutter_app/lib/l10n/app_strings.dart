@@ -38,4 +38,6 @@ class AppStrings {
 
   static const String publicEvent = "Public";
   static const String visibleWithoutLoginEvent = "Without Login";
+
+  static const String inviteFriends = "Invite Friends";
 }

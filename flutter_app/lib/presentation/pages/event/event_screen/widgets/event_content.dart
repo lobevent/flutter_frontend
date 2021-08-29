@@ -36,7 +36,7 @@ class EventContent extends StatelessWidget{
                   /// Used as space
                   const SizedBox(height: 20),
 
-                  AttendingAndOwnStatus(state.event.attending!, state.event.status),
+                  AttendingAndOwnStatus(state.event.attendingCount!, state.event.status),
 
 
                   /// Used as space

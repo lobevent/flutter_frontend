@@ -30,7 +30,7 @@ class Event with _$Event {
     Profile? owner,
     required bool public,
     required bool visibleWithoutLogin,
-    int? attending,
+    int? attendingCount,
     EventStatus? status,
     double? longitude,
     double? latitude
@@ -47,7 +47,7 @@ class Event with _$Event {
     creationDate: DateTime.now(),
     owner: Profile(id: UniqueId(), name: ProfileName("ssss")), //TODO: !!!!!!!IIIIIIMMMMMMMMPPPPPPOOOOORTANT!!!!!!!! Implement logged in profile fetching
     public: false,
-    attending: 0,
+    attendingCount: 0,
     status: EventStatus.attending,
     longitude: 0,
     latitude: 0,

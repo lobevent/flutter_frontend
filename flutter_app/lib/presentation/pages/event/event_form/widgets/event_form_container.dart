@@ -1,4 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_frontend/l10n/app_strings.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/checkbox_area.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/date_picker.dart';
 
@@ -31,5 +34,8 @@ class EventFormContainer extends StatelessWidget{
       ),
     );
   }
+  
+  
+
 
 }

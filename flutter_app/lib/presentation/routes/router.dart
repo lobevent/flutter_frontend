@@ -17,7 +17,6 @@ import 'package:flutter_frontend/presentation/post_comment/comments_screen/comme
 @MaterialAutoRouter(
   routes: <AutoRoute>[
     AutoRoute(page: FeedScreen, initial: true),
-    AutoRoute(page: InviteFriendsWidget),
     AutoRoute(page: EventFormPage),
     AutoRoute(page: EventsMultilistScreen),
     AutoRoute(page: ItemCreateWidget),

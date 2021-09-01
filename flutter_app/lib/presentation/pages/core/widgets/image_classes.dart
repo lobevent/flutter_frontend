@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_frontend/domain/profile/profile.dart';
 
 
 /// contains functions for the profile images in one class
@@ -11,5 +12,9 @@ class ProfileImage{
     }else{
       return const AssetImage("assets/images/partypeople.jpg",);
     }
+  }
+
+  static ImageProvider getAssetOrNetworkFromProfile(Profile profile){
+    return getAssetOrNetwork(null);
   }
 }

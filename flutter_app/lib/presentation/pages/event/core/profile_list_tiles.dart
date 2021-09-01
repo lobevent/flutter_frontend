@@ -18,14 +18,12 @@ enum TileButton {
 
 class ProfileListTiles extends StatelessWidget {
   final Profile profile;
-  final String? imagePath;
   final TileButton buttonCase;
 
   //profile list tiles for searching profiles
   const ProfileListTiles(
       {required ObjectKey key,
       required this.profile,
-      String? this.imagePath,
       required this.buttonCase})
       : super(key: key);
 
@@ -62,7 +60,7 @@ class ProfileListTiles extends StatelessWidget {
         //load the avatar
         icon: CircleAvatar(
           radius: 30,
-          backgroundImage: ProfileImage.getAssetOrNetwork(imagePath),
+          backgroundImage: ProfileImage.getAssetOrNetworkFromProfile(profile),
         ),
         onPressed: () => showProfile(context),
       ),

@@ -268,5 +268,42 @@ class _TextCheckBoxState extends State<TextCheckbox>{
 
 
 
+class GenericSearchBar extends StatelessWidget{
+  final TextEditingController controller;
+  final void Function(String) onSearchTextChanged;
+  GenericSearchBar({Key? key,required this.controller, required this.onSearchTextChanged}): super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        color: Colors.black.withOpacity(0.5),
+        child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+                child: ListTile(
+                    leading: const Icon(Icons.search),
+                    title: TextField(
+                      controller: controller,
+                      decoration: const InputDecoration(
+                          hintText: 'Search', border: InputBorder.none),
+                      onChanged: onSearchTextChanged,
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.cancel),
+                      onPressed: () {
+                        controller.clear();
+                        onSearchTextChanged('');
+                      },
+                    )
+                )
+            )
+        )
+    );
+  }
+
+}
+
+
+
 
 

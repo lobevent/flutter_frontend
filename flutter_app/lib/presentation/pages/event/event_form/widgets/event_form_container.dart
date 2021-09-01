@@ -4,6 +4,8 @@ import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/checkbox_area.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/date_picker.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/invite_friends_widget.dart';
+import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 import 'description_body_widged.dart';
 import 'title_widget.dart';
@@ -20,7 +22,7 @@ class EventFormContainer extends StatelessWidget{
           : AutovalidateMode.disabled,
       child: SingleChildScrollView(
         child: Column(
-          children: const [
+          children:  [
             /// the input field, where the name is typed
             EventNameField(),
             /// the input filed with the decription
@@ -29,6 +31,8 @@ class EventFormContainer extends StatelessWidget{
             DatePicker(),
 
             CheckBoxArea(),
+
+            InviteFriendsWidget(),
           ],
         ),
       ),

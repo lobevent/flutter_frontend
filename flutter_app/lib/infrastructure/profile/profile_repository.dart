@@ -86,8 +86,7 @@ class ProfileRepository extends IProfileRepository {
             throw UnexpectedTypeError();
           }
           profileDtos = await _profileRemoteService.getProfilesToPost(
-              amount,
-              post.id!.getOrCrash().toString());
+              amount, post.id!.getOrCrash().toString());
           break;
       }
       //convert the dto objects to domain Objects
@@ -155,32 +154,32 @@ class ProfileRepository extends IProfileRepository {
   }
 
   ///Like functionalities
-  Future<bool> like(UniqueId objectId, LikeTypeOption option) async{
-    try{
-      final bool success=
-      (await _profileRemoteService.like(objectId.getOrCrash(), option));
+  Future<bool> like(UniqueId objectId, LikeTypeOption option) async {
+    try {
+      final bool success =
+          (await _profileRemoteService.like(objectId.getOrCrash(), option));
       return success;
-    } on CommunicationException catch(e){
+    } on CommunicationException catch (e) {
       return false;
     }
   }
 
-  Future<bool> unlike(UniqueId objectId, LikeTypeOption option) async{
-    try{
-      final bool success=
-      (await _profileRemoteService.unlike(objectId.getOrCrash(), option));
+  Future<bool> unlike(UniqueId objectId, LikeTypeOption option) async {
+    try {
+      final bool success =
+          (await _profileRemoteService.unlike(objectId.getOrCrash(), option));
       return success;
-    } on CommunicationException catch(e){
+    } on CommunicationException catch (e) {
       return false;
     }
   }
 
-  Future<bool> checkLikeStatus(UniqueId objectId) async{
-    try{
-      final bool success=
-      (await _profileRemoteService.getOwnLikeStatus(objectId.getOrCrash().toString()));
+  Future<bool> checkLikeStatus(UniqueId objectId) async {
+    try {
+      final bool success =
+          (await _profileRemoteService.getOwnLikeStatus(objectId.getOrCrash()));
       return success;
-    }on CommunicationException catch (e){
+    } on CommunicationException catch (e) {
       return false;
     }
   }

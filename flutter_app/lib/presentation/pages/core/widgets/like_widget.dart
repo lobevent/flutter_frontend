@@ -1,54 +1,61 @@
-import 'package:dartz/dartz.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/like/like_cubit.dart';
+import 'package:flutter_frontend/application/post_comment/comment_screen/comment_screen_cubit.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 
-class LikeButton extends StatelessWidget {
+class LikeButton extends StatefulWidget {
   final UniqueId objectId;
-  final LikeTypeOption? option;
-  final bool? likeStatus;
+  final LikeTypeOption option;
+  final bool likeStatus;
 
   const LikeButton(
-      {required ObjectKey key,
-        required this.objectId,
-        LikeTypeOption? this.option,
-        bool? this.likeStatus})
+      {Key? key,
+      required this.objectId,
+      required this.option,
+      required this.likeStatus})
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<LikeCubit,LikeState>(
-      builder: (context, state){
-        /*return IconButton(
-            onPressed: (){
-              context.read<LikeCubit>().like(objectId, option!);
-            }, icon: const Icon(Icons.radio_button_unchecked_rounded));
+  _LikeButtonState createState() => _LikeButtonState();
+}
 
-         */
-        if(likeStatus!){
-          return IconButton(
-              onPressed: (){
-                context.read<LikeCubit>().like(objectId, option!);
-              },
-              icon: Icon(Icons.map));
-        }else{
-          return IconButton(onPressed: null, icon: Icon(Icons.ac_unit));
-        }
+class _LikeButtonState extends State<LikeButton> {
+  bool likeStatus = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<LikeCubit, LikeState>(
+      listener: (context, state) {
+        state.maybeMap((value) => {},
+            loaded: (state) {
+              this.likeStatus = state.likeStatus;
+              setState(() {});
+            },
+            orElse: () => {});
       },
+      child: BlocBuilder<LikeCubit, LikeState>(
+        builder: (context, state) {
+          return buildLikeWithStatus();
+        },
+      ),
     );
   }
 
-  IconButton buildLikeWithStatus(BuildContext context){
-    if(likeStatus!){
+  IconButton buildLikeWithStatus() {
+    if (this.likeStatus) {
       return IconButton(
-          onPressed: (){
-            context.read<LikeCubit>().like(objectId, option!);
-            },
+          onPressed: () {
+            context.read<LikeCubit>().unlike(widget.objectId, widget.option);
+          },
           icon: Icon(Icons.map));
-    }else{
-      return IconButton(onPressed: null, icon: Icon(Icons.ac_unit));
+    } else {
+      return IconButton(
+          onPressed: () {
+            context.read<LikeCubit>().like(widget.objectId, widget.option);
+          },
+          icon: Icon(Icons.ac_unit));
     }
   }
 }

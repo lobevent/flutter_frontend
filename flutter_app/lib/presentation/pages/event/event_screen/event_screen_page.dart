@@ -59,10 +59,15 @@ class EventScreenPage extends StatelessWidget {
 
                             ///likebutton and information
                             BlocProvider(
-                                create: (context) => LikeCubit(this.eventId),
+                              create: (context) => LikeCubit(this.eventId),
                               child: BlocBuilder<LikeCubit, LikeState>(
-                                builder: (contex,state){
-                                  return LikeButton(key: ObjectKey(eventId), objectId: eventId, option: LikeTypeOption.Event, likeStatus: false,);
+                                builder: (context, state) {
+                                  return LikeButton(
+                                    key: ObjectKey(eventId),
+                                    objectId: eventId,
+                                    option: LikeTypeOption.Event,
+                                    likeStatus: false,
+                                  );
                                 },
                               ),
                             ),

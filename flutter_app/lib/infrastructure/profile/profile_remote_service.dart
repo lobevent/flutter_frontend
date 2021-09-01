@@ -32,7 +32,6 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String acceptFriendShipPath = "/friend/accept/%profileId%";
   static const String deleteFriendShipPath = "/friend/delete/%profileId%";
 
-
   static const String getProfilesWhichLikedPath = "/likes/%objectId%";
   static const String ownLikeStatusPath = "/like/%objectId%";
 
@@ -40,11 +39,9 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String postLikePath = "/post/%objectId%/like";
   static const String commentLikePath = "/comment/%objectId%/like";
 
-  static const String eventUnLikePath = "/event/%objectId%/like";
-  static const String postUnLikePath = "/post/%objectId%/like";
-  static const String commentUnLikePath = "/comment/%objectId%/like";
-
-
+  static const String eventUnLikePath = "/event/%objectId%/unlike";
+  static const String postUnLikePath = "/post/%objectId%/unlike";
+  static const String commentUnLikePath = "/comment/%objectId%/unlike";
 
   SymfonyCommunicator client;
 
@@ -145,28 +142,25 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   ///Like functionalities
 
   ///returns a list of profiles, which liked an entity (event,post,comment)
-  Future<List<ProfileDto>> getProfilesWhichLiked(String objectId) async{
+  Future<List<ProfileDto>> getProfilesWhichLiked(String objectId) async {
     final Response response;
 
-    response = await client.get(
-      getProfilesWhichLikedPath.interpolate({"objectId": objectId}));
+    response = await client
+        .get(getProfilesWhichLikedPath.interpolate({"objectId": objectId}));
     return convertList(response);
   }
 
   ///get own like status for showing indicator if already liked
-  Future<bool> getOwnLikeStatus(String objectId) async{
-    final Response response;
-
-    response = await client.get(
-      ownLikeStatusPath.interpolate({"objectId": objectId}));
-
-    return response.body.isNotEmpty;
+  Future<bool> getOwnLikeStatus(String objectId) async {
+    final Response response =
+        await client.get(ownLikeStatusPath.interpolate({"objectId": objectId}));
+    return response.body.length > 2;
   }
 
-  Future<bool> like(String objectId, LikeTypeOption option) async{
+  Future<bool> like(String objectId, LikeTypeOption option) async {
     final Response response;
     //switch between the different routes for the different entity types
-    switch(option){
+    switch (option) {
       case LikeTypeOption.Event:
         response = await client.post(
             eventLikePath.interpolate({"objectId": objectId}), objectId);
@@ -183,10 +177,10 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
     return response.body.isNotEmpty;
   }
 
-  Future<bool> unlike(String objectId, LikeTypeOption option) async{
+  Future<bool> unlike(String objectId, LikeTypeOption option) async {
     final Response response;
     //switch between the different routes for the different entity types
-    switch(option){
+    switch (option) {
       case LikeTypeOption.Event:
         response = await client.post(
             eventUnLikePath.interpolate({"objectId": objectId}), objectId);

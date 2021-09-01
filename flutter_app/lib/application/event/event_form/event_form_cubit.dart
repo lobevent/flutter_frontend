@@ -2,7 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
+import 'package:flutter_frontend/domain/profile/i_profile_repository.dart' as profileOps;
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
+import 'package:flutter_frontend/infrastructure/profile/profile_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -20,6 +22,7 @@ class EventFormCubit extends Cubit<EventFormState> {
     ;
   }
 
+  ProfileRepository profileRepository = GetIt.I<ProfileRepository>();
   EventRepository repository = GetIt.I<EventRepository>();
 
   Future<void> saveEvent() async {
@@ -61,6 +64,10 @@ class EventFormCubit extends Cubit<EventFormState> {
   void changeVisibleWithoutLogin(bool vwl){
     emit(state.copyWith(event: state.event.copyWith(visibleWithoutLogin: vwl)));
   }
+
+/*  Future<void> getFriends() async{
+    profileRepository.getList(profileOps.Operation.friends, 1000000000);
+  }*/
 
   Future<void> loadEvent(String id) async {
     emit(EventFormState.loading());

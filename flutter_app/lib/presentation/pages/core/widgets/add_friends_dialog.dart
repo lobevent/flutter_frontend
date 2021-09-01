@@ -5,6 +5,17 @@ import 'package:flutter_frontend/presentation/pages/core/list_tiles/friend_list_
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 
 class AddFriendsDialog extends StatefulWidget {
+  /// the list with all the friends of the user
+  final List<Profile> friends;
+  /// the list with all the friends, that are invited
+  final List<Profile> invitedFriends;
+  // callbackfunctio for adding friend
+  final VoidCallback onAddFriend;
+  // callback functtion for removing friends
+  final VoidCallback onRemoveFriend;
+
+  const AddFriendsDialog({Key? key, required this.friends, required this.invitedFriends, required this.onAddFriend, required this.onRemoveFriend}) : super(key: key);
+
 
 
   AddFriendsDialogState createState() => AddFriendsDialogState();
@@ -13,31 +24,58 @@ class AddFriendsDialog extends StatefulWidget {
 
 class AddFriendsDialogState extends State<AddFriendsDialog>{
   final TextEditingController controller = new TextEditingController();
-  final List<Profile> results = [];
-  final List<Profile> friends = [];
-  final List<Profile> invitedFriends = [];
+  List<Profile> results = [];
+
+  @override
+  void initState() {
+    results = widget.friends;
+    super.initState();
+  }
+
 
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        GenericSearchBar(controller: controller, onSearchTextChanged: onSearchTextChanged)
+        // searchbar
+        GenericSearchBar(controller: controller, onSearchTextChanged: onSearchTextChanged),
+        // the listtiles
+        _ProfileListView(context)
 
       ],
     );
 
   }
 
-  void onSearchTextChanged(String value) {}
+  void onSearchTextChanged(String text) {
+    // clear the results befor working with it
+    results.clear();
+    if (text.isEmpty) {
+      results = widget.friends;
+      setState(() {});
+      return;
+    }
+    // add each friend that contains the string
+    widget.friends.forEach((friend) {
+      if (friend.name.getOrCrash().contains(text))
+        results.add(friend);
+    });
+
+    setState(() {});
+  }
+
 
   Widget _ProfileListView(BuildContext context){
-    return ListView.builder(
-        itemCount: results.length,
-        itemBuilder: (context, i ){
-          return FriendListTile(profile: results[i], isInvited: invitedFriends.contains(friends));
-        }
-    );
+    return
+        ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: results.length,
+            itemBuilder: (context, i ){
+              return FriendListTile(profile: results[i], isInvited: widget.invitedFriends.contains(results[i]), onAddFriend: widget.onAddFriend, onRemoveFriend: widget.onRemoveFriend,);
+            }
+        );
   }
 
 

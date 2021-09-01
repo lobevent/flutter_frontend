@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/profile/profile_friends/profile_friends_cubit.dart';
+import 'package:flutter_frontend/application/profile/profile_search/profile_search_cubit.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/profile_list_tiles.dart';
 
 class ProfileFriendsBody extends StatefulWidget {
@@ -36,6 +38,33 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody>
     return TabController(length: tabs.length, vsync: this);
   }
 
+  Widget buildFriendListView(List<Profile> friendsOrPending) {
+    if (friendsOrPending.isEmpty) {
+      return Center(
+        child: Text(AppStrings.noProfilesFound),
+      );
+    }
+    return ListView.builder(
+        itemBuilder: (context, index) {
+          final friend = friendsOrPending[index];
+          if (friend.failureOption.isSome()) {
+            return Ink(
+                color: Colors.red,
+                child: ListTile(
+                  title: Text(
+                      friend.failureOption.fold(() => "", (a) => a.toString())),
+                ));
+          } else {
+            return ProfileListTiles(
+              key: ObjectKey(friend),
+              profile: friendsOrPending[index],
+              buttonCase: TileButton.deleteFriendButton,
+            );
+          }
+        },
+        itemCount: friendsOrPending.length);
+  }
+
   @override
   void dispose() {
     tabController.dispose();
@@ -60,74 +89,31 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody>
                 },
             orElse: () => {})
       },
+      //normal tab controller
       child: DefaultTabController(
-        length: tabs.length,
-        child: Scaffold(
-            appBar: TabBar(
-              controller: tabController,
-              unselectedLabelColor: Colors.black,
-              labelColor: Colors.red,
-              tabs: tabs,
-            ),
-            //tabbarview for switching between friends and pending requests
-            body: TabBarView(
-              controller: tabController,
-              children: [
-                ListView.builder(
-                    itemBuilder: (context, index) {
-                      final friend = this.friends[index];
-                      if (friend.failureOption.isSome()) {
-                        return Ink(
-                            color: Colors.red,
-                            child: ListTile(
-                              title: Text(friend.failureOption
-                                  .fold(() => "", (a) => a.toString())),
-                            ));
-                      }
-                      if (this.friends.isEmpty) {
-                        return Ink(
-                            color: Colors.red,
-                            child: ListTile(
-                                title: Text("No friends available :(")));
-                      } else {
-                        return ProfileListTiles(
-                          key: ObjectKey(friend),
-                          profile: this.friends[index],
-                          buttonCase: TileButton.deleteFriendButton,
-                        );
-                        //EventListTiles(key: ObjectKey(event), event: this.events[index], allowEdit: true);
-                      }
-                    },
-                    itemCount: this.friends.length),
-                ListView.builder(
-                    itemBuilder: (context, index) {
-                      final friend = this.pendingFriends[index];
-                      if (friend.failureOption.isSome()) {
-                        return Ink(
-                            color: Colors.red,
-                            child: ListTile(
-                              title: Text(friend.failureOption
-                                  .fold(() => "", (a) => a.toString())),
-                            ));
-                      }
-                      if (this.pendingFriends.isEmpty) {
-                        return Ink(
-                            color: Colors.red,
-                            child: ListTile(
-                                title: Text("No friends available :(")));
-                      } else {
-                        return ProfileListTiles(
-                          key: ObjectKey(friend),
-                          profile: this.pendingFriends[index],
-                          buttonCase: TileButton.acceptDeclineFriendButton,
-                        );
-                        //EventListTiles(key: ObjectKey(event), event: this.events[index], allowEdit: true);
-                      }
-                    },
-                    itemCount: this.pendingFriends.length),
-              ],
-            )),
-      ),
+          length: tabs.length,
+          child: BlocBuilder<ProfileFriendsCubit, ProfileFriendsState>(
+            builder: (context, state) {
+              return Scaffold(
+                appBar: TabBar(
+                  controller: tabController,
+                  unselectedLabelColor: Colors.black,
+                  labelColor: Colors.red,
+                  tabs: tabs,
+                ),
+                //tabbarview for switching between friends and pending requests
+                body: TabBarView(
+                  controller: tabController,
+                  children: [
+                    //build the friendTileListview here or return no friends found
+                    buildFriendListView(friends),
+                    //build the friendTileListview for pending friends here or return no pending requests found
+                    buildFriendListView(pendingFriends),
+                  ],
+                ),
+              );
+            },
+          )),
     );
   }
 }

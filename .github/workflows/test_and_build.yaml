@@ -4,23 +4,36 @@ on:
 
 jobs:
 
-  test_and_build:
-    name: Test the flutter app and build it (should always pass)
-    runs-on: macos-latest # needs to be macos otherwise flutter can't build for iOS
+  analyze-test-build:
+    name: Analyze, test, and build the app
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        include:
+        - os: ubuntu-latest
+          build-target: appbundle
+        - os: macos-latest
+          build-target: ios --no-codesign
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: flutter_app
     steps:
       - name: Checkout the git repository
         uses: actions/checkout@v2
       - name: Install flutter using the stable channel
-        uses: subosito/flutter-action@v1.3.2
+        uses: subosito/flutter-action@v1
         with:
           channel: stable
-      - name: Run dartanalyzer, pub get, tests and build for Android & iOS
-        run: |
-          cd flutter_app
-          flutter --version
-          flutter pub get
-          flutter pub run build_runner build --delete-conflicting-outputs
-          dartanalyzer --no-hints lib test
-          flutter test --no-pub --coverage
-          flutter build appbundle
-          flutter build ios --no-codesign
+      - name: Print info
+        run: flutter --version
+      - name: Fetch dependencies
+        run: flutter pub get
+      - name: Run code-generation
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Analyze code
+        run: flutter analyze --no-fatal-infos
+      - name: Run tests
+        run: flutter test
+      - name: Build app
+        run: flutter build ${{ matrix.build-target }}

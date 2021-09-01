@@ -42,7 +42,8 @@ class ProfilePageMeta extends StatelessWidget {
                           TitleText(st.profile.name.getOrCrash())
                         ],
                       ),
-                      st.profile.map((value) => throw UnexpectedTypeError(), full: (profile) =>
+                      // TODO: The unexpected Type Error comes when somone is not a friend yet. they cant load the full profile, but only the name and id. Fix to error message
+                      st.profile.map((value) => throw UnexpectedTypeError() , full: (profile) =>
                         EventAndFriends(profile.friendshipCount?? 0, profile.ownedEvents?.length, profile, context)
                       )
                 ]
@@ -73,8 +74,14 @@ class ProfilePageMeta extends StatelessWidget {
 
     return PaddingRowWidget(
         children: [
+          // Null friends is not tested yet. Maybe not working
           // The Friends Button
-          StdTextButton(// On Pressed Navigate to the FriendsScreenRoute
+          TextWithIconButton(// On Pressed Navigate to the FriendsScreenRoute
+              onPressed: () => context.router.push(ProfileFriendsScreenRoute()),
+              text: " Friends: ${friendscount?.toString()?? 0.toString()}" ,
+              icon: Icons.emoji_people_outlined),
+
+/*          StdTextButton(
             onPressed: () =>  context.router.push(ProfileFriendsScreenRoute()),
             child: Row(children: [
               const Icon(
@@ -86,10 +93,15 @@ class ProfilePageMeta extends StatelessWidget {
               Text(friendscount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
             ],),)
 
-          ,
+          ,*/
           Spacer(),
           // The Events Button
-          StdTextButton(
+          TextWithIconButton(
+              onPressed: () => context.router.push(EventsMultilistScreenRoute(option: EventScreenOptions.fromUser, profile: profile )),
+              text: " Events: ${eventcount?.toString()?? 0.toString()}",
+              icon: Icons.tapas_outlined)
+
+/*          StdTextButton(
             onPressed: () => context.router.push(EventsMultilistScreenRoute(option: EventScreenOptions.fromUser, profile: profile )),
             child: Row(children: [
               const Icon(
@@ -99,7 +111,7 @@ class ProfilePageMeta extends StatelessWidget {
               // divide in two texts, as count could be null, and the whole thing isnt diplayed
               Text(" Events: ", style: TextStyle(color: AppColors.stdTextColor),),
               Text(eventcount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
-            ],),)
+            ],),)*/
 
 
     ]);

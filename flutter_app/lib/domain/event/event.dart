@@ -29,7 +29,8 @@ class Event with _$Event {
     Todo? todo,
     Profile? owner,
     required bool public,
-    int? attending,
+    required bool visibleWithoutLogin,
+    int? attendingCount,
     EventStatus? status,
     double? longitude,
     double? latitude
@@ -42,14 +43,15 @@ class Event with _$Event {
     name: EventName(''),
     date: DateTime.now(),
     description: EventDescription(''),
-    todo: Todo(id: UniqueId.fromUniqueString('e6837df8-9e99-4f00-a40d-0e798834e9da'),items: [],name: TodoName('lool'), ),
+    //todo: Todo(id: UniqueId.fromUniqueString('e6837df8-9e99-4f00-a40d-0e798834e9da'),items: [],name: TodoName('lool'), ),
     creationDate: DateTime.now(),
     owner: Profile(id: UniqueId(), name: ProfileName("ssss")), //TODO: !!!!!!!IIIIIIMMMMMMMMPPPPPPOOOOORTANT!!!!!!!! Implement logged in profile fetching
     public: false,
-    attending: 0,
+    attendingCount: 0,
     status: EventStatus.attending,
     longitude: 0,
-    latitude: 0
+    latitude: 0,
+    visibleWithoutLogin: false,
   );
 
   //check if the whole object is no failure

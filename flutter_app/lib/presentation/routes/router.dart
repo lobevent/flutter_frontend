@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/event_form.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/invite_friends_widget.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/event_screen_page.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/events_multilist_screen.dart';
 import 'package:flutter_frontend/presentation/pages/event/todos/widgets/item_create_widget.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_frontend/presentation/post_comment/comments_screen/comme
 @MaterialAutoRouter(
   routes: <AutoRoute>[
     AutoRoute(page: FeedScreen, initial: true),
+    AutoRoute(page: InviteFriendsWidget),
     AutoRoute(page: EventFormPage),
     AutoRoute(page: EventsMultilistScreen),
     AutoRoute(page: ItemCreateWidget),

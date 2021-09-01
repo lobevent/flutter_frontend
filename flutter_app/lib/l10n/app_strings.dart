@@ -32,4 +32,12 @@ class AppStrings {
       "You are about to delete an friend. He will be alone :(";
   static const String deleteFriendDialogConfirm = "Delete";
   static const String deleteFriendDialogAbort = "Abort";
+
+  static const String noProfilesFound = "No profiles found";
+  static const String noEventsFound = "No events found";
+
+  static const String publicEvent = "Public";
+  static const String visibleWithoutLoginEvent = "Without Login";
+
+  static const String inviteFriends = "Invite Friends";
 }

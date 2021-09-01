@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  static const checkboxColor = Color(0xF5F67F41);
+
   static const white = Colors.white;
   static const black = Colors.black;
 

@@ -2,6 +2,7 @@
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 const double paddingLeftConst  = 30;
 const double paddingTopConst = 0;
 const double paddingRightConst  = 30;
@@ -15,10 +16,14 @@ const stdPadding = EdgeInsets.fromLTRB(paddingLeftConst, paddingTopConst, paddin
 class BasicContentContainer extends StatelessWidget{
   final List<Widget> children;
   final bool scrollable;
-  const BasicContentContainer({Key? key, required this.children, this.scrollable = true}): super(key: key);
+  // https://stackoverflow.com/questions/54114221/flutter-fixed-button-in-customscrollview
+  final Widget? bottomNavigationBar;
+  const BasicContentContainer({Key? key, required this.children, this.bottomNavigationBar,  this.scrollable = true}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+
     if(!scrollable) {
       return Scaffold(
           body: ColorfulSafeArea(
@@ -27,6 +32,7 @@ class BasicContentContainer extends StatelessWidget{
                 children: children,
               ),
             ),
+        bottomNavigationBar: bottomNavigationBar,
           );
     }
     return Scaffold(
@@ -37,7 +43,9 @@ class BasicContentContainer extends StatelessWidget{
               children: children,
             ),
           ),
-        ));
+        ),
+      bottomNavigationBar: bottomNavigationBar,
+    );
   }
 }
 
@@ -142,6 +150,122 @@ class StdTextButton extends StatelessWidget{
 
 
 }
+
+
+/// A simple Button for displaying text, and an icon
+class TextWithIconButton extends StatelessWidget{
+  final String text;
+  final VoidCallback? onPressed;
+  final IconData? icon;
+  const TextWithIconButton({Key? key, required this.onPressed, required this.text, this.icon}) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return
+      StdTextButton(
+        // the call of the on pressed. With the nullcheck, because not every button needs an onpressed
+        onPressed: () => onPressed == null? null : onPressed!(),
+        child: Row(children: [
+          // button and text are Prestyled
+          Icon(
+            icon,
+            color: AppColors.stdTextColor,
+          ),
+          Text(text, style: TextStyle(color: AppColors.stdTextColor),),
+        ],),);
+
+    }
+
+}
+
+
+/// checkbox with text widget
+/// its statefull, because the text and the checkbox are covered by a button
+/// the button is useful because you dont have to hit the checkbox directly to toggle
+class TextCheckbox extends StatefulWidget {
+  // not a child, because I only want text in this boxes
+  final String? text;
+  final bool value;
+  // the checkbox on changed function
+  final void Function(bool)? onChanged;
+
+
+  TextCheckbox({Key? key,
+    required this.onChanged,
+    this.text,
+    required this.value}) : super(key: key);
+
+  @override
+  _TextCheckBoxState createState() => _TextCheckBoxState();
+
+}
+
+class _TextCheckBoxState extends State<TextCheckbox>{
+
+  bool value = false;
+
+
+  /// this is used to set the initial value of the checkbox
+  /// but thats not enough
+  /// because if the state is not yet loaded in the bloc, the value wont change afterwards
+  /// thats why we have to override: didUpdateWidget
+  @override
+  void initState() {
+    value = widget.value;
+
+    super.initState();
+  }
+
+  /// this override is used, if the widged is changed externaly, so we have to
+  /// update the value
+  @override
+  void didUpdateWidget(covariant TextCheckbox oldWidget) {
+    // TODO: implement didUpdateWidget
+    value = widget.value;
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    Color getColor(Set<MaterialState> states) {
+      return AppColors.checkboxColor;
+    }
+
+    // As button, the Standard textbutton is used of cource
+    return StdTextButton(
+
+        onPressed: () { // when the button is hit, the checkbox value gets triggered!
+          value = !value;
+          callOnChanged(value);
+          setState(() {});
+        },
+        child:
+          Row(
+            children: [
+              Checkbox(
+                // the fill color is set by an material stateproperty, the states are
+                // similar to css pseudo classes like hover etc!
+                // more info: https://api.flutter.dev/flutter/material/Checkbox-class.html
+                fillColor: MaterialStateProperty.resolveWith(getColor),
+                // if the checkbox is toggled (Not if value is changed externaly!!!; see callOnChanged)
+                onChanged: (bool? value)=> callOnChanged(value),
+                value: value,
+              ),
+              // the text in this checkbox, with styling
+              Text(widget.text != null ? widget.text! : '', style: TextStyle(color: AppColors.stdTextColor)),
+            ],
+          ));
+  }
+
+  // because the checkbox' on changed is not called if value is changed externaly
+  // and we are using button to change it, the given on changed function has to be called
+  // from the button AND the checkbox, so this is an auxiliary function, to avoid code dupplication
+  void callOnChanged(bool? value){
+    widget.onChanged == null? null : widget.onChanged!(value!);
+  }
+}
+
 
 
 

@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/event/event_form/event_form_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
-import 'package:flutter_frontend/presentation/pages/Event/Event_Form/widgets/description_body_widged.dart';
-import 'package:flutter_frontend/presentation/pages/Event/Event_Form/widgets/title_widget.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/description_body_widged.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/event_form_container.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/title_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
@@ -23,92 +25,83 @@ class EventFormPage extends StatelessWidget {
     return BlocProvider(
         create: (context) => EventFormCubit(optionOf(editedEventId)),
         child: BlocConsumer<EventFormCubit, EventFormState>(
-        //listener: (context, state) {},
+          //listener: (context, state) {},
           listenWhen: (p, c) =>
               p.saveFailureOrSuccessOption != c.saveFailureOrSuccessOption,
           listener: (context, state) {
-            state.saveFailureOrSuccessOption.fold(
-              () {},
-              (either) {
-                either.fold( //TODO: the flashbar is only shown oncegngfh
-                  (failure) {
-                    // FlushbarHelper.createError(
-                    //   message: failure.map(
-                    //     insufficientPermissions: (_) =>
-                    //         'Insufficient permissions ❌',
-                    //     unableToUpdate: (_) =>
-                    //         "Couldn't update the note. Was it deleted from another device?",
-                    //     unexpected: (_) =>
-                    //         'Unexpected error occured, please contact support.',
-                    //     notFound: (_) => "Not Found",
-                    //     notAuthenticated: (_) => "Not Authenticated",
-                    //     internalServer: (_) => "Internal Server", //TODO: localization
-                    //   ),
-                    // ).show(context);
-                  },
-                  (_) {
-                    context.router.popUntil(
-                      (route) => route.settings.name == FeedScreenRoute.name,
-                    );
-                  },
-                );
-              },
-            );
+            successAndErrorHandler(state, context);
           },
           //buildWhen: (p, c) => p.isSaving != c.isSaving /*|| p.isLoading != c.isLoading*/,
-          builder: (context, state) {
-           String text = state.isSaving? "Saving": "Loading";
-            return LoadingOverlay(
-                child: EventFormPageScaffold(),
-                isLoading: state.isSaving || state.isLoading,
-                text: text);
 
+
+          builder: (context, state) {
+            // generate the heading
+            String text = state.isSaving ? "Saving" : "Loading";
+            return LoadingOverlay(
+              // controll the overlay
+              isLoading: state.isSaving || state.isLoading,
+              // set the custom loading text
+              text: text,
+
+              // the basic container, as everywhere
+              child: BasicContentContainer(
+                // its scrollable, because the form might get big
+                scrollable: true,
+
+                /// add a sticky bottom navigation
+                bottomNavigationBar: BottomNavigation(context),
+
+
+                children: [
+
+
+                  /// Title text for this page
+                  Text(state.isEditing ? 'Edit a Event' : 'Create a Event'),
+
+
+                  /// the form which contains all the inputs
+                  /// because the inputs have to be wrapped in a Form to function
+                  /// properly
+                  EventFormContainer( showErrorMessages: state.showErrorMessages,),
+                ],
+              ),
+            );
           },
         ));
   }
-}
 
-
-class EventFormPageScaffold extends StatelessWidget {
-  const EventFormPageScaffold({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: BlocBuilder<EventFormCubit, EventFormState>(
-          //buildWhen: (p, c) => p.isEditing != c.isEditing,
-          builder: (context, state) {
-            return Text(state.isEditing ? 'Edit a Event' : 'Create a Event');
-          },
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.check),
-            onPressed: () {
-              context.read<EventFormCubit>().submit();
-            },
-          )
-        ],
-      ),
-      body: BlocBuilder<EventFormCubit, EventFormState>(
-          //buildWhen: (p, c) => p.showErrorMessages != c.showErrorMessages,
-          builder: (context, state) {
-            return Form(
-              autovalidateMode: state.showErrorMessages? AutovalidateMode.always : AutovalidateMode.disabled,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const EventNameField(),
-                    const DescriptionField(),
-                  ],
-                ),
-              ),
-            );
+  Widget BottomNavigation(BuildContext context){
+    return PaddingRowWidget(children: [
+      IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            context.router.pop();
           }),
-    );
+      Spacer(),
+      IconButton(
+          icon: Icon(Icons.check),
+          onPressed: () {
+            context.read<EventFormCubit>().submit();
+          })
+    ]);
   }
 
+  void successAndErrorHandler(state, BuildContext context){
+    state.saveFailureOrSuccessOption.fold(
+          () {},
+          (either) {
+        either.fold(
+              (failure) {
+            //TODO: ADD flushbar
+          },
+              (_) {
+            context.router.popUntil(
+                  (route) => route.settings.name == FeedScreenRoute.name,
+            );
+          },
+        );
+      },
+    );
+  }
 }
+

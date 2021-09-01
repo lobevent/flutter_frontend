@@ -34,8 +34,9 @@ class EventDto extends BaseDto with _$EventDto {
     required bool public,
     required String? description,
     required DateTime date,
+    required bool visibleWithoutLogin,
     required DateTime creationDate,
-    int? attendingUsers,
+    int? attendingUsersCount,
     @TodoConverter() TodoDto? todo,
     @OwnerConverter() ProfileDto? owner,
     double? longitude,
@@ -54,13 +55,14 @@ class EventDto extends BaseDto with _$EventDto {
       public: event.public,
       date: event.date,
       description: event.description!.getOrCrash(),
-      todo: TodoDto.fromDomain(event.todo!),
+      todo: event.todo != null ? TodoDto.fromDomain(event.todo!) : null,
       creationDate: event.creationDate,
       owner: ProfileDto.fromDomain(event.owner!),
-      attendingUsers: event.attending,
+      attendingUsersCount: event.attendingCount,
       ownStatus:  domainToDtoStatus[event.status] as int?,
       longitude: event.longitude,
-      latitude: event.latitude
+      latitude: event.latitude,
+      visibleWithoutLogin: event.visibleWithoutLogin,
     );
   }
 
@@ -79,10 +81,11 @@ class EventDto extends BaseDto with _$EventDto {
       //TODO: don't forget this one!
       public: public,
       creationDate: creationDate,
-      attending: attendingUsers,
+      attendingCount: attendingUsersCount,
       status: dtoToDomainStatus[ownStatus] as EventStatus?,
       longitude: longitude,
-      latitude: latitude
+      latitude: latitude,
+      visibleWithoutLogin: visibleWithoutLogin,
     );
   }
 }

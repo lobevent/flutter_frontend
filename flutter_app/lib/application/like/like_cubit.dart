@@ -33,18 +33,16 @@ class LikeCubit extends Cubit<LikeState> {
     } catch (e) {}
   }
 
-  ///just like 1 entity and pass option to handle different route in remote service
-  Future<bool> like(UniqueId objectId, LikeTypeOption option) async {
-    final success = await repository.like(objectId, option);
-    this.likeStatus = success;
-
-    return success;
-  }
-
-  ///just unlike 1 entity and pass option to handle different route in remote service
-  Future<bool> unlike(UniqueId objectId, LikeTypeOption option) async {
-    final success = await repository.unlike(objectId, option);
-    this.likeStatus = !success;
+  ///just like or unlike (depending on the likestatus) 1 entity and pass option to handle different route in remote service
+  Future<bool> unOrlike(UniqueId objectId, LikeTypeOption option, bool likeStatusUi) async {
+    bool success=false;
+    if(likeStatusUi){
+      final success = await repository.unlike(objectId, option);
+      this.likeStatus = !success;
+    }else{
+      final success = await repository.like(objectId, option);
+      this.likeStatus = success;
+    }
     return success;
   }
 

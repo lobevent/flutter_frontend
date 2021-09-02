@@ -1,8 +1,10 @@
 import 'package:expand_widget/expand_widget.dart';
+import 'package:flutter_frontend/application/like/like_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/like_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +46,12 @@ class EventContent extends StatelessWidget{
 
                   /// the date of the event
                   DateAndOwner(state.event.date, state.event.owner!, context),
+
+                  /// Used as space
+                  const SizedBox(height: 20),
+
+                  ///likebutton and information
+                  LikeWidget(state.event),
 
 
                   /// Used as space
@@ -140,6 +148,22 @@ class EventContent extends StatelessWidget{
       // the flexible widget is used for the text wrap property, overflowing text
       // wraps to next line
       Flexible(child: ExpandText(description, maxLines: 3, style: const TextStyle(color: Color(0xFF2F1919)),)),
+    ]);
+  }
+
+
+  Widget LikeWidget(Event event){
+    return PaddingWidget(children: [
+      Flexible(
+        child: BlocProvider(
+          create: (context) => LikeCubit(event.id),
+          child:  LikeButton(
+            key: ObjectKey(this.key),
+            objectId: event.id,
+            option: LikeTypeOption.Event,
+            likeStatus: false,
+        ),
+      ),)
     ]);
   }
 

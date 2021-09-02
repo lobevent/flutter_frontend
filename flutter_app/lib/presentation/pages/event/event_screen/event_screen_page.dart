@@ -4,10 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/event/event_screen/event_screen_cubit.dart';
-import 'package:flutter_frontend/application/like/like_cubit.dart';
 import 'package:flutter_frontend/application/todo/todo_cubit.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/like_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/header_visual.dart';
@@ -57,20 +55,7 @@ class EventScreenPage extends StatelessWidget {
                             /// todoevents list
                             TodoWidget(),
 
-                            ///likebutton and information
-                            BlocProvider(
-                              create: (context) => LikeCubit(this.eventId),
-                              child: BlocBuilder<LikeCubit, LikeState>(
-                                builder: (context, state) {
-                                  return LikeButton(
-                                    key: ObjectKey(eventId),
-                                    objectId: eventId,
-                                    option: LikeTypeOption.Event,
-                                    likeStatus: false,
-                                  );
-                                },
-                              ),
-                            ),
+
                           ]),
                 ));
           },

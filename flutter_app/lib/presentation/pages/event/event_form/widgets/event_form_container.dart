@@ -22,7 +22,7 @@ class EventFormContainer extends StatelessWidget{
           : AutovalidateMode.disabled,
       child: SingleChildScrollView(
         child: Column(
-          children:  [
+          children:  const [
             /// the input field, where the name is typed
             EventNameField(),
             /// the input filed with the decription

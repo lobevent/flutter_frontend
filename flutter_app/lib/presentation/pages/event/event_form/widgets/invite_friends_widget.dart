@@ -22,9 +22,13 @@ class InviteFriendsWidget extends StatefulWidget{
 }
 
 class _InviteFriendsWidgetState extends State<InviteFriendsWidget>{
+
+
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EventFormCubit, EventFormState>(builder: (context, state) {
+
       return _AddFriendsButton(context);
     });
   }
@@ -40,8 +44,7 @@ class _InviteFriendsWidgetState extends State<InviteFriendsWidget>{
     showDialog(context: context, builder: (BuildContext context) {
       return AddFriendsDialog(
         friends: [Profile(id: UniqueId(), name: ProfileName("ssss")), Profile(id: UniqueId(), name: ProfileName("ssss"))],
-      invitedFriends: [], onAddFriend: (){}, onRemoveFriend: (){},);
+        invitedFriends: [], onAddFriend: (){}, onRemoveFriend: (){},);
     });
   }
-
 }

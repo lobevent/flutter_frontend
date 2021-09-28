@@ -1,5 +1,6 @@
 import 'package:flutter_frontend/domain/core/value_validators.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
+import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -39,6 +40,7 @@ class EventDto extends BaseDto with _$EventDto {
     int? attendingUsersCount,
     @TodoConverter() TodoDto? todo,
     @OwnerConverter() ProfileDto? owner,
+    @InvitationsToProfileConverter() List<ProfileDto>? invitations,
     double? longitude,
     double? latitude,
     int? ownStatus,
@@ -86,6 +88,7 @@ class EventDto extends BaseDto with _$EventDto {
       longitude: longitude,
       latitude: latitude,
       visibleWithoutLogin: visibleWithoutLogin,
+     invitations: invitations?.map((e) => e.toDomain()).toList(),
     );
   }
 }
@@ -119,4 +122,8 @@ class TodoConverter implements JsonConverter<TodoDto, Map<String, dynamic>>{
   Map<String, dynamic> toJson(TodoDto todoDto) {
     return todoDto.toJson();
   }
+}
+
+class InvitationsToProfileConverter extends ListConverter<ProfileDto>{
+  const InvitationsToProfileConverter() :super();
 }

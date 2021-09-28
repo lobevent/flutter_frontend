@@ -28,7 +28,7 @@ class AddFriendsDialogState extends State<AddFriendsDialog>{
 
   @override
   void initState() {
-    results = widget.friends;
+    results = List<Profile>.from(widget.friends);
     super.initState();
   }
 
@@ -49,18 +49,19 @@ class AddFriendsDialogState extends State<AddFriendsDialog>{
   }
 
   void onSearchTextChanged(String text) {
-    // clear the results befor working with it
+    // clear the results before working with it
     results.clear();
     if (text.isEmpty) {
-      results = widget.friends;
+      results = List<Profile>.from(widget.friends);
       setState(() {});
       return;
     }
     // add each friend that contains the string
-    widget.friends.forEach((friend) {
-      if (friend.name.getOrCrash().contains(text))
+    for (Profile friend in widget.friends){
+      if (friend.name.getOrCrash().contains(text)) {
         results.add(friend);
-    });
+      }
+    }
 
     setState(() {});
   }
@@ -77,7 +78,4 @@ class AddFriendsDialogState extends State<AddFriendsDialog>{
             }
         );
   }
-
-
-
 }

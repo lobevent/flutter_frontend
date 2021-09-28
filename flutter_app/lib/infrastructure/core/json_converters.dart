@@ -49,6 +49,8 @@ class CommentsConverter extends ListConverter<CommentDto>{
 }
 
 
+
+
 class ProfileConverter implements JsonConverter<ProfileDto,Map<String, dynamic>> {
 
   const ProfileConverter();

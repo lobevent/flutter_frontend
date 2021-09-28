@@ -30,6 +30,7 @@ class Event with _$Event {
     Profile? owner,
     required bool public,
     required bool visibleWithoutLogin,
+    List<Profile>? invitations,
     int? attendingCount,
     EventStatus? status,
     double? longitude,

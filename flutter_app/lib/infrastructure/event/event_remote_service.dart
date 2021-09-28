@@ -116,6 +116,7 @@ class EventRemoteService extends RemoteService<EventDto> {
 
   Future<List<EventDto>> _getEventList(String path) async {
     final Response response = await client.get(path);
+
     return convertList(response);
   }
 

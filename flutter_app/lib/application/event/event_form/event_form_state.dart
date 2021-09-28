@@ -1,4 +1,4 @@
-  part of 'event_form_cubit.dart';
+part of 'event_form_cubit.dart';
 
 
 @freezed
@@ -11,7 +11,8 @@ class EventFormState with _$EventFormState {
     required bool isSaving,
     required bool isLoading,
     required Option<NetWorkFailure> eventFailure,
-    required Option<Either<NetWorkFailure, Unit>> saveFailureOrSuccessOption
+    required Option<Either<NetWorkFailure, Unit>> saveFailureOrSuccessOption,
+    required List<Profile> friends,
   }) = _EventFormStateMain;
 
 
@@ -22,7 +23,7 @@ class EventFormState with _$EventFormState {
     isLoading: false,
     showErrorMessages: false,
     eventFailure: none(),
-    saveFailureOrSuccessOption: none()
+    saveFailureOrSuccessOption: none(), friends: []
   );
 
   factory EventFormState.loaded(Event event) => EventFormState(
@@ -32,7 +33,7 @@ class EventFormState with _$EventFormState {
       isLoading: false,
       showErrorMessages: false,
       eventFailure: none(),
-      saveFailureOrSuccessOption: none()
+      saveFailureOrSuccessOption: none(), friends: []
   );
 
   factory EventFormState.error(NetWorkFailure failure) => EventFormState(
@@ -42,7 +43,7 @@ class EventFormState with _$EventFormState {
       isLoading: false,
       showErrorMessages: false,
       eventFailure: some(failure),
-      saveFailureOrSuccessOption: none()
+      saveFailureOrSuccessOption: none(), friends: []
   );
 
   factory EventFormState.loading() => EventFormState(
@@ -52,10 +53,19 @@ class EventFormState with _$EventFormState {
       isLoading: true,
       showErrorMessages: false,
       eventFailure: none(),
-      saveFailureOrSuccessOption: none()
+      saveFailureOrSuccessOption: none(), friends: []
   );
 
+  factory EventFormState.friendsLoaded() => EventFormState(
+      event: Event.empty(),
+      isEditing: false,
+      isSaving: false,
+      isLoading: false,
+      showErrorMessages: false,
+      eventFailure: none(),
+      saveFailureOrSuccessOption: none(), friends: [],
 
+  );
 
 
 }

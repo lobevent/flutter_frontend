@@ -69,7 +69,7 @@ class FriendListTile extends StatelessWidget {
     return CircleAvatar(
       radius: 20,
       backgroundImage: ProfileImage.getAssetOrNetworkFromProfile(profile),
-      child: isInvited? const Text('') : Stack(
+      child: !isInvited? const Text('') : Stack(
           children:  const [
             Align(
               // the alignment, so its bottom right
@@ -84,10 +84,5 @@ class FriendListTile extends StatelessWidget {
           ]
       ),
     );
-
-
   }
-
-
-
 }

@@ -3,6 +3,7 @@ import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/i_profile_repository.dart' as profileOps;
+import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -65,6 +66,12 @@ class EventFormCubit extends Cubit<EventFormState> {
     emit(state.copyWith(event: state.event.copyWith(visibleWithoutLogin: vwl)));
   }
 
+
+  Future<void> getFriends() async{
+    (await this.profileRepository.getList(profileOps.Operation.friends, 1000)).fold(
+            (friends) => null,
+            (failure) => null);
+  }
 /*  Future<void> getFriends() async{
     profileRepository.getList(profileOps.Operation.friends, 1000000000);
   }*/
@@ -90,13 +97,4 @@ class EventFormCubit extends Cubit<EventFormState> {
     emit(state.copyWith(isSaving: false, showErrorMessages: true, saveFailureOrSuccessOption: optionOf(failureOrSuccess)));
   }
 
-//  Future<void> _getTrendingMovies() async {
-//    try {
-//      emit(EventFormState.loading());
-//      final movies = await repository.getSingle(Id());
-//      emit(EventFormState.loaded(Event.empty()));
-//    } catch (e) {
-//      emit(EventFormState.error(EventFailure.unexpected()));
-//    }
-//  }
 }

@@ -25,7 +25,7 @@ class LikeButton extends StatefulWidget {
 
 class _LikeButtonState extends State<LikeButton> {
   bool likeStatus = false;
-  List<Profile> profilesWhichLiked =[];
+  List<Profile> profilesWhichLiked = [];
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +41,9 @@ class _LikeButtonState extends State<LikeButton> {
       child: BlocBuilder<LikeCubit, LikeState>(
         builder: (context, state) {
           //return the likebutton only if it fetched the status from backend
-          return state.maybeMap(
-                  (value) => (Text("")),
-              loaded: (state){
-                    return buildLikeWithStatus();
+          return state.maybeMap((value) => (Text("")),
+              loaded: (state) {
+                return buildLikeWithStatus();
               },
               orElse: () => Text(""));
         },
@@ -52,31 +51,33 @@ class _LikeButtonState extends State<LikeButton> {
     );
   }
   //just
-  void changeLikeStatus(){
+  void changeLikeStatus() {
     setState(() {
-      likeStatus=!likeStatus;
+      likeStatus = !likeStatus;
     });
   }
 
   ///decide if the icon for liking or unliking is shown
-  Icon decideIcon(bool likeStatus){
-    if(likeStatus){
+  Icon decideIcon(bool likeStatus) {
+    if (likeStatus) {
       return Icon(Icons.airplanemode_active_sharp);
-    }else{
+    } else {
       return Icon(Icons.airplanemode_inactive_sharp);
     }
   }
 
   ///build the likebutton, fetch if user liked it and change Icon and likestatus if user presses the button
   Widget buildLikeWithStatus() {
-      return StdTextButton(
+    return StdTextButton(
         onPressed: () {
           //call the backend
-          context.read<LikeCubit>().unOrlike(widget.objectId, widget.option, likeStatus);
+          context
+              .read<LikeCubit>()
+              .unOrlike(widget.objectId, widget.option, likeStatus);
           //change the bool likestatus
           changeLikeStatus();
         },
-          //icon liked or not liked?
+        //icon liked or not liked?
         child: decideIcon(likeStatus));
   }
 }

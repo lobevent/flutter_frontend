@@ -42,7 +42,8 @@ class TodoCubit extends Cubit<TodoState> {
         id: UniqueId(),
         name: ItemName(itemName),
         description: ItemDescription(itemDescription),
-        profiles: null);
+        //fake profile list
+        profiles: [Profile(id: UniqueId(), name: ProfileName("fake"))]);
     repository.addItem(myCastedState.todo, newItem).then((itemOrFailure) =>
         itemOrFailure.fold((failure) => emit(TodoState.error(failure: failure)),
             (item) {

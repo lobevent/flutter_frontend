@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/event/event_form/event_form_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/cubit/event_form_cubit.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:intl/intl.dart';

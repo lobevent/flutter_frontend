@@ -19,8 +19,8 @@ part 'event_form_state.dart';
 class EventFormCubit extends Cubit<EventFormState> {
   final Option<String> eventId;
   EventFormCubit(this.eventId) : super(EventFormState.initial()) {
-    eventId.fold(() => emit(EventFormState.initial()), (id) => loadEvent(id))
-    ;
+    eventId.fold(() => emit(EventFormState.initial()), (id) => loadEvent(id));
+
   }
 
   ProfileRepository profileRepository = GetIt.I<ProfileRepository>();
@@ -68,9 +68,15 @@ class EventFormCubit extends Cubit<EventFormState> {
 
 
   Future<void> getFriends() async{
+    emit(state.copyWith(isLoadingFriends: true));
     (await this.profileRepository.getList(profileOps.Operation.friends, 1000)).fold(
-            (friends) => null,
-            (failure) => null);
+            (failure) => null,
+            // compare the complete friendlist with the invitations for this event
+            // set isLoadingFriends false, as they are loaded now obviously
+            (friends) => emit(state.copyWith(friends: _generateAttendingFriends(state.event, friends), isLoadingFriends: false))
+            );
+
+
   }
 /*  Future<void> getFriends() async{
     profileRepository.getList(profileOps.Operation.friends, 1000000000);
@@ -95,6 +101,18 @@ class EventFormCubit extends Cubit<EventFormState> {
       failureOrSuccess = (await repository.update(state.event)).fold((l) => left(l), (r) => right(unit));
     }
     emit(state.copyWith(isSaving: false, showErrorMessages: true, saveFailureOrSuccessOption: optionOf(failureOrSuccess)));
+  }
+
+
+  /// compare event invitations with an friendlist, and generate list with the intersection
+  List<Profile> _generateAttendingFriends(Event event, List<Profile> friends){
+      List<Profile> invitedFriends = [];
+      event.invitations?.forEach((invitedProfile) {
+        if (friends.map((friend) => friend.id.getOrCrash()).contains(invitedProfile.id.getOrCrash())){
+          invitedFriends.add(invitedProfile);
+        }
+      });
+      return invitedFriends;
   }
 
 }

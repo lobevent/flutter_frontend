@@ -10,9 +10,11 @@ class EventFormState with _$EventFormState {
     required bool isEditing,
     required bool isSaving,
     required bool isLoading,
+    required bool isLoadingFriends,
     required Option<NetWorkFailure> eventFailure,
     required Option<Either<NetWorkFailure, Unit>> saveFailureOrSuccessOption,
     required List<Profile> friends,
+    required List<Profile> attendingFriends,
   }) = _EventFormStateMain;
 
 
@@ -23,7 +25,11 @@ class EventFormState with _$EventFormState {
     isLoading: false,
     showErrorMessages: false,
     eventFailure: none(),
-    saveFailureOrSuccessOption: none(), friends: []
+    saveFailureOrSuccessOption: none(),
+    friends: [],
+    attendingFriends: [],
+    isLoadingFriends: false,
+
   );
 
   factory EventFormState.loaded(Event event) => EventFormState(
@@ -33,7 +39,11 @@ class EventFormState with _$EventFormState {
       isLoading: false,
       showErrorMessages: false,
       eventFailure: none(),
-      saveFailureOrSuccessOption: none(), friends: []
+      saveFailureOrSuccessOption: none(),
+      friends: [],
+      attendingFriends: [],
+      isLoadingFriends: false,
+
   );
 
   factory EventFormState.error(NetWorkFailure failure) => EventFormState(
@@ -43,7 +53,11 @@ class EventFormState with _$EventFormState {
       isLoading: false,
       showErrorMessages: false,
       eventFailure: some(failure),
-      saveFailureOrSuccessOption: none(), friends: []
+      saveFailureOrSuccessOption: none(),
+      friends: [],
+      attendingFriends: [],
+      isLoadingFriends: false,
+
   );
 
   factory EventFormState.loading() => EventFormState(
@@ -53,18 +67,24 @@ class EventFormState with _$EventFormState {
       isLoading: true,
       showErrorMessages: false,
       eventFailure: none(),
-      saveFailureOrSuccessOption: none(), friends: []
+      saveFailureOrSuccessOption: none(),
+      friends: [],
+      attendingFriends: [],
+      isLoadingFriends: false,
+
   );
 
-  factory EventFormState.friendsLoaded() => EventFormState(
-      event: Event.empty(),
-      isEditing: false,
+  factory EventFormState.friendsLoaded(List<Profile> friends, List<Profile> attendingFriends, Event event) => EventFormState(
+      event: event,
+      isEditing: event.longitude != Event.empty().longitude && event.latitude != Event.empty().latitude && event.id != Event.empty().id, // at the moment the best idea to check if its editing or not (without parameter)
       isSaving: false,
       isLoading: false,
       showErrorMessages: false,
       eventFailure: none(),
-      saveFailureOrSuccessOption: none(), friends: [],
-
+      saveFailureOrSuccessOption: none(),
+      friends: friends,
+      attendingFriends: attendingFriends,
+      isLoadingFriends: false,
   );
 
 

@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/event/event_form/event_form_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/cubit/event_form_cubit.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 
 

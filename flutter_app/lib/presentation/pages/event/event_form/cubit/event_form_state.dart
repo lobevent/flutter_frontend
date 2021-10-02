@@ -14,7 +14,7 @@ class EventFormState with _$EventFormState {
     required Option<NetWorkFailure> eventFailure,
     required Option<Either<NetWorkFailure, Unit>> saveFailureOrSuccessOption,
     required List<Profile> friends,
-    required List<Profile> attendingFriends,
+    required List<Profile> invitedFriends,
   }) = _EventFormStateMain;
 
 
@@ -27,7 +27,7 @@ class EventFormState with _$EventFormState {
     eventFailure: none(),
     saveFailureOrSuccessOption: none(),
     friends: [],
-    attendingFriends: [],
+    invitedFriends: [],
     isLoadingFriends: false,
 
   );
@@ -41,7 +41,7 @@ class EventFormState with _$EventFormState {
       eventFailure: none(),
       saveFailureOrSuccessOption: none(),
       friends: [],
-      attendingFriends: [],
+      invitedFriends: [],
       isLoadingFriends: false,
 
   );
@@ -55,7 +55,7 @@ class EventFormState with _$EventFormState {
       eventFailure: some(failure),
       saveFailureOrSuccessOption: none(),
       friends: [],
-      attendingFriends: [],
+      invitedFriends: [],
       isLoadingFriends: false,
 
   );
@@ -69,7 +69,7 @@ class EventFormState with _$EventFormState {
       eventFailure: none(),
       saveFailureOrSuccessOption: none(),
       friends: [],
-      attendingFriends: [],
+      invitedFriends: [],
       isLoadingFriends: false,
 
   );
@@ -83,7 +83,7 @@ class EventFormState with _$EventFormState {
       eventFailure: none(),
       saveFailureOrSuccessOption: none(),
       friends: friends,
-      attendingFriends: attendingFriends,
+      invitedFriends: attendingFriends,
       isLoadingFriends: false,
   );
 

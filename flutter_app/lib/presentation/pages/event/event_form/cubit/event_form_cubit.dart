@@ -19,7 +19,8 @@ part 'event_form_state.dart';
 class EventFormCubit extends Cubit<EventFormState> {
   final Option<String> eventId;
   EventFormCubit(this.eventId) : super(EventFormState.initial()) {
-    eventId.fold(() => emit(EventFormState.initial()), (id) => loadEvent(id));
+    eventId.fold(() => emit(EventFormState.initial()), (id) => loadEvent(id).then((value) => getFriends()));
+    getFriends();
 
   }
 
@@ -70,17 +71,14 @@ class EventFormCubit extends Cubit<EventFormState> {
   Future<void> getFriends() async{
     emit(state.copyWith(isLoadingFriends: true));
     (await this.profileRepository.getList(profileOps.Operation.friends, 1000)).fold(
-            (failure) => null,
+            (failure) => EventFormState.error(failure),
             // compare the complete friendlist with the invitations for this event
             // set isLoadingFriends false, as they are loaded now obviously
-            (friends) => emit(state.copyWith(friends: _generateAttendingFriends(state.event, friends), isLoadingFriends: false))
+            (friends) => emit(state.copyWith(friends: friends, isLoadingFriends: false, invitedFriends: _generateAttendingFriends(state.event, friends)))
             );
 
 
   }
-/*  Future<void> getFriends() async{
-    profileRepository.getList(profileOps.Operation.friends, 1000000000);
-  }*/
 
   Future<void> loadEvent(String id) async {
     emit(EventFormState.loading());

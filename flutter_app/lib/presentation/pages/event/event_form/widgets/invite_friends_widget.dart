@@ -29,22 +29,28 @@ class _InviteFriendsWidgetState extends State<InviteFriendsWidget>{
   Widget build(BuildContext context) {
     return BlocBuilder<EventFormCubit, EventFormState>(builder: (context, state) {
 
-      return _AddFriendsButton(context);
+      return _AddFriendsButton(context, state);
     });
   }
 
-  Widget _AddFriendsButton(BuildContext context){
-    return TextWithIconButton(
-        onPressed: () => inviteFriends(context),
+  /// when this button is clicked, the add friends widget should appear
+  /// if the friends are still loading, the button is inactive
+  Widget _AddFriendsButton(BuildContext context, EventFormState state){
+    return Column( children:
+      [TextWithIconButton(
+        disabled: state.isLoadingFriends,
+        onPressed: () => inviteFriends(context, state),
         icon: Icons.group,
-        text: AppStrings.inviteFriends);
+        text: AppStrings.inviteFriends,),
+        if (state.isLoadingFriends) const LinearProgressIndicator()
+      ]);
   }
 
-  void inviteFriends(BuildContext context){
+  void inviteFriends(BuildContext context, EventFormState state){
     showDialog(context: context, builder: (BuildContext context) {
       return AddFriendsDialog(
-        friends: [Profile(id: UniqueId(), name: ProfileName("ssss")), Profile(id: UniqueId(), name: ProfileName("ssss"))],
-        invitedFriends: [], onAddFriend: (){}, onRemoveFriend: (){},);
+        friends: state.friends,
+        invitedFriends: state.invitedFriends, onAddFriend: (){}, onRemoveFriend: (){},);
     });
   }
 }

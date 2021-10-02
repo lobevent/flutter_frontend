@@ -131,20 +131,22 @@ class OverflowSafeString extends StatelessWidget{
 class StdTextButton extends StatelessWidget{
   final Widget child;
   final VoidCallback? onPressed;
-  const StdTextButton({Key? key, required this.child, required this.onPressed}) : super(key: key);
+  final bool disabled;
+  const StdTextButton({Key? key, required this.child, required this.onPressed, this.disabled = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
         decoration: BoxDecoration(
-            color: Color(0x2ABBBBBB),
+            color: disabled ? Color(0x2A000000)
+                : Color(0x2ABBBBBB),
             /*   border:Border.all(width: 2.0,
                   color:  Color(0x6BBBBBBB)),*/
             borderRadius: BorderRadius.circular(10)),
         child: TextButton(
             style: ButtonStyle(overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent)),
             onPressed: ()
-            => onPressed == null? null : onPressed!(),
+            => onPressed == null || disabled? null : onPressed!(),
             child: child));
   }
 
@@ -157,13 +159,15 @@ class TextWithIconButton extends StatelessWidget{
   final String text;
   final VoidCallback? onPressed;
   final IconData? icon;
-  const TextWithIconButton({Key? key, required this.onPressed, required this.text, this.icon}) : super(key: key);
+  final bool disabled;
+  const TextWithIconButton({Key? key, required this.onPressed, required this.text, this.icon, this.disabled = false}) : super(key: key);
 
 
   @override
   Widget build(BuildContext context) {
     return
       StdTextButton(
+        disabled: disabled,
         // the call of the on pressed. With the nullcheck, because not every button needs an onpressed
         onPressed: () => onPressed == null? null : onPressed!(),
         child: Row(children: [

@@ -50,7 +50,9 @@ class _InviteFriendsWidgetState extends State<InviteFriendsWidget>{
     showDialog(context: context, builder: (BuildContext context) {
       return AddFriendsDialog(
         friends: state.friends,
-        invitedFriends: state.invitedFriends, onAddFriend: (){}, onRemoveFriend: (){},);
+        invitedFriends: state.invitedFriends,
+        onAddFriend: (Profile profile){context.read<EventFormCubit>().addFriend(profile);},
+        onRemoveFriend: (Profile profile){context.read<EventFormCubit>().removeFriend(profile);},);
     });
   }
 }

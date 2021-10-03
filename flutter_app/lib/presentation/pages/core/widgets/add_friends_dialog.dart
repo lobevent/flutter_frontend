@@ -10,9 +10,9 @@ class AddFriendsDialog extends StatefulWidget {
   /// the list with all the friends, that are invited
   final List<Profile> invitedFriends;
   // callbackfunctio for adding friend
-  final VoidCallback onAddFriend;
+  final Function(Profile) onAddFriend;
   // callback functtion for removing friends
-  final VoidCallback onRemoveFriend;
+  final Function(Profile) onRemoveFriend;
 
   const AddFriendsDialog({Key? key, required this.friends, required this.invitedFriends, required this.onAddFriend, required this.onRemoveFriend}) : super(key: key);
 

@@ -68,6 +68,16 @@ class EventFormCubit extends Cubit<EventFormState> {
   }
 
 
+  void addFriend(Profile profile){
+    // TODO: implement this
+  }
+
+  void removeFriend(Profile profile){
+    // TODO: implement this
+  }
+
+
+  /// fetch friends
   Future<void> getFriends() async{
     emit(state.copyWith(isLoadingFriends: true));
     (await this.profileRepository.getList(profileOps.Operation.friends, 1000)).fold(

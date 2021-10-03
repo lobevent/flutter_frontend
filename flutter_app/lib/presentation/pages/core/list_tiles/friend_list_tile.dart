@@ -9,8 +9,8 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 class FriendListTile extends StatelessWidget {
   final bool isInvited;
   final Profile profile;
-  final VoidCallback onAddFriend;
-  final VoidCallback onRemoveFriend;
+  final Function(Profile) onAddFriend;
+  final Function(Profile) onRemoveFriend;
 
 
   const FriendListTile({Key? key, required this.profile, required this.isInvited, required this.onAddFriend, required this.onRemoveFriend}): super(key: key);
@@ -52,10 +52,12 @@ class FriendListTile extends StatelessWidget {
 
 
   void removeFriend(BuildContext context){
+    onRemoveFriend(profile);
     //context.router.push(EventFormPageRoute(editedEventId: event.id.getOrCrash()));
   }
 
   void addFriend(BuildContext context){
+    onAddFriend(profile);
     //context.router.push(EventFormPageRoute(editedEventId: event.id.getOrCrash()));
   }
 

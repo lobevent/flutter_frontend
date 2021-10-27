@@ -2,14 +2,14 @@ import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/event/event_screen/event_screen_cubit.dart';
-import 'package:flutter_frontend/application/like/like_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/like_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/like/like_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:intl/intl.dart';
 

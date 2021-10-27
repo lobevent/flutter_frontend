@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
-import 'package:flutter_frontend/domain/event/i_event_repository.dart' as ev;
 import 'package:flutter_frontend/domain/profile/i_profile_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
@@ -38,8 +37,7 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
     try {
       emit(ProfileSearchState.loading());
       final Either<NetWorkFailure, List<Event>> eventList =
-          await eventRepository.getList(ev.Operation.search, DateTime.now(), 10,
-              searchString: eventName);
+          await eventRepository.searchEvent(DateTime.now(), 10, eventName);
       emit(ProfileSearchState.loadedEvents(
           events: eventList.fold((l) => throw Exception, (r) => r)));
     } catch (e) {
@@ -51,8 +49,7 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
     try {
       emit(ProfileSearchState.loading());
       final Either<NetWorkFailure, List<Event>> eventList =
-          await eventRepository.getList(ev.Operation.search, DateTime.now(), 10,
-              searchString: queryName);
+          await eventRepository.searchEvent(DateTime.now(), 10,  queryName);
       final Either<NetWorkFailure, List<Profile>> profileList = await repository
           .getList(Operation.search, 10, searchString: queryName);
       emit(ProfileSearchState.loadedBoth(

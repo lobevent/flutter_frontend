@@ -44,7 +44,7 @@ class EventDto extends BaseDto with _$EventDto {
     EventDto returnedDto;
 
     return EventDto(
-      id: event.id.getOrCrash(),
+      id: event.id.value,
       name: event.name.getOrCrash(),
       public: event.public,
       date: event.date,

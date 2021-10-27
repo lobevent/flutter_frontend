@@ -22,7 +22,7 @@ class UserDto extends BaseDto with _$UserDto {
 
   factory UserDto.fromDomain(User user) {
     return UserDto(
-      id: user.id.getOrCrash(),
+      id: user.id.value,
       username: user.username.getOrCrash(),
       emailAddress: user.email.fold(
           () => null, (EmailAddress emailAddress) => emailAddress.getOrCrash()),

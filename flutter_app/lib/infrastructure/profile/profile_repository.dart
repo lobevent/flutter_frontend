@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_frontend/application/like/like_cubit.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
@@ -11,6 +10,7 @@ import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions_handler.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_remote_service.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/like/like_cubit.dart';
 
 class ProfileRepository extends IProfileRepository {
   final ProfileRemoteService _profileRemoteService;
@@ -63,18 +63,18 @@ class ProfileRepository extends IProfileRepository {
             throw UnexpectedTypeError();
           }
           profileDtos = await _profileRemoteService.getAttendingUsersToEvent(
-              amount, profile.id.getOrCrash().toString());
+              amount, profile.id.value.toString());
           break;
         case Operation.follower:
           if (profile == null) {
             throw UnexpectedTypeError();
           }
           profileDtos = await _profileRemoteService.getFollower(
-              amount, profile.id.getOrCrash().toString());
+              amount, profile.id.value.toString());
           break;
         case Operation.friends:
           profileDtos = await _profileRemoteService
-              .getAcceptedFriendships(profile?.id.getOrCrash().toString());
+              .getAcceptedFriendships(profile?.id.value.toString());
           break;
         case Operation.pendingFriends:
           profileDtos = await _profileRemoteService.getOpenFriendRequests();
@@ -84,7 +84,7 @@ class ProfileRepository extends IProfileRepository {
             throw UnexpectedTypeError();
           }
           profileDtos = await _profileRemoteService.getProfilesToPost(
-              amount, post.id!.getOrCrash().toString());
+              amount, post.id!.value.toString());
           break;
       }
       //convert the dto objects to domain Objects
@@ -100,7 +100,7 @@ class ProfileRepository extends IProfileRepository {
   Future<Either<NetWorkFailure, Profile>> getSingleProfile(UniqueId id) async {
     try {
       final ProfileDto profileDto =
-          await _profileRemoteService.getSingleProfile(id.getOrCrash());
+          await _profileRemoteService.getSingleProfile(id.value);
       final Profile profile = profileDto.toDomain();
       return right(profile);
     } on CommunicationException catch (e) {
@@ -124,7 +124,7 @@ class ProfileRepository extends IProfileRepository {
   Future<String> sendFriendRequest(UniqueId id) async {
     try {
       final success =
-          await _profileRemoteService.sendFriendship(id.getOrCrash());
+          await _profileRemoteService.sendFriendship(id.value);
       return success;
     } on CommunicationException catch (e) {
       return e.toString();
@@ -134,7 +134,7 @@ class ProfileRepository extends IProfileRepository {
   Future<bool> acceptFriend(UniqueId id) async {
     try {
       final bool success =
-          (await _profileRemoteService.acceptFriendRequest(id.getOrCrash()));
+          await _profileRemoteService.acceptFriendRequest(id.value);
       return success;
     } on CommunicationException catch (e) {
       return false;
@@ -144,7 +144,7 @@ class ProfileRepository extends IProfileRepository {
   Future<bool> deleteFriend(UniqueId id) async {
     try {
       final bool success =
-          (await _profileRemoteService.deleteFriendRequest(id.getOrCrash()));
+          await _profileRemoteService.deleteFriendRequest(id.value);
       return success;
     } on CommunicationException catch (e) {
       return false;
@@ -155,7 +155,7 @@ class ProfileRepository extends IProfileRepository {
   Future<bool> like(UniqueId objectId, LikeTypeOption option) async {
     try {
       final bool success =
-          (await _profileRemoteService.like(objectId.getOrCrash(), option));
+          await _profileRemoteService.like(objectId.value, option);
       return success;
     } on CommunicationException catch (e) {
       return false;
@@ -165,7 +165,7 @@ class ProfileRepository extends IProfileRepository {
   Future<bool> unlike(UniqueId objectId, LikeTypeOption option) async {
     try {
       final bool success =
-          (await _profileRemoteService.unlike(objectId.getOrCrash(), option));
+          await _profileRemoteService.unlike(objectId.value, option);
       return success;
     } on CommunicationException catch (e) {
       return false;
@@ -175,7 +175,7 @@ class ProfileRepository extends IProfileRepository {
   Future<bool> checkLikeStatus(UniqueId objectId) async {
     try {
       final bool success =
-          (await _profileRemoteService.getOwnLikeStatus(objectId.getOrCrash()));
+          await _profileRemoteService.getOwnLikeStatus(objectId.value);
       return success;
     } on CommunicationException catch (e) {
       return false;
@@ -187,7 +187,7 @@ class ProfileRepository extends IProfileRepository {
     try {
       final profileDtos =
           profiles.map((e) => ProfileDto.fromDomain(e)).toList();
-      List<Profile> profilesResp =
+      final List<Profile> profilesResp =
           (await _profileRemoteService.addFriendsToEvent(profileDtos, event))
               .map((e) => e.toDomain())
               .toList();

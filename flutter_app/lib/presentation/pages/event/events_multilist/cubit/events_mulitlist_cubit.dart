@@ -31,27 +31,20 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
       emit(EventsMultilistState.loading());
       switch (this.option) {
         case EventScreenOptions.owned:
-          eventsList = await repository
-              .getList(Operation.owned, DateTime.now(), 30, descending: true);
+          eventsList = await repository.getOwnedEvents(DateTime.now(), 30, descending: true);
           break;
         case EventScreenOptions.fromUser:
           if (profile == null) {
             // profile must be set for this!
             throw UnexpectedTypeError();
           }
-          eventsList = await repository.getList(
-              Operation.fromUser, DateTime.now(), 30,
-              descending: true, profile: profile);
+          eventsList = await repository.getEventsFromUser(DateTime.now(), 30, profile!, descending: true);
           break;
         case EventScreenOptions.ownAttending:
-          eventsList = await repository.getList(
-              Operation.attending, DateTime.now(), 30,
-              descending: true);
+          eventsList = await repository.getAttendingEvents(DateTime.now(), 30);
           break;
         case EventScreenOptions.unreacted:
-          eventsList = await repository.getList(
-              Operation.unreacted, DateTime.now(), 30,
-              descending: true);
+          eventsList = await repository.getUnreactedEvents(DateTime.now(), 30);
           break;
       }
       emit(EventsMultilistState.loaded(

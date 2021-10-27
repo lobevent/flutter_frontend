@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/todo/todo_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/presentation/pages/event/todos/todo_cubit/todo_cubit.dart';
 
 class ItemCreateWidget extends StatefulWidget {
   final Event event;

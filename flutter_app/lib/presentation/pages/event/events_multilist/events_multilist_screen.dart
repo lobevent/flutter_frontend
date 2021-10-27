@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
-import 'package:flutter_frontend/presentation/pages/event/events_multilist/events_mulitlist/events_mulitlist_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/widgets/events_multilist_body.dart';
+
+import 'cubit/events_mulitlist_cubit.dart';
 
 class EventsMultilistScreen extends StatelessWidget {
   final EventScreenOptions? option;

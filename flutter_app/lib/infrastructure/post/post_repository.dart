@@ -59,7 +59,7 @@ class PostRepository implements IPostRepository {
             throw UnexpectedTypeError();
           }
           postDtos = await _postRemoteService.getPostsFromUser(
-              lastPostTime, amount, profile.id.getOrCrash().toString());
+              lastPostTime, amount, profile.id.value.toString());
           break;
       }
       //convert the dto objects to domain Objects
@@ -75,7 +75,7 @@ class PostRepository implements IPostRepository {
   Future<Either<NetWorkFailure, Post>> getSingle(UniqueId id) async {
     try {
       final PostDto postDto =
-          await _postRemoteService.getSingle(id.getOrCrash());
+          await _postRemoteService.getSingle(id.value);
       final Post post = postDto.toDomain();
       return right(post);
     } on CommunicationException catch (e) {

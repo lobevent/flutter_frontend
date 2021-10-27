@@ -27,11 +27,11 @@ class ProfileDto extends BaseDto with _$ProfileDto {
   factory ProfileDto.fromDomain(Profile profile) {
     return profile.map(
         (value) => ProfileDto(
-              id: profile.id.getOrCrash(),
+              id: profile.id.value,
               username: profile.name.getOrCrash(),
             ),
         full: (detailedProfile) => ProfileDto(
-            id: detailedProfile.id.getOrCrash(),
+            id: detailedProfile.id.value,
             username: detailedProfile.name.getOrCrash(),
             ownedEvents: detailedProfile.ownedEvents != null
                 ? detailedProfile.ownedEvents!

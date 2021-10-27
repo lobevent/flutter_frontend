@@ -23,9 +23,8 @@ Either<ValueFailure<String>, String> validatePassword(String input) {
         failedValue: input, minLength: Constants.minPasswordLength));
   } else if (!RegExp("[A-Z]").hasMatch(input)) {
     return left(const ValueFailure.noBigCaseLetterPassword());
-    //TODO: this regexp doesnt does its job, maybe somebody can fix it
-  } else if (!RegExp('[\*\.!@#\$%\^&\(\)\{\}\[\]:;<>,\.\?/~_\+-=\|\\]')
-      .hasMatch(input)) {
+  } else if (!RegExp(r'[!-/:-@\[-`{-~]').hasMatch(input)) {
+    // The four ranges of printable special characters in ASCII
     return left(const ValueFailure.noSpecialLetterPassword());
   } else {
     return right(input);

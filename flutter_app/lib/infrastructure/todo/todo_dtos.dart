@@ -23,7 +23,7 @@ class TodoDto extends BaseDto with _$TodoDto {
 
   factory TodoDto.fromDomain(Todo todo) {
     return TodoDto(
-        id: todo.id.getOrCrash(),
+        id: todo.id.value,
         name: todo.name.getOrCrash(),
         orgalistItems:
             todo.items.map((item) => ItemDto.fromDomain(item)).toList());

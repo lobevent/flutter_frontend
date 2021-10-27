@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/post_comment/comment_screen/comment_screen_cubit.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
+import 'package:flutter_frontend/presentation/post_comment/comments_screen/comment_screen/comment_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class CommentContainer extends StatelessWidget {

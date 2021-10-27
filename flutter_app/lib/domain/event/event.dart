@@ -31,8 +31,9 @@ class Event with _$Event {
       double? longitude,
       double? latitude}) = EventFull;
 
+
   factory Event.empty() => Event(
-        id: UniqueId.fromUniqueString('e6837df8-9e99-4f00-a40d-0e798834e9da'),
+        id: UniqueId.fromUniqueString('e6837df8-9e99-4f00-a40d-0e798834e9da'), // TODO: Random initial id?
         name: EventName(''),
         date: DateTime.now(),
         description: EventDescription(''),

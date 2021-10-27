@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/profile/profile_page/profile_page_cubit.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
@@ -8,6 +7,8 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets
 import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_header_visual.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_meta.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_posts.dart';
+
+import 'cubit/profile_page_cubit.dart';
 
 /// the page for displaying profile information in social context
 /// (not settings page)

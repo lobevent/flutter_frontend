@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/profile/profile_friends/profile_friends_cubit.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/profile_list_tiles.dart';
+import 'package:flutter_frontend/presentation/pages/social/profile_friends/cubit/profile_friends_cubit.dart';
 
 class ProfileFriendsBody extends StatefulWidget {
   @override

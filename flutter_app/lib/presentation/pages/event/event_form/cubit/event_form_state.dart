@@ -16,7 +16,7 @@ class EventFormState with _$EventFormState {
   }) = _EventFormStateMain;
 
   factory EventFormState.initial() => EventFormState(
-        event: Event.empty(),
+        event: Event.empty() as Event,
         isEditing: false,
         isSaving: false,
         isLoading: false,
@@ -42,7 +42,7 @@ class EventFormState with _$EventFormState {
       );
 
   factory EventFormState.error(NetWorkFailure failure) => EventFormState(
-        event: Event.empty(),
+        event: Event.empty() as Event,
         isEditing: true,
         isSaving: false,
         isLoading: false,
@@ -55,7 +55,7 @@ class EventFormState with _$EventFormState {
       );
 
   factory EventFormState.loading() => EventFormState(
-        event: Event.empty(),
+        event: Event.empty() as Event,
         isEditing: true,
         isSaving: false,
         isLoading: true,

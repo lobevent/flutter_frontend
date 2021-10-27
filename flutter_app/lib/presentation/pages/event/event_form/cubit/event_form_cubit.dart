@@ -120,8 +120,8 @@ class EventFormCubit extends Cubit<EventFormState> {
     List<Profile> invitedFriends = [];
     event.invitations?.forEach((invitedProfile) {
       if (friends
-          .map((friend) => friend.id.getOrCrash())
-          .contains(invitedProfile.id.getOrCrash())) {
+          .map((friend) => friend.id.value)
+          .contains(invitedProfile.id.value)) {
         invitedFriends.add(invitedProfile);
       }
     });

@@ -53,7 +53,7 @@ class CommentRepository implements ICommentRepository {
             throw UnexpectedTypeError();
           }
           commentDtos = await _commentRemoteService.getCommentsFromPost(
-              lastCommentTime, amount, postParent.id!.getOrCrash().toString());
+              lastCommentTime, amount, postParent.id!.value.toString());
           break;
         case Operation.fromComment:
           if (commentParent == null || commentParent.id == null) {
@@ -63,14 +63,14 @@ class CommentRepository implements ICommentRepository {
               await _commentRemoteService.getCommentsFromCommentParent(
                   lastCommentTime,
                   amount,
-                  commentParent.id.getOrCrash().toString());
+                  commentParent.id.value.toString());
           break;
         case Operation.fromUser:
           if (profile == null) {
             throw UnexpectedTypeError();
           }
           commentDtos = await _commentRemoteService.getCommentsFromUser(
-              lastCommentTime, amount, profile.id.getOrCrash().toString());
+              lastCommentTime, amount, profile.id.value.toString());
           break;
         case Operation.own:
           commentDtos = await _commentRemoteService.getOwnComments(
@@ -90,7 +90,7 @@ class CommentRepository implements ICommentRepository {
   Future<Either<NetWorkFailure, Comment>> getSingleComment(UniqueId id) async {
     try {
       final CommentDto commentDto =
-          await _commentRemoteService.getSingleComment(id.getOrCrash());
+          await _commentRemoteService.getSingleComment(id.value);
       final Comment comment = commentDto.toDomain();
       return right(comment);
     } on CommunicationException catch (e) {

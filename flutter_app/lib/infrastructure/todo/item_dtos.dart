@@ -22,7 +22,7 @@ class ItemDto extends BaseDto with _$ItemDto {
 
   factory ItemDto.fromDomain(Item item) {
     return ItemDto(
-      id: item.id.getOrCrash(),
+      id: item.id.value,
       profiles: item.profiles!
           .map((profile) => ProfileDto.fromDomain(profile))
           .toList(),

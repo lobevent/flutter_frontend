@@ -5,7 +5,8 @@ part 'profile_failure.freezed.dart';
 @freezed //TODO real erros
 class ProfileFailure with _$ProfileFailure {
   const factory ProfileFailure.unexpected() = Unexpected;
-  const factory ProfileFailure.insufficientPermissions() = InsufficientPermissions;
+  const factory ProfileFailure.insufficientPermissions() =
+      InsufficientPermissions;
   const factory ProfileFailure.unableToUpdate() = UnableToUpdate;
   const factory ProfileFailure.notAuthenticated() = _NotAuthenticated;
   const factory ProfileFailure.notFound() = _NotFound;

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/data/constants.dart';
-
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/pages/login/widgets/login_buttons/base_login_button.dart';
 
@@ -22,7 +21,7 @@ class GoogleSignInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseLoginButton(
-      text: AppStrings.signInWithGoogle, 
+      text: AppStrings.signInWithGoogle,
       onPressed: onPressed,
       image: const Image(
         image: AssetImage(Constants.googleLogoPath),

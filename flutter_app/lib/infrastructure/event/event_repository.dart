@@ -3,19 +3,17 @@ import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
-import 'package:flutter_frontend/domain/event/event_failure.dart';
 import 'package:flutter_frontend/domain/event/i_event_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions_handler.dart';
-
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/event/event_local_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
 
 // TODO ignored this it's too late and seems to be in progress
 
-class EventRepository implements IEventRepository {
+class EventRepository {
   final EventRemoteService _eventRemoteService;
   final EventLocalService _eventLocalService;
 
@@ -43,8 +41,8 @@ class EventRepository implements IEventRepository {
           if (profile == null) {
             throw UnexpectedTypeError();
           }
-          eventDtos = await _eventRemoteService.getEventsFromUser(
-              lastEventTime, amount, profile.id.getOrCrash().toString(), descending);
+          eventDtos = await _eventRemoteService.getEventsFromUser(lastEventTime,
+              amount, profile.id.getOrCrash().toString(), descending);
           break;
         case Operation.attending:
           eventDtos = await _eventRemoteService.getAttendingEvents(

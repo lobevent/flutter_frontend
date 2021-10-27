@@ -4,22 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
-import 'package:flutter_frontend/domain/event/event_failure.dart';
 import 'package:flutter_frontend/domain/event/i_event_repository.dart' as ev;
 import 'package:flutter_frontend/domain/profile/i_profile_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:flutter_frontend/domain/profile/profile_failure.dart';
-import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
-import 'package:flutter_frontend/infrastructure/profile/profile_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter_frontend/infrastructure/profile/profile_remote_service.dart';
-import 'package:flutter_frontend/infrastructure/profile/profile_repository.dart';
 import 'package:get_it/get_it.dart';
 
-part 'profile_search_state.dart';
 part 'profile_search_cubit.freezed.dart';
+part 'profile_search_state.dart';
 
 class ProfileSearchCubit extends Cubit<ProfileSearchState> {
   ProfileSearchCubit() : super(ProfileSearchState.initial());
@@ -44,8 +38,8 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
     try {
       emit(ProfileSearchState.loading());
       final Either<NetWorkFailure, List<Event>> eventList =
-      await eventRepository.getList(ev.Operation.search, DateTime.now(), 10,
-          searchString: eventName);
+          await eventRepository.getList(ev.Operation.search, DateTime.now(), 10,
+              searchString: eventName);
       emit(ProfileSearchState.loadedEvents(
           events: eventList.fold((l) => throw Exception, (r) => r)));
     } catch (e) {
@@ -57,8 +51,8 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
     try {
       emit(ProfileSearchState.loading());
       final Either<NetWorkFailure, List<Event>> eventList =
-      await eventRepository.getList(ev.Operation.search, DateTime.now(), 10,
-          searchString: queryName);
+          await eventRepository.getList(ev.Operation.search, DateTime.now(), 10,
+              searchString: queryName);
       final Either<NetWorkFailure, List<Profile>> profileList = await repository
           .getList(Operation.search, 10, searchString: queryName);
       emit(ProfileSearchState.loadedBoth(
@@ -72,9 +66,9 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
   Future<void> loadProfile(String id) async {
     repository.getSingleProfile(UniqueId.fromUniqueString(id)).then((value) =>
         value.fold(
-                (failure) =>
+            (failure) =>
                 emit(ProfileSearchState.error(error: failure.toString())),
-                (profile) => profile)); //todo emit to profilepage
+            (profile) => profile)); //todo emit to profilepage
   }
 
   Future<String> sendFriendship(UniqueId id) async {

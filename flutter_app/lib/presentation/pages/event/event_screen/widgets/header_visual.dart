@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class HeaderVisual extends StatelessWidget{
-
+class HeaderVisual extends StatelessWidget {
   final String? networkImagePath;
 
   const HeaderVisual({this.networkImagePath});
@@ -19,5 +18,4 @@ class HeaderVisual extends StatelessWidget{
       ),
     );
   }
-
 }

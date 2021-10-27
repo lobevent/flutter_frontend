@@ -1,13 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_frontend/domain/core/errors.dart';
-
+import 'package:flutter_frontend/data/constants.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_validators.dart';
-import 'package:flutter_frontend/data/constants.dart';
 
 class ProfileName extends ValueObject<String> {
-
   @override
   final Either<ValueFailure<String>, String> value;
 
@@ -15,15 +12,14 @@ class ProfileName extends ValueObject<String> {
     assert(input != null);
     {
       //check single line, and the length of the profilename
-      return ProfileName._(validateSingleLine(input).andThen(validateLength(input, minLength: Constants.minProfilenameLength, maxLength: Constants.maxProfilenameLength)));
+      return ProfileName._(validateSingleLine(input).andThen(validateLength(
+          input,
+          minLength: Constants.minProfilenameLength,
+          maxLength: Constants.maxProfilenameLength)));
     }
   }
   const ProfileName._(this.value);
 }
-
-
-
-
 
 /*
 class Post extends ValueObject<String> {

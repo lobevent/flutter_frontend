@@ -7,9 +7,8 @@ import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 // object to json which mostly only generates a few lines of json output.
 // If we see any problems with UI we should start using compute even for toJson!
 
-
 /// Just adding this function that we have one single point for jsonEncoding.
-/// When we later add features to the encoding it will automatically will be 
+/// When we later add features to the encoding it will automatically will be
 /// applied to encoding of lists and single models
 String _customJsonEncode(Map<String, dynamic> jsonMap) {
   return jsonEncode(jsonMap);
@@ -25,7 +24,7 @@ String serializeModel(BaseDto model) {
 /// and than returns the model list joined with a ',' in [ ]
 /// e.g. [{user:'test'},{user:'test1'}]
 String serializedModelList(List<BaseDto> models) {
-  final List<String> jsonMapList = 
-    models.map((model) => serializeModel(model)).toList();
+  final List<String> jsonMapList =
+      models.map((model) => serializeModel(model)).toList();
   return "[${jsonMapList.join(',')}]";
 }

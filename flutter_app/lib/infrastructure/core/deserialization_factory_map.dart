@@ -11,11 +11,11 @@ import 'package:flutter_frontend/infrastructure/todo/todo_dtos.dart';
 // I call this the one single point of ugliness
 // BUT it's just one central single point instead many over all dto classes
 final Map<Type, dynamic> factoryMap = {
-  UserDto : (Map<String, dynamic> json) => UserDto.fromJson(json),
-  EventDto : (Map<String, dynamic> json) => EventDto.fromJson(json),
-  CommentDto : (Map<String, dynamic> json) => CommentDto.fromJson(json),
-  PostDto : (Map<String, dynamic> json) => PostDto.fromJson(json),
-  ProfileDto : (Map<String, dynamic> json) => ProfileDto.fromJson(json),
-  TodoDto : (Map<String, dynamic> json) => TodoDto.fromJson(json),
-  ItemDto : (Map<String, dynamic> json) => ItemDto.fromJson(json),
+  UserDto: (Map<String, dynamic> json) => UserDto.fromJson(json),
+  EventDto: (Map<String, dynamic> json) => EventDto.fromJson(json),
+  CommentDto: (Map<String, dynamic> json) => CommentDto.fromJson(json),
+  PostDto: (Map<String, dynamic> json) => PostDto.fromJson(json),
+  ProfileDto: (Map<String, dynamic> json) => ProfileDto.fromJson(json),
+  TodoDto: (Map<String, dynamic> json) => TodoDto.fromJson(json),
+  ItemDto: (Map<String, dynamic> json) => ItemDto.fromJson(json),
 };

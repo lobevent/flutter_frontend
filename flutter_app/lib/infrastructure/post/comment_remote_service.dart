@@ -1,26 +1,28 @@
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
+import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
-import 'comment_dtos.dart';
 import 'package:http/http.dart';
-import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 
-class CommentRemoteService extends RemoteService<CommentDto>{
+import 'comment_dtos.dart';
+
+class CommentRemoteService extends RemoteService<CommentDto> {
   static const String commentIdGet = "/comment/";
 
   //commented out unused paths
   //static const String _commentAdd = "/event/post/{postId}/comment/{parentId}";
   //static const String _commentsGet = "/event/post/{postId}/comment";
 
-
   //Routes Lists
   static const String ownCommentsPath = "/comments/%amount%/%lastCommentTime%";
-  static const String commentsFromUserPath = "/profile/%profileId%/comments/%amount%/%lastCommentTime%";
-  static const String commentsFromCommentParentPath = "/comment/%parentCommentId%/comment/%amount%/%lastCommentTime%";
-  static const String commentsFromPostPath ="/event/post/%postId%/comment/%amount%/%lastCommentTime%";
+  static const String commentsFromUserPath =
+      "/profile/%profileId%/comments/%amount%/%lastCommentTime%";
+  static const String commentsFromCommentParentPath =
+      "/comment/%parentCommentId%/comment/%amount%/%lastCommentTime%";
+  static const String commentsFromPostPath =
+      "/event/post/%postId%/comment/%amount%/%lastCommentTime%";
 
   static const String postPath = "/comment";
   static const String deletePath = "/comment";
@@ -41,26 +43,37 @@ class CommentRemoteService extends RemoteService<CommentDto>{
 
   Future<List<CommentDto>> getCommentsFromPost(
       DateTime lastCommentTime, int amount, String postId) async {
-    return _getCommentList(commentsFromPostPath.interpolate(
-        {"postId" : postId, "amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}));
+    return _getCommentList(commentsFromPostPath.interpolate({
+      "postId": postId,
+      "amount": amount.toString(),
+      "lastCommentTime": lastCommentTime.toString()
+    }));
   }
 
   Future<List<CommentDto>> getOwnComments(
       DateTime lastCommentTime, int amount) async {
-    return _getCommentList(commentsFromPostPath.interpolate(
-        {"amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}));
+    return _getCommentList(commentsFromPostPath.interpolate({
+      "amount": amount.toString(),
+      "lastCommentTime": lastCommentTime.toString()
+    }));
   }
 
   Future<List<CommentDto>> getCommentsFromUser(
       DateTime lastCommentTime, int amount, String profileId) async {
-    return _getCommentList(commentsFromUserPath.interpolate(
-        {"profileId" : profileId, "amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}));
+    return _getCommentList(commentsFromUserPath.interpolate({
+      "profileId": profileId,
+      "amount": amount.toString(),
+      "lastCommentTime": lastCommentTime.toString()
+    }));
   }
 
   Future<List<CommentDto>> getCommentsFromCommentParent(
       DateTime lastCommentTime, int amount, String parentCommentId) async {
-    return _getCommentList(commentsFromCommentParentPath.interpolate(
-        {"parentCommentId" : parentCommentId, "amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}));
+    return _getCommentList(commentsFromCommentParentPath.interpolate({
+      "parentCommentId": parentCommentId,
+      "amount": amount.toString(),
+      "lastCommentTime": lastCommentTime.toString()
+    }));
   }
 
   Future<CommentDto> getSingleComment(String id) async {
@@ -78,14 +91,12 @@ class CommentRemoteService extends RemoteService<CommentDto>{
   }
 
   Future<CommentDto> delete(CommentDto commentDto) async {
-    return _decodeComment(await client.delete(
-        "$deletePath${commentDto.id}"));
+    return _decodeComment(await client.delete("$deletePath${commentDto.id}"));
   }
 
   Future<CommentDto> update(CommentDto commentDto) async {
     return _decodeComment(await client.put(
-        "$updatePath${commentDto.id}",
-        jsonEncode(commentDto.toJson())));
+        "$updatePath${commentDto.id}", jsonEncode(commentDto.toJson())));
   }
 
   //Not necessery anymore

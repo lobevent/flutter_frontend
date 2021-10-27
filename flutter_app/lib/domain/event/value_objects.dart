@@ -1,10 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter/cupertino.dart';
-
+import 'package:flutter_frontend/data/constants.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_validators.dart';
-import 'package:flutter_frontend/data/constants.dart';
 
 class EventName extends ValueObject<String> {
   @override
@@ -12,10 +10,11 @@ class EventName extends ValueObject<String> {
   static int maxLength = Constants.maxNameLength;
 
   factory EventName(String input) {
-
     assert(input != null);
     {
-      return EventName._(validateLength(input, maxLength: maxLength).flatMap(validateStringNotEmpty).flatMap(validateSingleLine));
+      return EventName._(validateLength(input, maxLength: maxLength)
+          .flatMap(validateStringNotEmpty)
+          .flatMap(validateSingleLine));
     }
   }
   const EventName._(this.value);
@@ -29,7 +28,8 @@ class EventDescription extends ValueObject<String> {
   factory EventDescription(String input) {
     assert(input != null);
     {
-      return EventDescription._(validateLength(input, maxLength: maxLength).flatMap(validateStringNotEmpty));
+      return EventDescription._(validateLength(input, maxLength: maxLength)
+          .flatMap(validateStringNotEmpty));
     }
   }
   const EventDescription._(this.value);

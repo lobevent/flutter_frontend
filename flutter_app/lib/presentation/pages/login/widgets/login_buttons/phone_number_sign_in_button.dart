@@ -19,7 +19,7 @@ class PhoneNumberSignInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseLoginButton(
-      text: AppStrings.signInWithPhone, 
+      text: AppStrings.signInWithPhone,
       onPressed: onPressed,
       icon: Icons.phone,
       iconColor: AppColors.mainIcon,

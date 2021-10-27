@@ -3,7 +3,6 @@
 //or moor database (sqllite for flutter) reso has also videos
 //JSON in Localstorage: https://rickyanto.com/cache-locally-on-flutter-with-localstorage/
 
-
-class EventLocalService{
+class EventLocalService {
   //Database
 }

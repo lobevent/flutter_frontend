@@ -1,15 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_frontend/domain/core/errors.dart';
-
+import 'package:flutter_frontend/data/constants.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_validators.dart';
-import 'package:flutter_frontend/data/constants.dart';
-
-
 
 class TodoDescription extends ValueObject<String> {
-
   @override
   final Either<ValueFailure<String>, String> value;
 
@@ -17,7 +12,8 @@ class TodoDescription extends ValueObject<String> {
     assert(input != null);
     {
       //check single line, and the length of the profilename
-      return TodoDescription._(validateSingleLine(input).andThen(validateLength(input, minLength: 0)));
+      return TodoDescription._(validateSingleLine(input)
+          .andThen(validateLength(input, minLength: 0)));
     }
   }
   const TodoDescription._(this.value);
@@ -29,29 +25,30 @@ class TodoName extends ValueObject<String> {
   static int maxLength = Constants.maxNameLength;
 
   factory TodoName(String input) {
-
     assert(input != null);
     {
-      return TodoName._(validateLength(input, maxLength: maxLength).flatMap(validateStringNotEmpty).flatMap(validateSingleLine));
+      return TodoName._(validateLength(input, maxLength: maxLength)
+          .flatMap(validateStringNotEmpty)
+          .flatMap(validateSingleLine));
     }
   }
   const TodoName._(this.value);
 }
 
-class ItemMaxProfiles extends ValueObject<int>{
+class ItemMaxProfiles extends ValueObject<int> {
   @override
   final Either<ValueFailure<int>, int> value;
 
   factory ItemMaxProfiles(int input) {
-
     assert(input != null);
     {
-      return ItemMaxProfiles._(validateNumberRange(input, max: Constants.maximumProfilesTodoLength, min: 0).flatMap(validateNonNegative));
+      return ItemMaxProfiles._(validateNumberRange(input,
+              max: Constants.maximumProfilesTodoLength, min: 0)
+          .flatMap(validateNonNegative));
     }
   }
   const ItemMaxProfiles._(this.value);
 }
-
 
 class ItemName extends ValueObject<String> {
   @override
@@ -59,17 +56,17 @@ class ItemName extends ValueObject<String> {
   static int maxLength = Constants.maxNameLength;
 
   factory ItemName(String input) {
-
     assert(input != null);
     {
-      return ItemName._(validateLength(input, maxLength: maxLength).flatMap(validateStringNotEmpty).flatMap(validateSingleLine));
+      return ItemName._(validateLength(input, maxLength: maxLength)
+          .flatMap(validateStringNotEmpty)
+          .flatMap(validateSingleLine));
     }
   }
   const ItemName._(this.value);
 }
 
 class ItemDescription extends ValueObject<String> {
-
   @override
   final Either<ValueFailure<String>, String> value;
 
@@ -77,7 +74,8 @@ class ItemDescription extends ValueObject<String> {
     assert(input != null);
     {
       //check single line, and the length of the profilename
-      return ItemDescription._(validateSingleLine(input).andThen(validateLength(input, minLength: 0)));
+      return ItemDescription._(validateSingleLine(input)
+          .andThen(validateLength(input, minLength: 0)));
     }
   }
   const ItemDescription._(this.value);

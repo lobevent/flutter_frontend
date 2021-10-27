@@ -4,11 +4,10 @@ import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/i_profile_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:flutter_frontend/domain/profile/profile_failure.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
+import 'package:flutter_frontend/infrastructure/profile/profile_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
-import 'package:flutter_frontend/infrastructure/profile/profile_repository.dart';
 
 part 'profile_friends_cubit.freezed.dart';
 part 'profile_friends_state.dart';

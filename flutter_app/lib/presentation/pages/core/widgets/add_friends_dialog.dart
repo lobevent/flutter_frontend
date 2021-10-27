@@ -7,6 +7,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets
 class AddFriendsDialog extends StatefulWidget {
   /// the list with all the friends of the user
   final List<Profile> friends;
+
   /// the list with all the friends, that are invited
   final List<Profile> invitedFriends;
   // callbackfunctio for adding friend
@@ -14,15 +15,18 @@ class AddFriendsDialog extends StatefulWidget {
   // callback functtion for removing friends
   final Function(Profile) onRemoveFriend;
 
-  const AddFriendsDialog({Key? key, required this.friends, required this.invitedFriends, required this.onAddFriend, required this.onRemoveFriend}) : super(key: key);
-
-
+  const AddFriendsDialog(
+      {Key? key,
+      required this.friends,
+      required this.invitedFriends,
+      required this.onAddFriend,
+      required this.onRemoveFriend})
+      : super(key: key);
 
   AddFriendsDialogState createState() => AddFriendsDialogState();
 }
 
-
-class AddFriendsDialogState extends State<AddFriendsDialog>{
+class AddFriendsDialogState extends State<AddFriendsDialog> {
   final TextEditingController controller = new TextEditingController();
   List<Profile> results = [];
 
@@ -32,20 +36,17 @@ class AddFriendsDialogState extends State<AddFriendsDialog>{
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         // searchbar
-        GenericSearchBar(controller: controller, onSearchTextChanged: onSearchTextChanged),
+        GenericSearchBar(
+            controller: controller, onSearchTextChanged: onSearchTextChanged),
         // the listtiles
         _ProfileListView(context)
-
       ],
     );
-
   }
 
   void onSearchTextChanged(String text) {
@@ -57,7 +58,7 @@ class AddFriendsDialogState extends State<AddFriendsDialog>{
       return;
     }
     // add each friend that contains the string
-    for (Profile friend in widget.friends){
+    for (Profile friend in widget.friends) {
       if (friend.name.getOrCrash().contains(text)) {
         results.add(friend);
       }
@@ -66,16 +67,18 @@ class AddFriendsDialogState extends State<AddFriendsDialog>{
     setState(() {});
   }
 
-
-  Widget _ProfileListView(BuildContext context){
-    return
-        ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: results.length,
-            itemBuilder: (context, i ){
-              return FriendListTile(profile: results[i], isInvited: widget.invitedFriends.contains(results[i]), onAddFriend: widget.onAddFriend, onRemoveFriend: widget.onRemoveFriend,);
-            }
-        );
+  Widget _ProfileListView(BuildContext context) {
+    return ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: results.length,
+        itemBuilder: (context, i) {
+          return FriendListTile(
+            profile: results[i],
+            isInvited: widget.invitedFriends.contains(results[i]),
+            onAddFriend: widget.onAddFriend,
+            onRemoveFriend: widget.onRemoveFriend,
+          );
+        });
   }
 }

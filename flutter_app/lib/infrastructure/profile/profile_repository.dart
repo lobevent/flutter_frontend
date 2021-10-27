@@ -3,12 +3,10 @@ import 'package:flutter_frontend/application/like/like_cubit.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
-import 'package:flutter_frontend/domain/event/event_failure.dart';
-import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/profile/i_profile_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:flutter_frontend/domain/profile/profile_failure.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions_handler.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
@@ -181,6 +179,21 @@ class ProfileRepository extends IProfileRepository {
       return success;
     } on CommunicationException catch (e) {
       return false;
+    }
+  }
+
+  Future<Either<NetWorkFailure, List<Profile>>> addFriendsToEvent(
+      List<Profile> profiles, Event event) async {
+    try {
+      final profileDtos =
+          profiles.map((e) => ProfileDto.fromDomain(e)).toList();
+      List<Profile> profilesResp =
+          (await _profileRemoteService.addFriendsToEvent(profileDtos, event))
+              .map((e) => e.toDomain())
+              .toList();
+      return right(profilesResp);
+    } on CommunicationException catch (e) {
+      return left(ExceptionsHandler.reactOnCommunicationException(e));
     }
   }
 }

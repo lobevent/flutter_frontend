@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
+import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:http/http.dart';
-import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 
 class EventRemoteService extends RemoteService<EventDto> {
   static const String eventByIdPath = "/event/";
@@ -20,7 +19,8 @@ class EventRemoteService extends RemoteService<EventDto> {
       "/user/eventStatus/events/%amount%/%lastEventTime%/"; //TODO attending?
   static const String unreactedEventsPath =
       "/user/events/%amount%/%lastEventTime%/"; //TODO reaction?
-  static const String searchEventsPath = "/event/search/%needle%/%amount%/%last%/";
+  static const String searchEventsPath =
+      "/event/search/%needle%/%amount%/%last%/";
   //event search name maxresults last
 
   // TODO combine it to event path?
@@ -37,7 +37,8 @@ class EventRemoteService extends RemoteService<EventDto> {
   Future<EventDto> getSingle(String id) async {
     final String uri = "$eventByIdPath$id";
     final Response response = await client.get(uri);
-    final EventDto eventDto = await _decodeEvent(response); // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
+    final EventDto eventDto = await _decodeEvent(
+        response); // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
     return eventDto;
   }
 
@@ -60,7 +61,8 @@ class EventRemoteService extends RemoteService<EventDto> {
   }
 
   Future<List<EventDto>> getEventsFromUser(
-      DateTime lastEventTime, int amount, String profileId, [bool descending = false]) async {
+      DateTime lastEventTime, int amount, String profileId,
+      [bool descending = false]) async {
     return _getEventList(profileEventPath.interpolate({
       "profileId": profileId,
       "amount": amount.toString(),

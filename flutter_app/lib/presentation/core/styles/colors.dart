@@ -15,5 +15,3 @@ class AppColors {
 
   static const Color stdButtonBackground = Color(0x2ABBBBBB);
 }
-
-

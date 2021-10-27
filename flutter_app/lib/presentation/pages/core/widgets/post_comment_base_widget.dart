@@ -6,8 +6,6 @@ import 'package:flutter_frontend/presentation/core/styles/text_styles.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/image_classes.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:auto_route/auto_route.dart' hide Router;
-import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class PostCommentBaseWidget extends StatelessWidget {
   /// the post attribute, which contains all the post data
@@ -15,47 +13,48 @@ class PostCommentBaseWidget extends StatelessWidget {
   final DateTime date;
   final String content;
   final Widget actionButtonsWidgets;
-  const PostCommentBaseWidget({Key? key, this.autor, required this.date, required this.content, required this.actionButtonsWidgets}): super(key: key);
+  const PostCommentBaseWidget(
+      {Key? key,
+      this.autor,
+      required this.date,
+      required this.content,
+      required this.actionButtonsWidgets})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      // constrained Box for min height
-        child:
-          ConstrainedBox(
-              constraints: const BoxConstraints(
-                minHeight: 150.0,
-                minWidth: 50.0,
-              ),
-              // column contains the content
-              child: Column(
-                children: [
-                  // Add header information (date, author, etc.)
-                  MetaHeadWidget(date: date, author: autor),
-                  // content of the post
-                  ContentWidget(content),
-                  // actions like comments and likes
-                  actionButtonsWidgets,
-
-                ],
-              )
-          )
-    );
+        // constrained Box for min height
+        child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              minHeight: 150.0,
+              minWidth: 50.0,
+            ),
+            // column contains the content
+            child: Column(
+              children: [
+                // Add header information (date, author, etc.)
+                MetaHeadWidget(date: date, author: autor),
+                // content of the post
+                ContentWidget(content),
+                // actions like comments and likes
+                actionButtonsWidgets,
+              ],
+            )));
   }
 
-
   /// contains the content of the post
-  Widget ContentWidget(String content){
-    return PaddingRowWidget(children:
-    [
-
-      Text(content,
-        style: const TextStyle(color: Color(0xFF400909)),)
+  Widget ContentWidget(String content) {
+    return PaddingRowWidget(children: [
+      Text(
+        content,
+        style: const TextStyle(color: Color(0xFF400909)),
+      )
     ]);
   }
 
   /// the head meta wiget displays metadata for the post
-  Widget MetaHeadWidget({Profile? author = null, required DateTime date}){
+  Widget MetaHeadWidget({Profile? author = null, required DateTime date}) {
     return PaddingRowWidget(
       // the top padding should be less than the content padding
       paddinfLeft: paddingLeftConst - 15,
@@ -76,23 +75,26 @@ class PostCommentBaseWidget extends StatelessWidget {
   }
 
   /// the widget for displaying the author (Overflow Safe)
-  Widget AuthorWidget(Profile profile){
+  Widget AuthorWidget(Profile profile) {
     // row so we can display multiple things
     return Row(
       children: [
         // get avatar image or from assets
-        CircleAvatar(backgroundImage: ProfileImage.getAssetOrNetwork(null), radius: 10,),
+        CircleAvatar(
+          backgroundImage: ProfileImage.getAssetOrNetwork(null),
+          radius: 10,
+        ),
         // sized box for little distance
-        SizedBox(width: 20,),
+        SizedBox(
+          width: 20,
+        ),
         // overflow safe
-        OverflowSafeString(child:
-        Text(profile.name.getOrCrash(), style: AppTextStyles.stdSubTextStyle,)
-        )
-
+        OverflowSafeString(
+            child: Text(
+          profile.name.getOrCrash(),
+          style: AppTextStyles.stdSubTextStyle,
+        ))
       ],
     );
   }
-
-
-
 }

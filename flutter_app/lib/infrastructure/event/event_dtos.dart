@@ -1,33 +1,27 @@
-import 'package:flutter_frontend/domain/core/value_validators.dart';
-import 'package:flutter_frontend/domain/todo/item.dart';
-import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
-import 'package:flutter_frontend/infrastructure/todo/todo_dtos.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
+import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
+import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
+import 'package:flutter_frontend/infrastructure/todo/todo_dtos.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_dtos.freezed.dart';
-
 part 'event_dtos.g.dart';
 
 @freezed
 class EventDto extends BaseDto with _$EventDto {
-
-
   const EventDto._();
 
   static const Map dtoToDomainStatus = {
-  0: EventStatus.notAttending,
-  1: EventStatus.attending,
-  2: EventStatus.interested,
+    0: EventStatus.notAttending,
+    1: EventStatus.attending,
+    2: EventStatus.interested,
   };
 
-  static final Map domainToDtoStatus = dtoToDomainStatus.map((key, value) => MapEntry(value, key));
-
+  static final Map domainToDtoStatus =
+      dtoToDomainStatus.map((key, value) => MapEntry(value, key));
 
   const factory EventDto({
     required String id,
@@ -46,10 +40,8 @@ class EventDto extends BaseDto with _$EventDto {
     int? ownStatus,
   }) = EventDtoFull;
 
-
   factory EventDto.fromDomain(Event event) {
     EventDto returnedDto;
-
 
     return EventDto(
       id: event.id.getOrCrash(),
@@ -61,7 +53,7 @@ class EventDto extends BaseDto with _$EventDto {
       creationDate: event.creationDate,
       owner: ProfileDto.fromDomain(event.owner!),
       attendingUsersCount: event.attendingCount,
-      ownStatus:  domainToDtoStatus[event.status] as int?,
+      ownStatus: domainToDtoStatus[event.status] as int?,
       longitude: event.longitude,
       latitude: event.latitude,
       visibleWithoutLogin: event.visibleWithoutLogin,
@@ -73,11 +65,11 @@ class EventDto extends BaseDto with _$EventDto {
 
   @override
   Event toDomain() {
-   return Event(
+    return Event(
       id: UniqueId.fromUniqueString(id),
       name: EventName(name),
       date: date,
-      description: description  == null ? null: EventDescription(description!),
+      description: description == null ? null : EventDescription(description!),
       todo: todo?.toDomain(),
       owner: owner?.toDomain(),
       //TODO: don't forget this one!
@@ -88,19 +80,18 @@ class EventDto extends BaseDto with _$EventDto {
       longitude: longitude,
       latitude: latitude,
       visibleWithoutLogin: visibleWithoutLogin,
-     invitations: invitations?.map((e) => e.toDomain()).toList(),
+      invitations: invitations?.map((e) => e.toDomain()).toList(),
     );
   }
 }
 
-
-
-class OwnerConverter implements JsonConverter<ProfileDto, Map<String, dynamic>> {
+class OwnerConverter
+    implements JsonConverter<ProfileDto, Map<String, dynamic>> {
   const OwnerConverter();
 
   @override
   ProfileDto fromJson(Map<String, dynamic> owner) {
-   //owner["runtimeType"] = "justId";
+    //owner["runtimeType"] = "justId";
     return ProfileDto.fromJson(owner);
   }
 
@@ -110,7 +101,7 @@ class OwnerConverter implements JsonConverter<ProfileDto, Map<String, dynamic>> 
   }
 }
 
-class TodoConverter implements JsonConverter<TodoDto, Map<String, dynamic>>{
+class TodoConverter implements JsonConverter<TodoDto, Map<String, dynamic>> {
   const TodoConverter();
 
   @override
@@ -124,6 +115,6 @@ class TodoConverter implements JsonConverter<TodoDto, Map<String, dynamic>>{
   }
 }
 
-class InvitationsToProfileConverter extends ListConverter<ProfileDto>{
-  const InvitationsToProfileConverter() :super();
+class InvitationsToProfileConverter extends ListConverter<ProfileDto> {
+  const InvitationsToProfileConverter() : super();
 }

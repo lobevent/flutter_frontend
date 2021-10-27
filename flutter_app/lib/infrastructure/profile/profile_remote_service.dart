@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter_frontend/application/like/like_cubit.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
-import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:http/http.dart';
 
 class ProfileRemoteService extends RemoteService<ProfileDto> {
@@ -42,6 +43,8 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String eventUnLikePath = "/event/%objectId%/unlike";
   static const String postUnLikePath = "/post/%objectId%/unlike";
   static const String commentUnLikePath = "/comment/%objectId%/unlike";
+
+  static const String addFriendsToEventPath = "/event/addFriends/";
 
   SymfonyCommunicator client;
 
@@ -195,5 +198,13 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
         break;
     }
     return response.body.isNotEmpty;
+  }
+
+  Future<List<ProfileDto>> addFriendsToEvent(
+      List<ProfileDto> friends, Event event) async {
+    final Response response = await client.put(
+        "$addFriendsToEventPath${event.id.getOrCrash()}",
+        jsonEncode(friends.map((e) => e.toJson())));
+    return convertList(response);
   }
 }

@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubit.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/pages/login/widgets/login_text_field.dart';
 
 class PhoneNumberVerificationCodeScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,17 +18,17 @@ class PhoneNumberVerificationCodeScreen extends StatelessWidget {
           GestureDetector(
             onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
           ),
-
           Column(
             children: [
               LoginTextField(
-                hintText: AppStrings.verificationCodeTextFieldHint, 
-                onChanged: (verificationCode) => _onVerificationCodeChanged(context, verificationCode),
+                hintText: AppStrings.verificationCodeTextFieldHint,
+                onChanged: (verificationCode) =>
+                    _onVerificationCodeChanged(context, verificationCode),
               ),
-
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0)),
                 ),
                 onPressed: () => _verifySmsCode(context),
                 child: Text(
@@ -50,7 +47,8 @@ class PhoneNumberVerificationCodeScreen extends StatelessWidget {
     // TODO implement
   }
 
-  void _onVerificationCodeChanged(BuildContext context, String verificationCode) {
+  void _onVerificationCodeChanged(
+      BuildContext context, String verificationCode) {
     context.read<SignInFormCubit>().verificationCodeChanged(verificationCode);
   }
 
@@ -61,6 +59,4 @@ class PhoneNumberVerificationCodeScreen extends StatelessWidget {
   void _resendSmsCode(BuildContext context) {
     // TODO implement
   }
-
-
 }

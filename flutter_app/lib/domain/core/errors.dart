@@ -1,14 +1,19 @@
 import 'package:flutter_frontend/domain/core/failures.dart';
 
 abstract class CommunicationError extends Error {}
+
 abstract class AuthError extends Error {}
+
 abstract class BadPresentationState extends Error {}
 
 class UnexpectedTypeError extends Error {}
 
 class NotAuthenticatedError extends CommunicationError {}
+
 class NotAuthorizedError extends CommunicationError {}
+
 class NotFoundError extends CommunicationError {}
+
 class InternalServerError extends CommunicationError {}
 
 class PhoneVerificationNotStarted extends AuthError {
@@ -19,7 +24,6 @@ class PhoneVerificationNotStarted extends AuthError {
     return Error.safeToString(explanation);
   }
 }
-
 
 class UnexpectedValueError extends Error {
   final ValueFailure valueFailure;
@@ -35,7 +39,8 @@ class UnexpectedValueError extends Error {
 }
 
 class DtoTypeNotFoundInDeserializationFactoryMapError extends Error {
-  static const String explanation = "DtoTypeNotFoundInDeserializationFactoryMapError: This error indicates that you tried to deserialize a type that isn't in the serialization factory map which is used to determine the type of the serialized Data.";
+  static const String explanation =
+      "DtoTypeNotFoundInDeserializationFactoryMapError: This error indicates that you tried to deserialize a type that isn't in the serialization factory map which is used to determine the type of the serialized Data.";
 
   @override
   String toString() {

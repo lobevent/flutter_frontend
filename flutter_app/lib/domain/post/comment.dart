@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
@@ -23,19 +22,14 @@ class Comment with _$Comment {
     Comment? commentParent,
     List<Comment>? commentChildren, // TODO find some solution for this one
     int? childCount,
-
   }) = CommentFull;
-
-
 
   // check if the whole object is no failure
   // TODO same as in domain/event/event.dart
   Option<ValueFailure<dynamic>> get failureOption {
     return commentContent.failureOrUnit.fold(
-              (f) => some(f),
-              (_) => none(),
-            );
+      (f) => some(f),
+      (_) => none(),
+    );
   }
 }
-
-

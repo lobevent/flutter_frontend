@@ -1,11 +1,10 @@
 abstract class BaseDto<T> {
   const BaseDto(); // for freezed to work we need this const constructor
 
-   Map<String, dynamic> toJson();
+  Map<String, dynamic> toJson();
 
-   T toDomain();
+  T toDomain();
 }
-
 
 // Below you can see a minimal example implementation using the BaseDto as superclass
 

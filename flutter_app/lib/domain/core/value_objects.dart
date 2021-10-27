@@ -1,13 +1,11 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/errors.dart';
+import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:flutter_frontend/domain/core/errors.dart';
-import 'package:flutter_frontend/domain/core/failures.dart';
-
-
 @immutable
-abstract class ValueObject<T>{
+abstract class ValueObject<T> {
   const ValueObject();
   Either<ValueFailure<T>, T> get value;
 

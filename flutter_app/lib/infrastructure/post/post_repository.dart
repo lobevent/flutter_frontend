@@ -5,7 +5,6 @@ import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/i_post_repository.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
-import 'package:flutter_frontend/domain/post/post_failure.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions_handler.dart';
@@ -40,21 +39,23 @@ class PostRepository implements IPostRepository {
   }
 
   @override
-  Future<Either<NetWorkFailure, List<Post>>> getList(Operation operation,
-      DateTime lastPostTime, int amount, Event eventParent,  //TODO add eventparent
+  Future<Either<NetWorkFailure, List<Post>>> getList(
+      Operation operation,
+      DateTime lastPostTime,
+      int amount,
+      Event eventParent, //TODO add eventparent
       {Profile? profile}) async {
     try {
       List<PostDto> postDtos;
       switch (operation) {
         case Operation.own:
-          postDtos =
-              await _postRemoteService.getOwnPosts(lastPostTime, amount);
+          postDtos = await _postRemoteService.getOwnPosts(lastPostTime, amount);
           break;
         case Operation.feed:
           postDtos = await _postRemoteService.getFeed(lastPostTime, amount);
           break;
         case Operation.fromUser:
-          if(profile == null){
+          if (profile == null) {
             throw UnexpectedTypeError();
           }
           postDtos = await _postRemoteService.getPostsFromUser(

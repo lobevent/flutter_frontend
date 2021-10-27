@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/data/constants.dart';
-
-import 'package:flutter_frontend/l10n/app_strings.dart';
 
 class BaseLoginButton extends StatelessWidget {
   final String text;
@@ -55,9 +52,11 @@ class BaseLoginButton extends StatelessWidget {
     this.height = 44.0,
     this.width,
     this.shape,
-  }) : assert(icon != null || image != null, "At least an icon or an image must be provided!"),
-       assert(!((icon != null) ^ (iconColor != null)), "If an icon is set, an iconColor must be provided!"),
-       super(key: key);
+  })  : assert(icon != null || image != null,
+            "At least an icon or an image must be provided!"),
+        assert(!((icon != null) ^ (iconColor != null)),
+            "If an icon is set, an iconColor must be provided!"),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +68,10 @@ class BaseLoginButton extends StatelessWidget {
       onPressed: onPressed as VoidCallback?,
       //splashColor: splashColor,
       // highlightColor: highlightColor,
-      shape: shape ?? RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
+      shape: shape ??
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
       child: _getButtonChild(context),
     );
   }
@@ -84,9 +84,7 @@ class BaseLoginButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: _iconOrImage()
-          ),
+              borderRadius: BorderRadius.circular(8.0), child: _iconOrImage()),
           Text(
             text,
             style: TextStyle(

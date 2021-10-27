@@ -1,28 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/event/events_mulitlist/events_mulitlist_cubit.dart';
-import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
+import 'package:flutter_frontend/presentation/pages/event/events_multilist/events_mulitlist/events_mulitlist_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/widgets/events_multilist_body.dart';
-
 
 class EventsMultilistScreen extends StatelessWidget {
   final EventScreenOptions? option;
   final Profile? profile;
-  EventsMultilistScreen({Key? key,  this.profile, this.option = EventScreenOptions.owned}) : super(key: key);
+  EventsMultilistScreen(
+      {Key? key, this.profile, this.option = EventScreenOptions.owned})
+      : super(key: key);
 
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => EventsMultilistCubit(option: option?? EventScreenOptions.owned, profile: profile),
+      create: (context) => EventsMultilistCubit(
+          option: option ?? EventScreenOptions.owned, profile: profile),
       child: BlocConsumer<EventsMultilistCubit, EventsMultilistState>(
-        listener: (context, state) => {},
+          listener: (context, state) => {},
           builder: (context, state) {
             bool isLoading = state.maybeMap((_) => false,
                 loading: (_) => true, orElse: () => false);
             return LoadingOverlay(
                 isLoading: isLoading,
-                child: OwnEventScreenHolder(profile: profile,));
+                child: OwnEventScreenHolder(
+                  profile: profile,
+                ));
           }),
     );
   }
@@ -36,7 +39,7 @@ class OwnEventScreenHolder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String appBarText = "";
-    switch(context.read<EventsMultilistCubit>().option){
+    switch (context.read<EventsMultilistCubit>().option) {
       case EventScreenOptions.owned:
         appBarText = "Own events";
         break;

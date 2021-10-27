@@ -1,7 +1,7 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/auth/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:dartz/dartz.dart';
 
 part 'user.freezed.dart';
 
@@ -12,7 +12,7 @@ class User with _$User {
     required Username username,
     required Option<EmailAddress> email,
     // TODO add more parameters as needed and create ValueObjects or Entities accordingly
-    // String phoneNumber, 
+    // String phoneNumber,
     // String profilePictureUrl,
   }) = _User;
 }

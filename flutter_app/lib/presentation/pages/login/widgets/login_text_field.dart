@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_frontend/presentation/core/style.dart';
 
 class LoginTextField extends StatelessWidget {
@@ -8,16 +7,11 @@ class LoginTextField extends StatelessWidget {
   final ValueChanged<String> onChanged;
 
   final UnderlineInputBorder underlineInputBorder = const UnderlineInputBorder(
-    borderSide: BorderSide(
-      color: AppColors.white
-    ),
+    borderSide: BorderSide(color: AppColors.white),
   );
 
-  const LoginTextField({
-    this.hintText,
-    this.prefixIcon,
-    required this.onChanged
-  });
+  const LoginTextField(
+      {this.hintText, this.prefixIcon, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -39,5 +33,3 @@ class LoginTextField extends StatelessWidget {
     );
   }
 }
-
-

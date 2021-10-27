@@ -1,7 +1,5 @@
 part of 'events_mulitlist_cubit.dart';
 
-
-
 @freezed
 class EventsMultilistState with _$EventsMultilistState {
   const factory EventsMultilistState({
@@ -9,8 +7,7 @@ class EventsMultilistState with _$EventsMultilistState {
     required bool showErrorMessages,
   }) = _OwnEventsState;
 
-
-  factory EventsMultilistState.initial()  = _Initial;
+  factory EventsMultilistState.initial() = _Initial;
 
   factory EventsMultilistState.loading() = _LoadInProgress;
 
@@ -19,12 +16,4 @@ class EventsMultilistState with _$EventsMultilistState {
   factory EventsMultilistState.error({required String error}) = _LoadFailure;
 
   factory EventsMultilistState.deleted({required Event event}) = _deletedEvent;
-
 }
-
-
-
-
-
-
-

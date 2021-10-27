@@ -1,11 +1,8 @@
 import 'dart:core';
 
 import 'package:dartz/dartz.dart';
-import 'package:flutter/material.dart';
-
 import 'package:flutter_frontend/data/constants.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 Either<ValueFailure<String>, String> validateEmailAddress(String input) {
   // Maybe not the most robust way of email validation but it's good enough
@@ -22,46 +19,34 @@ Either<ValueFailure<String>, String> validatePassword(String input) {
   // You can also add some advanced password checks (uppercase/lowercase, at least 1 number, ...)
   // Added PW checking, at least 1 uppercase letter and TODO: at least 1 special character
   if (input.length < Constants.minPasswordLength) {
-    return left(
-      ValueFailure.shortPassword(
-        failedValue: input, 
-        minLength: Constants.minPasswordLength
-      )
-    );
-
-  } else if(!RegExp("[A-Z]").hasMatch(input)) {
-    return left(
-      const ValueFailure.noBigCaseLetterPassword()
-    );
+    return left(ValueFailure.shortPassword(
+        failedValue: input, minLength: Constants.minPasswordLength));
+  } else if (!RegExp("[A-Z]").hasMatch(input)) {
+    return left(const ValueFailure.noBigCaseLetterPassword());
     //TODO: this regexp doesnt does its job, maybe somebody can fix it
-  } else if(!RegExp('[\*\.!@#\$%\^&\(\)\{\}\[\]:;<>,\.\?/~_\+-=\|\\]').hasMatch(input)){
-    return left(
-      const ValueFailure.noSpecialLetterPassword()
-    );
-  }
-  else
-  {
+  } else if (!RegExp('[\*\.!@#\$%\^&\(\)\{\}\[\]:;<>,\.\?/~_\+-=\|\\]')
+      .hasMatch(input)) {
+    return left(const ValueFailure.noSpecialLetterPassword());
+  } else {
     return right(input);
   }
 }
 
-Either<ValueFailure<double>,double> validateLongitude(double input){
-  if (input<180 && input>-180) {
+Either<ValueFailure<double>, double> validateLongitude(double input) {
+  if (input < 180 && input > -180) {
     return right(input);
   } else {
     return left(ValueFailure.empty(failedValue: input));
   }
-
 }
 
-Either<ValueFailure<double>,double> validateLatitude(double input){
-  if(input<90 && input>-90){
+Either<ValueFailure<double>, double> validateLatitude(double input) {
+  if (input < 90 && input > -90) {
     return right(input);
-  }else {
+  } else {
     return left(ValueFailure.empty(failedValue: input));
   }
 }
-
 
 Either<ValueFailure<String>, String> validateStringNotEmpty(String input) {
   if (input.isNotEmpty) {
@@ -71,18 +56,17 @@ Either<ValueFailure<String>, String> validateStringNotEmpty(String input) {
   }
 }
 
-
-Either<ValueFailure<String>, String> validateLength(String input, {int minLength=0, int? maxLength}) {
+Either<ValueFailure<String>, String> validateLength(String input,
+    {int minLength = 0, int? maxLength}) {
   if (input.length < minLength) {
     return left(
-      ValueFailure.lengthTooShort(failedValue: input, minLength: minLength)
-    );
+        ValueFailure.lengthTooShort(failedValue: input, minLength: minLength));
   }
   if (maxLength != null) {
-    if (input.length > maxLength) { // check if the string is longer than max length
-      return left(
-        ValueFailure.exceedingLength(failedValue: input, maxLength: maxLength)
-      );
+    if (input.length > maxLength) {
+      // check if the string is longer than max length
+      return left(ValueFailure.exceedingLength(
+          failedValue: input, maxLength: maxLength));
     }
   }
 
@@ -98,9 +82,6 @@ Either<ValueFailure<String>, String> validateSingleLine(String input) {
   }
 }
 
-
-
-
 // TODO lets make this right tomorrow don't know what this should actually do (all the functions under this comment)
 
 Either<ValueFailure<String>, String> validateDate(String input) {
@@ -114,7 +95,8 @@ Either<ValueFailure<String>, String> validateDate(String input) {
   }
 }
 
-Either<ValueFailure<int>, int> validateNumberRange(int input, {required int max, required int min}) {
+Either<ValueFailure<int>, int> validateNumberRange(int input,
+    {required int max, required int min}) {
   // check if the date is in valid format
 
   if (input <= max && input >= min) {
@@ -124,7 +106,8 @@ Either<ValueFailure<int>, int> validateNumberRange(int input, {required int max,
   }
 }
 
-Either<ValueFailure<T>, T> validateNonNegative<T extends num>(T input, {T? max, T? min}) {
+Either<ValueFailure<T>, T> validateNonNegative<T extends num>(T input,
+    {T? max, T? min}) {
   // check if the date is in valid format
   if (isNonNegative(input)) {
     return right(input);
@@ -133,11 +116,9 @@ Either<ValueFailure<T>, T> validateNonNegative<T extends num>(T input, {T? max, 
   }
 }
 
-
-bool isNonNegative(num number){
+bool isNonNegative(num number) {
   return !((num as int) < 0);
 }
-
 
 bool isValidDate(String input) {
   final date = DateTime.parse(input);

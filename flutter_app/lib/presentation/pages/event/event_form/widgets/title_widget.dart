@@ -1,24 +1,18 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_form/cubit/event_form_cubit.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/cubit/event_form_cubit.dart';
 
-
-class EventNameField extends StatefulWidget{
+class EventNameField extends StatefulWidget {
   const EventNameField({
     Key? key,
   }) : super(key: key);
 
-
   @override
   _EventNameFieldState createState() => _EventNameFieldState();
-
 }
 
 class _EventNameFieldState extends State<EventNameField> {
-
-
   @override
   Widget build(BuildContext context) {
     //final textEditingController = useTextEditingController();
@@ -38,19 +32,19 @@ class _EventNameFieldState extends State<EventNameField> {
               //counterText: '',
             ),
             maxLength: EventName.maxLength,
-            maxLines: 1,
             onChanged: (value) => {
-              context.read<EventFormCubit>().changeTitle(value)} // For value error validaton
-            ,
-            validator: (_) => context.read<EventFormCubit>().state.event.name.value
-                .fold(
-                  (f) => f.maybeMap(
-                empty: (f) => 'Cannot be empty',
-                exceedingLength: (f) => 'Exceeding length, max: ${f.maxLength}',
-                orElse: () => "",
-              ),
-                  (r) => "",
-            ),
+              context.read<EventFormCubit>().changeTitle(value)
+            }, // For value error validaton
+            validator: (_) =>
+                context.read<EventFormCubit>().state.event.name.value.fold(
+                      (f) => f.maybeMap(
+                        empty: (f) => 'Cannot be empty',
+                        exceedingLength: (f) =>
+                            'Exceeding length, max: ${f.maxLength}',
+                        orElse: () => null,
+                      ),
+                      (r) => null,
+                    ),
           )),
     );
   }

@@ -1,12 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart' as firebase;
-import 'package:flutter_frontend/l10n/app_strings.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartz/dartz.dart';
-
-import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter_frontend/domain/auth/user.dart';
 import 'package:flutter_frontend/domain/auth/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
+import 'package:flutter_frontend/l10n/app_strings.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_dto.freezed.dart';
 part 'user_dto.g.dart';
@@ -26,9 +25,7 @@ class UserDto extends BaseDto with _$UserDto {
       id: user.id.getOrCrash(),
       username: user.username.getOrCrash(),
       emailAddress: user.email.fold(
-        () => null, 
-        (EmailAddress emailAddress) => emailAddress.getOrCrash()
-      ),
+          () => null, (EmailAddress emailAddress) => emailAddress.getOrCrash()),
     );
   }
 
@@ -41,7 +38,8 @@ class UserDto extends BaseDto with _$UserDto {
     );
   }
 
-  factory UserDto.fromJson(Map<String, dynamic> json) => _$UserDtoFromJson(json);
+  factory UserDto.fromJson(Map<String, dynamic> json) =>
+      _$UserDtoFromJson(json);
 
   factory UserDto.fromFirebase(firebase.User firebaseUser) {
     return UserDto(

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/like/like_cubit.dart';
-import 'package:flutter_frontend/application/post_comment/comment_screen/comment_screen_cubit.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 
 class LikeButton extends StatefulWidget {
@@ -50,6 +48,7 @@ class _LikeButtonState extends State<LikeButton> {
       ),
     );
   }
+
   //just
   void changeLikeStatus() {
     setState(() {

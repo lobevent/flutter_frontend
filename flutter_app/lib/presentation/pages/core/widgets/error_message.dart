@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 
-class ErrorMessage extends StatelessWidget{
-
+class ErrorMessage extends StatelessWidget {
   /// a text to show as error
   final String? errorText;
+
   /// we can have fun working with failures
   final NetWorkFailure? netWorkFailure;
 
@@ -14,5 +14,4 @@ class ErrorMessage extends StatelessWidget{
   Widget build(BuildContext context) {
     return Center(child: Text('error'));
   }
-
 }

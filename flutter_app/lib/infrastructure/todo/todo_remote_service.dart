@@ -1,18 +1,13 @@
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
-import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_dtos.dart';
 import 'package:http/http.dart';
-import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 
-
-class TodoRemoteService extends RemoteService<TodoDto>{
+class TodoRemoteService extends RemoteService<TodoDto> {
   static const String orgalistByEventId = "/orgalist/event/";
-
 
   // TODO combine it to event path?
   static const String postPath = "/orgalist/event/";
@@ -23,10 +18,7 @@ class TodoRemoteService extends RemoteService<TodoDto>{
 
   TodoRemoteService({SymfonyCommunicator? communicator})
       : client = communicator ??
-      SymfonyCommunicator(); // TODO this doesn't work on runtime -> will throw an error!
-
-
-
+            SymfonyCommunicator(); // TODO this doesn't work on runtime -> will throw an error!
 
   Future<TodoDto> getSingle(String eventId) async {
     final String uri = "$orgalistByEventId$eventId";
@@ -36,27 +28,21 @@ class TodoRemoteService extends RemoteService<TodoDto>{
     return todoDto;
   }
 
-
   Future<TodoDto> createTodo(String eventId, TodoDto todo) async {
     return _decodeTodo(
         await client.post("$postPath$eventId", jsonEncode(todo.toJson())));
   }
 
   Future<TodoDto> deleteTodo(String todoId) async {
-    return _decodeTodo(await client.delete(
-        "$deletePath${todoId}"));
+    return _decodeTodo(await client.delete("$deletePath${todoId}"));
   }
 
   Future<TodoDto> updateTodo(TodoDto todoDto) async {
     return _decodeTodo(await client.put(
-        "$updatePath${todoDto.id}",
-        jsonEncode(todoDto.toJson())));
+        "$updatePath${todoDto.id}", jsonEncode(todoDto.toJson())));
   }
 
   TodoDto _decodeTodo(Response json) {
     return TodoDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
-
-
-
 }

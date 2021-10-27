@@ -1,23 +1,24 @@
-import 'dart:convert';
 
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_dtos.dart';
 import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'deserialization_factory_map.dart';
 import 'exceptions.dart';
 
-class ListConverter<DTO extends BaseDto> implements JsonConverter<List<DTO>, List<dynamic>>{
+class ListConverter<DTO extends BaseDto>
+    implements JsonConverter<List<DTO>, List<dynamic>> {
   const ListConverter();
 
-  List<DTO> convertList(List<dynamic> json){
+  List<DTO> convertList(List<dynamic> json) {
     List<DTO> dtoList;
     try {
       dtoList = json
           .map((e) => e as Map<String, dynamic>)
-          .map((e) => factoryMap[DTO](e) as DTO) //factorymap is from the corefile deserialization_factory_map (single point of uglyness)
+          .map((e) => factoryMap[DTO](e)
+              as DTO) //factorymap is from the corefile deserialization_factory_map (single point of uglyness)
           .toList(); // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
     } on Exception {
       throw UnexpectedFormatException();
@@ -43,16 +44,12 @@ class ListConverter<DTO extends BaseDto> implements JsonConverter<List<DTO>, Lis
 
 }
 
-
-class CommentsConverter extends ListConverter<CommentDto>{
-  const CommentsConverter() :super();
+class CommentsConverter extends ListConverter<CommentDto> {
+  const CommentsConverter() : super();
 }
 
-
-
-
-class ProfileConverter implements JsonConverter<ProfileDto,Map<String, dynamic>> {
-
+class ProfileConverter
+    implements JsonConverter<ProfileDto, Map<String, dynamic>> {
   const ProfileConverter();
 
   @override
@@ -66,9 +63,7 @@ class ProfileConverter implements JsonConverter<ProfileDto,Map<String, dynamic>>
   }
 }
 
-
-class PostConverter implements JsonConverter<PostDto,Map<String, dynamic>> {
-
+class PostConverter implements JsonConverter<PostDto, Map<String, dynamic>> {
   const PostConverter();
 
   @override
@@ -82,8 +77,8 @@ class PostConverter implements JsonConverter<PostDto,Map<String, dynamic>> {
   }
 }
 
-class CommentConverter implements JsonConverter<CommentDto,Map<String, dynamic>> {
-
+class CommentConverter
+    implements JsonConverter<CommentDto, Map<String, dynamic>> {
   const CommentConverter();
 
   @override
@@ -96,8 +91,6 @@ class CommentConverter implements JsonConverter<CommentDto,Map<String, dynamic>>
     return commentDto.toJson();
   }
 }
-
-
 
 // class DatetimeConverter implements JsonConverter<DateTime, String>{
 //   @override
@@ -113,4 +106,3 @@ class CommentConverter implements JsonConverter<CommentDto,Map<String, dynamic>>
 //   }
 //
 // }
-

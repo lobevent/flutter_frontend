@@ -3,13 +3,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_form/cubit/event_form_cubit.dart';
-import 'package:flutter_frontend/domain/event/event.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/description_body_widged.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/event_form_container.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/title_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/cubit/event_form_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/event_form_container.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class EventFormPage extends StatelessWidget {
@@ -33,7 +30,6 @@ class EventFormPage extends StatelessWidget {
           },
           //buildWhen: (p, c) => p.isSaving != c.isSaving /*|| p.isLoading != c.isLoading*/,
 
-
           builder: (context, state) {
             // generate the heading
             String text = state.isSaving ? "Saving" : "Loading";
@@ -51,18 +47,16 @@ class EventFormPage extends StatelessWidget {
                 /// add a sticky bottom navigation
                 bottomNavigationBar: BottomNavigation(context),
 
-
                 children: [
-
-
                   /// Title text for this page
                   Text(state.isEditing ? 'Edit a Event' : 'Create a Event'),
-
 
                   /// the form which contains all the inputs
                   /// because the inputs have to be wrapped in a Form to function
                   /// properly
-                  EventFormContainer( showErrorMessages: state.showErrorMessages,),
+                  EventFormContainer(
+                    showErrorMessages: state.showErrorMessages,
+                  ),
                 ],
               ),
             );
@@ -70,7 +64,7 @@ class EventFormPage extends StatelessWidget {
         ));
   }
 
-  Widget BottomNavigation(BuildContext context){
+  Widget BottomNavigation(BuildContext context) {
     return PaddingRowWidget(children: [
       IconButton(
           icon: Icon(Icons.arrow_back),
@@ -86,17 +80,17 @@ class EventFormPage extends StatelessWidget {
     ]);
   }
 
-  void successAndErrorHandler(state, BuildContext context){
+  void successAndErrorHandler(state, BuildContext context) {
     state.saveFailureOrSuccessOption.fold(
-          () {},
-          (either) {
+      () {},
+      (either) {
         either.fold(
-              (failure) {
+          (failure) {
             //TODO: ADD flushbar
           },
-              (_) {
+          (_) {
             context.router.popUntil(
-                  (route) => route.settings.name == FeedScreenRoute.name,
+              (route) => route.settings.name == FeedScreenRoute.name,
             );
           },
         );
@@ -104,4 +98,3 @@ class EventFormPage extends StatelessWidget {
     );
   }
 }
-

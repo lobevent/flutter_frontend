@@ -1,17 +1,14 @@
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
+import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:http/http.dart';
-import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
-
 
 import 'post_dtos.dart';
 
-class PostRemoteService extends RemoteService<PostDto>{
-
+class PostRemoteService extends RemoteService<PostDto> {
   static const String postIdPath = "/event/post/";
 
   //commented out Unused path
@@ -33,32 +30,35 @@ class PostRemoteService extends RemoteService<PostDto>{
   final SymfonyCommunicator client;
 
   PostRemoteService({required SymfonyCommunicator communicator})
-      : client = communicator; // TODO this doesn't work on runtime -> will throw an error!
-
+      : client =
+            communicator; // TODO this doesn't work on runtime -> will throw an error!
 
   //decode the json response for post
   Future<PostDto> _decodePost(Response json) async {
     return PostDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
 
-  Future<List<PostDto>> getOwnPosts(
-      DateTime lastPostTime, int amount) async {
-    return _getPostList(
-        ownPostsPath.interpolate(
-            {"amount" : amount.toString(), "lastPostTime" : lastPostTime.toString()}));
+  Future<List<PostDto>> getOwnPosts(DateTime lastPostTime, int amount) async {
+    return _getPostList(ownPostsPath.interpolate({
+      "amount": amount.toString(),
+      "lastPostTime": lastPostTime.toString()
+    }));
   }
 
   Future<List<PostDto>> getFeed(DateTime lastPostTime, int amount) async {
-    return _getPostList(
-        feedPath.interpolate(
-            {"amount" : amount.toString(), "lastPostTime" : lastPostTime.toString()}));
+    return _getPostList(feedPath.interpolate({
+      "amount": amount.toString(),
+      "lastPostTime": lastPostTime.toString()
+    }));
   }
 
   Future<List<PostDto>> getPostsFromUser(
       DateTime lastPostTime, int amount, String profileId) async {
-    return _getPostList(
-        postsFromUserPath.interpolate(
-            {"profileId": profileId, "amount" : amount.toString(), "lastPostTime" : lastPostTime.toString()}));
+    return _getPostList(postsFromUserPath.interpolate({
+      "profileId": profileId,
+      "amount": amount.toString(),
+      "lastPostTime": lastPostTime.toString()
+    }));
   }
 
   Future<PostDto> getSingle(String id) async {
@@ -75,14 +75,12 @@ class PostRemoteService extends RemoteService<PostDto>{
   }
 
   Future<PostDto> deletePost(PostDto postDto) async {
-    return _decodePost(await client.delete(
-        "$deletePath${postDto.id}"));
+    return _decodePost(await client.delete("$deletePath${postDto.id}"));
   }
 
   Future<PostDto> updatePost(PostDto postDto) async {
     return _decodePost(await client.put(
-        "$updatePath${postDto.id}",
-        jsonEncode(postDto.toJson())));
+        "$updatePath${postDto.id}", jsonEncode(postDto.toJson())));
   }
 
   /*static String generatePaginatedRoute(
@@ -94,5 +92,4 @@ class PostRemoteService extends RemoteService<PostDto>{
     final Response response = await client.get(path);
     return convertList(response);
   }
-
 }

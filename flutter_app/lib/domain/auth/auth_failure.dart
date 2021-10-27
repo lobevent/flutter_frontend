@@ -7,7 +7,8 @@ part 'auth_failure.freezed.dart';
 class AuthFailure with _$AuthFailure {
   const factory AuthFailure.cancelledByUser() = _CancelledByUser;
   const factory AuthFailure.serverError() = _ServerError;
-  const factory AuthFailure.appleSignInNotSupported() = _AppleSignInNotSupported;
+  const factory AuthFailure.appleSignInNotSupported() =
+      _AppleSignInNotSupported;
   const factory AuthFailure.appleSignInAuthError() = _AppleSignInAuthError;
   const factory AuthFailure.invalidCredential() = _InvalidCredential;
   const factory AuthFailure.autoPhoneAuthFailed() = _AutoPhoneAuthFailed;

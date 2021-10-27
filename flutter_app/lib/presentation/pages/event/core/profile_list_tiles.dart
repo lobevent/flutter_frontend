@@ -1,10 +1,10 @@
+import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/profile/profile_friends/profile_friends_cubit.dart';
 import 'package:flutter_frontend/application/profile/profile_search/profile_search_cubit.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/image_classes.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
@@ -22,9 +22,7 @@ class ProfileListTiles extends StatelessWidget {
 
   //profile list tiles for searching profiles
   const ProfileListTiles(
-      {required ObjectKey key,
-      required this.profile,
-      required this.buttonCase})
+      {required ObjectKey key, required this.profile, required this.buttonCase})
       : super(key: key);
 
   //card for the friendlisttile with the actionbuttons
@@ -32,23 +30,22 @@ class ProfileListTiles extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         child: ListTile(
-          leading: IconButton(
-            //load the avatar
-            icon: CircleAvatar(
-              radius: 30,
-              backgroundImage: ProfileImage.getAssetOrNetworkFromProfile(profile),
-            ),
-            onPressed: () => showProfile(context),
-          ),
-          title: Text(profile.name.getOrCrash()),
-          trailing: Row(
-            children: [actionButtons(context)],
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          ),
-        ));
+      leading: IconButton(
+        //load the avatar
+        icon: CircleAvatar(
+          radius: 30,
+          backgroundImage: ProfileImage.getAssetOrNetworkFromProfile(profile),
+        ),
+        onPressed: () => showProfile(context),
+      ),
+      title: Text(profile.name.getOrCrash()),
+      trailing: Row(
+        children: [actionButtons(context)],
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      ),
+    ));
   }
-
 
   //build the send friendrequest buttons
   Widget actionButtons(BuildContext context) {
@@ -59,7 +56,7 @@ class ProfileListTiles extends StatelessWidget {
             onPressed: () =>
                 context.read<ProfileSearchCubit>().sendFriendship(profile.id),
             icon: Icon(Icons.person_add_alt_1_rounded));
-        //for deletion of already friends
+      //for deletion of already friends
       case TileButton.deleteFriendButton:
         return IconButton(
             icon: Icon(Icons.delete_forever),
@@ -73,7 +70,7 @@ class ProfileListTiles extends StatelessWidget {
                       print("falseee"),
                   });
             });
-        //for open friend reqeusts
+      //for open friend reqeusts
       case TileButton.acceptDeclineFriendButton:
         return PaddingRowWidget(
           paddinfLeft: 5,

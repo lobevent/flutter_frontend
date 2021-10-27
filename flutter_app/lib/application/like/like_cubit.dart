@@ -1,9 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:dartz/dartz.dart';
-import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:flutter_frontend/infrastructure/profile/profile_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
@@ -34,12 +31,13 @@ class LikeCubit extends Cubit<LikeState> {
   }
 
   ///just like or unlike (depending on the likestatus) 1 entity and pass option to handle different route in remote service
-  Future<bool> unOrlike(UniqueId objectId, LikeTypeOption option, bool likeStatusUi) async {
-    bool success=false;
-    if(likeStatusUi){
+  Future<bool> unOrlike(
+      UniqueId objectId, LikeTypeOption option, bool likeStatusUi) async {
+    bool success = false;
+    if (likeStatusUi) {
       final success = await repository.unlike(objectId, option);
       this.likeStatus = !success;
-    }else{
+    } else {
       final success = await repository.like(objectId, option);
       this.likeStatus = success;
     }

@@ -1,22 +1,19 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter_frontend/application/profile/profile_friends/profile_friends_cubit.dart';
-import 'package:flutter_frontend/application/profile/profile_search/profile_search_cubit.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
-import 'package:flutter_frontend/domain/todo/value_objects.dart';
-import 'package:get_it/get_it.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:flutter_frontend/domain/todo/todo.dart';
-import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_repository.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:get_it/get_it.dart';
 
-part 'todo_state.dart';
 part 'todo_cubit.freezed.dart';
+part 'todo_state.dart';
 
 class TodoCubit extends Cubit<TodoState> {
   final Event event;

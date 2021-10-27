@@ -1,9 +1,6 @@
-import 'package:flutter/material.dart';
-
 import 'package:auto_route/auto_route.dart';
-
+import 'package:flutter/material.dart';
 import 'package:flutter_frontend/data/constants.dart';
-
 import 'package:flutter_frontend/presentation/core/style.dart';
 
 typedef CountryCodeCallback = void Function(Map<String, String> countryData);
@@ -11,11 +8,9 @@ typedef CountryCodeCallback = void Function(Map<String, String> countryData);
 class CountryCodeListTile extends StatelessWidget {
   final Map<String, String> countryData;
   final CountryCodeCallback countryCodePressed;
-  
-  const CountryCodeListTile({
-    required this.countryData,
-    required this.countryCodePressed
-  });
+
+  const CountryCodeListTile(
+      {required this.countryData, required this.countryCodePressed});
 
   @override
   Widget build(BuildContext context) {

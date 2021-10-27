@@ -3,7 +3,6 @@ import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
-
 import 'package:flutter_frontend/domain/profile/profile.dart';
 
 // TODO rename this one since it's duplicated in domain/event/i_event_repository.dart -> really confusing

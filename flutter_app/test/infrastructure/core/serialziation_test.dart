@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_frontend/infrastructure/core/deserialization.dart';
 import 'package:flutter_frontend/infrastructure/core/serilization.dart';
 import 'package:flutter_frontend/infrastructure/auth/user_dto.dart';
-import 'package:flutter_frontend/domain/core/errors.dart';
 
 
 void main() {

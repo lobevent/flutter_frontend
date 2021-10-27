@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_frontend/domain/profile/profile.dart';
 
 class ItemElementWidget extends StatelessWidget {
-
   final String name;
   final String description;
   final List<Profile> profiles;

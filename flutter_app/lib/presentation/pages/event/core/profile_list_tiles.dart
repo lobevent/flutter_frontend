@@ -10,19 +10,19 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/image_classes.d
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
-enum TileButton {
-  sendFriendButton,
-  deleteFriendButton,
-  acceptDeclineFriendButton
-}
-
 class ProfileListTiles extends StatelessWidget {
   final Profile profile;
-  final TileButton buttonCase;
+  //accept/send friendrequest
+  final Function(Profile profile)? onFriendRequest;
+  //decline/delete friendrequest
+  final Function(Profile profile)? onDeleteFriend;
 
   //profile list tiles for searching profiles
   const ProfileListTiles(
-      {required ObjectKey key, required this.profile, required this.buttonCase})
+      {required ObjectKey key,
+      required this.profile,
+      this.onDeleteFriend,
+      this.onFriendRequest})
       : super(key: key);
 
   //card for the friendlisttile with the actionbuttons
@@ -40,7 +40,10 @@ class ProfileListTiles extends StatelessWidget {
       ),
       title: Text(profile.name.getOrCrash()),
       trailing: Row(
-        children: [actionButtons(context)],
+        children: [
+          actionButtons(
+              onFriendRequest != null, onDeleteFriend != null, context)
+        ],
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
       ),
@@ -48,56 +51,48 @@ class ProfileListTiles extends StatelessWidget {
   }
 
   //build the send friendrequest buttons
-  Widget actionButtons(BuildContext context) {
-    switch (buttonCase) {
-      //build send friednship button
-      case TileButton.sendFriendButton:
-        return IconButton(
-            onPressed: () =>
-                context.read<ProfileSearchCubit>().sendFriendship(profile.id),
-            icon: Icon(Icons.person_add_alt_1_rounded));
-      //for deletion of already friends
-      case TileButton.deleteFriendButton:
-        return IconButton(
-            icon: Icon(Icons.delete_forever),
-            onPressed: () {
-              deleteFriend(context).then((value) async => {
-                    if (value)
-                      context
-                          .read<ProfileFriendsCubit>()
-                          .deleteFriendship(profile)
-                    else
-                      print("falseee"),
-                  });
-            });
-      //for open friend reqeusts
-      case TileButton.acceptDeclineFriendButton:
-        return PaddingRowWidget(
-          paddinfLeft: 5,
-          paddingRight: 5,
-          children: [
-            //button for sending a friendship
-            IconButton(
-                icon: Icon(Icons.add_circle),
-                onPressed: () {
-                  context.read<ProfileFriendsCubit>().acceptFriendship(profile);
-                }),
-            //button for deleting a friendship, opens a showdialog for submitting
-            IconButton(
-                icon: Icon(Icons.delete_forever),
-                onPressed: () {
-                  deleteFriend(context).then((value) async => {
-                        if (value)
-                          context
-                              .read<ProfileFriendsCubit>()
-                              .deleteFriendship(profile)
-                        else
-                          print("falseee"),
-                      });
-                })
-          ],
-        );
+  Widget actionButtons(
+      bool acceptOrSend, bool deleteOrDeny, BuildContext context) {
+    //for building both buttons to accept or decline the friendrequest
+    if (acceptOrSend && deleteOrDeny) {
+      return PaddingRowWidget(
+        paddinfLeft: 5,
+        paddingRight: 5,
+        children: [
+          //button for sending a friendship
+          IconButton(
+              icon: Icon(Icons.add_circle),
+              onPressed: () {
+                onFriendRequest!(profile);
+              }),
+          //button for deleting a friendship, opens a showdialog for submitting
+          IconButton(
+              icon: Icon(Icons.delete_forever),
+              onPressed: () {
+                deleteFriend(context).then((value) async => {
+                      if (value) onDeleteFriend!(profile) else print("falseee"),
+                    });
+              })
+        ],
+      );
+      //this is for building the delete or decline friend/request buttons
+    } else if (!acceptOrSend && deleteOrDeny) {
+      return IconButton(
+          icon: Icon(Icons.delete_forever),
+          onPressed: () {
+            deleteFriend(context).then((value) async => {
+                  if (value) onDeleteFriend!(profile) else print("falseee"),
+                });
+          });
+      //only build the send friendrequest button
+    } else if (!deleteOrDeny && acceptOrSend) {
+      return IconButton(
+          icon: Icon(Icons.person_add_alt_1_rounded),
+          onPressed: () {
+            onFriendRequest!(profile);
+          });
     }
+    return Text("");
   }
 
   void showProfile(BuildContext context) {

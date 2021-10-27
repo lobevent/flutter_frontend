@@ -76,7 +76,9 @@ class SearchResultsListViewState extends State<SearchResultsListView>
                   child: ProfileListTiles(
                 key: ObjectKey(e.id),
                 profile: e,
-                buttonCase: TileButton.sendFriendButton,
+                onFriendRequest: (Profile profile) {
+                  context.read<ProfileSearchCubit>().sendFriendship(profile.id);
+                },
               )))
           .toList();
     }

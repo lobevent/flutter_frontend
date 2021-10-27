@@ -1,15 +1,16 @@
 import 'dart:convert';
-
 //import 'dart:html';
 
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
+import 'package:meta/meta.dart';
+import 'package:http/http.dart';
 import 'package:http/http.dart';
 
 import 'exceptions.dart';
 
 class SymfonyCommunicator {
   Client client;
-  static const String url = "http://192.168.1.15:8001";
+  static const String url = "http://192.168.1.15:8000";
   final Map<String, String> headers;
 
   SymfonyCommunicator({String jwt = CurrentLogin.jwt, Client? client})

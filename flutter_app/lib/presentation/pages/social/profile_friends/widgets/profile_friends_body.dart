@@ -37,7 +37,7 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody>
     return TabController(length: tabs.length, vsync: this);
   }
 
-  Widget buildFriendListView(List<Profile> friendsOrPending) {
+  Widget buildFriendListView(List<Profile> friendsOrPending, bool notAccepted) {
     if (friendsOrPending.isEmpty) {
       return Center(
         child: Text(AppStrings.noProfilesFound),
@@ -55,10 +55,19 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody>
                 ));
           } else {
             return ProfileListTiles(
-              key: ObjectKey(friend),
-              profile: friendsOrPending[index],
-              buttonCase: TileButton.deleteFriendButton,
-            );
+                key: ObjectKey(friend),
+                profile: friendsOrPending[index],
+                //decide if we build both buttons or only 1 for friends
+                onFriendRequest: notAccepted == true
+                    ? (Profile profile) {
+                        context
+                            .read<ProfileFriendsCubit>()
+                            .acceptFriendship(profile);
+                      }
+                    : null,
+                onDeleteFriend: (Profile profile) {
+                  context.read<ProfileFriendsCubit>().deleteFriendship(profile);
+                });
           }
         },
         itemCount: friendsOrPending.length);
@@ -105,9 +114,9 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody>
                   controller: tabController,
                   children: [
                     //build the friendTileListview here or return no friends found
-                    buildFriendListView(friends),
-                    //build the friendTileListview for pending friends here or return no pending requests found
-                    buildFriendListView(pendingFriends),
+                    buildFriendListView(friends, false),
+                    //build the friendTileListview for pending friends here or return no pending requests found true for building accept and decline button
+                    buildFriendListView(pendingFriends, true),
                   ],
                 ),
               );

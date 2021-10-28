@@ -84,6 +84,9 @@ dependencies:
   # nice widget, that implements expandable visualisation
   expand_widget: ^2.1.0
 
+  # safe encryped stuff / login credentials /not nessesary if connection is avaible firebase makes it persitent https://firebase.google.com/docs/auth/web/auth-state-persistence
+  flutter_secure_storage: ^4.2.1
+
 
 dev_dependencies:
   flutter_test:

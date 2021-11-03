@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
-import 'package:flutter_frontend/domain/post/i_comment_repository.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -31,19 +30,16 @@ class CommentScreenCubit extends Cubit<CommentScreenState> {
     try {
       // this is the case if post is set (so load comments to a post)
       if (post != null) {
-        comments = commentsErrorHandler(await repository.getList(
-                Operation.fromPost, DateTime.now(), 30, postParent: post))
-            as List<Comment>?;
+        comments = commentsErrorHandler(await repository.getCommentsFromPost(lastCommentTime: DateTime.now(), amount: 30, postParent: post!)) as List<Comment>?;
         if (comments != null) {
-          emit(CommentScreenState.loadedPost(
-              // copy to the post thats given and emit state
-              post!.copyWith(comments: comments)));
+          // copy to the post thats given and emit state
+          emit(CommentScreenState.loadedPost(post!.copyWith(comments: comments)));
         }
+
       } else {
         // this is the case if the comments are loaded from parent comment
-        comments = commentsErrorHandler(await repository.getList(
-            Operation.fromComment, DateTime.now(), 30,
-            commentParent: parentComment)) as List<Comment>?;
+        comments = commentsErrorHandler(await repository.getCommentsFromComment(lastCommentTime: DateTime.now(), amount: 30, commentParent: parentComment!)) as List<Comment>?;
+
         if (comments != null) {
           emit(CommentScreenState.loadedComment(
               // copy to the comment thats given and emit state

@@ -9,7 +9,7 @@ import 'exceptions.dart';
 
 class SymfonyCommunicator {
   Client client;
-  static const String url = "http://192.168.1.30:8000";
+  static const String url = "http://192.168.1.15:8000";
   final Map<String, String> headers;
 
   SymfonyCommunicator({String jwt = CurrentLogin.jwt, Client? client})

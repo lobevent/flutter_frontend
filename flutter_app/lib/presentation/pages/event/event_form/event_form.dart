@@ -10,7 +10,6 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 import 'cubit/event_form_cubit.dart';
 
-
 class EventFormPage extends StatelessWidget {
   final String? editedEventId;
 

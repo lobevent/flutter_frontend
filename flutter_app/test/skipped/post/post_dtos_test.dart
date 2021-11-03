@@ -134,12 +134,19 @@ main() {
 
   //getList operations with corresponding api paths
   final listOperations = {
-    Operation.own: PostRemoteService.ownPostsPath.interpolate(
-        {"amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
-    Operation.feed: PostRemoteService.feedPath.interpolate(
-        {"amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
-    Operation.fromUser: PostRemoteService.postsFromUserPath.interpolate(
-        {"profileId": profileId, "amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
+    Operation.own: PostRemoteService.ownPostsPath.interpolate({
+      "amount": amount.toString(),
+      "lastCommentTime": lastCommentTime.toString()
+    }),
+    Operation.feed: PostRemoteService.feedPath.interpolate({
+      "amount": amount.toString(),
+      "lastCommentTime": lastCommentTime.toString()
+    }),
+    Operation.fromUser: PostRemoteService.postsFromUserPath.interpolate({
+      "profileId": profileId,
+      "amount": amount.toString(),
+      "lastCommentTime": lastCommentTime.toString()
+    }),
   };
 
   //first test

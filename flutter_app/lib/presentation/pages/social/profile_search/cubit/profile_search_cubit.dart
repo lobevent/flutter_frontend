@@ -49,7 +49,7 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
     try {
       emit(ProfileSearchState.loading());
       final Either<NetWorkFailure, List<Event>> eventList =
-          await eventRepository.searchEvent(DateTime.now(), 10,  queryName);
+          await eventRepository.searchEvent(DateTime.now(), 10, queryName);
       final Either<NetWorkFailure, List<Profile>> profileList = await repository
           .getList(Operation.search, 10, searchString: queryName);
       emit(ProfileSearchState.loadedBoth(

@@ -61,9 +61,7 @@ class CommentRepository implements ICommentRepository {
           }
           commentDtos =
               await _commentRemoteService.getCommentsFromCommentParent(
-                  lastCommentTime,
-                  amount,
-                  commentParent.id.value.toString());
+                  lastCommentTime, amount, commentParent.id.value.toString());
           break;
         case Operation.fromUser:
           if (profile == null) {

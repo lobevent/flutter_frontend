@@ -106,26 +106,32 @@ main() {
   //getList operations with corresponding api paths
   //placeholder for the listOperations
   final listOperations = {
-    Operation.own: CommentRemoteService.ownCommentsPath
-        .interpolate({"amount" : amount.toString(),
-                      "lastCommentTime" : lastCommentTime.toString()}),
-    Operation.fromComment: CommentRemoteService.commentsFromCommentParentPath
-        .interpolate({"parentCommentId" :  x.maybeMap(                          //x commentparent in the test left(x)
-                                              (value) => value.id.toString(),
-                                              parent: (value) => value.id.toString(),
-                                              orElse: () => throw UnexpectedFormatException()),
-                      "amount" : amount.toString(),
-                      "lastCommentTime" : lastCommentTime.toString()}),
-    Operation.fromUser: CommentRemoteService.commentsFromCommentParentPath
-        .interpolate({"profileId" : profileId.toString(),
-                      "amount" : amount.toString(),
-                      "lastCommentTime" : lastCommentTime.toString()}),
-    Operation.fromPost: CommentRemoteService.commentsFromPostPath
-        .interpolate({"postId" :   1.toString(),
-                      "amount" : amount.toString(),
-                      "lastCommentTime" : lastCommentTime.toString()}),
+    Operation.own: CommentRemoteService.ownCommentsPath.interpolate({
+      "amount": amount.toString(),
+      "lastCommentTime": lastCommentTime.toString()
+    }),
+    Operation.fromComment:
+        CommentRemoteService.commentsFromCommentParentPath.interpolate({
+      "parentCommentId": x.maybeMap(
+          //x commentparent in the test left(x)
+          (value) => value.id.toString(),
+          parent: (value) => value.id.toString(),
+          orElse: () => throw UnexpectedFormatException()),
+      "amount": amount.toString(),
+      "lastCommentTime": lastCommentTime.toString()
+    }),
+    Operation.fromUser:
+        CommentRemoteService.commentsFromCommentParentPath.interpolate({
+      "profileId": profileId.toString(),
+      "amount": amount.toString(),
+      "lastCommentTime": lastCommentTime.toString()
+    }),
+    Operation.fromPost: CommentRemoteService.commentsFromPostPath.interpolate({
+      "postId": 1.toString(),
+      "amount": amount.toString(),
+      "lastCommentTime": lastCommentTime.toString()
+    }),
   };
-
 
   //first test
   test("Post Convertion", () {
@@ -137,14 +143,14 @@ main() {
   //test  CRUD HERE
   group('CRUD', () {
     test("get Single Test", () async {
-      when(client.get("ourUrl.com/comment/1",
-              headers: authenticationHeader))
+      when(client.get("ourUrl.com/comment/1", headers: authenticationHeader))
           .thenAnswer((_) async =>
               http.Response(jsonEncode(testCommentDtoWithoutId.toJson()), 200));
 
       expect(
-          await repository.getSingleComment(UniqueId.fromUniqueString(1)).then((value) =>
-              value.fold((l) => null, (r) => CommentDto.fromDomain(r))),
+          await repository.getSingleComment(UniqueId.fromUniqueString(1)).then(
+              (value) =>
+                  value.fold((l) => null, (r) => CommentDto.fromDomain(r))),
           testCommentDtoWithoutId);
     });
 
@@ -159,11 +165,13 @@ main() {
                 jsonEncode(commentList.map((e) => e.toJson()).toList()),
                 200)); // client response configuration
         if (operation == Operation.fromUser) {
-          returnedList = await repository.getList(
-              operation, DateTime.now(), 5, profile: Profile(id: UniqueId.fromUniqueString(1), name: ProfileName("Anita"))); //the case, when profile must be passed
+          returnedList = await repository.getList(operation, DateTime.now(), 5,
+              profile: Profile(
+                  id: UniqueId.fromUniqueString(1),
+                  name: ProfileName(
+                      "Anita"))); //the case, when profile must be passed
         } else {
-          returnedList = await repository.getList(
-              operation, DateTime.now(), 5);
+          returnedList = await repository.getList(operation, DateTime.now(), 5);
         }
         expect(
             returnedList
@@ -313,7 +321,8 @@ main() {
           when(client.get(SymfonyCommunicator.url + path,
                   headers: authenticationHeader))
               .thenAnswer((_) async => http.Response(
-                  jsonEncode(commentList.map((e) => e.toJson()).toList()), code));
+                  jsonEncode(commentList.map((e) => e.toJson()).toList()),
+                  code));
           if (operation == Operation.fromUser) {
             returnedFailure = await repository
                 .getList(operation, lastCommentTime, amount)
@@ -326,7 +335,6 @@ main() {
           expect(returnedFailure, pstFailure);
         });
       });
-
     });
   });
 }

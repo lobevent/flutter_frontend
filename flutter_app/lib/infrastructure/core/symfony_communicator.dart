@@ -1,9 +1,8 @@
 import 'dart:convert';
+
 //import 'dart:html';
 
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
-import 'package:meta/meta.dart';
-import 'package:http/http.dart';
 import 'package:http/http.dart';
 
 import 'exceptions.dart';

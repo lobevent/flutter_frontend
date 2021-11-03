@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
-import 'package:flutter_frontend/domain/event/i_event_repository.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -31,14 +30,17 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
       emit(EventsMultilistState.loading());
       switch (this.option) {
         case EventScreenOptions.owned:
-          eventsList = await repository.getOwnedEvents(DateTime.now(), 30, descending: true);
+          eventsList = await repository.getOwnedEvents(DateTime.now(), 30,
+              descending: true);
           break;
         case EventScreenOptions.fromUser:
           if (profile == null) {
             // profile must be set for this!
             throw UnexpectedTypeError();
           }
-          eventsList = await repository.getEventsFromUser(DateTime.now(), 30, profile!, descending: true);
+          eventsList = await repository.getEventsFromUser(
+              DateTime.now(), 30, profile!,
+              descending: true);
           break;
         case EventScreenOptions.ownAttending:
           eventsList = await repository.getAttendingEvents(DateTime.now(), 30);

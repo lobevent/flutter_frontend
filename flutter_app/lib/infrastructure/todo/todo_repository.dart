@@ -36,8 +36,8 @@ class TodoRepository extends ITodoRepository {
   Future<Either<NetWorkFailure, Todo>> delete(Todo todo) async {
     try {
       //try if the request can be made, if not we will get an NetworkFailure
-      return right((await _todoRemoteService.deleteTodo(todo.id.value))
-          .toDomain());
+      return right(
+          (await _todoRemoteService.deleteTodo(todo.id.value)).toDomain());
     } on CommunicationException catch (e) {
       return left(ExceptionsHandler.reactOnCommunicationException(e));
     }
@@ -47,8 +47,8 @@ class TodoRepository extends ITodoRepository {
   Future<Either<NetWorkFailure, Todo>> getTodoList(Event event) async {
     try {
       //try if the request can be made, if not we will get an NetworkFailure
-      return right((await _todoRemoteService.getSingle(event.id.value))
-          .toDomain());
+      return right(
+          (await _todoRemoteService.getSingle(event.id.value)).toDomain());
     } on CommunicationException catch (e) {
       return left(ExceptionsHandler.reactOnCommunicationException(e));
     }
@@ -95,8 +95,8 @@ class TodoRepository extends ITodoRepository {
   Future<Either<NetWorkFailure, Item>> deleteItem(Item item) async {
     try {
       //try if the request can be made, if not we will get an NetworkFailure
-      return right((await _itemRemoteService.deleteItem(item.id.value))
-          .toDomain());
+      return right(
+          (await _itemRemoteService.deleteItem(item.id.value)).toDomain());
     } on CommunicationException catch (e) {
       return left(ExceptionsHandler.reactOnCommunicationException(e));
     }

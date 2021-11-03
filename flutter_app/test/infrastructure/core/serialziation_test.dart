@@ -4,17 +4,17 @@ import 'package:flutter_frontend/infrastructure/core/deserialization.dart';
 import 'package:flutter_frontend/infrastructure/core/serilization.dart';
 import 'package:flutter_frontend/infrastructure/auth/user_dto.dart';
 
-
 void main() {
-    const userDto = UserDto(
+  const userDto = UserDto(
       id: "thisIsUniqueUglinessOfAnId",
       username: "UglyUser",
-      emailAddress: "ugly@ugly.com"
-    );
-    //generated with serializeModel(userDto);
-    const String expectedUserDtoString = """{"id":"thisIsUniqueUglinessOfAnId","username":"UglyUser","emailAddress":"ugly@ugly.com"}""";
-    // generated with serializedModelList([userDto, userDto])
-    const String expectedUserDtoListString = """[{"id":"thisIsUniqueUglinessOfAnId","username":"UglyUser","emailAddress":"ugly@ugly.com"},{"id":"thisIsUniqueUglinessOfAnId","username":"UglyUser","emailAddress":"ugly@ugly.com"}]""";
+      emailAddress: "ugly@ugly.com");
+  //generated with serializeModel(userDto);
+  const String expectedUserDtoString =
+      """{"id":"thisIsUniqueUglinessOfAnId","username":"UglyUser","emailAddress":"ugly@ugly.com"}""";
+  // generated with serializedModelList([userDto, userDto])
+  const String expectedUserDtoListString =
+      """[{"id":"thisIsUniqueUglinessOfAnId","username":"UglyUser","emailAddress":"ugly@ugly.com"},{"id":"thisIsUniqueUglinessOfAnId","username":"UglyUser","emailAddress":"ugly@ugly.com"}]""";
 
   test("Test the serializeModel serialization function", () async {
     final String userJsonString = serializeModel(userDto);
@@ -27,12 +27,14 @@ void main() {
   });
 
   test("Test the deserializeModel deserialization function", () async {
-    final UserDto deserializedUserDto = await deserializeModel<UserDto>(expectedUserDtoString);
+    final UserDto deserializedUserDto =
+        await deserializeModel<UserDto>(expectedUserDtoString);
     expect(deserializedUserDto, userDto);
   });
 
   test("Test the deserializeModelList deserialization function", () async {
-    final List<UserDto> deserializedUserDtoList = await deserializeModelList<UserDto>(expectedUserDtoListString);
+    final List<UserDto> deserializedUserDtoList =
+        await deserializeModelList<UserDto>(expectedUserDtoListString);
     expect(deserializedUserDtoList.length, 2);
     expect(deserializedUserDtoList[0], userDto);
     expect(deserializedUserDtoList[1], userDto);

@@ -74,8 +74,7 @@ class PostRepository implements IPostRepository {
   @override
   Future<Either<NetWorkFailure, Post>> getSingle(UniqueId id) async {
     try {
-      final PostDto postDto =
-          await _postRemoteService.getSingle(id.value);
+      final PostDto postDto = await _postRemoteService.getSingle(id.value);
       final Post post = postDto.toDomain();
       return right(post);
     } on CommunicationException catch (e) {

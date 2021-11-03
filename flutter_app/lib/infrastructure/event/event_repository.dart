@@ -13,7 +13,6 @@ import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart'
 
 // TODO ignored this it's too late and seems to be in progress
 
-
 class EventRepository {
   final EventRemoteService _eventRemoteService;
   final EventLocalService _eventLocalService;
@@ -67,8 +66,7 @@ class EventRepository {
 
   Future<Either<NetWorkFailure, Event>> getSingle(UniqueId id) async {
     try {
-      final EventDto eventDto =
-          await _eventRemoteService.getSingle(id);
+      final EventDto eventDto = await _eventRemoteService.getSingle(id);
       final Event event = eventDto.toDomain();
       return right(event);
     } on CommunicationException catch (e) {

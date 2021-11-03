@@ -13,7 +13,8 @@ void main() {
 
     Map<String, dynamic> jsonMap = userDto.toJson();
     String jsonString = jsonEncode(jsonMap);
-    Map<String, dynamic> jsonMapBackwards = jsonDecode(jsonString) as Map<String, dynamic>;
+    Map<String, dynamic> jsonMapBackwards =
+        jsonDecode(jsonString) as Map<String, dynamic>;
     UserDto userDtoBackwards = UserDto.fromJson(jsonMapBackwards);
     User userBackwards = userDtoBackwards.toDomain();
     print("");

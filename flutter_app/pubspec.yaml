@@ -22,7 +22,7 @@ dependencies:
   freezed_annotation: ^0.14.1
 
   # dartz for a ton of useful utils (like Either type and so on)
-  dartz: ^0.10.0-nullsafety.1  
+  dartz: ^0.10.0-nullsafety.1
 
   # standard dart http library
   http: ^0.13.1
@@ -59,7 +59,7 @@ dependencies:
   ###
   # use firebase core to initialize app
   firebase_core: ^1.0.2
-  
+
   # firebase auth for the authentication with firebase
   firebase_auth: ^1.0.1
   ###

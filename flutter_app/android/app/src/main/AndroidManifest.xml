@@ -43,7 +43,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        
+
         <!-- Set up the Sign in with Apple activity, such that it's callable from the browser-redirect -->
       <activity
           android:name="com.firebaseapp.lobevent.sign_in_with_apple.SignInWithAppleCallback"

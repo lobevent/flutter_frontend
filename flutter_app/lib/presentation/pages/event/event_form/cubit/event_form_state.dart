@@ -12,7 +12,7 @@ class EventFormState with _$EventFormState {
     required Option<NetWorkFailure> eventFailure,
     required Option<Either<NetWorkFailure, Unit>> saveFailureOrSuccessOption,
     required List<Profile> friends,
-    required List<Profile> invitedFriends,
+    required List<Invitation> invitedFriends,
   }) = _EventFormStateMain;
 
   factory EventFormState.initial() => EventFormState(
@@ -68,7 +68,7 @@ class EventFormState with _$EventFormState {
       );
 
   factory EventFormState.friendsLoaded(
-          List<Profile> friends, List<Profile> attendingFriends, Event event) =>
+          List<Profile> friends, List<Invitation> attendingFriends, Event event) =>
       EventFormState(
         event: event,
         isEditing: event.longitude != Event.empty().longitude &&

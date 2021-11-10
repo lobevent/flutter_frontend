@@ -38,18 +38,18 @@ class _InviteFriendsWidgetState extends State<InviteFriendsWidget> {
     ]);
   }
 
-  void inviteFriends(BuildContext context, EventFormState state) {
+  void inviteFriends(BuildContext contextWCubit, EventFormState state) {
     showDialog(
-        context: context,
+        context: contextWCubit,
         builder: (BuildContext context) {
           return AddFriendsDialog(
             friends: state.friends,
             invitedFriends: state.invitedFriends,
             onAddFriend: (Profile profile) {
-              context.read<EventFormCubit>().addFriend(profile);
+              contextWCubit.read<EventFormCubit>().addFriend(profile);
             },
             onRemoveFriend: (Profile profile) {
-              context.read<EventFormCubit>().removeFriend(profile);
+              contextWCubit.read<EventFormCubit>().removeFriend(profile);
             },
           );
         });

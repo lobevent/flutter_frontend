@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/i_profile_repository.dart'
     as profileOps;
@@ -114,12 +115,12 @@ class EventFormCubit extends Cubit<EventFormState> {
   }
 
   /// compare event invitations with an friendlist, and generate list with the intersection
-  List<Profile> _generateAttendingFriends(Event event, List<Profile> friends) {
-    List<Profile> invitedFriends = [];
+  List<Invitation> _generateAttendingFriends(Event event, List<Profile> friends) {
+    List<Invitation> invitedFriends = [];
     event.invitations?.forEach((invitedProfile) {
       if (friends
           .map((friend) => friend.id.value)
-          .contains(invitedProfile.id.value)) {
+          .contains(invitedProfile.profile.id.value)) {
         invitedFriends.add(invitedProfile);
       }
     });

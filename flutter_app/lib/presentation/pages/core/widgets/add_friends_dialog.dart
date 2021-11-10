@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/pages/core/list_tiles/friend_list_tile.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
@@ -9,7 +10,7 @@ class AddFriendsDialog extends StatefulWidget {
   final List<Profile> friends;
 
   /// the list with all the friends, that are invited
-  final List<Profile> invitedFriends;
+  final List<Invitation> invitedFriends;
   // callbackfunctio for adding friend
   final Function(Profile) onAddFriend;
   // callback functtion for removing friends

@@ -17,6 +17,44 @@ class EventRepository {
 
   EventRepository(this._eventRemoteService, this._eventLocalService);
 
+  // --------------- simple crud operations ---------------------
+
+  Future<Either<NetWorkFailure, Event>> create(Event event) async {
+    try {
+      final eventDto = EventDto.fromDomain(event);
+      EventDto returnedEvent = await _eventRemoteService.createEvent(eventDto);
+      return right(returnedEvent.toDomain());
+    } on CommunicationException catch (e) {
+      return left(ExceptionsHandler.reactOnCommunicationException(e));
+    }
+  }
+
+  Future<Either<NetWorkFailure, Event>> update(Event event) async {
+    try {
+      final eventDto = EventDto.fromDomain(event);
+      EventDto returnedEvent = await _eventRemoteService.updateEvent(eventDto);
+      return right(returnedEvent.toDomain());
+    } on CommunicationException catch (e) {
+      return left(ExceptionsHandler.reactOnCommunicationException(e));
+    }
+  }
+
+  Future<Either<NetWorkFailure, Event>> delete(Event event) async {
+    try {
+      final eventDto = EventDto.fromDomain(event);
+      EventDto returnedEvent = await _eventRemoteService.deleteEvent(eventDto);
+      return right(returnedEvent.toDomain());
+    } on CommunicationException catch (e) {
+      return left(ExceptionsHandler.reactOnCommunicationException(e));
+    }
+  }
+
+  // ------------------ Complex list operations ----------------------------
+
+
+  ///
+  ///  generic get list method, that makes the try catch
+  ///
   Future<Either<NetWorkFailure, List<Event>>> _getList(
       Future<List<EventDto>> Function() repocall) async {
     try {
@@ -72,33 +110,5 @@ class EventRepository {
     }
   }
 
-  Future<Either<NetWorkFailure, Event>> create(Event event) async {
-    try {
-      final eventDto = EventDto.fromDomain(event);
-      EventDto returnedEvent = await _eventRemoteService.createEvent(eventDto);
-      return right(returnedEvent.toDomain());
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
-  }
 
-  Future<Either<NetWorkFailure, Event>> update(Event event) async {
-    try {
-      final eventDto = EventDto.fromDomain(event);
-      EventDto returnedEvent = await _eventRemoteService.updateEvent(eventDto);
-      return right(returnedEvent.toDomain());
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
-  }
-
-  Future<Either<NetWorkFailure, Event>> delete(Event event) async {
-    try {
-      final eventDto = EventDto.fromDomain(event);
-      EventDto returnedEvent = await _eventRemoteService.deleteEvent(eventDto);
-      return right(returnedEvent.toDomain());
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
-  }
 }

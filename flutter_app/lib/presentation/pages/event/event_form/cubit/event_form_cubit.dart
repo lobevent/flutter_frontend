@@ -81,16 +81,14 @@ class EventFormCubit extends Cubit<EventFormState> {
   /// fetch friends
   Future<void> getFriends() async {
     emit(state.copyWith(isLoadingFriends: true));
-    (await this.profileRepository.getList(profileOps.Operation.friends, 1000))
-        .fold(
-            (failure) => EventFormState.error(failure),
-            // compare the complete friendlist with the invitations for this event
-            // set isLoadingFriends false, as they are loaded now obviously
-            (friends) => emit(state.copyWith(
-                friends: friends,
-                isLoadingFriends: false,
-                invitedFriends:
-                    _generateAttendingFriends(state.event, friends))));
+    (await this.profileRepository.getFriends(profile: null)).fold(
+        (failure) => EventFormState.error(failure),
+        // compare the complete friendlist with the invitations for this event
+        // set isLoadingFriends false, as they are loaded now obviously
+        (friends) => emit(state.copyWith(
+            friends: friends,
+            isLoadingFriends: false,
+            invitedFriends: _generateAttendingFriends(state.event, friends))));
   }
 
   Future<void> loadEvent(String id) async {

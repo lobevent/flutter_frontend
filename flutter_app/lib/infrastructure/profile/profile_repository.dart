@@ -11,12 +11,17 @@ import 'package:flutter_frontend/infrastructure/core/exceptions_handler.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_remote_service.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/like/like_cubit.dart';
+import 'package:flutter_frontend/domain/core/repository.dart';
 
-class ProfileRepository extends IProfileRepository {
+class ProfileRepository extends Repository {
   final ProfileRemoteService _profileRemoteService;
 
   ProfileRepository(this._profileRemoteService);
 
+  //---------------------------Simple CRUD-----------------------------
+  ///
+  /// Creates a profile in the backend or returns failure
+  ///
   @override
   Future<Either<NetWorkFailure, Profile>> create(Profile profile) async {
     try {
@@ -29,6 +34,9 @@ class ProfileRepository extends IProfileRepository {
     }
   }
 
+  ///
+  /// deletes a profile in the backend or returns failure
+  ///
   @override
   Future<Either<NetWorkFailure, Profile>> delete(Profile profile) async {
     try {
@@ -41,61 +49,9 @@ class ProfileRepository extends IProfileRepository {
     }
   }
 
-  @override
-  Future<Either<NetWorkFailure, List<Profile>>> getList(
-      Operation operation, int amount,
-      {Post? post,
-      Profile? profile,
-      Event? event,
-      String? searchString}) async {
-    try {
-      List<ProfileDto> profileDtos;
-      switch (operation) {
-        case Operation.search:
-          if (searchString == null) {
-            throw UnexpectedTypeError();
-          }
-          profileDtos = await _profileRemoteService.getSearchedProfiles(
-              amount, searchString);
-          break;
-        case Operation.attendingUsersEvent:
-          if (profile == null) {
-            throw UnexpectedTypeError();
-          }
-          profileDtos = await _profileRemoteService.getAttendingUsersToEvent(
-              amount, profile.id.value.toString());
-          break;
-        case Operation.follower:
-          if (profile == null) {
-            throw UnexpectedTypeError();
-          }
-          profileDtos = await _profileRemoteService.getFollower(
-              amount, profile.id.value.toString());
-          break;
-        case Operation.friends:
-          profileDtos = await _profileRemoteService
-              .getAcceptedFriendships(profile?.id.value.toString());
-          break;
-        case Operation.pendingFriends:
-          profileDtos = await _profileRemoteService.getOpenFriendRequests();
-          break;
-        case Operation.postProfile:
-          if (post == null || post.id == null) {
-            throw UnexpectedTypeError();
-          }
-          profileDtos = await _profileRemoteService.getProfilesToPost(
-              amount, post.id!.value.toString());
-          break;
-      }
-      //convert the dto objects to domain Objects
-      final List<Profile> profiles =
-          profileDtos.map((profileDtos) => profileDtos.toDomain()).toList();
-      return right(profiles);
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
-  }
-
+  ///
+  /// gets a single profile in the backend or returns failure
+  ///
   @override
   Future<Either<NetWorkFailure, Profile>> getSingleProfile(UniqueId id) async {
     try {
@@ -108,6 +64,9 @@ class ProfileRepository extends IProfileRepository {
     }
   }
 
+  ///
+  /// updates a profile in the backend or returns failure
+  ///
   @override
   Future<Either<NetWorkFailure, Profile>> update(Profile profile) async {
     try {
@@ -118,6 +77,79 @@ class ProfileRepository extends IProfileRepository {
     } on CommunicationException catch (e) {
       return left(ExceptionsHandler.reactOnCommunicationException(e));
     }
+  }
+
+  //-------------------List Getters--------------------------
+
+  ///
+  /// gets the profiles found by the searchstring
+  ///
+  Future<Either<NetWorkFailure, List<Profile>>> getSearchProfiles(
+      {required String searchString, required int amount}) {
+    return localErrorHandler(() async {
+      final List<ProfileDto> searchProfiles =
+          await _profileRemoteService.getSearchedProfiles(amount, searchString);
+      return right(_convertToDomainList(searchProfiles));
+    });
+  }
+
+  ///
+  /// gets the profiles atten
+  ///
+  Future<Either<NetWorkFailure, List<Profile>>> getAttendingProfiles(
+      {required int amount, required Profile profile}) async {
+    return localErrorHandler(() async {
+      final List<ProfileDto> profileDtos = await _profileRemoteService
+          .getAttendingUsersToEvent(amount, profile.id.value.toString());
+      return right(_convertToDomainList(profileDtos));
+    });
+  }
+
+  ///
+  /// gets the follower
+  ///
+  Future<Either<NetWorkFailure, List<Profile>>> getFollower(
+      {required int amount, required Profile profile}) async {
+    return localErrorHandler(() async {
+      final List<ProfileDto> profileDtos = await _profileRemoteService
+          .getFollower(amount, profile.id.value.toString());
+      return right(_convertToDomainList(profileDtos));
+    });
+  }
+
+  ///
+  /// gets the friends
+  ///
+  Future<Either<NetWorkFailure, List<Profile>>> getFriends(
+      {required Profile profile}) async {
+    return localErrorHandler(() async {
+      final List<ProfileDto> profileDtos = await _profileRemoteService
+          .getAcceptedFriendships(profile?.id.value.toString());
+      return right(_convertToDomainList(profileDtos));
+    });
+  }
+
+  ///
+  /// gets the open friend requests
+  ///
+  Future<Either<NetWorkFailure, List<Profile>>> getOpenFriends() async {
+    return localErrorHandler(() async {
+      final List<ProfileDto> profileDtos =
+          await _profileRemoteService.getOpenFriendRequests();
+      return right(_convertToDomainList(profileDtos));
+    });
+  }
+
+  ///
+  /// gets the profiles of post
+  ///
+  Future<Either<NetWorkFailure, List<Profile>>> getProfilesToPost(
+      {required int amount, required Profile profile}) async {
+    return localErrorHandler(() async {
+      final List<ProfileDto> profileDtos = await _profileRemoteService
+          .getProfilesToPost(amount, profile.id.value.toString());
+      return right(_convertToDomainList(profileDtos));
+    });
   }
 
   ///Friendship functionalities (maybe do them in seperate repository
@@ -194,5 +226,12 @@ class ProfileRepository extends IProfileRepository {
     } on CommunicationException catch (e) {
       return left(ExceptionsHandler.reactOnCommunicationException(e));
     }
+  }
+
+  ///
+  /// converts to domain list
+  ///
+  List<Profile> _convertToDomainList(List<ProfileDto> dtos) {
+    return dtos.map((profileDto) => profileDto.toDomain()).toList();
   }
 }

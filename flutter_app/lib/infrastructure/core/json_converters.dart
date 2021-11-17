@@ -32,8 +32,7 @@ class ListConverter<DTO extends BaseDto>
 
   @override
   List<Map<String, dynamic>> toJson(List<DTO> object) {
-    // TODO: implement toJson
-    throw UnimplementedError();
+    return object.map((e) => e.toJson()).toList();
   }
 
 /*  @override

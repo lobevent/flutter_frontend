@@ -26,7 +26,7 @@ class Event with _$Event {
       Profile? owner,
       required bool public,
       required bool visibleWithoutLogin,
-      List<Invitation>? invitations,
+      required List<Invitation> invitations,
       int? attendingCount,
       EventStatus? status,
       double? longitude,
@@ -50,6 +50,7 @@ class Event with _$Event {
         longitude: 0,
         latitude: 0,
         visibleWithoutLogin: false,
+        invitations: <Invitation>[]
       );
 
   //check if the whole object is no failure

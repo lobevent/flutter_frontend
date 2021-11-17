@@ -14,13 +14,19 @@ part 'profile_dtos.g.dart';
 class ProfileDto extends BaseDto with _$ProfileDto {
   const ProfileDto._();
 
+
   const factory ProfileDto({
     required String id,
     required String username,
+    @JsonKey(includeIfNull: false)
     List<EventDto>? ownedEvents,
+    @JsonKey(includeIfNull: false)
     List<EventDto>? invitations,
+    @JsonKey(includeIfNull: false)
     int? friendshipCount,
+    @JsonKey(includeIfNull: false)
     List<PostDto>? posts,
+    @JsonKey(includeIfNull: false)
     List<CommentDto>? comments,
   }) = _ProfileDto;
 

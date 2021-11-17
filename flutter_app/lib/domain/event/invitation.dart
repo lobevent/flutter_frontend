@@ -4,17 +4,18 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'event.dart';
 
-part 'invitation.freezed.dart';
+class Invitation{
 
-@freezed
-class Invitation with _$Invitation{
+  UniqueId id = UniqueId();
+  Profile profile;
+  Event? event;
+  int userEventStatus = 3;
 
-  const Invitation._();
+  Invitation({
+    required this.id,
+    required this.profile,
+    required this.event,
+    this.userEventStatus = 3,
+  });
 
-  const factory Invitation({
-    UniqueId? id,
-    required Profile profile,
-    required Event event,
-    required int userEventStatus,
-  }) = FullInvitation;
 }

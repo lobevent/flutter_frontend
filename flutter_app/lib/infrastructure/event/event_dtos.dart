@@ -25,6 +25,7 @@ class EventDto extends BaseDto with _$EventDto {
   static final Map domainToDtoStatus =
       dtoToDomainStatus.map((key, value) => MapEntry(value, key));
 
+  @JsonSerializable(explicitToJson: true)
   const factory EventDto({
     required String id,
     required String name,
@@ -44,7 +45,6 @@ class EventDto extends BaseDto with _$EventDto {
 
   factory EventDto.fromDomain(Event event) {
     EventDto returnedDto;
-
     return EventDto(
       id: event.id.value,
       name: event.name.getOrCrash(),
@@ -59,6 +59,7 @@ class EventDto extends BaseDto with _$EventDto {
       longitude: event.longitude,
       latitude: event.latitude,
       visibleWithoutLogin: event.visibleWithoutLogin,
+      invitations: event.invitations.map((i) => InvitationDto.fromDomain(i)).toList(),
     );
   }
 
@@ -67,6 +68,7 @@ class EventDto extends BaseDto with _$EventDto {
 
   @override
   Event toDomain() {
+    List<Invitation> invitationL = invitations?.map<Invitation>((e) => e.toDomain() as Invitation).toList()?? <Invitation>[];
     return Event(
       id: UniqueId.fromUniqueString(id),
       name: EventName(name),
@@ -82,7 +84,7 @@ class EventDto extends BaseDto with _$EventDto {
       longitude: longitude,
       latitude: latitude,
       visibleWithoutLogin: visibleWithoutLogin,
-      invitations: invitations?.map((e) => e.toDomain()).toList() as List<Invitation>,
+      invitations: invitationL,
     );
   }
 }

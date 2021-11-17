@@ -37,6 +37,16 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
     super.initState();
   }
 
+
+
+  /// this override is used, if the widged is changed externaly, so we have to
+  /// update the value
+  @override
+  void didUpdateWidget(covariant AddFriendsDialog oldWidget) {
+    // TODO: implement didUpdateWidget
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -76,9 +86,15 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
         itemBuilder: (context, i) {
           return FriendListTile(
             profile: results[i],
-            isInvited: widget.invitedFriends.contains(results[i]),
-            onAddFriend: widget.onAddFriend,
-            onRemoveFriend: widget.onRemoveFriend,
+            isInvited: widget.invitedFriends.map((e) => e.profile).contains(results[i]),
+            onAddFriend: (Profile profile){
+              widget.onAddFriend(profile);
+              setState(() {});
+            },
+            onRemoveFriend: (Profile profile) {
+              widget.onRemoveFriend(profile);
+              setState(() {});
+            },
           );
         });
   }

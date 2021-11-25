@@ -38,7 +38,7 @@ class EventFormState with _$EventFormState {
         saveFailureOrSuccessOption: none(),
         friends: [],
         invitedFriends: [],
-        isLoadingFriends: false,
+        isLoadingFriends: true,
       );
 
   factory EventFormState.error(NetWorkFailure failure) => EventFormState(
@@ -64,7 +64,7 @@ class EventFormState with _$EventFormState {
         saveFailureOrSuccessOption: none(),
         friends: [],
         invitedFriends: [],
-        isLoadingFriends: false,
+        isLoadingFriends: true,
       );
 
   factory EventFormState.friendsLoaded(

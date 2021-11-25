@@ -60,6 +60,7 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
     );
   }
 
+
   void onSearchTextChanged(String text) {
     // clear the results before working with it
     results.clear();
@@ -78,6 +79,7 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
     setState(() {});
   }
 
+  /// listview of the proviles as Friend tile
   Widget _ProfileListView(BuildContext context) {
     return ListView.builder(
         physics: NeverScrollableScrollPhysics(),
@@ -86,7 +88,7 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
         itemBuilder: (context, i) {
           return FriendListTile(
             profile: results[i],
-            isInvited: widget.invitedFriends.map((e) => e.profile).contains(results[i]),
+            isInvited: widget.invitedFriends.map((e) => e.profile.id.toString()).contains(results[i].id.toString()),
             onAddFriend: (Profile profile){
               widget.onAddFriend(profile);
               setState(() {});

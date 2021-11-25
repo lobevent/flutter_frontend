@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -27,20 +28,7 @@ class EventFormCubit extends Cubit<EventFormState> {
   ProfileRepository profileRepository = GetIt.I<ProfileRepository>();
   EventRepository repository = GetIt.I<EventRepository>();
 
-  Future<void> saveEvent() async {
-    Either<NetWorkFailure, Unit>? failureOrSuccess;
-    emit(state.copyWith(isSaving: true));
-    if (state.event.failureOption.isNone()) {
-      //failureOrSuccess =  await right(unit);
-      //failureOrSuccess =  await left(EventFailure.insufficientPermissions());
-      failureOrSuccess = (await repository.create(state.event))
-          .fold((l) => left(l), (r) => right(unit));
-    }
-    emit(state.copyWith(
-        isSaving: false,
-        showErrorMessages: true,
-        saveFailureOrSuccessOption: optionOf(failureOrSuccess)));
-  }
+
 
   Future<void> submit() async {
     if (state.isEditing) {
@@ -79,8 +67,8 @@ class EventFormCubit extends Cubit<EventFormState> {
   }
 
   void removeFriend(Profile profile) {
-    if(state.event.invitations.map((e) => e.profile).contains(profile)){
-      state.event.invitations.removeWhere((invitation) => invitation.profile.id == profile.id);
+    if(state.event.invitations.map((e) => e.profile.id.toString()).contains(profile.id.toString())){
+      state.event.invitations.removeWhere((invitation) => invitation.profile.id.value == profile.id.value);
       emit(state);
     }
   }
@@ -111,19 +99,34 @@ class EventFormCubit extends Cubit<EventFormState> {
             (event) => emit(EventFormState.loaded(event))));
   }
 
+
+
+
+  /// save event to database
+  Future<void> saveEvent() async {
+    return updateEditEvent(() => repository.create(state.event));
+  }
+
+  /// upload edited event and send to server
   Future<void> updateEvent() async {
+    return updateEditEvent(() => repository.update(state.event));
+  }
+
+
+  Future<void> updateEditEvent( Future<Either<NetWorkFailure, Event>> Function() serverCall) async{
     Either<NetWorkFailure, Unit>? failureOrSuccess;
     emit(state.copyWith(isSaving: true));
     if (state.event.failureOption.isNone()) {
       //failureOrSuccess =  await right(unit);
       //failureOrSuccess =  await left(EventFailure.insufficientPermissions());
-      failureOrSuccess = (await repository.update(state.event))
-          .fold((l) => left(l), (r) => right(unit));
+      failureOrSuccess = (await serverCall())
+        .fold((l) => left(l), (r) => right(unit));
     }
     emit(state.copyWith(
-        isSaving: false,
-        showErrorMessages: true,
-        saveFailureOrSuccessOption: optionOf(failureOrSuccess)));
+    isSaving: false,
+    showErrorMessages: true,
+    saveFailureOrSuccessOption: optionOf(failureOrSuccess)));
+
   }
 
   /// compare event invitations with an friendlist, and generate list with the intersection

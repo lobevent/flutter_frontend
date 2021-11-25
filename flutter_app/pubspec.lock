@@ -14,11 +14,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.7.2"
-=======
     version: "2.7.0"
->>>>>>> 12e29477b3248580fa98dbb8633d4c1c5f0a1359
   args:
     dependency: transitive
     description:
@@ -317,11 +313,7 @@ packages:
       name: flutter_bloc
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "8.0.0"
-=======
-    version: "7.3.2"
->>>>>>> 12e29477b3248580fa98dbb8633d4c1c5f0a1359
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -357,11 +349,7 @@ packages:
       name: freezed_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "0.14.2"
-=======
     version: "0.15.0"
->>>>>>> 12e29477b3248580fa98dbb8633d4c1c5f0a1359
   frontend_server_client:
     dependency: transitive
     description:

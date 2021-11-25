@@ -28,13 +28,13 @@ dependencies:
   http: ^0.13.1
 
   # bloc library in general (Cubit and Bloc)
-  bloc: ^7.0.0
+  bloc: ^8.0.1
 
   # flutter bloc specific widgets like BlocConsumer
-  flutter_bloc: ^7.0.0
+  flutter_bloc: ^8.0.0
 
   # safe state of bloc/cubit
-  hydrated_bloc: ^7.0.0
+  hydrated_bloc: ^8.0.0
 
   # safe on local
   path_provider: ^2.0.2
@@ -72,7 +72,7 @@ dependencies:
   material_floating_search_bar: ^0.3.4
 
   # Equality Comparisons of objects
-  equatable: ^2.0.2
+  equatable: ^2.0.3
 
   # postion calculation
   geolocator: ^7.0.3

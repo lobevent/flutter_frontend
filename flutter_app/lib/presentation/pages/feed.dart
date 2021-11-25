@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class FeedScreen extends StatelessWidget {
@@ -10,6 +11,7 @@ class FeedScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text("Feed"),
         ),
+        bottomNavigationBar: BottomNavigation(selected: NavigationOptions.home),
         body: Column(
           children: [
             ElevatedButton(

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 //import 'dart:html';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:http/http.dart';
 
@@ -9,7 +10,7 @@ import 'exceptions.dart';
 
 class SymfonyCommunicator {
   Client client;
-  static const String url = "http://192.168.3.11:8000";
+  final String url = dotenv.env['ipSim']!.toString();
   final Map<String, String> headers;
 
   SymfonyCommunicator({String jwt = CurrentLogin.jwt, Client? client})

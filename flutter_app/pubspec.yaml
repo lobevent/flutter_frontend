@@ -87,6 +87,9 @@ dependencies:
   # safe encryped stuff / login credentials /not nessesary if connection is avaible firebase makes it persitent https://firebase.google.com/docs/auth/web/auth-state-persistence
   flutter_secure_storage: ^4.2.1
 
+  # set .env variable for emulator
+  flutter_dotenv: ^5.0.2
+
 
 dev_dependencies:
   flutter_test:
@@ -114,3 +117,5 @@ flutter:
   assets:
     - assets/logos/
     - assets/images/partypeople.jpg
+    - .env
+    - .env.local

@@ -118,4 +118,4 @@ flutter:
     - assets/logos/
     - assets/images/partypeople.jpg
     - .env
-    - .env.local
+    - .env.ios

@@ -7,12 +7,13 @@ import 'package:flutter_frontend/injection_container.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart'
     as app_router;
 import 'package:get_it/get_it.dart';
+import 'dart:io' show Platform;
 
 Future<void> main() async {
-  try {
-    await dotenv.load(fileName: ".env.local");
-  } catch (e) {
+  if (Platform.isAndroid) {
     await dotenv.load(fileName: ".env");
+  } else if (Platform.isIOS) {
+    await dotenv.load(fileName: ".env.ios");
   }
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

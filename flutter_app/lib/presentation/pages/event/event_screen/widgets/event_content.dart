@@ -54,6 +54,11 @@ class EventContent extends StatelessWidget {
                   /// Used as space
                   const SizedBox(height: 20),
 
+                  PostWidget(state.event),
+                  /// Used as space
+                  const SizedBox(height: 20),
+
+
                   /// Contains the description of the event
                   DescriptionWidget(state.event.description!.getOrCrash()),
                 ],
@@ -186,6 +191,10 @@ class EventContent extends StatelessWidget {
         ),
       )
     ]);
+  }
+
+  Widget PostWidget(Event event){
+    return MaterialButton(onPressed: () {  },);
   }
 
   /// Widget used for making padding with a row, so the children start on the

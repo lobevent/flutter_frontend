@@ -12,11 +12,11 @@ class EventFormState with _$EventFormState {
     required Option<NetWorkFailure> eventFailure,
     required Option<Either<NetWorkFailure, Unit>> saveFailureOrSuccessOption,
     required List<Profile> friends,
-    required List<Profile> invitedFriends,
+    required List<Invitation> invitedFriends,
   }) = _EventFormStateMain;
 
   factory EventFormState.initial() => EventFormState(
-        event: Event.empty(),
+        event: Event.empty() as Event,
         isEditing: false,
         isSaving: false,
         isLoading: false,
@@ -38,11 +38,11 @@ class EventFormState with _$EventFormState {
         saveFailureOrSuccessOption: none(),
         friends: [],
         invitedFriends: [],
-        isLoadingFriends: false,
+        isLoadingFriends: true,
       );
 
   factory EventFormState.error(NetWorkFailure failure) => EventFormState(
-        event: Event.empty(),
+        event: Event.empty() as Event,
         isEditing: true,
         isSaving: false,
         isLoading: false,
@@ -55,7 +55,7 @@ class EventFormState with _$EventFormState {
       );
 
   factory EventFormState.loading() => EventFormState(
-        event: Event.empty(),
+        event: Event.empty() as Event,
         isEditing: true,
         isSaving: false,
         isLoading: true,
@@ -64,11 +64,11 @@ class EventFormState with _$EventFormState {
         saveFailureOrSuccessOption: none(),
         friends: [],
         invitedFriends: [],
-        isLoadingFriends: false,
+        isLoadingFriends: true,
       );
 
   factory EventFormState.friendsLoaded(
-          List<Profile> friends, List<Profile> attendingFriends, Event event) =>
+          List<Profile> friends, List<Invitation> attendingFriends, Event event) =>
       EventFormState(
         event: event,
         isEditing: event.longitude != Event.empty().longitude &&

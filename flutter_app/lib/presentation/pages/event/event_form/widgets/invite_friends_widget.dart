@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/add_friends_dialog.dart';
@@ -20,7 +21,7 @@ class _InviteFriendsWidgetState extends State<InviteFriendsWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<EventFormCubit, EventFormState>(
         builder: (context, state) {
-      return _AddFriendsButton(context, state);
+            return _AddFriendsButton(context, state);
     });
   }
 
@@ -38,19 +39,24 @@ class _InviteFriendsWidgetState extends State<InviteFriendsWidget> {
     ]);
   }
 
-  void inviteFriends(BuildContext context, EventFormState state) {
+
+  void inviteFriends(BuildContext contextWCubit, EventFormState state) {
     showDialog(
-        context: context,
+        context: contextWCubit,
         builder: (BuildContext context) {
-          return AddFriendsDialog(
-            friends: state.friends,
-            invitedFriends: state.invitedFriends,
-            onAddFriend: (Profile profile) {
-              context.read<EventFormCubit>().addFriend(profile);
-            },
-            onRemoveFriend: (Profile profile) {
-              context.read<EventFormCubit>().removeFriend(profile);
-            },
+          return StatefulBuilder(
+              builder: (context, setState) {
+                return AddFriendsDialog(
+                  friends: state.friends,
+                  invitedFriends: state.event.invitations,
+                  onAddFriend: (Profile profile) {
+                    contextWCubit.read<EventFormCubit>().addFriend(profile);
+                  },
+                  onRemoveFriend: (Profile profile) {
+                    contextWCubit.read<EventFormCubit>().removeFriend(profile);
+                  },
+                );
+              }
           );
         });
   }

@@ -45,13 +45,12 @@ main() {
           creationDate: DateTime.now(),
           owner: ProfileDto(id: 1, name: "adolf")));
 
+  List<ProfileDto> profileDtoList = [testProfileDto, testProfileDtoWithoutId];
 
-  List<ProfileDto> profileDtoList = [testProfileDto,testProfileDtoWithoutId];
-
-  test("Profile Convertion", ()
-  {
-    ProfileDto testProfileDto = ProfileDto(id: 1,name: "manfred");
-    ProfileDto convertedProfileDto = ProfileDto.fromJson(ProfileDto.fromDomain(testProfileDto.toDomain()).toJson());
+  test("Profile Convertion", () {
+    ProfileDto testProfileDto = ProfileDto(id: 1, name: "manfred");
+    ProfileDto convertedProfileDto = ProfileDto.fromJson(
+        ProfileDto.fromDomain(testProfileDto.toDomain()).toJson());
     expect(testProfileDto, convertedProfileDto);
   });
 
@@ -60,12 +59,12 @@ main() {
   final SymfonyCommunicator communicator = SymfonyCommunicator(
       jwt: "lalala",
       client:
-      client); //SymfonyCommunicator for communication mocking with fake jwt and the mocking client
+          client); //SymfonyCommunicator for communication mocking with fake jwt and the mocking client
   final ProfileRemoteService
-  remoteService //we have to pass the communicator, as it has the mocked client
-  = ProfileRemoteService(
-      communicator:
-      communicator); //remoteService for mocking in the repository
+      remoteService //we have to pass the communicator, as it has the mocked client
+      = ProfileRemoteService(
+          communicator:
+              communicator); //remoteService for mocking in the repository
   ProfileRepository repository = ProfileRepository(remoteService);
 
   //some often used values
@@ -79,8 +78,6 @@ main() {
   final DateTime lastCommentTime = DateTime.now();
   final String profileId = testProfileDto.id.toString();
   final String postId = "2";
-
-
 
   //HTTP error codes with corresponding eventFailures
   final codesAndFailures = {
@@ -96,14 +93,26 @@ main() {
   postProfile,
    */
   final listOperations = {
-    Operation.search: ProfileRemoteService.searchProfilePath.interpolate(
-        {"profileId": profileId,"amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
-    Operation.attendingUsersEvent: ProfileRemoteService.attendingUsersPath.interpolate(
-        {"profileId": profileId,"amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
-    Operation.follower: ProfileRemoteService.followerPath.interpolate(
-        {"profileId": profileId, "amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
-    Operation.postProfile: ProfileRemoteService.postProfilePath.interpolate(
-        {"amount" : amount.toString(), "lastCommentTime" : lastCommentTime.toString()}),
+    Operation.search: ProfileRemoteService.searchProfilePath.interpolate({
+      "profileId": profileId,
+      "amount": amount.toString(),
+      "lastCommentTime": lastCommentTime.toString()
+    }),
+    Operation.attendingUsersEvent:
+        ProfileRemoteService.attendingUsersPath.interpolate({
+      "profileId": profileId,
+      "amount": amount.toString(),
+      "lastCommentTime": lastCommentTime.toString()
+    }),
+    Operation.follower: ProfileRemoteService.followerPath.interpolate({
+      "profileId": profileId,
+      "amount": amount.toString(),
+      "lastCommentTime": lastCommentTime.toString()
+    }),
+    Operation.postProfile: ProfileRemoteService.postProfilePath.interpolate({
+      "amount": amount.toString(),
+      "lastCommentTime": lastCommentTime.toString()
+    }),
   };
 
   //first test
@@ -118,11 +127,12 @@ main() {
     test("get Single Test", () async {
       when(client.get("ourUrl.com/profile", headers: authenticationHeader))
           .thenAnswer((_) async =>
-          http.Response(jsonEncode(testProfileDto.toJson()), 200));
+              http.Response(jsonEncode(testProfileDto.toJson()), 200));
 
       expect(
           await repository.getSingleProfile(UniqueId.fromUniqueString(1)).then(
-                  (value) => value.fold((l) => null, (r) => ProfileDto.fromDomain(r))),
+              (value) =>
+                  value.fold((l) => null, (r) => ProfileDto.fromDomain(r))),
           testProfileDto);
     });
 
@@ -132,10 +142,10 @@ main() {
       test("get List Test with 200 response. Operation: $operation", () async {
         Either<ProfileFailure, List<Profile>> returnedList;
         when(client.get(SymfonyCommunicator.url + path,
-            headers: authenticationHeader))
+                headers: authenticationHeader))
             .thenAnswer((_) async => http.Response(
-            jsonEncode(profileDtoList.map((e) => e.toJson()).toList()),
-            200)); // client response configuration
+                jsonEncode(profileDtoList.map((e) => e.toJson()).toList()),
+                200)); // client response configuration
         expect(
             returnedList
                 .getOrElse(() => throw Error())
@@ -146,10 +156,10 @@ main() {
     });
     test("Post with 200 response", () async {
       when(client.post("ourUrl.com/profile",
-          headers: authenticationHeader,
-          body: jsonEncode(testProfileDto.toJson())))
+              headers: authenticationHeader,
+              body: jsonEncode(testProfileDto.toJson())))
           .thenAnswer((realInvocation) async =>
-          http.Response(jsonEncode(testProfileDto.toJson()), 200));
+              http.Response(jsonEncode(testProfileDto.toJson()), 200));
 
       Profile answer = await repository
           .create(testProfileDto.toDomain())
@@ -163,12 +173,12 @@ main() {
 
     test("Delete with 200 response", () async {
       when(client.delete(
-          SymfonyCommunicator.url +
-              ProfileRemoteService.deletePath +
-              testId.toString(),
-          headers: authenticationHeader))
+              SymfonyCommunicator.url +
+                  ProfileRemoteService.deletePath +
+                  testId.toString(),
+              headers: authenticationHeader))
           .thenAnswer((realInvocation) async =>
-          http.Response(jsonEncode(testProfileDto.toJson()), 200));
+              http.Response(jsonEncode(testProfileDto.toJson()), 200));
       Profile answer = await repository
           .delete(testProfileDto.toDomain())
           .then((value) => value.fold((l) => null, (r) => r));
@@ -179,17 +189,16 @@ main() {
       expect(ProfileDto.fromDomain(answer), testProfileDto);
     });
 
-
     //---------------------UPDATE----------------------
     test("Put with 200 response", () async {
       when(client.put(
-          SymfonyCommunicator.url +
-              ProfileRemoteService.updatePath +
-              testId.toString(),
-          headers: authenticationHeader,
-          body: jsonEncode(testProfileDto.toJson())))
+              SymfonyCommunicator.url +
+                  ProfileRemoteService.updatePath +
+                  testId.toString(),
+              headers: authenticationHeader,
+              body: jsonEncode(testProfileDto.toJson())))
           .thenAnswer((realInvocation) async =>
-          http.Response(jsonEncode(testProfileDto.toJson()), 200));
+              http.Response(jsonEncode(testProfileDto.toJson()), 200));
 
       Profile answer = await repository
           .update(testProfileDto.toDomain())
@@ -208,9 +217,10 @@ main() {
       //Autogenerated tests for the different failures in post
       test("Post with communicaton errors. Code: $code", () async {
         //tests for posts
-        when(client.post(SymfonyCommunicator.url + ProfileRemoteService.postPath,
-            headers: authenticationHeader,
-            body: jsonEncode(testProfileDtoWithoutId.toJson())))
+        when(client.post(
+                SymfonyCommunicator.url + ProfileRemoteService.postPath,
+                headers: authenticationHeader,
+                body: jsonEncode(testProfileDtoWithoutId.toJson())))
             .thenAnswer((realInvocation) async => http.Response("", code));
         final ProfileFailure answer = await repository
             .create(testProfileDtoWithoutId.toDomain())
@@ -221,25 +231,25 @@ main() {
       test("Delete with communication errors. Code: $code", () async {
         //Autogenerated tests for the different failures in delete
         when(client.delete(
-            SymfonyCommunicator.url +
-                ProfileRemoteService.deletePath +
-                testId.toString(),
-            headers: authenticationHeader))
+                SymfonyCommunicator.url +
+                    ProfileRemoteService.deletePath +
+                    testId.toString(),
+                headers: authenticationHeader))
             .thenAnswer((realInvocation) async => http.Response("", code));
         final Either<ProfileFailure, Profile> answer = await repository
             .delete(testProfileDto.toDomain()); //await answer from repository
         final ProfileFailure failure = answer.swap().getOrElse(() =>
-        throw Error()); //swap, so we can use get or else, and throw an error if its not an failure
+            throw Error()); //swap, so we can use get or else, and throw an error if its not an failure
         expect(failure, pstFailure);
       });
 
       test("Put with communication Errors. Code: $code", () async {
         when(client.put(
-            SymfonyCommunicator.url +
-                ProfileRemoteService.updatePath +
-                testId.toString(),
-            headers: authenticationHeader,
-            body: jsonEncode(testProfileDtoWithoutId.toJson())))
+                SymfonyCommunicator.url +
+                    ProfileRemoteService.updatePath +
+                    testId.toString(),
+                headers: authenticationHeader,
+                body: jsonEncode(testProfileDtoWithoutId.toJson())))
             .thenAnswer((realInvocation) async => http.Response("", code));
         ProfileFailure failure = await repository
             .update(testProfileDtoWithoutId.toDomain())
@@ -251,17 +261,18 @@ main() {
       listOperations.forEach((operation, path) {
         test(
             "getList with communication Errors. Operation: $operation. Code: $code",
-                () async {
-              ProfileFailure returnedFailure;
-              when(client.get(SymfonyCommunicator.url + path,
+            () async {
+          ProfileFailure returnedFailure;
+          when(client.get(SymfonyCommunicator.url + path,
                   headers: authenticationHeader))
-                  .thenAnswer((_) async => http.Response(
-                  jsonEncode(profileDtoList.map((e) => e.toJson()).toList()), code));
-                returnedFailure = await repository
-                    .getList(operation, amount)
-                    .then((value) => value.swap().getOrElse(() => throw Error()));
-              expect(returnedFailure, pstFailure);
-            });
+              .thenAnswer((_) async => http.Response(
+                  jsonEncode(profileDtoList.map((e) => e.toJson()).toList()),
+                  code));
+          returnedFailure = await repository
+              .getList(operation, amount)
+              .then((value) => value.swap().getOrElse(() => throw Error()));
+          expect(returnedFailure, pstFailure);
+        });
       });
     });
   });

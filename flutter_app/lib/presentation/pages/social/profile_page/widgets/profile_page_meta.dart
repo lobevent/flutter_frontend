@@ -1,12 +1,11 @@
-
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/profile/profile_page/profile_page_cubit.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
-import 'package:flutter_frontend/presentation/pages/event/events_multilist/events_mulitlist/events_mulitlist_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/events_multilist/cubit/events_mulitlist_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/social/profile_page/cubit/profile_page_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class ProfilePageMeta extends StatelessWidget {

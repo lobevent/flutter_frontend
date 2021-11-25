@@ -14,6 +14,7 @@ part 'profile_dtos.g.dart';
 class ProfileDto extends BaseDto with _$ProfileDto {
   const ProfileDto._();
 
+
   const factory ProfileDto({
     required String id,
     required String username,
@@ -27,11 +28,11 @@ class ProfileDto extends BaseDto with _$ProfileDto {
   factory ProfileDto.fromDomain(Profile profile) {
     return profile.map(
         (value) => ProfileDto(
-              id: profile.id.getOrCrash(),
+              id: profile.id.value,
               username: profile.name.getOrCrash(),
             ),
         full: (detailedProfile) => ProfileDto(
-            id: detailedProfile.id.getOrCrash(),
+            id: detailedProfile.id.value,
             username: detailedProfile.name.getOrCrash(),
             ownedEvents: detailedProfile.ownedEvents != null
                 ? detailedProfile.ownedEvents!

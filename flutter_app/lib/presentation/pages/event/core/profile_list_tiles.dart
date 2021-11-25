@@ -1,9 +1,6 @@
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/profile/profile_friends/profile_friends_cubit.dart';
-import 'package:flutter_frontend/application/profile/profile_search/profile_search_cubit.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/image_classes.dart';

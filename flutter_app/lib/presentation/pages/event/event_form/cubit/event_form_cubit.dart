@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/i_profile_repository.dart'
     as profileOps;
@@ -26,20 +28,7 @@ class EventFormCubit extends Cubit<EventFormState> {
   ProfileRepository profileRepository = GetIt.I<ProfileRepository>();
   EventRepository repository = GetIt.I<EventRepository>();
 
-  Future<void> saveEvent() async {
-    Either<NetWorkFailure, Unit>? failureOrSuccess;
-    emit(state.copyWith(isSaving: true));
-    if (state.event.failureOption.isNone()) {
-      //failureOrSuccess =  await right(unit);
-      //failureOrSuccess =  await left(EventFailure.insufficientPermissions());
-      failureOrSuccess = (await repository.create(state.event))
-          .fold((l) => left(l), (r) => right(unit));
-    }
-    emit(state.copyWith(
-        isSaving: false,
-        showErrorMessages: true,
-        saveFailureOrSuccessOption: optionOf(failureOrSuccess)));
-  }
+
 
   Future<void> submit() async {
     if (state.isEditing) {
@@ -71,27 +60,37 @@ class EventFormCubit extends Cubit<EventFormState> {
   }
 
   void addFriend(Profile profile) {
-    // TODO: implement this
+    if(!state.event.invitations.map((e) => e.profile).contains(profile)){
+      state.event.invitations.add(Invitation(profile: profile, event: state.event, id: UniqueId()));
+      emit(state);
+    }
   }
 
   void removeFriend(Profile profile) {
-    // TODO: implement this
+    if(state.event.invitations.map((e) => e.profile.id.toString()).contains(profile.id.toString())){
+      state.event.invitations.removeWhere((invitation) => invitation.profile.id.value == profile.id.value);
+      emit(state);
+    }
   }
 
   /// fetch friends
   Future<void> getFriends() async {
     emit(state.copyWith(isLoadingFriends: true));
-    (await this.profileRepository.getList(profileOps.Operation.friends, 1000))
-        .fold(
-            (failure) => EventFormState.error(failure),
-            // compare the complete friendlist with the invitations for this event
-            // set isLoadingFriends false, as they are loaded now obviously
-            (friends) => emit(state.copyWith(
-                friends: friends,
-                isLoadingFriends: false,
-                invitedFriends:
-                    _generateAttendingFriends(state.event, friends))));
+    (await this.profileRepository.getFriends(profile: null)).fold(
+        (failure) => EventFormState.error(failure),
+        // compare the complete friendlist with the invitations for this event
+        // set isLoadingFriends false, as they are loaded now obviously
+        (friends) {
+          emit(state.copyWith(
+            event: removeNoneFriends(state.event, friends),
+            friends: friends,
+            isLoadingFriends: false,
+            )
+          );
+        }
+    );
   }
+
 
   Future<void> loadEvent(String id) async {
     emit(EventFormState.loading());
@@ -100,31 +99,53 @@ class EventFormCubit extends Cubit<EventFormState> {
             (event) => emit(EventFormState.loaded(event))));
   }
 
+
+
+
+  /// save event to database
+  Future<void> saveEvent() async {
+    return updateEditEvent(() => repository.create(state.event));
+  }
+
+  /// upload edited event and send to server
   Future<void> updateEvent() async {
+    return updateEditEvent(() => repository.update(state.event));
+  }
+
+
+  Future<void> updateEditEvent( Future<Either<NetWorkFailure, Event>> Function() serverCall) async{
     Either<NetWorkFailure, Unit>? failureOrSuccess;
     emit(state.copyWith(isSaving: true));
     if (state.event.failureOption.isNone()) {
       //failureOrSuccess =  await right(unit);
       //failureOrSuccess =  await left(EventFailure.insufficientPermissions());
-      failureOrSuccess = (await repository.update(state.event))
-          .fold((l) => left(l), (r) => right(unit));
+      failureOrSuccess = (await serverCall())
+        .fold((l) => left(l), (r) => right(unit));
     }
     emit(state.copyWith(
-        isSaving: false,
-        showErrorMessages: true,
-        saveFailureOrSuccessOption: optionOf(failureOrSuccess)));
+    isSaving: false,
+    showErrorMessages: true,
+    saveFailureOrSuccessOption: optionOf(failureOrSuccess)));
+
   }
 
   /// compare event invitations with an friendlist, and generate list with the intersection
-  List<Profile> _generateAttendingFriends(Event event, List<Profile> friends) {
-    List<Profile> invitedFriends = [];
-    event.invitations?.forEach((invitedProfile) {
+/*  List<Invitation> _generateAttendingFriends(Event event, List<Profile> friends) {
+    List<Invitation> invitedFriends = [];
+    event.invitations.forEach((invitedProfile) {
       if (friends
-          .map((friend) => friend.id.getOrCrash())
-          .contains(invitedProfile.id.getOrCrash())) {
+          .map((friend) => friend.id.value)
+          .contains(invitedProfile.profile.id.value)) {
         invitedFriends.add(invitedProfile);
       }
     });
     return invitedFriends;
+  }*/
+
+
+  /// remove non friends from invitations
+  Event removeNoneFriends(Event event, List<Profile> friends){
+    event.invitations.removeWhere((invitation) => !friends.map((i) => i.id.value).contains(invitation.profile.id.value));
+    return event;
   }
 }

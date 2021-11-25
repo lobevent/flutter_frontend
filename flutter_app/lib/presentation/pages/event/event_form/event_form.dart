@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_form/cubit/event_form_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/event_form_container.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
+
+import 'cubit/event_form_cubit.dart';
 
 class EventFormPage extends StatelessWidget {
   final String? editedEventId;

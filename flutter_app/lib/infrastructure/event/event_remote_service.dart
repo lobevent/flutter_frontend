@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
@@ -34,8 +35,8 @@ class EventRemoteService extends RemoteService<EventDto> {
       : client = communicator ??
             SymfonyCommunicator(); // TODO this doesn't work on runtime -> will throw an error!
 
-  Future<EventDto> getSingle(String id) async {
-    final String uri = "$eventByIdPath$id";
+  Future<EventDto> getSingle(UniqueId id) async {
+    final String uri = "$eventByIdPath${id.value}";
     final Response response = await client.get(uri);
     final EventDto eventDto = await _decodeEvent(
         response); // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
@@ -61,10 +62,10 @@ class EventRemoteService extends RemoteService<EventDto> {
   }
 
   Future<List<EventDto>> getEventsFromUser(
-      DateTime lastEventTime, int amount, String profileId,
+      DateTime lastEventTime, int amount, UniqueId profileId,
       [bool descending = false]) async {
     return _getEventList(profileEventPath.interpolate({
-      "profileId": profileId,
+      "profileId": profileId.value,
       "amount": amount.toString(),
       "lastEventTime": lastEventTime.toString(),
       "descending": descending.toString()

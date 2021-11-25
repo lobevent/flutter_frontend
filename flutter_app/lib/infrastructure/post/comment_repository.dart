@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
+import 'package:flutter_frontend/domain/core/repository.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
-import 'package:flutter_frontend/domain/post/i_comment_repository.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
@@ -12,101 +12,106 @@ import 'package:flutter_frontend/infrastructure/core/exceptions_handler.dart';
 import 'comment_dtos.dart';
 import 'comment_remote_service.dart';
 
-class CommentRepository implements ICommentRepository {
+
+class CommentRepository extends Repository {
   final CommentRemoteService _commentRemoteService;
 
   CommentRepository(this._commentRemoteService);
 
-  @override
+  // -------------------------------- Single Crud operations --------------------------------------
+
+  ///
+  /// Creates an comment in the backend or returns failure
+  ///
   Future<Either<NetWorkFailure, Comment>> create(Comment comment) async {
-    try {
+    return localErrorHandler<Comment>(() async {
       final commentDto = CommentDto.fromDomain(comment);
-      CommentDto returnedCommentDto =
-          await _commentRemoteService.create(commentDto);
+      CommentDto returnedCommentDto = await _commentRemoteService.create(commentDto);
       return right(returnedCommentDto.toDomain());
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
+    });
   }
 
-  @override
+  ///
+  /// deletes an comment in the backend or returns failure
+  ///
   Future<Either<NetWorkFailure, Comment>> delete(Comment comment) async {
-    try {
+    return localErrorHandler<Comment>(() async {
       final commentDto = CommentDto.fromDomain(comment);
-      CommentDto returnedCommentDto =
-          await _commentRemoteService.delete(commentDto);
+      CommentDto returnedCommentDto = await _commentRemoteService.delete(commentDto);
       return right(returnedCommentDto.toDomain());
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
+    });
   }
 
-  @override
-  Future<Either<NetWorkFailure, List<Comment>>> getList(
-      Operation operation, DateTime lastCommentTime, int amount,
-      {Profile? profile, Comment? commentParent, Post? postParent}) async {
-    try {
-      List<CommentDto> commentDtos;
-      switch (operation) {
-        case Operation.fromPost:
-          if (postParent == null || postParent.id == null) {
-            throw UnexpectedTypeError();
-          }
-          commentDtos = await _commentRemoteService.getCommentsFromPost(
-              lastCommentTime, amount, postParent.id!.getOrCrash().toString());
-          break;
-        case Operation.fromComment:
-          if (commentParent == null || commentParent.id == null) {
-            throw UnexpectedTypeError();
-          }
-          commentDtos =
-              await _commentRemoteService.getCommentsFromCommentParent(
-                  lastCommentTime,
-                  amount,
-                  commentParent.id.getOrCrash().toString());
-          break;
-        case Operation.fromUser:
-          if (profile == null) {
-            throw UnexpectedTypeError();
-          }
-          commentDtos = await _commentRemoteService.getCommentsFromUser(
-              lastCommentTime, amount, profile.id.getOrCrash().toString());
-          break;
-        case Operation.own:
-          commentDtos = await _commentRemoteService.getOwnComments(
-              lastCommentTime, amount);
-          break;
-      }
-      //convert the dto objects to domain Objects
-      final List<Comment> comments =
-          commentDtos.map((commentDtos) => commentDtos.toDomain()).toList();
-      return right(comments);
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
-  }
 
-  @override
+  ///
+  /// gets an single comment in the backend or returns failure
+  ///
   Future<Either<NetWorkFailure, Comment>> getSingleComment(UniqueId id) async {
-    try {
-      final CommentDto commentDto =
-          await _commentRemoteService.getSingleComment(id.getOrCrash());
+    return localErrorHandler<Comment>(() async {
+      final CommentDto commentDto = await _commentRemoteService.getSingleComment(id.value);
       final Comment comment = commentDto.toDomain();
       return right(comment);
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
+    });
   }
 
-  @override
+  ///
+  /// updates an comment in the backend or returns failure
+  ///
   Future<Either<NetWorkFailure, Comment>> update(Comment comment) async {
-    try {
+     return localErrorHandler(() async {
       final commentDto = CommentDto.fromDomain(comment);
-      CommentDto returnedComment =
-          await _commentRemoteService.update(commentDto);
+      CommentDto returnedComment = await _commentRemoteService.update(commentDto);
       return right(returnedComment.toDomain());
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
+    });
   }
+
+  // ------------------------------------------ Comments from list section -----------------------------------
+
+  ///
+  /// loads comment that have an parent post
+  ///
+  Future<Either<NetWorkFailure, List<Comment>>> getCommentsFromPost({required DateTime lastCommentTime, required int amount, required Post postParent}) async {
+    return localErrorHandler<List<Comment>>(() async {
+      List<CommentDto> commentDtos = await _commentRemoteService.getCommentsFromPost(lastCommentTime, amount, postParent.id!.value.toString());
+      return right(convertToDomainList(commentDtos));
+    });
+  }
+
+  ///
+  /// loads comments that have an parent comment
+  ///
+  Future<Either<NetWorkFailure, List<Comment>>> getCommentsFromComment({required DateTime lastCommentTime, required int amount, required Comment commentParent,}) async {
+    return localErrorHandler<List<Comment>>(() async {
+      List<CommentDto> commentDtos = await _commentRemoteService.getCommentsFromCommentParent(lastCommentTime, amount, commentParent.id.value.toString());
+      return right(convertToDomainList(commentDtos));
+    });
+  }
+
+  ///
+  /// load all public user comments
+  ///
+  Future<Either<NetWorkFailure, List<Comment>>> getCommentsFromUser({required DateTime lastCommentTime, required int amount, required Profile profile,}) async {
+    return localErrorHandler<List<Comment>>(() async {
+      List<CommentDto> commentDtos = await _commentRemoteService.getCommentsFromUser(lastCommentTime, amount, profile.id.value.toString());
+      return right(convertToDomainList(commentDtos));
+    });
+  }
+
+  ///
+  /// load all own comments
+  ///
+  Future<Either<NetWorkFailure, List<Comment>>> getOwnComments({required DateTime lastCommentTime, required int amount}) async {
+    return localErrorHandler<List<Comment>>(() async {
+      List<CommentDto> commentDtos = await _commentRemoteService.getOwnComments(lastCommentTime, amount);
+      return right(convertToDomainList(commentDtos));
+    });
+  }
+
+  ///
+  /// converts to domain list
+  ///
+  List<Comment> convertToDomainList(List<CommentDto> commentDtos){
+    return commentDtos.map((commentDtos) => commentDtos.toDomain()).toList();
+  }
+
 }

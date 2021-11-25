@@ -1,8 +1,10 @@
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
+import 'package:flutter_frontend/infrastructure/event/invitation_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -23,6 +25,7 @@ class EventDto extends BaseDto with _$EventDto {
   static final Map domainToDtoStatus =
       dtoToDomainStatus.map((key, value) => MapEntry(value, key));
 
+  @JsonSerializable(explicitToJson: true)
   const factory EventDto({
     required String id,
     required String name,
@@ -34,7 +37,7 @@ class EventDto extends BaseDto with _$EventDto {
     int? attendingUsersCount,
     @TodoConverter() TodoDto? todo,
     @OwnerConverter() ProfileDto? owner,
-    @InvitationsToProfileConverter() List<ProfileDto>? invitations,
+    @InvitationsToProfileConverter() List<InvitationDto>? invitations,
     double? longitude,
     double? latitude,
     int? ownStatus,
@@ -42,9 +45,8 @@ class EventDto extends BaseDto with _$EventDto {
 
   factory EventDto.fromDomain(Event event) {
     EventDto returnedDto;
-
     return EventDto(
-      id: event.id.getOrCrash(),
+      id: event.id.value,
       name: event.name.getOrCrash(),
       public: event.public,
       date: event.date,
@@ -57,6 +59,7 @@ class EventDto extends BaseDto with _$EventDto {
       longitude: event.longitude,
       latitude: event.latitude,
       visibleWithoutLogin: event.visibleWithoutLogin,
+      invitations: event.invitations.map((i) => InvitationDto.fromDomain(i)).toList(),
     );
   }
 
@@ -65,6 +68,7 @@ class EventDto extends BaseDto with _$EventDto {
 
   @override
   Event toDomain() {
+    List<Invitation> invitationL = invitations?.map<Invitation>((e) => e.toDomain() as Invitation).toList()?? <Invitation>[];
     return Event(
       id: UniqueId.fromUniqueString(id),
       name: EventName(name),
@@ -80,7 +84,7 @@ class EventDto extends BaseDto with _$EventDto {
       longitude: longitude,
       latitude: latitude,
       visibleWithoutLogin: visibleWithoutLogin,
-      invitations: invitations?.map((e) => e.toDomain()).toList(),
+      invitations: invitationL,
     );
   }
 }
@@ -115,6 +119,6 @@ class TodoConverter implements JsonConverter<TodoDto, Map<String, dynamic>> {
   }
 }
 
-class InvitationsToProfileConverter extends ListConverter<ProfileDto> {
+class InvitationsToProfileConverter extends ListConverter<InvitationDto> {
   const InvitationsToProfileConverter() : super();
 }

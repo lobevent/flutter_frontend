@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles.dart';
-import 'package:flutter_frontend/presentation/pages/event/events_multilist/events_mulitlist/events_mulitlist_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/events_multilist/cubit/events_mulitlist_cubit.dart';
 
 class EventsMultilistBody extends StatefulWidget {
   @override

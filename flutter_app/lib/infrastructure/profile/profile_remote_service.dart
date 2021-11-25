@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:flutter_frontend/application/like/like_cubit.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/like/like_cubit.dart';
 import 'package:http/http.dart';
 
 class ProfileRemoteService extends RemoteService<ProfileDto> {
@@ -203,7 +203,7 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   Future<List<ProfileDto>> addFriendsToEvent(
       List<ProfileDto> friends, Event event) async {
     final Response response = await client.put(
-        "$addFriendsToEventPath${event.id.getOrCrash()}",
+        "$addFriendsToEventPath${event.id.value}",
         jsonEncode(friends.map((e) => e.toJson())));
     return convertList(response);
   }

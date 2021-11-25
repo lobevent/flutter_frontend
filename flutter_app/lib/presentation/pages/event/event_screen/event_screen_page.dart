@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/application/event/event_screen/event_screen_cubit.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
@@ -10,6 +9,7 @@ import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/h
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/todo_widget.dart';
 
 import '../../core/widgets/loading_overlay.dart';
+import 'cubit/event_screen/event_screen_cubit.dart';
 
 class EventScreenPage extends StatelessWidget {
   final UniqueId eventId;

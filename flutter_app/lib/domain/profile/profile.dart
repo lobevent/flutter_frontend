@@ -16,7 +16,7 @@ class Profile with _$Profile {
   const factory Profile({
     required UniqueId id,
     required ProfileName name,
-  }) = _BaseProfile;
+  }) = BaseProfile;
 
   const factory Profile.full({
     required UniqueId id,

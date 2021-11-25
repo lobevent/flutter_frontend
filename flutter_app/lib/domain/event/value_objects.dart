@@ -26,11 +26,8 @@ class EventDescription extends ValueObject<String> {
 
   static int maxLength = Constants.maxTextLength;
   factory EventDescription(String input) {
-    assert(input != null);
-    {
-      return EventDescription._(validateLength(input, maxLength: maxLength)
-          .flatMap(validateStringNotEmpty));
-    }
+    return EventDescription._(validateLength(input, maxLength: maxLength)
+        .flatMap(validateStringNotEmpty));
   }
   const EventDescription._(this.value);
 }

@@ -1,97 +1,103 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
+import 'package:flutter_frontend/domain/core/repository.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
-import 'package:flutter_frontend/domain/event/event.dart';
-import 'package:flutter_frontend/domain/post/i_post_repository.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
-import 'package:flutter_frontend/infrastructure/core/exceptions_handler.dart';
 import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
 import 'package:flutter_frontend/infrastructure/post/post_remote_service.dart';
 
-class PostRepository implements IPostRepository {
+enum Operation { fromUser }
+class PostRepository extends Repository {
   final PostRemoteService _postRemoteService;
 
   PostRepository(this._postRemoteService);
 
-  @override
+
+  // ---------------------------------- Simple CRUD ------------------------------------
+  ///
+  /// Creates an post in the backend or returns failure
+  ///  
   Future<Either<NetWorkFailure, Post>> create(Post post) async {
-    try {
+    return localErrorHandler(() async {
       final postDto = PostDto.fromDomain(post);
-      PostDto returnedPostDto = await _postRemoteService.createPost(postDto);
+      final PostDto returnedPostDto = await _postRemoteService.createPost(postDto);
       return right(returnedPostDto.toDomain());
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
+    });
   }
-
-  @override
+  ///
+  /// deletes an post in the backend or returns failure
+  /// 
   Future<Either<NetWorkFailure, Post>> delete(Post post) async {
-    try {
+    return localErrorHandler(() async {
       final postDto = PostDto.fromDomain(post);
-      PostDto returnedPostDto = await _postRemoteService.deletePost(postDto);
+      final PostDto returnedPostDto = await _postRemoteService.deletePost(postDto);
       return right(returnedPostDto.toDomain()); //TODO implement with .toDomain
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
+    });
   }
 
-  @override
-  Future<Either<NetWorkFailure, List<Post>>> getList(
-      Operation operation,
-      DateTime lastPostTime,
-      int amount,
-      Event eventParent, //TODO add eventparent
-      {Profile? profile}) async {
-    try {
-      List<PostDto> postDtos;
-      switch (operation) {
-        case Operation.own:
-          postDtos = await _postRemoteService.getOwnPosts(lastPostTime, amount);
-          break;
-        case Operation.feed:
-          postDtos = await _postRemoteService.getFeed(lastPostTime, amount);
-          break;
-        case Operation.fromUser:
-          if (profile == null) {
-            throw UnexpectedTypeError();
-          }
-          postDtos = await _postRemoteService.getPostsFromUser(
-              lastPostTime, amount, profile.id.getOrCrash().toString());
-          break;
-      }
-      //convert the dto objects to domain Objects
-      final List<Post> posts =
-          postDtos.map((postDto) => postDto.toDomain()).toList();
-      return right(posts);
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
-  }
-
-  @override
+  ///
+  /// gets an single post in the backend or returns failure
+  /// 
   Future<Either<NetWorkFailure, Post>> getSingle(UniqueId id) async {
-    try {
+    return localErrorHandler(() async {
       final PostDto postDto =
-          await _postRemoteService.getSingle(id.getOrCrash());
+      await _postRemoteService.getSingle(id.value);
       final Post post = postDto.toDomain();
       return right(post);
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
+    });
   }
-
-  @override
+  ///
+  /// updates an post in the backend or returns failure
+  /// 
   Future<Either<NetWorkFailure, Post>> update(Post post) async {
-    try {
+    return localErrorHandler(() async {
       final postDto = PostDto.fromDomain(post);
       PostDto returnedPost;
       returnedPost = await _postRemoteService.updatePost(postDto);
       return right(returnedPost.toDomain());
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
+    });
   }
+
+
+  // ------------------------- List Getters ----------------------------------
+
+  ///
+  /// gets posts from logged in user
+  ///
+  Future<Either<NetWorkFailure, List<Post>>> getOwnPosts({required DateTime lastPostTime, required int amount}) async{
+    return localErrorHandler(() async {
+      final List<PostDto> postDtos = await _postRemoteService.getOwnPosts(lastPostTime, amount);
+      return right(_convertToDomainList(postDtos));
+    });
+  }
+
+  ///
+  /// gets the feed for logged in user
+  ///
+  Future<Either<NetWorkFailure, List<Post>>> getFeed({required DateTime lastPostTime, required int amount}) async{
+    return localErrorHandler(() async {
+      final List<PostDto> postDtos = await _postRemoteService.getFeed(lastPostTime, amount);
+      return right(_convertToDomainList(postDtos));
+    });
+  }
+
+  ///
+  /// gets the public posts from specific user
+  ///
+  Future<Either<NetWorkFailure, List<Post>>> getPostsFromUser({required DateTime lastPostTime, required int amount, required Profile profile}) async{
+    return localErrorHandler(() async {
+      final List<PostDto> postDtos = await _postRemoteService.getPostsFromUser(lastPostTime, amount, profile.id.value.toString());
+      return right(_convertToDomainList(postDtos));
+    });
+  }
+
+  ///
+  /// converts to domain list
+  ///
+  List<Post> _convertToDomainList(List<PostDto> dtos){
+    return dtos.map((postDto) => postDto.toDomain()).toList();
+  }
+
+
 }

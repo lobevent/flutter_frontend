@@ -1,4 +1,3 @@
-
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_dtos.dart';
 import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
@@ -33,8 +32,7 @@ class ListConverter<DTO extends BaseDto>
 
   @override
   List<Map<String, dynamic>> toJson(List<DTO> object) {
-    // TODO: implement toJson
-    throw UnimplementedError();
+    return object.map((e) => e.toJson()).toList();
   }
 
 /*  @override

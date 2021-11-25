@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
@@ -25,14 +26,15 @@ class Event with _$Event {
       Profile? owner,
       required bool public,
       required bool visibleWithoutLogin,
-      List<Profile>? invitations,
+      required List<Invitation> invitations,
       int? attendingCount,
       EventStatus? status,
       double? longitude,
       double? latitude}) = EventFull;
 
   factory Event.empty() => Event(
-        id: UniqueId.fromUniqueString('e6837df8-9e99-4f00-a40d-0e798834e9da'),
+        id: UniqueId.fromUniqueString(
+            'e6837df8-9e99-4f00-a40d-0e798834e9da'), // TODO: Random initial id?
         name: EventName(''),
         date: DateTime.now(),
         description: EventDescription(''),
@@ -48,6 +50,7 @@ class Event with _$Event {
         longitude: 0,
         latitude: 0,
         visibleWithoutLogin: false,
+        invitations: <Invitation>[]
       );
 
   //check if the whole object is no failure

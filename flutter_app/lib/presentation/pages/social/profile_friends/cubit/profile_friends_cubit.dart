@@ -26,20 +26,18 @@ class ProfileFriendsCubit extends Cubit<ProfileFriendsState> {
     try {
       emit(ProfileFriendsState.loading());
 
-      final Either<
-          NetWorkFailure,
-          List<
-              Profile>> friendList = await repository.getList(
-          Operation.friends, 0,
-          // here a fake Profile Object is created, because only profileId is needed and available, but name must be in the Profile Object
-          // if no profile id is given "profile" is set to null
-          //profile: profileId == null ? null :Profile(name:ProfileName("thisNameIsFake"), id: profileId!)
-          profile: profileId == null
-              ? null
-              : Profile(name: ProfileName("thisNameIsFake"), id: profileId!));
+      final Either<NetWorkFailure, List<Profile>> friendList =
+          await repository.getFriends(
+              // here a fake Profile Object is created, because only profileId is needed and available, but name must be in the Profile Object
+              // if no profile id is given "profile" is set to null
+              //profile: profileId == null ? null :Profile(name:ProfileName("thisNameIsFake"), id: profileId!)
+              profile: profileId == null
+                  ? null
+                  : Profile(
+                      name: ProfileName("thisNameIsFake"), id: profileId!));
       //load the pending friends and mapping
       final Either<NetWorkFailure, List<Profile>> pendingFriendsList =
-          await repository.getList(Operation.pendingFriends, 0);
+          await repository.getOpenFriends();
       emit(ProfileFriendsState.loadedBoth(
           friendList: friendList.fold((l) => throw Exception(), (r) => r),
           pendingFriendsList:

@@ -49,8 +49,7 @@ class EventListTiles extends StatelessWidget {
   }
 
   void editEvent(BuildContext context) {
-    context.router
-        .push(EventFormPageRoute(editedEventId: event.id.getOrCrash()));
+    context.router.push(EventFormPageRoute(editedEventId: event.id.value));
   }
 
   void showEvent(BuildContext context) {

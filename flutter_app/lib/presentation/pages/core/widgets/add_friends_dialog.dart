@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/pages/core/list_tiles/friend_list_tile.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
@@ -9,7 +10,7 @@ class AddFriendsDialog extends StatefulWidget {
   final List<Profile> friends;
 
   /// the list with all the friends, that are invited
-  final List<Profile> invitedFriends;
+  final List<Invitation> invitedFriends;
   // callbackfunctio for adding friend
   final Function(Profile) onAddFriend;
   // callback functtion for removing friends
@@ -36,6 +37,16 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
     super.initState();
   }
 
+
+
+  /// this override is used, if the widged is changed externaly, so we have to
+  /// update the value
+  @override
+  void didUpdateWidget(covariant AddFriendsDialog oldWidget) {
+    // TODO: implement didUpdateWidget
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -48,6 +59,7 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
       ],
     );
   }
+
 
   void onSearchTextChanged(String text) {
     // clear the results before working with it
@@ -67,6 +79,7 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
     setState(() {});
   }
 
+  /// listview of the proviles as Friend tile
   Widget _ProfileListView(BuildContext context) {
     return ListView.builder(
         physics: NeverScrollableScrollPhysics(),
@@ -75,9 +88,15 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
         itemBuilder: (context, i) {
           return FriendListTile(
             profile: results[i],
-            isInvited: widget.invitedFriends.contains(results[i]),
-            onAddFriend: widget.onAddFriend,
-            onRemoveFriend: widget.onRemoveFriend,
+            isInvited: widget.invitedFriends.map((e) => e.profile.id.toString()).contains(results[i].id.toString()),
+            onAddFriend: (Profile profile){
+              widget.onAddFriend(profile);
+              setState(() {});
+            },
+            onRemoveFriend: (Profile profile) {
+              widget.onRemoveFriend(profile);
+              setState(() {});
+            },
           );
         });
   }

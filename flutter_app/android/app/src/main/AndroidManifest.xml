@@ -11,6 +11,7 @@
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
+            android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -43,7 +44,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        
+
         <!-- Set up the Sign in with Apple activity, such that it's callable from the browser-redirect -->
       <activity
           android:name="com.firebaseapp.lobevent.sign_in_with_apple.SignInWithAppleCallback"

@@ -32,7 +32,7 @@ class PostDto extends BaseDto with _$PostDto {
     PostDto returnedDto;
     //distinguish between both PostDto cases
     return PostDto(
-        id: post.id?.getOrCrash(),
+        id: post.id?.value,
         date: post.creationDate,
         content: post.postContent.getOrCrash(),
         owner: ProfileDto.fromDomain(post.owner!),

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/presentation/pages/event/todos/todo_cubit/todo_cubit.dart';
 
 class ItemCreateWidget extends StatefulWidget {
   final Event event;
-  const ItemCreateWidget({Key? key, required this.event}) : super(key: key);
+  final Todo todo;
+  //orgalist created or not
+  const ItemCreateWidget({Key? key, required this.event, required this.todo})
+      : super(key: key);
 
   @override
-  _ItemCreateWidgetState createState() => _ItemCreateWidgetState(event);
+  _ItemCreateWidgetState createState() => _ItemCreateWidgetState(event, todo);
 }
 
 class _ItemCreateWidgetState extends State<ItemCreateWidget> {
@@ -17,8 +21,9 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
   final itemNameController = TextEditingController();
   final itemDescriptionController = TextEditingController();
   final Event event;
+  final Todo todo;
 
-  _ItemCreateWidgetState(this.event);
+  _ItemCreateWidgetState(this.event, this.todo);
 
   @override
   void initState() {
@@ -69,18 +74,24 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
                     hintText: 'Enter the Itemdescription'),
                 controller: itemDescriptionController,
               ),
-              MaterialButton(
-                  color: Colors.blue,
-                  textColor: Colors.white,
-                  onPressed: () => context.read<TodoCubit>().postItem(
-                      itemName: itemNameController.text,
-                      itemDescription: itemDescriptionController.text),
-                  //dispose();
-                  child: const Text('Create Item')),
+              actionButton(context),
             ],
           ),
         );
       }),
+    );
+  }
+
+  Widget actionButton(BuildContext context) {
+    return MaterialButton(
+      color: Colors.blue,
+      textColor: Colors.white,
+      onPressed: () => context.read<TodoCubit>().postItem(
+          itemName: itemNameController.text,
+          itemDescription: itemDescriptionController.text,
+          todo: todo),
+      //dispose();
+      child: const Text('Create Item'),
     );
   }
 }

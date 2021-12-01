@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/event_content.dart';
@@ -31,6 +32,7 @@ class EventScreenPage extends StatelessWidget {
             return LoadingOverlay(
                 isLoading: state is LoadInProgress,
                 child: BasicContentContainer(
+                  bottomNavigationBar: const BottomNavigation(selected: NavigationOptions.ownEvents,),
                   children: state.maybeMap(
 
                       /// check if an error has occured and show error message in that case
@@ -52,7 +54,9 @@ class EventScreenPage extends StatelessWidget {
                             /// todoevents list
                             TodoWidget(),
                           ]),
-                ));
+
+                ),
+            );
           },
         ));
   }

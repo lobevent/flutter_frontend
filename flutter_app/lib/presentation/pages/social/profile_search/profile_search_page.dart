@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_search/profile_search_results.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -80,6 +81,7 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
               initial: (_) => false, loading: (_) => true, orElse: () => false);
           //for the tapable history tiles
           return Scaffold(
+            bottomNavigationBar: BottomNavigation(selected: NavigationOptions.profileSearch,),
               body: FloatingSearchBar(
                   controller: controller,
                   body: FloatingSearchBarScrollNotifier(

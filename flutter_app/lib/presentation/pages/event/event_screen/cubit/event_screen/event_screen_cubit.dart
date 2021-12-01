@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -24,5 +25,10 @@ class EventScreenCubit extends Cubit<EventScreenState> {
     repository.getSingle(id).then((eventOrFailure) => eventOrFailure.fold(
         (failure) => emit(EventScreenState.error(failure: failure)),
         (event) => emit(EventScreenState.loaded(event: event))));
+  }
+
+  Future<void> createOrgaEvent(Event event) async {
+    Either<NetWorkFailure, bool> failureOrSuccess =
+        await todoRepository.createOrga(event);
   }
 }

@@ -105,7 +105,7 @@ Either<ValueFailure<int>, int> validateNumberRange(int input,
   }
 }
 
-Either<ValueFailure<T>, T> validateNonNegative<T extends num>(T input,
+Either<ValueFailure<int>, int> validateNonNegative<T extends int>(int input,
     {T? max, T? min}) {
   // check if the date is in valid format
   if (isNonNegative(input)) {
@@ -115,8 +115,8 @@ Either<ValueFailure<T>, T> validateNonNegative<T extends num>(T input,
   }
 }
 
-bool isNonNegative(num number) {
-  return !((num as int) < 0);
+bool isNonNegative(int number) {
+  return !(number < 0);
 }
 
 bool isValidDate(String input) {

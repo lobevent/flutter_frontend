@@ -20,7 +20,12 @@ class TodoCubit extends Cubit<TodoState> {
 
   TodoCubit({required this.event}) : super(TodoState.initial()) {
     emit(TodoState.initial());
-    loadTodoList(event);
+    if (event.todo == null) {
+      createOrga(event);
+    }
+    if (!event.public) {
+      loadTodoList(event);
+    }
   }
 
   TodoRepository repository = GetIt.I<TodoRepository>();
@@ -33,19 +38,23 @@ class TodoCubit extends Cubit<TodoState> {
   }
 
   Future<void> postItem(
-      {required String itemName, required String itemDescription}) async {
-    _TodoLoaded myCastedState = state as _TodoLoaded;
+      {required String itemName,
+      required String itemDescription,
+      required Todo todo}) async {
     final Item newItem = Item(
         id: UniqueId(),
         name: ItemName(itemName),
         description: ItemDescription(itemDescription),
+        maxProfiles: ItemMaxProfiles(3),
         //fake profile list
-        profiles: [Profile(id: UniqueId(), name: ProfileName("fake"))]);
-    repository.addItem(myCastedState.todo, newItem).then((itemOrFailure) =>
-        itemOrFailure.fold((failure) => emit(TodoState.error(failure: failure)),
-            (item) {
-          myCastedState.todo.items.add(newItem);
-          emit(myCastedState);
+        profiles: [
+          Profile(id: UniqueId(), name: ProfileName("fake2")),
+          Profile(id: UniqueId(), name: ProfileName("fake3"))
+        ]);
+    repository.addItem(todo, newItem).then((itemOrFailure) => itemOrFailure
+            .fold((failure) => emit(TodoState.error(failure: failure)), (item) {
+          todo.items.add(newItem);
+          emit(TodoState.loaded(todo: todo));
         }));
   }
 
@@ -54,5 +63,11 @@ class TodoCubit extends Cubit<TodoState> {
         await repository.create(todo, event);
     emit(TodoState.loaded(
         todo: failureOrSuccess.fold((l) => throw Exception(), (r) => r)));
+  }
+
+  Future<void> createOrga(Event event) async {
+    Either<NetWorkFailure, bool> failureOrSuccess =
+        await repository.createOrga(event);
+    emit(TodoState.initial());
   }
 }

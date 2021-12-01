@@ -8,17 +8,22 @@ import 'package:meta/meta.dart';
 part 'feed_state.dart';
 
 class FeedCubit extends Cubit<FeedState> {
-  FeedCubit() : super(FeedState());
+  FeedCubit() : super(FeedState()) {
+    loadFeed();
+  }
   PostRepository repository = GetIt.I<PostRepository>();
 
 
   void loadFeed(){
+    state.isLoading = true;
+    emit(state);
     repository.getFeed(lastPostTime: DateTime.now(), amount: 20).then((value) => value.fold(
             (failure) => {
               state.error = some(failure.toString()),
               emit(state)
             },
             (posts) {
+              state.isLoading = false;
               state.posts = posts;
               emit(state);
             }));

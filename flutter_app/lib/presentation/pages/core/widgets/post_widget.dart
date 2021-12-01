@@ -50,7 +50,7 @@ class PostWidget extends StatelessWidget {
 
 
 /// generate list of posts
-Widget generateUnscrollablePostContainer(List<Post> posts, Profile? profile) {
+Widget generateUnscrollablePostContainer(List<Post> posts, [Profile? profile]) {
   if (posts.isEmpty) {
     return Text("Nothing here yet");
   }

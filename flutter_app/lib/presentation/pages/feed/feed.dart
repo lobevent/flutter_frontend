@@ -31,7 +31,6 @@ class _FeedScreenState extends State<FeedScreen> {
               //   return previousState.isLoading != state.isLoading;
               // },
               builder: (context, state) {
-                context.read<FeedCubit>().loadFeed();
                 return BasicContentContainer(
                   controller: context.read<FeedCubit>().controller,
                   appBar: MainAppBar(),

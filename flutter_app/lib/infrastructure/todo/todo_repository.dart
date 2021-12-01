@@ -20,10 +20,11 @@ class TodoRepository extends ITodoRepository {
 
   ///  posts an orgalist to the server
   @override
-  Future<Either<NetWorkFailure, bool>> createOrga(Event event) async {
+  Future<Either<NetWorkFailure, Todo>> createOrga(Event event) async {
     try {
       //try if the request can be made, if not we will get an NetworkFailure
-      return right((await _todoRemoteService.createOrg(event.id.value)));
+      return right(
+          (await _todoRemoteService.createOrg(event.id.value)).toDomain());
     } on CommunicationException catch (e) {
       return left(ExceptionsHandler.reactOnCommunicationException(e));
     }
@@ -103,13 +104,13 @@ class TodoRepository extends ITodoRepository {
   }
 
   @override
-  Future<Either<NetWorkFailure, Item>> deleteItem(Item item) async {
+  Future<bool> deleteItem(Item item) async {
     try {
       //try if the request can be made, if not we will get an NetworkFailure
-      return right(
-          (await _itemRemoteService.deleteItem(item.id.value)).toDomain());
+      final bool success = await _itemRemoteService.deleteItem(item.id.value);
+      return success;
     } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
+      return false;
     }
   }
 

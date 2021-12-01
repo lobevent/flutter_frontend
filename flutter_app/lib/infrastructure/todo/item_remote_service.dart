@@ -5,6 +5,7 @@ import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/todo/item_dtos.dart';
 import 'package:http/http.dart';
+import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 
 import 'item_dtos.dart';
 
@@ -12,8 +13,8 @@ class ItemRemoteService extends RemoteService<ItemDto> {
   static const String postPath = "/orgalist/item";
   static const String postItemPath = "/orgalist/item/post/";
   static const String assignProfPath = "orgalist/item/add/";
-  static const String deletePath = "/orgalist/item/";
-  static const String updatePath = "/orgalist/item/";
+  static const String deletePath = "/orgalist/item/%itemId%";
+  static const String updatePath = "/orgalist/item/%itemId%";
 
   final SymfonyCommunicator client;
 
@@ -30,13 +31,16 @@ class ItemRemoteService extends RemoteService<ItemDto> {
         await client.post("$postPath$itemId" + (profileId ?? ''), ''));
   }
 
-  Future<ItemDto> deleteItem(String itemId) async {
-    return _decodeItem(await client.delete("$deletePath${itemId}"));
+  Future<bool> deleteItem(String itemId) async {
+    final Response response =
+        await client.delete(deletePath.interpolate({"itemId": itemId}));
+    return response.body.isNotEmpty;
   }
 
   Future<ItemDto> updateItem(ItemDto itemDto) async {
     return _decodeItem(await client.put(
-        "$updatePath${itemDto.id}", jsonEncode(itemDto.toJson())));
+        updatePath.interpolate({"itemId": itemDto.id.toString()}),
+        jsonEncode(itemDto.toJson())));
   }
 
   ItemDto _decodeItem(Response json) {

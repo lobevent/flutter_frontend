@@ -13,7 +13,7 @@ abstract class ITodoRepository {
   Future<Either<NetWorkFailure, Item>> addItem(Todo todo, Item item);
   Future<Either<NetWorkFailure, Item>> addProfileToItem(
       Item item, Profile profile);
-  Future<Either<NetWorkFailure, Item>> deleteItem(Item item);
+  Future<bool> deleteItem(Item item);
   Future<Either<NetWorkFailure, Item>> updateItem(Item item);
   Future<Either<NetWorkFailure, List<Item>>> getItems(Todo todo);
 }

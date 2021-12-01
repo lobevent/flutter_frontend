@@ -29,13 +29,14 @@ class EventTodoWidget extends StatelessWidget {
                   onPressed: () => context.router.push(ItemCreateWidgetRoute(
                         event: event,
                         todo: todo!,
+                        //onEdit: context.read<>()
                       )),
                   icon: const Icon(Icons.add)),
 
               /// Used as space
               const SizedBox(height: 20),
 
-              TodoList(todo: todo),
+              TodoList(todo: todo!, event: event),
             ],
           );
         }));

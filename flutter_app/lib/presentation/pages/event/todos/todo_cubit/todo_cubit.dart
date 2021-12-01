@@ -20,12 +20,6 @@ class TodoCubit extends Cubit<TodoState> {
 
   TodoCubit({required this.event}) : super(TodoState.initial()) {
     emit(TodoState.initial());
-    if (event.todo == null) {
-      createOrga(event);
-    }
-    if (!event.public) {
-      loadTodoList(event);
-    }
   }
 
   TodoRepository repository = GetIt.I<TodoRepository>();
@@ -37,6 +31,7 @@ class TodoCubit extends Cubit<TodoState> {
         (todo) => emit(TodoState.loaded(todo: todo)));
   }
 
+  ///CRUD
   Future<void> postItem(
       {required String itemName,
       required String itemDescription,
@@ -65,9 +60,37 @@ class TodoCubit extends Cubit<TodoState> {
         todo: failureOrSuccess.fold((l) => throw Exception(), (r) => r)));
   }
 
-  Future<void> createOrga(Event event) async {
-    Either<NetWorkFailure, bool> failureOrSuccess =
-        await repository.createOrga(event);
-    emit(TodoState.initial());
+  Future<bool> deleteItem(Todo todo, Item item) async {
+    final success = await repository.deleteItem(item);
+    return success;
   }
+
+  Future<void> editItem(Todo todo, Item item) async {
+    /*Either<NetWorkFailure, Item> failureOrSuccess =
+        await repository.updateItem(item);
+    emit(TodoState.loaded(
+        todo: failureOrSuccess.fold((l) => throw Exception(), (item) {
+      //remove item
+      int itemPos = todo.items.indexOf(item);
+      todo.items[itemPos] = item;
+      return Todo(
+          id: todo.id,
+          description: todo.description,
+          event: todo.event,
+          items: todo.items,
+          name: todo.name);
+    })));
+
+     */
+  }
+  /*
+  Future<void> saveItem() async{
+    return updateEditItem(() => repository.updateItem(state.item));
+  }
+
+  Future<void> updateEditItem(Future<Either<NetworkFailure, Todo>> Function() servercall) async{
+
+  }
+
+   */
 }

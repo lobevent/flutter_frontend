@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/presentation/pages/event/todos/todo_cubit/todo_cubit.dart';
+import 'package:flutter_frontend/domain/todo/item.dart';
 
 class ItemCreateWidget extends StatefulWidget {
   final Event event;
   final Todo todo;
-  //orgalist created or not
-  const ItemCreateWidget({Key? key, required this.event, required this.todo})
+  final Item? item;
+  //function for editing item or posting new item
+  final Function(Item item)? onEdit;
+
+  const ItemCreateWidget(
+      {Key? key,
+      required this.event,
+      required this.todo,
+      this.item,
+      this.onEdit})
       : super(key: key);
 
   @override
-  _ItemCreateWidgetState createState() => _ItemCreateWidgetState(event, todo);
+  _ItemCreateWidgetState createState() =>
+      _ItemCreateWidgetState(event, todo, item, onEdit);
 }
 
 class _ItemCreateWidgetState extends State<ItemCreateWidget> {
@@ -22,8 +33,10 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
   final itemDescriptionController = TextEditingController();
   final Event event;
   final Todo todo;
+  final Item? item;
+  final Function(Item item)? onEdit;
 
-  _ItemCreateWidgetState(this.event, this.todo);
+  _ItemCreateWidgetState(this.event, this.todo, this.item, this.onEdit);
 
   @override
   void initState() {
@@ -74,7 +87,7 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
                     hintText: 'Enter the Itemdescription'),
                 controller: itemDescriptionController,
               ),
-              actionButton(context),
+              actionButton(onEdit != null, context),
             ],
           ),
         );
@@ -82,14 +95,20 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
     );
   }
 
-  Widget actionButton(BuildContext context) {
+  Widget actionButton(bool edit, BuildContext context) {
     return MaterialButton(
       color: Colors.blue,
       textColor: Colors.white,
-      onPressed: () => context.read<TodoCubit>().postItem(
-          itemName: itemNameController.text,
-          itemDescription: itemDescriptionController.text,
-          todo: todo),
+      onPressed: () {
+        if (edit) {
+          onEdit!(item!);
+        } else {
+          context.read<TodoCubit>().postItem(
+              itemName: itemNameController.text,
+              itemDescription: itemDescriptionController.text,
+              todo: todo);
+        }
+      },
       //dispose();
       child: const Text('Create Item'),
     );

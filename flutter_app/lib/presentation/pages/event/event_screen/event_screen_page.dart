@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
@@ -30,32 +31,33 @@ class EventScreenPage extends StatelessWidget {
           builder: (context, state) {
             ///the loading Overlay wraps the whole tree
             return LoadingOverlay(
-                isLoading: state is LoadInProgress,
-                child: BasicContentContainer(
-                  bottomNavigationBar: const BottomNavigation(selected: NavigationOptions.ownEvents,),
-                  children: state.maybeMap(
-
-                      /// check if an error has occured and show error message in that case
-                      /// wrapped in a list to match closure context
-                      error: (failure) => [
-                            ErrorMessage(
-                              errorText: failure.toString(),
-                            )
-                          ],
-
-                      /// if the error state is not active, load the contentS
-                      orElse: () => [
-                            /// the Header with the pictures etc
-                            HeaderVisual(),
-
-                            /// the event contents and information
-                            EventContent(),
-
-                            /// todoevents list
-                            TodoWidget(),
-                          ]),
-
+              isLoading: state is LoadInProgress,
+              child: BasicContentContainer(
+                bottomNavigationBar: const BottomNavigation(
+                  selected: NavigationOptions.ownEvents,
                 ),
+                children: state.maybeMap(
+
+                    /// check if an error has occured and show error message in that case
+                    /// wrapped in a list to match closure context
+                    error: (failure) => [
+                          ErrorMessage(
+                            errorText: failure.toString(),
+                          )
+                        ],
+
+                    /// if the error state is not active, load the contentS
+                    orElse: () => [
+                          /// the Header with the pictures etc
+                          HeaderVisual(),
+
+                          /// the event contents and information
+                          EventContent(),
+
+                          /// todoevents list
+                          TodoWidget(),
+                        ]),
+              ),
             );
           },
         ));

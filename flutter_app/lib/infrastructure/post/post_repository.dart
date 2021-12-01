@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/repository.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
@@ -88,6 +89,16 @@ class PostRepository extends Repository {
   Future<Either<NetWorkFailure, List<Post>>> getPostsFromUser({required DateTime lastPostTime, required int amount, required Profile profile}) async{
     return localErrorHandler(() async {
       final List<PostDto> postDtos = await _postRemoteService.getPostsFromUser(lastPostTime, amount, profile.id.value.toString());
+      return right(_convertToDomainList(postDtos));
+    });
+  }
+  
+  ///
+  /// gets the public posts from a specific event
+  ///
+  Future<Either<NetWorkFailure, List<Post>>> getPostsFromEvent({required DateTime lastPostTime, required int amount, required Event event}) async{
+    return localErrorHandler(() async {
+      final List<PostDto> postDtos = await _postRemoteService.getPostsFromEvent(lastPostTime, amount, event.id.value.toString());
       return right(_convertToDomainList(postDtos));
     });
   }

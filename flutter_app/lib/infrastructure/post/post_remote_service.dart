@@ -22,6 +22,7 @@ class PostRemoteService extends RemoteService<PostDto> {
   static const String ownPostsPath = "/post/%amount%/%lastPostTime%";
   static const String feedPath = "/feed/post/%amount%/%lastPostTime%";
   static const String postsFromUserPath = "/profile/post/%profileId%";
+  static const String postsFromEventPath = "/event/post/%eventId%";
 
   static const String postPath = "/event/post/";
   static const String deletePath = "/post/";
@@ -56,6 +57,15 @@ class PostRemoteService extends RemoteService<PostDto> {
       DateTime lastPostTime, int amount, String profileId) async {
     return _getPostList(postsFromUserPath.interpolate({
       "profileId": profileId,
+      "amount": amount.toString(),
+      "lastPostTime": lastPostTime.toString()
+    }));
+  }
+
+  Future<List<PostDto>> getPostsFromEvent(
+      DateTime lastPostTime, int amount, String eventId) async {
+    return _getPostList(postsFromUserPath.interpolate({
+      "eventId": eventId,
       "amount": amount.toString(),
       "lastPostTime": lastPostTime.toString()
     }));

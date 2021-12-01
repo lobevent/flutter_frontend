@@ -7,7 +7,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/post_comment/comments_screen/widgets/comment_container.dart';
 
-import 'comment_screen/comment_screen_cubit.dart';
+import 'cubit/comment_screen_cubit.dart';
 
 class CommentsScreen extends StatelessWidget {
   final Post? post;

@@ -194,7 +194,8 @@ class EventContent extends StatelessWidget {
   }
 
   Widget PostWidget(Event event, BuildContext context){
-    return MaterialButton(onPressed: () { context.router.push(PostsScreenRoute(eventId: event.id)); });
+    return MaterialButton(
+      onPressed: () { context.router.push(PostsScreenRoute(event: event)); });
   }
 
   /// Widget used for making padding with a row, so the children start on the

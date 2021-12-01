@@ -25,9 +25,9 @@ class PostScreenCubit extends Cubit<PostScreenState> {
     final Either<NetWorkFailure, List<Post>> postsList;
     try {
       emit(PostScreenState.loading());
-      postsList = await repository.getPostsFromEvent(lastPostTime: DateTime.now(),amount: 30,event: event!);
+      postsList = await repository.getPostsFromEvent(lastPostTime: DateTime.now(),amount: 30, event: event!);
       emit(PostScreenState.loaded(
-          posts: postsList.fold((l) => throw Exception, (r) => r)));
+          posts: postsList.fold((l) => throw NetWorkFailure, (r) => r)));
     } catch (e) {
       emit(PostScreenState.error(error: e.toString()));
     }

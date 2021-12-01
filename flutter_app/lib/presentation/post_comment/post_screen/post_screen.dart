@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
-import 'package:flutter_frontend/domain/post/comment.dart';
-import 'package:flutter_frontend/domain/post/post.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
-import 'package:flutter_frontend/presentation/post_comment/comments_screen/widgets/comment_container.dart';
+import 'package:flutter_frontend/presentation/post_comment/post_screen/widgets/post_container.dart';
 
-//import 'comment_screen/comment_screen_cubit.dart';
+import 'cubit/post_screen_cubit.dart';
 
 class PostsScreen extends StatelessWidget {
-  
-  final UniqueId eventId;
 
-  const PostsScreen({Key? key, required this.eventId});
+  final Event event;
+
+  const PostsScreen({Key? key, required this.event});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
-  /*  return BlocProvider(
+    return BlocProvider(
       create: (context) =>
-          CommentScreenCubit(post: post, parentComment: parentComment),
-      child: BlocBuilder<CommentScreenCubit, CommentScreenState>(
+          PostScreenCubit(event: event),
+      child: BlocBuilder<PostScreenCubit, PostScreenState>(
         builder: (context, state) {
           return LoadingOverlay(
               isLoading: state is Loading,
@@ -32,11 +31,11 @@ class PostsScreen extends StatelessWidget {
                     error: (errState) =>
                         [ErrorMessage(errorText: errState.error)],
                     orElse: () => const [
-                          CommentContainer(),
+                          PostContainer(),
                         ]),
               ));
         },
       ),
     );
-  */}
+  }
 }

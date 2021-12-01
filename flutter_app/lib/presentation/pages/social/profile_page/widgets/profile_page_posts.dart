@@ -35,5 +35,5 @@ class ProfilePagePosts extends StatelessWidget {
 
   /// generate list of posts
   Widget PostList(List<Post> posts, Profile profile) {
-    return generateUnscrollablePostContainer(posts, profile);
+    return generateUnscrollablePostContainer(posts: posts, profile: profile);
 }

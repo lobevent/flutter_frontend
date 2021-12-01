@@ -27,7 +27,7 @@ class FeedScreen extends StatelessWidget {
                   children: [
                     LoadingOverlay(
                       isLoading: state.isLoading,
-                      child:  state.error.isSome() ? ErrorMessage(errorText: state.error.fold(() {}, (a) => a)) : generateUnscrollablePostContainer(state.posts), )
+                      child:  state.error.isSome() ? ErrorMessage(errorText: state.error.fold(() {}, (a) => a)) : generateUnscrollablePostContainer(posts: state.posts , showAutor: true), )
                   ],
                 );
               },

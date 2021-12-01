@@ -32,5 +32,5 @@ class PostContainer extends StatelessWidget {
 }
   /// generate list of posts
   Widget PostList(List<Post> posts) {
-    return generateUnscrollablePostContainer(posts);
+    return generateUnscrollablePostContainer(posts: posts);
 }

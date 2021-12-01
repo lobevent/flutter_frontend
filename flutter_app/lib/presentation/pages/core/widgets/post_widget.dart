@@ -50,7 +50,7 @@ class PostWidget extends StatelessWidget {
 
 
 /// generate list of posts
-Widget generateUnscrollablePostContainer(List<Post> posts, [Profile? profile]) {
+Widget generateUnscrollablePostContainer({required List<Post> posts, Profile? profile, bool showAutor = false}) {
   if (posts.isEmpty) {
     return Text("Nothing here yet");
   }
@@ -67,7 +67,7 @@ Widget generateUnscrollablePostContainer(List<Post> posts, [Profile? profile]) {
         itemBuilder: (context, index) {
           return PostWidget(
             post: profile != null ? posts[index].copyWith(owner: profile) : posts[index],
-            showAuthor: false,
+            showAuthor: showAutor,
           );
         },
       ));

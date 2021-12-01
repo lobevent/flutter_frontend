@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/main_app_bar.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_widget.dart';
@@ -16,6 +17,9 @@ class FeedScreen extends StatelessWidget {
     return BlocProvider(
             create: (context) => FeedCubit(),
             child: BlocBuilder<FeedCubit, FeedState>(
+              // buildWhen: (previousState, state) {
+              //   return previousState.isLoading != state.isLoading;
+              // },
               builder: (context, state) {
                 return BasicContentContainer(
                   appBar: MainAppBar(),
@@ -23,7 +27,7 @@ class FeedScreen extends StatelessWidget {
                   children: [
                     LoadingOverlay(
                       isLoading: state.isLoading,
-                      child: generateUnscrollablePostContainer(state.posts), )
+                      child:  state.error.isSome() ? ErrorMessage(errorText: state.error.fold(() {}, (a) => a)) : generateUnscrollablePostContainer(state.posts), )
                   ],
                 );
               },

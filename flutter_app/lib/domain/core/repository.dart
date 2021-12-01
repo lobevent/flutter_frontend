@@ -14,10 +14,13 @@ class Repository<Domain>{
   /// executes try catch routine and returns failure if there was a networkexception
   ///
   Future<Either<NetWorkFailure, T>> localErrorHandler<T>(Future<Either<NetWorkFailure, T>> Function() function) async {
+    Either<NetWorkFailure, T> result;
     try {
-      return function();
+      result = await function();
+      //return function();
     } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
+      result = left(ExceptionsHandler.reactOnCommunicationException(e));
     }
+    return result;
   }
 }

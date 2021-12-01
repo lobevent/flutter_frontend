@@ -11,7 +11,17 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets
 import 'package:flutter_frontend/presentation/pages/feed/cubit/feed_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
-class FeedScreen extends StatelessWidget {
+
+class FeedScreen extends StatefulWidget {
+  const FeedScreen({Key? key}) : super(key: key);
+
+  @override
+  _FeedScreenState createState() => _FeedScreenState();
+}
+
+class _FeedScreenState extends State<FeedScreen> {
+
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -21,7 +31,9 @@ class FeedScreen extends StatelessWidget {
               //   return previousState.isLoading != state.isLoading;
               // },
               builder: (context, state) {
+                context.read<FeedCubit>().loadFeed();
                 return BasicContentContainer(
+                  controller: context.read<FeedCubit>().controller,
                   appBar: MainAppBar(),
                   bottomNavigationBar: const BottomNavigation(selected: NavigationOptions.home),
                   children: [
@@ -34,4 +46,7 @@ class FeedScreen extends StatelessWidget {
             ),
     );
   }
+
+
+
 }

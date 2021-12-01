@@ -14,4 +14,7 @@ class AppColors {
   static const Color stdTextColor = Colors.black38;
 
   static const Color stdButtonBackground = Color(0x2ABBBBBB);
+
+
+  static const Color primaryColor = Color(0xFFFF851C);
 }

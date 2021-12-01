@@ -8,6 +8,8 @@ import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart'
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_repository.dart';
+import 'package:flutter_frontend/infrastructure/post/post_remote_service.dart';
+import 'package:flutter_frontend/infrastructure/post/post_repository.dart';
 import 'package:flutter_frontend/infrastructure/todo/item_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_repository.dart';
@@ -36,6 +38,9 @@ class InjectionContainer {
 
     getIt.registerLazySingleton(() => EventRepository(
         EventRemoteService(communicator: communicator), EventLocalService()));
+
+    getIt.registerLazySingleton(() => PostRepository(
+        PostRemoteService(communicator: communicator)));
 
     getIt.registerLazySingleton(
       () => TodoRepository(

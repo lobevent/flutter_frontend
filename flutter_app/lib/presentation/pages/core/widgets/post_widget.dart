@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
+import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
@@ -45,4 +46,29 @@ class PostWidget extends StatelessWidget {
       ],
     );
   }
+}
+
+
+/// generate list of posts
+Widget generateUnscrollablePostContainer(List<Post> posts, Profile? profile) {
+  if (posts.isEmpty) {
+    return Text("Nothing here yet");
+  }
+  // Expanded because if you leave it, it expands infinitely and throws errors
+  return Container(
+    // building the list of post widgets
+      child: ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        // the padding is set to the std padding defined in styling widgets
+        padding: stdPadding,
+        scrollDirection: Axis.vertical,
+        itemCount: posts.length,
+        itemBuilder: (context, index) {
+          return PostWidget(
+            post: profile != null ? posts[index].copyWith(owner: profile) : posts[index],
+            showAuthor: false,
+          );
+        },
+      ));
 }

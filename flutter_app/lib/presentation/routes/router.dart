@@ -3,7 +3,7 @@ import 'package:flutter_frontend/presentation/pages/event/event_form/event_form.
 import 'package:flutter_frontend/presentation/pages/event/event_screen/event_screen_page.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/events_multilist_screen.dart';
 import 'package:flutter_frontend/presentation/pages/event/todos/widgets/item_create_widget.dart';
-import 'package:flutter_frontend/presentation/pages/feed.dart';
+import 'package:flutter_frontend/presentation/pages/feed/feed.dart';
 import 'package:flutter_frontend/presentation/pages/login/country_code_selection_screen.dart';
 import 'package:flutter_frontend/presentation/pages/login/login_screen.dart';
 import 'package:flutter_frontend/presentation/pages/login/phone_number_sign_in_screen.dart';

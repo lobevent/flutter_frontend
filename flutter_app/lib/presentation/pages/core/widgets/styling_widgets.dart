@@ -17,17 +17,20 @@ class BasicContentContainer extends StatelessWidget {
   final bool scrollable;
   // https://stackoverflow.com/questions/54114221/flutter-fixed-button-in-customscrollview
   final Widget? bottomNavigationBar;
+  final PreferredSizeWidget? appBar;
   const BasicContentContainer(
       {Key? key,
-      required this.children,
-      this.bottomNavigationBar,
-      this.scrollable = true})
+        required this.children,
+        this.bottomNavigationBar,
+        this.appBar,
+        this.scrollable = true})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (!scrollable) {
       return Scaffold(
+        appBar: appBar,
         body: ColorfulSafeArea(
           color: Colors.yellow,
           child: Column(
@@ -38,6 +41,7 @@ class BasicContentContainer extends StatelessWidget {
       );
     }
     return Scaffold(
+      appBar: appBar,
       body: ColorfulSafeArea(
         color: Colors.yellow,
         child: SingleChildScrollView(

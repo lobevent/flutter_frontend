@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart' hide Router;
-import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 
 enum NavigationOptions{
   home,

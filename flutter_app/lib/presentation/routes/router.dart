@@ -12,6 +12,7 @@ import 'package:flutter_frontend/presentation/pages/social/profile_friends/profi
 import 'package:flutter_frontend/presentation/pages/social/profile_page/profile_page.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_search/profile_search_page.dart';
 import 'package:flutter_frontend/presentation/post_comment/comments_screen/comments_screen.dart';
+import 'package:flutter_frontend/presentation/post_comment/post_screen/post_screen.dart';
 
 @MaterialAutoRouter(
   routes: <AutoRoute>[
@@ -27,7 +28,8 @@ import 'package:flutter_frontend/presentation/post_comment/comments_screen/comme
     AutoRoute(page: ProfilePage),
     AutoRoute(page: ProfileSearchPage),
     AutoRoute(page: ProfileFriendsScreen),
-    AutoRoute(page: CommentsScreen)
+    AutoRoute(page: CommentsScreen),
+    AutoRoute(page: PostsScreen),
   ],
 )
 class $Router {}

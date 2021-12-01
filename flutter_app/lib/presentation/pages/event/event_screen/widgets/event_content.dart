@@ -54,7 +54,7 @@ class EventContent extends StatelessWidget {
                   /// Used as space
                   const SizedBox(height: 20),
 
-                  PostWidget(state.event),
+                  PostWidget(state.event, context),
                   /// Used as space
                   const SizedBox(height: 20),
 
@@ -193,8 +193,8 @@ class EventContent extends StatelessWidget {
     ]);
   }
 
-  Widget PostWidget(Event event){
-    return MaterialButton(onPressed: () {  },);
+  Widget PostWidget(Event event, BuildContext context){
+    return MaterialButton(onPressed: () { context.router.push(PostsScreenRoute(eventId: event.id)); });
   }
 
   /// Widget used for making padding with a row, so the children start on the

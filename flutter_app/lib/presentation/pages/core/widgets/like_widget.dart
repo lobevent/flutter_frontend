@@ -60,9 +60,9 @@ class _LikeButtonState extends State<LikeButton> {
   ///decide if the icon for liking or unliking is shown
   Icon decideIcon(bool likeStatus) {
     if (likeStatus) {
-      return Icon(Icons.airplanemode_active_sharp);
+      return Icon(Icons.thumb_up_alt);
     } else {
-      return Icon(Icons.airplanemode_inactive_sharp);
+      return Icon(Icons.thumb_up_alt_outlined);
     }
   }
 

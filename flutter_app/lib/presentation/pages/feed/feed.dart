@@ -21,15 +21,31 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> {
 
+  Widget child = Text('');
+  Widget LoadingIndicator = Container();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
             create: (context) => FeedCubit(),
-            child: BlocBuilder<FeedCubit, FeedState>(
+            child: BlocConsumer<FeedCubit, FeedState>(
+              listener: (context, state){
+                if(state.isLoadingNew){
+                  LoadingIndicator  = CircularProgressIndicator();
+                }else{
+                  LoadingIndicator = Container();
+                }
+                child = state.error.isSome() ? ErrorMessage(errorText: state.error.fold(() {}, (a) => a)) : generateUnscrollablePostContainer(posts: state.posts , showAutor: true);
+                setState(() {
+
+                });
+              },
               // buildWhen: (previousState, state) {
               //   return previousState.isLoading != state.isLoading;
               // },
+              buildWhen: (previus, current){
+                return previus.isLoading != current.isLoading;
+              },
               builder: (context, state) {
                 return BasicContentContainer(
                   controller: context.read<FeedCubit>().controller,
@@ -38,7 +54,11 @@ class _FeedScreenState extends State<FeedScreen> {
                   children: [
                     LoadingOverlay(
                       isLoading: state.isLoading,
-                      child:  state.error.isSome() ? ErrorMessage(errorText: state.error.fold(() {}, (a) => a)) : generateUnscrollablePostContainer(posts: state.posts , showAutor: true), )
+                      child:  Column(
+                          children: [
+                            child,
+                            LoadingIndicator
+                          ]), )
                   ],
                 );
               },

@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
+import 'package:flutter_frontend/domain/todo/value_objects.dart';
+import 'package:flutter_frontend/infrastructure/todo/item_remote_service.dart';
 import 'package:flutter_frontend/presentation/pages/event/todos/todo_cubit/todo_cubit.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
 
@@ -104,7 +106,16 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
       textColor: Colors.white,
       onPressed: () {
         if (edit) {
-          onEdit!(item!);
+          final Item editItem = Item(
+              id: item!.id,
+              name: ItemName(itemNameController.text),
+              description: ItemDescription(itemDescriptionController.text),
+              maxProfiles: item!.maxProfiles == null
+                  ? ItemMaxProfiles(3)
+                  : item!.maxProfiles!,
+              //fake profile list
+              profiles: item!.profiles);
+          onEdit!(editItem);
         } else {
           context.read<TodoCubit>().postItem(
               itemName: itemNameController.text,

@@ -66,7 +66,7 @@ class TodoCubit extends Cubit<TodoState> {
   }
 
   Future<void> editItem(Todo todo, Item item) async {
-    /*Either<NetWorkFailure, Item> failureOrSuccess =
+    Either<NetWorkFailure, Item> failureOrSuccess =
         await repository.updateItem(item);
     emit(TodoState.loaded(
         todo: failureOrSuccess.fold((l) => throw Exception(), (item) {
@@ -80,8 +80,6 @@ class TodoCubit extends Cubit<TodoState> {
           items: todo.items,
           name: todo.name);
     })));
-
-     */
   }
   /*
   Future<void> saveItem() async{

@@ -68,23 +68,26 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
           ),
           body: Column(
             children: [
-              const Text('Create Item'),
+              Text(item != null ? 'Edit Item' : 'Create Item'),
               const SizedBox(height: 20),
               const Text('Itemname:'),
               const SizedBox(height: 20),
               TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                     border: UnderlineInputBorder(),
-                    hintText: 'Enter the Itemname'),
+                    hintText:
+                        item != null ? getItemName() : 'Enter the Itemname'),
                 controller: itemNameController,
               ),
               const SizedBox(height: 40),
               const Text('Itemdescription:'),
               const SizedBox(height: 20),
               TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                     border: UnderlineInputBorder(),
-                    hintText: 'Enter the Itemdescription'),
+                    hintText: item != null
+                        ? getItemDesc()
+                        : 'Enter the Itemdescription'),
                 controller: itemDescriptionController,
               ),
               actionButton(onEdit != null, context),
@@ -110,7 +113,17 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
         }
       },
       //dispose();
-      child: const Text('Create Item'),
+      child: Text(item != null ? 'Edit Item' : 'Create Item'),
     );
+  }
+
+  String getItemName() {
+    return itemNameController.text =
+        item!.name.value.fold((l) => l.toString(), (name) => name.toString());
+  }
+
+  String getItemDesc() {
+    return itemDescriptionController.text = item!.description.value
+        .fold((l) => l.toString(), (desc) => desc.toString());
   }
 }

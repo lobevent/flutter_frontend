@@ -27,6 +27,7 @@ class Event with _$Event {
       required bool public,
       required bool visibleWithoutLogin,
       required List<Invitation> invitations,
+      bool? liked,
       int? attendingCount,
       EventStatus? status,
       double? longitude,

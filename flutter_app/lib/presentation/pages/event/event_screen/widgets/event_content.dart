@@ -186,7 +186,7 @@ class EventContent extends StatelessWidget {
             key: ObjectKey(this.key),
             objectId: event.id,
             option: LikeTypeOption.Event,
-            likeStatus: false,
+            likeStatus: event.liked?? false,
           ),
         ),
       )

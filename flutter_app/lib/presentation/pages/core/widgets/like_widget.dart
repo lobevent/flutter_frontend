@@ -18,12 +18,13 @@ class LikeButton extends StatefulWidget {
       : super(key: key);
 
   @override
-  _LikeButtonState createState() => _LikeButtonState();
+  _LikeButtonState createState() => _LikeButtonState(likeStatus);
 }
 
 class _LikeButtonState extends State<LikeButton> {
   bool likeStatus = false;
   List<Profile> profilesWhichLiked = [];
+  _LikeButtonState(bool likeStatus) : likeStatus = likeStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,7 @@ class _LikeButtonState extends State<LikeButton> {
               loaded: (state) {
                 return buildLikeWithStatus();
               },
-              orElse: () => Text(""));
+              orElse: () => buildLikeWithStatus());
         },
       ),
     );

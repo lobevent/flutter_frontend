@@ -38,6 +38,7 @@ class EventDto extends BaseDto with _$EventDto {
     @TodoConverter() TodoDto? todo,
     @OwnerConverter() ProfileDto? owner,
     @InvitationsToProfileConverter() List<InvitationDto>? invitations,
+    bool? liked,
     double? longitude,
     double? latitude,
     int? ownStatus,
@@ -78,6 +79,7 @@ class EventDto extends BaseDto with _$EventDto {
       owner: owner?.toDomain(),
       //TODO: don't forget this one!
       public: public,
+      liked: liked,
       creationDate: creationDate,
       attendingCount: attendingUsersCount,
       status: dtoToDomainStatus[ownStatus] as EventStatus?,

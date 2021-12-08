@@ -46,6 +46,7 @@ class FeedCubit extends Cubit<FeedState> {
   _scrollListener(){
     if (controller.offset >= controller.position.maxScrollExtent &&
         !controller.position.outOfRange) {
+
     }
     if (controller.offset <= controller.position.minScrollExtent &&
         !controller.position.outOfRange) {

@@ -69,10 +69,11 @@ class TodoCubit extends Cubit<TodoState> {
     Either<NetWorkFailure, Item> failureOrSuccess =
         await repository.updateItem(item);
     emit(TodoState.loaded(
-        todo: failureOrSuccess.fold((l) => throw Exception(), (item) {
+        todo: failureOrSuccess.fold((l) => throw Exception(), (itemBack) {
       //remove item
-      int itemPos = todo.items.indexOf(item);
-      todo.items[itemPos] = item;
+
+      int itemPos = todo.items.indexWhere((i) => i.id.value == item.id.value);
+      todo.items[itemPos] = itemBack;
       return Todo(
           id: todo.id,
           description: todo.description,

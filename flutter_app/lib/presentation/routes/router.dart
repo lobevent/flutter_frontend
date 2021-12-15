@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_frontend/presentation/login_register_email/login_register.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/event_form.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/event_screen_page.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/events_multilist_screen.dart';
@@ -30,6 +31,7 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/post_scre
     AutoRoute(page: ProfileFriendsScreen),
     AutoRoute(page: CommentsScreen),
     AutoRoute(page: PostsScreen),
+    AutoRoute(page: LoginRegister)
   ],
 )
 class $Router {}

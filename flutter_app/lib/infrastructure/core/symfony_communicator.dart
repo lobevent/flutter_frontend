@@ -10,7 +10,7 @@ import 'exceptions.dart';
 
 class SymfonyCommunicator {
   Client client;
-  final String url = dotenv.env['ipSim']!.toString();
+  static final String url = dotenv.env['ipSim']!.toString();
   final Map<String, String> headers;
 
   SymfonyCommunicator({String jwt = CurrentLogin.jwt, Client? client})
@@ -23,7 +23,7 @@ class SymfonyCommunicator {
   /// The id (if needed) should be in the uri.
   /// Uri has to start with an backslash "/".
   Future<Response> get(String uri) async {
-    return _handleExceptions(
+    return handleExceptions(
         await client.get(Uri.parse("$url$uri"), headers: headers));
   }
 
@@ -33,7 +33,7 @@ class SymfonyCommunicator {
   /// Uri has to start with an backslash "/".
   Future<Response> post(String uri, dynamic body, [Encoding? encoding]) async {
     encoding ??= Encoding.getByName("text/plain");
-    return _handleExceptions(await client.post(Uri.parse("$url$uri"),
+    return handleExceptions(await client.post(Uri.parse("$url$uri"),
         headers: headers, body: body, encoding: encoding));
   }
 
@@ -43,7 +43,7 @@ class SymfonyCommunicator {
   /// Uri has to start with an backslash "/".
   Future<Response> put(String uri, dynamic body, [Encoding? encoding]) async {
     encoding ??= Encoding.getByName("text/plain");
-    return _handleExceptions(await client.put(Uri.parse("$url$uri"),
+    return handleExceptions(await client.put(Uri.parse("$url$uri"),
         headers: headers, body: body, encoding: encoding));
   }
 
@@ -52,12 +52,12 @@ class SymfonyCommunicator {
   /// The id (if needed) should be in the uri.
   /// Uri has to start with an backslash "/".
   Future<Response> delete(String uri) async {
-    return _handleExceptions(
+    return handleExceptions(
         await client.delete(Uri.parse("$url$uri"), headers: headers));
   }
 
   /// The [requestFunction] is an lambda function, containing a request to execute
-  Future<Response> _handleExceptions(Response response) async {
+  static Future<Response> handleExceptions(Response response) async {
     // TODO any reason to give a lambda into this? We could directly pass the response or
     // TODO subclassing the Response class (like the reddit link I did sent you)
     //tried the solution with passing -> now I get that i can call await when calling a function

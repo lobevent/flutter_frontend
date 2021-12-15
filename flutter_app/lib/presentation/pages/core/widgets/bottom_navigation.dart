@@ -22,7 +22,7 @@ class BottomNavigation extends StatelessWidget{
     NavigationOptions.invited: {'key': 2, 'route' : EventsMultilistScreenRoute()},
     NavigationOptions.ownProfile: {'key': 3, 'route' : ProfilePageRoute(profileId: UniqueId.fromUniqueString(""))},
     NavigationOptions.profileSearch: {'key': 4, 'route': ProfileSearchPageRoute()},
-    NavigationOptions.login: {'key': 5, 'route' : LoginScreenRoute()},
+    NavigationOptions.login: {'key': 5, 'route' : LoginRegisterRoute()},
     NavigationOptions.friends:{'key': 6, 'route' : ProfileFriendsScreenRoute()},
     NavigationOptions.addEvent:{'key': 7, 'route' : EventFormPageRoute()},
   };

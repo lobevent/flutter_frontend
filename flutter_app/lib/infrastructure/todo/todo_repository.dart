@@ -91,15 +91,14 @@ class TodoRepository extends ITodoRepository {
   }
 
   @override
-  Future<Either<NetWorkFailure, Item>> addProfileToItem(
-      Item item, Profile profile) async {
+  Future<bool> assignProfileToItem(Item item, Profile? profile) async {
     try {
       //try if the request can be made, if not we will get an NetworkFailure
-      return right((await _itemRemoteService.assignProfile(
-              item.id.value, profile.id.value))
-          .toDomain());
+      final bool success =
+          await _itemRemoteService.assignProfile(item.id.value, null);
+      return success;
     } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
+      return false;
     }
   }
 

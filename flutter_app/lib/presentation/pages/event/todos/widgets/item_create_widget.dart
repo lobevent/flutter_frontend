@@ -1,3 +1,4 @@
+import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -116,11 +117,13 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
               //fake profile list
               profiles: item!.profiles);
           onEdit!(editItem);
+          context.router.pop();
         } else {
           context.read<TodoCubit>().postItem(
               itemName: itemNameController.text,
               itemDescription: itemDescriptionController.text,
               todo: todo);
+          context.router.pop();
         }
       },
       //dispose();
@@ -136,5 +139,56 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
   String getItemDesc() {
     return itemDescriptionController.text = item!.description.value
         .fold((l) => l.toString(), (desc) => desc.toString());
+  }
+
+  //overlay try
+  void showOverlay(BuildContext context) {
+    //declaring and initializing the overlay state and objects
+    OverlayState overlayState = Overlay.of(context)!;
+    OverlayEntry overlayEntry;
+    overlayEntry = OverlayEntry(builder: (context) {
+      return Positioned(
+        left: MediaQuery.of(context).size.height * 0.3,
+        top: MediaQuery.of(context).size.width * 0.4,
+        child: BlocProvider(
+          create: (context) => TodoCubit(event: event),
+          child: BlocBuilder<TodoCubit, TodoState>(builder: (context, state) {
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text("Item Creation"),
+              ),
+              body: Column(
+                children: [
+                  Text(item != null ? 'Edit Item' : 'Create Item'),
+                  const SizedBox(height: 20),
+                  const Text('Itemname:'),
+                  const SizedBox(height: 20),
+                  TextField(
+                    decoration: InputDecoration(
+                        border: UnderlineInputBorder(),
+                        hintText: item != null
+                            ? getItemName()
+                            : 'Enter the Itemname'),
+                    controller: itemNameController,
+                  ),
+                  const SizedBox(height: 40),
+                  const Text('Itemdescription:'),
+                  const SizedBox(height: 20),
+                  TextField(
+                    decoration: InputDecoration(
+                        border: UnderlineInputBorder(),
+                        hintText: item != null
+                            ? getItemDesc()
+                            : 'Enter the Itemdescription'),
+                    controller: itemDescriptionController,
+                  ),
+                  actionButton(onEdit != null, context),
+                ],
+              ),
+            );
+          }),
+        ),
+      );
+    });
   }
 }

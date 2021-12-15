@@ -4,6 +4,7 @@ import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/presentation/pages/event/todos/todo_cubit/todo_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/todos/widgets/item_create_widget.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:provider/src/provider.dart';
 import 'package:auto_route/auto_route.dart';
@@ -50,8 +51,11 @@ class TodoList extends StatelessWidget {
               onEdit: (Item item) {
                 context.read<TodoCubit>().editItem(todo!, item);
               }));
-
           //context.read<TodoCubit>().editItem(todo!, item);
+        },
+        assignProf: (Item item) {
+          //add support for adding other profiles and not only the own maybe
+          context.read<TodoCubit>().assignProfile(item, null);
         },
       );
       itemElements.add(elements);

@@ -15,6 +15,7 @@ class ItemRemoteService extends RemoteService<ItemDto> {
   static const String assignProfPath = "orgalist/item/add/";
   static const String deletePath = "/orgalist/item/%itemId%";
   static const String updatePath = "/orgalist/item/%itemId%";
+  static const String assignProfilePath = "/orgalist/item/add/%itemId%";
 
   final SymfonyCommunicator client;
 
@@ -26,9 +27,10 @@ class ItemRemoteService extends RemoteService<ItemDto> {
         await client.post("$postItemPath$todoId", jsonEncode(item.toJson())));
   }
 
-  Future<ItemDto> assignProfile(String itemId, String? profileId) async {
-    return _decodeItem(
-        await client.post("$postPath$itemId" + (profileId ?? ''), ''));
+  Future<bool> assignProfile(String itemId, String? profileId) async {
+    final Response response = await client.post(
+        assignProfilePath.interpolate({"itemId": itemId}), null);
+    return response.body.isNotEmpty;
   }
 
   Future<bool> deleteItem(String itemId) async {

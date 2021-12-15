@@ -82,6 +82,11 @@ class TodoCubit extends Cubit<TodoState> {
           name: todo.name);
     })));
   }
+
+  Future<bool> assignProfile(Item item, Profile? profile) async {
+    final success = await repository.assignProfileToItem(item, null);
+    return success;
+  }
   /*
   Future<void> saveItem() async{
     return updateEditItem(() => repository.updateItem(state.item));

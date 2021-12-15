@@ -11,8 +11,6 @@ abstract class ITodoRepository {
   Future<Either<NetWorkFailure, Todo>> update(Todo todo);
   Future<Either<NetWorkFailure, Todo>> delete(Todo todo);
   Future<Either<NetWorkFailure, Item>> addItem(Todo todo, Item item);
-  Future<Either<NetWorkFailure, Item>> addProfileToItem(
-      Item item, Profile profile);
   Future<bool> deleteItem(Item item);
   Future<Either<NetWorkFailure, Item>> updateItem(Item item);
   Future<Either<NetWorkFailure, List<Item>>> getItems(Todo todo);

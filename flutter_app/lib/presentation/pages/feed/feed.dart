@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
@@ -22,7 +23,7 @@ class FeedScreen extends StatefulWidget {
 class _FeedScreenState extends State<FeedScreen> {
 
   Widget child = Text('');
-  Widget LoadingIndicator = Container();
+  Widget LoadingIndicatorOrEnd = Container();
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +32,14 @@ class _FeedScreenState extends State<FeedScreen> {
             child: BlocConsumer<FeedCubit, FeedState>(
               listener: (context, state){
                 if(state.isLoadingNew){
-                  LoadingIndicator  = CircularProgressIndicator();
+                  LoadingIndicatorOrEnd  = CircularProgressIndicator();
                 }else{
-                  LoadingIndicator = Container();
-                }
+                  if(state.endReached){
+                    LoadingIndicatorOrEnd = Text(AppStrings.endReached);
+                  }else {
+                    LoadingIndicatorOrEnd = Container();
+                  }
+          }
                 child = state.error.isSome() ? ErrorMessage(errorText: state.error.fold(() {}, (a) => a)) : generateUnscrollablePostContainer(posts: state.posts , showAutor: true);
                 setState(() {
 
@@ -57,7 +62,7 @@ class _FeedScreenState extends State<FeedScreen> {
                       child:  Column(
                           children: [
                             child,
-                            LoadingIndicator
+                            LoadingIndicatorOrEnd
                           ]), )
                   ],
                 );

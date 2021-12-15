@@ -23,7 +23,7 @@ class FeedCubit extends Cubit<FeedState> {
   Future<void> loadFeed() async {
     state.isLoading = true;
     emit(state);
-    repository.getFeed(lastPostTime: DateTime.now(), amount: 2).then((value) => value.fold(
+    repository.getFeed(lastPostTime: DateTime.now(), amount: 20).then((value) => value.fold(
             // (failure) {
             //   state.isLoading = false;
             //   state.error = some(failure.toString());
@@ -52,16 +52,22 @@ class FeedCubit extends Cubit<FeedState> {
           emit(state.copywith(isLoadingNew: false, error: some(failure.toString())));
         },
       (posts) {
-          state.posts.addAll(posts);
-          emit(state.copywith(isLoadingNew: false, posts: state.posts));
+        if(posts.length == 0){
+          emit(state.copywith(endReached: true));
+        }else {
+            state.posts.addAll(posts);
+            emit(state.copywith(isLoadingNew: false, posts: state.posts));
+          }
         }));
     //this.lastLoadedDate = state.posts.last.creationDate;
   }
   
   _scrollListener(){
-    if (controller.offset >= controller.position.maxScrollExtent - 100.0 &&
+    if (controller.offset >= controller.position.maxScrollExtent &&
         !controller.position.outOfRange) {
-        //loadMore();
+      if(!state.endReached) {
+        loadMore();
+      }
     }
     if (controller.offset <= controller.position.minScrollExtent &&
         !controller.position.outOfRange) {

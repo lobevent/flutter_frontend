@@ -40,4 +40,7 @@ class AppStrings {
   static const String visibleWithoutLoginEvent = "Without Login";
 
   static const String inviteFriends = "Invite Friends";
+
+
+  static const String endReached = "You have reached the end!";
 }

@@ -49,7 +49,7 @@ class PostRemoteService extends RemoteService<PostDto> {
   Future<List<PostDto>> getFeed(DateTime lastPostTime, int amount) async {
     return _getPostList(feedPath.interpolate({
       "amount": amount.toString(),
-      "lastPostTime": lastPostTime.toString()
+      "lastPostTime": lastPostTime.toIso8601String()
     }));
   }
 

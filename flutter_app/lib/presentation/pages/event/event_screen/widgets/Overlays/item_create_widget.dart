@@ -73,7 +73,12 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
 
   @override
   Widget build(BuildContext context) {
-          return LoadingOverlay(child: OverlayScaffold(context), isLoading: cubitContext.read<EventScreenCubit>().state.maybeMap(loading: (state) => true, orElse:() => false));
+
+    return BlocBuilder<EventScreenCubit, EventScreenState>(
+        builder: (con, st) => LoadingOverlay(child: OverlayScaffold(context), isLoading: st.maybeMap(loading: (state) => true, orElse:() => false)),
+        // this is for accessing the blocProvider from the context!!!
+        bloc: BlocProvider.of(cubitContext));
+
   }
 
 

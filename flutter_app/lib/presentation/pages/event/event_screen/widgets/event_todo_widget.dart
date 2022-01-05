@@ -7,6 +7,7 @@ import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Todos/todo_list.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/todo_overlay_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/todos/todo_cubit/todo_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
@@ -28,7 +29,7 @@ class EventTodoWidget extends StatelessWidget {
             children: [
               Text('TodoName: ${todo!.name.getOrCrash()}'),
               IconButton(
-                  onPressed: () => /*context.read<EventScreenCubit>().postItem(itemName: 'abc', itemDescription: 'itemDescription', todo: todo!),*/showOverlay(context),
+                  onPressed: () => showOverlay(context),
                   icon: const Icon(Icons.add)),
 
               /// Used as space

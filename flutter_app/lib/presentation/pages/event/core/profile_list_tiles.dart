@@ -6,6 +6,7 @@ import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/image_classes.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/gen_dialog.dart';
 
 class ProfileListTiles extends StatelessWidget {
   final Profile profile;
@@ -66,9 +67,18 @@ class ProfileListTiles extends StatelessWidget {
           IconButton(
               icon: Icon(Icons.delete_forever),
               onPressed: () {
-                deleteFriend(context).then((value) async => {
-                      if (value) onDeleteFriend!(profile) else print("falseee"),
-                    });
+                GenDialog.genericDialog(
+                        context,
+                        AppStrings.deleteFriendDialogTitle,
+                        AppStrings.deleteFriendDialogText,
+                        AppStrings.deleteFriendDialogConfirm,
+                        AppStrings.deleteFriendDialogAbort)
+                    .then((value) async => {
+                          if (value)
+                            onDeleteFriend!(profile)
+                          else
+                            print("falseee"),
+                        });
               })
         ],
       );
@@ -77,9 +87,15 @@ class ProfileListTiles extends StatelessWidget {
       return IconButton(
           icon: Icon(Icons.delete_forever),
           onPressed: () {
-            deleteFriend(context).then((value) async => {
-                  if (value) onDeleteFriend!(profile) else print("falseee"),
-                });
+            GenDialog.genericDialog(
+                    context,
+                    AppStrings.deleteFriendDialogTitle,
+                    AppStrings.deleteFriendDialogText,
+                    AppStrings.deleteFriendDialogConfirm,
+                    AppStrings.deleteFriendDialogAbort)
+                .then((value) async => {
+                      if (value) onDeleteFriend!(profile) else print("falseee"),
+                    });
           });
       //only build the send friendrequest button
     } else if (!deleteOrDeny && acceptOrSend) {
@@ -94,47 +110,5 @@ class ProfileListTiles extends StatelessWidget {
 
   void showProfile(BuildContext context) {
     context.router.push(ProfilePageRoute(profileId: profile.id));
-  }
-
-  ///ask for submition
-  Future<bool> deleteFriend(BuildContext context) async {
-    bool answer = false;
-
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(AppStrings.deleteFriendDialogTitle),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(AppStrings.deleteFriendDialogText),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              //Cpnfirmation
-              child: Text(AppStrings.deleteFriendDialogConfirm),
-              onPressed: () {
-                Navigator.of(context).pop();
-                //context.read<OwnEventsCubit>().deleteEvent();
-                answer = true;
-              },
-            ),
-            TextButton(
-              //Abortion
-              child: Text(AppStrings.deleteFriendDialogAbort),
-              onPressed: () {
-                Navigator.of(context).pop();
-                answer = false;
-              },
-            ),
-          ],
-        );
-      },
-    );
-    return answer;
   }
 }

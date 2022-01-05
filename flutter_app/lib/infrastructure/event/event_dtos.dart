@@ -51,7 +51,8 @@ class EventDto extends BaseDto with _$EventDto {
       name: event.name.getOrCrash(),
       public: event.public,
       date: event.date,
-      description: event.description!.getOrCrash(),
+      description:
+          event.description != null ? event.description!.getOrCrash() : null,
       todo: event.todo != null ? TodoDto.fromDomain(event.todo!) : null,
       creationDate: event.creationDate,
       owner: ProfileDto.fromDomain(event.owner!),
@@ -60,7 +61,8 @@ class EventDto extends BaseDto with _$EventDto {
       longitude: event.longitude,
       latitude: event.latitude,
       visibleWithoutLogin: event.visibleWithoutLogin,
-      invitations: event.invitations.map((i) => InvitationDto.fromDomain(i)).toList(),
+      invitations:
+          event.invitations.map((i) => InvitationDto.fromDomain(i)).toList(),
     );
   }
 
@@ -69,13 +71,16 @@ class EventDto extends BaseDto with _$EventDto {
 
   @override
   Event toDomain() {
-    List<Invitation> invitationL = invitations?.map<Invitation>((e) => e.toDomain() as Invitation).toList()?? <Invitation>[];
+    List<Invitation> invitationL = invitations
+            ?.map<Invitation>((e) => e.toDomain() as Invitation)
+            .toList() ??
+        <Invitation>[];
     return Event(
       id: UniqueId.fromUniqueString(id),
       name: EventName(name),
       date: date,
       description: description == null ? null : EventDescription(description!),
-      todo: todo?.toDomain(),
+      todo: todo == null ? null : todo!.toDomain(),
       owner: owner?.toDomain(),
       //TODO: don't forget this one!
       public: public,

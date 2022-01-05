@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/gen_dialog.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class EventListTiles extends StatelessWidget {
@@ -38,8 +39,14 @@ class EventListTiles extends StatelessWidget {
         IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {
-              deleteEvent(context).then((value) async =>
-                  {if (value) onDeletion!(event) else print("falseeeee")});
+              GenDialog.genericDialog(
+                      context,
+                      AppStrings.deleteEventDialogTitle,
+                      AppStrings.deleteEventDialogText,
+                      AppStrings.deleteEventDialogConfirm,
+                      AppStrings.deleteEventDialogAbort)
+                  .then((value) async =>
+                      {if (value) onDeletion!(event) else print("falseeeee")});
             }),
         IconButton(
             icon: Icon(Icons.edit), onPressed: () => {editEvent(context)}),
@@ -57,7 +64,7 @@ class EventListTiles extends StatelessWidget {
   }
 
   /// an delete event function with an alert dialog to submit
-  Future<bool> deleteEvent(BuildContext context) async {
+  /*Future<bool> deleteEvent(BuildContext context) async {
     bool answer = false;
     //Not yet implemented
     await showDialog<void>(
@@ -97,4 +104,6 @@ class EventListTiles extends StatelessWidget {
     );
     return answer;
   }
+
+   */
 }

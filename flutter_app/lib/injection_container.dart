@@ -35,6 +35,8 @@ class InjectionContainer {
     SymfonyCommunicator communicator =
         SymfonyCommunicator(jwt: token, client: Client());
 
+    getIt.registerLazySingleton(() => communicator);
+
     // register Token Service for retrieving login tokens
     getIt.registerLazySingleton(() => AuthTokenService());
 
@@ -48,21 +50,21 @@ class InjectionContainer {
         () => SignInFormCubit(authFacade: getIt<FirebaseAuthFacade>()));
 
     getIt.registerLazySingleton(() => EventRepository(
-        EventRemoteService(communicator: communicator), EventLocalService()));
+        EventRemoteService(communicator: GetIt.I<SymfonyCommunicator>()), EventLocalService()));
 
     getIt.registerLazySingleton(() => PostRepository(
-        PostRemoteService(communicator: communicator)));
+        PostRemoteService(communicator: GetIt.I<SymfonyCommunicator>())));
 
     getIt.registerLazySingleton(
       () => TodoRepository(
-        ItemRemoteService(communicator: communicator),
-        TodoRemoteService(communicator: communicator),
+        ItemRemoteService(communicator: GetIt.I<SymfonyCommunicator>()),
+        TodoRemoteService(communicator: GetIt.I<SymfonyCommunicator>()),
       ),
     );
 
     getIt.registerLazySingleton(
       () => CommentRepository(
-        CommentRemoteService(communicator: communicator),
+        CommentRemoteService(communicator: GetIt.I<SymfonyCommunicator>()),
       ),
     );
 

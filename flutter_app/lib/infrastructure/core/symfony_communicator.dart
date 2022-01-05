@@ -1,11 +1,10 @@
 import 'dart:convert';
 
-import 'package:flutter_frontend/presentation/routes/router.gr.dart'
-as _app_router;
 
 //import 'dart:html';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_frontend/core/Utils/LoginControllFunctions.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:get_it/get_it.dart';
@@ -17,9 +16,10 @@ import 'exceptions.dart';
 class SymfonyCommunicator {
   Client client;
   static final String url = dotenv.env['ipSim']!.toString();
-  final Map<String, String> headers;
+  Map<String, String> headers;
+  String? jwt;
 
-  SymfonyCommunicator({String jwt = CurrentLogin.jwt, Client? client})
+  SymfonyCommunicator({this.jwt, Client? client})
       : //assert(jwt != null, "jwt must be given"),
         headers = {"Authorization": "Bearer $jwt"},
         client = client ?? Client();
@@ -62,6 +62,14 @@ class SymfonyCommunicator {
         await client.delete(Uri.parse("$url$uri"), headers: headers));
   }
 
+
+
+  // after loging in or out it has to be resettet
+  setJwt(String token){
+    jwt = token;
+    headers = {"Authorization": "Bearer $token"};
+  }
+
   /// The [requestFunction] is an lambda function, containing a request to execute
   static Future<Response> handleExceptions(Response response) async {
     // TODO any reason to give a lambda into this? We could directly pass the response or
@@ -73,8 +81,7 @@ class SymfonyCommunicator {
     }
     switch (response.statusCode) {
       case 401:
-        GetIt.I<_app_router.Router>().popUntilRoot();(_app_router.LoginRegisterRoute());
-        GetIt.I<_app_router.Router>().replace(_app_router.LoginRegisterRoute());
+        LoginControllFunctions.logout();
         throw NotAuthenticatedException();
         break;
       case 403:
@@ -91,4 +98,6 @@ class SymfonyCommunicator {
         break; //return the baseclass for all other codes
     }
   }
+
+
 }

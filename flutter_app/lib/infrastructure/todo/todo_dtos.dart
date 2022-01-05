@@ -25,6 +25,9 @@ class TodoDto extends BaseDto with _$TodoDto {
     return TodoDto(
         id: todo.id.value,
         name: todo.name.getOrCrash(),
+        //asign description if it is not null
+        description:
+            todo.description != null ? todo.description!.getOrCrash() : '',
         orgalistItems:
             todo.items.map((item) => ItemDto.fromDomain(item)).toList());
   }

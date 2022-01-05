@@ -44,13 +44,15 @@ class TodoList extends StatelessWidget {
         },
         //edit items, pass the item
         editItemFunc: (Item item) {
-          context.router.push(ItemCreateWidgetRoute(
+          /*context.router.push(ItemCreateWidgetRoute(
               event: event,
               todo: todo!,
               item: item,
               onEdit: (Item item) {
                 context.read<TodoCubit>().editItem(todo!, item);
               }));
+
+           */
           //context.read<TodoCubit>().editItem(todo!, item);
         },
         assignProf: (Item item) {

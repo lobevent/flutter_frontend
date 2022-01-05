@@ -7,6 +7,7 @@ import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/todo_list.dart';
 import 'package:flutter_frontend/presentation/pages/event/todos/todo_cubit/todo_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
+import 'package:flutter_frontend/presentation/pages/event/todos/widgets/item_create_widget.dart';
 
 class EventTodoWidget extends StatelessWidget {
   final Todo? todo;
@@ -26,11 +27,7 @@ class EventTodoWidget extends StatelessWidget {
             children: [
               Text('TodoName: ${todo!.name.getOrCrash()}'),
               IconButton(
-                  onPressed: () => context.router.push(ItemCreateWidgetRoute(
-                        event: event,
-                        todo: todo!,
-                        //onEdit: context.read<>()
-                      )),
+                  onPressed: () => showOverlay(context),
                   icon: const Icon(Icons.add)),
 
               /// Used as space
@@ -40,5 +37,23 @@ class EventTodoWidget extends StatelessWidget {
             ],
           );
         }));
+  }
+
+  void showOverlay(BuildContext buildContext) async {
+    //initialise overlaystate and entries
+    final OverlayState overlayState = Overlay.of(buildContext)!;
+    //have to do it nullable
+    OverlayEntry? overlayEntry;
+
+    //controllers for name and desc
+    final orgaNameController = TextEditingController();
+    final orgaDescriptionController = TextEditingController();
+
+    //this is the way to work with overlays
+    overlayEntry = OverlayEntry(builder: (buildContext) {
+      return ItemCreateWidget(
+          overlayEntry: overlayEntry!, event: event, todo: todo!);
+    });
+    overlayState.insert(overlayEntry);
   }
 }

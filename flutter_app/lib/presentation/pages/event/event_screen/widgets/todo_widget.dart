@@ -13,24 +13,36 @@ import 'package:flutter_frontend/presentation/pages/event/todos/todo_cubit/todo_
 import 'package:flutter_frontend/presentation/pages/event/todos/widgets/item_create_widget.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
-class TodoWidget extends StatelessWidget {
+class TodoWidget extends StatefulWidget {
   const TodoWidget({Key? key}) : super(key: key);
 
+  @override
+  State<TodoWidget> createState() => _TodoWidgetState();
+}
+
+class _TodoWidgetState extends State<TodoWidget> {
+  late Event eventPass;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EventScreenCubit, EventScreenState>(
         builder: (context, state) {
       return state.maybeMap(
         loaded: (state) {
+          eventPass = state.event;
           //check if todoList existed; else create one
           if (state.event.todo != null) {
             return EventTodoWidget(todo: state.event.todo, event: state.event);
           }
           if (state.event.todo == null) {
             return IconButton(
-                onPressed: () => context
+                /*onPressed: () => context
                     .read<EventScreenCubit>()
                     .createOrgaEvent(state.event),
+
+                 */
+                onPressed: () {
+                  showOverlay(context);
+                },
                 icon: const Icon(Icons.public));
           } else
             return Text('');
@@ -40,5 +52,64 @@ class TodoWidget extends StatelessWidget {
         },
       );
     });
+  }
+
+  //overlay for orgalist creation
+  //we name it buildContext cause we need the cubit context also for sending orgalist to server
+  void showOverlay(BuildContext buildContext) async {
+    //initialise overlaystate and entries
+    final OverlayState overlayState = Overlay.of(buildContext)!;
+    //have to do it nullable
+    OverlayEntry? overlayEntry;
+
+    //controllers for name and desc
+    final orgaNameController = TextEditingController();
+    final orgaDescriptionController = TextEditingController();
+
+    //this is the way to work with overlays
+    overlayEntry = OverlayEntry(builder: (buildContext) {
+      return Scaffold(
+          body: Column(
+        children: [
+          Text('Create Orgalist'),
+          const SizedBox(height: 20),
+          const Text('Organame:'),
+          const SizedBox(height: 20),
+          TextField(
+            decoration: InputDecoration(
+                border: UnderlineInputBorder(), hintText: 'Enter the Organame'),
+            controller: orgaNameController,
+          ),
+          const SizedBox(height: 40),
+          const Text('OrgaList Description:'),
+          const SizedBox(height: 20),
+          TextField(
+            decoration: InputDecoration(
+                border: UnderlineInputBorder(),
+                hintText: 'Enter the Orgadescription'),
+            controller: orgaDescriptionController,
+          ),
+          IconButton(
+              onPressed: () {
+                //check for overlay so it is nullsafe
+                if (overlayEntry != null) {
+                  //remove overlay so we have to dont fuck around with routes
+                  overlayEntry.remove();
+                }
+                //create the orgalist and pass the event + inputted orgalistname +desc
+                context.read<EventScreenCubit>().createOrgaEvent(eventPass,
+                    orgaNameController.text, orgaDescriptionController.text);
+              },
+              icon: Icon(Icons.add))
+        ],
+      ));
+    });
+    //insert the entry in the state to make it accesible
+    overlayState.insert(overlayEntry);
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 }

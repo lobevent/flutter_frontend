@@ -17,7 +17,7 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/post_scre
 
 @MaterialAutoRouter(
   routes: <AutoRoute>[
-    AutoRoute(page: FeedScreen, initial: true),
+    AutoRoute(path: '/', page: FeedScreen, initial: true),
     AutoRoute(page: EventFormPage),
     AutoRoute(page: EventsMultilistScreen),
     AutoRoute(page: ItemCreateWidget),

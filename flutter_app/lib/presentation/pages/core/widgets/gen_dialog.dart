@@ -9,7 +9,7 @@ class GenDialog {
       BuildContext context, String dialogTitle, String dialogText,
       [String dialogConfirm = "Bestátigen",
       String dialogAbort = "Abbrechen",
-      bool barrierDissmissible = false]) async {
+      bool barrierDissmissible = true]) async {
     bool answer = false;
 
     await showDialog<void>(

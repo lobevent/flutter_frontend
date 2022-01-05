@@ -7,13 +7,13 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubit.dart';
 import 'package:flutter_frontend/injection_container.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart'
-    as app_router;
+    as _app_router;
 import 'package:get_it/get_it.dart';
 import 'dart:io' show Platform;
 
-//final app_router.Router appRouter = app_router.Router();
+final _app_router.Router _appRouter = _app_router.Router();
 
-//final GlobalKey<AutoRouterState> navigatorKey = new GlobalKey<AutoRouterState>();
+
 Future<void> main() async {
   if (Platform.isAndroid) {
     await dotenv.load(fileName: ".env");
@@ -21,6 +21,13 @@ Future<void> main() async {
     await dotenv.load(fileName: ".env.ios");
   }
   WidgetsFlutterBinding.ensureInitialized();
+
+
+  // save router to getIt so we can route from everywhere
+  InjectionContainer.getIt.registerLazySingleton(() => _appRouter);
+
+
+
   await Firebase.initializeApp();
   await InjectionContainer.injectDependencies();
   runApp(MyApp());
@@ -28,11 +35,12 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
 
-  final app_router.Router appRouter = app_router.Router();
+
 
 
   @override
   Widget build(BuildContext context) {
+
 
     return MultiBlocProvider(
       providers: [
@@ -40,8 +48,8 @@ class MyApp extends StatelessWidget {
             create: (context) => GetIt.I<SignInFormCubit>()),
       ],
       child: MaterialApp.router(
-          routerDelegate: appRouter.delegate(),
-          routeInformationParser: appRouter.defaultRouteParser()),
+          routerDelegate: _appRouter.delegate(),
+          routeInformationParser: _appRouter.defaultRouteParser()),
     );
     //   (
     //   title: 'Material App',

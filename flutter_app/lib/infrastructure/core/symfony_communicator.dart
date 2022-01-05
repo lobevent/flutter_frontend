@@ -1,10 +1,14 @@
 import 'dart:convert';
 
+import 'package:flutter_frontend/presentation/routes/router.gr.dart'
+as _app_router;
+
 //import 'dart:html';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 
 import '../../main.dart';
@@ -69,7 +73,8 @@ class SymfonyCommunicator {
     }
     switch (response.statusCode) {
       case 401:
-
+        GetIt.I<_app_router.Router>().popUntilRoot();(_app_router.LoginRegisterRoute());
+        GetIt.I<_app_router.Router>().replace(_app_router.LoginRegisterRoute());
         throw NotAuthenticatedException();
         break;
       case 403:

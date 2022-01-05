@@ -12,7 +12,7 @@ class LoginControllFunctions{
     GetIt.I<_app_router.Router>().replace(_app_router.LoginRegisterRoute());
   }
 
-  static setLoginStuff() async{
-    await GetIt.I<AuthTokenService>().retrieveToken().then((value) => GetIt.I<SymfonyCommunicator>().setJwt(value??''));
+  static Future<void> setLoginStuff() async{
+    GetIt.I<AuthTokenService>().retrieveToken().then((value) => GetIt.I<SymfonyCommunicator>().setJwt(value??''));
   }
 }

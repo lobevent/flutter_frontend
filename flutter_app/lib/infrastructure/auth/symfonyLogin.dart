@@ -14,9 +14,8 @@ class SymfonyLogin{
 
   // extern callable and saves token
   Future<void> login(String username, String passwort) async{
-    this.loginRequest(username, passwort).then(
+    await this.loginRequest(username, passwort).then(
             (value) {
-              var test = jsonDecode(value.body);
               GetIt.I<AuthTokenService>().safeToken(jsonDecode(value.body)["token"] as String);
             });
   }

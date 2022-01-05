@@ -3,8 +3,10 @@ import 'dart:convert';
 
 //import 'dart:html';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/core/Utils/LoginControllFunctions.dart';
+import 'package:flutter_frontend/core/services/AuthTokenService.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:get_it/get_it.dart';
@@ -69,6 +71,7 @@ class SymfonyCommunicator {
     jwt = token;
     headers = {"Authorization": "Bearer $token"};
   }
+
 
   /// The [requestFunction] is an lambda function, containing a request to execute
   static Future<Response> handleExceptions(Response response) async {

@@ -63,4 +63,8 @@ class EventScreenCubit extends Cubit<EventScreenState> {
                     date: event.date,
                     id: event.id)))));
   }
+
+
+
+
 }

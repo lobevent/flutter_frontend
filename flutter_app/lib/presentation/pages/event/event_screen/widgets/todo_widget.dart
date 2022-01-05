@@ -10,7 +10,6 @@ import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/event_todo_widget.dart';
 import 'package:flutter_frontend/presentation/pages/event/todos/todo_cubit/todo_cubit.dart';
-import 'package:flutter_frontend/presentation/pages/event/todos/widgets/item_create_widget.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class TodoWidget extends StatefulWidget {

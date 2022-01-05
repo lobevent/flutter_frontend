@@ -25,6 +25,13 @@ class PhoneVerificationNotStarted extends AuthError {
   }
 }
 
+class LogicError extends Error{
+  @override
+  String toString() {
+    return "The program should never got here!";
+  }
+}
+
 class UnexpectedValueError extends Error {
   final ValueFailure valueFailure;
 

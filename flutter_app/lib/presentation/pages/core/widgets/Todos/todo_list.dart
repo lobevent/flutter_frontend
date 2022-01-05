@@ -3,13 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/Todos/item_element_widget.dart';
 import 'package:flutter_frontend/presentation/pages/event/todos/todo_cubit/todo_cubit.dart';
-import 'package:flutter_frontend/presentation/pages/event/todos/widgets/item_create_widget.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:provider/src/provider.dart';
 import 'package:auto_route/auto_route.dart';
 
-import '../../event/todos/widgets/item_element_widget.dart';
+
 
 class TodoList extends StatelessWidget {
   final Event event;

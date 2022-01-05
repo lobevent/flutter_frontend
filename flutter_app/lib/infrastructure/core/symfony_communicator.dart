@@ -4,8 +4,10 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
+import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:http/http.dart';
 
+import '../../main.dart';
 import 'exceptions.dart';
 
 class SymfonyCommunicator {
@@ -67,6 +69,7 @@ class SymfonyCommunicator {
     }
     switch (response.statusCode) {
       case 401:
+
         throw NotAuthenticatedException();
         break;
       case 403:

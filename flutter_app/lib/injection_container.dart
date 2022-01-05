@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubit.dart';
+import 'package:flutter_frontend/core/services/AuthTokenService.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:flutter_frontend/infrastructure/auth/firebase_auth_facade.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
@@ -17,6 +18,7 @@ import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 
+import 'infrastructure/auth/symfonyLogin.dart';
 import 'infrastructure/profile/profile_remote_service.dart';
 import 'infrastructure/profile/profile_repository.dart';
 
@@ -26,8 +28,17 @@ class InjectionContainer {
   static final GetIt getIt = GetIt.I; // equal to: GetIt.instance;
 
   static Future<void> injectDependencies() async {
+
+    AuthTokenService tokenService = AuthTokenService();
+    String token = await tokenService.retrieveToken() ?? '';
+
     SymfonyCommunicator communicator =
-        SymfonyCommunicator(jwt: CurrentLogin.jwt, client: Client());
+        SymfonyCommunicator(jwt: token, client: Client());
+
+    // register Token Service for retrieving login tokens
+    getIt.registerLazySingleton(() => AuthTokenService());
+
+
 
     getIt.registerLazySingleton<FirebaseAuthFacade>(() => FirebaseAuthFacade(
         FirebaseAuth.instance,

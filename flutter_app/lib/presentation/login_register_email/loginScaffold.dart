@@ -8,8 +8,9 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController textEditingController = TextEditingController();
-    return BlocBuilder<LoginRegisterCubit, LoginRegisterState>(builder: (context, state) {
+    TextEditingController textEditingControllerUsername = TextEditingController();
+    TextEditingController textEditingControllerPassword = TextEditingController();
+    return BlocBuilder<LoginRegisterCubit, LoginRegisterState>(builder: (context1, state) {
       return BasicContentContainer(children: [
         Column(children: [
           Text("Login"),
@@ -17,7 +18,7 @@ class Login extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(10),
             child: TextField(
-              controller: textEditingController,
+              controller: textEditingControllerUsername,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Email or username',
@@ -31,7 +32,7 @@ class Login extends StatelessWidget {
                 obscureText: true,
                 enableSuggestions: false,
                 autocorrect: false,
-                controller: textEditingController,
+                controller: textEditingControllerPassword,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Email or username',
@@ -40,7 +41,7 @@ class Login extends StatelessWidget {
           Padding(
               padding: const EdgeInsets.all(10),
               child: TextWithIconButton(
-                onPressed: () => {},
+                onPressed: () => {context1.read<LoginRegisterCubit>().login(textEditingControllerPassword.value.text, textEditingControllerUsername.value.text)},
                 text: "Login",
                 icon: Icons.login,
               ))

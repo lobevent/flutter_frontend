@@ -1,4 +1,7 @@
+import 'package:flutter_frontend/data/storage_strings.dart';
+
 class Constants {
+
   // value validator constants
   static const int maxTextLength = 500;
   static const int maxNameLength = 100;

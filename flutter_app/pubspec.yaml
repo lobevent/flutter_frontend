@@ -25,7 +25,7 @@ dependencies:
   dartz: ^0.10.0-nullsafety.1
 
   # standard dart http library
-  http: ^0.13.1
+  http: ^0.13.4
 
   # bloc library in general (Cubit and Bloc)
   bloc: ^8.0.1
@@ -89,6 +89,9 @@ dependencies:
 
   # set .env variable for emulator
   flutter_dotenv: ^5.0.2
+
+  # pick image from gallery
+  image_picker: ^0.8.4+4
 
 
 dev_dependencies:

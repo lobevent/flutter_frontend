@@ -7,6 +7,9 @@ class Constants {
   static const int minProfilenameLength = 4;
   static const int maxProfilenameLength = 40;
 
+  static const int maxImageLength = 65519;
+  
+
   static const int maximumProfilesTodoLength = 500;
 
   // asset paths

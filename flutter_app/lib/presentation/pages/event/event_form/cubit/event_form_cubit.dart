@@ -10,9 +10,11 @@ import 'package:flutter_frontend/domain/profile/i_profile_repository.dart'
     as profileOps;
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
+import 'package:flutter_frontend/infrastructure/file/file_repository.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'event_form_cubit.freezed.dart';
 part 'event_form_state.dart';
@@ -27,6 +29,7 @@ class EventFormCubit extends Cubit<EventFormState> {
 
   ProfileRepository profileRepository = GetIt.I<ProfileRepository>();
   EventRepository repository = GetIt.I<EventRepository>();
+  FileRepository fileRepository = GetIt.I<FileRepository>();
 
 
 
@@ -147,5 +150,9 @@ class EventFormCubit extends Cubit<EventFormState> {
   Event removeNoneFriends(Event event, List<Profile> friends){
     event.invitations.removeWhere((invitation) => !friends.map((i) => i.id.value).contains(invitation.profile.id.value));
     return event;
+  }
+
+  Future<void> chooseImage(Event event) async {
+    emit(state.copyWith(event: state.event.copyWith(image: await fileRepository.getImage())));
   }
 }

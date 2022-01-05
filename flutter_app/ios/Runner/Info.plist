@@ -39,6 +39,12 @@
 	<string>This app needs access to location when in the background.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open and in the background.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to the Photo Library to pick a photo.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs access to the camera to take a photo.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app needs access to access the microphone, if you take a video.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

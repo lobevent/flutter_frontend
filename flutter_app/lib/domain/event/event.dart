@@ -7,6 +7,7 @@ import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'event.freezed.dart';
 
@@ -22,6 +23,7 @@ class Event with _$Event {
       required DateTime date,
       EventDescription? description,
       required DateTime creationDate,
+      XFile? image,
       Todo? todo,
       Profile? owner,
       required bool public,

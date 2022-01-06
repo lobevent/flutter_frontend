@@ -16,29 +16,31 @@ class Login extends StatelessWidget {
         Column(children: [
           Text("Login"),
           // email Field
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: TextField(
-              controller: textEditingControllerUsername,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Email or username',
-              ),
-            ),
-          ),
+          FullWidthPaddingInput(labelText:  'Email or Username', controller: textEditingControllerUsername),
+          FullWidthPaddingInput(labelText:  'Password', controller: textEditingControllerPassword),
+          // Padding(
+          //   padding: const EdgeInsets.all(10),
+          //   child: TextField(
+          //     controller: textEditingControllerUsername,
+          //     decoration: const InputDecoration(
+          //       border: OutlineInputBorder(),
+          //       labelText: 'Email or username',
+          //     ),
+          //   ),
+          // ),
           // password field
-          Padding(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                controller: textEditingControllerPassword,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Email or username',
-                ),
-              )),
+          // Padding(
+          //     padding: const EdgeInsets.all(10),
+          //     child: TextField(
+          //       obscureText: true,
+          //       enableSuggestions: false,
+          //       autocorrect: false,
+          //       controller: textEditingControllerPassword,
+          //       decoration: const InputDecoration(
+          //         border: OutlineInputBorder(),
+          //         labelText: 'Email or username',
+          //       ),
+          //     )),
           Padding(
               padding: const EdgeInsets.all(10),
               child: TextWithIconButton(

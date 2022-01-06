@@ -8,7 +8,6 @@ import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Todos/todo_list.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/todo_overlay_cubit.dart';
-import 'package:flutter_frontend/presentation/pages/event/todos/todo_cubit/todo_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 import 'Overlays/item_create_widget.dart';
@@ -28,10 +27,10 @@ class EventTodoWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('TodoName: ${todo!.name.getOrCrash()}'),
+              // the create item button, for showing overlay
               IconButton(
                   onPressed: () => showOverlay(context),
                   icon: const Icon(Icons.add)),
-
               /// Used as space
               const SizedBox(height: 20),
 
@@ -43,16 +42,13 @@ class EventTodoWidget extends StatelessWidget {
   void showOverlay(BuildContext buildContext) async {
     //initialise overlaystate and entries
     final OverlayState overlayState = Overlay.of(buildContext)!;
+
     //have to do it nullable
     OverlayEntry? overlayEntry;
 
-    //controllers for name and desc
-    final orgaNameController = TextEditingController();
-    final orgaDescriptionController = TextEditingController();
-
     //this is the way to work with overlays
     overlayEntry = OverlayEntry(builder: (context) {
-      return ItemCreateWidget(overlayEntry: overlayEntry!, event: event, todo: todo!, cubitContext: buildContext);
+      return ItemCreateWidget(overlayEntry: overlayEntry!, todo: todo!, cubitContext: buildContext);
     });
     overlayState.insert(overlayEntry);
   }

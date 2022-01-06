@@ -1,4 +1,5 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
+import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -6,26 +7,25 @@ import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/todo/item_remote_service.dart';
+import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/todo_overlay_cubit.dart';
-import 'package:flutter_frontend/presentation/pages/event/todos/todo_cubit/todo_cubit.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
 
 
 class ItemCreateWidget extends StatefulWidget {
   final OverlayEntry overlayEntry;
-  final Event event;
   final Todo todo;
   final Item? item;
   //function for editing item or posting new item
   final Function(Item item)? onEdit;
   final BuildContext cubitContext;
 
-  const ItemCreateWidget(
+  const   ItemCreateWidget(
       {Key? key,
       required this.overlayEntry,
-      required this.event,
       required this.todo,
       this.item,
       this.onEdit,
@@ -34,7 +34,7 @@ class ItemCreateWidget extends StatefulWidget {
 
   @override
   _ItemCreateWidgetState createState() =>
-      _ItemCreateWidgetState(event, todo, item, onEdit, overlayEntry, cubitContext);
+      _ItemCreateWidgetState( todo, item, onEdit, overlayEntry, cubitContext);
 }
 
 class _ItemCreateWidgetState extends State<ItemCreateWidget> {
@@ -43,14 +43,12 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
   String itemDescription = '';
   final itemNameController = TextEditingController();
   final itemDescriptionController = TextEditingController();
-  final Event event;
   final Todo todo;
   final Item? item;
   final Function(Item item)? onEdit;
   final BuildContext cubitContext;
 
-  _ItemCreateWidgetState(
-      this.event, this.todo, this.item, this.onEdit, this.overlayEntry, this.cubitContext);
+  _ItemCreateWidgetState(this.todo, this.item, this.onEdit, this.overlayEntry, this.cubitContext);
 
   @override
   void initState() {
@@ -83,73 +81,54 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
 
 
   Widget OverlayScaffold(BuildContext context){
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Item Creation"),
-      ),
-      body: Column(
-        children: [
-          Text(item != null ? 'Edit Item' : 'Create Item'),
-          const SizedBox(height: 20),
-          const Text('Itemname:'),
-          const SizedBox(height: 20),
-          TextField(
-            decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText:
-                item != null ? getItemName() : 'Enter the Itemname'),
-            controller: itemNameController,
-          ),
-          const SizedBox(height: 40),
-          const Text('Itemdescription:'),
-          const SizedBox(height: 20),
-          TextField(
-            decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: item != null
-                    ? getItemDesc()
-                    : 'Enter the Itemdescription'),
-            controller: itemDescriptionController,
-          ),
-          actionButton(onEdit != null, context, overlayEntry),
-        ],
-      ),
+    return ColorfulSafeArea(child:
+        Scaffold(
+        body: Column(
+          children: [
+            Text(item != null ? 'Edit Item' : 'Create Item'),
+            const SizedBox(height: 20),
+            const Text('Itemname:'),
+            const SizedBox(height: 20),
+            TextField(
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText:
+                  item != null ? getItemName() : 'Enter the Itemname'),
+              controller: itemNameController,
+            ),
+            const SizedBox(height: 40),
+            const Text('Itemdescription:'),
+            const SizedBox(height: 20),
+            TextField(
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: item != null
+                      ? getItemDesc()
+                      : 'Enter the Itemdescription'),
+              controller: itemDescriptionController,
+            ),
+            actionButton(onEdit != null, context, overlayEntry),
+          ],
+        ),
+        )
     );
   }
 
   Widget actionButton(
       bool edit, BuildContext context, OverlayEntry overlayEntry) {
-    return MaterialButton(
-      color: Colors.blue,
-      textColor: Colors.white,
+    return StdTextButton(
       onPressed: () {
         if (edit) {
-          /*
-          if (overlayEntry != null) {
-            //remove overlay so we have to dont fuck around with routes
-            overlayEntry.remove();
-          }
-
-           */
-
-          ///
-          final Item editItem = Item(
-              id: item!.id,
-              name: ItemName(itemNameController.text),
-              description: ItemDescription(itemDescriptionController.text),
-              maxProfiles: item!.maxProfiles == null
-                  ? ItemMaxProfiles(3)
-                  : item!.maxProfiles!,
-              //fake profile list
-              profiles: item!.profiles);
-          onEdit!(editItem);
-          //context.router.pop();
+          // call the onEdit function, and copy previus Item with the new text!
+          onEdit!(item!.copyWith(name: ItemName(itemNameController.text), description: ItemDescription(itemDescriptionController.text)));
         } else {
           if (overlayEntry != null) {
             cubitContext.read<EventScreenCubit>().postItem(
                 itemName: itemNameController.text,
                 itemDescription: itemDescriptionController.text,
-                todo: todo).then((value) => overlayEntry.remove());
+                todo: todo)
+                // first save item, then remove overlay
+                .then((value) => overlayEntry.remove());
             //remove overlay so we have to dont fuck around with routes
 
           }
@@ -157,7 +136,7 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
         }
       },
       //dispose();
-      child: Text(item != null ? 'Edit Item' : 'Create Item'),
+      child: Text(item != null ? 'Edit Item' : 'Create Item', style: TextStyle(color: AppColors.stdTextColor)),
     );
   }
 

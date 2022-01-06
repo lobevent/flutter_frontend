@@ -11,7 +11,7 @@ class Item with _$Item {
 
   const factory Item({
     required UniqueId id,
-    required List<Profile>? profiles,
+    List<Profile>? profiles,
     ItemMaxProfiles? maxProfiles,
     required ItemName name,
     required ItemDescription description,

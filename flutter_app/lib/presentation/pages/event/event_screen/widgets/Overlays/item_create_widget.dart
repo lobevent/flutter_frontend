@@ -50,19 +50,12 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
   @override
   void initState() {
     super.initState();
-
-    // Start listening to changes.
-
-    // itemNameController.addListener(_printLatestValue);
-    // itemDescriptionController.addListener(_printLatestValue);
   }
 
   @override
   void dispose() {
     // Clean up the controller when the widget is removed from the
     // widget tree.
-    //itemNameController.dispose();
-    //itemDescriptionController.dispose();
     super.dispose();
   }
 
@@ -129,21 +122,6 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
     );
   }
 
-
-  // String getItemName() {
-  //   // return itemNameController.text =
-  //   //     item!.name.value.fold((l) => l.toString(), (name) => name.toString());
-  //   return itemNameController.text =
-  //       item!.name.value.fold((l) => l.toString(), (name) => name.toString());
-  // }
-  //
-  // String getItemDesc() {
-  //   return itemDescriptionController.text = item!.description.value
-  //       .fold((l) => l.toString(), (desc) => desc.toString());
-  //   return itemDescriptionController.text = item!.description.value
-  //       .fold((l) => l.toString(), (desc) => desc.toString());
-  //
-  // }
 
 
   void _setTextControllerValues(){

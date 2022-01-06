@@ -10,7 +10,7 @@ import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/eve
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/todo_overlay_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
-import 'Overlays/item_create_widget.dart';
+import 'Overlays/item_create_form.dart';
 
 class EventTodoWidget extends StatelessWidget {
   final Todo? todo;

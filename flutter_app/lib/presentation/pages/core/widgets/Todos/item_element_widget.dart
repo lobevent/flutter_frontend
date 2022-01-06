@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
 
-class ItemElementWidget extends StatelessWidget {
+class ItemElementWidget extends StatefulWidget {
   final Item item;
   final String name;
   final String description;
@@ -23,23 +23,32 @@ class ItemElementWidget extends StatelessWidget {
       this.assignProf});
 
   @override
+  State<ItemElementWidget> createState() => _ItemElementWidgetState();
+}
+
+class _ItemElementWidgetState extends State<ItemElementWidget> {
+
+  bool isDeleting = false;
+
+  @override
   Widget build(BuildContext context) {
-    return buildListtile(editItemFunc != null);
+    return buildListtile(widget.editItemFunc != null);
   }
 
   //seperate to fix the editItem
   Widget buildListtile(bool editItem) {
     return ListTile(
+      tileColor: isDeleting? Color(0x28FF0000) :null,
       leading: const FlutterLogo(), //Todo Userlogos displayed here
-      title: Text(name),
-      subtitle: Text(description + "\n" + profileNames(item.profiles!)),
-      trailing: actionButtons(deleteItemFunc != null),
+      title: Text(widget.name),
+      subtitle: Text(widget.description + "\n" + profileNames(widget.item.profiles!)),
+      trailing: actionButtons(widget.deleteItemFunc != null),
       onTap: () {
-        editItemFunc!(item);
+        widget.editItemFunc!(widget.item);
       },
       onLongPress: () {
         //assign profile to todo item
-        assignProf!(item);
+        widget.assignProf!(widget.item);
       },
     );
   }
@@ -56,8 +65,11 @@ class ItemElementWidget extends StatelessWidget {
 
   Widget actionButtons(bool deleteItem) {
     return IconButton(
+
         onPressed: () {
-          deleteItemFunc!(item);
+          this.isDeleting = true;
+          if(!isDeleting) widget.deleteItemFunc!(widget.item);
+          setState(() {});
         },
         icon: Icon(Icons.delete));
   }

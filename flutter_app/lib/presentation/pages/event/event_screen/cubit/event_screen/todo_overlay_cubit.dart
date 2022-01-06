@@ -25,9 +25,8 @@ extension TodoOverlayCubit on EventScreenCubit {
   Future<void> postItem({required String itemName, required String itemDescription, required Todo todo}) async {
     // new generated Item
     final Item newItem =
-        Item(id: UniqueId(), name: ItemName(itemName), description: ItemDescription(itemDescription));
-            //, maxProfiles: ItemMaxProfiles(3),); //what do we have this for????
-            // //fake profile list
+        Item(id: UniqueId(), name: ItemName(itemName), description: ItemDescription(itemDescription), maxProfiles: ItemMaxProfiles(3),);
+            // //fake profile list //what do we have this for????
             // profiles: [Profile(id: UniqueId(), name: ProfileName("fake2")), Profile(id: UniqueId(), name: ProfileName("fake3"))]);
 
     await state.maybeMap(

@@ -331,8 +331,9 @@ class GenericSearchBar extends StatelessWidget {
 class FullWidthPaddingInput extends StatelessWidget{
   final TextEditingController? controller;
   final String? labelText;
+  final String? hintText;
 
-  FullWidthPaddingInput({this.controller, this.labelText});
+  FullWidthPaddingInput({this.controller, this.labelText, this.hintText});
 
   @override
   Widget build(BuildContext context) {
@@ -341,6 +342,7 @@ class FullWidthPaddingInput extends StatelessWidget{
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
+          hintText: hintText,
           border: const OutlineInputBorder(),
           labelText: labelText,
         ),

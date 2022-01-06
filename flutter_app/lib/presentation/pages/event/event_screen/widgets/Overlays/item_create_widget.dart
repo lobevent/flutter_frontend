@@ -1,18 +1,15 @@
-import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/domain/todo/value_objects.dart';
-import 'package:flutter_frontend/infrastructure/todo/item_remote_service.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/todo_overlay_cubit.dart';
-import 'package:flutter_frontend/domain/todo/item.dart';
 
 
 class ItemCreateWidget extends StatefulWidget {
@@ -71,6 +68,8 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // sets the vaules its edit
+    _setTextControllerValues();
 
     return BlocBuilder<EventScreenCubit, EventScreenState>(
         builder: (con, st) => LoadingOverlay(child: OverlayScaffold(context), isLoading: st.maybeMap(loading: (state) => true, orElse:() => false)),
@@ -81,36 +80,26 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
 
 
   Widget OverlayScaffold(BuildContext context){
-    return ColorfulSafeArea(child:
-        Scaffold(
-        body: Column(
-          children: [
-            Text(item != null ? 'Edit Item' : 'Create Item'),
-            const SizedBox(height: 20),
-            const Text('Itemname:'),
-            const SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText:
-                  item != null ? getItemName() : 'Enter the Itemname'),
-              controller: itemNameController,
-            ),
-            const SizedBox(height: 40),
-            const Text('Itemdescription:'),
-            const SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: item != null
-                      ? getItemDesc()
-                      : 'Enter the Itemdescription'),
-              controller: itemDescriptionController,
-            ),
-            actionButton(onEdit != null, context, overlayEntry),
-          ],
-        ),
-        )
+    // make the overlay dismissible, so it can be swiped away
+    return Dismissible(
+        onDismissed: (dismissDirection) => overlayEntry.remove() ,
+        direction: DismissDirection.vertical,
+        key: Key(''),
+        child: ColorfulSafeArea(child:
+          Scaffold(
+          body: Column(
+            children: [
+              const SizedBox(height: 20),
+              Text(item != null ? 'Edit Item' : 'Create Item', style: Theme.of(context).textTheme.headline3,),
+              const SizedBox(height: 20),
+              FullWidthPaddingInput(controller:  itemNameController, labelText: 'Enter the Itemname'),
+              const SizedBox(height: 20),
+              FullWidthPaddingInput(controller:  itemDescriptionController, labelText: 'Enter the Itemdescription'),
+              actionButton(onEdit != null, context, overlayEntry),
+            ],
+          ),
+          )
+      )
     );
   }
 
@@ -140,14 +129,30 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
     );
   }
 
-  String getItemName() {
-    return itemNameController.text =
-        item!.name.value.fold((l) => l.toString(), (name) => name.toString());
-  }
 
-  String getItemDesc() {
-    return itemDescriptionController.text = item!.description.value
-        .fold((l) => l.toString(), (desc) => desc.toString());
+  // String getItemName() {
+  //   // return itemNameController.text =
+  //   //     item!.name.value.fold((l) => l.toString(), (name) => name.toString());
+  //   return itemNameController.text =
+  //       item!.name.value.fold((l) => l.toString(), (name) => name.toString());
+  // }
+  //
+  // String getItemDesc() {
+  //   return itemDescriptionController.text = item!.description.value
+  //       .fold((l) => l.toString(), (desc) => desc.toString());
+  //   return itemDescriptionController.text = item!.description.value
+  //       .fold((l) => l.toString(), (desc) => desc.toString());
+  //
+  // }
+
+
+  void _setTextControllerValues(){
+    if(onEdit != null){
+      itemDescriptionController.text = item!.description.value
+          .fold((l) => l.toString(), (desc) => desc.toString());
+      itemNameController.text =
+          item!.name.value.fold((l) => l.toString(), (name) => name.toString());
+    }
   }
 
 

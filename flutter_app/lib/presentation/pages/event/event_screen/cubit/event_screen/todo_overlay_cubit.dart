@@ -88,8 +88,28 @@ extension TodoOverlayCubit on EventScreenCubit {
         orElse: () => throw LogicError());
   }
 
-  Future<bool> assignProfile(Item item, Profile? profile) async {
-    final success = await todoRepository.assignProfileToItem(item, null);
-    return success;
+  Future<void> assignProfile(Item item, Profile? profile) async {
+    state.maybeMap(
+        loaded: (loadedState) async {
+          // await the deleteion
+          bool success = await todoRepository.assignProfileToItem(item, null);
+          if (success) {
+            // emit the loading state, so we can trigger an state change
+            emit(EventScreenState.loading());
+            //and then remove the item and emit new state with the item deleted
+            int itemPos = loadedState.event.todo!.items.indexWhere((i) => i.id.value == item.id.value);
+            // TODO: we have to retrieve our own profile somehow, and allow user to add other profiles if they are host
+            loadedState.event.todo!.items[itemPos].profiles?.add(Profile(id: UniqueId(), name: ProfileName('Its Mee')));
+
+            emit(EventScreenState.loaded(event: loadedState.event));
+          } else {
+            // TODO: Fix this garbage! Never return booleans from requests, what if we have an networkfailure? The user will never know which??
+            emit(EventScreenState.error(failure: NetWorkFailure.unexpected()));
+          }
+        },
+        orElse: () => {});
+    //
+    // final success = await todoRepository.assignProfileToItem(item, null);
+    // return success;
   }
 }

@@ -39,8 +39,9 @@ class _ItemElementWidgetState extends State<ItemElementWidget> {
   Widget buildListtile(bool editItem) {
     return ListTile(
       tileColor: isDeleting? Color(0x28FF0000) :null,
-      leading: const FlutterLogo(), //Todo Userlogos displayed here
-      title: Text(widget.name),
+      leading: Icon(Icons.check_circle_outline_outlined), //Todo Userlogos displayed here
+      title: Text(widget.name), //the name of the todoitem
+      // the assigned profiles
       subtitle: Text(widget.description + "\n" + profileNames(widget.item.profiles!)),
       trailing: actionButtons(widget.deleteItemFunc != null),
       onTap: () {
@@ -53,6 +54,7 @@ class _ItemElementWidgetState extends State<ItemElementWidget> {
     );
   }
 
+  // extract the assigned profile names
   String profileNames(List<Profile> profiles) {
     String profileNameList = "";
     for (var i = 0; i < profiles.length; i++) {
@@ -68,6 +70,7 @@ class _ItemElementWidgetState extends State<ItemElementWidget> {
 
         onPressed: () {
           this.isDeleting = true;
+          //deactivate button if deleting is alredy ongoing
           if(!isDeleting) widget.deleteItemFunc!(widget.item);
           setState(() {});
         },

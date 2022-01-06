@@ -69,9 +69,9 @@ class _ItemElementWidgetState extends State<ItemElementWidget> {
     return IconButton(
 
         onPressed: () {
-          this.isDeleting = true;
           //deactivate button if deleting is alredy ongoing
           if(!isDeleting) widget.deleteItemFunc!(widget.item);
+          this.isDeleting = true;
           setState(() {});
         },
         icon: Icon(Icons.delete));

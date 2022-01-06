@@ -17,7 +17,7 @@ class Login extends StatelessWidget {
           Text("Login"),
           // email Field
           FullWidthPaddingInput(labelText:  'Email or Username', controller: textEditingControllerUsername),
-          FullWidthPaddingInput(labelText:  'Password', controller: textEditingControllerPassword),
+          FullWidthPaddingInput(labelText:  'Password', controller: textEditingControllerPassword, password: true,),
           // Padding(
           //   padding: const EdgeInsets.all(10),
           //   child: TextField(

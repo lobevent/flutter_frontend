@@ -1,8 +1,15 @@
+library stlyling_widgets;
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
+
+export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/dismissible_overlay.dart';
+
+
+
 //TODO: Move this all to seperate files
+
 
 
 const double paddingLeftConst = 30;

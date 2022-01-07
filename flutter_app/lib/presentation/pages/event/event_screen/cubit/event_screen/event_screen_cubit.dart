@@ -45,22 +45,7 @@ class EventScreenCubit extends Cubit<EventScreenState> {
     todoRepository.createOrga(event, newTodo).then((todoOrFailure) =>
         todoOrFailure.fold(
             (failure) => emit(EventScreenState.error(failure: failure)),
-            (todo) => emit(EventScreenState.loaded(
-                event: Event(
-                    todo: todo,
-                    owner: event.owner,
-                    attendingCount: event.attendingCount,
-                    status: event.status,
-                    latitude: event.latitude,
-                    longitude: event.longitude,
-                    description: event.description,
-                    name: event.name,
-                    invitations: event.invitations,
-                    creationDate: event.creationDate,
-                    public: event.public,
-                    visibleWithoutLogin: event.visibleWithoutLogin,
-                    date: event.date,
-                    id: event.id)))));
+            (todo) => emit(EventScreenState.loaded(event: event.copyWith(todo: todo)))));
   }
 
 

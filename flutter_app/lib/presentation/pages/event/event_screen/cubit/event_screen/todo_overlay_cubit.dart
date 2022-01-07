@@ -2,24 +2,15 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
-import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
-import 'package:get_it/get_it.dart';
 
 extension TodoOverlayCubit on EventScreenCubit {
-  //TodoOverlayCubit(UniqueId id) : super(id);
 
-  // Future<void> loadTodoList(Event eventId) async {
-  //   Either<NetWorkFailure, Todo> response = await todoRepository.getTodoList(event);
-  //
-  //   response.fold((failure) => emit(TodoState.error(failure: failure)),
-  //           (todo) => emit(TodoState.loaded(todo: todo)));
-  // }
 
   ///CRUD
   Future<void> postItem({required String itemName, required String itemDescription, required Todo todo}) async {
@@ -31,6 +22,7 @@ extension TodoOverlayCubit on EventScreenCubit {
 
     await state.maybeMap(
         loaded: (value) async {
+          //emit loading state so an change is triggered
           emit(EventScreenState.loading());
           await todoRepository.addItem(todo, newItem).then((itemOrFailure) => itemOrFailure.fold(
                   // if we have an failure make an add EditItem Failure state, where the event is preserved
@@ -39,9 +31,7 @@ extension TodoOverlayCubit on EventScreenCubit {
                   (item) {
                 //add item to the eventOrgalist
                 value.event.todo!.items.add(item);
-                //emit loading state so an change is triggered
-
-                emit(value.copyWith());
+                emit(value);
               }));
         },
         // if we are not in the loaded state we have an error, we should not be here
@@ -108,8 +98,6 @@ extension TodoOverlayCubit on EventScreenCubit {
           }
         },
         orElse: () => {});
-    //
-    // final success = await todoRepository.assignProfileToItem(item, null);
-    // return success;
   }
+
 }

@@ -18,29 +18,6 @@ class Login extends StatelessWidget {
           // email Field
           FullWidthPaddingInput(labelText:  'Email or Username', controller: textEditingControllerUsername),
           FullWidthPaddingInput(labelText:  'Password', controller: textEditingControllerPassword, password: true,),
-          // Padding(
-          //   padding: const EdgeInsets.all(10),
-          //   child: TextField(
-          //     controller: textEditingControllerUsername,
-          //     decoration: const InputDecoration(
-          //       border: OutlineInputBorder(),
-          //       labelText: 'Email or username',
-          //     ),
-          //   ),
-          // ),
-          // password field
-          // Padding(
-          //     padding: const EdgeInsets.all(10),
-          //     child: TextField(
-          //       obscureText: true,
-          //       enableSuggestions: false,
-          //       autocorrect: false,
-          //       controller: textEditingControllerPassword,
-          //       decoration: const InputDecoration(
-          //         border: OutlineInputBorder(),
-          //         labelText: 'Email or username',
-          //       ),
-          //     )),
           Padding(
               padding: const EdgeInsets.all(10),
               child: TextWithIconButton(

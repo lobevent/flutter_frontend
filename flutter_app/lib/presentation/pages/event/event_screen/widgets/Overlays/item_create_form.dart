@@ -1,6 +1,5 @@
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/dismissible_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/todo_overlay_cubit.dart';
 
@@ -74,12 +74,8 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
 
   Widget OverlayScaffold(BuildContext context){
     // make the overlay dismissible, so it can be swiped away
-    return Dismissible(
-        onDismissed: (dismissDirection) => overlayEntry.remove() ,
-        direction: DismissDirection.vertical,
-        key: Key(''),
-        child: ColorfulSafeArea(child:
-          Scaffold(
+    return DismissibleOverlay(overlayEntry: overlayEntry,
+          child: Scaffold(
           body: Column(
             children: [
               const SizedBox(height: 20),
@@ -92,8 +88,7 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
             ],
           ),
           )
-      )
-    );
+      );
   }
 
   Widget actionButton(
@@ -112,12 +107,10 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
                 // first save item, then remove overlay
                 .then((value) => overlayEntry.remove());
             //remove overlay so we have to dont fuck around with routes
-
           }
-
         }
       },
-      //dispose();
+
       child: Text(item != null ? 'Edit Item' : 'Create Item', style: TextStyle(color: AppColors.stdTextColor)),
     );
   }

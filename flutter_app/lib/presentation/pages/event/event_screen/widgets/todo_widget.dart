@@ -8,6 +8,7 @@ import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/Overlays/todolist_form.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/event_todo_widget.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
@@ -30,15 +31,14 @@ class _TodoWidgetState extends State<TodoWidget> {
           if (state.event.todo != null) {
             return EventTodoWidget(todo: state.event.todo, event: state.event);
           }
-          if (state.event.todo == null) {
-            // create todo List button
+          else {
+            // create todolist button
             return IconButton(
                 onPressed: () {
                   showCreateTodoListOverlay(context);
                 },
                 icon: const Icon(Icons.public));
-          } else
-            return Text('');
+          }
         },
         orElse: () {
           return const Text('');
@@ -56,42 +56,12 @@ class _TodoWidgetState extends State<TodoWidget> {
     OverlayEntry? overlayEntry;
 
     //controllers for name and desc
-    final orgaNameController = TextEditingController();
-    final orgaDescriptionController = TextEditingController();
+
 
     //this is the way to work with overlays
-    overlayEntry = OverlayEntry(builder: (buildContext) {
-      return Scaffold(
-          body: Column(
-        children: [
-          Text('Create Orgalist'),
-          const SizedBox(height: 20),
-          const Text('Organame:'),
-          const SizedBox(height: 20),
-          TextField(
-            decoration: InputDecoration(border: UnderlineInputBorder(), hintText: 'Enter the Organame'),
-            controller: orgaNameController,
-          ),
-          const SizedBox(height: 40),
-          const Text('OrgaList Description:'),
-          const SizedBox(height: 20),
-          TextField(
-            decoration: InputDecoration(border: UnderlineInputBorder(), hintText: 'Enter the Orgadescription'),
-            controller: orgaDescriptionController,
-          ),
-          IconButton(
-              onPressed: () {
-                //check for overlay so it is nullsafe
-                if (overlayEntry != null) {
-                  //remove overlay so we have to dont fuck around with routes
-                  overlayEntry.remove();
-                }
-                //create the orgalist and pass the event + inputted orgalistname +desc
-                context.read<EventScreenCubit>().createOrgaEvent(eventPass, orgaNameController.text, orgaDescriptionController.text);
-              },
-              icon: Icon(Icons.add))
-        ],
-      ));
+    overlayEntry = OverlayEntry(builder: (buildContext)
+    {
+      return TodoListForm(overlayEntry: overlayEntry!, cubitContext: context, event: eventPass,);
     });
     //insert the entry in the state to make it accesible
     overlayState.insert(overlayEntry);

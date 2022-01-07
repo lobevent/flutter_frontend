@@ -108,6 +108,8 @@ class EventRemoteService extends RemoteService<EventDto> {
         "$updatePath${eventDto.id}", jsonEncode(eventDto.toJson())));
   }
 
+
+
   /*static String generatePaginatedRoute(
       String route, int amount, DateTime lastEventTime) {
     return "$route/$amount/$lastEventTime";

@@ -10,7 +10,6 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/todo_overlay_cubit.dart';
 
-
 class ItemCreateWidget extends StatefulWidget {
   final OverlayEntry overlayEntry;
   final Todo todo;
@@ -71,6 +70,9 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
   }
 
 
+  ///
+  /// the Scaffold of the overlay, conataining all elements
+  ///
   Widget OverlayScaffold(BuildContext context){
     // make the overlay dismissible, so it can be swiped away
     return DismissibleOverlay(overlayEntry: overlayEntry,
@@ -90,6 +92,12 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
       );
   }
 
+  ///
+  /// the add/edit button
+  /// [edit] describes if we are in an editing context
+  /// [context] the buildContext
+  /// [overlayEntry] the "overlaycontroller", used to close the overlay
+  ///
   Widget actionButton(
       bool edit, BuildContext context, OverlayEntry overlayEntry) {
     return StdTextButton(
@@ -116,6 +124,9 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
 
 
 
+  ///
+  /// sets the textcontroller values if we are in an editing context
+  ///
   void _setTextControllerValues(){
     if(onEdit != null){
       itemDescriptionController.text = item!.description.value

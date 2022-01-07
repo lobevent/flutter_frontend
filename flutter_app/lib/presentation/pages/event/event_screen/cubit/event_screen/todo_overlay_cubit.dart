@@ -13,6 +13,13 @@ extension TodoOverlayCubit on EventScreenCubit {
 
 
   ///CRUD
+
+  ///
+  /// posts new item to the backend, loading state while waiting and new state with the item in the list
+  /// [itemName] the name that the item should have
+  /// [itemDescription] the description of the item
+  /// [todo] the todolist
+  ///
   Future<void> postItem({required String itemName, required String itemDescription, required Todo todo}) async {
     // new generated Item
     final Item newItem =
@@ -38,6 +45,11 @@ extension TodoOverlayCubit on EventScreenCubit {
         orElse: () => throw LogicError());
   }
 
+  ///
+  /// deletes item from the backend and emits state with the list without the item
+  /// [todo] the todolist
+  /// [item] the item to delete
+  ///
   Future<void> deleteItem(Todo todo, Item item) async {
     //map on the current state
     state.maybeMap(
@@ -58,6 +70,11 @@ extension TodoOverlayCubit on EventScreenCubit {
         orElse: () => {});
   }
 
+  ///
+  /// edit item function: sends edited item to backend and emits new state with the edited item in the list
+  /// [todo] the todolist
+  /// [item] the item to edit
+  ///
   Future<void> editItem(Todo todo, Item item) async {
     Either<NetWorkFailure, Item> failureOrSuccess = await todoRepository.updateItem(item);
 
@@ -78,6 +95,12 @@ extension TodoOverlayCubit on EventScreenCubit {
         orElse: () => throw LogicError());
   }
 
+
+  ///
+  /// assigns profile to an item, and sends the request to backend. emits new state with the assigned profile at the item
+  /// [item] the item where a profile should be assigned to
+  /// [profile] the profile which has to be assigned, if no profile is given, the current profile will be assigned
+  ///
   Future<void> assignProfile(Item item, Profile? profile) async {
     state.maybeMap(
         loaded: (loadedState) async {

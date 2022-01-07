@@ -53,6 +53,7 @@ class EventRepository extends Repository {
   // ------------------ Complex list operations ----------------------------
 
 
+
   ///
   ///  generic get list method, that makes the try catch
   ///
@@ -67,6 +68,7 @@ class EventRepository extends Repository {
       return left(ExceptionsHandler.reactOnCommunicationException(e));
     }
   }
+
 
   Future<Either<NetWorkFailure, List<Event>>> getOwnedEvents(
       DateTime lastEventTime, int amount,
@@ -112,6 +114,9 @@ class EventRepository extends Repository {
   }
 
 
+  Future<Either<NetWorkFailure, List<Event>>> getInvitedEvents(DateTime lastEventTime, int amount, {bool descending = false}) async {
+    return _getList(() =>  _eventRemoteService.getInvitedEvents(lastEventTime, amount, descending));
+  }
   // Future<Either<NetWorkFailure, bool>> sendInvitation(Event event, Profile profile)async{
   //   return localErrorHandler(() async {
   //

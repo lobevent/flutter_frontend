@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter_frontend/presentation/pages/core/widgets/gen_dialog.dart';
+import 'package:flutter_frontend/presentation/pages/event/events_multilist/cubit/events_mulitlist_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 
@@ -24,7 +25,7 @@ class BottomNavigation extends StatelessWidget {
     },
     NavigationOptions.invited: {
       'key': 2,
-      'route': EventsMultilistScreenRoute()
+      'route': EventsMultilistScreenRoute(option: EventScreenOptions.invited)
     },
     NavigationOptions.ownProfile: {
       'key': 3,

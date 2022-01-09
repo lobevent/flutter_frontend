@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
+import 'package:flutter_frontend/domain/core/repository.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
@@ -11,7 +12,7 @@ import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart'
 
 // TODO ignored this it's too late and seems to be in progress
 
-class EventRepository {
+class EventRepository extends Repository {
   final EventRemoteService _eventRemoteService;
   final EventLocalService _eventLocalService;
 
@@ -52,6 +53,7 @@ class EventRepository {
   // ------------------ Complex list operations ----------------------------
 
 
+
   ///
   ///  generic get list method, that makes the try catch
   ///
@@ -66,6 +68,7 @@ class EventRepository {
       return left(ExceptionsHandler.reactOnCommunicationException(e));
     }
   }
+
 
   Future<Either<NetWorkFailure, List<Event>>> getOwnedEvents(
       DateTime lastEventTime, int amount,
@@ -110,5 +113,15 @@ class EventRepository {
     }
   }
 
+
+  Future<Either<NetWorkFailure, List<Event>>> getInvitedEvents(DateTime lastEventTime, int amount, {bool descending = false}) async {
+    return _getList(() =>  _eventRemoteService.getInvitedEvents(lastEventTime, amount, descending));
+  }
+  // Future<Either<NetWorkFailure, bool>> sendInvitation(Event event, Profile profile)async{
+  //   return localErrorHandler(() async {
+  //
+  //   });
+  // }
+  //
 
 }

@@ -17,14 +17,19 @@ class LoginRegisterCubit extends Cubit<LoginRegisterState> {
   Future<void> login(String password, String username) async{
     // login user and safe to safestorage
     SymfonyLogin symfonyLogin = SymfonyLogin();
-    await symfonyLogin.login(username, password);
+    // double then because we have to wait until all is set
+    await symfonyLogin.login(username, password).then((value) {
+      LoginControllFunctions.setLoginStuff().then((value) {
+        // route to the feed
+        // pop until root so no routes are in the stack anymore
+        GetIt.I<_app_router.Router>().popUntilRoot();
+        // replace the root route
+        GetIt.I<_app_router.Router>().replaceNamed("/");
+      });
+    });
 
-    await LoginControllFunctions.setLoginStuff();
-    // route to the feed
-    // pop until root so no routes are in the stack anymore
-    GetIt.I<_app_router.Router>().popUntilRoot();
-    // replace the root route
-    GetIt.I<_app_router.Router>().replaceNamed("/");
+
+
     
 
   }

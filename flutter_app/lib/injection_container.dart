@@ -69,6 +69,6 @@ class InjectionContainer {
     );
 
     getIt
-        .registerLazySingleton(() => ProfileRepository(ProfileRemoteService()));
+        .registerLazySingleton(() => ProfileRepository(ProfileRemoteService(communicator: GetIt.I<SymfonyCommunicator>())));
   }
 }

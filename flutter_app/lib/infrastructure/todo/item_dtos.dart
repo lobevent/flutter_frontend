@@ -23,8 +23,7 @@ class ItemDto extends BaseDto with _$ItemDto {
   factory ItemDto.fromDomain(Item item) {
     return ItemDto(
       id: item.id.value,
-      profiles: item.profiles!
-          .map((profile) => ProfileDto.fromDomain(profile))
+      profiles: item.profiles?.map((profile) => ProfileDto.fromDomain(profile))
           .toList(),
       description: item.description.getOrCrash(),
       name: item.name.getOrCrash(),
@@ -39,7 +38,7 @@ class ItemDto extends BaseDto with _$ItemDto {
   Item toDomain() {
     return Item(
         id: UniqueId.fromUniqueString(this.id),
-        profiles: profiles!.map((pdto) => pdto.toDomain()).toList(),
+        profiles: profiles?.map((pdto) => pdto.toDomain()).toList(),
         maxProfiles: maxProfiles == null ? ItemMaxProfiles(maxProfiles!) : null,
         name: ItemName(name),
         description: ItemDescription(description));

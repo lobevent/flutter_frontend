@@ -9,7 +9,6 @@ import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_repository.dart';
-import 'package:flutter_frontend/presentation/pages/event/todos/todo_cubit/todo_cubit.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
@@ -46,21 +45,10 @@ class EventScreenCubit extends Cubit<EventScreenState> {
     todoRepository.createOrga(event, newTodo).then((todoOrFailure) =>
         todoOrFailure.fold(
             (failure) => emit(EventScreenState.error(failure: failure)),
-            (todo) => emit(EventScreenState.loaded(
-                event: Event(
-                    todo: todo,
-                    owner: event.owner,
-                    attendingCount: event.attendingCount,
-                    status: event.status,
-                    latitude: event.latitude,
-                    longitude: event.longitude,
-                    description: event.description,
-                    name: event.name,
-                    invitations: event.invitations,
-                    creationDate: event.creationDate,
-                    public: event.public,
-                    visibleWithoutLogin: event.visibleWithoutLogin,
-                    date: event.date,
-                    id: event.id)))));
+            (todo) => emit(EventScreenState.loaded(event: event.copyWith(todo: todo)))));
   }
+
+
+
+
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/presentation/login_register_email/cubit/login_register_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
+
+import 'cubit/login_register_cubit.dart';
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
@@ -15,29 +16,8 @@ class Login extends StatelessWidget {
         Column(children: [
           Text("Login"),
           // email Field
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: TextField(
-              controller: textEditingControllerUsername,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Email or username',
-              ),
-            ),
-          ),
-          // password field
-          Padding(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                controller: textEditingControllerPassword,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Email or username',
-                ),
-              )),
+          FullWidthPaddingInput(labelText:  'Email or Username', controller: textEditingControllerUsername),
+          FullWidthPaddingInput(labelText:  'Password', controller: textEditingControllerPassword, password: true,),
           Padding(
               padding: const EdgeInsets.all(10),
               child: TextWithIconButton(

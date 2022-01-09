@@ -3,13 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
-import 'package:flutter_frontend/presentation/pages/event/todos/todo_cubit/todo_cubit.dart';
-import 'package:flutter_frontend/presentation/pages/event/todos/widgets/item_create_widget.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/Todos/item_element_widget.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/todo_overlay_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:provider/src/provider.dart';
 import 'package:auto_route/auto_route.dart';
 
-import '../../event/todos/widgets/item_element_widget.dart';
+
 
 class TodoList extends StatelessWidget {
   final Event event;
@@ -40,24 +41,15 @@ class TodoList extends StatelessWidget {
 
         ///for function passing for the buttons
         deleteItemFunc: (Item item) {
-          context.read<TodoCubit>().deleteItem(todo!, item);
+          context.read<EventScreenCubit>().deleteItem(todo!, item);
         },
         //edit items, pass the item
         editItemFunc: (Item item) {
-          /*context.router.push(ItemCreateWidgetRoute(
-              event: event,
-              todo: todo!,
-              item: item,
-              onEdit: (Item item) {
-                context.read<TodoCubit>().editItem(todo!, item);
-              }));
 
-           */
-          //context.read<TodoCubit>().editItem(todo!, item);
         },
         assignProf: (Item item) {
           //add support for adding other profiles and not only the own maybe
-          context.read<TodoCubit>().assignProfile(item, null);
+          context.read<EventScreenCubit>().assignProfile(item, null);
         },
       );
       itemElements.add(elements);

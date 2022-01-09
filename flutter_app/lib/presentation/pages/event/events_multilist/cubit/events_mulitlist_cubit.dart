@@ -11,7 +11,7 @@ import 'package:get_it/get_it.dart';
 part 'events_mulitlist_cubit.freezed.dart';
 part 'events_mulitlist_state.dart';
 
-enum EventScreenOptions { owned, fromUser, ownAttending, unreacted }
+enum EventScreenOptions { owned, fromUser, ownAttending, unreacted, invited }
 
 class EventsMultilistCubit extends Cubit<EventsMultilistState> {
   EventScreenOptions option = EventScreenOptions.owned;
@@ -47,6 +47,9 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
           break;
         case EventScreenOptions.unreacted:
           eventsList = await repository.getUnreactedEvents(DateTime.now(), 30);
+          break;
+        case EventScreenOptions.invited:
+          eventsList = await repository.getInvitedEvents(DateTime.now(), 30, descending: false);
           break;
       }
       emit(EventsMultilistState.loaded(

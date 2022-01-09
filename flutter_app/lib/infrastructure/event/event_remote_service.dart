@@ -16,6 +16,8 @@ class EventRemoteService extends RemoteService<EventDto> {
       "/user/events/%amount%/%lastEventTime%/%descending%";
   static const String profileEventPath =
       "/profile/events/%profileId%/%amount%/%lastEventTime%/%descending%";
+  static const String invitedEventsPath =
+      "/user/events/invited/%amount%/%lastEventTime%/%descending%";
   static const String attendingEventsPath =
       "/user/eventStatus/events/%amount%/%lastEventTime%/"; //TODO attending?
   static const String unreactedEventsPath =
@@ -60,6 +62,17 @@ class EventRemoteService extends RemoteService<EventDto> {
       "last": last.toString()
     }));
   }
+
+  Future<List<EventDto>> getInvitedEvents(
+      DateTime lastEventTime, int amount,
+      [bool descending = false]) async {
+    return _getEventList(invitedEventsPath.interpolate({
+      "amount": amount.toString(),
+      "lastEventTime": lastEventTime.toString(),
+      "descending": descending ? '1': '0',
+    }));
+  }
+
 
   Future<List<EventDto>> getEventsFromUser(
       DateTime lastEventTime, int amount, UniqueId profileId,
@@ -107,6 +120,8 @@ class EventRemoteService extends RemoteService<EventDto> {
     return _decodeEvent(await client.put(
         "$updatePath${eventDto.id}", jsonEncode(eventDto.toJson())));
   }
+
+
 
   /*static String generatePaginatedRoute(
       String route, int amount, DateTime lastEventTime) {

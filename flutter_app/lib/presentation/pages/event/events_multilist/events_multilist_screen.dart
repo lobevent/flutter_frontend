@@ -40,6 +40,7 @@ class OwnEventScreenHolder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  var navigation = NavigationOptions.ownEvents;
     String appBarText = "";
     switch (context.read<EventsMultilistCubit>().option) {
       case EventScreenOptions.owned:
@@ -54,12 +55,16 @@ class OwnEventScreenHolder extends StatelessWidget {
       case EventScreenOptions.unreacted:
         appBarText = "Unreacted Events";
         break;
+      case EventScreenOptions.invited:
+        appBarText = "Invited Events";
+        navigation = NavigationOptions.invited;
+        break;
     }
     return Scaffold(
         appBar: AppBar(
           title: Text(appBarText),
         ),
-        bottomNavigationBar: BottomNavigation(selected: NavigationOptions.ownEvents,),
+        bottomNavigationBar: BottomNavigation(selected: navigation),
         body: EventsMultilistBody());
   }
 }

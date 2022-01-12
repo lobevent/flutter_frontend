@@ -1,4 +1,5 @@
 library stlyling_widgets;
+
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +7,7 @@ import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/dismissible_overlay.dart';
 
-
-
 //TODO: Move this all to seperate files
-
-
 
 const double paddingLeftConst = 30;
 const double paddingTopConst = 0;
@@ -30,11 +27,11 @@ class BasicContentContainer extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   const BasicContentContainer(
       {Key? key,
-        required this.children,
-        this.bottomNavigationBar,
-        this.controller,
-        this.appBar,
-        this.scrollable = true})
+      required this.children,
+      this.bottomNavigationBar,
+      this.controller,
+      this.appBar,
+      this.scrollable = true})
       : super(key: key);
 
   @override
@@ -335,13 +332,14 @@ class GenericSearchBar extends StatelessWidget {
   }
 }
 
-class FullWidthPaddingInput extends StatelessWidget{
+class FullWidthPaddingInput extends StatelessWidget {
   final TextEditingController? controller;
   final String? labelText;
   final String? hintText;
   final bool password;
 
-  FullWidthPaddingInput({this.controller, this.labelText, this.hintText, this.password = false});
+  FullWidthPaddingInput(
+      {this.controller, this.labelText, this.hintText, this.password = false});
 
   @override
   Widget build(BuildContext context) {
@@ -349,8 +347,8 @@ class FullWidthPaddingInput extends StatelessWidget{
       padding: const EdgeInsets.all(10),
       child: TextField(
         obscureText: password ? true : false,
-        enableSuggestions: password ? false: true,
-        autocorrect: password ? false: true,
+        enableSuggestions: password ? false : true,
+        autocorrect: password ? false : true,
         controller: controller,
         decoration: InputDecoration(
           hintText: hintText,
@@ -360,5 +358,4 @@ class FullWidthPaddingInput extends StatelessWidget{
       ),
     );
   }
-
 }

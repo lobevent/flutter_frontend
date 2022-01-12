@@ -5,7 +5,7 @@ import 'package:flutter_frontend/infrastructure/invitation/invitation_dtos.dart'
 
 class InvitationRemoteService extends RemoteService<InvitationDto>{
 
-  static const String getInvitationsRoute = "/user/events/%amount%/%lastEventTime%/%descending%";
+  static const String getInvitationsRoute = "/user/invitations/%amount%/%lastEventTime%/%descending%";
 
   final SymfonyCommunicator client;
 

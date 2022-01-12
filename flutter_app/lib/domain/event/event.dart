@@ -10,7 +10,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event.freezed.dart';
 
-enum EventStatus { attending, notAttending, interested }
+enum EventStatus { attending, notAttending, interested, invited }
 
 @freezed
 class Event with _$Event {

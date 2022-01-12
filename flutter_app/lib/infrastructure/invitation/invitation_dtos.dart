@@ -1,6 +1,7 @@
 
 
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
@@ -16,22 +17,33 @@ part 'invitation_dtos.g.dart';
 @freezed
 class InvitationDto extends BaseDto with _$InvitationDto{
 
+  static final Map dtoToDomainStatus = {
+    0: EventStatus.notAttending,
+    1: EventStatus.attending,
+    2: EventStatus.interested,
+    3: EventStatus.invited,
+  };
+
+  static final Map domainToDtoStatus =
+  dtoToDomainStatus.map((key, value) => MapEntry(value, key));
+
   const InvitationDto._();
 
   const factory InvitationDto({
     required String id,
-    EventDto? event,
+    @EventConverter() EventDto? event,
     @ProfileConverter() required ProfileDto profile,
     required int userEventStatus
   }) = InvitationFull;
 
   @override
   Invitation toDomain() {
+    var test =  dtoToDomainStatus[3];
     return Invitation(
         id: UniqueId.fromUniqueString(id),
         profile: profile.toDomain(),
         event: event?.toDomain(),
-        userEventStatus: userEventStatus);
+        userEventStatus: dtoToDomainStatus[userEventStatus] as EventStatus);
   }
 
   factory InvitationDto.fromDomain(Invitation invitation){
@@ -39,7 +51,7 @@ class InvitationDto extends BaseDto with _$InvitationDto{
     return InvitationDto(
         id:  invitation.id.value,
         profile: ProfileDto.fromDomain(invitation.profile as BaseProfile),
-        userEventStatus: invitation.userEventStatus
+        userEventStatus: domainToDtoStatus[invitation.userEventStatus] as int
     );
   }
 

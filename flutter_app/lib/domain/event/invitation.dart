@@ -9,13 +9,13 @@ class Invitation{
   UniqueId id = UniqueId();
   Profile profile;
   Event? event;
-  int userEventStatus = 3;
+  EventStatus userEventStatus = EventStatus.attending;
 
   Invitation({
     required this.id,
     required this.profile,
     required this.event,
-    this.userEventStatus = 3,
+    this.userEventStatus = EventStatus.attending,
   });
 
 }

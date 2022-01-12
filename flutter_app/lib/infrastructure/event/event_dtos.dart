@@ -4,7 +4,7 @@ import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
-import 'package:flutter_frontend/infrastructure/event/invitation_dtos.dart';
+import 'package:flutter_frontend/infrastructure/invitation/invitation_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

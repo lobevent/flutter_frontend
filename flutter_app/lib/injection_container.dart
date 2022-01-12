@@ -7,6 +7,7 @@ import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/event/event_local_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
+import 'package:flutter_frontend/infrastructure/invitation/invitation_repository.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_repository.dart';
 import 'package:flutter_frontend/infrastructure/post/post_remote_service.dart';
@@ -19,6 +20,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 
 import 'infrastructure/auth/symfonyLogin.dart';
+import 'infrastructure/invitation/invitation_remote_service.dart';
 import 'infrastructure/profile/profile_remote_service.dart';
 import 'infrastructure/profile/profile_repository.dart';
 
@@ -54,6 +56,10 @@ class InjectionContainer {
 
     getIt.registerLazySingleton(() => PostRepository(
         PostRemoteService(communicator: GetIt.I<SymfonyCommunicator>())));
+
+
+    getIt.registerLazySingleton(() => InvitationRepository(
+        remoteService: InvitationRemoteService(communicator: GetIt.I<SymfonyCommunicator>())));
 
     getIt.registerLazySingleton(
       () => TodoRepository(

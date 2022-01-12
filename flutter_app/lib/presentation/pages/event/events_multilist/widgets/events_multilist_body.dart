@@ -14,7 +14,7 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
   List<Event> events = [];
   @override
   Widget build(BuildContext context) {
-    return BlocListener<EventsMultilistCubit, EventsMultilistState>(
+    return BlocConsumer<EventsMultilistCubit, EventsMultilistState>(
       // listener used here for deleting events
       listener: (context, state) => {
         //this is the deletion and loading
@@ -27,36 +27,36 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
                 },
             orElse: () => {})
       },
-      child: ListView.builder(
-          itemBuilder: (context, index) {
-            final event = this.events[index];
-            // Errors
-            if (event.failureOption.isSome()) {
-              return Ink(
-                  color: Colors.red,
-                  child: ListTile(
-                    title: Text(event.failureOption
-                        .fold(() => "", (a) => a.toString())),
-                  ));
-            }
-            if (this.events.isEmpty) {
-              return Ink(
-                  color: Colors.red,
-                  child: ListTile(title: Text("No events available")));
-            } else {
-              return EventListTiles(
-                key: ObjectKey(event),
-                event: this.events[index],
-                onDeletion: context.read<EventsMultilistCubit>().option ==
-                        EventScreenOptions.owned
-                    ? (Event event) {
-                        context.read<EventsMultilistCubit>().deleteEvent(event);
-                      }
-                    : null,
-              );
-            }
-          },
-          itemCount: this.events.length),
-    );
+      buildWhen: (previous, current) {
+        return current.maybeMap((value) => true, deleted: (state) => false, orElse: () => true);
+      },
+      builder: (context, state) {
+          return ListView.builder(
+              itemBuilder: (context, index) {
+                final event = this.events[index];
+                // Errors
+                if (event.failureOption.isSome()) {
+                  return Ink(
+                      color: Colors.red,
+                      child: ListTile(
+                        title: Text(event.failureOption.fold(() => "", (a) => a.toString())),
+                      ));
+                }
+                if (this.events.isEmpty) {
+                  return Ink(color: Colors.red, child: ListTile(title: Text("No events available")));
+                } else {
+                  return EventListTiles(
+                    key: ObjectKey(event),
+                    event: this.events[index],
+                    onDeletion: context.read<EventsMultilistCubit>().option == EventScreenOptions.owned
+                        ? (Event event) {
+                            context.read<EventsMultilistCubit>().deleteEvent(event);
+                          }
+                        : null,
+                  );
+                }
+              },
+              itemCount: this.events.length);
+        });
   }
 }

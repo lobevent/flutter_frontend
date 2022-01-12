@@ -63,47 +63,4 @@ class EventListTiles extends StatelessWidget {
     context.router.push(EventScreenPageRoute(eventId: event.id));
   }
 
-  /// an delete event function with an alert dialog to submit
-  /*Future<bool> deleteEvent(BuildContext context) async {
-    bool answer = false;
-    //Not yet implemented
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(AppStrings.deleteEventDialogTitle),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(AppStrings.deleteEventDialogText),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              //Cpnfirmation
-              child: Text(AppStrings.deleteEventDialogConfirm),
-              onPressed: () {
-                Navigator.of(context).pop();
-                //context.read<OwnEventsCubit>().deleteEvent();
-                answer = true;
-              },
-            ),
-            TextButton(
-              //Abortion
-              child: Text(AppStrings.deleteEventDialogAbort),
-              onPressed: () {
-                Navigator.of(context).pop();
-                answer = false;
-              },
-            ),
-          ],
-        );
-      },
-    );
-    return answer;
-  }
-
-   */
 }

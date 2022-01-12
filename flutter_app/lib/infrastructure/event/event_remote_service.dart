@@ -74,6 +74,8 @@ class EventRemoteService extends RemoteService<EventDto> {
   }
 
 
+
+
   Future<List<EventDto>> getEventsFromUser(
       DateTime lastEventTime, int amount, UniqueId profileId,
       [bool descending = false]) async {
@@ -137,8 +139,8 @@ class EventRemoteService extends RemoteService<EventDto> {
     return convertList(response);
   }
 
-//  Future<List<EventDto>> getViewableEventsFromProfile(int ProfileId){
-//
-//  }
+  //  Future<List<EventDto>> getViewableEventsFromProfile(int ProfileId){
+  //
+  //  }
 
 }

@@ -47,7 +47,7 @@ class InvitationDto extends BaseDto with _$InvitationDto {
     return InvitationDto(
         id: invitation.id.value,
         profile: ProfileDto.fromDomain(invitation.profile as BaseProfile),
-        addHost: invitation.addHost != null ? invitation.addHost! : null,
+        addHost: invitation.addHost != null ? invitation.addHost! : false,
         userEventStatus: domainToDtoStatus[invitation.userEventStatus] as int);
   }
 

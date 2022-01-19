@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/repository.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/invitation.dart';
+import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/invitation/invitation_remote_service.dart';
 
@@ -25,4 +27,14 @@ class InvitationRepository extends Repository{
     return _getList(() => remoteService.getInvitations(lastEventTime, amount, descending));
   }
 
+  Future<Either<NetWorkFailure, Invitation>> sendInvitation(Profile profile, Event event, bool isHost){
+    return localErrorHandler(() async {
+      return right((await remoteService.sendInvitation(profile.id.value, event.id.value, isHost ? '1' : '0')).toDomain());
+    });
+  }
+  Future<Either<NetWorkFailure, Invitation>> revokeInvitation(Profile profile, Event event){
+    return localErrorHandler(() async {
+      return right(( await remoteService.revokeInvitation(profile.id.value, event.id.value)).toDomain());
+    });
+  }
 }

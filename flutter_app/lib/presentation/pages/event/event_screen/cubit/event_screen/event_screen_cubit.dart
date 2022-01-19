@@ -3,8 +3,8 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
-import 'package:flutter_frontend/domain/event/value_objects.dart';
-import 'package:flutter_frontend/domain/todo/item.dart';
+import 'package:flutter_frontend/domain/event/invitation.dart';
+
 import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
@@ -25,11 +25,14 @@ class EventScreenCubit extends Cubit<EventScreenState> {
   EventRepository repository = GetIt.I<EventRepository>();
   TodoRepository todoRepository = GetIt.I<TodoRepository>();
 
+
   Future<void> getEvent(UniqueId id) async {
     repository.getSingle(id).then((eventOrFailure) => eventOrFailure.fold(
         (failure) => emit(EventScreenState.error(failure: failure)),
         (event) => emit(EventScreenState.loaded(event: event))));
   }
+
+
 
   Future<void> createOrgaEvent(
       Event event, String orgaName, String orgaDesc) async {
@@ -48,6 +51,23 @@ class EventScreenCubit extends Cubit<EventScreenState> {
             (todo) => emit(EventScreenState.loaded(event: event.copyWith(todo: todo)))));
   }
 
+
+  void addedInvitation(Invitation invitation){
+    state.maybeMap(orElse: (){}, loaded: (loaded){
+      emit(EventScreenState.loading());
+      loaded.event.invitations.add(invitation);
+      emit(loaded);
+    });
+  }
+
+
+  void revokedInvitation(Invitation invitation){
+    state.maybeMap(orElse: (){}, loaded: (loaded){
+      loaded.event.invitations.removeWhere((inv) => inv.id.value == invitation.id.value);
+      emit(EventScreenState.loading());
+      emit(loaded);
+    });
+  }
 
 
 

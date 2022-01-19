@@ -31,7 +31,8 @@ class Event with _$Event {
       int? attendingCount,
       EventStatus? status,
       double? longitude,
-      double? latitude}) = EventFull;
+      double? latitude,
+      required bool isHost}) = EventFull;
 
   factory Event.empty() => Event(
         id: UniqueId.fromUniqueString(
@@ -51,6 +52,7 @@ class Event with _$Event {
         longitude: 0,
         latitude: 0,
         visibleWithoutLogin: false,
+        isHost: false,
         invitations: <Invitation>[]
       );
 

@@ -121,7 +121,7 @@ class ProfileRepository extends Repository {
   /// gets the friends
   ///
   Future<Either<NetWorkFailure, List<Profile>>> getFriends(
-      {required Profile? profile}) async {
+      {Profile? profile}) async {
     return localErrorHandler(() async {
       final List<ProfileDto> profileDtos = await _profileRemoteService
           .getAcceptedFriendships(profile?.id.value.toString());

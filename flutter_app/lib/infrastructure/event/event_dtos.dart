@@ -42,6 +42,7 @@ class EventDto extends BaseDto with _$EventDto {
     double? longitude,
     double? latitude,
     int? ownStatus,
+    bool? isHost,
   }) = EventDtoFull;
 
   factory EventDto.fromDomain(Event event) {
@@ -92,6 +93,7 @@ class EventDto extends BaseDto with _$EventDto {
       latitude: latitude,
       visibleWithoutLogin: visibleWithoutLogin,
       invitations: invitationL,
+      isHost: isHost ?? false
     );
   }
 }

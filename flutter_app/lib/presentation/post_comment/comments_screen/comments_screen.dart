@@ -25,6 +25,15 @@ class CommentsScreen extends StatelessWidget {
           return LoadingOverlay(
               isLoading: state is Loading,
               child: BasicContentContainer(
+                //floating action button to scroll down
+                /*floatingActionButton: FloatingActionButton.small(
+                  elevation: 0.0,
+                  onPressed: () {},
+                  backgroundColor: Colors.green,
+                  child: const Icon(Icons.navigation),
+                ),
+
+                 */
                 children: state.maybeMap(
 
                     /// if the error state is not active, load the contents

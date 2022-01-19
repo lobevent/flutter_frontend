@@ -29,10 +29,13 @@ class CommentDto extends BaseDto with _$CommentDto {
 
   factory CommentDto.fromDomain(Comment comment) {
     return CommentDto(
-        content: comment.commentContent.getOrCrash(),
-        date: comment.creationDate,
-        profile: ProfileDto.fromDomain(comment.owner),
-        post: PostDto.fromDomain(comment.post));
+      id: comment.id.value.toString(),
+      content: comment.commentContent.getOrCrash(),
+      date: comment.creationDate,
+      profile: ProfileDto.fromDomain(comment.owner),
+      post: PostDto.fromDomain(comment.post),
+      children: comment.childCount,
+    );
   }
 
   factory CommentDto.fromJson(Map<String, dynamic> json) =>

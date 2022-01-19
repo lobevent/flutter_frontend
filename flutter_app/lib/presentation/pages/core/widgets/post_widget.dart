@@ -48,27 +48,29 @@ class PostWidget extends StatelessWidget {
   }
 }
 
-
 /// generate list of posts
-Widget generateUnscrollablePostContainer({required List<Post> posts, Profile? profile, bool showAutor = false}) {
+Widget generateUnscrollablePostContainer(
+    {required List<Post> posts, Profile? profile, bool showAutor = false}) {
   if (posts.isEmpty) {
     return Text("Nothing here yet");
   }
   // Expanded because if you leave it, it expands infinitely and throws errors
   return Container(
-    // building the list of post widgets
+      // building the list of post widgets
       child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        // the padding is set to the std padding defined in styling widgets
-        padding: stdPadding,
-        scrollDirection: Axis.vertical,
-        itemCount: posts.length,
-        itemBuilder: (context, index) {
-          return PostWidget(
-            post: profile != null ? posts[index].copyWith(owner: profile) : posts[index],
-            showAuthor: showAutor,
-          );
-        },
-      ));
+    physics: NeverScrollableScrollPhysics(),
+    shrinkWrap: true,
+    // the padding is set to the std padding defined in styling widgets
+    padding: stdPadding,
+    scrollDirection: Axis.vertical,
+    itemCount: posts.length,
+    itemBuilder: (context, index) {
+      return PostWidget(
+        post: profile != null
+            ? posts[index].copyWith(owner: profile)
+            : posts[index],
+        showAuthor: showAutor,
+      );
+    },
+  ));
 }

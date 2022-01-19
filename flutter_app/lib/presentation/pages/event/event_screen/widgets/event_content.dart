@@ -54,21 +54,21 @@ class EventContent extends StatelessWidget {
 
                   ///likebutton and information
                   LikeWidget(state.event),
+
                   /// Used as space
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
 
                   if (state.event.isHost) AddFriendsWidget(context),
-
 
                   /// Used as space
                   const SizedBox(height: 20),
 
                   PostWidget(state.event, context),
+
                   /// Used as space
                   const SizedBox(height: 20),
-
-
-
 
                   /// Contains the description of the event
                   DescriptionWidget(state.event.description!.getOrCrash()),
@@ -197,21 +197,21 @@ class EventContent extends StatelessWidget {
             key: ObjectKey(this.key),
             objectId: event.id,
             option: LikeTypeOption.Event,
-            likeStatus: event.liked?? false,
+            likeStatus: event.liked ?? false,
           ),
         ),
       )
     ]);
   }
 
-
-  Widget AddFriendsWidget(BuildContext eventCubitContext){
+  Widget AddFriendsWidget(BuildContext eventCubitContext) {
     return AddFriendsButton();
   }
 
-  Widget PostWidget(Event event, BuildContext context){
-    return MaterialButton(
-      onPressed: () { context.router.push(PostsScreenRoute(event: event)); });
+  Widget PostWidget(Event event, BuildContext context) {
+    return MaterialButton(onPressed: () {
+      context.router.push(PostsScreenRoute(event: event));
+    });
   }
 
   /// Widget used for making padding with a row, so the children start on the

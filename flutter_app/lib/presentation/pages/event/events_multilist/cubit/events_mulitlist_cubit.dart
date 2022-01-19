@@ -3,8 +3,10 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
+import 'package:flutter_frontend/infrastructure/invitation/invitation_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 
@@ -22,12 +24,15 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
     getEvents();
   }
   EventRepository repository = GetIt.I<EventRepository>();
+  InvitationRepository invRepo = GetIt.I<InvitationRepository>();
 
   /// gets events from backend, swiches on the options
   Future<void> getEvents() async {
     final Either<NetWorkFailure, List<Event>> eventsList;
-    try {
+    final Either<NetWorkFailure, List<Invitation>> invitationList;
+    // try {
       emit(EventsMultilistState.loading());
+      bool isInvite = false;
       switch (this.option) {
         case EventScreenOptions.owned:
           eventsList = await repository.getOwnedEvents(DateTime.now(), 30,
@@ -49,14 +54,21 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
           eventsList = await repository.getUnreactedEvents(DateTime.now(), 30);
           break;
         case EventScreenOptions.invited:
-          eventsList = await repository.getInvitedEvents(DateTime.now(), 30, descending: false);
+          {
+            invitationList = await invRepo.getInvitations(DateTime.now(), 30, descending: false);
+            isInvite = true;
+            invitationList.fold((l) => EventsMultilistState.error(error: l.toString()), (r) => emit(EventsMultilistState.loadedInvited(invites: r)));
+          }
+          return;
           break;
       }
-      emit(EventsMultilistState.loaded(
+        emit(EventsMultilistState.loaded(
           events: eventsList.fold((l) => throw Exception, (r) => r)));
-    } catch (e) {
-      emit(EventsMultilistState.error(error: e.toString()));
-    }
+
+    // } catch (e) {
+    //   throw e;
+    //   emit(EventsMultilistState.error(error: e.toString()));
+    // }
   }
 
   /// deletes Event if its own event list

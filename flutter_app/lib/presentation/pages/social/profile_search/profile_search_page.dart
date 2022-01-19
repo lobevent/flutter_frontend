@@ -81,7 +81,9 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
               initial: (_) => false, loading: (_) => true, orElse: () => false);
           //for the tapable history tiles
           return Scaffold(
-            bottomNavigationBar: BottomNavigation(selected: NavigationOptions.profileSearch,),
+              bottomNavigationBar: BottomNavigation(
+                selected: NavigationOptions.profileSearch,
+              ),
               body: FloatingSearchBar(
                   controller: controller,
                   body: FloatingSearchBarScrollNotifier(
@@ -202,9 +204,7 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
                   );
                   putSearchTermFirst(term);
                   selectedTerm = term;
-                  context
-                      .read<ProfileSearchCubit>()
-                      .searchByBothName(controller.query);
+                  context.read<ProfileSearchCubit>().searchByBothName(term);
                 });
                 controller.close();
               },

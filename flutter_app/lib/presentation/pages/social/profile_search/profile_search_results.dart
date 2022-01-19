@@ -23,10 +23,10 @@ class SearchResultsListViewState extends State<SearchResultsListView>
 
   //tabs to show
   final List<Tab> tabs = [
-    Tab(
+    const Tab(
       text: "Profile",
     ),
-    Tab(
+    const Tab(
       text: "Event",
     )
   ];
@@ -66,8 +66,8 @@ class SearchResultsListViewState extends State<SearchResultsListView>
   List<Widget> generateProfileTiles(List<Profile> profiles) {
     if (profiles.isEmpty) {
       return [
-        Center(
-          child: const Text(AppStrings.noProfilesFound),
+        const Center(
+          child: Text(AppStrings.noProfilesFound),
         ),
       ];
     } else {
@@ -88,7 +88,7 @@ class SearchResultsListViewState extends State<SearchResultsListView>
   List<Widget> generateEventTiles(List<Event> events) {
     if (events.isEmpty) {
       return [
-        Center(
+        const Center(
           child: Text(AppStrings.noEventsFound),
         )
       ];
@@ -109,7 +109,7 @@ class SearchResultsListViewState extends State<SearchResultsListView>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
+          const Icon(
             Icons.search,
             size: 64,
           ),
@@ -139,8 +139,8 @@ class SearchResultsListViewState extends State<SearchResultsListView>
                   setState(() {})
                 },
             loadedBoth: (state) => {
+                  this.events = state.events,
                   this.profiles = state.profiles,
-                  this.events = state.events as List<Event>,
                   isInit = false,
                   setState(() {})
                 },

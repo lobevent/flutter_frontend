@@ -31,8 +31,6 @@ class EventFormCubit extends Cubit<EventFormState> {
   EventRepository repository = GetIt.I<EventRepository>();
   FileRepository fileRepository = GetIt.I<FileRepository>();
 
-
-
   Future<void> submit() async {
     if (state.isEditing) {
       updateEvent();
@@ -63,15 +61,31 @@ class EventFormCubit extends Cubit<EventFormState> {
   }
 
   void addFriend(Profile profile) {
-    if(!state.event.invitations.map((e) => e.profile).contains(profile)){
-      state.event.invitations.add(Invitation(profile: profile, event: state.event, id: UniqueId()));
+    if (!state.event.invitations.map((e) => e.profile).contains(profile)) {
+      state.event.invitations.add(Invitation(
+          profile: profile,
+          event: state.event,
+          id: UniqueId(),
+          addHost: false));
+      emit(state);
+    }
+  }
+
+  /// invites an friend and makes him host
+  void addFriendAsHost(Profile profile) {
+    if (!state.event.invitations.map((e) => e.profile).contains(profile)) {
+      state.event.invitations.add(Invitation(
+          profile: profile, event: state.event, id: UniqueId(), addHost: true));
       emit(state);
     }
   }
 
   void removeFriend(Profile profile) {
-    if(state.event.invitations.map((e) => e.profile.id.toString()).contains(profile.id.toString())){
-      state.event.invitations.removeWhere((invitation) => invitation.profile.id.value == profile.id.value);
+    if (state.event.invitations
+        .map((e) => e.profile.id.toString())
+        .contains(profile.id.toString())) {
+      state.event.invitations.removeWhere(
+          (invitation) => invitation.profile.id.value == profile.id.value);
       emit(state);
     }
   }
@@ -84,16 +98,13 @@ class EventFormCubit extends Cubit<EventFormState> {
         // compare the complete friendlist with the invitations for this event
         // set isLoadingFriends false, as they are loaded now obviously
         (friends) {
-          emit(state.copyWith(
-            event: removeNoneFriends(state.event, friends),
-            friends: friends,
-            isLoadingFriends: false,
-            )
-          );
-        }
-    );
+      emit(state.copyWith(
+        event: removeNoneFriends(state.event, friends),
+        friends: friends,
+        isLoadingFriends: false,
+      ));
+    });
   }
-
 
   Future<void> loadEvent(String id) async {
     emit(EventFormState.loading());
@@ -101,9 +112,6 @@ class EventFormCubit extends Cubit<EventFormState> {
         value.fold((failure) => emit(EventFormState.error(failure)),
             (event) => emit(EventFormState.loaded(event))));
   }
-
-
-
 
   /// save event to database
   Future<void> saveEvent() async {
@@ -115,21 +123,20 @@ class EventFormCubit extends Cubit<EventFormState> {
     return updateEditEvent(() => repository.update(state.event));
   }
 
-
-  Future<void> updateEditEvent( Future<Either<NetWorkFailure, Event>> Function() serverCall) async{
+  Future<void> updateEditEvent(
+      Future<Either<NetWorkFailure, Event>> Function() serverCall) async {
     Either<NetWorkFailure, Unit>? failureOrSuccess;
     emit(state.copyWith(isSaving: true));
     if (state.event.failureOption.isNone()) {
       //failureOrSuccess =  await right(unit);
       //failureOrSuccess =  await left(EventFailure.insufficientPermissions());
-      failureOrSuccess = (await serverCall())
-        .fold((l) => left(l), (r) => right(unit));
+      failureOrSuccess =
+          (await serverCall()).fold((l) => left(l), (r) => right(unit));
     }
     emit(state.copyWith(
-    isSaving: false,
-    showErrorMessages: true,
-    saveFailureOrSuccessOption: optionOf(failureOrSuccess)));
-
+        isSaving: false,
+        showErrorMessages: true,
+        saveFailureOrSuccessOption: optionOf(failureOrSuccess)));
   }
 
   /// compare event invitations with an friendlist, and generate list with the intersection
@@ -145,10 +152,10 @@ class EventFormCubit extends Cubit<EventFormState> {
     return invitedFriends;
   }*/
 
-
   /// remove non friends from invitations
-  Event removeNoneFriends(Event event, List<Profile> friends){
-    event.invitations.removeWhere((invitation) => !friends.map((i) => i.id.value).contains(invitation.profile.id.value));
+  Event removeNoneFriends(Event event, List<Profile> friends) {
+    event.invitations.removeWhere((invitation) =>
+        !friends.map((i) => i.id.value).contains(invitation.profile.id.value));
     return event;
   }
 

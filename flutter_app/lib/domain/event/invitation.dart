@@ -4,18 +4,18 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'event.dart';
 
-class Invitation{
-
+class Invitation {
   UniqueId id = UniqueId();
   Profile profile;
   Event? event;
-  int userEventStatus = 3;
+  bool? addHost;
+  EventStatus userEventStatus = EventStatus.attending;
 
   Invitation({
     required this.id,
     required this.profile,
     required this.event,
-    this.userEventStatus = 3,
+    this.addHost,
+    this.userEventStatus = EventStatus.attending,
   });
-
 }

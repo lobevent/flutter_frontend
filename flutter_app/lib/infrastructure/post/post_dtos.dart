@@ -56,18 +56,7 @@ class PostDto extends BaseDto with _$PostDto {
   }
 }
 
-class EventConverter implements JsonConverter<EventDto, Map<String, dynamic>> {
-  const EventConverter();
-  @override
-  EventDto fromJson(Map<String, dynamic> event) {
-    return EventDto.fromJson(event);
-  }
 
-  @override
-  Map<String, dynamic> toJson(EventDto EventDto) {
-    return EventDto.toJson();
-  }
-}
 
 /*
   Post toDomain(){

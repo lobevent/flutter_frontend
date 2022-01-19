@@ -21,7 +21,7 @@ class EventsMultilistScreen extends StatelessWidget {
       child: BlocConsumer<EventsMultilistCubit, EventsMultilistState>(
           listener: (context, state) => {},
           builder: (context, state) {
-            bool isLoading = state.maybeMap((_) => false,
+            bool isLoading = state.maybeMap((_) => false, loadedInvited: (s) => false,
                 loading: (_) => true, orElse: () => false);
             return LoadingOverlay(
                 isLoading: isLoading,

@@ -15,13 +15,16 @@ class AddFriendsDialog extends StatefulWidget {
   final Function(Profile) onAddFriend;
   // callback functtion for removing friends
   final Function(Profile) onRemoveFriend;
+  // callback function for adding hosts
+  final Function(Profile)? onAddHost;
 
   const AddFriendsDialog(
       {Key? key,
       required this.friends,
       required this.invitedFriends,
       required this.onAddFriend,
-      required this.onRemoveFriend})
+      required this.onRemoveFriend,
+      this.onAddHost})
       : super(key: key);
 
   AddFriendsDialogState createState() => AddFriendsDialogState();
@@ -36,8 +39,6 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
     results = List<Profile>.from(widget.friends);
     super.initState();
   }
-
-
 
   /// this override is used, if the widged is changed externaly, so we have to
   /// update the value
@@ -59,7 +60,6 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
       ],
     );
   }
-
 
   void onSearchTextChanged(String text) {
     // clear the results before working with it
@@ -88,13 +88,20 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
         itemBuilder: (context, i) {
           return FriendListTile(
             profile: results[i],
-            isInvited: widget.invitedFriends.map((e) => e.profile.id.toString()).contains(results[i].id.toString()),
-            onAddFriend: (Profile profile){
+            isInvited: widget.invitedFriends
+                .map((e) => e.profile.id.toString())
+                .contains(results[i].id.toString()),
+            onAddFriend: (Profile profile) {
               widget.onAddFriend(profile);
               setState(() {});
             },
             onRemoveFriend: (Profile profile) {
               widget.onRemoveFriend(profile);
+              setState(() {});
+            },
+            //TODO: check if the inviter is host
+            onAddHost: (Profile profile) {
+              widget.onAddHost!(profile);
               setState(() {});
             },
           );

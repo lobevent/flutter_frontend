@@ -21,7 +21,7 @@ class _InviteFriendsWidgetState extends State<InviteFriendsWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<EventFormCubit, EventFormState>(
         builder: (context, state) {
-            return _AddFriendsButton(context, state);
+      return _AddFriendsButton(context, state);
     });
   }
 
@@ -39,25 +39,25 @@ class _InviteFriendsWidgetState extends State<InviteFriendsWidget> {
     ]);
   }
 
-
   void inviteFriends(BuildContext contextWCubit, EventFormState state) {
     showDialog(
         context: contextWCubit,
         builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (context, setState) {
-                return AddFriendsDialog(
-                  friends: state.friends,
-                  invitedFriends: state.event.invitations,
-                  onAddFriend: (Profile profile) {
-                    contextWCubit.read<EventFormCubit>().addFriend(profile);
-                  },
-                  onRemoveFriend: (Profile profile) {
-                    contextWCubit.read<EventFormCubit>().removeFriend(profile);
-                  },
-                );
-              }
-          );
+          return StatefulBuilder(builder: (context, setState) {
+            return AddFriendsDialog(
+              friends: state.friends,
+              invitedFriends: state.event.invitations,
+              onAddFriend: (Profile profile) {
+                contextWCubit.read<EventFormCubit>().addFriend(profile);
+              },
+              onRemoveFriend: (Profile profile) {
+                contextWCubit.read<EventFormCubit>().removeFriend(profile);
+              },
+              onAddHost: (Profile profile) {
+                contextWCubit.read<EventFormCubit>().addFriendAsHost(profile);
+              },
+            );
+          });
         });
   }
 }

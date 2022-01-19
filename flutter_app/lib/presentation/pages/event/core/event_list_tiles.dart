@@ -9,9 +9,11 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 class EventListTiles extends StatelessWidget {
   final Event event;
   final Function(Event event)? onDeletion;
+  final bool isInvitation;
+  final EventStatus? eventStatus;
 
   const EventListTiles(
-      {required ObjectKey key, required this.event, this.onDeletion})
+      {required ObjectKey key, required this.event, this.onDeletion, this.isInvitation = false, this.eventStatus})
       : super(key: key);
 
   @override
@@ -34,6 +36,28 @@ class EventListTiles extends StatelessWidget {
 
   /// action buttons for the event, can be made invisible, if its not own events
   List<Widget> actionButtons(bool visible, BuildContext context) {
+    Icon uesIcon = Icon(Icons.error);
+    if(isInvitation) {
+      switch (eventStatus) {
+        case EventStatus.attending:
+        uesIcon = Icon(Icons.check);
+          break;
+        case EventStatus.notAttending:
+        uesIcon = Icon(Icons.clear);
+          break;
+        case EventStatus.interested:
+          uesIcon = Icon(Icons.lightbulb);
+          break;
+        case null:
+          break;
+        case EventStatus.invited:
+          uesIcon = Icon(Icons.lightbulb);
+          break;
+      }
+      return <Widget>[
+        IconButton(icon: uesIcon, onPressed: () => {}),
+        ];
+        }
     if (visible) {
       return <Widget>[
         IconButton(
@@ -63,47 +87,4 @@ class EventListTiles extends StatelessWidget {
     context.router.push(EventScreenPageRoute(eventId: event.id));
   }
 
-  /// an delete event function with an alert dialog to submit
-  /*Future<bool> deleteEvent(BuildContext context) async {
-    bool answer = false;
-    //Not yet implemented
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(AppStrings.deleteEventDialogTitle),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(AppStrings.deleteEventDialogText),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              //Cpnfirmation
-              child: Text(AppStrings.deleteEventDialogConfirm),
-              onPressed: () {
-                Navigator.of(context).pop();
-                //context.read<OwnEventsCubit>().deleteEvent();
-                answer = true;
-              },
-            ),
-            TextButton(
-              //Abortion
-              child: Text(AppStrings.deleteEventDialogAbort),
-              onPressed: () {
-                Navigator.of(context).pop();
-                answer = false;
-              },
-            ),
-          ],
-        );
-      },
-    );
-    return answer;
-  }
-
-   */
 }

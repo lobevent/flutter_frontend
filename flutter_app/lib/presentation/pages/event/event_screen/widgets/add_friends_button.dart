@@ -17,7 +17,7 @@ class AddFriendsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext eventCubitContext) {
-    return TextWithIconButton( text: "add Friends", icon: Icons.accessible,
+    return OutlinedNonOverflowbutton( text: "add Friends", icon: Icons.accessible,
         onPressed: () {
           // opens an dialog
           showDialog(context: eventCubitContext, builder: (noCubitContext) {

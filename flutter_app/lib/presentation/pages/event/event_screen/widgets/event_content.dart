@@ -54,6 +54,11 @@ class EventContent extends StatelessWidget {
 
                   ///likebutton and information
                   LikeWidget(state.event),
+                  /// Used as space
+                  const SizedBox(height: 20,),
+
+                  if (state.event.isHost) AddFriendsWidget(context),
+
 
                   /// Used as space
                   const SizedBox(height: 20),
@@ -62,10 +67,7 @@ class EventContent extends StatelessWidget {
                   /// Used as space
                   const SizedBox(height: 20),
 
-                  if (state.event.isHost) AddFriendsWidget(context),
 
-                  /// Used as space
-                  const SizedBox(height: 20,),
 
 
                   /// Contains the description of the event

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/dismissible_overlay.dart';
+export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/outlined_non_overflow_button_with_text.dart';
 
 //TODO: Move this all to seperate files
 

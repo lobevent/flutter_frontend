@@ -9,5 +9,7 @@ class FileRepository{
   Future<XFile> getImage() async{
       return image = (await _picker.pickImage(source: ImageSource.gallery))!;
   }
-  Future<
+  Future<XFile>uploadImage() async{
+     return image; 
+  }
 }

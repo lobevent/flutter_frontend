@@ -24,8 +24,8 @@ class _PickImageWidgetState extends State<PickImageWidget> {
 }
 
 Widget _ImageButton(BuildContext context, EventFormState state){
-  const RaisedButton(
-                onPressed: state.event.id,
-                child: Text('Choose Image'),
-              );
+  return Text( 'hallo');
+}
+
+upload() {
 }

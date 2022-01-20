@@ -64,8 +64,6 @@ class SymfonyCommunicator {
         await client.delete(Uri.parse("$url$uri"), headers: headers));
   }
 
-
-
   // after loging in or out it has to be resettet
   setJwt(String token){
     jwt = token;

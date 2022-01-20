@@ -25,6 +25,7 @@ class AppStrings {
   static const String attending = "attending";
   static const String notAttending = "not attending";
   static const String interested = "interested";
+  static const String invited = "invited";
   static const String participants = "Participants";
 
   static const String deleteFriendDialogTitle = "Are you sure?";

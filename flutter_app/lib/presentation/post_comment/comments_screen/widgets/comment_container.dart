@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
+import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_widget.dart';
@@ -11,7 +12,6 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class CommentContainer extends StatelessWidget {
   const CommentContainer({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CommentScreenCubit, CommentScreenState>(
@@ -23,18 +23,18 @@ class CommentContainer extends StatelessWidget {
                   CommentWidget(
                       comment: loadedComment.comment, context: context),
                   CommentList(
-                      loadedComment.comment.commentChildren ?? [], context)
+                      loadedComment.comment.commentChildren ?? [], context),
+                  WriteWidget(context, loadedComment.comment.post,
+                      loadedComment.comment),
                 ],
             loadedPost: (loadedPost) => [
                   PostWidget(post: loadedPost.post),
-                  CommentList(loadedPost.post.comments ?? [], context)
+                  CommentList(loadedPost.post.comments ?? [], context),
+                  WriteWidget(context, loadedPost.post),
                 ],
             orElse: () => [Text("")]),
       );
     });
-
-    /**/
-    return Container();
   }
 
   /// generates the list with the comments
@@ -47,6 +47,21 @@ class CommentContainer extends StatelessWidget {
       itemBuilder: (context, index) {
         return CommentWidget(comment: comments[index], context: context);
       },
+    );
+  }
+
+  Widget PositionedFloatingButton() {
+    return Positioned(
+      right: 20,
+      bottom: 20,
+      child: Align(
+        alignment: Alignment.bottomRight,
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: Colors.green,
+          child: const Icon(Icons.navigation),
+        ),
+      ),
     );
   }
 
@@ -63,6 +78,48 @@ class CommentContainer extends StatelessWidget {
       ),
       padding: stdPadding.copyWith(right: 0.0),
     );
+  }
+
+  Widget WriteWidget(BuildContext context, Post loadedPost,
+      [Comment? parentComment = null]) {
+    TextEditingController postWidgetController = TextEditingController();
+    return Container(
+        width: 300,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            gradient: const LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Colors.white12,
+                Colors.white70,
+              ],
+            )),
+        child: Title(
+          title: "Post a comment.",
+          color: Colors.black,
+          child: Column(
+            children: [
+              FullWidthPaddingInput(
+                password: false,
+                maxLines: 6,
+                controller: postWidgetController,
+              ),
+              TextWithIconButton(
+                  onPressed: () {
+                    parentComment == null
+                        ? context
+                            .read<CommentScreenCubit>()
+                            .postComment(postWidgetController.text, loadedPost)
+                        : context.read<CommentScreenCubit>().postComment(
+                            postWidgetController.text,
+                            loadedPost,
+                            parentComment);
+                  },
+                  text: "Post")
+            ],
+          ),
+        ));
   }
 
   /// generate the widget with the action buttons (like load children etc.)

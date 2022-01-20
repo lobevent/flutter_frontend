@@ -23,7 +23,8 @@ class CommentRemoteService extends RemoteService<CommentDto> {
       "/comment/%parentCommentId%/comment/%amount%/%lastCommentTime%";
   static const String commentsFromPostPath =
       "/event/post/%postId%/comment/%amount%/%lastCommentTime%";
-
+  static const String postPathComment =
+      "/event/post/%postId%/comment%parentId%";
   static const String postPath = "/comment";
   static const String deletePath = "/comment";
   static const String updatePath = "/comment";
@@ -108,5 +109,15 @@ class CommentRemoteService extends RemoteService<CommentDto> {
   Future<List<CommentDto>> _getCommentList(String path) async {
     final Response response = await client.get(path);
     return convertList(response);
+  }
+
+  Future<CommentDto> createComment(
+      CommentDto commentDto, String postId, String parentId) async {
+    return _decodeComment(await client.post(
+        postPathComment.interpolate({
+          "postId": postId,
+          "parentId": parentId == "" ? "/" + postId : "/" + parentId,
+        }),
+        jsonEncode(commentDto.toJson())));
   }
 }

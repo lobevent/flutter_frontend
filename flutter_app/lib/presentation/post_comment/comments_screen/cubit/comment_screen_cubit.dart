@@ -1,8 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
+import 'package:flutter_frontend/domain/post/value_objects.dart';
+import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
@@ -30,18 +35,26 @@ class CommentScreenCubit extends Cubit<CommentScreenState> {
     try {
       // this is the case if post is set (so load comments to a post)
       if (post != null) {
-        comments = commentsErrorHandler(await repository.getCommentsFromPost(lastCommentTime: DateTime.now(), amount: 30, postParent: post!)) as List<Comment>?;
+        comments = commentsErrorHandler(await repository.getCommentsFromPost(
+            lastCommentTime: DateTime.now(),
+            amount: 30,
+            postParent: post!)) as List<Comment>?;
         if (comments != null) {
           // copy to the post thats given and emit state
-          emit(CommentScreenState.loadedPost(post!.copyWith(comments: comments)));
+          emit(CommentScreenState.loadedPost(
+              post!.copyWith(comments: comments)));
         }
-
       } else {
         // this is the case if the comments are loaded from parent comment
-        comments = commentsErrorHandler(await repository.getCommentsFromComment(lastCommentTime: DateTime.now(), amount: 30, commentParent: parentComment!)) as List<Comment>?;
+        comments = commentsErrorHandler(await repository.getCommentsFromComment(
+            lastCommentTime: DateTime.now(),
+            amount: 30,
+            commentParent: parentComment!)) as List<Comment>?;
 
         if (comments != null) {
           emit(CommentScreenState.loadedComment(
+              //maybe bullshit
+              parentComment!.post,
               // copy to the comment thats given and emit state
               parentComment!.copyWith(commentChildren: comments)));
         }
@@ -49,6 +62,59 @@ class CommentScreenCubit extends Cubit<CommentScreenState> {
     } catch (e) {
       emit(CommentScreenState.error(e.toString()));
     }
+  }
+
+  ///post a comment and add the comment to our loadpost state so we can reload and see the new comment
+  Future<void> postComment(String commentDesc, Post loadedPost,
+      [Comment? parentComment = null]) async {
+    Comment comment = Comment(
+      id: UniqueId(),
+      creationDate: DateTime.now(),
+      owner: Profile(id: UniqueId(), name: ProfileName("fake")),
+      post: loadedPost,
+      //decide if parent has comment or only post
+      commentParent: parentComment != null ? parentComment : null,
+      commentContent: CommentContent(commentDesc),
+    );
+    await state.maybeMap(
+        //decision for loaded post
+        loadedPost: (value) async {
+          //emit "reloading"
+          emit(CommentScreenState.loading());
+          //access repo
+          await repository
+              .createComment(comment, loadedPost.id!.value.toString())
+              .then((commentOrFailure) => commentOrFailure.fold(
+                      (failure) =>
+                          emit(CommentScreenState.error(failure.toString())),
+                      (comment) {
+                    //doesnt work yet, increment the childcount so it displays
+                    value.post.comments!.add(comment);
+                    value.post.commentCount != null
+                        ? value.post.commentCount! + 1
+                        : value.post.commentCount == 1;
+                    //emit the loaded post, so we see our added comment
+                    emit(CommentScreenState.loadedPost(loadedPost));
+                  }));
+        },
+        loadedComment: (commentLoaded) async {
+          //emit loading
+          emit(CommentScreenState.loading());
+          //call the backend
+          await repository
+              .createComment(comment, loadedPost.id!.value.toString(),
+                  commentLoaded.comment.id.value.toString())
+              .then((commentOrFailure) => commentOrFailure.fold(
+                      (failure) =>
+                          emit(CommentScreenState.error(failure.toString())),
+                      (comment) {
+                    commentLoaded.comment.commentChildren!.add(comment);
+                    //emit out new state so we see our generated comment
+                    //emit(CommentScreenState.loadedComment(
+                    //    commentLoaded.post, parentComment!));
+                  }));
+        },
+        orElse: () => throw LogicError());
   }
 
   // an simple error handler for eithers

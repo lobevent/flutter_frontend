@@ -2,6 +2,10 @@ import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/data/icons_with_texts.dart';
+import 'package:flutter_frontend/data/icons_with_texts.dart';
+import 'package:flutter_frontend/data/icons_with_texts.dart';
+import 'package:flutter_frontend/data/icons_with_texts.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
@@ -40,8 +44,7 @@ class EventContent extends StatelessWidget {
                   /// Used as space
                   const SizedBox(height: 20),
 
-                  AttendingAndOwnStatus(
-                      state.event.attendingCount!, state.event.status),
+                  AttendingAndOwnStatus(state.event.attendingCount!, state.event.status, context),
 
                   /// Used as space
                   const SizedBox(height: 20),
@@ -54,21 +57,21 @@ class EventContent extends StatelessWidget {
 
                   ///likebutton and information
                   LikeWidget(state.event),
+
                   /// Used as space
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
 
                   if (state.event.isHost) AddFriendsWidget(context),
-
 
                   /// Used as space
                   const SizedBox(height: 20),
 
                   PostWidget(state.event, context),
+
                   /// Used as space
                   const SizedBox(height: 20),
-
-
-
 
                   /// Contains the description of the event
                   DescriptionWidget(state.event.description!.getOrCrash()),
@@ -83,7 +86,7 @@ class EventContent extends StatelessWidget {
   }
 
   /// this contains the attending paritcipants and the own attending status view for this event
-  Widget AttendingAndOwnStatus(int attending, EventStatus? status) {
+  Widget AttendingAndOwnStatus(int attending, EventStatus? status, BuildContext context) {
     IconData icon;
     String text;
 
@@ -106,6 +109,7 @@ class EventContent extends StatelessWidget {
         break;
     }
 
+    //return TextWithIconButton(onPressed: null, text: AppStrings.participants + ':' + attending.toString());
     return PaddingWidget(
       children: [
         Icon(Icons.group),
@@ -114,11 +118,11 @@ class EventContent extends StatelessWidget {
           style: TextStyle(color: textColor),
         ),
         Spacer(),
-        Icon(icon),
-        Text(
-          text,
-          style: TextStyle(color: textColor),
-        )
+        //Icon(icon),
+        uesMenubutton(context, icon, text)
+        //Text(text, style: TextStyle(color: textColor))
+
+        //TextWithIconButton(onPressed: null, text: text, icon: icon,)
       ],
     );
   }
@@ -137,8 +141,7 @@ class EventContent extends StatelessWidget {
 
       /// We want to be able to navigate to the owner of the event
       OutlinedButton(
-          onPressed: () =>
-              context.router.push(ProfilePageRoute(profileId: profile.id)),
+          onPressed: () => context.router.push(ProfilePageRoute(profileId: profile.id)),
           child:
               // this looks cancer, and maybe you are right
               // feel free to correct this
@@ -164,14 +167,7 @@ class EventContent extends StatelessWidget {
 
   /// A text widget, styled for headings
   Widget TitleText(String title) {
-    return PaddingWidget(children: [
-      Text(title,
-          style: TextStyle(
-              height: 2,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: textColor))
-    ]);
+    return PaddingWidget(children: [Text(title, style: TextStyle(height: 2, fontSize: 30, fontWeight: FontWeight.bold, color: textColor))]);
   }
 
   /// returns widget, that ist padded and expands
@@ -197,26 +193,51 @@ class EventContent extends StatelessWidget {
             key: ObjectKey(this.key),
             objectId: event.id,
             option: LikeTypeOption.Event,
-            likeStatus: event.liked?? false,
+            likeStatus: event.liked ?? false,
           ),
         ),
       )
     ]);
   }
 
-
-  Widget AddFriendsWidget(BuildContext eventCubitContext){
+  Widget AddFriendsWidget(BuildContext eventCubitContext) {
     return AddFriendsButton();
   }
 
-  Widget PostWidget(Event event, BuildContext context){
-    return MaterialButton(
-      onPressed: () { context.router.push(PostsScreenRoute(event: event)); });
+  Widget PostWidget(Event event, BuildContext context) {
+    return MaterialButton(onPressed: () {
+      context.router.push(PostsScreenRoute(event: event));
+    });
   }
 
   /// Widget used for making padding with a row, so the children start on the
   /// correct side and is padded from the side
   Widget PaddingWidget({required List<Widget> children}) {
     return PaddingRowWidget(children: children);
+  }
+
+  Widget uesMenubutton(BuildContext context, IconData icon, String text) {
+// This menu button widget updates a _selection field (of type EventStatus,
+// not shown here).
+    return PopupMenuButton<EventStatus>(
+      child: Row(children: [Icon(icon), Text(text, style: TextStyle(color: textColor))]),
+      onSelected: (EventStatus result) {
+
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<EventStatus>>[
+        PopupMenuItem<EventStatus>(
+          value: EventStatus.attending,
+          child: Row(children: [Icon(IconsWithTexts.uesWithIcons[EventStatus.attending]!.values.first), Text(IconsWithTexts.uesWithIcons[EventStatus.attending]!.keys.first)]),
+        ),
+        PopupMenuItem<EventStatus>(
+          value: EventStatus.interested,
+          child: Row(children: [Icon(IconsWithTexts.uesWithIcons[EventStatus.interested]!.values.first), Text(IconsWithTexts.uesWithIcons[EventStatus.interested]!.keys.first)]),
+        ),
+        PopupMenuItem<EventStatus>(
+          value: EventStatus.notAttending,
+          child: Row(children: [Icon(IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.values.first), Text(IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.keys.first)]),
+        ),
+      ],
+    );
   }
 }

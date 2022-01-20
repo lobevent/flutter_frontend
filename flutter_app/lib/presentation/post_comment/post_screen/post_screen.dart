@@ -10,7 +10,6 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/widgets/p
 import 'cubit/post_screen_cubit.dart';
 
 class PostsScreen extends StatelessWidget {
-
   final Event event;
 
   const PostsScreen({Key? key, required this.event});
@@ -18,13 +17,13 @@ class PostsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          PostScreenCubit(event: event),
+      create: (context) => PostScreenCubit(event: event),
       child: BlocBuilder<PostScreenCubit, PostScreenState>(
         builder: (context, state) {
           return LoadingOverlay(
               isLoading: state is Loading,
               child: BasicContentContainer(
+                scrollable: false,
                 children: state.maybeMap(
 
                     /// if the error state is not active, load the contents

@@ -1,5 +1,7 @@
 library stlyling_widgets;
 
+import 'dart:ffi';
+
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,19 +28,22 @@ class BasicContentContainer extends StatelessWidget {
   // https://stackoverflow.com/questions/54114221/flutter-fixed-button-in-customscrollview
   final Widget? bottomNavigationBar;
   final PreferredSizeWidget? appBar;
+  final FloatingActionButton? floatingActionButton;
   const BasicContentContainer(
       {Key? key,
       required this.children,
       this.bottomNavigationBar,
       this.controller,
       this.appBar,
-      this.scrollable = true})
+      this.scrollable = true,
+      this.floatingActionButton})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (!scrollable) {
       return Scaffold(
+        floatingActionButton: floatingActionButton ?? null,
         appBar: appBar,
         body: ColorfulSafeArea(
           color: Colors.yellow,
@@ -338,9 +343,14 @@ class FullWidthPaddingInput extends StatelessWidget {
   final String? labelText;
   final String? hintText;
   final bool password;
+  final int? maxLines;
 
   FullWidthPaddingInput(
-      {this.controller, this.labelText, this.hintText, this.password = false});
+      {this.controller,
+      this.labelText,
+      this.hintText,
+      this.password = false,
+      this.maxLines});
 
   @override
   Widget build(BuildContext context) {
@@ -351,6 +361,7 @@ class FullWidthPaddingInput extends StatelessWidget {
         enableSuggestions: password ? false : true,
         autocorrect: password ? false : true,
         controller: controller,
+        maxLines: maxLines != null ? maxLines : 1,
         decoration: InputDecoration(
           hintText: hintText,
           border: const OutlineInputBorder(),

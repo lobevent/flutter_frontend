@@ -25,4 +25,6 @@ class SymfonyLogin{
     return SymfonyCommunicator.handleExceptions(await client.post(Uri.parse("$url/login_check"),
         body: jsonEncode({"username": username, "password": passwort}), headers: {"Content-Type": "application/json"}));
   }
+
+
 }

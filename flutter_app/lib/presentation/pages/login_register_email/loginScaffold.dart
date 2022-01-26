@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
-
+import 'package:auto_route/auto_route.dart' hide Router;
+import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'cubit/login_register_cubit.dart';
 
 class Login extends StatelessWidget {
@@ -20,11 +21,17 @@ class Login extends StatelessWidget {
           FullWidthPaddingInput(labelText:  'Password', controller: textEditingControllerPassword, password: true,),
           Padding(
               padding: const EdgeInsets.all(10),
-              child: TextWithIconButton(
+              child: Column(children: [
+                TextWithIconButton(
                 onPressed: () => {context1.read<LoginRegisterCubit>().login(textEditingControllerPassword.value.text, textEditingControllerUsername.value.text)},
                 text: "Login",
                 icon: Icons.login,
-              ))
+              ),
+                TextWithIconButton(
+                onPressed: () => {context.router.push(RegistrationFormRoute())},
+                text: "Reigi",
+                icon: Icons.login,)
+              ]))
         ])
       ]);
     });

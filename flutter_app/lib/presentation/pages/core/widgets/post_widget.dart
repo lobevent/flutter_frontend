@@ -1,22 +1,29 @@
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
+import 'package:flutter_frontend/presentation/post_comment/comments_screen/cubit/comment_screen_cubit.dart';
+import 'package:flutter_frontend/presentation/post_comment/comments_screen/widgets/comment_container.dart';
+import 'package:flutter_frontend/presentation/post_comment/post_screen/cubit/post_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
+import 'package:provider/src/provider.dart';
 
 /// this is the post widget, which should be used everywhere
 class PostWidget extends StatelessWidget {
   /// the post attribute, which contains all the post data
   final Post post;
+  final Event? event;
   final bool showAuthor;
   final bool showCommentAction;
   const PostWidget(
       {Key? key,
       required this.post,
+      this.event,
       this.showAuthor = true,
       this.showCommentAction = true})
       : super(key: key);
@@ -42,7 +49,11 @@ class PostWidget extends StatelessWidget {
                 Text(post.commentCount.toString(),
                     style: TextStyle(color: AppColors.stdTextColor))
               ],
-            ))
+            )),
+        //delete a post
+        StdTextButton(
+            onPressed: () => context.read<PostScreenCubit>().deletePost(post),
+            child: Icon(Icons.delete))
       ],
     );
   }
@@ -50,27 +61,74 @@ class PostWidget extends StatelessWidget {
 
 /// generate list of posts
 Widget generateUnscrollablePostContainer(
-    {required List<Post> posts, Profile? profile, bool showAutor = false}) {
+    {required List<Post> posts,
+    Profile? profile,
+    bool showAutor = false,
+    Event? event,
+    BuildContext? context}) {
   if (posts.isEmpty) {
-    return Text("Nothing here yet");
+    return Column(
+      children: [
+        Text("No Posts available."),
+        WriteWidget(context!, event!),
+      ],
+    );
+
+    //return Text("Nothing here yet");
   }
   // Expanded because if you leave it, it expands infinitely and throws errors
+  return Column(
+    children: [
+      Container(
+        // building the list of post widgets
+        child: ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          // the padding is set to the std padding defined in styling widgets
+          padding: stdPadding,
+          scrollDirection: Axis.vertical,
+          itemCount: posts.length,
+          itemBuilder: (context, index) {
+            return PostWidget(
+                post: profile != null
+                    ? posts[index].copyWith(owner: profile)
+                    : posts[index],
+                showAuthor: showAutor,
+                event: event);
+          },
+        ),
+        //WriteWidget(context!, event!)
+      ),
+      //check if we need to build it or if we are on the feedscreen
+      if (event != null && context != null)
+        WriteWidget(context, event)
+      else
+        Text("")
+    ],
+  );
+}
+
+Widget WriteWidget(BuildContext context, Event event) {
+  TextEditingController postWidgetController = TextEditingController();
   return Container(
-      // building the list of post widgets
-      child: ListView.builder(
-    physics: NeverScrollableScrollPhysics(),
-    shrinkWrap: true,
-    // the padding is set to the std padding defined in styling widgets
-    padding: stdPadding,
-    scrollDirection: Axis.vertical,
-    itemCount: posts.length,
-    itemBuilder: (context, index) {
-      return PostWidget(
-        post: profile != null
-            ? posts[index].copyWith(owner: profile)
-            : posts[index],
-        showAuthor: showAutor,
-      );
-    },
-  ));
+      width: 300,
+      child: Title(
+        title: "Post something.",
+        color: Colors.black,
+        child: Column(
+          children: [
+            FullWidthPaddingInput(
+              password: false,
+              maxLines: 6,
+              controller: postWidgetController,
+            ),
+            TextWithIconButton(
+                onPressed: () {
+                  context.read<PostScreenCubit>().postPost(
+                      postWidgetController.text, event.id.value.toString());
+                },
+                text: "Post")
+          ],
+        ),
+      ));
 }

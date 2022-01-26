@@ -135,7 +135,13 @@ class CommentContainer extends StatelessWidget {
                 Text(comment.childCount.toString(),
                     style: TextStyle(color: AppColors.stdTextColor))
               ],
-            ))
+            )),
+        //delete an comment button
+        StdTextButton(
+            onPressed: () => context
+                .read<CommentScreenCubit>()
+                .deletePostOrComment(comment.id.value.toString()),
+            child: Icon(Icons.delete))
       ],
     );
   }

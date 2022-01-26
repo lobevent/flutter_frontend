@@ -1,8 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
+import 'package:flutter_frontend/domain/post/value_objects.dart';
+import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/post/post_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
@@ -14,8 +19,7 @@ class PostScreenCubit extends Cubit<PostScreenState> {
   final Event? event;
   final PostRepository repository = GetIt.I<PostRepository>();
 
-  PostScreenCubit({this.event})
-      : super(PostScreenState.initial()) {
+  PostScreenCubit({this.event}) : super(PostScreenState.initial()) {
     emit(PostScreenState.initial());
     loadPosts();
   }
@@ -25,7 +29,8 @@ class PostScreenCubit extends Cubit<PostScreenState> {
     final Either<NetWorkFailure, List<Post>> postsList;
     try {
       emit(PostScreenState.loading());
-      postsList = await repository.getPostsFromEvent(lastPostTime: DateTime.now(),amount: 30, event: event!);
+      postsList = await repository.getPostsFromEvent(
+          lastPostTime: DateTime.now(), amount: 30, event: event!);
       emit(PostScreenState.loaded(
           posts: postsList.fold((l) => throw NetWorkFailure, (r) => r)));
     } catch (e) {
@@ -33,6 +38,37 @@ class PostScreenCubit extends Cubit<PostScreenState> {
     }
   }
 
+  ///creates a post and send it to backend with eventId
+  Future<void> postPost(String postDesc, String eventId) async {
+    Post post = Post(
+        id: UniqueId(),
+        creationDate: DateTime.now(),
+        postContent: PostContent(postDesc),
+        event: event,
+        owner: Profile(id: UniqueId(), name: ProfileName("test")));
+    await state.maybeMap(
+      loaded: (value) async {
+        emit(PostScreenState.loading());
+        await repository
+            .createPost(post, eventId)
+            .then((postOrFailure) => postOrFailure.fold(
+                (failure) =>
+                    //if failure emit to error screen
+                    emit(PostScreenState.error(error: failure.toString())),
+                (post) => {
+                      //add our post to posts and emit the postsscreen
+                      value.posts.add(post),
+                      emit(PostScreenState.loaded(posts: value.posts))
+                    }));
+      },
+      orElse: () => throw LogicError(),
+    );
+  }
+
+  //we dont use this
+  Future<void> deletePost(Post post) async {
+    final answer = await repository.delete(post);
+  }
 
   // an simple error handler for eithers
   dynamic postsErrorHandler(Either<NetWorkFailure, dynamic> response) {

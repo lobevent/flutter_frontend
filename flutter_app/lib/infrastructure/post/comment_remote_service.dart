@@ -28,6 +28,8 @@ class CommentRemoteService extends RemoteService<CommentDto> {
   static const String postPath = "/comment";
   static const String deletePath = "/comment";
   static const String updatePath = "/comment";
+  static const String deleteCommentPath =
+      "/event/post/comment/delete/%commentId%";
 
   //either comment or post as parent
 
@@ -119,5 +121,11 @@ class CommentRemoteService extends RemoteService<CommentDto> {
           "parentId": parentId == "" ? "/" + postId : "/" + parentId,
         }),
         jsonEncode(commentDto.toJson())));
+  }
+
+  Future<void> deletePostOrComment(String commentId) async {
+    final answer = await client.delete(deleteCommentPath.interpolate({
+      "commentId": commentId,
+    }));
   }
 }

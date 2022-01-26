@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
+import 'package:flutter_frontend/infrastructure/post/comment_remote_service.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_widget.dart';
@@ -12,25 +13,27 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/cubit/pos
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class PostContainer extends StatelessWidget {
+  final Event event;
 
-  const PostContainer({Key? key}) : super(key: key);
+  const PostContainer({Key? key, required this.event}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PostScreenCubit, PostScreenState>(
-      builder: (context, state) {
-        return state.maybeMap(
-            loaded: (loadedState) {
-              // if we have the loaded state, map over the profile
-              // profile has the base profile (list view) and an full profile
-              return PostList(loadedState.posts);
-            },
-            orElse: () => Text(""));
-      }
-    );
+        builder: (context, state) {
+      return state.maybeMap(
+          loaded: (loadedState) {
+            // if we have the loaded state, map over the profile
+            // profile has the base profile (list view) and an full profile
+            return PostList(event, loadedState.posts, context);
+          },
+          orElse: () => Text(""));
+    });
   }
 }
-  /// generate list of posts
-  Widget PostList(List<Post> posts) {
-    return generateUnscrollablePostContainer(posts: posts, showAutor: true);
+
+/// generate list of posts
+Widget PostList(Event event, List<Post> posts, BuildContext context) {
+  return generateUnscrollablePostContainer(
+      event: event, posts: posts, context: context, showAutor: true);
 }

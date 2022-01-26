@@ -149,4 +149,9 @@ class CommentRepository extends Repository {
       return right(returnedCommentDto.toDomain());
     });
   }
+
+  Future<void> deletePostComment(String postOrCommentId) async {
+    final answer =
+        await _commentRemoteService.deletePostOrComment(postOrCommentId);
+  }
 }

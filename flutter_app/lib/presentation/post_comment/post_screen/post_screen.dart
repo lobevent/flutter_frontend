@@ -23,14 +23,14 @@ class PostsScreen extends StatelessWidget {
           return LoadingOverlay(
               isLoading: state is Loading,
               child: BasicContentContainer(
-                scrollable: false,
+                scrollable: true,
                 children: state.maybeMap(
 
                     /// if the error state is not active, load the contents
                     error: (errState) =>
                         [ErrorMessage(errorText: errState.error)],
-                    orElse: () => const [
-                          PostContainer(),
+                    orElse: () => [
+                          PostContainer(event: event),
                         ]),
               ));
         },

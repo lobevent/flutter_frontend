@@ -9,48 +9,51 @@ import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
 import 'package:flutter_frontend/infrastructure/post/post_remote_service.dart';
 
 enum Operation { fromUser }
+
 class PostRepository extends Repository {
   final PostRemoteService _postRemoteService;
 
   PostRepository(this._postRemoteService);
 
-
   // ---------------------------------- Simple CRUD ------------------------------------
   ///
   /// Creates an post in the backend or returns failure
-  ///  
+  ///
   Future<Either<NetWorkFailure, Post>> create(Post post) async {
     return localErrorHandler(() async {
       final postDto = PostDto.fromDomain(post);
-      final PostDto returnedPostDto = await _postRemoteService.createPost(postDto);
+      final PostDto returnedPostDto = await _postRemoteService.createPost(
+          postDto, post.event!.id.value.toString());
       return right(returnedPostDto.toDomain());
     });
   }
+
   ///
   /// deletes an post in the backend or returns failure
-  /// 
+  ///
   Future<Either<NetWorkFailure, Post>> delete(Post post) async {
     return localErrorHandler(() async {
       final postDto = PostDto.fromDomain(post);
-      final PostDto returnedPostDto = await _postRemoteService.deletePost(postDto);
+      final PostDto returnedPostDto =
+          await _postRemoteService.deletePost(postDto);
       return right(returnedPostDto.toDomain()); //TODO implement with .toDomain
     });
   }
 
   ///
   /// gets an single post in the backend or returns failure
-  /// 
+  ///
   Future<Either<NetWorkFailure, Post>> getSingle(UniqueId id) async {
     return localErrorHandler(() async {
-      final PostDto postDto =
-      await _postRemoteService.getSingle(id.value);
+      final PostDto postDto = await _postRemoteService.getSingle(id.value);
       final Post post = postDto.toDomain();
       return right(post);
     });
   }
+
   ///
   /// updates an post in the backend or returns failure
-  /// 
+  ///
   Future<Either<NetWorkFailure, Post>> update(Post post) async {
     return localErrorHandler(() async {
       final postDto = PostDto.fromDomain(post);
@@ -60,15 +63,16 @@ class PostRepository extends Repository {
     });
   }
 
-
   // ------------------------- List Getters ----------------------------------
 
   ///
   /// gets posts from logged in user
   ///
-  Future<Either<NetWorkFailure, List<Post>>> getOwnPosts({required DateTime lastPostTime, required int amount}) async{
+  Future<Either<NetWorkFailure, List<Post>>> getOwnPosts(
+      {required DateTime lastPostTime, required int amount}) async {
     return localErrorHandler(() async {
-      final List<PostDto> postDtos = await _postRemoteService.getOwnPosts(lastPostTime, amount);
+      final List<PostDto> postDtos =
+          await _postRemoteService.getOwnPosts(lastPostTime, amount);
       return right(_convertToDomainList(postDtos));
     });
   }
@@ -76,9 +80,11 @@ class PostRepository extends Repository {
   ///
   /// gets the feed for logged in user
   ///
-  Future<Either<NetWorkFailure, List<Post>>> getFeed({required DateTime lastPostTime, required int amount}) async{
+  Future<Either<NetWorkFailure, List<Post>>> getFeed(
+      {required DateTime lastPostTime, required int amount}) async {
     return localErrorHandler(() async {
-      final List<PostDto> postDtos = await _postRemoteService.getFeed(lastPostTime, amount);
+      final List<PostDto> postDtos =
+          await _postRemoteService.getFeed(lastPostTime, amount);
       return right(_convertToDomainList(postDtos));
     });
   }
@@ -86,19 +92,27 @@ class PostRepository extends Repository {
   ///
   /// gets the public posts from specific user
   ///
-  Future<Either<NetWorkFailure, List<Post>>> getPostsFromUser({required DateTime lastPostTime, required int amount, required Profile profile}) async{
+  Future<Either<NetWorkFailure, List<Post>>> getPostsFromUser(
+      {required DateTime lastPostTime,
+      required int amount,
+      required Profile profile}) async {
     return localErrorHandler(() async {
-      final List<PostDto> postDtos = await _postRemoteService.getPostsFromUser(lastPostTime, amount, profile.id.value.toString());
+      final List<PostDto> postDtos = await _postRemoteService.getPostsFromUser(
+          lastPostTime, amount, profile.id.value.toString());
       return right(_convertToDomainList(postDtos));
     });
   }
-  
+
   ///
   /// gets the public posts from a specific event
   ///
-  Future<Either<NetWorkFailure, List<Post>>> getPostsFromEvent({required DateTime lastPostTime, required int amount, required Event event}) async{
+  Future<Either<NetWorkFailure, List<Post>>> getPostsFromEvent(
+      {required DateTime lastPostTime,
+      required int amount,
+      required Event event}) async {
     return localErrorHandler(() async {
-      final List<PostDto> postDtos = await _postRemoteService.getPostsFromEvent(lastPostTime, amount, event.id.value.toString());
+      final List<PostDto> postDtos = await _postRemoteService.getPostsFromEvent(
+          lastPostTime, amount, event.id.value.toString());
       return right(_convertToDomainList(postDtos));
     });
   }
@@ -106,9 +120,21 @@ class PostRepository extends Repository {
   ///
   /// converts to domain list
   ///
-  List<Post> _convertToDomainList(List<PostDto> dtos){
+  List<Post> _convertToDomainList(List<PostDto> dtos) {
     return dtos.map((postDto) => postDto.toDomain()).toList();
   }
 
-
+  ///---------------------------------------------------------------------Post ADD/EDIT/DELETE-----------------------------------------------------
+  ///
+  /// adds a post
+  ///
+  Future<Either<NetWorkFailure, Post>> createPost(
+      Post post, String eventId) async {
+    return localErrorHandler<Post>(() async {
+      final postDto = PostDto.fromDomain(post);
+      PostDto returnedPostDto =
+          await _postRemoteService.createPost(postDto, eventId);
+      return right(returnedPostDto.toDomain());
+    });
+  }
 }

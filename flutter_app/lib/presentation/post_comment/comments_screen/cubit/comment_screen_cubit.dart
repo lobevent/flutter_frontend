@@ -117,6 +117,10 @@ class CommentScreenCubit extends Cubit<CommentScreenState> {
         orElse: () => throw LogicError());
   }
 
+  Future<void> deletePostOrComment(String commentPostId) async {
+    final answer = await repository.deletePostComment(commentPostId);
+  }
+
   // an simple error handler for eithers
   dynamic commentsErrorHandler(Either<NetWorkFailure, dynamic> response) {
     return response.fold(

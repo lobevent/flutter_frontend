@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
@@ -30,6 +31,7 @@ class EventRemoteService extends RemoteService<EventDto> {
   static const String postPath = "/event";
   static const String deletePath = "/event/";
   static const String updatePath = "/event/edit/";
+  static const String changeStatusPath = "/user/eventStatus/%eventId%/%status%";
 
   final SymfonyCommunicator client;
 
@@ -118,6 +120,13 @@ class EventRemoteService extends RemoteService<EventDto> {
     return _decodeEvent(await client.delete("$deletePath${eventDto.id}"));
   }
 
+
+  Future<EventDto> changeStatus(EventDto eventDto, EventStatus status) async {
+    // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive
+
+    return _decodeEvent(await client.put(changeStatusPath.interpolate({"eventId" : eventDto.id, "status": (EventDto.domainToDtoStatus[status] as int).toString()}), {}), 'event');
+  }
+
   Future<EventDto> updateEvent(EventDto eventDto) async {
     return _decodeEvent(await client.put(
         "$updatePath${eventDto.id}", jsonEncode(eventDto.toJson())));
@@ -130,8 +139,14 @@ class EventRemoteService extends RemoteService<EventDto> {
     return "$route/$amount/$lastEventTime";
   }*/
 
-  EventDto _decodeEvent(Response json) {
-    return EventDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
+  EventDto _decodeEvent(Response json, [String? arrayField]) {
+    if(arrayField == null){
+      return EventDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
+    }
+    else
+    {
+      return EventDto.fromJson(jsonDecode(json.body)[arrayField] as Map<String, dynamic>);
+    }
   }
 
   Future<List<EventDto>> _getEventList(String path) async {

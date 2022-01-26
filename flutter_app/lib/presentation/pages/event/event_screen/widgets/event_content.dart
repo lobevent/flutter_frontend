@@ -103,6 +103,10 @@ class EventContent extends StatelessWidget {
         icon = Icons.lightbulb;
         text = AppStrings.interested;
         break;
+      case EventStatus.invited:
+        icon = IconsWithTexts.uesWithIcons[EventStatus.invited]!.values.first;
+        text = IconsWithTexts.uesWithIcons[EventStatus.invited]!.keys.first;
+        break;
       default:
         icon = Icons.lightbulb;
         text = AppStrings.interested;
@@ -217,27 +221,77 @@ class EventContent extends StatelessWidget {
   }
 
   Widget uesMenubutton(BuildContext context, IconData icon, String text) {
+
+    final onClickFunction = (EventStatus status) {
+      context.read<EventScreenCubit>().changeStatus(status);
+      Navigator.pop(context);
+    };
+
 // This menu button widget updates a _selection field (of type EventStatus,
 // not shown here).
-    return PopupMenuButton<EventStatus>(
+    return PopupMenuButton(
       child: Row(children: [Icon(icon), Text(text, style: TextStyle(color: textColor))]),
-      onSelected: (EventStatus result) {
+       itemBuilder: (BuildContext context){
+           return [
+             PopupMenuWidget(height: 20, child:
+             PaddingRowWidget(paddingRight: 20, paddinfLeft: 20, children: [
+               TextWithIconButton(onPressed: () => onClickFunction(EventStatus.attending), text: '', icon: IconsWithTexts.uesWithIcons[EventStatus.attending]!.values.first,),
+               Spacer(),
+               TextWithIconButton(onPressed: () => onClickFunction(EventStatus.interested), text: '', icon: IconsWithTexts.uesWithIcons[EventStatus.interested]!.values.first),
+               Spacer(),
+               TextWithIconButton(onPressed: () => onClickFunction(EventStatus.notAttending), text: '', icon: IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.values.first),
+             ],))
+           ];
 
-      },
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<EventStatus>>[
-        PopupMenuItem<EventStatus>(
-          value: EventStatus.attending,
-          child: Row(children: [Icon(IconsWithTexts.uesWithIcons[EventStatus.attending]!.values.first), Text(IconsWithTexts.uesWithIcons[EventStatus.attending]!.keys.first)]),
-        ),
-        PopupMenuItem<EventStatus>(
-          value: EventStatus.interested,
-          child: Row(children: [Icon(IconsWithTexts.uesWithIcons[EventStatus.interested]!.values.first), Text(IconsWithTexts.uesWithIcons[EventStatus.interested]!.keys.first)]),
-        ),
-        PopupMenuItem<EventStatus>(
-          value: EventStatus.notAttending,
-          child: Row(children: [Icon(IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.values.first), Text(IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.keys.first)]),
-        ),
-      ],
+       }
+      //<PopupMenuEntry<EventStatus>>[
+      //
+      //     PopupMenuItem<EventStatus>(
+      //       enabled: false,
+      //       value: EventStatus.attending,
+      //       child: Row(children: [IconButton(icon: Icon(IconsWithTexts.uesWithIcons[EventStatus.attending]!.values.first), onPressed: () => {},), Icon(IconsWithTexts.uesWithIcons[EventStatus.attending]!.values.first),]),
+      //     ),
+        //Row(children: [TextWithIconButton(onPressed: null, text: 'asdasdad')],)
+      //   PopupMenuItem<EventStatus>(
+      //     value: EventStatus.attending,
+      //     child: Row(children: [Icon(IconsWithTexts.uesWithIcons[EventStatus.attending]!.values.first), Text(IconsWithTexts.uesWithIcons[EventStatus.attending]!.keys.first)]),
+      //   ),
+      //   PopupMenuItem<EventStatus>(
+      //     value: EventStatus.interested,
+      //     child: Row(children: [Icon(IconsWithTexts.uesWithIcons[EventStatus.interested]!.values.first), Text(IconsWithTexts.uesWithIcons[EventStatus.interested]!.keys.first)]),
+      //   ),
+      //   PopupMenuItem<EventStatus>(
+      //     value: EventStatus.notAttending,
+      //     child: Row(children: [Icon(IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.values.first), Text(IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.keys.first)]),
+      //   ),
+      //],
     );
   }
+}
+
+class PopupMenuWidget<T> extends PopupMenuEntry<T> {
+  const PopupMenuWidget({ Key? key, required this.height ,required this.child }) : super(key: key);
+
+  @override
+  final Widget child;
+
+  @override
+  final double height;
+
+  @override
+  bool get enabled => false;
+
+  @override
+  _PopupMenuWidgetState createState() => new _PopupMenuWidgetState();
+
+  @override
+  bool represents(T? value) {
+    // TODO: implement represents
+    throw UnimplementedError();
+  }
+}
+
+class _PopupMenuWidgetState extends State<PopupMenuWidget> {
+  @override
+  Widget build(BuildContext context) => widget.child;
 }

@@ -52,6 +52,24 @@ class EventScreenCubit extends Cubit<EventScreenState> {
   }
 
 
+  Future<void> changeStatus(EventStatus status) async{
+
+    state.maybeMap(orElse: (){}, loaded: (loadedState) async{
+      await repository.changeStatus(loadedState.event, status).then((value){
+
+        value.fold((failute) => emit(EventScreenState.error(failure: failute)), (event) {
+          var event = loadedState.event.copyWith(status: status);
+
+          emit(EventScreenState.loading());
+
+          emit(EventScreenState.loaded(event: event));
+        });
+
+      });
+    });
+  }
+
+
   void addedInvitation(Invitation invitation){
     state.maybeMap(orElse: (){}, loaded: (loaded){
       emit(EventScreenState.loading());

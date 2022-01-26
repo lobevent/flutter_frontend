@@ -50,6 +50,16 @@ class EventRepository extends Repository {
     }
   }
 
+  Future<Either<NetWorkFailure, Event>> changeStatus(Event event, EventStatus status) async {
+    try {
+      final eventDto = EventDto.fromDomain(event);
+      EventDto returnedEvent = await _eventRemoteService.changeStatus(eventDto, status);
+      return right(returnedEvent.toDomain());
+    } on CommunicationException catch (e) {
+      return left(ExceptionsHandler.reactOnCommunicationException(e));
+    }
+  }
+
   // ------------------ Complex list operations ----------------------------
 
 

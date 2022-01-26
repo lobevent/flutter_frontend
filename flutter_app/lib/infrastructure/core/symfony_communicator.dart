@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 
 //import 'dart:html';
@@ -10,6 +11,7 @@ import 'package:flutter_frontend/core/services/AuthTokenService.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:get_it/get_it.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 import '../../main.dart';
@@ -43,6 +45,15 @@ class SymfonyCommunicator {
     encoding ??= Encoding.getByName("text/plain");
     return handleExceptions(await client.post(Uri.parse("$url$uri"),
         headers: headers, body: body, encoding: encoding));
+  }
+
+  /// Post to an resource with uri.
+  /// Throws [NotAuthenticatedException], [NotAuthorizedException], [NotFoundException], [InternalServerException]
+  /// The id (if needed) should be in the uri.
+  /// Uri has to start with an backslash "/".
+  Future<void> postFile(String uri, dynamic body, String filepath, [Encoding? encoding]) async {
+    var request = await http.MultipartRequest('POST', Uri.parse("$url$uri"));
+    request.files.add(await http.MultipartFile.fromPath('image', filepath));
   }
 
   /// Put an resource with uri.

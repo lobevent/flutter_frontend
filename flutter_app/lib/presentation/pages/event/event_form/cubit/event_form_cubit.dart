@@ -29,7 +29,7 @@ class EventFormCubit extends Cubit<EventFormState> {
 
   ProfileRepository profileRepository = GetIt.I<ProfileRepository>();
   EventRepository repository = GetIt.I<EventRepository>();
-  FileRepository fileRepository = GetIt.I<FileRepository>();
+  //FileRepository fileRepository = GetIt.I<FileRepository>();
 
   Future<void> submit() async {
     if (state.isEditing) {
@@ -159,7 +159,7 @@ class EventFormCubit extends Cubit<EventFormState> {
     return event;
   }
 
-  Future<void> chooseImage(Event event) async {
-    emit(state.copyWith(event: state.event.copyWith(image: await fileRepository.getImage())));
-  }
+  // Future<void> chooseImage(Event event) async {
+  //   emit(state.copyWith(event: state.event.copyWith(image: await fileRepository.getImage())));
+  // }
 }

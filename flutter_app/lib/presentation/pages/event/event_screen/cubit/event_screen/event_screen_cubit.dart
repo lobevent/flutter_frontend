@@ -75,6 +75,9 @@ class EventScreenCubit extends Cubit<EventScreenState> {
   }
 
 
+  ///
+  /// this alters the local invitation list and adds an invitation
+  ///
   void addedInvitation(Invitation invitation){
     state.maybeMap(orElse: (){}, loaded: (loaded){
       emit(EventScreenState.loading());
@@ -84,6 +87,9 @@ class EventScreenCubit extends Cubit<EventScreenState> {
   }
 
 
+  ///
+  /// this alters the local invitation list and removes an invitation
+  ///
   void revokedInvitation(Invitation invitation){
     state.maybeMap(orElse: (){}, loaded: (loaded){
       loaded.event.invitations.removeWhere((inv) => inv.id.value == invitation.id.value);
@@ -91,7 +97,6 @@ class EventScreenCubit extends Cubit<EventScreenState> {
       emit(loaded);
     });
   }
-
 
 
 }

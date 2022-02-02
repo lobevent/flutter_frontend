@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-
 //import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/core/Utils/LoginControllFunctions.dart';
 import 'package:flutter_frontend/core/services/AuthTokenService.dart';
+import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:get_it/get_it.dart';
@@ -51,6 +51,7 @@ class SymfonyCommunicator {
   /// Throws [NotAuthenticatedException], [NotAuthorizedException], [NotFoundException], [InternalServerException]
   /// The id (if needed) should be in the uri.
   /// Uri has to start with an backslash "/".
+
   Future<String> postFile(String uri, String filepath, [Encoding? encoding]) async {
     var request = await http.MultipartRequest('POST', Uri.parse("$url$uri"));
     request.files.add(await http.MultipartFile.fromPath('image', filepath));
@@ -78,11 +79,10 @@ class SymfonyCommunicator {
   }
 
   // after loging in or out it has to be resettet
-  setJwt(String token){
+  setJwt(String token) {
     jwt = token;
     headers = {"Authorization": "Bearer $token"};
   }
-
 
   /// The [requestFunction] is an lambda function, containing a request to execute
   static Future<Response> handleExceptions(Response response) async {
@@ -112,6 +112,4 @@ class SymfonyCommunicator {
         break; //return the baseclass for all other codes
     }
   }
-
-
 }

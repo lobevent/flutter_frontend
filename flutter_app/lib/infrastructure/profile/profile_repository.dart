@@ -234,4 +234,14 @@ class ProfileRepository extends Repository {
   List<Profile> _convertToDomainList(List<ProfileDto> dtos) {
     return dtos.map((profileDto) => profileDto.toDomain()).toList();
   }
+
+  Future<Either<NetWorkFailure, Profile>> getOwnProfile() async {
+    try {
+      final ProfileDto profileDto = await _profileRemoteService.getOwnProfile();
+      final Profile profile = profileDto.toDomain();
+      return right(profile);
+    } on CommunicationException catch (e) {
+      return left(ExceptionsHandler.reactOnCommunicationException(e));
+    }
+  }
 }

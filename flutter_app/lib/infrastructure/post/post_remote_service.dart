@@ -27,7 +27,7 @@ class PostRemoteService extends RemoteService<PostDto> {
 
   static const String postPath = "/event/post/";
   static const String createPostPath = "/event/%eventId%/post";
-  static const String deletePath = "/post/";
+  static const String deletePath = "/event/post/%postId%";
   static const String updatePath = "/post/";
 
   final SymfonyCommunicator client;
@@ -106,5 +106,9 @@ class PostRemoteService extends RemoteService<PostDto> {
   Future<List<PostDto>> _getPostList(String path) async {
     final Response response = await client.get(path);
     return convertList(response);
+  }
+
+  Future<void> deletedPost(String postId) async {
+    final answer = client.delete(deletePath.interpolate({"postId": postId}));
   }
 }

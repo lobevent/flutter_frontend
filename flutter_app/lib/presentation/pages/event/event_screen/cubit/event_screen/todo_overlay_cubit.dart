@@ -29,16 +29,17 @@ extension TodoOverlayCubit on EventScreenCubit {
 
     await state.maybeMap(
         loaded: (value) async {
+          emit(value.copyWith(addingItem: true));
           //emit loading state so an change is triggered
-          emit(EventScreenState.loading());
+          //emit(EventScreenState.loading());
           await todoRepository.addItem(todo, newItem).then((itemOrFailure) => itemOrFailure.fold(
                   // if we have an failure make an add EditItem Failure state, where the event is preserved
                   (failure) => emit(EventScreenState.addEditItemFailute(failure: failure, event: value.event)),
                   // if successfull emit new state with the added item
                   (item) {
                 //add item to the eventOrgalist
-                value.event.todo!.items.add(item);
-                emit(value);
+                value.event.todo!.items.insert(0, item);
+                emit(value.copyWith(addingItem: false));
               }));
         },
         // if we are not in the loaded state we have an error, we should not be here
@@ -60,6 +61,7 @@ extension TodoOverlayCubit on EventScreenCubit {
             // emit the loading state, so we can trigger an state change
             emit(EventScreenState.loading());
             //and then remove the item and emit new state with the item deleted
+
             loadedState.event.todo!.items.removeWhere((i) => i.id.value == item.id.value);
             emit(EventScreenState.loaded(event: loadedState.event));
           } else {
@@ -122,5 +124,6 @@ extension TodoOverlayCubit on EventScreenCubit {
         },
         orElse: () => {});
   }
+
 
 }

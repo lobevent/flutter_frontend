@@ -137,4 +137,8 @@ class PostRepository extends Repository {
       return right(returnedPostDto.toDomain());
     });
   }
+
+  Future<void> deletePost(Post post) async {
+    await _postRemoteService.deletedPost(post.id!.value.toString());
+  }
 }

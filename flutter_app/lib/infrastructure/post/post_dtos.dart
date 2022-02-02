@@ -37,6 +37,7 @@ class PostDto extends BaseDto with _$PostDto {
         content: post.postContent.getOrCrash(),
         owner: ProfileDto.fromDomain(post.owner!),
         event: EventDto.fromDomain(post.event!),
+        comments: <CommentDto>[],
         commentCount: post.commentCount);
   }
 
@@ -55,8 +56,6 @@ class PostDto extends BaseDto with _$PostDto {
         commentCount: commentCount);
   }
 }
-
-
 
 /*
   Post toDomain(){

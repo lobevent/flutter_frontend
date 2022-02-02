@@ -17,7 +17,8 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/add_friends/add_friends_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/like/like_cubit.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/add_friends_button.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/UesMenuButton.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/add_friends_button.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:intl/intl.dart';
 
@@ -33,48 +34,48 @@ class EventContent extends StatelessWidget {
       builder: (context, state) {
         ///state mapping
         return state.maybeMap(
-            loaded: (state) {
+            loaded: (stateLoaded) {
               return Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   /// at first the title of course
-                  TitleText(state.event.name.getOrCrash()),
+                  TitleText(stateLoaded.event.name.getOrCrash()),
 
                   /// Used as space
                   const SizedBox(height: 20),
 
-                  AttendingAndOwnStatus(state.event.attendingCount!, state.event.status, context),
+                  AttendingAndOwnStatus(stateLoaded.event.attendingCount!, stateLoaded.event.status, context, stateLoaded.loadingStatus),
 
                   /// Used as space
                   const SizedBox(height: 20),
 
                   /// the date of the event
-                  DateAndOwner(state.event.date, state.event.owner!, context),
+                  DateAndOwner(stateLoaded.event.date, stateLoaded.event.owner!, context),
 
                   /// Used as space
                   const SizedBox(height: 20),
 
                   ///likebutton and information
-                  LikeWidget(state.event),
+                  LikeWidget(stateLoaded.event),
 
                   /// Used as space
                   const SizedBox(
                     height: 20,
                   ),
 
-                  if (state.event.isHost) AddFriendsWidget(context),
+                  if (stateLoaded.event.isHost) AddFriendsWidget(context),
 
                   /// Used as space
                   const SizedBox(height: 20),
 
-                  PostWidget(state.event, context),
+                  PostWidget(stateLoaded.event, context),
 
                   /// Used as space
                   const SizedBox(height: 20),
 
                   /// Contains the description of the event
-                  DescriptionWidget(state.event.description!.getOrCrash()),
+                  DescriptionWidget(stateLoaded.event.description!.getOrCrash()),
                 ],
               );
             },
@@ -86,7 +87,7 @@ class EventContent extends StatelessWidget {
   }
 
   /// this contains the attending paritcipants and the own attending status view for this event
-  Widget AttendingAndOwnStatus(int attending, EventStatus? status, BuildContext context) {
+  Widget AttendingAndOwnStatus(int attending, EventStatus? status, BuildContext context, bool isLoadingStatus) {
     IconData icon;
     String text;
 
@@ -113,6 +114,7 @@ class EventContent extends StatelessWidget {
         break;
     }
 
+
     //return TextWithIconButton(onPressed: null, text: AppStrings.participants + ':' + attending.toString());
     return PaddingWidget(
       children: [
@@ -123,7 +125,7 @@ class EventContent extends StatelessWidget {
         ),
         Spacer(),
         //Icon(icon),
-        uesMenubutton(context, icon, text)
+        UesMenuButton(icon: icon, text: text, isLoading: isLoadingStatus,)
         //Text(text, style: TextStyle(color: textColor))
 
         //TextWithIconButton(onPressed: null, text: text, icon: icon,)
@@ -220,78 +222,6 @@ class EventContent extends StatelessWidget {
     return PaddingRowWidget(children: children);
   }
 
-  Widget uesMenubutton(BuildContext context, IconData icon, String text) {
-
-    final onClickFunction = (EventStatus status) {
-      context.read<EventScreenCubit>().changeStatus(status);
-      Navigator.pop(context);
-    };
-
-// This menu button widget updates a _selection field (of type EventStatus,
-// not shown here).
-    return PopupMenuButton(
-      child: Row(children: [Icon(icon), Text(text, style: TextStyle(color: textColor))]),
-       itemBuilder: (BuildContext context){
-           return [
-             PopupMenuWidget(height: 20, child:
-             PaddingRowWidget(paddingRight: 20, paddinfLeft: 20, children: [
-               TextWithIconButton(onPressed: () => onClickFunction(EventStatus.attending), text: '', icon: IconsWithTexts.uesWithIcons[EventStatus.attending]!.values.first,),
-               Spacer(),
-               TextWithIconButton(onPressed: () => onClickFunction(EventStatus.interested), text: '', icon: IconsWithTexts.uesWithIcons[EventStatus.interested]!.values.first),
-               Spacer(),
-               TextWithIconButton(onPressed: () => onClickFunction(EventStatus.notAttending), text: '', icon: IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.values.first),
-             ],))
-           ];
-
-       }
-      //<PopupMenuEntry<EventStatus>>[
-      //
-      //     PopupMenuItem<EventStatus>(
-      //       enabled: false,
-      //       value: EventStatus.attending,
-      //       child: Row(children: [IconButton(icon: Icon(IconsWithTexts.uesWithIcons[EventStatus.attending]!.values.first), onPressed: () => {},), Icon(IconsWithTexts.uesWithIcons[EventStatus.attending]!.values.first),]),
-      //     ),
-        //Row(children: [TextWithIconButton(onPressed: null, text: 'asdasdad')],)
-      //   PopupMenuItem<EventStatus>(
-      //     value: EventStatus.attending,
-      //     child: Row(children: [Icon(IconsWithTexts.uesWithIcons[EventStatus.attending]!.values.first), Text(IconsWithTexts.uesWithIcons[EventStatus.attending]!.keys.first)]),
-      //   ),
-      //   PopupMenuItem<EventStatus>(
-      //     value: EventStatus.interested,
-      //     child: Row(children: [Icon(IconsWithTexts.uesWithIcons[EventStatus.interested]!.values.first), Text(IconsWithTexts.uesWithIcons[EventStatus.interested]!.keys.first)]),
-      //   ),
-      //   PopupMenuItem<EventStatus>(
-      //     value: EventStatus.notAttending,
-      //     child: Row(children: [Icon(IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.values.first), Text(IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.keys.first)]),
-      //   ),
-      //],
-    );
-  }
 }
 
-class PopupMenuWidget<T> extends PopupMenuEntry<T> {
-  const PopupMenuWidget({ Key? key, required this.height ,required this.child }) : super(key: key);
 
-  @override
-  final Widget child;
-
-  @override
-  final double height;
-
-  @override
-  bool get enabled => false;
-
-  @override
-  _PopupMenuWidgetState createState() => new _PopupMenuWidgetState();
-
-  @override
-  bool represents(T? value) {
-    // TODO: implement represents
-    throw UnimplementedError();
-  }
-}
-
-class _PopupMenuWidgetState extends State<PopupMenuWidget> {
-  @override
-  Widget build(BuildContext context) => widget.child;
-}

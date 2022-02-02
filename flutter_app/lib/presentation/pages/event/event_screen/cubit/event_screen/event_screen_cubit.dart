@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -55,6 +56,7 @@ class EventScreenCubit extends Cubit<EventScreenState> {
   Future<void> changeStatus(EventStatus status) async{
 
     state.maybeMap(orElse: (){}, loaded: (loadedState) async{
+      emit(loadedState.copyWith(loadingStatus: true));
       await repository.changeStatus(loadedState.event, status).then((value){
 
         value.fold((failute) => emit(EventScreenState.error(failure: failute)), (event) {
@@ -63,6 +65,9 @@ class EventScreenCubit extends Cubit<EventScreenState> {
           emit(EventScreenState.loading());
 
           emit(EventScreenState.loaded(event: event));
+
+
+
         });
 
       });

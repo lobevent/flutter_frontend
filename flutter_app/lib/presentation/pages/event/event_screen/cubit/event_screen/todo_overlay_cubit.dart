@@ -61,6 +61,7 @@ extension TodoOverlayCubit on EventScreenCubit {
             // emit the loading state, so we can trigger an state change
             emit(EventScreenState.loading());
             //and then remove the item and emit new state with the item deleted
+
             loadedState.event.todo!.items.removeWhere((i) => i.id.value == item.id.value);
             emit(EventScreenState.loaded(event: loadedState.event));
           } else {

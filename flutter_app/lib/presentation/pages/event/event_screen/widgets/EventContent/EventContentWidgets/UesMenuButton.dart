@@ -7,6 +7,10 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+
+///
+/// UserEventStatus change button, when clicked shows menu to change ues for that event
+///
 class UesMenuButton extends StatefulWidget {
   final IconData icon;
   final String text;

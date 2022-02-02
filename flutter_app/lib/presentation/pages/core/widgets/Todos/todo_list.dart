@@ -37,6 +37,8 @@ class _TodoListState extends State<TodoList> {
   List<Widget> getTodoItems(List<Item> items, BuildContext context) {
     final List<Widget> itemElements = [];
 
+
+    // show loading animation on request still out
     if(widget.showLoading){
       itemElements.add(const Padding(
           padding: EdgeInsets.fromLTRB(0, 0, 0, 20),

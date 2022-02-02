@@ -20,10 +20,9 @@ class ImageUploadState extends State<ImageUpload> {
   Future<void> _pickImage() async{
     try{
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-       setState(() {
+       setState(() async {
         imageFile = image!;
-        Image.file(File(imageFile.path));
-        uploadFile();
+        await UploadFile().uploadFile(imageFile.path);
       });
     } catch (e) {
       print("Image picker error");

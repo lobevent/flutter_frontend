@@ -6,11 +6,11 @@ import 'package:http/http.dart';
 
 import 'exceptions.dart';
 
-class RemoteService<DTO extends BaseDto> {
-  Future<List<DTO>> convertList(Response response) async {
+class RemoteService<DTO extends BaseDto> { 
+  Future<List<DTO>> convertList(Response response) async { // dit versteht kein mensch was hier passiert
     List<DTO> dtoList;
     try {
-      dtoList = ((jsonDecode(response.body) as List)
+      dtoList = ((jsonDecode(response.body) as List) 
               .map((e) => e as Map<String, dynamic>))
           .toList()
           .map((e) => factoryMap[DTO](e)

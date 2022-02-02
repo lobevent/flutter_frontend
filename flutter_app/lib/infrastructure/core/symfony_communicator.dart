@@ -51,9 +51,11 @@ class SymfonyCommunicator {
   /// Throws [NotAuthenticatedException], [NotAuthorizedException], [NotFoundException], [InternalServerException]
   /// The id (if needed) should be in the uri.
   /// Uri has to start with an backslash "/".
-  Future<void> postFile(String uri, dynamic body, String filepath, [Encoding? encoding]) async {
+  Future<String> postFile(String uri, String filepath, [Encoding? encoding]) async {
     var request = await http.MultipartRequest('POST', Uri.parse("$url$uri"));
     request.files.add(await http.MultipartFile.fromPath('image', filepath));
+    var res = await request.send();
+    return res.reasonPhrase!;
   }
 
   /// Put an resource with uri.

@@ -18,6 +18,9 @@ dependencies:
   # annotations for json code generation
   json_annotation: ^4.3.0
 
+  # shared storage, e g for storing own profile
+  shared_preferences: ^2.0.12
+
   # annotations for freezed data and union classes code generation
   freezed_annotation: ^1.1.0
 

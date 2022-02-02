@@ -138,9 +138,8 @@ class CommentContainer extends StatelessWidget {
             )),
         //delete an comment button
         StdTextButton(
-            onPressed: () => context
-                .read<CommentScreenCubit>()
-                .deletePostOrComment(comment.id.value.toString()),
+            onPressed: () =>
+                context.read<CommentScreenCubit>().deleteComment(comment),
             child: Icon(Icons.delete))
       ],
     );

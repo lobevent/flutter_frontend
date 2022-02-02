@@ -78,6 +78,14 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
         "$updatePath${profileDto.id}", jsonEncode(profileDto.toJson())));
   }
 
+  Future<ProfileDto> getOwnProfile() async {
+    final String uri = "$profileIdPath";
+    Response response = await client.get(uri);
+    ProfileDto profileDto =
+        ProfileDto.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    return profileDto;
+  }
+
   Future<List<ProfileDto>> getSearchedProfiles(
       int amount, String searchString) async {
     return _getProfileList(searchProfilePath

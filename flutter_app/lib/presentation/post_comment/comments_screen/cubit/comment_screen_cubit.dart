@@ -8,6 +8,7 @@ import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/post/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
+import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
@@ -117,8 +118,21 @@ class CommentScreenCubit extends Cubit<CommentScreenState> {
         orElse: () => throw LogicError());
   }
 
-  Future<void> deletePostOrComment(String commentPostId) async {
-    final answer = await repository.deletePostComment(commentPostId);
+  Future<void> deleteComment(Comment comment) async {
+    final answer = await repository
+        .deletePostComment(comment.id.value.toString())
+        .then((value) {
+      //emit loading to emit updated commentlist
+      emit(CommentScreenState.loading());
+      /*if (comment.post.comments!.isNotEmpty) {
+        emit(CommentScreenState.loadedComment(
+            comment.post, comment.post.comments![0]));
+      } else {
+
+       */
+      emit(CommentScreenState.loadedPost(comment.post));
+      //}
+    });
   }
 
   // an simple error handler for eithers

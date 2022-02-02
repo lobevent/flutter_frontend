@@ -9,7 +9,7 @@ import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/Overlays/todolist_form.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/event_todo_widget.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/EventTodoWidget/event_todo_widget.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class TodoWidget extends StatefulWidget {
@@ -25,11 +25,11 @@ class _TodoWidgetState extends State<TodoWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<EventScreenCubit, EventScreenState>(builder: (context, state) {
       return state.maybeMap(
-        loaded: (state) {
-          eventPass = state.event;
+        loaded: (stateLoaded) {
+          eventPass = stateLoaded.event;
           //check if todoList existed; else show button to create one
-          if (state.event.todo != null) {
-            return EventTodoWidget(todo: state.event.todo, event: state.event);
+          if (stateLoaded.event.todo != null) {
+            return EventTodoWidget(todo: stateLoaded.event.todo, event: stateLoaded.event, showLoading: stateLoaded.addingItem,);
           }
           else {
             // create todolist button

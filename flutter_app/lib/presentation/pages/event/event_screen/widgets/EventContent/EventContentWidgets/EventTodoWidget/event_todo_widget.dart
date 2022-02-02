@@ -10,15 +10,20 @@ import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/eve
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/todo_overlay_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
-import '../../Overlays/item_create_form.dart';
+import '../../../Overlays/item_create_form.dart';
 
-class EventTodoWidget extends StatelessWidget {
+class EventTodoWidget extends StatefulWidget {
   final Todo? todo;
   final Event event;
-
-  const EventTodoWidget({Key? key, required this.todo, required this.event})
+  final bool showLoading;
+  const EventTodoWidget({Key? key, required this.todo, required this.event, this.showLoading = false})
       : super(key: key);
 
+  @override
+  State<EventTodoWidget> createState() => _EventTodoWidgetState();
+}
+
+class _EventTodoWidgetState extends State<EventTodoWidget> {
   @override
   Widget build(BuildContext context) {
 
@@ -26,7 +31,7 @@ class EventTodoWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('TodoName: ${todo!.name.getOrCrash()}'),
+              Text('TodoName: ${widget.todo!.name.getOrCrash()}'),
               // the create item button, for showing overlay
               IconButton(
                   onPressed: () => showOverlay(context),
@@ -34,7 +39,7 @@ class EventTodoWidget extends StatelessWidget {
               /// Used as space
               const SizedBox(height: 20),
 
-              TodoList(todo: todo!, event: event),
+              TodoList(todo: widget.todo!, event: widget.event, showLoading: widget.showLoading,),
             ],
           );
   }
@@ -48,7 +53,7 @@ class EventTodoWidget extends StatelessWidget {
 
     //this is the way to work with overlays
     overlayEntry = OverlayEntry(builder: (context) {
-      return ItemCreateWidget(overlayEntry: overlayEntry!, todo: todo!, cubitContext: buildContext);
+      return ItemCreateWidget(overlayEntry: overlayEntry!, todo: widget.todo!, cubitContext: buildContext);
     });
     overlayState.insert(overlayEntry);
   }

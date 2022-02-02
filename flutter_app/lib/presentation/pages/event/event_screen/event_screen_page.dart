@@ -8,7 +8,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/post_widget.dar
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/event_content.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/header_visual.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/todo_widget.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/EventTodoWidget/TodoWidgets/todo_widget.dart';
 import 'package:flutter_frontend/presentation/post_comment/post_screen/post_screen.dart';
 
 import '../../core/widgets/loading_overlay.dart';

@@ -109,9 +109,10 @@ class _ItemCreateWidgetState extends State<ItemCreateWidget> {
             cubitContext.read<EventScreenCubit>().postItem(
                 itemName: itemNameController.text,
                 itemDescription: itemDescriptionController.text,
-                todo: todo)
+                todo: todo);
+            overlayEntry.remove();
                 // first save item, then remove overlay
-                .then((value) => overlayEntry.remove());
+                //.then((value) => overlayEntry.remove()); //this was for closing after adding but now we will try to instantly close it!
             //remove overlay so we have to dont fuck around with routes
           }
         }

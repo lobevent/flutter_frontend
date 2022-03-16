@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/data/storage_shared.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
@@ -9,6 +12,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/post_widget.dar
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/post_comment/comments_screen/cubit/comment_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
+import 'package:get_it/get_it.dart';
 
 class CommentContainer extends StatelessWidget {
   const CommentContainer({Key? key}) : super(key: key);
@@ -70,13 +74,13 @@ class CommentContainer extends StatelessWidget {
   Widget CommentWidget(
       {required Comment comment, required BuildContext context}) {
     return Container(
+      padding: stdPadding.copyWith(right: 0.0),
       child: PostCommentBaseWidget(
         date: comment.creationDate,
         content: comment.commentContent.getOrCrash(),
         actionButtonsWidgets: ActionWidgets(context, comment),
         autor: comment.owner,
       ),
-      padding: stdPadding.copyWith(right: 0.0),
     );
   }
 
@@ -116,7 +120,7 @@ class CommentContainer extends StatelessWidget {
                             loadedPost,
                             parentComment);
                   },
-                  text: "Post")
+                  text: "Post"),
             ],
           ),
         ));
@@ -137,10 +141,12 @@ class CommentContainer extends StatelessWidget {
               ],
             )),
         //delete an comment button
-        StdTextButton(
-            onPressed: () =>
-                context.read<CommentScreenCubit>().deleteComment(comment),
-            child: Icon(Icons.delete))
+        //check if its the own comment to display delete button
+        if(GetIt.I<StorageShared>().checkIfOwnId(comment.owner.id.value.toString()))...[
+          StdTextButton(onPressed: () => context.read<CommentScreenCubit>().deleteComment(comment), child: Icon(Icons.delete)),
+        ],
+
+
       ],
     );
   }

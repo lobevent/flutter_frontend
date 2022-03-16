@@ -56,7 +56,8 @@ class EventDto extends BaseDto with _$EventDto {
           event.description != null ? event.description!.getOrCrash() : null,
       todo: event.todo != null ? TodoDto.fromDomain(event.todo!) : null,
       creationDate: event.creationDate,
-      owner: ProfileDto.fromDomain(event.owner!),
+      owner: event.owner!=null ? ProfileDto.fromDomain(event.owner!)
+          :null,
       attendingUsersCount: event.attendingCount,
       ownStatus: domainToDtoStatus[event.status] as int?,
       longitude: event.longitude,

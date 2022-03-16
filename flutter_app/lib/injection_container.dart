@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubit.dart';
 import 'package:flutter_frontend/core/services/AuthTokenService.dart';
+import 'package:flutter_frontend/data/storage_shared.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:flutter_frontend/infrastructure/auth/firebase_auth_facade.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
@@ -41,6 +42,10 @@ class InjectionContainer {
 
     // register Token Service for retrieving login tokens
     getIt.registerLazySingleton(() => AuthTokenService());
+
+    // register Shared storage
+    getIt.registerLazySingleton(() => StorageShared());
+
 
 
 

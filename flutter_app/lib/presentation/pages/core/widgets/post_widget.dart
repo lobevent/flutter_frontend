@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/data/storage_shared.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_frontend/presentation/post_comment/comments_screen/cubit
 import 'package:flutter_frontend/presentation/post_comment/comments_screen/widgets/comment_container.dart';
 import 'package:flutter_frontend/presentation/post_comment/post_screen/cubit/post_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/src/provider.dart';
 
 /// this is the post widget, which should be used everywhere
@@ -51,10 +53,10 @@ class PostWidget extends StatelessWidget {
               ],
             )),
         //delete a post
-        StdTextButton(
-            onPressed: () => context.read<PostScreenCubit>().deletePost(post),
-            child: Icon(Icons.delete))
+        if(GetIt.I<StorageShared>().checkIfOwnId(post.owner!.id.value.toString()))...[
+          StdTextButton(onPressed: () => context.read<PostScreenCubit>().deletePost(post), child: Icon(Icons.delete))
       ],
+    ]
     );
   }
 }
@@ -70,7 +72,8 @@ Widget generateUnscrollablePostContainer(
     return Column(
       children: [
         Text("No Posts available."),
-        WriteWidget(context!, event!),
+       if(event!=null&&context!=null) WriteWidget(context, event)
+
       ],
     );
 

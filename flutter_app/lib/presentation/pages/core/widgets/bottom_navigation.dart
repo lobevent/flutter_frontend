@@ -14,6 +14,7 @@ enum NavigationOptions {
   profileSearch,
   friends,
   addEvent,
+  imageUpload
 }
 
 class BottomNavigation extends StatelessWidget {
@@ -38,6 +39,7 @@ class BottomNavigation extends StatelessWidget {
     NavigationOptions.login: {'key': 5, 'route': LoginRegisterRoute()},
     NavigationOptions.friends: {'key': 6, 'route': ProfileFriendsScreenRoute()},
     NavigationOptions.addEvent: {'key': 7, 'route': EventFormPageRoute()},
+    NavigationOptions.imageUpload: {'key': 8, 'route': ImageUploadRoute()},
   };
 
   static final indexToEnum =
@@ -93,6 +95,11 @@ class BottomNavigation extends StatelessWidget {
           icon: Icon(Icons.add),
           label: 'AddEvent',
           backgroundColor: Colors.blue,
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.upload_rounded),
+          label: 'ImageUpload',
+          backgroundColor: Colors.green,
         ),
       ],
       currentIndex: enumToData[selected]['key'] as int,

@@ -3,7 +3,7 @@ import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/core/styles/sizes.dart';
 import 'package:flutter_frontend/presentation/core/styles/text_styles.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/image_classes.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_classes.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:intl/intl.dart';
 

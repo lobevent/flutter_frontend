@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/image_classes.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_classes.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class FriendListTile extends StatelessWidget {

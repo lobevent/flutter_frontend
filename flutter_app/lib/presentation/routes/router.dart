@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/image_upload.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_upload.dart';
 import 'package:flutter_frontend/presentation/pages/login_register_email/registration_widget.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/event_form.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/event_screen_page.dart';

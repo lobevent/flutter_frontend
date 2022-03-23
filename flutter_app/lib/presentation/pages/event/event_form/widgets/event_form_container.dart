@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_upload.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/checkbox_area.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/date_picker.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/invite_friends_widget.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/pick_image_widget.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'description_body_widged.dart';
 import 'title_widget.dart';
@@ -22,7 +24,8 @@ class EventFormContainer extends StatelessWidget {
           : AutovalidateMode.disabled,
       child: SingleChildScrollView(
         child: Column(
-          children: const [
+          children:  [
+            ImageUploadPicker(returnFunction: (List<XFile?>? blaa){}),
             /// the input field, where the name is typed
             EventNameField(),
 

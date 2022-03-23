@@ -4,6 +4,7 @@ import 'package:flutter_frontend/data/storage_shared.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
@@ -14,6 +15,8 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/cubit/pos
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/src/provider.dart';
+
+import 'gen_dialog.dart';
 
 /// this is the post widget, which should be used everywhere
 class PostWidget extends StatelessWidget {
@@ -54,7 +57,22 @@ class PostWidget extends StatelessWidget {
             )),
         //delete a post
         if(GetIt.I<StorageShared>().checkIfOwnId(post.owner!.id.value.toString()))...[
-          StdTextButton(onPressed: () => context.read<PostScreenCubit>().deletePost(post), child: Icon(Icons.delete))
+          StdTextButton(
+              onPressed: () {
+                GenDialog.genericDialog(
+                    context,
+                    AppStrings.deleteCommentDialogAbort,
+                    AppStrings.deleteCommentDialogText,
+                    AppStrings.deleteCommentDialogConfirm,
+                    AppStrings.deleteCommentDialogAbort)
+                    .then((value) async => {
+                  if (value)
+                    context.read<PostScreenCubit>().deletePost(post)
+                  else
+                    print("falseee"),
+                });
+              },
+              child: Icon(Icons.delete))
       ],
     ]
     );

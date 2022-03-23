@@ -34,6 +34,12 @@ class AppStrings {
   static const String deleteFriendDialogConfirm = "Delete";
   static const String deleteFriendDialogAbort = "Abort";
 
+  static const String deleteCommentDialogTitle = "Delete this comment?";
+  static const String deleteCommentDialogText =
+      "Do you want to delete this comment?";
+  static const String deleteCommentDialogConfirm = "Delete";
+  static const String deleteCommentDialogAbort = "Abort";
+
   static const String noProfilesFound = "No profiles found";
   static const String noEventsFound = "No events found";
 

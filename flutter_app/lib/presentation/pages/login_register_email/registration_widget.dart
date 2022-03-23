@@ -13,6 +13,9 @@ class RegistrationForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController textEditingControllerUsername = TextEditingController();
+    TextEditingController textEditingControllerPassword = TextEditingController();
+    TextEditingController textEditingControllerEmail = TextEditingController();
     return BasicContentContainer(
       scrollable: false,
       // height: 200.0,
@@ -23,12 +26,16 @@ class RegistrationForm extends StatelessWidget {
             children: [
               FullWidthPaddingInput(
                 labelText: "Username",
+                controller: textEditingControllerUsername,
               ),
               FullWidthPaddingInput(
                 labelText: "Password",
+                controller: textEditingControllerPassword,
+                password: true,
               ),
               FullWidthPaddingInput(
                 labelText: "E-mail adress",
+                controller: textEditingControllerEmail,
               ),
               const Padding(
                 padding: EdgeInsets.all(10),

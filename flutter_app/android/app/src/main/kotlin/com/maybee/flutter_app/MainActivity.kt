@@ -1,4 +1,4 @@
-package com.lobevent.flutter_frontend
+package com.maybee.flutter_app
 
 import io.flutter.embedding.android.FlutterActivity
 

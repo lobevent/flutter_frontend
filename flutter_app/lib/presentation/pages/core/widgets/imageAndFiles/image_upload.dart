@@ -33,9 +33,10 @@ class _ImageUploadState extends State<ImageUpload> {
 
 
 class ImageUploadPicker extends StatefulWidget {
-  const ImageUploadPicker({Key? key, this.title = "bla", required this.returnFunction}) : super(key: key);
+  const ImageUploadPicker({Key? key, this.title = "bla", required this.returnFunction, this.showMultiPic = false}) : super(key: key);
 
   final void Function(List<XFile?>?) returnFunction;
+  final bool showMultiPic;
   final String? title ;
 
   @override
@@ -104,7 +105,7 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
                 _onImageButtonPressed(ImageSource.gallery, context: context);
               }, text: "", icon: Icons.photo,),
               Spacer(),
-              TextWithIconButton(onPressed: () {
+              if (widget.showMultiPic) TextWithIconButton(onPressed: () {
                     isVideo = false;
                     _onImageButtonPressed(
                     ImageSource.gallery,
@@ -196,10 +197,10 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
     if (_imageFileList != null) {
       return ConstrainedBox(
           constraints: new BoxConstraints(
-            minHeight: 5.0,
-            minWidth: 5.0,
-            maxHeight: 30.0,
-            maxWidth: 30.0,
+            minHeight: 20.0,
+            minWidth: 20.0,
+            maxHeight: 90.0,
+            maxWidth: 90.0,
           ),
           child: ListView.builder(
             key: UniqueKey(),

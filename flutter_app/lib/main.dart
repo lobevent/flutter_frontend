@@ -42,14 +42,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<SignInFormCubit>(
-            create: (context) => GetIt.I<SignInFormCubit>()),
-      ],
-      child: MaterialApp.router(
-          routerDelegate: _appRouter.delegate(),
-          routeInformationParser: _appRouter.defaultRouteParser()),
+    return GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<SignInFormCubit>(
+                create: (context) => GetIt.I<SignInFormCubit>()),
+          ],
+          child: MaterialApp.router(
+              routerDelegate: _appRouter.delegate(),
+              routeInformationParser: _appRouter.defaultRouteParser()),
+        )
     );
     //   (
     //   title: 'Material App',

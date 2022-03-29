@@ -27,18 +27,18 @@ class EventFormContainer extends StatelessWidget {
           children:  [
             ImageUploadPicker(returnFunction: (List<XFile?>? blaa){}),
             /// the input field, where the name is typed
-            EventNameField(),
+            const EventNameField(), // ATTENTION: the textfieldclasses have to be constant ( research has to be done into this! )
 
             /// the input filed with the decription
-            DescriptionField(),
+            const DescriptionField(),
 
-            DatePicker(),
+            const DatePicker(),
 
-            CheckBoxArea(),
+            const CheckBoxArea(),
 
-            InviteFriendsWidget(),
+            const InviteFriendsWidget(),
 
-            PickImageWidget(),
+            const PickImageWidget(),
           ],
         ),
       ),

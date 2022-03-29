@@ -40,7 +40,8 @@ class EventFormCubit extends Cubit<EventFormState> {
   }
 
   void changeTitle(String title) {
-    emit(state.copyWith(event: state.event.copyWith(name: EventName(title))));
+    var test = state.event.copyWith(name: EventName(title));
+    emit(state.copyWith(event: test));
   }
 
   void changeBody(String body) {

@@ -34,17 +34,15 @@ class LoginRegisterCubit extends Cubit<LoginRegisterState> {
 
   }
 
-  /*Future<void> register(String password, String username, String email) async{
+  Future<void> register(String password, String username, String email) async{
     // register new user and save
     SymfonyLogin symfonyLogin = SymfonyLogin();
     await symfonyLogin.register(username, password, email).then((value) {
-      LoginControllFunctions.setLoginStuff().then((value) {
-        // route to the feed
-        // pop until root so no routes are in the stack anymore
-        GetIt.I<_app_router.Router>().popUntilRoot();
-        // replace the root route
-        GetIt.I<_app_router.Router>().replaceNamed("/");
-      });
+      // route to the feed
+      // pop until root so no routes are in the stack anymore
+      GetIt.I<_app_router.Router>().popUntilRoot();
+      // replace the root route
+      GetIt.I<_app_router.Router>().replaceNamed("/");
     });
-  }*/
+  }
 }

@@ -27,4 +27,20 @@ class SymfonyLogin {
         body: jsonEncode({"username": username, "password": passwort}),
         headers: {"Content-Type": "application/json"}));
   }
+
+  Future<Response> register(String username, String password, String email) async{
+    return SymfonyCommunicator.handleExceptions(await client.post(
+        Uri.parse("$url/register"),
+        body: jsonEncode({"user":
+                          {
+                            "email": email,
+                            "password": password
+                          },
+                          "profile":
+                          {
+                            "username": username
+                          }
+        }),
+        headers: {"Content-Type": "application/json"}));
+  }
 }

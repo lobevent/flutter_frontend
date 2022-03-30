@@ -47,6 +47,16 @@ class EventScreenPage extends StatelessWidget {
                           )
                         ],
 
+                    loaded: (loadetState) => [
+                      /// the Header with the pictures etc
+                      HeaderVisual(networkImagePath: loadetState.event.image),
+
+                      /// the event contents and information
+                      EventContent(),
+
+                      /// todoevents list
+                      TodoWidget(),
+                    ],
                     /// if the error state is not active, load the contentS
                     orElse: () => [
                           /// the Header with the pictures etc

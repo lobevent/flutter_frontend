@@ -16,7 +16,7 @@ class RegistrationForm extends StatelessWidget {
         TextEditingController();
     TextEditingController textEditingControllerEmail = TextEditingController();
     return BlocProvider(
-        create: (context) => LoginRegisterCubit(),
+        create: (context) => LoginRegisterCubit(withRouting: false),
         child: BlocBuilder<LoginRegisterCubit, LoginRegisterState>(
           builder: (context1, state) {
             return BasicContentContainer(scrollable: false,

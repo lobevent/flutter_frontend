@@ -13,6 +13,7 @@ class EventFormState with _$EventFormState {
     required Option<Either<NetWorkFailure, Unit>> saveFailureOrSuccessOption,
     required List<Profile> friends,
     required List<Invitation> invitedFriends,
+    XFile? picture
   }) = _EventFormStateMain;
 
   factory EventFormState.initial() => EventFormState(

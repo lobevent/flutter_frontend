@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
+import 'dart:io';
 
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -32,6 +33,8 @@ class EventRemoteService extends RemoteService<EventDto> {
   static const String deletePath = "/event/";
   static const String updatePath = "/event/edit/";
   static const String changeStatusPath = "/user/eventStatus/%eventId%/%status%";
+
+  static const String uploadImage = '/event/uploadImage/%eventId%';
 
   final SymfonyCommunicator client;
 
@@ -132,6 +135,9 @@ class EventRemoteService extends RemoteService<EventDto> {
         "$updatePath${eventDto.id}", jsonEncode(eventDto.toJson())));
   }
 
+  Future<void> uploadImageToEvent(String eventId, File image){
+    return client.postFile(uploadImage.interpolate({"eventId": eventId}), image);
+  }
 
 
   /*static String generatePaginatedRoute(

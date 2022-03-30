@@ -17,6 +17,8 @@ import 'package:http/http.dart';
 
 import '../../main.dart';
 import 'exceptions.dart';
+import 'package:path/path.dart';
+import 'package:async/async.dart';
 
 class SymfonyCommunicator {
   Client client;
@@ -53,11 +55,31 @@ class SymfonyCommunicator {
   /// The id (if needed) should be in the uri.
   /// Uri has to start with an backslash "/".
 
-  Future<String> postFile(String uri, String filepath, [Encoding? encoding]) async {
-    var request = await http.MultipartRequest('POST', Uri.parse("$url$uri"));
-    request.files.add(await http.MultipartFile.fromPath('image', filepath));
-    var res = await request.send();
-    return res.reasonPhrase!;
+  Future<String> postFile(String uri, File file, [Encoding? encoding]) async {
+    var stream = new http.ByteStream(DelegatingStream.typed(file.openRead()));
+    var length = await file.length();
+
+    var uploadUri = Uri.parse("$url$uri");
+
+    var request = new http.MultipartRequest("POST", uploadUri);
+    request.headers.addAll(headers);
+    var multipartFile = new http.MultipartFile('image', stream, length,
+        filename: basename(file.path));
+    //contentType: new MediaType('image', 'png'));
+
+    request.files.add(multipartFile);
+    var response = await request.send();
+    print(response.statusCode);
+    response.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+    });
+
+    return response.reasonPhrase!;
+
+    // var request = await http.MultipartRequest('POST', Uri.parse("$url$uri"));
+    // request.files.add(await http.MultipartFile.fromPath('image', filepath));
+    // var res = await request.send();
+    // return res.reasonPhrase!;
   }
 
   /// Put an resource with uri.
@@ -93,7 +115,7 @@ class SymfonyCommunicator {
     // TODO any reason to give a lambda into this? We could directly pass the response or
     // TODO subclassing the Response class (like the reddit link I did sent you)
     //tried the solution with passing -> now I get that i can call await when calling a function
-    if (response.statusCode / 100 == 2) {
+    if (response.statusCode ~/ 100 == 2) {
       // return response if the statuscode is something with 200, all these are ok
       return response;
     }

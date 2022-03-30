@@ -23,7 +23,6 @@ class Event with _$Event {
       required DateTime date,
       EventDescription? description,
       required DateTime creationDate,
-      XFile? image,
       Todo? todo,
       Profile? owner,
       required bool public,
@@ -34,7 +33,8 @@ class Event with _$Event {
       EventStatus? status,
       double? longitude,
       double? latitude,
-      required bool isHost}) = EventFull;
+      required bool isHost,
+      String? image}) = EventFull;
 
   factory Event.empty() => Event(
         id: UniqueId.fromUniqueString(

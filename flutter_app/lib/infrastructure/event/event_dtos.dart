@@ -42,6 +42,7 @@ class EventDto extends BaseDto with _$EventDto {
     double? longitude,
     double? latitude,
     int? ownStatus,
+    String? image,
     @JsonKey(ignore: true) bool? isHost,
   }) = EventDtoFull;
 
@@ -65,6 +66,7 @@ class EventDto extends BaseDto with _$EventDto {
       visibleWithoutLogin: event.visibleWithoutLogin,
       invitations:
           event.invitations.map((i) => InvitationDto.fromDomain(i)).toList(),
+      image: event.image
     );
   }
 
@@ -94,7 +96,8 @@ class EventDto extends BaseDto with _$EventDto {
       latitude: latitude,
       visibleWithoutLogin: visibleWithoutLogin,
       invitations: invitationL,
-      isHost: isHost ?? false
+      isHost: isHost ?? false,
+      image: image
     );
   }
 }

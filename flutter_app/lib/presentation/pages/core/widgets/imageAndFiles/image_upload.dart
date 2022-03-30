@@ -33,10 +33,11 @@ class _ImageUploadState extends State<ImageUpload> {
 
 
 class ImageUploadPicker extends StatefulWidget {
-  const ImageUploadPicker({Key? key, this.title = "bla", required this.returnFunction, this.showMultiPic = false}) : super(key: key);
+  const ImageUploadPicker({Key? key, this.title = "bla", required this.returnFunction, this.showMultiPic = false, this.showPreview = false}) : super(key: key);
 
   final void Function(List<XFile?>?) returnFunction;
   final bool showMultiPic;
+  final bool showPreview;
   final String? title ;
 
   @override
@@ -70,7 +71,7 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
     return
       Column(
         children: [Column(children: [
-          if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) FutureBuilder<void>(
+          if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android && widget.showPreview) FutureBuilder<void>(
           future: retrieveLostData(),
           builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
             switch (snapshot.connectionState) {
@@ -96,7 +97,7 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
                 }
             }
           },
-        ) else _handlePreview(),
+        ) else if(widget.showPreview) _handlePreview(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

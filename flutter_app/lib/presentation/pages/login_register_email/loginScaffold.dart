@@ -28,7 +28,8 @@ class Login extends StatelessWidget {
                 icon: Icons.login,
               ),
                 TextWithIconButton(
-                onPressed: () => {context.router.push(RegistrationFormRoute())},
+                onPressed: () => {
+                  context.router.push(RegistrationFormRoute())},
                 text: "Reigi",
                 icon: Icons.login,)
               ]))

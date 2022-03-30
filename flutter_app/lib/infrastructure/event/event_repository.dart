@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/repository.dart';
@@ -9,6 +11,7 @@ import 'package:flutter_frontend/infrastructure/core/exceptions_handler.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/event/event_local_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
+import 'package:image_picker/image_picker.dart';
 
 // TODO ignored this it's too late and seems to be in progress
 
@@ -121,6 +124,13 @@ class EventRepository extends Repository {
     } on CommunicationException catch (e) {
       return left(ExceptionsHandler.reactOnCommunicationException(e));
     }
+  }
+
+  Future<Either<NetWorkFailure, void>> uploadImageToEvent(UniqueId eventId, XFile image) async{
+    return localErrorHandler(() async {
+      return right(
+          _eventRemoteService.uploadImageToEvent(eventId.value, File(image.path)));
+    });
   }
 
 

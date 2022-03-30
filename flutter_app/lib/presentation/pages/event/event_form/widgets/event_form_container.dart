@@ -24,22 +24,22 @@ class EventFormContainer extends StatelessWidget {
           : AutovalidateMode.disabled,
       child: SingleChildScrollView(
         child: Column(
-          children:  [
+          children:  const [
             // TODO: This one is jumping if image is selected and input is given. It has to be made constant!
-            ImageUploadPicker(returnFunction: (List<XFile?>? blaa){}),
+            PickImageWidget(),
             /// the input field, where the name is typed
-            const EventNameField(), // ATTENTION: the textfieldclasses have to be constant ( research has to be done into this! )
+            EventNameField(), // ATTENTION: the textfieldclasses have to be constant ( research has to be done into this! )
 
             /// the input filed with the decription
-            const DescriptionField(),
+            DescriptionField(),
 
-            const DatePicker(),
+            DatePicker(),
 
-            const CheckBoxArea(),
+            CheckBoxArea(),
 
-            const InviteFriendsWidget(),
+            InviteFriendsWidget(),
 
-            const PickImageWidget(),
+            //const PickImageWidget(),
           ],
         ),
       ),

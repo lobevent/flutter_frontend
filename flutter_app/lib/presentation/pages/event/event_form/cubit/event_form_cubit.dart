@@ -39,9 +39,12 @@ class EventFormCubit extends Cubit<EventFormState> {
     saveEvent();
   }
 
+  void changePicture(XFile picture){
+    emit(state.copyWith(picture: picture));
+  }
+
   void changeTitle(String title) {
-    var test = state.event.copyWith(name: EventName(title));
-    emit(state.copyWith(event: test));
+    emit(state.copyWith(event: state.event.copyWith(name: EventName(title))));
   }
 
   void changeBody(String body) {
@@ -132,12 +135,20 @@ class EventFormCubit extends Cubit<EventFormState> {
       //failureOrSuccess =  await right(unit);
       //failureOrSuccess =  await left(EventFailure.insufficientPermissions());
       failureOrSuccess =
-          (await serverCall()).fold((l) => left(l), (r) => right(unit));
+         await (await serverCall()).fold((l) => left(l), (r) async {
+            if(state.picture != null){
+              (await repository.uploadImageToEvent(r.id, state.picture!)).fold((l) => left(l), (r) => right(unit));
+            }
+
+            return right(unit);
+          });
     }
     emit(state.copyWith(
         isSaving: false,
         showErrorMessages: true,
         saveFailureOrSuccessOption: optionOf(failureOrSuccess)));
+
+
   }
 
   /// compare event invitations with an friendlist, and generate list with the intersection

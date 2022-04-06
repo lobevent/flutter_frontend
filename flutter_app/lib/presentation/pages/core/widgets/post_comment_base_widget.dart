@@ -79,7 +79,7 @@ class PostCommentBaseWidget extends StatelessWidget {
   }
 
   Widget imageCarousell(){
-    return PostImageCarousel(imagePaths: images,);
+    return PostImageCarousel(imagePaths: images, isLoadetFromWeb: true,);
   }
 
   /// the widget for displaying the author (Overflow Safe)

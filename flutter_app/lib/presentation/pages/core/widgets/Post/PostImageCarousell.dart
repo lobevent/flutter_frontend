@@ -1,10 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PostImageCarousel extends StatefulWidget {
   final List<String> imagePaths;
   final bool isLoadetFromWeb;
-  const PostImageCarousel({Key? key, required this.imagePaths, this.isLoadetFromWeb = false}) : super(key: key);
+  const PostImageCarousel({Key? key, this.imagePaths = const [], this.isLoadetFromWeb = false}) : super(key: key);
 
 
   @override
@@ -54,8 +57,7 @@ class _PostImageCarouselState extends State<PostImageCarousel> {
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: NetworkImage(dotenv.env['ipSim']!.toString() + widget.imagePaths[pagePosition])
-                          //image: widget.isLoadetFromWeb ? NetworkImage(widget.imagePaths[pagePosition]) : Image.file(File(preview[pagePosition]!.path)).image
+                          image: widget.isLoadetFromWeb ? NetworkImage(dotenv.env['ipSim']!.toString() +widget.imagePaths[pagePosition]) : Image.file(File(widget.imagePaths[pagePosition])).image
                       )),
 
                 );}),

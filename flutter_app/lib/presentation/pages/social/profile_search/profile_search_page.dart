@@ -199,9 +199,9 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
               ),
               onTap: () {
                 setState(() {
-                  BlocProvider(
-                    create: (context) => ProfileSearchCubit(),
-                  );
+                  // BlocProvider(
+                  //   create: (context) => ProfileSearchCubit(),
+                  // );
                   putSearchTermFirst(term);
                   selectedTerm = term;
                   context.read<ProfileSearchCubit>().searchByBothName(term);

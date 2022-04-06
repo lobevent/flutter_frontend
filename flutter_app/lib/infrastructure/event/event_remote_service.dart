@@ -135,8 +135,8 @@ class EventRemoteService extends RemoteService<EventDto> {
         "$updatePath${eventDto.id}", jsonEncode(eventDto.toJson())));
   }
 
-  Future<void> uploadImageToEvent(String eventId, File image){
-    return client.postFile(uploadImage.interpolate({"eventId": eventId}), image);
+  Future<void> uploadImageToEvent(String eventId, File image)async{
+    client.postFile(uploadImage.interpolate({"eventId": eventId}), image);
   }
 
 

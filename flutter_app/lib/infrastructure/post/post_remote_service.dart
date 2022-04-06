@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
+import 'dart:io';
 
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
@@ -30,6 +31,8 @@ class PostRemoteService extends RemoteService<PostDto> {
   static const String deletePath = "/event/post/%postId%";
   static const String updatePath = "/post/";
 
+  static const String uploadImage = '/post/uploadImage/%postId%';
+
   final SymfonyCommunicator client;
 
   PostRemoteService({required SymfonyCommunicator communicator})
@@ -40,6 +43,11 @@ class PostRemoteService extends RemoteService<PostDto> {
   Future<PostDto> _decodePost(Response json) async {
     return PostDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
+
+  Future<String> uploadImageToEvent(String postId, File image) async{
+    return client.postFile(uploadImage.interpolate({"postId": postId}), image);
+  }
+
 
   Future<List<PostDto>> getOwnPosts(DateTime lastPostTime, int amount) async {
     return _getPostList(ownPostsPath.interpolate({

@@ -7,8 +7,10 @@ import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/Post/PostImagePickerWidget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/pick_image_widget.dart';
 import 'package:flutter_frontend/presentation/post_comment/comments_screen/cubit/comment_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/post_comment/comments_screen/widgets/comment_container.dart';
 import 'package:flutter_frontend/presentation/post_comment/post_screen/cubit/post_screen_cubit.dart';
@@ -16,7 +18,7 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/src/provider.dart';
 
-import 'gen_dialog.dart';
+import '../gen_dialog.dart';
 
 /// this is the post widget, which should be used everywhere
 class PostWidget extends StatelessWidget {
@@ -132,6 +134,9 @@ Widget generateUnscrollablePostContainer(
 Widget WriteWidget(BuildContext context, Event event) {
   TextEditingController postWidgetController = TextEditingController();
   return Container(
+    decoration: BoxDecoration(
+        border: Border.all(color: Colors.blueAccent)
+      ),
       width: 300,
       child: Title(
         title: "Post something.",
@@ -143,6 +148,7 @@ Widget WriteWidget(BuildContext context, Event event) {
               maxLines: 6,
               controller: postWidgetController,
             ),
+            PostImagePickerWidget(),
             TextWithIconButton(
                 onPressed: () {
                   context.read<PostScreenCubit>().postPost(

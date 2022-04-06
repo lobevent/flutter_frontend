@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/repository.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
 import 'package:flutter_frontend/infrastructure/post/post_remote_service.dart';
+import 'package:image_picker/image_picker.dart';
 
 enum Operation { fromUser }
 
@@ -14,7 +17,16 @@ class PostRepository extends Repository {
   final PostRemoteService _postRemoteService;
 
   PostRepository(this._postRemoteService);
+  // ---------------------------------- Image Crud ------------------------------------------
+  
+  Future<Either<NetWorkFailure, String>> uploadImages(UniqueId postId, XFile image) async{
+    return localErrorHandler(() async {
+      return right(
+         await _postRemoteService.uploadImageToEvent(postId.value, File(image.path)));
+    });
+  }
 
+  
   // ---------------------------------- Simple CRUD ------------------------------------
   ///
   /// Creates an post in the backend or returns failure

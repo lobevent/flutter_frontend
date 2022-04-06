@@ -11,6 +11,7 @@ import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/post/post_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'post_screen_state.dart';
 part 'post_screen_cubit.freezed.dart';
@@ -55,10 +56,11 @@ class PostScreenCubit extends Cubit<PostScreenState> {
                 (failure) =>
                     //if failure emit to error screen
                     emit(PostScreenState.error(error: failure.toString())),
-                (post) => {
+                (post) {
+                      post = uploadImages(post, value);
                       //add our post to posts and emit the postsscreen
-                      value.posts.add(post),
-                      emit(PostScreenState.loaded(posts: value.posts))
+                      value.posts.add(post);
+                      emit(PostScreenState.loaded(posts: value.posts));
                     }));
       },
       orElse: () => throw LogicError(),
@@ -90,4 +92,25 @@ class PostScreenCubit extends Cubit<PostScreenState> {
             emit(PostScreenState.error(error: networfailure.toString())),
         (payload) => payload);
   }
+
+  void changePictures(List<XFile?> images){
+    state.maybeMap(orElse: (){}, loaded: (loadedState){ emit(loadedState.copyWith(images: images));});
+  }
+
+
+  Post uploadImages(Post post, _Loaded loaded){
+    if(post.images == null){
+      post = post.copyWith(images: []);
+    }
+    loaded.images.forEach((element) {
+      if(element != null){
+        repository.uploadImages(post.id!, element).then((value) {
+          value.fold((l) => null, (imagePath) => post.images!.add(imagePath));
+        });
+      }});
+    return post;
+  }
+
+
+
 }

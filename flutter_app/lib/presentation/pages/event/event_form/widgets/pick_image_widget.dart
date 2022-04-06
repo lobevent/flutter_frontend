@@ -47,7 +47,6 @@ class _PickImageWidgetState extends State<PickImageWidget> {
             minHeight: 20.0,
             minWidth: 20.0,
             maxHeight: 90.0,
-            //maxWidth: 90.0,
           ),
           child: Container(
             decoration: BoxDecoration(
@@ -55,9 +54,6 @@ class _PickImageWidgetState extends State<PickImageWidget> {
                   fit: BoxFit.cover,
                   image: Image.file(File(preview!.path)).image
                 )),
-            // child: dotenv.env['isWeb'] == "true"
-            //     ? Image.network(preview!.path)
-            //     : Image.file(File(preview!.path)),
 
           )
           );

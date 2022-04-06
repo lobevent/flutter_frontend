@@ -70,10 +70,9 @@ class SymfonyCommunicator {
     request.files.add(multipartFile);
     var response = await request.send();
     print(response.statusCode);
-    response.stream.transform(utf8.decoder).listen((value) {
-      print(value);
-    });
 
+
+    return response.stream.bytesToString();
     return response.reasonPhrase!;
 
     // var request = await http.MultipartRequest('POST', Uri.parse("$url$uri"));

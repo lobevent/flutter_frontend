@@ -21,6 +21,7 @@ class Post with _$Post {
     Event? event,
     List<Comment>? comments,
     int? commentCount,
+    List<String>? images,
   }) = _Post;
 
 /*  const factory Post.WithoutId({

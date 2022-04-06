@@ -26,6 +26,7 @@ class PostDto extends BaseDto with _$PostDto {
     @CommentsConverter() List<CommentDto>? comments,
     @ProfileConverter() ProfileDto? owner,
     @EventConverter() EventDto? event,
+    List<String>? images
   }) = _PostDto;
 
   factory PostDto.fromDomain(Post post) {
@@ -39,6 +40,7 @@ class PostDto extends BaseDto with _$PostDto {
             : null,
         event: EventDto.fromDomain(post.event!),
         comments: <CommentDto>[],
+        images: post.images,
         commentCount: post.commentCount);
   }
 
@@ -54,6 +56,7 @@ class PostDto extends BaseDto with _$PostDto {
         owner: owner?.toDomain(),
         event: event?.toDomain(),
         comments: <Comment>[],
+        images: images,
         commentCount: commentCount);
   }
 }

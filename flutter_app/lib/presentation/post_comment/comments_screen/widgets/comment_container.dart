@@ -10,7 +10,7 @@ import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/gen_dialog.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/post_widget.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/post_comment/comments_screen/cubit/comment_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';

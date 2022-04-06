@@ -25,7 +25,6 @@ class EventFormContainer extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children:  const [
-            // TODO: This one is jumping if image is selected and input is given. It has to be made constant!
             PickImageWidget(),
             /// the input field, where the name is typed
             EventNameField(), // ATTENTION: the textfieldclasses have to be constant ( research has to be done into this! )

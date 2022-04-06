@@ -7,7 +7,7 @@ import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_remote_service.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/post_widget.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/post_comment/post_screen/cubit/post_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';

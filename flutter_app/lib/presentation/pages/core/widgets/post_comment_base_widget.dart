@@ -3,6 +3,7 @@ import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/core/styles/sizes.dart';
 import 'package:flutter_frontend/presentation/core/styles/text_styles.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/Post/PostImageCarousell.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_classes.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:intl/intl.dart';
@@ -13,9 +14,11 @@ class PostCommentBaseWidget extends StatelessWidget {
   final DateTime date;
   final String content;
   final Widget actionButtonsWidgets;
+  final List<String> images;
   const PostCommentBaseWidget(
       {Key? key,
       this.autor,
+      this.images = const [],
       required this.date,
       required this.content,
       required this.actionButtonsWidgets})
@@ -37,6 +40,7 @@ class PostCommentBaseWidget extends StatelessWidget {
                 MetaHeadWidget(date: date, author: autor),
                 // content of the post
                 ContentWidget(content),
+                imageCarousell(),
                 // actions like comments and likes
                 actionButtonsWidgets,
               ],
@@ -72,6 +76,10 @@ class PostCommentBaseWidget extends StatelessWidget {
         author == null ? Spacer() : AuthorWidget(author),
       ],
     );
+  }
+
+  Widget imageCarousell(){
+    return PostImageCarousel(imagePaths: images,);
   }
 
   /// the widget for displaying the author (Overflow Safe)

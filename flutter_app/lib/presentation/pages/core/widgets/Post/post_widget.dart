@@ -40,6 +40,7 @@ class PostWidget extends StatelessWidget {
     return PostCommentBaseWidget(
         date: post.creationDate,
         content: post.postContent.getOrCrash(),
+        images: post.images == null ? [] : post.images!,
         autor: showAuthor ? post.owner : null,
         actionButtonsWidgets: ActionWidgets(context));
   }

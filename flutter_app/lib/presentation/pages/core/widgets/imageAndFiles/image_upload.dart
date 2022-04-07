@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 // NOT READY YET DUE TO LACK OF KNOWLEDGE AND CONCEPT -> No comments yet
+// TODO: add clear images
 class ImageUpload extends StatefulWidget {
   const ImageUpload({Key? key, this.title = "bla"}) : super(key: key);
 

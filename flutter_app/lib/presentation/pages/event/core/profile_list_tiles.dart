@@ -77,7 +77,7 @@ class ProfileListTiles extends StatelessWidget {
                           if (value)
                             onDeleteFriend!(profile)
                           else
-                            print("falseee"),
+                            print("abort friend delete"),
                         });
               })
         ],
@@ -94,7 +94,7 @@ class ProfileListTiles extends StatelessWidget {
                     AppStrings.deleteFriendDialogConfirm,
                     AppStrings.deleteFriendDialogAbort)
                 .then((value) async => {
-                      if (value) onDeleteFriend!(profile) else print("falseee"),
+                      if (value) onDeleteFriend!(profile) else print("abort delete Friend"),
                     });
           });
       //only build the send friendrequest button

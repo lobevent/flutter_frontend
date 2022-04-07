@@ -70,7 +70,7 @@ class EventListTiles extends StatelessWidget {
                       AppStrings.deleteEventDialogConfirm,
                       AppStrings.deleteEventDialogAbort)
                   .then((value) async =>
-                      {if (value) onDeletion!(event) else print("falseeeee")});
+                      {if (value) onDeletion!(event) else print("abort delete")});
             }),
         IconButton(
             icon: Icon(Icons.edit), onPressed: () => {editEvent(context)}),

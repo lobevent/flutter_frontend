@@ -21,8 +21,7 @@ class PostRepository extends Repository {
   
   Future<Either<NetWorkFailure, String>> uploadImages(UniqueId postId, XFile image) async{
     return localErrorHandler(() async {
-      return right(
-         await _postRemoteService.uploadImageToEvent(postId.value, File(image.path)));
+      return right(await _postRemoteService.uploadImageToEvent(postId.value, File(image.path)));
     });
   }
 

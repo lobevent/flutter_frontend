@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/Post/PostImageCarousell.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/ImageCarousell.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_upload.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/cubit/event_form_cubit.dart';
 import 'package:flutter_frontend/presentation/post_comment/post_screen/cubit/post_screen_cubit.dart';
@@ -58,7 +58,7 @@ class _PostImagePickerWidgetState extends State<PostImagePickerWidget> {
   /// This is the image Preview with an Carousel, because we do support multilist here
   Widget previewImage() {
     if (preview != null) {
-      return PostImageCarousel(imagePaths: preview.map((e) => e!.path).toList(), isLoadetFromWeb: false,);
+      return ImageCarousel(imagePaths: preview.map((e) => e!.path).toList(), isLoadetFromWeb: false,);
     }
     return Spacer();
   }

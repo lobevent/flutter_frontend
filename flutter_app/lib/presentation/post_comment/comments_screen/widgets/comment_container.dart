@@ -157,7 +157,7 @@ class CommentContainer extends StatelessWidget {
                   if (value)
                     context.read<CommentScreenCubit>().deleteComment(comment)
                   else
-                    print("falseee"),
+                    print("abort delete Comment"),
                 });
                 },
               child: Icon(Icons.delete))

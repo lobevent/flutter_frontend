@@ -72,7 +72,7 @@ class PostWidget extends StatelessWidget {
                   if (value)
                     context.read<PostScreenCubit>().deletePost(post)
                   else
-                    print("falseee"),
+                    print("abort delete post"),
                 });
               },
               child: Icon(Icons.delete))

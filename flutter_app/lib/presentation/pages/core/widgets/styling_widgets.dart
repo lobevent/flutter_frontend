@@ -1,12 +1,11 @@
 library stlyling_widgets;
 
-import 'dart:ffi';
-
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 
+export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/CarouselIndicators.dart';
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/dismissible_overlay.dart';
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/outlined_non_overflow_button_with_text.dart';
 

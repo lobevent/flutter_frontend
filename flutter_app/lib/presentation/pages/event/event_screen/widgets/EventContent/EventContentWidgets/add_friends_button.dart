@@ -37,7 +37,10 @@ class AddFriendsButton extends StatelessWidget {
                             invitedFriends: eventCubitContext.read<EventScreenCubit>().state.maybeMap(orElse: () => [], loaded: (state) => state.event.invitations),
                             // add friend function
                             onAddFriend: (friend) {onAddFriend(eventCubitContext, context, friend);},
-                            //remove friend gunction
+
+                            onAddHost: (friend) {onAddHost(eventCubitContext, context, friend);},
+
+                            //remove friend function
                             onRemoveFriend: (friend) {onRemoveInvite(eventCubitContext, context, friend);});
                       },
                       //error state
@@ -63,6 +66,15 @@ class AddFriendsButton extends StatelessWidget {
   ///
   void onRemoveInvite(BuildContext eventCubitContext, BuildContext currentContext, Profile friend){
     currentContext.read<AddFriendsCubit>().revokeInvitation(friend,
+        eventCubitContext.read<EventScreenCubit>().state.maybeMap(orElse: () => throw LogicError(), loaded: (state) => state.event),
+        eventCubitContext.read<EventScreenCubit>());
+  }
+
+  ///
+  /// make an friend host, so they can add other friends too
+  ///
+  void onAddHost(BuildContext eventCubitContext, BuildContext currentContext, Profile friend) {
+    currentContext.read<AddFriendsCubit>().onAddHost(friend,
         eventCubitContext.read<EventScreenCubit>().state.maybeMap(orElse: () => throw LogicError(), loaded: (state) => state.event),
         eventCubitContext.read<EventScreenCubit>());
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_upload.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/checkbox_area.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/date_picker.dart';
@@ -12,7 +13,9 @@ import 'title_widget.dart';
 
 class EventFormContainer extends StatelessWidget {
   final bool showErrorMessages;
-  const EventFormContainer({Key? key, this.showErrorMessages = true})
+  final bool isEditing;
+  final Event? event;
+  const EventFormContainer({Key? key, this.showErrorMessages = true, required this.isEditing, this.event})
       : super(key: key);
 
   @override
@@ -24,19 +27,19 @@ class EventFormContainer extends StatelessWidget {
           : AutovalidateMode.disabled,
       child: SingleChildScrollView(
         child: Column(
-          children:  const [
-            PickImageWidget(),
+          children:  [
+            if(event != null && event!.image != null) PickImageWidget(loadetFile: event!.image,) else const PickImageWidget(),
             /// the input field, where the name is typed
-            EventNameField(), // ATTENTION: the textfieldclasses have to be constant ( research has to be done into this! )
+            const EventNameField(), // ATTENTION: the textfieldclasses have to be constant ( research has to be done into this! )
 
             /// the input filed with the decription
-            DescriptionField(),
+            const DescriptionField(),
 
-            DatePicker(),
+            const DatePicker(),
 
-            CheckBoxArea(),
+            const CheckBoxArea(),
 
-            InviteFriendsWidget(),
+            if(!isEditing) InviteFriendsWidget(),
 
             //const PickImageWidget(),
           ],

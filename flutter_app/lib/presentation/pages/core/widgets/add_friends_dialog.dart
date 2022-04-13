@@ -89,8 +89,8 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
           return FriendListTile(
             profile: results[i],
             isInvited: widget.invitedFriends
-                .map((e) => e.profile.id.toString())
-                .contains(results[i].id.toString()),
+                .map((e) => e.profile.id.value.toString())
+                .contains(results[i].id.value.toString()),
             onAddFriend: (Profile profile) {
               widget.onAddFriend(profile);
               setState(() {});
@@ -101,7 +101,9 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
             },
             //TODO: check if the inviter is host
             onAddHost: (Profile profile) {
-              widget.onAddHost!(profile);
+              if(widget.onAddHost != null){
+                widget.onAddHost!(profile);
+              }
               setState(() {});
             },
           );

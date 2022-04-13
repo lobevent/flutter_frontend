@@ -56,6 +56,8 @@ class EventFormPage extends StatelessWidget {
                   /// because the inputs have to be wrapped in a Form to function
                   /// properly
                   EventFormContainer(
+                    event: state.event,
+                    isEditing: state.isEditing,
                     showErrorMessages: state.showErrorMessages,
                   ),
                 ],

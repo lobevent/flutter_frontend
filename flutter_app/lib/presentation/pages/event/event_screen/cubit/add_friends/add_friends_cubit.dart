@@ -56,4 +56,9 @@ class AddFriendsCubit extends Cubit<AddFriendsState> {
               cubit.revokedInvitation(invitation);
             }));
   }
+
+
+  Future<void> onAddHost(Profile profile, Event event, EventScreenCubit cubit) async{
+    throw UnimplementedError();
+  }
 }

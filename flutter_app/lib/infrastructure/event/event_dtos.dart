@@ -43,7 +43,8 @@ class EventDto extends BaseDto with _$EventDto {
     double? latitude,
     int? ownStatus,
     String? image,
-    @JsonKey(ignore: true) bool? isHost,
+    //@JsonKey(ignore: true) bool? isHost,
+    bool? isHost,
   }) = EventDtoFull;
 
   factory EventDto.fromDomain(Event event) {

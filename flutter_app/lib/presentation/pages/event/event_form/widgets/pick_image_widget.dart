@@ -8,8 +8,9 @@ import 'package:flutter_frontend/presentation/pages/event/event_form/cubit/event
 import 'package:image_picker/image_picker.dart';
 
 class PickImageWidget extends StatefulWidget {
+  final String? loadetFile;
   const PickImageWidget({
-    Key? key,
+    Key? key, this.loadetFile,
   }) : super(key: key);
 
   @override
@@ -41,7 +42,14 @@ class _PickImageWidgetState extends State<PickImageWidget> {
 
 
   Widget previewImage() {
-    if (preview != null) {
+    ImageProvider? image;
+    if(widget.loadetFile != null){
+      image = NetworkImage(dotenv.env['ipSim'].toString() + widget.loadetFile!);
+    }
+    if(preview != null){
+      image = Image.file(File(preview!.path)).image;
+    }
+    if (image != null) {
       return ConstrainedBox(
           constraints: new BoxConstraints(
             minHeight: 20.0,
@@ -52,7 +60,7 @@ class _PickImageWidgetState extends State<PickImageWidget> {
             decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: Image.file(File(preview!.path)).image
+                  image: image
                 )),
 
           )

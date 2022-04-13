@@ -58,7 +58,12 @@ class _PostImagePickerWidgetState extends State<PostImagePickerWidget> {
   /// This is the image Preview with an Carousel, because we do support multilist here
   Widget previewImage() {
     if (preview != null) {
-      return ImageCarousel(imagePaths: preview.map((e) => e!.path).toList(), isLoadetFromWeb: false,);
+      // this check is for the eventuality that somone does not select an image when going into galery!
+      if(preview.contains(null)){
+        preview = [];
+      }
+      List<String> pathlist = preview.length != 0 ? preview.map((e) => e!.path).toList() : [];
+      return ImageCarousel(imagePaths: pathlist, isLoadetFromWeb: false,);
     }
     return Spacer();
   }

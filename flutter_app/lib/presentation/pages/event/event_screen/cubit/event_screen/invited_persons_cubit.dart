@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 extension on EventScreenCubit{
   
   Future<void> revokeInvitation(Profile profile, Event event) async{
+
     invitationRepository.revokeInvitation(profile, event).then((value) => value.fold(
             (failure) => throw UnimplementedError(),
             (invitation){

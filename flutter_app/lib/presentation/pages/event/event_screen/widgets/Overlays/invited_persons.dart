@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/domain/event/invitation.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
 
 class InvitedPersonsOverlay extends StatefulWidget {
   final OverlayEntry overlayEntry;
-  final List<Invitations>
+  final BuildContext eventCubitContext;
   
   
   
-  const InvitedPersonsOverlay({Key? key, required this.overlayEntry}) : super(key: key);
+  const InvitedPersonsOverlay({Key? key, required this.overlayEntry, required this.eventCubitContext}) : super(key: key);
 
   
-  //build this Widget as overlay!
-  static void showCreateTodoListOverlay(BuildContext eventCubitcontext, BuildContext addFriendsCubit) async {
+  /// build this Widget as overlay!
+  static void showInvitedPersonsOverlay(BuildContext eventCubitContextLocal /* this is used to access the cubit inside of the overlay*/) async {
     //initialise overlaystate and entries
-    final OverlayState overlayState = Overlay.of(buildContext)!;
+    final OverlayState overlayState = Overlay.of(eventCubitContextLocal)!;
     //have to do it nullable
     OverlayEntry? overlayEntry;
-
-    //controllers for name and desc
 
 
     //this is the way to work with overlays
     overlayEntry = OverlayEntry(builder: (buildContext)
     {
-      return InvitedPersonsOverlay(overlayEntry: overlayEntry!, cubitContext: context, event: eventPass,);
+      return InvitedPersonsOverlay(overlayEntry: overlayEntry!, eventCubitContext: eventCubitContextLocal);
     });
     //insert the entry in the state to make it accesible
     overlayState.insert(overlayEntry);
@@ -31,12 +33,30 @@ class InvitedPersonsOverlay extends StatefulWidget {
   State<InvitedPersonsOverlay> createState() => _InvitedPersonsOverlayState();
 }
 
+// ======================// ======================// ======================// ======================// ======================// ======================// ======================// ======================
+// --------------------------------------------------------------------------------- STATE --------------------------------------------------------------
+// ======================// ======================// ======================// ======================// ======================// ======================// ======================// ======================
+
 class _InvitedPersonsOverlayState extends State<InvitedPersonsOverlay> {
   
-  
+  List<Invitation> invitations = [];
   
   @override
   Widget build(BuildContext context) {
-    return Container();
-  }
+
+    return
+      BlocBuilder<EventScreenCubit, EventScreenState>(
+        bloc: BlocProvider.of(widget.eventCubitContext),
+        builder: (context, state){ state.maybeMap(orElse: (){
+          invitations = [];
+        },
+        loaded: (loadedState) {
+          invitations = loadedState.event.invitations;
+        });
+        return DismissibleOverlay(
+          overlayEntry: widget.overlayEntry,
+          child: Text(invitations.length.toString()),
+        );
+      });
+    }
 }

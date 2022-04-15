@@ -53,6 +53,7 @@ class AddFriendsCubit extends Cubit<AddFriendsState> {
               AddFriendsState currentState = state;
               emit(AddFriendsState.loadingFriends());
               emit(currentState);
+              // with this one the view is updated!
               cubit.revokedInvitation(invitation);
             }));
   }

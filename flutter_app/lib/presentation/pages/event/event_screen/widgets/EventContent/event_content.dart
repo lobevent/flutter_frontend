@@ -19,6 +19,7 @@ import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/eve
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/like/like_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/UesMenuButton.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/add_friends_button.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/Overlays/invited_persons.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:intl/intl.dart';
 
@@ -125,7 +126,7 @@ class EventContent extends StatelessWidget {
               style: TextStyle(color: textColor),
             ),
           onTap: (){
-              // TODO: Open all invited!
+              InvitedPersonsOverlay.showInvitedPersonsOverlay(context);
           },
         ),
         Spacer(),

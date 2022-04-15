@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/core/list_tiles/friend_list_tile.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 
@@ -81,32 +82,40 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
 
   /// listview of the proviles as Friend tile
   Widget _ProfileListView(BuildContext context) {
-    return ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: results.length,
-        itemBuilder: (context, i) {
-          return FriendListTile(
-            profile: results[i],
-            isInvited: widget.invitedFriends
-                .map((e) => e.profile.id.value.toString())
-                .contains(results[i].id.value.toString()),
-            onAddFriend: (Profile profile) {
-              widget.onAddFriend(profile);
-              setState(() {});
-            },
-            onRemoveFriend: (Profile profile) {
-              widget.onRemoveFriend(profile);
-              setState(() {});
-            },
-            //TODO: check if the inviter is host
-            onAddHost: (Profile profile) {
-              if(widget.onAddHost != null){
-                widget.onAddHost!(profile);
-              }
-              setState(() {});
-            },
-          );
-        });
+    // that one is for layout testing
+    //for(int i = 0; i < 30; i++){results.add(results[0].copyWith(name: ProfileName("input")));}
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height*0.7,
+        maxWidth: MediaQuery.of(context).size.width*0.8,
+      ),
+        child: ListView.builder(
+          //physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: results.length,
+          itemBuilder: (context, i) {
+            return FriendListTile(
+              profile: results[i],
+              isInvited: widget.invitedFriends
+                  .map((e) => e.profile.id.value.toString())
+                  .contains(results[i].id.value.toString()),
+              onAddFriend: (Profile profile) {
+                widget.onAddFriend(profile);
+                setState(() {});
+              },
+              onRemoveFriend: (Profile profile) {
+                widget.onRemoveFriend(profile);
+                setState(() {});
+              },
+              //TODO: check if the inviter is host
+              onAddHost: (Profile profile) {
+                if(widget.onAddHost != null){
+                  widget.onAddHost!(profile);
+                }
+                setState(() {});
+              },
+            );
+          }));
   }
 }

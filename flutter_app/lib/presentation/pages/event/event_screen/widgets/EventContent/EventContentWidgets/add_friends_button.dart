@@ -72,7 +72,7 @@ class AddFriendsButton extends StatelessWidget {
 
   ///
   /// make an friend host, so they can add other friends too
-  ///
+  /// TODO: not working yet
   void onAddHost(BuildContext eventCubitContext, BuildContext currentContext, Profile friend) {
     currentContext.read<AddFriendsCubit>().onAddHost(friend,
         eventCubitContext.read<EventScreenCubit>().state.maybeMap(orElse: () => throw LogicError(), loaded: (state) => state.event),

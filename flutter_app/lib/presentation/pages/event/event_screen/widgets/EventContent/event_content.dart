@@ -64,7 +64,7 @@ class EventContent extends StatelessWidget {
                     height: 20,
                   ),
 
-                  if (stateLoaded.event.isHost) AddFriendsWidget(context),
+                  if (stateLoaded.event.isHost) AddFriendsButton(),
 
                   /// Used as space
                   const SizedBox(height: 20),
@@ -206,9 +206,7 @@ class EventContent extends StatelessWidget {
     ]);
   }
 
-  Widget AddFriendsWidget(BuildContext eventCubitContext) {
-    return AddFriendsButton();
-  }
+
 
   Widget PostWidget(Event event, BuildContext context) {
     return MaterialButton(onPressed: () {

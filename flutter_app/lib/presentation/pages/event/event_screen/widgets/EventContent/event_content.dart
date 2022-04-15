@@ -46,11 +46,7 @@ class EventContent extends StatelessWidget {
                   /// Used as space
                   const SizedBox(height: 20),
 
-                  AttendingAndOwnStatus(
-                      stateLoaded.event.attendingCount!,
-                      stateLoaded.event.status,
-                      context,
-                      stateLoaded.loadingStatus),
+                  AttendingAndOwnStatus(stateLoaded.event.attendingCount??0, stateLoaded.event.status, context, stateLoaded.loadingStatus),
 
                   /// Used as space
                   const SizedBox(height: 20),
@@ -126,9 +122,14 @@ class EventContent extends StatelessWidget {
     return PaddingWidget(
       children: [
         Icon(Icons.group),
-        Text(
-          AppStrings.participants + ':' + attending.toString(),
-          style: TextStyle(color: textColor),
+        GestureDetector(
+            child: Text(
+              AppStrings.participants + ':' + attending.toString(),
+              style: TextStyle(color: textColor),
+            ),
+          onTap: (){
+              // TODO: Open all invited!
+          },
         ),
         Spacer(),
         //Icon(icon),

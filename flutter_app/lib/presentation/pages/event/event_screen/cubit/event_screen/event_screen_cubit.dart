@@ -9,6 +9,7 @@ import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
+import 'package:flutter_frontend/infrastructure/invitation/invitation_repository.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
@@ -18,13 +19,21 @@ part 'event_screen_cubit.freezed.dart';
 part 'event_screen_state.dart';
 
 class EventScreenCubit extends Cubit<EventScreenState> {
+
+
   EventScreenCubit(UniqueId id) : super(EventScreenState.loading()) {
     emit(EventScreenState.loading());
     getEvent(id);
   }
 
+
   EventRepository repository = GetIt.I<EventRepository>();
+
+  /// this one is created for the todoOverlay extension
   TodoRepository todoRepository = GetIt.I<TodoRepository>();
+
+  /// is created for the invited Persons Cubit extension
+  InvitationRepository invitationRepository = GetIt.I<InvitationRepository>();
 
 
   Future<void> getEvent(UniqueId id) async {
@@ -60,7 +69,21 @@ class EventScreenCubit extends Cubit<EventScreenState> {
       await repository.changeStatus(loadedState.event, status).then((value){
 
         value.fold((failute) => emit(EventScreenState.error(failure: failute)), (event) {
-          var event = loadedState.event.copyWith(status: status);
+          //------------------ the attending stuff is just for refreshing the participants count ------------------
+          // here we initialize the attending part from before
+         int attending = loadedState.event.attendingCount??0;
+         // checking if the status has changed to attending. If so, increment attending
+         if(status == EventStatus.attending && loadedState.event.status != status){
+            attending++;
+         }
+         // check if the status was change to anything but attending (but was attending before), if so decrement attending
+         if (status != EventStatus.attending && /* previous status -> */loadedState.event.status == EventStatus.attending){
+           attending--;
+         }
+
+         //------------ here lives all the other stuff for updating the view----------------
+
+          var event = loadedState.event.copyWith(status: status, attendingCount: attending);
 
           emit(EventScreenState.loading());
 

@@ -6,9 +6,9 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigati
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/event_content.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/header_visual.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/EventTodoWidget/TodoWidgets/todo_widget.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/es_event_content.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/es_header_visual.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/EventTodoWidget/es_ec_td_todo_widget.dart';
 import 'package:flutter_frontend/presentation/post_comment/post_screen/post_screen.dart';
 
 import '../../core/widgets/loading_overlay.dart';

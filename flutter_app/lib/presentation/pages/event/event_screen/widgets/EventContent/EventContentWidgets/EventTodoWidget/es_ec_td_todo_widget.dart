@@ -8,8 +8,8 @@ import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
 import 'package:flutter_frontend/domain/todo/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/Overlays/todolist_form.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/EventTodoWidget/event_todo_widget.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/Overlays/es_ol_todolist_form.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/EventTodoWidget/es_ec_td_tw_todo_overview.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class TodoWidget extends StatefulWidget {

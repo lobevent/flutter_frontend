@@ -17,9 +17,9 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/add_friends/add_friends_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/like/like_cubit.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/UesMenuButton.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/add_friends_button.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/Overlays/invited_persons.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/es_ec_UesMenuButton.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/es_ec_add_friends_button.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/Overlays/es_ol_invited_persons.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:intl/intl.dart';
 

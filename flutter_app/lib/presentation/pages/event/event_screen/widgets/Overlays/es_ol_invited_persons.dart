@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/Overlays/es_ol_invited_persons_widgets/es_ol_ip_content.dart';
 
 class InvitedPersonsOverlay extends StatefulWidget {
   final OverlayEntry overlayEntry;
@@ -34,7 +35,7 @@ class InvitedPersonsOverlay extends StatefulWidget {
 }
 
 // ======================// ======================// ======================// ======================// ======================// ======================// ======================// ======================
-// --------------------------------------------------------------------------------- STATE --------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------- STATE -----------------------------------------------------------------------------------
 // ======================// ======================// ======================// ======================// ======================// ======================// ======================// ======================
 
 class _InvitedPersonsOverlayState extends State<InvitedPersonsOverlay> {
@@ -55,7 +56,7 @@ class _InvitedPersonsOverlayState extends State<InvitedPersonsOverlay> {
         });
         return DismissibleOverlay(
           overlayEntry: widget.overlayEntry,
-          child: Text(invitations.length.toString()),
+          child: InvitedPersonsContent(),
         );
       });
     }

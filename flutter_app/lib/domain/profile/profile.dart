@@ -16,6 +16,7 @@ class Profile with _$Profile {
   const factory Profile({
     required UniqueId id,
     required ProfileName name,
+    List<String>? images
   }) = BaseProfile;
 
   const factory Profile.full({
@@ -26,6 +27,7 @@ class Profile with _$Profile {
     int? friendshipCount,
     List<Post>? posts,
     List<Comment>? comments,
+    List<String>? images,
   }) = _FullProfile;
 
   //check if the whole object is no failure

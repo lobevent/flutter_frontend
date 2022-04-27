@@ -123,15 +123,30 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
                 _onImageButtonPressed(ImageSource.camera, context: context);
               }, text: "", icon: Icons.camera_alt,),
 
+
               Spacer(),
             ],
           ),
+          //buildButton(),
         ]
       )
 
     ]);
 
   }
+
+  /*Widget buildButton(){
+    if(widget.withButton==true){
+      return TextWithIconButton(
+          onPressed:(){
+            widget.buttonFunction!;
+          },
+          text: "Upload profile pictures");
+    }
+    else return(Text(""));
+  }
+
+   */
 
   Text? _getRetrieveErrorWidget() {
     if (_retrieveDataError != null) {

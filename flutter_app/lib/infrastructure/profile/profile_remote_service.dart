@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:core';
+import 'dart:io';
 
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
@@ -27,6 +29,8 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String deletePath = "/profile";
   static const String updatePath = "/profile";
 
+  static const String uploadImage = '/profile/uploadImage/%profileId%';
+
   static const String getOpenFriendRequestsPath = "/friend/requests";
   static const String getAcceptedFriendshipsPath = "/friend/%profileId%";
   static const String sendFriendShipPath = "/friend/request/%profileId%";
@@ -54,6 +58,10 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
 
   Future<ProfileDto> _decodeProfile(Response json) async {
     return ProfileDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
+  }
+
+  Future<String> uploadImageToEvent(String profileId, File image) async{
+    return client.postFile(uploadImage.interpolate({"profileId": profileId}), image);
   }
 
   Future<ProfileDto> getSingleProfile(String id) async {

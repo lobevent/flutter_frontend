@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/Profile/ProfileImagePickerWidget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_upload.dart';
 import 'package:flutter_frontend/presentation/pages/login_register_email/registration_widget.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/event_form.dart';
@@ -35,7 +36,8 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/post_scre
     AutoRoute(page: PostsScreen),
     AutoRoute(page: LoginRegister),
     AutoRoute(page: ImageUpload),
-    AutoRoute(page: RegistrationForm)
+    AutoRoute(page: RegistrationForm),
+    AutoRoute(page: ProfileImagePickerWidget)
 
   ],
 )

@@ -23,6 +23,7 @@ class ProfileDto extends BaseDto with _$ProfileDto {
     int? friendshipCount,
     List<PostDto>? posts,
     List<CommentDto>? comments,
+    List<String>? images
   }) = _ProfileDto;
 
   factory ProfileDto.fromDomain(Profile profile) {
@@ -54,7 +55,8 @@ class ProfileDto extends BaseDto with _$ProfileDto {
                 ? detailedProfile.comments!
                     .map((e) => CommentDto.fromDomain(e))
                     .toList()
-                : null));
+                : null,
+          images: profile.images,));
   }
 
   factory ProfileDto.fromJson(Map<String, dynamic> json) =>
@@ -80,7 +82,8 @@ class ProfileDto extends BaseDto with _$ProfileDto {
               posts != null ? posts!.map((e) => e.toDomain()).toList() : null,
           comments: comments != null
               ? comments!.map((e) => e.toDomain()).toList()
-              : null);
+              : null,
+        images: images);
     }
   }
 }

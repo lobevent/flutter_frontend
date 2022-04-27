@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
@@ -12,11 +14,21 @@ import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_remote_service.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/like/like_cubit.dart';
 import 'package:flutter_frontend/domain/core/repository.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileRepository extends Repository {
   final ProfileRemoteService _profileRemoteService;
 
   ProfileRepository(this._profileRemoteService);
+
+
+  // ---------------------------------- Image Crud ------------------------------------------
+
+  Future<Either<NetWorkFailure, String>> uploadImages(UniqueId postId, XFile image) async{
+    return localErrorHandler(() async {
+      return right(await _profileRemoteService.uploadImageToEvent(postId.value, File(image.path)));
+    });
+  }
 
   //---------------------------Simple CRUD-----------------------------
   ///

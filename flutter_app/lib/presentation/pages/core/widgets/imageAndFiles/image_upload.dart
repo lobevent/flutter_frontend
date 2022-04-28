@@ -15,7 +15,7 @@ import 'package:image_picker/image_picker.dart';
 class ImageUpload extends StatefulWidget {
   const ImageUpload({Key? key, this.title = "bla"}) : super(key: key);
 
-  final String? title ;
+  final String? title;
 
   @override
   _ImageUploadState createState() => _ImageUploadState();
@@ -26,20 +26,24 @@ class _ImageUploadState extends State<ImageUpload> {
   Widget build(BuildContext context) {
     return BasicContentContainer(
       scrollable: true,
-      children: [ImageUploadPicker(returnFunction: (List<XFile?>? blaa){})],
+      children: [ImageUploadPicker(returnFunction: (List<XFile?>? blaa) {})],
     );
-
   }
 }
 
-
 class ImageUploadPicker extends StatefulWidget {
-  const ImageUploadPicker({Key? key, this.title = "bla", required this.returnFunction, this.showMultiPic = false, this.showPreview = false}) : super(key: key);
+  const ImageUploadPicker(
+      {Key? key,
+      this.title = "bla",
+      required this.returnFunction,
+      this.showMultiPic = false,
+      this.showPreview = false})
+      : super(key: key);
 
   final void Function(List<XFile?>?) returnFunction;
   final bool showMultiPic;
   final bool showPreview;
-  final String? title ;
+  final String? title;
 
   @override
   _ImageUploadPickerState createState() => _ImageUploadPickerState();
@@ -57,7 +61,6 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
   dynamic _pickImageError;
   bool isVideo = false;
 
-
   String? _retrieveDataError;
 
   final ImagePicker _picker = ImagePicker();
@@ -65,74 +68,81 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
   final TextEditingController maxHeightController = TextEditingController();
   final TextEditingController qualityController = TextEditingController();
 
-
-
   @override
   Widget build(BuildContext context) {
-    return
-      Column(
-        children: [Column(children: [
-          if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android && widget.showPreview) FutureBuilder<void>(
-          future: retrieveLostData(),
-          builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return const Text(
-                  'You have not yet picked an image.',
-                  textAlign: TextAlign.center,
-                );
-              case ConnectionState.done:
-                return _handlePreview();
-              default:
-                if (snapshot.hasError) {
-                  return Text(
-                    'Pick image/video error: ${snapshot.error}}',
-                    textAlign: TextAlign.center,
-                  );
-                } else {
+    return Column(children: [
+      Column(children: [
+        if (!kIsWeb &&
+            defaultTargetPlatform == TargetPlatform.android &&
+            widget.showPreview)
+          FutureBuilder<void>(
+            future: retrieveLostData(),
+            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                case ConnectionState.waiting:
                   return const Text(
                     'You have not yet picked an image.',
                     textAlign: TextAlign.center,
                   );
-                }
-            }
-          },
-        ) else if(widget.showPreview) _handlePreview(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Spacer(),
-              TextWithIconButton(onPressed: () {
-                _onImageButtonPressed(ImageSource.gallery, context: context);
-              }, text: "", icon: Icons.photo,),
-              Spacer(),
-              if (widget.showMultiPic) TextWithIconButton(onPressed: () {
-                    isVideo = false;
-                    _onImageButtonPressed(
+                case ConnectionState.done:
+                  return _handlePreview();
+                default:
+                  if (snapshot.hasError) {
+                    return Text(
+                      'Pick image/video error: ${snapshot.error}}',
+                      textAlign: TextAlign.center,
+                    );
+                  } else {
+                    return const Text(
+                      'You have not yet picked an image.',
+                      textAlign: TextAlign.center,
+                    );
+                  }
+              }
+            },
+          )
+        else if (widget.showPreview)
+          _handlePreview(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Spacer(),
+            TextWithIconButton(
+                onPressed: () {
+                  _onImageButtonPressed(ImageSource.gallery, context: context);
+                },
+                text: "",
+                icon: Icons.photo),
+            Spacer(),
+            if (widget.showMultiPic)
+              TextWithIconButton(
+                onPressed: () {
+                  isVideo = false;
+                  _onImageButtonPressed(
                     ImageSource.gallery,
                     context: context,
                     isMultiImage: true,
-                    );
-                  },
-                 text: "", icon: Icons.photo_library,
+                  );
+                },
+                text: "",
+                icon: Icons.photo_library,
               ),
-              Spacer(),
-              TextWithIconButton(onPressed: () {
+            Spacer(),
+            TextWithIconButton(
+              onPressed: () {
                 isVideo = false;
                 _onImageButtonPressed(ImageSource.camera, context: context);
-              }, text: "", icon: Icons.camera_alt,),
-
-
-              Spacer(),
-            ],
-          ),
-          //buildButton(),
-        ]
-      )
-
+              },
+              text: "",
+              icon: Icons.camera_alt,
+            ),
+            Spacer(),
+          ],
+        ),
+        //buildButton(),
+      ])
     ]);
-
   }
 
   /*Widget buildButton(){
@@ -176,7 +186,6 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
         });
       }
     } else {
-
       try {
         final XFile? pickedFile = await _picker.pickImage(
           source: source,
@@ -196,7 +205,6 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
     }
   }
 
-
   @override
   void dispose() {
     maxWidthController.dispose();
@@ -204,7 +212,6 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
     qualityController.dispose();
     super.dispose();
   }
-
 
   Widget _previewImages() {
     final Text? retrieveError = _getRetrieveErrorWidget();
@@ -225,8 +232,8 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
               // Why network for web?
               // See https://pub.dev/packages/image_picker#getting-ready-for-the-web-platform
               return kIsWeb
-                    ? Image.network(_imageFileList![index].path)
-                    : Image.file(File(_imageFileList![index].path));
+                  ? Image.network(_imageFileList![index].path)
+                  : Image.file(File(_imageFileList![index].path));
             },
             itemCount: _imageFileList!.length,
           ));
@@ -262,8 +269,4 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
       _retrieveDataError = response.exception!.code;
     }
   }
-
-
 }
-
-

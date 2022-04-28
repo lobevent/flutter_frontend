@@ -13,6 +13,7 @@ import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/add_friends_dialog.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/like_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/add_friends/add_friends_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
@@ -45,13 +46,18 @@ class EventContent extends StatelessWidget {
                   /// Used as space
                   const SizedBox(height: 20),
 
-                  AttendingAndOwnStatus(stateLoaded.event.attendingCount!, stateLoaded.event.status, context, stateLoaded.loadingStatus),
+                  AttendingAndOwnStatus(
+                      stateLoaded.event.attendingCount!,
+                      stateLoaded.event.status,
+                      context,
+                      stateLoaded.loadingStatus),
 
                   /// Used as space
                   const SizedBox(height: 20),
 
                   /// the date of the event
-                  DateAndOwner(stateLoaded.event.date, stateLoaded.event.owner!, context),
+                  DateAndOwner(stateLoaded.event.date, stateLoaded.event.owner!,
+                      context),
 
                   /// Used as space
                   const SizedBox(height: 20),
@@ -75,7 +81,8 @@ class EventContent extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   /// Contains the description of the event
-                  DescriptionWidget(stateLoaded.event.description!.getOrCrash()),
+                  DescriptionWidget(
+                      stateLoaded.event.description!.getOrCrash()),
                 ],
               );
             },
@@ -87,7 +94,8 @@ class EventContent extends StatelessWidget {
   }
 
   /// this contains the attending paritcipants and the own attending status view for this event
-  Widget AttendingAndOwnStatus(int attending, EventStatus? status, BuildContext context, bool isLoadingStatus) {
+  Widget AttendingAndOwnStatus(int attending, EventStatus? status,
+      BuildContext context, bool isLoadingStatus) {
     IconData icon;
     String text;
 
@@ -114,7 +122,6 @@ class EventContent extends StatelessWidget {
         break;
     }
 
-
     //return TextWithIconButton(onPressed: null, text: AppStrings.participants + ':' + attending.toString());
     return PaddingWidget(
       children: [
@@ -125,7 +132,11 @@ class EventContent extends StatelessWidget {
         ),
         Spacer(),
         //Icon(icon),
-        UesMenuButton(icon: icon, text: text, isLoading: isLoadingStatus,)
+        UesMenuButton(
+          icon: icon,
+          text: text,
+          isLoading: isLoadingStatus,
+        )
         //Text(text, style: TextStyle(color: textColor))
 
         //TextWithIconButton(onPressed: null, text: text, icon: icon,)
@@ -147,7 +158,8 @@ class EventContent extends StatelessWidget {
 
       /// We want to be able to navigate to the owner of the event
       OutlinedButton(
-          onPressed: () => context.router.push(ProfilePageRoute(profileId: profile.id)),
+          onPressed: () =>
+              context.router.push(ProfilePageRoute(profileId: profile.id)),
           child:
               // this looks cancer, and maybe you are right
               // feel free to correct this
@@ -173,7 +185,14 @@ class EventContent extends StatelessWidget {
 
   /// A text widget, styled for headings
   Widget TitleText(String title) {
-    return PaddingWidget(children: [Text(title, style: TextStyle(height: 2, fontSize: 30, fontWeight: FontWeight.bold, color: textColor))]);
+    return PaddingWidget(children: [
+      Text(title,
+          style: TextStyle(
+              height: 2,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: textColor))
+    ]);
   }
 
   /// returns widget, that ist padded and expands
@@ -206,12 +225,23 @@ class EventContent extends StatelessWidget {
     ]);
   }
 
-
-
   Widget PostWidget(Event event, BuildContext context) {
-    return MaterialButton(onPressed: () {
-      context.router.push(PostsScreenRoute(event: event));
-    });
+    /*return InkWell(
+      child: PostCommentBaseWidget(
+          date: event. post.creationDate,
+          content: post.postContent.getOrCrash(),
+          images: post.images == null ? [] : post.images!,
+          autor: showAuthor ? post.owner : null,
+          actionButtonsWidgets: ActionWidgets(context)),
+      ),
+
+     */
+    return MaterialButton(
+      onPressed: () {
+        context.router.push(PostsScreenRoute(event: event));
+      },
+      child: Icon(Icons.local_post_office_outlined),
+    );
   }
 
   /// Widget used for making padding with a row, so the children start on the
@@ -219,7 +249,4 @@ class EventContent extends StatelessWidget {
   Widget PaddingWidget({required List<Widget> children}) {
     return PaddingRowWidget(children: children);
   }
-
 }
-
-

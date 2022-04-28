@@ -38,12 +38,27 @@ class ProfilePage extends StatelessWidget {
                   /// wrapped in a list to match closure context
                   BasicContentContainer(
                       scrollable: true,
-                      bottomNavigationBar: BottomNavigation(selected: NavigationOptions.ownProfile,),
+                      bottomNavigationBar: BottomNavigation(
+                        selected: NavigationOptions.ownProfile,
+                      ),
                       children: state.maybeMap(
 
                           /// if the error state is not active, load the contents
                           error: (errState) =>
                               [ErrorMessage(errorText: errState.error)],
+                          loaded: (loadedState) => [
+                                // the profile image
+                                ProfilePageHeaderVisual(
+                                    profile: loadedState.profile),
+                                ProfilePageMeta(),
+                                ProfilePagePosts(),
+                              ],
+                          loading: (loadingState) => const [
+                                // the profile image
+                                ProfilePageHeaderVisual(),
+                                ProfilePageMeta(),
+                                ProfilePagePosts(),
+                              ],
                           orElse: () => const [
                                 // the profile image
                                 ProfilePageHeaderVisual(),

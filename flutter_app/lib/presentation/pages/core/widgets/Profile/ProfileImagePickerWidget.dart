@@ -14,20 +14,27 @@ import 'package:image_picker/image_picker.dart';
 // TODO: open an Dialog with the image when clicking on it!
 /// The image picker widged for posts!
 class ProfileImagePickerWidget extends StatefulWidget {
+  final OverlayEntry overlayEntry;
+  final BuildContext cubitContext;
   const ProfileImagePickerWidget({
+    required this.overlayEntry,
+    required this.cubitContext,
     Key? key,
   }) : super(key: key);
 
   @override
-  _ProfileImagePickerWidgetState createState() => _ProfileImagePickerWidgetState();
+  _ProfileImagePickerWidgetState createState() =>
+      _ProfileImagePickerWidgetState(cubitContext);
 }
 
 class _ProfileImagePickerWidgetState extends State<ProfileImagePickerWidget> {
+  _ProfileImagePickerWidgetState(this.cubitContext);
+
+  final BuildContext cubitContext;
   List<XFile?> preview = [];
   late PageController _pageController;
   int activePage = 0;
   //int maxImages = 5;
-
 
   @override
   void initState() {
@@ -38,52 +45,59 @@ class _ProfileImagePickerWidgetState extends State<ProfileImagePickerWidget> {
   @override
   Widget build(BuildContext context) {
     //return BlocProvider(
-     //   create: (context) => ProfilePageCubit(profileId: profileId),
-   // child:  BlocBuilder<ProfilePageCubit, ProfilePageState>(
-     //   builder: (context, state) {
-          return Scaffold(
-            body: Column(
-              children: [
-                Spacer(),
-                Spacer(),
-                previewImage(),
-                ImageUploadPicker(returnFunction: (List<XFile?>? image) {
-                  if (image != null && image.length > 0) {
-                    preview = image;
-                    context.read<ProfilePageCubit>().changePictures(preview);
-                    setState(() {});
-                  }
-                }, showMultiPic: true,),
-                TextWithIconButton(
-                    onPressed: (){
-                      context.read<ProfilePageCubit>().postProfilePics();
-                      setState(() {});
-                    },
-                    text: "Upload profile pictures"),
-                Spacer(),
-              ],
+    //   create: (context) => ProfilePageCubit(profileId: profileId),
+    // child:  BlocBuilder<ProfilePageCubit, ProfilePageState>(
+    //   builder: (context, state) {
+    return DismissibleOverlay(
+      overlayEntry: widget.overlayEntry,
+      child: Scaffold(
+        //lets make this transparent
+        backgroundColor: Colors.white38.withOpacity(0.9),
+        body: Column(
+          children: [
+            Spacer(),
+            Spacer(),
+            previewImage(),
+            ImageUploadPicker(
+              returnFunction: (List<XFile?>? image) {
+                if (image != null && image.length > 0) {
+                  preview = image;
+                  cubitContext.read<ProfilePageCubit>().changePictures(preview);
+                  setState(() {});
+                }
+              },
+              showMultiPic: true,
             ),
-          );
-       // }
- //   ),
-   // );
+            TextWithIconButton(
+                onPressed: () {
+                  cubitContext.read<ProfilePageCubit>().postProfilePics();
+                  setState(() {});
+                },
+                text: "Upload profile pictures"),
+            Spacer(),
+          ],
+        ),
+      ),
+    );
+    // }
+    //   ),
+    // );
   }
-
 
   /// This is the image Preview with an Carousel, because we do support multilist here
   Widget previewImage() {
     if (preview != null) {
       // this check is for the eventuality that somone does not select an image when going into galery!
-      if(preview.contains(null)){
+      if (preview.contains(null)) {
         preview = [];
       }
-      List<String> pathlist = preview.length != 0 ? preview.map((e) => e!.path).toList() : [];
-      return ImageCarousel(imagePaths: pathlist, isLoadetFromWeb: false,);
-
+      List<String> pathlist =
+          preview.length != 0 ? preview.map((e) => e!.path).toList() : [];
+      return ImageCarousel(
+        imagePaths: pathlist,
+        isLoadetFromWeb: false,
+      );
     }
     return Spacer();
   }
-
-
-
 }

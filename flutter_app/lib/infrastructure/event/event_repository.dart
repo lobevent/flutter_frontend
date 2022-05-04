@@ -53,10 +53,12 @@ class EventRepository extends Repository {
     }
   }
 
-  Future<Either<NetWorkFailure, Event>> changeStatus(Event event, EventStatus status) async {
+  Future<Either<NetWorkFailure, Event>> changeStatus(
+      Event event, EventStatus status) async {
     try {
       final eventDto = EventDto.fromDomain(event);
-      EventDto returnedEvent = await _eventRemoteService.changeStatus(eventDto, status);
+      EventDto returnedEvent =
+          await _eventRemoteService.changeStatus(eventDto, status);
       return right(returnedEvent.toDomain());
     } on CommunicationException catch (e) {
       return left(ExceptionsHandler.reactOnCommunicationException(e));
@@ -64,8 +66,6 @@ class EventRepository extends Repository {
   }
 
   // ------------------ Complex list operations ----------------------------
-
-
 
   ///
   ///  generic get list method, that makes the try catch
@@ -81,7 +81,6 @@ class EventRepository extends Repository {
       return left(ExceptionsHandler.reactOnCommunicationException(e));
     }
   }
-
 
   Future<Either<NetWorkFailure, List<Event>>> getOwnedEvents(
       DateTime lastEventTime, int amount,
@@ -126,16 +125,25 @@ class EventRepository extends Repository {
     }
   }
 
-  Future<Either<NetWorkFailure, void>> uploadImageToEvent(UniqueId eventId, XFile image) async{
+  Future<Either<NetWorkFailure, void>> uploadImageToEvent(
+      UniqueId eventId, XFile image) async {
     return localErrorHandler(() async {
-      return right(
-          _eventRemoteService.uploadImageToEvent(eventId.value, File(image.path)));
+      return right(_eventRemoteService.uploadImageToEvent(
+          eventId.value, File(image.path)));
     });
   }
 
+  Future<Either<NetWorkFailure, List<Event>>> getInvitedEvents(
+      DateTime lastEventTime, int amount,
+      {bool descending = false}) async {
+    return _getList(() => _eventRemoteService.getInvitedEvents(
+        lastEventTime, amount, descending));
+  }
 
-  Future<Either<NetWorkFailure, List<Event>>> getInvitedEvents(DateTime lastEventTime, int amount, {bool descending = false}) async {
-    return _getList(() =>  _eventRemoteService.getInvitedEvents(lastEventTime, amount, descending));
+  Future<Either<NetWorkFailure, List<Event>>> getEventsOfInterest(
+      DateTime lastEventTime, int amount) {
+    return _getList(
+        () => _eventRemoteService.getEventsOfInterest(lastEventTime, amount));
   }
   // Future<Either<NetWorkFailure, bool>> sendInvitation(Event event, Profile profile)async{
   //   return localErrorHandler(() async {

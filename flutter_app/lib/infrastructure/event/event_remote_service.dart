@@ -26,6 +26,8 @@ class EventRemoteService extends RemoteService<EventDto> {
       "/user/events/%amount%/%lastEventTime%/"; //TODO reaction?
   static const String searchEventsPath =
       "/event/search/%needle%/%amount%/%last%/";
+  static const String eventsOfInterestPath =
+      "/events/userInterest/%amount%/%lastEventTime%";
   //event search name maxresults last
 
   // TODO combine it to event path?
@@ -68,18 +70,22 @@ class EventRemoteService extends RemoteService<EventDto> {
     }));
   }
 
-  Future<List<EventDto>> getInvitedEvents(
-      DateTime lastEventTime, int amount,
+  Future<List<EventDto>> getInvitedEvents(DateTime lastEventTime, int amount,
       [bool descending = false]) async {
     return _getEventList(invitedEventsPath.interpolate({
       "amount": amount.toString(),
       "lastEventTime": lastEventTime.toString(),
-      "descending": descending ? '1': '0',
+      "descending": descending ? '1' : '0',
     }));
   }
 
-
-
+  Future<List<EventDto>> getEventsOfInterest(
+      DateTime lastEventTime, int amount) async {
+    return _getEventList(eventsOfInterestPath.interpolate({
+      "amount": amount.toString(),
+      "lastEventTime": lastEventTime.toString(),
+    }));
+  }
 
   Future<List<EventDto>> getEventsFromUser(
       DateTime lastEventTime, int amount, UniqueId profileId,
@@ -123,11 +129,17 @@ class EventRemoteService extends RemoteService<EventDto> {
     return _decodeEvent(await client.delete("$deletePath${eventDto.id}"));
   }
 
-
   Future<EventDto> changeStatus(EventDto eventDto, EventStatus status) async {
     // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive
 
-    return _decodeEvent(await client.put(changeStatusPath.interpolate({"eventId" : eventDto.id, "status": (EventDto.domainToDtoStatus[status] as int).toString()}), {}), 'event');
+    return _decodeEvent(
+        await client.put(
+            changeStatusPath.interpolate({
+              "eventId": eventDto.id,
+              "status": (EventDto.domainToDtoStatus[status] as int).toString()
+            }),
+            {}),
+        'event');
   }
 
   Future<EventDto> updateEvent(EventDto eventDto) async {
@@ -135,10 +147,9 @@ class EventRemoteService extends RemoteService<EventDto> {
         "$updatePath${eventDto.id}", jsonEncode(eventDto.toJson())));
   }
 
-  Future<void> uploadImageToEvent(String eventId, File image)async{
+  Future<void> uploadImageToEvent(String eventId, File image) async {
     client.postFile(uploadImage.interpolate({"eventId": eventId}), image);
   }
-
 
   /*static String generatePaginatedRoute(
       String route, int amount, DateTime lastEventTime) {
@@ -146,12 +157,11 @@ class EventRemoteService extends RemoteService<EventDto> {
   }*/
 
   EventDto _decodeEvent(Response json, [String? arrayField]) {
-    if(arrayField == null){
+    if (arrayField == null) {
       return EventDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
-    }
-    else
-    {
-      return EventDto.fromJson(jsonDecode(json.body)[arrayField] as Map<String, dynamic>);
+    } else {
+      return EventDto.fromJson(
+          jsonDecode(json.body)[arrayField] as Map<String, dynamic>);
     }
   }
 

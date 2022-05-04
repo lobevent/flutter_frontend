@@ -78,6 +78,6 @@ class _LikeButtonState extends State<LikeButton> {
           changeLikeStatus();
         },
         //icon liked or not liked?
-        child: decideIcon(likeStatus));
+        child: decideIcon(widget.likeStatus));
   }
 }

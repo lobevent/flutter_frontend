@@ -60,8 +60,9 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
     return ProfileDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
 
-  Future<String> uploadImageToEvent(String profileId, File image) async{
-    return client.postFile(uploadImage.interpolate({"profileId": profileId}), image);
+  Future<String> uploadImageToEvent(String profileId, File image) async {
+    return client.postFile(
+        uploadImage.interpolate({"profileId": profileId}), image);
   }
 
   Future<ProfileDto> getSingleProfile(String id) async {
@@ -173,7 +174,12 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   Future<bool> getOwnLikeStatus(String objectId) async {
     final Response response =
         await client.get(ownLikeStatusPath.interpolate({"objectId": objectId}));
-    return response.body.length > 2;
+    if (response.body == false) {
+      //check if backend gives false back or a like
+      return false;
+    } else
+      return true;
+    //response.body.length > 2;
   }
 
   Future<bool> like(String objectId, LikeTypeOption option) async {

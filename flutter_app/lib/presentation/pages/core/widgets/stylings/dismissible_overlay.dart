@@ -6,12 +6,19 @@ class DismissibleOverlay extends StatelessWidget {
   final OverlayEntry overlayEntry;
   const DismissibleOverlay({Key? key, required this.child, required this.overlayEntry}) : super(key: key);
 
+
+
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-        onDismissed: (dismissDirection) => overlayEntry.remove(),
-        direction: DismissDirection.vertical,
-        key: Key(''),
-        child: ColorfulSafeArea(child: child));
+    return BackButtonListener(
+        onBackButtonPressed: () async { overlayEntry.remove(); return Future.value(true);},
+        child: Dismissible(
+            onDismissed: (dismissDirection) => overlayEntry.remove(),
+            direction: DismissDirection.vertical,
+            key: Key(''),
+            child: ColorfulSafeArea(child: child)
+        )
+    );
+
   }
 }

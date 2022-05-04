@@ -7,6 +7,7 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class FriendListTile extends StatelessWidget {
   final bool isInvited;
+  final bool showUninviteButton;
   final Profile profile;
   final Function(Profile) onAddFriend;
   final Function(Profile) onRemoveFriend;
@@ -14,6 +15,7 @@ class FriendListTile extends StatelessWidget {
 
   const FriendListTile(
       {Key? key,
+      this.showUninviteButton = false,
       required this.profile,
       required this.isInvited,
       required this.onAddFriend,
@@ -48,7 +50,7 @@ class FriendListTile extends StatelessWidget {
   /// action buttons for the event, can be made invisible, if its not own events
   List<Widget> actionButtons(BuildContext context) {
     return <Widget>[
-      if (!isInvited)
+      if (!isInvited && !showUninviteButton)
         IconButton(icon: Icon(Icons.add), onPressed: () => {addFriend(context)})
       else
         IconButton(

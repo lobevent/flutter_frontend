@@ -56,7 +56,7 @@ class _InvitedPersonsOverlayState extends State<InvitedPersonsOverlay> {
         });
         return DismissibleOverlay(
           overlayEntry: widget.overlayEntry,
-          child: InvitedPersonsContent(),
+          child: InvitedPersonsContent(invitations: invitations,),
         );
       });
     }

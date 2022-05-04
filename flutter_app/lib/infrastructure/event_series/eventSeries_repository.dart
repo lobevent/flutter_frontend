@@ -30,9 +30,9 @@ class EventSeriesRepository extends Repository{
   }
 
 
-  Future<Either<NetWorkFailure, List<EventSeries>>> addSeries(EventSeries series) async{
+  Future<Either<NetWorkFailure, EventSeries>> addSeries(EventSeries series) async{
     return localErrorHandler(() async {
-      return right((await remoteService.addSubscription(Ev)).toDomain());
+      return right((await remoteService.addSeries(EventSeriesDto.fromDomain(series))).toDomain());
     });
   }
 

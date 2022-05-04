@@ -78,7 +78,7 @@ dependencies:
   equatable: ^2.0.3
 
   # postion calculation
-  geolocator: ^8.0.1
+  #geolocator: ^8.0.1
 
   # nice colorfull safearea
   colorful_safe_area: ^0.3.0

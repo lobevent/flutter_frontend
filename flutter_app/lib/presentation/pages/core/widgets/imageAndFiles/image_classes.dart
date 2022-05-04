@@ -18,8 +18,8 @@ class ProfileImage {
 
   // TODO: make it viable for a list of images
   static ImageProvider getAssetsOrNetwork(List<String?> imagePaths) {
-    if (imagePaths != null) {
-      return NetworkImage(dotenv.env['ipSim']!.toString() + imagePaths.last!);
+    if (imagePaths != null && imagePaths.length != 0) {
+      return NetworkImage(dotenv.env['ipSim']!.toString() + imagePaths.first!);
       //return NetworkImage(dotenv.env['ipSim']!.toString()+imagePaths.last!);
     } else {
       return const AssetImage(

@@ -18,6 +18,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
     return AppBar(
       backgroundColor: AppColors.primaryColor,
       leading: LeadingButton(context),
+      actions: [AddSeriesButton(context)],
     );
   }
 
@@ -27,6 +28,14 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
           context.router.push(EventFormPageRoute());
         },
         icon: const Icon(Icons.add));
+  }
+
+  Widget AddSeriesButton(BuildContext context){
+    return IconButton(
+        onPressed: (){
+          context.router.push(EventSeriesFormMainRoute());
+        },
+        icon: const Icon(Icons.add_alert));
   }
 
 

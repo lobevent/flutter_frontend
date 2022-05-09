@@ -8,6 +8,8 @@ import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/event/event_local_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
+import 'package:flutter_frontend/infrastructure/event_series/eventSeries_remote_service.dart';
+import 'package:flutter_frontend/infrastructure/event_series/eventSeries_repository.dart';
 import 'package:flutter_frontend/infrastructure/invitation/invitation_repository.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_repository.dart';
@@ -61,6 +63,10 @@ class InjectionContainer {
 
     getIt.registerLazySingleton(() => PostRepository(
         PostRemoteService(communicator: GetIt.I<SymfonyCommunicator>())));
+
+
+    getIt.registerLazySingleton(() => EventSeriesRepository(
+        remoteService: EventSeriesRemoteService(communicator: GetIt.I<SymfonyCommunicator>())));
 
 
     getIt.registerLazySingleton(() => InvitationRepository(

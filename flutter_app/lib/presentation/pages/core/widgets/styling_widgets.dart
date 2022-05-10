@@ -4,6 +4,7 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/CarouselIndicators.dart';
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/dismissible_overlay.dart';
@@ -28,6 +29,7 @@ class BasicContentContainer extends StatelessWidget {
   final Widget? bottomNavigationBar;
   final PreferredSizeWidget? appBar;
   final FloatingActionButton? floatingActionButton;
+  final bool isLoading;
   const BasicContentContainer(
       {Key? key,
       required this.children,
@@ -35,37 +37,45 @@ class BasicContentContainer extends StatelessWidget {
       this.controller,
       this.appBar,
       this.scrollable = true,
-      this.floatingActionButton})
+      this.floatingActionButton,
+      this.isLoading = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (!scrollable) {
-      return Scaffold(
-        floatingActionButton: floatingActionButton ?? null,
-        appBar: appBar,
-        body: ColorfulSafeArea(
-          color: Colors.yellow,
-          child: Column(
-            children: children,
-          ),
-        ),
-        bottomNavigationBar: bottomNavigationBar,
-      );
-    }
     return Scaffold(
+      floatingActionButton: floatingActionButton ?? null,
       appBar: appBar,
       body: ColorfulSafeArea(
         color: Colors.yellow,
-        child: SingleChildScrollView(
-          controller: controller,
-          child: Column(
-            children: children,
-          ),
-        ),
+        child: LoadingOverlay(
+          isLoading: isLoading,
+          child: ScrollOrNotChild(),
+        )
       ),
       bottomNavigationBar: bottomNavigationBar,
     );
+  }
+
+
+  /**
+   * Depending on wether the scroll parameter is set true, this either returns
+   * an scrollview or just an column
+   */
+  Widget ScrollOrNotChild(){
+    if(scrollable){
+      return SingleChildScrollView(
+        controller: controller,
+        child: Column(
+          children: children,
+        ),
+      );
+    }
+    else{
+      return Column(
+          children: children,
+      );
+    }
   }
 }
 
@@ -343,23 +353,32 @@ class FullWidthPaddingInput extends StatelessWidget {
   final String? hintText;
   final bool password;
   final int? maxLines;
+  final int? maxLength;
+  final FormFieldValidator<String>? validator;
+  final ValueChanged<String>? onChanged;
 
   FullWidthPaddingInput(
       {this.controller,
       this.labelText,
       this.hintText,
       this.password = false,
-      this.maxLines});
+      this.maxLines,
+      this.maxLength,
+      this.validator,
+      this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: TextField(
+      child: TextFormField(
         obscureText: password ? true : false,
         enableSuggestions: password ? false : true,
         autocorrect: password ? false : true,
         controller: controller,
+        maxLength: maxLength,
+        validator: validator,
+        onChanged: onChanged,
         maxLines: maxLines != null ? maxLines : 1,
         decoration: InputDecoration(
           hintText: hintText,

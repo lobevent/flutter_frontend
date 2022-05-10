@@ -1,5 +1,6 @@
 // just a file for the beginning which should be later upgraded to real
 // internationalization!!!
+export 'app_strings_failures.dart';
 
 class AppStrings {
   static const String noUsernameError = "No Username Error";
@@ -50,4 +51,11 @@ class AppStrings {
 
 
   static const String endReached = "You have reached the end!";
+
+
+
+
+  static const String createSeries = "Create an event series!";
+  static const String enterSeriesName = "Enter a name for the series";
+  static const String enterSeriesDescription = "Enter a description for the series";
 }

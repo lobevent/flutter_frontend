@@ -60,23 +60,14 @@ class ValueFailure<T> with _$ValueFailure<T> {
         outOfRange: (_) =>AppStringsFailures.outOfRange);
   }
 
-  String getDisplayStringLocal(){
-    return map(
-        invalidEmail: (_) =>AppStringsFailures.invalidEmail,
-        noEmailProvided: (_) =>AppStringsFailures.noEmailProvided,
-        shortPassword: (_) =>AppStringsFailures.shortPassword,
-        noBigCaseLetterPassword: (_) =>AppStringsFailures.noBigCaseLetterPassword,
-        noSpecialLetterPassword: (_) =>AppStringsFailures.noSpecialLetterPassword,
-        exceedingLength: (_) =>AppStringsFailures.exceedingLength,
-        lengthTooShort: (_) =>AppStringsFailures.lengthTooShort,
-        empty: (_) =>AppStringsFailures.empty,
-        invalidDate: (_) =>AppStringsFailures.invalidDate,
-        multiLine: (_) =>AppStringsFailures.multiLine,
-        exceedingMinMax: (_) =>AppStringsFailures.exceedingMinMax,
-        outOfRange: (_) =>AppStringsFailures.outOfRange);
-  }
-
 }
+
+extension GenerateStrings on ValueFailure{
+  String getDisplayStringLocal(){
+    return ValueFailure.getDisplayStringFromFailure(this);
+  }
+}
+
 
 @freezed
 class NetWorkFailure<T> with _$NetWorkFailure<T> {

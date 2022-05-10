@@ -17,8 +17,18 @@ class EventSeriesFormCubit extends Cubit<EventSeriesFormState> {
   EventSeriesFormCubit(this.isEdit) : super(EventSeriesFormState.initial()){}
 
 
-  // Future<void> saveSeries(){
-  // }
+  Future<void> saveSeries() async {
+    repository.addSeries(retrieveFormReadyStateOrCrash().series).then(
+            (response){
+              response.fold((l) {emit(EventSeriesFormState.error());} , (r) => null);
+            });
+    emit(EventSeriesFormState.saving());
+  }
+
+
+  ESF_Ready retrieveFormReadyStateOrCrash(){
+    return state.maybeMap(orElse: (){throw UnimplementedError();}, ready: (readyState) => readyState);
+  }
 
 
 }

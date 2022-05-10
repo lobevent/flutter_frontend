@@ -11,7 +11,7 @@ import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
 
   static const String getInvitationsRoute = "/user/invitations/%amount%/%lastEventTime%/%descending%";
-  static const String sendInvitationRoute = "/invitation/%eventId%/%profileId%/%addHost%";
+  static const String addSeriesRoute = "/eventSeries";
   static const String revokeInvitationRoute = "/invitation/%eventId%/%profileId%";
 
   final SymfonyCommunicator client;
@@ -27,7 +27,7 @@ class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
   }
 
   Future<EventSeriesDto> addSeries(EventSeriesDto seriesDto) async{
-    return EventSeriesDto.fromJson(jsonDecode((await this.client.post(sendInvitationRoute, jsonEncode(seriesDto.toJson()))).body) as Map<String, dynamic>);
+    return EventSeriesDto.fromJson(jsonDecode((await this.client.post(addSeriesRoute, jsonEncode(seriesDto.toJson()))).body) as Map<String, dynamic>);
   }
 
 
@@ -35,7 +35,7 @@ class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
   // -------------------------------------------------------------------------------- SUBSCRIPTION MANAGEMENT ------------------------------------------------------------------------------
   // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   Future<EventSeriesDto> addSubscription(String seriesId) async{
-    return EventSeriesDto.fromJson(jsonDecode((await this.client.post(sendInvitationRoute.interpolate({'seriesId': seriesId}), {})).body) as Map<String, dynamic>);
+    return EventSeriesDto.fromJson(jsonDecode((await this.client.post(addSeriesRoute.interpolate({'seriesId': seriesId}), {})).body) as Map<String, dynamic>);
   }
 
 

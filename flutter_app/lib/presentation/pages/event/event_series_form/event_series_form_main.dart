@@ -23,12 +23,15 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
 
   final TextEditingController title_controller = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(create: (context) => EventSeriesFormCubit(false),
       child: BlocBuilder<EventSeriesFormCubit, EventSeriesFormState>(builder: (context, state) {
         return Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
+            key: _formKey,
+            //autovalidateMode: AutovalidateMode.onUserInteraction,
             child: BasicContentContainer(
               isLoading: state is ESF_Loading || state is ESF_Saving,
               scrollable: true,
@@ -41,7 +44,10 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
                 DescriptionInput(context),
                 StdTextButton(
                   onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      context.read<EventSeriesFormCubit>().saveSeries();
 
+                    }
                   },
                   child: const Icon(Icons.add, color: AppColors.stdTextColor))
             ],
@@ -51,6 +57,12 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
 
     );
   }
+
+  //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------------- INPUTS ----------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
   Widget TitleInput(BuildContext context){
     return FullWidthPaddingInput(
@@ -73,6 +85,13 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
       validator: (_) => context.read<EventSeriesFormCubit>().state.maybeMap(orElse: ()=>null, ready: (ready) => StringValueValidator(ready.series.description.value)),
     );
   }
+
+
+  //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------ AUXILIARY FUNCTIONS ------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
   String? StringValueValidator(dartz.Either<ValueFailure<String>, String> value){
     return value.fold((failure) => failure.getDisplayStringLocal(), (r) => null);

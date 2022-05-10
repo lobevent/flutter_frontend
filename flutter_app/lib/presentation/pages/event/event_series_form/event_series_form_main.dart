@@ -27,22 +27,25 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
   Widget build(BuildContext context) {
     return BlocProvider(create: (context) => EventSeriesFormCubit(false),
       child: BlocBuilder<EventSeriesFormCubit, EventSeriesFormState>(builder: (context, state) {
-        return BasicContentContainer(
-          isLoading: state is ESF_Loading || state is ESF_Saving,
-          scrollable: true,
-          children: [
-            const SizedBox(height: 20),
-            Text(AppStrings.createSeries, style: Theme.of(context).textTheme.headline3),
-            const SizedBox(height: 20),
-            TitleInput(context),
-            const SizedBox(height: 20),
-            DescriptionInput(context),
-            StdTextButton(
-                onPressed: () {
+        return Form(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: BasicContentContainer(
+              isLoading: state is ESF_Loading || state is ESF_Saving,
+              scrollable: true,
+              children: [
+                const SizedBox(height: 20),
+                Text(AppStrings.createSeries, style: Theme.of(context).textTheme.headline3),
+                const SizedBox(height: 20),
+                TitleInput(context),
+                const SizedBox(height: 20),
+                DescriptionInput(context),
+                StdTextButton(
+                  onPressed: () {
 
-                },
-                child: const Icon(Icons.add, color: AppColors.stdTextColor))
-          ],
+                  },
+                  child: const Icon(Icons.add, color: AppColors.stdTextColor))
+            ],
+          )
         );
       })
 
@@ -55,7 +58,8 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
       controller: title_controller,
       maxLength: EventName.maxLength + 2,
       onChanged: (value)=>context.read<EventSeriesFormCubit>().changeTitle(value),
-      validator: (_) => context.read<EventSeriesFormCubit>().state.maybeMap(orElse: ()=>null, ready: (ready) => StringValueValidator(ready.series.name.value)),
+      validator: (_) {
+        context.read<EventSeriesFormCubit>().state.maybeMap(orElse: ()=>null, ready: (ready) => StringValueValidator(ready.series.name.value));},
     );
   }
 

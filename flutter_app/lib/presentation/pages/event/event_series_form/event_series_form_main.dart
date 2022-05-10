@@ -29,29 +29,35 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
   Widget build(BuildContext context) {
     return BlocProvider(create: (context) => EventSeriesFormCubit(false),
       child: BlocBuilder<EventSeriesFormCubit, EventSeriesFormState>(builder: (context, state) {
-        return Form(
-            key: _formKey,
-            //autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: BasicContentContainer(
+        // return Form(
+        //   //autovalidateMode: AutovalidateMode.always,
+        //   key: _formKey,
+        //     child:
+            return BasicContentContainer(
               isLoading: state is ESF_Loading || state is ESF_Saving,
               scrollable: true,
               children: [
                 const SizedBox(height: 20),
                 Text(AppStrings.createSeries, style: Theme.of(context).textTheme.headline3),
                 const SizedBox(height: 20),
-                TitleInput(context),
-                const SizedBox(height: 20),
-                DescriptionInput(context),
+                Form(
+                      key: _formKey,
+                      child: Column(children: [
+                        TitleInput(context),
+                        const SizedBox(height: 20),
+                        DescriptionInput(context),
+                  ],)
+                ),
                 StdTextButton(
                   onPressed: () {
+                    print(_formKey.currentState!.validate());
                     if (_formKey.currentState!.validate()) {
                       context.read<EventSeriesFormCubit>().saveSeries();
-
                     }
                   },
                   child: const Icon(Icons.add, color: AppColors.stdTextColor))
             ],
-          )
+          //)
         );
       })
 
@@ -68,10 +74,9 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
     return FullWidthPaddingInput(
       labelText: AppStrings.enterSeriesName,
       controller: title_controller,
-      maxLength: EventName.maxLength + 2,
+      maxLength: EventName.maxLength,
       onChanged: (value)=>context.read<EventSeriesFormCubit>().changeTitle(value),
-      validator: (_) {
-        context.read<EventSeriesFormCubit>().state.maybeMap(orElse: ()=>null, ready: (ready) => StringValueValidator(ready.series.name.value));},
+      validator: (_) => context.read<EventSeriesFormCubit>().state.maybeMap(orElse: ()=>null, ready: (ready) => StringValueValidator(ready.series.name.value)),
     );
   }
 

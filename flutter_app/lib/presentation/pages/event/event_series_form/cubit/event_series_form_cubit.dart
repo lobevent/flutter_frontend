@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event_series.dart';
+import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/event_series/eventSeries_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
@@ -14,7 +16,13 @@ class EventSeriesFormCubit extends Cubit<EventSeriesFormState> {
   EventSeriesRepository repository = GetIt.I<EventSeriesRepository>();
 
 
-  EventSeriesFormCubit(this.isEdit) : super(EventSeriesFormState.initial()){}
+  EventSeriesFormCubit(this.isEdit) : super(EventSeriesFormState.initial()){
+    if(!isEdit){
+      EventSeries series = EventSeries(id: UniqueId(), description: EventDescription(''), name: EventName(''));
+      emit(EventSeriesFormState.ready(series));
+
+    }
+  }
 
 
   Future<void> saveSeries() async {

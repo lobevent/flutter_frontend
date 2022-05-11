@@ -4,8 +4,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'failures.freezed.dart';
 
+
+
 @freezed
-class ValueFailure<T> with _$ValueFailure<T> {
+class ValueFailure<T> with _$ValueFailure<T>{
   const factory ValueFailure.invalidEmail({
     required T failedValue,
   }) = InvalidEmail<T>;
@@ -42,8 +44,8 @@ class ValueFailure<T> with _$ValueFailure<T> {
     required T failedValue,
   }) = OutOfRange<T>;
   
-  
-  
+
+
   static String getDisplayStringFromFailure(ValueFailure failure){
     return failure.map(
         invalidEmail: (_) =>AppStringsFailures.invalidEmail,
@@ -70,7 +72,7 @@ extension GenerateStrings on ValueFailure{
 
 
 @freezed
-class NetWorkFailure<T> with _$NetWorkFailure<T> {
+class NetWorkFailure<T> with _$NetWorkFailure<T>{
   const factory NetWorkFailure.unexpected() = Unexpected<T>;
 
   const factory NetWorkFailure.insufficientPermissions() =
@@ -83,4 +85,15 @@ class NetWorkFailure<T> with _$NetWorkFailure<T> {
   const factory NetWorkFailure.notFound() = NotFound<T>;
 
   const factory NetWorkFailure.internalServer() = InternalServer<T>;
+
+
+  static String getDisplayStringFromFailure(NetWorkFailure failure){
+    return '';
+  }
+}
+
+extension GenStrings on NetWorkFailure{
+  String getDisplayStringLocal(){
+    return NetWorkFailure.getDisplayStringFromFailure(this);
+  }
 }

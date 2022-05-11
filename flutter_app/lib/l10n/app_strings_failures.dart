@@ -11,4 +11,13 @@ class AppStringsFailures{
   static const String multiLine = "Multiline is forbidden!";
   static const String exceedingMinMax = "Exceeding min max!";
   static const String outOfRange = "The input is out of range!";
+
+
+  //-----------------------------------------------------NETWORK----------------------------------
+  static const  String unexpected = "The values given have an unexpected format!";
+  static const  String insufficientPermissions = "You don't have the permission to go there!";
+  static const  String unableToUpdate = "We are unable to update the resource!";
+  static const  String notAuthenticated = "You are not Authenticated!";
+  static const  String notFound = "The requested resource was not found!";
+  static const  String internalServer = "The server encountered an error!";
 }

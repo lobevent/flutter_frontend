@@ -8,6 +8,8 @@ import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_series_form/cubit/event_series_form_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_series_form/cubit/event_series_form_cubit_editingExtension.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class EventSeriesFormMain extends StatefulWidget {
 
@@ -27,12 +29,18 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (context) => EventSeriesFormCubit(false),
-      child: BlocBuilder<EventSeriesFormCubit, EventSeriesFormState>(builder: (context, state) {
-        // return Form(
-        //   //autovalidateMode: AutovalidateMode.always,
-        //   key: _formKey,
-        //     child:
+    return BlocProvider(
+        create: (context) => EventSeriesFormCubit(false),
+        child: BlocConsumer<EventSeriesFormCubit, EventSeriesFormState>(
+          listener: (context, state) {
+            if(state is ESF_SavedReady){
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("+++++ Successfully created ++++++")));
+              context.router.popUntil(
+                (route) => route.settings.name == FeedScreenRoute.name,
+              );
+            }
+          },
+          builder: (context, state) {
             return BasicContentContainer(
               isLoading: state is ESF_Loading || state is ESF_Saving,
               scrollable: true,
@@ -40,34 +48,47 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
                 const SizedBox(height: 20),
                 Text(AppStrings.createSeries, style: Theme.of(context).textTheme.headline3),
                 const SizedBox(height: 20),
+                // every input has to be inside the form
                 Form(
                       key: _formKey,
                       child: Column(children: [
+                        // title field
                         TitleInput(context),
                         const SizedBox(height: 20),
+                        // description field
                         DescriptionInput(context),
                   ],)
                 ),
-                StdTextButton(
-                  onPressed: () {
-                    print(_formKey.currentState!.validate());
-                    if (_formKey.currentState!.validate()) {
-                      context.read<EventSeriesFormCubit>().saveSeries();
-                    }
-                  },
-                  child: const Icon(Icons.add, color: AppColors.stdTextColor))
+                SubmitButton(context)
             ],
-          //)
         );
       })
 
     );
   }
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++      WIDGETS      +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+  ///
+  /// The submission button, which also calls the validation function!
+  ///
+  Widget SubmitButton(BuildContext context){
+    return StdTextButton(
+        onPressed: () {
+          // only submit if the form is valid!
+          if (_formKey.currentState!.validate()) {
+            context.read<EventSeriesFormCubit>().saveSeries();
+          }
+        },
+        child: const Icon(Icons.add, color: AppColors.stdTextColor));
+  }
+
 
   //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   //-------------------------------------------------------------------------------------- INPUTS ----------------------------------------------------------------------------------
-  //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
   Widget TitleInput(BuildContext context){
@@ -92,11 +113,11 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
   }
 
 
-  //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------ AUXILIARY FUNCTIONS ------------------------------------------------------------------------------
-  //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ AUXILIARY FUNCTIONS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   String? StringValueValidator(dartz.Either<ValueFailure<String>, String> value){
     return value.fold((failure) => failure.getDisplayStringLocal(), (r) => null);

@@ -21,7 +21,7 @@ import 'package:flutter_frontend/presentation/post_comment/comments_screen/comme
 import 'package:flutter_frontend/presentation/post_comment/post_screen/post_screen.dart';
 
 @MaterialAutoRouter(
-  routes: <AutoRoute>[
+  routes: [
     AutoRoute(path: '/', page: FeedScreen, initial: true),
     AutoRoute(page: EventFormPage),
     AutoRoute(page: EventsMultilistScreen),
@@ -41,7 +41,7 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/post_scre
     AutoRoute(page: RegistrationForm),
     AutoRoute(page: ProfileImagePickerWidget),
     AutoRoute(page: EventSwiper),
-    AutoRoute(page: EventSeriesFormMain)
+    CustomRoute(page: EventSeriesFormMain, transitionsBuilder: TransitionsBuilders.fadeIn, durationInMilliseconds: 400)
   ],
 )
 class $Router {}

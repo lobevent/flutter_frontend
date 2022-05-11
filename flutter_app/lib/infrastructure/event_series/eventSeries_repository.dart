@@ -25,11 +25,17 @@ class EventSeriesRepository extends Repository{
     });
   }
 
+  ///
+  /// this function fetches all the event series that the user has subscribed to
+  ///
   Future<Either<NetWorkFailure, List<EventSeries>>> getSubscribedSeries(DateTime lastEventTime, int amount, {bool descending = false}) async{
     return _getList(() => remoteService.getEventSeries(lastEventTime, amount));
   }
 
 
+  ///
+  /// saves an new series in the backend
+  ///
   Future<Either<NetWorkFailure, EventSeries>> addSeries(EventSeries series) async{
     return localErrorHandler(() async {
       return right((await remoteService.addSeries(EventSeriesDto.fromDomain(series))).toDomain());
@@ -38,18 +44,12 @@ class EventSeriesRepository extends Repository{
 
 
 
-  // Future<Either<NetWorkFailure, List<Invitation>>> getInvitations(DateTime lastEventTime, int amount, {bool descending = false}){
-  //   return _getList(() => remoteService.getInvitations(lastEventTime, amount, descending));
-  // }
-
+  ///
+  /// subscribes the current user to an eventseries
+  ///
   Future<Either<NetWorkFailure, EventSeries>> addSubscription(EventSeries series){
     return localErrorHandler(() async {
       return right((await remoteService.addSubscription(series.id.value)).toDomain());
     });
   }
-  // Future<Either<NetWorkFailure, Invitation>> revokeInvitation(Profile profile, Event event){
-  //   return localErrorHandler(() async {
-  //     return right(( await remoteService.revokeInvitation(profile.id.value, event.id.value)).toDomain());
-  //   });
-  // }
 }

@@ -29,19 +29,13 @@ class BottomNavigation extends StatelessWidget {
       'key': 2,
       'route': EventsMultilistScreenRoute(option: EventScreenOptions.invited)
     },
-    NavigationOptions.ownProfile: {
-      'key': 3,
-      'route': ProfilePageRoute(profileId: UniqueId.fromUniqueString(""))
-    },
     NavigationOptions.profileSearch: {
-      'key': 4,
+      'key': 3,
       'route': ProfileSearchPageRoute()
     },
-    NavigationOptions.login: {'key': 5, 'route': LoginRegisterRoute()},
-    NavigationOptions.friends: {'key': 6, 'route': ProfileFriendsScreenRoute()},
-    NavigationOptions.addEvent: {'key': 7, 'route': EventFormPageRoute()},
-    NavigationOptions.imageUpload: {'key': 8, 'route': ImageUploadRoute()},
-    NavigationOptions.eventSwiper: {'key': 9, 'route': EventSwiperRoute()},
+    //NavigationOptions.login: {'key': 4, 'route': LoginRegisterRoute()},
+    NavigationOptions.friends: {'key': 4, 'route': ProfileFriendsScreenRoute()},
+    NavigationOptions.eventSwiper: {'key': 5, 'route': EventSwiperRoute()},
   };
 
   static final indexToEnum =
@@ -73,35 +67,20 @@ class BottomNavigation extends StatelessWidget {
           backgroundColor: Colors.purple,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          label: 'OwnProfile',
-          backgroundColor: Colors.pink,
-        ),
-        BottomNavigationBarItem(
           icon: Icon(Icons.person_search),
           label: 'ProfileSearch',
           backgroundColor: Colors.brown,
         ),
         //logout
-        BottomNavigationBarItem(
-          icon: Icon(Icons.login),
-          label: 'login',
-          backgroundColor: Colors.blue,
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.login),
+        //   label: 'login',
+        //   backgroundColor: Colors.blue,
+        // ),
         BottomNavigationBarItem(
           icon: Icon(Icons.people),
           label: 'Friends',
           backgroundColor: Colors.red,
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.add),
-          label: 'AddEvent',
-          backgroundColor: Colors.blue,
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.upload_rounded),
-          label: 'ImageUpload',
-          backgroundColor: Colors.green,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.swap_horiz_outlined),
@@ -119,18 +98,18 @@ class BottomNavigation extends StatelessWidget {
 
   void navigate(NavigationOptions where, BuildContext context) async {
     //index  4 is logout so ask if really wants to log out
-    if (where.index == 4) {
-      await GenDialog.genericDialog(context, "Logout?",
-              "Willst du dich wirklich ausloggen?", "Logout", "Abbrechen")
-          .then((value) async => {
-                if (value)
-                  context.router
-                      .push(enumToData[where]['route'] as PageRouteInfo)
-                else
-                  {}
-              });
-    } else {
+    // if (where.index == 4) {
+    //   await GenDialog.genericDialog(context, "Logout?",
+    //           "Willst du dich wirklich ausloggen?", "Logout", "Abbrechen")
+    //       .then((value) async => {
+    //             if (value)
+    //               context.router
+    //                   .push(enumToData[where]['route'] as PageRouteInfo)
+    //             else
+    //               {}
+    //           });
+    // } else {
       context.router.push(enumToData[where]['route'] as PageRouteInfo);
-    }
+    //}
   }
 }

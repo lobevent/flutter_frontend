@@ -14,28 +14,37 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageShared {
   String? ownProfileId;
+  String? ownProfilePicture;
 
   //TODO: Maybe we should store it in fluttersecurestorage tho, idk if its harmful to know the string of uuid of an user
 
   ///fetch out of our sharedpreferences
   Future<String?> getOwnProfileFuture() async {
     final sharedStorage = await SharedPreferences.getInstance();
-    final String ownProfile = sharedStorage.getString(StorageStrings.ownProfile)!;
+    final String ownProfile = sharedStorage.getString(StorageStrings.ownProfileId)!;
 
     return ownProfile;
   }
 
   ///helper method
-  String getOwnProfile(){
+  String getOwnProfileId(){
     getOwnProfileFuture().then((ownProfile) => ownProfileId= ownProfile);
     //check if its null
     ownProfileId ??= "";
     return ownProfileId!;
   }
 
+  String? getOwnProfileImage(){
+    SharedPreferences.getInstance().then((value) => ownProfilePicture = value.getString(StorageStrings.ownProfileImage));
+    // final sharedStorage = await SharedPreferences.getInstance();
+    // final String ownProfilePicture =   sharedStorage.getString(StorageStrings.ownProfileImage)!;
+    return ownProfilePicture == ''? null : ownProfilePicture;
+
+  }
+
   ///returns true if its the id of own profile
   bool checkIfOwnId(String checkId){
-    return getOwnProfile()==checkId;
+    return getOwnProfileId()==checkId;
   }
 
 
@@ -46,8 +55,10 @@ class StorageShared {
         await GetIt.I<ProfileRepository>().getOwnProfile();
     //initialising sharedstorage
     final sharedStorage = await SharedPreferences.getInstance();
+    Profile? profile =  ownProfile.fold((l) => null, (r) => r);
     //saving profile id in shared storage as string
     sharedStorage.setString(
-        StorageStrings.ownProfile, ownProfile.fold((l) => "", (r) => r.id.value.toString()));
+        StorageStrings.ownProfileId, profile?.id.value.toString()?? '');
+    sharedStorage.setString(StorageStrings.ownProfileImage, profile?.images?[0]??'');
   }
 }

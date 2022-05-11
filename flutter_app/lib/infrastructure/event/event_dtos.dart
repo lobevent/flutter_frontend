@@ -4,6 +4,7 @@ import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
+import 'package:flutter_frontend/infrastructure/event_series/eventSeries_dtos.dart';
 import 'package:flutter_frontend/infrastructure/invitation/invitation_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_dtos.dart';
@@ -35,6 +36,7 @@ class EventDto extends BaseDto with _$EventDto {
     required bool visibleWithoutLogin,
     required DateTime creationDate,
     int? attendingUsersCount,
+    @SeriesConverter() EventSeriesDto? eventSeries,
     @TodoConverter() TodoDto? todo,
     @OwnerConverter() ProfileDto? owner,
     @InvitationsToProfileConverter() List<InvitationDto>? invitations,
@@ -54,6 +56,7 @@ class EventDto extends BaseDto with _$EventDto {
       name: event.name.getOrCrash(),
       public: event.public,
       date: event.date,
+      eventSeries: event.series != null ? EventSeriesDto.fromDomain(event.series!) : null,
       description:
           event.description != null ? event.description!.getOrCrash() : null,
       todo: event.todo != null ? TodoDto.fromDomain(event.todo!) : null,
@@ -70,6 +73,7 @@ class EventDto extends BaseDto with _$EventDto {
       image: event.image
     );
   }
+
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>
       _$EventDtoFromJson(json);
@@ -90,6 +94,7 @@ class EventDto extends BaseDto with _$EventDto {
       //TODO: don't forget this one!
       public: public,
       liked: liked,
+      series: eventSeries?.toDomain(),
       creationDate: creationDate,
       attendingCount: attendingUsersCount,
       status: dtoToDomainStatus[ownStatus] as EventStatus?,
@@ -99,6 +104,7 @@ class EventDto extends BaseDto with _$EventDto {
       invitations: invitationL,
       isHost: isHost ?? false,
       image: image
+
     );
   }
 }
@@ -116,6 +122,22 @@ class OwnerConverter
   @override
   Map<String, dynamic> toJson(ProfileDto profileDto) {
     return profileDto.toJson();
+  }
+}
+
+class SeriesConverter
+    implements JsonConverter<EventSeriesDto, Map<String, dynamic>> {
+  const SeriesConverter();
+
+  @override
+  EventSeriesDto fromJson(Map<String, dynamic> series) {
+    //owner["runtimeType"] = "justId";
+    return EventSeriesDto.fromJson(series);
+  }
+
+  @override
+  Map<String, dynamic> toJson(EventSeriesDto series) {
+    return series.toJson();
   }
 }
 

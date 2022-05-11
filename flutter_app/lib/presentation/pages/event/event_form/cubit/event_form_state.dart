@@ -9,10 +9,12 @@ class EventFormState with _$EventFormState {
     required bool isSaving,
     required bool isLoading,
     required bool isLoadingFriends,
+    required bool isLoadingSeries,
     required Option<NetWorkFailure> eventFailure,
     required Option<Either<NetWorkFailure, Unit>> saveFailureOrSuccessOption,
     required List<Profile> friends,
     required List<Invitation> invitedFriends,
+    required List<EventSeries> series,
     XFile? picture
   }) = _EventFormStateMain;
 
@@ -27,6 +29,8 @@ class EventFormState with _$EventFormState {
         friends: [],
         invitedFriends: [],
         isLoadingFriends: false,
+        isLoadingSeries: true,
+        series: []
       );
 
   factory EventFormState.loaded(Event event) => EventFormState(
@@ -40,6 +44,8 @@ class EventFormState with _$EventFormState {
         friends: [],
         invitedFriends: [],
         isLoadingFriends: true,
+        isLoadingSeries: true,
+        series: []
       );
 
   factory EventFormState.error(NetWorkFailure failure) => EventFormState(
@@ -53,6 +59,8 @@ class EventFormState with _$EventFormState {
         friends: [],
         invitedFriends: [],
         isLoadingFriends: false,
+        isLoadingSeries: true,
+        series: []
       );
 
   factory EventFormState.loading() => EventFormState(
@@ -66,10 +74,12 @@ class EventFormState with _$EventFormState {
         friends: [],
         invitedFriends: [],
         isLoadingFriends: true,
+        isLoadingSeries: true,
+        series: []
       );
 
-  factory EventFormState.friendsLoaded(
-          List<Profile> friends, List<Invitation> attendingFriends, Event event) =>
+  factory EventFormState.readyLoadingMeta(
+          List<Profile> friends, List<Invitation> attendingFriends, Event event, List<EventSeries> series) =>
       EventFormState(
         event: event,
         isEditing: event.longitude != Event.empty().longitude &&
@@ -85,5 +95,7 @@ class EventFormState with _$EventFormState {
         friends: friends,
         invitedFriends: attendingFriends,
         isLoadingFriends: false,
+        isLoadingSeries: false,
+        series: series
       );
 }

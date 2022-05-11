@@ -11,6 +11,7 @@ import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
 
   static const String getInvitationsRoute = "/user/invitations/%amount%/%lastEventTime%/%descending%";
+  static const String getOwnSeriesRoute = "/eventSeries/%amount%/%lastEventTime%/%descending%";
   static const String addSeriesRoute = "/eventSeries";
   static const String revokeInvitationRoute = "/invitation/%eventId%/%profileId%";
 
@@ -20,10 +21,16 @@ class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
       : client = communicator ??
       SymfonyCommunicator();
 
-  Future<List<EventSeriesDto>> getEventSeries(
+  Future<List<EventSeriesDto>> getSubscribedEventSeries(
       DateTime lastEventTime, int amount,
       [bool descending = false]) async{
         return convertList(await client.get(getInvitationsRoute.interpolate({'amount': amount.toString(), 'lastEventTime': lastEventTime.toString(), 'descending': descending? '1' : '0'})));
+  }
+
+  Future<List<EventSeriesDto>> getOwnedEventSeries(
+      DateTime lastEventTime, int amount,
+      [bool descending = false]) async{
+        return convertList(await client.get(getOwnSeriesRoute.interpolate({'amount': amount.toString(), 'lastEventTime': lastEventTime.toString(), 'descending': descending? '1' : '0'})));
   }
 
   Future<EventSeriesDto> addSeries(EventSeriesDto seriesDto) async{

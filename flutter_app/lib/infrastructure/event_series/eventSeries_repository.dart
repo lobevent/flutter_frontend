@@ -29,8 +29,20 @@ class EventSeriesRepository extends Repository{
   /// this function fetches all the event series that the user has subscribed to
   ///
   Future<Either<NetWorkFailure, List<EventSeries>>> getSubscribedSeries(DateTime lastEventTime, int amount, {bool descending = false}) async{
-    return _getList(() => remoteService.getEventSeries(lastEventTime, amount));
+    return _getList(() => remoteService.getSubscribedEventSeries(lastEventTime, amount));
   }
+  
+
+
+  ///
+  /// this function fetches all the event series that the user owns
+  ///
+  Future<Either<NetWorkFailure, List<EventSeries>>> getOwnedEventSeries( {bool descending = false, int amount = 100, DateTime? lastEventTime}) async{
+    if(lastEventTime == null) lastEventTime = DateTime.now();
+    return _getList(() => remoteService.getOwnedEventSeries(lastEventTime!, amount));
+  }
+  
+
 
 
   ///

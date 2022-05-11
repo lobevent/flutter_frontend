@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
+import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/gen_dialog.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
@@ -18,17 +20,48 @@ class EventListTiles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Card(
-      child: ListTile(
-        leading: IconButton(
-          icon: Icon(Icons.event),
-          onPressed: () => showEvent(context),
+      child: Column(children: [
+        GestureDetector(
+          onTap: () => showEvent(context),
+          child: ImageWidget(context, event.image),
         ),
-        title: Text(event.name.getOrCrash()),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: actionButtons(onDeletion != null, context),
+        ListTile(
+          leading: IconButton(
+            icon: Icon(Icons.event),
+            onPressed: () => showEvent(context),
+          ),
+          title: Text(event.name.getOrCrash()),
+          //subtitle: Text(event.description?.getOrCrash()??'', style: TextStyle(color: AppColors.stdTextColor),),
+          subtitle: Text(event.date.toString(), style: TextStyle(color: AppColors.stdTextColor), ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: actionButtons(onDeletion != null, context),
+          ),
+      ),])
+    );
+  }
+
+  ///
+  /// Checks if imagePath exists and shows other stdimage if not
+  ///
+  Widget ImageWidget(BuildContext context, String? imagePath){
+    ImageProvider image;
+    if(imagePath == null){
+      image = AssetImage("assets/images/partypeople.jpg");
+    }
+    else {
+      image = NetworkImage(dotenv.env['ipSim']!.toString() +  imagePath);
+    }
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 150,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: image,
         ),
       ),
     );

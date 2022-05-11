@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/widgets/events_multilist_body.dart';
 
+import '../../core/widgets/stylings/core_widgets_stylings_text_with_icon.dart';
 import 'cubit/events_mulitlist_cubit.dart';
 
 class EventsMultilistScreen extends StatelessWidget {
@@ -60,11 +62,20 @@ class OwnEventScreenHolder extends StatelessWidget {
         navigation = NavigationOptions.invited;
         break;
     }
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(appBarText),
-        ),
-        bottomNavigationBar: BottomNavigation(selected: navigation),
-        body: EventsMultilistBody());
+
+    // var tabs = <Tab>[
+    //   Tab(child: TextWithIcon(text: "Own", icon: Icons.person,)),
+    //   Tab(child: TextWithIcon(text: "Invited", icon: Icons.mail,)),
+    //   //Tab(child: TextWithIcon(text: "Refused", icon: Icons.person,)),
+    // ];
+
+    return BasicContentContainer(
+      bottomNavigationBar: BottomNavigation(selected: navigation),
+      children: [
+        Container(
+          child: EventsMultilistBody()
+        )
+      ],
+    );
   }
 }

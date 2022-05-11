@@ -35,7 +35,7 @@ class _InviteFriendsWidgetState extends State<InviteFriendsWidget> {
         icon: Icons.group,
         text: AppStrings.inviteFriends,
       ),
-      if (state.isLoadingFriends) const LinearProgressIndicator()
+      //if (state.isLoadingFriends) const LinearProgressIndicator()
     ]);
   }
 

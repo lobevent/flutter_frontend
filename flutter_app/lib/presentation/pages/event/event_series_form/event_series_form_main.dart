@@ -34,12 +34,15 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
         child: BlocConsumer<EventSeriesFormCubit, EventSeriesFormState>(
           listener: (context, state) {
             if(state is ESF_SavedReady){
+              // display snackbar
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("+++++ Successfully created ++++++")));
+              // pop until feed (home)
               context.router.popUntil(
                 (route) => route.settings.name == FeedScreenRoute.name,
               );
             }
           },
+            // this is the view!
           builder: (context, state) {
             return BasicContentContainer(
               isLoading: state is ESF_Loading || state is ESF_Saving,

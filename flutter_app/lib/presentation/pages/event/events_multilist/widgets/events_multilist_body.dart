@@ -37,6 +37,8 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
       },
       builder: (context, state) {
           return ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 if(isInvites){
                   return ItemBuilder(index, this.invitations[index].event!, this.invitations[index].userEventStatus);

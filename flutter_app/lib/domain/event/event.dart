@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/event/event_series.dart';
 import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
@@ -25,6 +26,7 @@ class Event with _$Event {
       required DateTime creationDate,
       Todo? todo,
       Profile? owner,
+      EventSeries? series,
       required bool public,
       required bool visibleWithoutLogin,
       required List<Invitation> invitations,

@@ -9,6 +9,7 @@ import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/pic
 import 'package:image_picker/image_picker.dart';
 
 import 'description_body_widged.dart';
+import 'event_series/add_to_series.dart';
 import 'title_widget.dart';
 
 class EventFormContainer extends StatelessWidget {
@@ -40,6 +41,8 @@ class EventFormContainer extends StatelessWidget {
             const CheckBoxArea(),
 
             if(!isEditing) InviteFriendsWidget(),
+
+            if(!isEditing) AddToSeries(),
 
             //const PickImageWidget(),
           ],

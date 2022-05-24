@@ -75,42 +75,43 @@ class _CardsSectionState extends State<CardsSectionAlignment>
         frontCard(),
 
         // Prevent swiping if the cards are animating
-        _controller.status != AnimationStatus.forward
-            ? SizedBox.expand(
-                child: GestureDetector(
-                // While dragging the first card
-                onPanUpdate: (DragUpdateDetails details) {
-                  // Add what the user swiped in the last frame to the alignment of the card
-                  setState(() {
-                    // 20 is the "speed" at which moves the card
-                    frontCardAlign = Alignment(
-                        frontCardAlign.x +
-                            20 *
-                                details.delta.dx /
-                                MediaQuery.of(context).size.width,
-                        frontCardAlign.y +
-                            40 *
-                                details.delta.dy /
-                                MediaQuery.of(context).size.height);
+        if (_controller.status != AnimationStatus.forward)
+          SizedBox.expand(
+              child: GestureDetector(
+            // While dragging the first card
+            onPanUpdate: (DragUpdateDetails details) {
+              // Add what the user swiped in the last frame to the alignment of the card
+              setState(() {
+                // 20 is the "speed" at which moves the card
+                frontCardAlign = Alignment(
+                    frontCardAlign.x +
+                        20 *
+                            details.delta.dx /
+                            MediaQuery.of(context).size.width,
+                    frontCardAlign.y +
+                        40 *
+                            details.delta.dy /
+                            MediaQuery.of(context).size.height);
 
-                    frontCardRot = frontCardAlign.x; // * rotation speed;
-                  });
-                },
-                // When releasing the first card
-                onPanEnd: (_) {
-                  // If the front card was swiped far enough to count as swiped
-                  if (frontCardAlign.x > 3.0 || frontCardAlign.x < -3.0) {
-                    animateCards();
-                  } else {
-                    // Return to the initial rotation and alignment
-                    setState(() {
-                      frontCardAlign = defaultFrontCardAlign;
-                      frontCardRot = 0.0;
-                    });
-                  }
-                },
-              ))
-            : Container(),
+                frontCardRot = frontCardAlign.x; // * rotation speed;
+              });
+            },
+            // When releasing the first card
+            onPanEnd: (_) {
+              // If the front card was swiped far enough to count as swiped
+              if (frontCardAlign.x > 3.0 || frontCardAlign.x < -3.0) {
+                animateCards();
+              } else {
+                // Return to the initial rotation and alignment
+                setState(() {
+                  frontCardAlign = defaultFrontCardAlign;
+                  frontCardRot = 0.0;
+                });
+              }
+            },
+          ))
+        else
+          Container(),
       ],
     ));
   }
@@ -154,6 +155,11 @@ class _CardsSectionState extends State<CardsSectionAlignment>
         ));
   }
 
+  void addNewCards(int counter) {
+    cards.add(EventCardAlignment(counter, widget.eventsList[counter]));
+    cards.add(EventCardAlignment(counter + 1, widget.eventsList[counter + 1]));
+  }
+
   void changeCardsOrder() {
     setState(() {
       // Swap cards (back card becomes the middle card; middle card becomes the front card, front card becomes a  bottom card)
@@ -162,7 +168,8 @@ class _CardsSectionState extends State<CardsSectionAlignment>
       cards[1] = cards[2];
       cards[2] = temp;
 
-      cards[2] = EventCardAlignment(cardsCounter, widget.eventsList[4]);
+      cards[2] =
+          EventCardAlignment(cardsCounter, widget.eventsList[cardsCounter]);
       cardsCounter++;
 
       frontCardAlign = defaultFrontCardAlign;

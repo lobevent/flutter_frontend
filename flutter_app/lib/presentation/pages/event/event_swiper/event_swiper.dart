@@ -22,9 +22,9 @@ class _EventSwiperState extends State<EventSwiper> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => EventSwiperCubit(),
+      create: (swiperContext) => EventSwiperCubit(),
       child: BlocBuilder<EventSwiperCubit, EventSwiperState>(
-        builder: (context, state) {
+        builder: (swiperContext, state) {
           return Scaffold(
             /*appBar: AppBar(
             elevation: 0.0,
@@ -50,7 +50,8 @@ class _EventSwiperState extends State<EventSwiper> {
                 children: state.maybeMap((value) => [Text("tessst")],
                     loading: (loadingState) => [Text("Loading")],
                     loaded: (loadedState) => [
-                          CardsSectionAlignment(loadedState.eventsList, context)
+                          CardsSectionDraggable(
+                              loadedState.eventsList, swiperContext)
                         ],
                     orElse: () => [Text("Something happened")])
                 //<Widget>[

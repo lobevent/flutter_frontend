@@ -36,13 +36,18 @@ class EventCardAlignment extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(event!.name.toString() + '$cardNum',
+                    Text(
+                        event!.name.value.fold(
+                                (l) => "Event Error", (r) => r.toString()) +
+                            '$cardNum',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,
                             fontWeight: FontWeight.w700)),
                     Padding(padding: EdgeInsets.only(bottom: 8.0)),
-                    Text('A short description.',
+                    Text(
+                        event!.description!.value
+                            .fold((l) => "Failure", (r) => r.toString()),
                         textAlign: TextAlign.start,
                         style: TextStyle(color: Colors.white)),
                   ],

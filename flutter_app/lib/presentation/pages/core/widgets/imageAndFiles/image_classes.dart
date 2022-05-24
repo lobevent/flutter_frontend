@@ -8,7 +8,7 @@ class ProfileImage {
   /// check if an image string is given, and if not give back an image from assets
   static ImageProvider getAssetOrNetwork(String? imagePath) {
     if (imagePath != null) {
-      return NetworkImage(imagePath);
+      return NetworkImage(dotenv.env['ipSim']!.toString() + imagePath);
     } else {
       return const AssetImage(
         "assets/images/partypeople.jpg",

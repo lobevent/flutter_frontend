@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
-import 'profile_card_draggable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
+import '../../event_screen/cubit/event_screen/event_screen_cubit.dart';
+import '../cubit/event_swiper_cubit.dart';
+import 'event_card_draggable.dart';
 
 class CardsSectionDraggable extends StatefulWidget {
+  final List<Event> eventsList;
+  final BuildContext cubitContext;
+
+  CardsSectionDraggable(this.eventsList, this.cubitContext);
+
   @override
-  _CardsSectionState createState() => _CardsSectionState();
+  _CardsSectionState createState() => _CardsSectionState(cubitContext);
 }
 
 class _CardsSectionState extends State<CardsSectionDraggable> {
+  _CardsSectionState(this.cubitContext);
   bool dragOverTarget = false;
-  List<ProfileCardDraggable> cards = [];
+  final BuildContext cubitContext;
+
+  List<EventCardDraggable> cards = [];
   int cardsCounter = 0;
 
   @override
@@ -16,64 +28,76 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
     super.initState();
 
     for (cardsCounter = 0; cardsCounter < 3; cardsCounter++) {
-      cards.add(ProfileCardDraggable(cardsCounter));
+      cards.add(
+          EventCardDraggable(cardsCounter, widget.eventsList[cardsCounter]));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Stack(
-      children: <Widget>[
-        // Drag target row
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            dragTarget(),
-            Flexible(flex: 2, child: Container()),
-            dragTarget()
-          ],
-        ),
-        // Back card
-        Align(
-          alignment: Alignment(0.0, 1.0),
-          child: IgnorePointer(
-              child: SizedBox.fromSize(
-            size: Size(MediaQuery.of(context).size.width * 0.8,
-                MediaQuery.of(context).size.height * 0.5),
-            child: cards[2],
-          )),
-        ),
-        // Middle card
-        Align(
-          alignment: Alignment(0.0, 0.8),
-          child: IgnorePointer(
-              child: SizedBox.fromSize(
-            size: Size(MediaQuery.of(context).size.width * 0.85,
-                MediaQuery.of(context).size.height * 0.55),
-            child: cards[1],
-          )),
-        ),
-        // Front card
-        Align(
-          alignment: Alignment(0.0, 0.0),
-          child: Draggable(
-            data: [1, 2, 3],
-            feedback: SizedBox.fromSize(
-              size: Size(MediaQuery.of(context).size.width * 0.9,
-                  MediaQuery.of(context).size.height * 0.6),
-              child: cards[0],
-            ),
-            child: SizedBox.fromSize(
-              size: Size(MediaQuery.of(context).size.width * 0.9,
-                  MediaQuery.of(context).size.height * 0.6),
-              child: cards[0],
-            ),
-            childWhenDragging: Container(),
-          ),
-        ),
-      ],
-    ));
+    return BlocProvider(
+      create: (eventScreenContext) => EventScreenCubit(widget.eventsList[0].id),
+      child: BlocBuilder<EventScreenCubit, EventScreenState>(
+        builder: (eventScreenContext, state) {
+          return Expanded(
+              child: Stack(
+            children: <Widget>[
+              // Drag target row
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  dragTarget(eventScreenContext),
+                  Flexible(flex: 2, child: Container()),
+                  dragTarget(eventScreenContext)
+                ],
+              ),
+              // Back card
+              Align(
+                alignment: Alignment(0.0, 1.0),
+                child: IgnorePointer(
+                    child: SizedBox.fromSize(
+                  size: Size(MediaQuery.of(context).size.width * 0.8,
+                      MediaQuery.of(context).size.height * 0.5),
+                  child: cards[2],
+                )),
+              ),
+              // Middle card
+              Align(
+                alignment: Alignment(0.0, 0.8),
+                child: IgnorePointer(
+                    child: SizedBox.fromSize(
+                  size: Size(MediaQuery.of(context).size.width * 0.85,
+                      MediaQuery.of(context).size.height * 0.55),
+                  child: cards[1],
+                )),
+              ),
+              // Front card
+              Align(
+                alignment: Alignment(0.0, 0.0),
+                child: Draggable(
+                  data: [1, 2, 3],
+                  feedback: SizedBox.fromSize(
+                    size: Size(MediaQuery.of(context).size.width * 0.9,
+                        MediaQuery.of(context).size.height * 0.6),
+                    child: cards[0],
+                  ),
+                  child: SizedBox.fromSize(
+                    size: Size(MediaQuery.of(context).size.width * 0.9,
+                        MediaQuery.of(context).size.height * 0.6),
+                    child: cards[0],
+                  ),
+                  childWhenDragging: Container(),
+                ),
+              ),
+            ],
+          ));
+        },
+      ),
+    );
+  }
+
+  void changeNewCards(int counter) {
+    cards[0] = EventCardDraggable(counter, widget.eventsList[counter]);
   }
 
   void changeCardsOrder() {
@@ -82,29 +106,37 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
       var temp = cards[0];
       cards[0] = cards[1];
       cards[1] = cards[2];
-      cards[2] = temp;
 
-      cards[2] = ProfileCardDraggable(cardsCounter);
+      //TODO : this only works until like 7th card, so fix it
+      cards[2] =
+          EventCardDraggable(cardsCounter, widget.eventsList[cardsCounter]);
       cardsCounter++;
     });
   }
 
-  Widget dragTarget() {
+  Widget dragTarget(BuildContext eventScreenContext) {
     return Flexible(
       flex: 1,
-      child: DragTarget(
-          builder: (_, __, ___) {
-            return Container();
-          },
-          onWillAccept: (_) {
-            setState(() => dragOverTarget = true);
-            return true;
-          },
-          onAccept: (_) {
-            changeCardsOrder();
-            setState(() => dragOverTarget = false);
-          },
-          onLeave: (_) => setState(() => dragOverTarget = false)),
+      child: DragTarget(builder: (_, __, ___) {
+        return Container();
+      }, onWillAccept: (_) {
+        setState(() => dragOverTarget = true);
+        return true;
+      }, onAccept: (_) {
+        //for attending the event
+        eventScreenContext
+            .read<EventScreenCubit>()
+            .changeStatus(EventStatus.attending);
+        //widget.eventScreenContext.read<EventScreenCubit>().changeStatus(EventStatus.attending);
+
+        changeCardsOrder();
+        setState(() => dragOverTarget = false);
+      }, onLeave: (_) {
+        setState(() => dragOverTarget = false);
+        eventScreenContext
+            .read<EventScreenCubit>()
+            .changeStatus(EventStatus.notAttending);
+      }),
     );
   }
 }

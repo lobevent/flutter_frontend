@@ -163,13 +163,12 @@ class _CardsSectionState extends State<CardsSectionAlignment>
   void changeCardsOrder() {
     setState(() {
       // Swap cards (back card becomes the middle card; middle card becomes the front card, front card becomes a  bottom card)
-      var temp = cards[0];
+      var temp = EventCardAlignment(cardsCounter, widget.eventsList[cards.length+cardsCounter]);
+      //change cards order ...
       cards[0] = cards[1];
       cards[1] = cards[2];
       cards[2] = temp;
 
-      cards[2] =
-          EventCardAlignment(cardsCounter, widget.eventsList[cardsCounter]);
       cardsCounter++;
 
       frontCardAlign = defaultFrontCardAlign;

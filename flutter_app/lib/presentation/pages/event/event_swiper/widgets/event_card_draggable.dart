@@ -14,8 +14,12 @@ class EventCardDraggable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return (event!=null) ?
+     Card(
       child: InkWell(
+        onLongPress: () async {
+
+        },
         onTap: () async {
           context.router.push(EventScreenPageRoute(eventId: event!.id));
         },
@@ -27,6 +31,7 @@ class EventCardDraggable extends StatelessWidget {
             Expanded(
                 child: Container(
                     alignment: Alignment.center,
+                    color: Colors.black,
                     child: Image(
                         image: ProfileImage.getAssetOrNetwork(event!.image)))),
             Container(
@@ -55,6 +60,27 @@ class EventCardDraggable extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ):
+    Container(
+        color: Colors.white12,
+        padding: EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            //displaz=y event title
+            Text(
+                "No other events available!",
+                style: TextStyle(
+                    fontSize: 20.0, fontWeight: FontWeight.w700)),
+            Padding(padding: EdgeInsets.only(bottom: 8.0)),
+            //display eventdesc
+            OverflowSafeString(
+              child: Text(
+                  "Come back Later.",
+                  textAlign: TextAlign.start),
+            )
+          ],
+        ))
+    ;
   }
 }

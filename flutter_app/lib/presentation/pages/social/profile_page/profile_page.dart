@@ -38,8 +38,8 @@ class ProfilePage extends StatelessWidget {
                   /// wrapped in a list to match closure context
                   BasicContentContainer(
                       scrollable: true,
-                      bottomNavigationBar: BottomNavigation(
-                        selected: NavigationOptions.ownProfile,
+                      bottomNavigationBar: const BottomNavigation(
+                        selected: NavigationOptions.home,
                       ),
                       children: state.maybeMap(
 

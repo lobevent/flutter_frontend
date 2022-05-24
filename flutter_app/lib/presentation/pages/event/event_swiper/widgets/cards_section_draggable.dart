@@ -56,7 +56,7 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
                 alignment: Alignment(0.0, 1.0),
                 child: IgnorePointer(
                     child: SizedBox.fromSize(
-                  size: Size(MediaQuery.of(context).size.width * 0.8,
+                  size: Size(MediaQuery.of(context).size.width * 0.7,
                       MediaQuery.of(context).size.height * 0.5),
                   child: cards[2],
                 )),
@@ -96,21 +96,24 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
     );
   }
 
-  void changeNewCards(int counter) {
-    cards[0] = EventCardDraggable(counter, widget.eventsList[counter]);
-  }
-
   void changeCardsOrder() {
     setState(() {
-      // Swap cards
-      var temp = cards[0];
-      cards[0] = cards[1];
-      cards[1] = cards[2];
+      //check if out of array bound
+      if(cards.length+cardsCounter>widget.eventsList.length-1){
+        cards[0] = EventCardDraggable(cardsCounter, null);
+        cards[1] = EventCardDraggable(cardsCounter, null);
+        cards[2] = EventCardDraggable(cardsCounter, null);
+      }else{
+        // Swap cards
+        var temp = EventCardDraggable(cardsCounter, widget.eventsList[cards.length+cardsCounter]);
+        //change cards order ...
+        cards[0] = cards[1];
+        cards[1] = cards[2];
+        cards[2] = temp;
 
-      //TODO : this only works until like 7th card, so fix it
-      cards[2] =
-          EventCardDraggable(cardsCounter, widget.eventsList[cardsCounter]);
-      cardsCounter++;
+        cardsCounter++;
+      }
+
     });
   }
 

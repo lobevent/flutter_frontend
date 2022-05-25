@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_friends/widgets/profile_friends_body.dart';
 
 import 'cubit/profile_friends_cubit.dart';
@@ -26,23 +27,28 @@ class _ProfileFriendsScreenState extends State<ProfileFriendsScreen> {
           builder: (context, state) {
             bool isLoading = state.maybeMap((initial) => false,
                 loading: (_) => true, orElse: () => false);
-            return LoadingOverlay(
-                isLoading: isLoading, child: ProfileFriendsScreenHolder());
+            return ProfileFriendsScreenHolder(
+              isLoading: isLoading,
+            );
           }),
     );
   }
 }
 
 class ProfileFriendsScreenHolder extends StatelessWidget {
-  ProfileFriendsScreenHolder({Key? key}) : super(key: key);
+  final bool isLoading;
+
+  ProfileFriendsScreenHolder({Key? key, required this.isLoading})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Your Friends"),
-        ),
-        bottomNavigationBar: BottomNavigation(selected: NavigationOptions.friends,),
-        body: ProfileFriendsBody());
+    return BasicContentContainer(
+      bottomNavigationBar: BottomNavigation(
+        selected: NavigationOptions.friends,
+      ),
+      isLoading: isLoading,
+      children: [ProfileFriendsBody()],
+    );
   }
 }

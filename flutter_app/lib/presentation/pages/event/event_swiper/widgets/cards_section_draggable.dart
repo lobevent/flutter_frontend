@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import '../../event_screen/cubit/event_screen/event_screen_cubit.dart';
 import '../cubit/event_swiper_cubit.dart';
 import 'event_card_draggable.dart';
@@ -23,18 +25,42 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
   List<EventCardDraggable> cards = [];
   int cardsCounter = 0;
 
-  @override
-  void initState() {
-    super.initState();
-
+  void addCards() {
+    //add 3 cards for displaying blank cards
     for (cardsCounter = 0; cardsCounter < 3; cardsCounter++) {
-      cards.add(
-          EventCardDraggable(cardsCounter, widget.eventsList[cardsCounter]));
+      if (widget.eventsList.length <= cardsCounter) {
+        //add blank cards
+        cards.add(EventCardDraggable(cardsCounter, null));
+      } else {
+        //add event cardsf
+        cards.add(
+            EventCardDraggable(cardsCounter, widget.eventsList[cardsCounter]));
+      }
     }
   }
 
   @override
+  void initState() {
+    super.initState();
+    addCards();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (widget.eventsList.isEmpty || widget.eventsList[0] == null) {
+      return buildNoEvents();
+    } else {
+      return buildEventCards();
+    }
+  }
+
+  Widget buildNoEvents() {
+    return Center(
+      child: Text("No events available"),
+    );
+  }
+
+  Widget buildEventCards() {
     return BlocProvider(
       create: (eventScreenContext) => EventScreenCubit(widget.eventsList[0].id),
       child: BlocBuilder<EventScreenCubit, EventScreenState>(
@@ -99,13 +125,14 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
   void changeCardsOrder() {
     setState(() {
       //check if out of array bound
-      if(cards.length+cardsCounter>widget.eventsList.length-1){
+      if (cardsCounter > widget.eventsList.length - 1) {
         cards[0] = EventCardDraggable(cardsCounter, null);
         cards[1] = EventCardDraggable(cardsCounter, null);
         cards[2] = EventCardDraggable(cardsCounter, null);
-      }else{
+      } else {
         // Swap cards
-        var temp = EventCardDraggable(cardsCounter, widget.eventsList[cards.length+cardsCounter]);
+        var temp = EventCardDraggable(
+            cardsCounter, widget.eventsList[cards.length + cardsCounter]);
         //change cards order ...
         cards[0] = cards[1];
         cards[1] = cards[2];
@@ -113,7 +140,6 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
 
         cardsCounter++;
       }
-
     });
   }
 
@@ -127,18 +153,22 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
         return true;
       }, onAccept: (_) {
         //for attending the event
+        //if (cardsCounter + cards.length > widget.eventsList.length) {
         eventScreenContext
             .read<EventScreenCubit>()
             .changeStatus(EventStatus.attending);
-        //widget.eventScreenContext.read<EventScreenCubit>().changeStatus(EventStatus.attending);
+        //}
 
         changeCardsOrder();
         setState(() => dragOverTarget = false);
       }, onLeave: (_) {
         setState(() => dragOverTarget = false);
+        //if (cardsCounter + cards.length > widget.eventsList.length) {
         eventScreenContext
             .read<EventScreenCubit>()
             .changeStatus(EventStatus.notAttending);
+
+        //}
       }),
     );
   }

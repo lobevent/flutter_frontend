@@ -109,7 +109,7 @@ class BottomNavigation extends StatelessWidget {
     //               {}
     //           });
     // } else {
-      context.router.push(enumToData[where]['route'] as PageRouteInfo);
+    context.router.push(enumToData[where]['route'] as PageRouteInfo);
     //}
   }
 }

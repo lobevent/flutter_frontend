@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
@@ -45,6 +46,8 @@ class _EventSwiperState extends State<EventSwiper> {
           ),
 
            */
+            bottomNavigationBar:
+                BottomNavigation(selected: NavigationOptions.eventSwiper),
             backgroundColor: Colors.white,
             body: Column(
                 children: state.maybeMap((value) => [Text("tessst")],

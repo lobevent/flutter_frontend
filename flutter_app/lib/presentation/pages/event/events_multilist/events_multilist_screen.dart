@@ -23,13 +23,14 @@ class EventsMultilistScreen extends StatelessWidget {
       child: BlocConsumer<EventsMultilistCubit, EventsMultilistState>(
           listener: (context, state) => {},
           builder: (context, state) {
-            bool isLoading = state.maybeMap((_) => false, loadedInvited: (s) => false,
-                loading: (_) => true, orElse: () => false);
-            return LoadingOverlay(
-                isLoading: isLoading,
-                child: OwnEventScreenHolder(
-                  profile: profile,
-                ));
+            bool isLoading = state.maybeMap((_) => false,
+                loadedInvited: (s) => false,
+                loading: (_) => true,
+                orElse: () => false);
+            return OwnEventScreenHolder(
+              profile: profile,
+              isLoading: isLoading,
+            );
           }),
     );
   }
@@ -38,11 +39,13 @@ class EventsMultilistScreen extends StatelessWidget {
 /// Has the Scaffold in it, and builds the children of the class
 class OwnEventScreenHolder extends StatelessWidget {
   final Profile? profile;
-  OwnEventScreenHolder({Key? key, this.profile}) : super(key: key);
+  final bool isLoading;
+  OwnEventScreenHolder({Key? key, this.profile, required this.isLoading})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-  var navigation = NavigationOptions.ownEvents;
+    var navigation = NavigationOptions.ownEvents;
     String appBarText = "";
     switch (context.read<EventsMultilistCubit>().option) {
       case EventScreenOptions.owned:
@@ -70,12 +73,8 @@ class OwnEventScreenHolder extends StatelessWidget {
     // ];
 
     return BasicContentContainer(
-      bottomNavigationBar: BottomNavigation(selected: navigation),
-      children: [
-        Container(
-          child: EventsMultilistBody()
-        )
-      ],
-    );
+        bottomNavigationBar: BottomNavigation(selected: navigation),
+        children: [Container(child: EventsMultilistBody())],
+        isLoading: isLoading);
   }
 }

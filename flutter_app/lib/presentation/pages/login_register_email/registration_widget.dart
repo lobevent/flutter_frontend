@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart' show left, Either;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +24,7 @@ class RegistrationForm extends StatelessWidget {
                 // height: 200.0,
                 // padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 // decoration: BoxDecoration(color: Colors.blue[500]),
-                children: [
+                child_ren: left([
                   Column(
                     children: [
                       FullWidthPaddingInput(
@@ -53,7 +54,7 @@ class RegistrationForm extends StatelessWidget {
                       )
                     ],
                   ),
-                ]);
+                ]));
           },
         ));
   }

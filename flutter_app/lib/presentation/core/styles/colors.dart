@@ -15,6 +15,8 @@ class AppColors {
 
   static const Color stdButtonBackground = Color(0x2ABBBBBB);
 
+  static const Color stdIndicatedTabColor = Colors.black;
+
 
   static const Color primaryColor = Color(0xFFFF851C);
 }

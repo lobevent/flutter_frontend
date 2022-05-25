@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
@@ -13,7 +14,7 @@ class Login extends StatelessWidget {
     TextEditingController textEditingControllerUsername = TextEditingController();
     TextEditingController textEditingControllerPassword = TextEditingController();
     return BlocBuilder<LoginRegisterCubit, LoginRegisterState>(builder: (context1, state) {
-      return BasicContentContainer(children: [
+      return BasicContentContainer(child_ren: left([
         Column(children: [
           Text("Login"),
           // email Field
@@ -34,7 +35,7 @@ class Login extends StatelessWidget {
                 icon: Icons.login,)
               ]))
         ])
-      ]);
+      ]));
     });
   }
 }

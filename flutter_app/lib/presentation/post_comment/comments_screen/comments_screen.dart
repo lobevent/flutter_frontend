@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
@@ -34,14 +35,14 @@ class CommentsScreen extends StatelessWidget {
                 ),
 
                  */
-                children: state.maybeMap(
+                child_ren: left(state.maybeMap(
 
                     /// if the error state is not active, load the contents
                     error: (errState) =>
                         [ErrorMessage(errorText: errState.error)],
                     orElse: () => const [
                           CommentContainer(),
-                        ]),
+                        ])),
               ));
         },
       ),

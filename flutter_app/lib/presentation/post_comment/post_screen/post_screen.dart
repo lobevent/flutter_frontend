@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
@@ -24,14 +25,14 @@ class PostsScreen extends StatelessWidget {
               isLoading: state is Loading,
               child: BasicContentContainer(
                 scrollable: true,
-                children: state.maybeMap(
+                child_ren: left(state.maybeMap(
 
                     /// if the error state is not active, load the contents
                     error: (errState) =>
                         [ErrorMessage(errorText: errState.error)],
                     orElse: () => [
                           PostContainer(event: event),
-                        ]),
+                        ])),
               ));
         },
       ),

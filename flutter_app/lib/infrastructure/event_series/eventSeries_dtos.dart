@@ -24,12 +24,13 @@ class EventSeriesDto extends BaseDto with _$EventSeriesDto {
         required String id,
         required String name,
         required String description,
+        @EventListConverter() List<EventDto>? events,
         DateTime? creationDate}) = EventSeriesFull;
 
   @override
   EventSeries toDomain() {
     return EventSeries(
-        id: UniqueId.fromUniqueString(id), description: EventDescription(description), name: EventName(name),
+        id: UniqueId.fromUniqueString(id), description: EventDescription(description), name: EventName(name), events: events?.map((e) => e.toDomain()).toList()
         );
   }
 
@@ -43,4 +44,8 @@ class EventSeriesDto extends BaseDto with _$EventSeriesDto {
 
   factory EventSeriesDto.fromJson(Map<String, dynamic> json) =>
       _$EventSeriesDtoFromJson(json);
+}
+
+class EventListConverter extends ListConverter<EventDto> {
+  const EventListConverter() : super();
 }

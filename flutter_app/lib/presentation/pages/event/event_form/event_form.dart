@@ -48,7 +48,7 @@ class EventFormPage extends StatelessWidget {
                 /// add a sticky bottom navigation
                 bottomNavigationBar: BottomNavigation(context),
 
-                children: [
+                child_ren: left([
                   /// Title text for this page
                   Text(state.isEditing ? 'Edit a Event' : 'Create a Event'),
 
@@ -60,7 +60,7 @@ class EventFormPage extends StatelessWidget {
                     isEditing: state.isEditing,
                     showErrorMessages: state.showErrorMessages,
                   ),
-                ],
+                ]),
               ),
             );
           },

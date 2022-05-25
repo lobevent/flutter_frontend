@@ -20,4 +20,10 @@ class AppTextStyles {
     color: AppColors.stdTextColor,
     fontSize: AppSizes.metaSubText,
   );
+
+  static const TextStyle stdLittleHeading = TextStyle(
+      height: 2,
+      fontSize: 30,
+      fontWeight: FontWeight.bold,
+      color: AppColors.stdTextColor);
 }

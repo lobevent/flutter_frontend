@@ -1,4 +1,4 @@
-import 'package:dartz/dartz.dart' as dartz;
+import'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
@@ -47,7 +47,7 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
             return BasicContentContainer(
               isLoading: state is ESF_Loading || state is ESF_Saving,
               scrollable: true,
-              children: [
+              child_ren: dartz.left([
                 const SizedBox(height: 20),
                 Text(AppStrings.createSeries, style: Theme.of(context).textTheme.headline3),
                 const SizedBox(height: 20),
@@ -63,7 +63,7 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
                   ],)
                 ),
                 SubmitButton(context)
-            ],
+            ]),
         );
       })
 

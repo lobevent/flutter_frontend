@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:dartz/dartz.dart' show left, Either;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/infrastructure/core/file_remote_service.dart';
@@ -26,7 +27,7 @@ class _ImageUploadState extends State<ImageUpload> {
   Widget build(BuildContext context) {
     return BasicContentContainer(
       scrollable: true,
-      children: [ImageUploadPicker(returnFunction: (List<XFile?>? blaa) {})],
+      child_ren: left([ImageUploadPicker(returnFunction: (List<XFile?>? blaa) {})]),
     );
   }
 }

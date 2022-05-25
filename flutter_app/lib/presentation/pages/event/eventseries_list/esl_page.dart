@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart' show left, Either;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,16 +21,16 @@ class EventSeriesListPage extends StatelessWidget {
           builder: (context, EventSeriesListState state) {
 
             return BasicContentContainer(
-              scrollable: true,
+              scrollable: false,
               isLoading: state is ESL_Loading,
               bottomNavigationBar: BottomNavigation(selected: NavigationOptions.home),
-              children: [
+              child_ren: left([
                   Text(AppStrings.ownEventSeriesOverviewTitle, style: Theme.of(context).textTheme.headline3),
                   state.maybeMap(orElse: () {return Spacer();}, ready: (lists) {
                     return EventSeriesList(lists.seriesList);
                   })
 
-              ],
+              ]),
             );
           }),
         );
@@ -39,14 +40,17 @@ class EventSeriesListPage extends StatelessWidget {
 
 
   Widget EventSeriesList(List<EventSeries> series){
-    return ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
+    return Expanded(
+
+        child: ListView.builder(
+        //shrinkWrap: true,
+        //physics: NeverScrollableScrollPhysics(),
         itemCount: series.length,
         itemBuilder: (context, i) {
           return Card(child: ListTile(
             title: Text(series[i].name.getOrCrash()),
-            leading: IconButton(icon: Icon(Icons.preview), onPressed: (){}, ),
+            leading: IconButton(icon: Icon(Icons.preview), onPressed: (){
+              context.router.push(EventSeriesScreenPageRoute(seriesId: series[i].id));}, ),
             trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,6 +60,6 @@ class EventSeriesListPage extends StatelessWidget {
             ),
 
           ));
-        });
+        }));
   }
 }

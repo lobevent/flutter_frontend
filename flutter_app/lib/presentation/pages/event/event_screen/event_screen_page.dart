@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart' show left, Either;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,17 +38,17 @@ class EventScreenPage extends StatelessWidget {
                 bottomNavigationBar: const BottomNavigation(
                   selected: NavigationOptions.ownEvents,
                 ),
-                children: state.maybeMap(
+                child_ren: state.maybeMap(
 
                     /// check if an error has occured and show error message in that case
                     /// wrapped in a list to match closure context
-                    error: (failure) => [
+                    error: (failure) => left([
                           ErrorMessage(
                             errorText: failure.toString(),
                           )
-                        ],
+                        ]),
 
-                    loaded: (loadetState) => [
+                    loaded: (loadetState) => left([
                       /// the Header with the pictures etc
                       HeaderVisual(networkImagePath: loadetState.event.image),
 
@@ -56,9 +57,9 @@ class EventScreenPage extends StatelessWidget {
 
                       /// todoevents list
                       TodoWidget(),
-                    ],
+                    ]),
                     /// if the error state is not active, load the contentS
-                    orElse: () => [
+                    orElse: () => left([
                           /// the Header with the pictures etc
                           HeaderVisual(),
 
@@ -67,7 +68,7 @@ class EventScreenPage extends StatelessWidget {
 
                           /// todoevents list
                           TodoWidget(),
-                        ]),
+                        ])),
               ),
             );
           },

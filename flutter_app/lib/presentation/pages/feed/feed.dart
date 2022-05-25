@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart' hide Router;
+import 'package:dartz/dartz.dart' show left, Either;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
@@ -56,7 +57,7 @@ class _FeedScreenState extends State<FeedScreen> {
                   controller: context.read<FeedCubit>().controller,
                   appBar: MainAppBar(),
                   bottomNavigationBar: const BottomNavigation(selected: NavigationOptions.home),
-                  children: [
+                  child_ren: left([
                     LoadingOverlay(
                       isLoading: state.isLoading,
                       child:  Column(
@@ -64,7 +65,7 @@ class _FeedScreenState extends State<FeedScreen> {
                             child,
                             LoadingIndicatorOrEnd
                           ]), )
-                  ],
+                  ]),
                 );
               },
             ),

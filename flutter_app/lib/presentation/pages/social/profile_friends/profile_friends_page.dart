@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart' show left, Either;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
@@ -48,7 +49,7 @@ class ProfileFriendsScreenHolder extends StatelessWidget {
         selected: NavigationOptions.friends,
       ),
       isLoading: isLoading,
-      children: [ProfileFriendsBody()],
+      child_ren: left([ProfileFriendsBody()]),
     );
   }
 }

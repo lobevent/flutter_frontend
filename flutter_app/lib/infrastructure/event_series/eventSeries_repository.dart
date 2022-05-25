@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/repository.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/event_series.dart';
 import 'package:flutter_frontend/domain/event/invitation.dart';
@@ -44,6 +45,16 @@ class EventSeriesRepository extends Repository{
   
 
 
+  // ----------------------------------------------------------------------------------------------
+  // ---------------------------------------- Single Series ---------------------------------------
+  // ----------------------------------------------------------------------------------------------
+
+
+  Future<Either<NetWorkFailure, EventSeries>> getSeriesById(UniqueId id) async{
+    return localErrorHandler(() async {
+      return right((await remoteService.getSeriesById(id.value)).toDomain());
+    });
+  }
 
   ///
   /// saves an new series in the backend

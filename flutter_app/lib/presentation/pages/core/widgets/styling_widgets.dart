@@ -1,14 +1,17 @@
 library stlyling_widgets;
 
 import 'package:colorful_safe_area/colorful_safe_area.dart';
+import 'package:dartz/dartz.dart' show left, Either;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/core_widgets_stylings_text_with_icon.dart';
 
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/CarouselIndicators.dart';
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/dismissible_overlay.dart';
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/outlined_non_overflow_button_with_text.dart';
+export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/core_widgets_stylings_text_with_icon.dart';
 
 //TODO: Move this all to seperate files
 
@@ -22,7 +25,7 @@ const stdPadding = EdgeInsets.fromLTRB(
 /// the content Container should contain no logic, but should only call the
 /// content widgets
 class BasicContentContainer extends StatelessWidget {
-  final List<Widget> children;
+  final Either<List<Widget>, Widget> child_ren;
   final bool scrollable;
   final ScrollController? controller;
   // https://stackoverflow.com/questions/54114221/flutter-fixed-button-in-customscrollview
@@ -32,7 +35,7 @@ class BasicContentContainer extends StatelessWidget {
   final bool isLoading;
   const BasicContentContainer(
       {Key? key,
-      required this.children,
+      required this.child_ren,
       this.bottomNavigationBar,
       this.controller,
       this.appBar,
@@ -64,20 +67,48 @@ class BasicContentContainer extends StatelessWidget {
    * an scrollview or just an column
    */
   Widget ScrollOrNotChild(){
-    if(scrollable){
-      return SingleChildScrollView(
-        controller: controller,
-        child: Column(
+    return child_ren.fold((children) {
+      if(scrollable){
+        return SingleChildScrollView(
+          controller: controller,
+          child: Column(
+            children: children,
+          ),
+        );
+      }
+      else{
+        return Column(
           children: children,
-        ),
-      );
-    }
-    else{
-      return Column(
-          children: children,
-      );
-    }
+        );
+      }
+    }, (child) {
+      return child;
+    });
+
   }
+}
+
+
+/// this is an basic Tab that can be Used in tab bar
+/// it has automatic padding at both ends
+/// it takes an String text and an icon
+class StdSpacedIconTextTab extends StatelessWidget {
+  final String text;
+  final IconData iconHere;
+  //late Widget child;
+  const StdSpacedIconTextTab({Key? key, required this.text, required this.iconHere}) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(mainAxisSize: MainAxisSize.min, children: [
+      const Spacer(),
+      Tab(child: TextWithIcon( text: text, icon: iconHere)),
+      const Spacer()
+    ],
+    );
+  }
+
 }
 
 /// Widget used for making padding with a row, so the children start on the

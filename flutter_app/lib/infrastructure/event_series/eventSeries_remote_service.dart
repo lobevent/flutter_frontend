@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
 
   static const String getInvitationsRoute = "/user/invitations/%amount%/%lastEventTime%/%descending%";
+  static const String getSeriesByIdRoute = "/series/%seriesId%";
   static const String getOwnSeriesRoute = "/eventSeries/%amount%/%lastEventTime%/%descending%";
   static const String addSeriesRoute = "/eventSeries";
   static const String revokeInvitationRoute = "/invitation/%eventId%/%profileId%";
@@ -35,6 +37,10 @@ class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
 
   Future<EventSeriesDto> addSeries(EventSeriesDto seriesDto) async{
     return EventSeriesDto.fromJson(jsonDecode((await this.client.post(addSeriesRoute, jsonEncode(seriesDto.toJson()))).body) as Map<String, dynamic>);
+  }
+
+  Future<EventSeriesDto> getSeriesById(String id) async{
+    return EventSeriesDto.fromJson(jsonDecode((await this.client.get(getSeriesByIdRoute.interpolate({'seriesId': id}))).body) as Map<String, dynamic>);
   }
 
 

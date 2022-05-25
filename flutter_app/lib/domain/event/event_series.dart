@@ -1,4 +1,5 @@
 import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -15,5 +16,6 @@ class EventSeries with _$EventSeries{
     required UniqueId id,
     required EventName name,
     required EventDescription description,
+    List<Event>? events
   }) = EventSeriesNormal;
 }

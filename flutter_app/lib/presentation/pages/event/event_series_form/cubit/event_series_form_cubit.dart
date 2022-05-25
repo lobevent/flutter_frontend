@@ -9,11 +9,12 @@ import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 
 part 'event_series_form_state.dart';
-part 'event_series_form_cubit.freezed.dart';
+  part 'event_series_form_cubit.freezed.dart';
 
 class EventSeriesFormCubit extends Cubit<EventSeriesFormState> {
 
   final bool isEdit;
+  
   EventSeriesRepository repository = GetIt.I<EventSeriesRepository>();
 
 

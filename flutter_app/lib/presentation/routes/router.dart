@@ -3,6 +3,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/Profile/Profile
 import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_upload.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_series_form/event_series_form_main.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_swiper/event_swiper.dart';
+import 'package:flutter_frontend/presentation/pages/event/eventseries_list/esl_page.dart';
 import 'package:flutter_frontend/presentation/pages/login_register_email/registration_widget.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/event_form.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/event_screen_page.dart';
@@ -41,7 +42,8 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/post_scre
     AutoRoute(page: RegistrationForm),
     AutoRoute(page: ProfileImagePickerWidget),
     AutoRoute(page: EventSwiper),
-    CustomRoute(page: EventSeriesFormMain, transitionsBuilder: TransitionsBuilders.fadeIn, durationInMilliseconds: 400)
+    CustomRoute(page: EventSeriesFormMain, transitionsBuilder: TransitionsBuilders.fadeIn, durationInMilliseconds: 400),
+    AutoRoute(page: EventSeriesListPage),
   ],
 )
 class $Router {}

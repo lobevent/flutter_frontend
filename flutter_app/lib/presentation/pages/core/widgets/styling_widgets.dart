@@ -43,6 +43,7 @@ class BasicContentContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //assert(onlyChild == true && child != null || onlyChild == false && children != null);
     return Scaffold(
       floatingActionButton: floatingActionButton ?? null,
       appBar: appBar,

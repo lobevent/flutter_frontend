@@ -24,13 +24,19 @@ class EventSeriesDto extends BaseDto with _$EventSeriesDto {
         required String id,
         required String name,
         required String description,
-        @EventListConverter() List<EventDto>? events,
+        @JsonKey(includeIfNull: false) @EventListConverter() List<EventDto>? upcomingEvents,
+        @JsonKey(includeIfNull: false) @EventListConverter() List<EventDto>? recentEvents,
+        //@JsonKey(includeIfNull: false) @EventListConverter() List<EventDto>? events,
         DateTime? creationDate}) = EventSeriesFull;
 
   @override
   EventSeries toDomain() {
     return EventSeries(
-        id: UniqueId.fromUniqueString(id), description: EventDescription(description), name: EventName(name), events: events?.map((e) => e.toDomain()).toList()
+        id: UniqueId.fromUniqueString(id),
+        description: EventDescription(description),
+        name: EventName(name),
+        recentEvents: recentEvents?.map((e) => e.toDomain()).toList(),
+        upcomingEvents: upcomingEvents?.map((e) => e.toDomain()).toList()
         );
   }
 

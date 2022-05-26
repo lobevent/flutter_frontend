@@ -16,6 +16,8 @@ class EventSeries with _$EventSeries{
     required UniqueId id,
     required EventName name,
     required EventDescription description,
-    List<Event>? events
+    List<Event>? upcomingEvents,
+    List<Event>? recentEvents,
+    //List<Event>? events
   }) = EventSeriesNormal;
 }

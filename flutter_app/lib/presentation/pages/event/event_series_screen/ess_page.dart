@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
+import 'package:flutter_frontend/presentation/core/styles/icons.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_series_screen/cubit/event_series_screen_cubit.dart';
@@ -27,44 +28,38 @@ class EventSeriesScreenPage extends StatelessWidget {
                     return [];
                   },
                   ready: (state) => [
-                    Text("Event Series: " + state.series.name.getOrCrash(), style: AppTextStyles.stdLittleHeading),
-                    EventTabs( upcoming: state.series.upcomingEvents?? [], recendEvents: state.series.recentEvents?? [])]),
+                        Text("Event Series: " + state.series.name.getOrCrash(), style: AppTextStyles.stdLittleHeading),
+                        PaddingRowWidget(
+                          centered: true,
+                          paddingTop: 25,
+                          paddingBottom: 25,
+                          children: [
+                            Text(
+                              "Subscribers: " + state.series.subscribersCount.toString(),
+                              style: AppTextStyles.stdText,
+                            ),
+                            Spacer(),
+                            Text(
+                              "Events: " + state.series.eventCount.toString(),
+                              style: AppTextStyles.stdText,
+                            ),
+                          ],
+
+                        ),
+                        PaddingRowWidget(
+                          centered: true,
+                          children: [
+                            Spacer(),
+                            TextWithIconButton(onPressed: (){context.read<EventSeriesScreenCubit>().subscribe();}, icon: AppIcons.subscribe, text: '',),
+                            Spacer()
+                          ]),
+                        // this provides the tab bar and the contents of the tabs; namely it displays the events in ListTiles within a listview
+                        EventTabs(upcoming: state.series.upcomingEvents ?? [], recendEvents: state.series.recentEvents ?? [])
+                      ]),
             )));
       }),
     );
   }
-
-  //
-  //
-  //
-  // Widget EventTabs(List<Event> upcoming, List<Event> recendEvents, BuildContext context) {
-  //   return DefaultTabController(
-  //       length: 2,
-  //       child: Expanded(child: Column(mainAxisSize: MainAxisSize.min, children: [
-  //         TabBar(
-  //           indicatorColor: AppColors.stdIndicatedTabColor,
-  //           tabs: [
-  //             StdSpacedIconTextTab(text: "Upcoming", iconHere: Icons.upcoming),
-  //             StdSpacedIconTextTab(text: "Recent", iconHere: Icons.recent_actors_outlined),
-  //           ],
-  //         ),
-  //
-  //         Expanded(child: Container(
-  //           //height: MediaQuery.of(context).size.height -171, //TODO: This might not work on all devices!
-  //             child: TabBarView(
-  //             physics: NeverScrollableScrollPhysics(),
-  //             children: [
-  //           EventListBuilder(upcoming),
-  //           EventListBuilder(recendEvents)
-  //         ])))
-  //       ])));
-  // }
-  //
-  // Widget EventListBuilder(List<Event> events){
-  //   return ListView.builder(
-  //       itemCount: events.length,
-  //       itemBuilder: (context, i){
-  //         return EventListTiles(key: ObjectKey(events[i]), event: events[i]);
-  //       });
-  // }
+  
+  
 }

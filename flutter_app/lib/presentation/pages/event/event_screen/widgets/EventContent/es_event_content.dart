@@ -7,9 +7,11 @@ import 'package:flutter_frontend/data/icons_with_texts.dart';
 import 'package:flutter_frontend/data/icons_with_texts.dart';
 import 'package:flutter_frontend/data/icons_with_texts.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/event/event_series.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
+import 'package:flutter_frontend/presentation/core/styles/icons.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/add_friends_dialog.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/like_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
@@ -60,7 +62,7 @@ class EventContent extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   ///likebutton and information
-                  LikeWidget(stateLoaded.event),
+                  LikeWidget(stateLoaded.event, stateLoaded.event.series, context),
 
                   /// Used as space
                   const SizedBox(
@@ -211,7 +213,7 @@ class EventContent extends StatelessWidget {
     ]);
   }
 
-  Widget LikeWidget(Event event) {
+  Widget LikeWidget(Event event, EventSeries? series, BuildContext context) {
     return PaddingWidget(children: [
       Flexible(
         child: BlocProvider(
@@ -223,7 +225,9 @@ class EventContent extends StatelessWidget {
             likeStatus: event.liked ?? false,
           ),
         ),
-      )
+      ),
+      Spacer(),
+      if(series != null )TextWithIconButton(onPressed: ()=> context.router.push(EventSeriesScreenPageRoute(seriesId: series.id)), text: series.name.getOrCrash(), icon: AppIcons.eventSeriesIcon,)
     ]);
   }
 

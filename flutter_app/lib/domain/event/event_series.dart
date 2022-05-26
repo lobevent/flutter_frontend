@@ -18,6 +18,8 @@ class EventSeries with _$EventSeries{
     required EventDescription description,
     List<Event>? upcomingEvents,
     List<Event>? recentEvents,
+    int? subscribersCount,
+    int? eventCount,
     //List<Event>? events
   }) = EventSeriesNormal;
 }

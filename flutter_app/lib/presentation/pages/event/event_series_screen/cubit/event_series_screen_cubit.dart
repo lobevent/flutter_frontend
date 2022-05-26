@@ -24,4 +24,12 @@ class EventSeriesScreenCubit extends Cubit<EventSeriesScreenState> {
 
     });
   }
+
+
+  Future<void> subscribe() async{
+    state.maybeMap(orElse: (){}, ready: (readyState) {
+      this.repository.addSubscription(readyState.series).then((value) => {});
+    });
+
+  }
 }

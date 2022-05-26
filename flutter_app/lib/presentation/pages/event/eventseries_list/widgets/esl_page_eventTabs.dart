@@ -4,6 +4,7 @@ import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles.dart';
 
+///Event Tabs contains an TabController an within two tabs: Upcoming Events and recent events!
 class EventTabs extends StatelessWidget {
   final List<Event> upcoming;
   final List<Event> recendEvents;
@@ -23,7 +24,6 @@ class EventTabs extends StatelessWidget {
           ),
 
           Expanded(child: Container(
-            //height: MediaQuery.of(context).size.height -171, //TODO: This might not work on all devices!
               child: TabBarView(
                   physics: NeverScrollableScrollPhysics(),
                   children: [
@@ -34,6 +34,7 @@ class EventTabs extends StatelessWidget {
   }
 
 
+  /// generates Lisview of an eventList
   Widget EventListBuilder(List<Event> events){
     return ListView.builder(
         itemCount: events.length,

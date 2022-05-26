@@ -26,6 +26,8 @@ class EventSeriesDto extends BaseDto with _$EventSeriesDto {
         required String description,
         @JsonKey(includeIfNull: false) @EventListConverter() List<EventDto>? upcomingEvents,
         @JsonKey(includeIfNull: false) @EventListConverter() List<EventDto>? recentEvents,
+        int? subscribersCount,
+        int? eventCount,
         //@JsonKey(includeIfNull: false) @EventListConverter() List<EventDto>? events,
         DateTime? creationDate}) = EventSeriesFull;
 
@@ -36,7 +38,9 @@ class EventSeriesDto extends BaseDto with _$EventSeriesDto {
         description: EventDescription(description),
         name: EventName(name),
         recentEvents: recentEvents?.map((e) => e.toDomain()).toList(),
-        upcomingEvents: upcomingEvents?.map((e) => e.toDomain()).toList()
+        upcomingEvents: upcomingEvents?.map((e) => e.toDomain()).toList(),
+        subscribersCount: subscribersCount,
+        eventCount: eventCount,
         );
   }
 

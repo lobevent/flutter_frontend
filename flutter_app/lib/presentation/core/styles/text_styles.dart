@@ -7,6 +7,11 @@ class AppTextStyles {
     color: AppColors.black,
   );
 
+  static const stdText = TextStyle(
+    color: AppColors.stdTextColor,
+    fontWeight: FontWeight.bold
+  );
+
   static const loginText = TextStyle(
     color: AppColors.white,
     fontWeight: FontWeight.bold,

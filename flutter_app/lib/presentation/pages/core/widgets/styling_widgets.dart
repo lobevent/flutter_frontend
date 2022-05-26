@@ -19,8 +19,7 @@ const double paddingLeftConst = 30;
 const double paddingTopConst = 0;
 const double paddingRightConst = 30;
 const double paddingBottomConst = 0;
-const stdPadding = EdgeInsets.fromLTRB(
-    paddingLeftConst, paddingTopConst, paddingRightConst, paddingBottomConst);
+const stdPadding = EdgeInsets.fromLTRB(paddingLeftConst, paddingTopConst, paddingRightConst, paddingBottomConst);
 
 /// the content Container should contain no logic, but should only call the
 /// content widgets
@@ -51,32 +50,29 @@ class BasicContentContainer extends StatelessWidget {
       floatingActionButton: floatingActionButton ?? null,
       appBar: appBar,
       body: ColorfulSafeArea(
-        color: Colors.yellow,
-        child: LoadingOverlay(
-          isLoading: isLoading,
-          child: ScrollOrNotChild(),
-        )
-      ),
+          color: Colors.yellow,
+          child: LoadingOverlay(
+            isLoading: isLoading,
+            child: ScrollOrNotChild(),
+          )),
       bottomNavigationBar: bottomNavigationBar,
     );
   }
-
 
   /**
    * Depending on wether the scroll parameter is set true, this either returns
    * an scrollview or just an column
    */
-  Widget ScrollOrNotChild(){
+  Widget ScrollOrNotChild() {
     return child_ren.fold((children) {
-      if(scrollable){
+      if (scrollable) {
         return SingleChildScrollView(
           controller: controller,
           child: Column(
             children: children,
           ),
         );
-      }
-      else{
+      } else {
         return Column(
           children: children,
         );
@@ -84,10 +80,8 @@ class BasicContentContainer extends StatelessWidget {
     }, (child) {
       return child;
     });
-
   }
 }
-
 
 /// this is an basic Tab that can be Used in tab bar
 /// it has automatic padding at both ends
@@ -98,17 +92,13 @@ class StdSpacedIconTextTab extends StatelessWidget {
   //late Widget child;
   const StdSpacedIconTextTab({Key? key, required this.text, required this.iconHere}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
-    return Row(mainAxisSize: MainAxisSize.min, children: [
-      const Spacer(),
-      Tab(child: TextWithIcon( text: text, icon: iconHere)),
-      const Spacer()
-    ],
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [const Spacer(), Tab(child: TextWithIcon(text: text, icon: iconHere)), const Spacer()],
     );
   }
-
 }
 
 /// Widget used for making padding with a row, so the children start on the
@@ -128,20 +118,32 @@ class PaddingRowWidget extends StatelessWidget {
   /// the padding value on the bottom
   final double paddingBottom;
 
+  /// decision if the container should be centered
+  final bool centered;
+
   const PaddingRowWidget(
       {Key? key,
       required this.children,
       this.paddinfLeft = paddingLeftConst,
       this.paddingTop = paddingTopConst,
       this.paddingRight = paddingRightConst,
-      this.paddingBottom = paddingBottomConst})
+      this.paddingBottom = paddingBottomConst,
+      this.centered = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if(centered){
+      return Center(child: ThePaddingWidged(),);
+    }
+    else{
+      return ThePaddingWidged();
+    }
+  }
+
+  Widget ThePaddingWidged() {
     return Padding(
-      padding: EdgeInsets.fromLTRB(
-          paddinfLeft, paddingTop, paddingRight, paddingBottom),
+      padding: EdgeInsets.fromLTRB(paddinfLeft, paddingTop, paddingRight, paddingBottom),
       child: Row(children: children),
     );
   }
@@ -175,8 +177,7 @@ class PaddingContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(
-          paddinfLeft, paddingTop, paddingRight, paddingBottom),
+      padding: EdgeInsets.fromLTRB(paddinfLeft, paddingTop, paddingRight, paddingBottom),
       child: child,
     );
   }
@@ -205,12 +206,7 @@ class StdTextButton extends StatelessWidget {
   final Widget child;
   final VoidCallback? onPressed;
   final bool disabled;
-  const StdTextButton(
-      {Key? key,
-      required this.child,
-      required this.onPressed,
-      this.disabled = false})
-      : super(key: key);
+  const StdTextButton({Key? key, required this.child, required this.onPressed, this.disabled = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -221,11 +217,8 @@ class StdTextButton extends StatelessWidget {
                   color:  Color(0x6BBBBBBB)),*/
             borderRadius: BorderRadius.circular(10)),
         child: TextButton(
-            style: ButtonStyle(
-                overlayColor: MaterialStateColor.resolveWith(
-                    (states) => Color(0xFFCECECE))),
-            onPressed: () =>
-                onPressed == null || disabled ? null : onPressed!(),
+            style: ButtonStyle(overlayColor: MaterialStateColor.resolveWith((states) => Color(0xFFCECECE))),
+            onPressed: () => onPressed == null || disabled ? null : onPressed!(),
             child: child));
   }
 }
@@ -236,13 +229,7 @@ class TextWithIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final IconData? icon;
   final bool disabled;
-  const TextWithIconButton(
-      {Key? key,
-      required this.onPressed,
-      required this.text,
-      this.icon,
-      this.disabled = false})
-      : super(key: key);
+  const TextWithIconButton({Key? key, required this.onPressed, required this.text, this.icon, this.disabled = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -277,9 +264,7 @@ class TextCheckbox extends StatefulWidget {
   // the checkbox on changed function
   final void Function(bool)? onChanged;
 
-  TextCheckbox(
-      {Key? key, required this.onChanged, this.text, required this.value})
-      : super(key: key);
+  TextCheckbox({Key? key, required this.onChanged, this.text, required this.value}) : super(key: key);
 
   @override
   _TextCheckBoxState createState() => _TextCheckBoxState();
@@ -333,8 +318,7 @@ class _TextCheckBoxState extends State<TextCheckbox> {
               value: value,
             ),
             // the text in this checkbox, with styling
-            Text(widget.text != null ? widget.text! : '',
-                style: TextStyle(color: AppColors.stdTextColor)),
+            Text(widget.text != null ? widget.text! : '', style: TextStyle(color: AppColors.stdTextColor)),
           ],
         ));
   }
@@ -350,9 +334,7 @@ class _TextCheckBoxState extends State<TextCheckbox> {
 class GenericSearchBar extends StatelessWidget {
   final TextEditingController controller;
   final void Function(String) onSearchTextChanged;
-  GenericSearchBar(
-      {Key? key, required this.controller, required this.onSearchTextChanged})
-      : super(key: key);
+  GenericSearchBar({Key? key, required this.controller, required this.onSearchTextChanged}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -365,8 +347,7 @@ class GenericSearchBar extends StatelessWidget {
                     leading: const Icon(Icons.search),
                     title: TextField(
                       controller: controller,
-                      decoration: const InputDecoration(
-                          hintText: 'Search', border: InputBorder.none),
+                      decoration: const InputDecoration(hintText: 'Search', border: InputBorder.none),
                       onChanged: onSearchTextChanged,
                     ),
                     trailing: IconButton(
@@ -390,14 +371,7 @@ class FullWidthPaddingInput extends StatelessWidget {
   final ValueChanged<String>? onChanged;
 
   FullWidthPaddingInput(
-      {this.controller,
-      this.labelText,
-      this.hintText,
-      this.password = false,
-      this.maxLines,
-      this.maxLength,
-      this.validator,
-      this.onChanged});
+      {this.controller, this.labelText, this.hintText, this.password = false, this.maxLines, this.maxLength, this.validator, this.onChanged});
 
   @override
   Widget build(BuildContext context) {

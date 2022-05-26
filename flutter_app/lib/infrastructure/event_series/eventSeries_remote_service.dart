@@ -11,10 +11,12 @@ import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 
 class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
 
-  static const String getInvitationsRoute = "/user/invitations/%amount%/%lastEventTime%/%descending%";
+
+  static const String getSubscribedESRoute = "";
   static const String getSeriesByIdRoute = "/series/%seriesId%";
   static const String getOwnSeriesRoute = "/eventSeries/%amount%/%lastEventTime%/%descending%";
   static const String addSeriesRoute = "/eventSeries";
+  static const String addSubscriptionRoute = "/eventSeries/subscription/%seriesId%";
   static const String revokeInvitationRoute = "/invitation/%eventId%/%profileId%";
 
   final SymfonyCommunicator client;
@@ -26,7 +28,7 @@ class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
   Future<List<EventSeriesDto>> getSubscribedEventSeries(
       DateTime lastEventTime, int amount,
       [bool descending = false]) async{
-        return convertList(await client.get(getInvitationsRoute.interpolate({'amount': amount.toString(), 'lastEventTime': lastEventTime.toString(), 'descending': descending? '1' : '0'})));
+        return convertList(await client.get(getSubscribedESRoute.interpolate({'amount': amount.toString(), 'lastEventTime': lastEventTime.toString(), 'descending': descending? '1' : '0'})));
   }
 
   Future<List<EventSeriesDto>> getOwnedEventSeries(
@@ -48,7 +50,7 @@ class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
   // -------------------------------------------------------------------------------- SUBSCRIPTION MANAGEMENT ------------------------------------------------------------------------------
   // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   Future<EventSeriesDto> addSubscription(String seriesId) async{
-    return EventSeriesDto.fromJson(jsonDecode((await this.client.post(addSeriesRoute.interpolate({'seriesId': seriesId}), {})).body) as Map<String, dynamic>);
+    return EventSeriesDto.fromJson(jsonDecode((await this.client.post(addSubscriptionRoute.interpolate({'seriesId': seriesId}), {})).body) as Map<String, dynamic>);
   }
 
 

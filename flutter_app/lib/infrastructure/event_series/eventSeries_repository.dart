@@ -75,4 +75,16 @@ class EventSeriesRepository extends Repository{
       return right((await remoteService.addSubscription(series.id.value)).toDomain());
     });
   }
+
+
+  ///
+  /// revokes subscription of the current user to an eventseries
+  ///
+  Future<Either<NetWorkFailure, EventSeries>> revokeSubscribtion(EventSeries series){
+    return localErrorHandler(() async {
+      return right((await remoteService.revokeSubscription(series.id.value)).toDomain());
+    });
+  }
+
+
 }

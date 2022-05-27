@@ -17,7 +17,7 @@ class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
   static const String getOwnSeriesRoute = "/eventSeries/%amount%/%lastEventTime%/%descending%";
   static const String addSeriesRoute = "/eventSeries";
   static const String addSubscriptionRoute = "/eventSeries/subscription/%seriesId%";
-  static const String revokeInvitationRoute = "/invitation/%eventId%/%profileId%";
+  static const String revokeSubscriptionRoute = "/eventSeries/subscription/%seriesId%";
 
   final SymfonyCommunicator client;
 
@@ -55,6 +55,6 @@ class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
 
 
   Future<EventSeriesDto> revokeSubscription(String seriesId) async{
-    return EventSeriesDto.fromJson(jsonDecode((await this.client.delete(revokeInvitationRoute.interpolate({'seriesId': seriesId}))).body) as Map<String, dynamic>);
+    return EventSeriesDto.fromJson(jsonDecode((await this.client.delete(revokeSubscriptionRoute.interpolate({'seriesId': seriesId}))).body) as Map<String, dynamic>);
   }
 }

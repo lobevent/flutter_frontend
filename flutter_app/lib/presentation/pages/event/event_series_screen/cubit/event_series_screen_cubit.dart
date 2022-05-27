@@ -28,8 +28,23 @@ class EventSeriesScreenCubit extends Cubit<EventSeriesScreenState> {
 
   Future<void> subscribe() async{
     state.maybeMap(orElse: (){}, ready: (readyState) {
-      this.repository.addSubscription(readyState.series).then((value) => {});
+      emit(EventSeriesScreenState.readyAndLoadingSubscription(readyState.series));
+      this.repository.addSubscription(readyState.series).then((value){
+        value.fold((failure) => emit(EventSeriesScreenState.failure(failure)), (_){
+            emit(readyState.copyWith(series: readyState.series.copyWith(subscribed: true)));
+        });
+      });
     });
+  }
 
+  Future<void> unsubscribe() async{
+    state.maybeMap(orElse: (){}, ready: (readyState) {
+      emit(EventSeriesScreenState.readyAndLoadingSubscription(readyState.series));
+      this.repository.revokeSubscribtion(readyState.series).then((value){
+        value.fold((failure) => emit(EventSeriesScreenState.failure(failure)), (_){
+          emit(readyState.copyWith(series: readyState.series.copyWith(subscribed: false)));
+        });
+      });
+    });
   }
 }

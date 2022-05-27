@@ -3,6 +3,7 @@ import 'package:flutter_frontend/data/icons_with_texts.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/animations.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/animations/loading_button.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,17 +32,7 @@ class _UesMenuButtonState extends State<UesMenuButton> {
 
     // the request is still running show this dialog
     if (widget.isLoading) {
-      return const Expanded(
-          flex: 1,
-          child: Center(
-            child: Align(
-              alignment: Alignment.center,
-              child: SpinKitRotatingCircle(
-                color: AppColors.primaryColor,
-                size: 20,
-              ),
-            ),
-          ));
+      return const LoadingButton();
     }
 // This menu button widget updates a _selection field (of type EventStatus,
 // not shown here).

@@ -28,6 +28,7 @@ class EventSeriesDto extends BaseDto with _$EventSeriesDto {
         @JsonKey(includeIfNull: false) @EventListConverter() List<EventDto>? recentEvents,
         int? subscribersCount,
         int? eventCount,
+        bool? subscribed,
         //@JsonKey(includeIfNull: false) @EventListConverter() List<EventDto>? events,
         DateTime? creationDate}) = EventSeriesFull;
 
@@ -41,6 +42,7 @@ class EventSeriesDto extends BaseDto with _$EventSeriesDto {
         upcomingEvents: upcomingEvents?.map((e) => e.toDomain()).toList(),
         subscribersCount: subscribersCount,
         eventCount: eventCount,
+        subscribed: subscribed,
         );
   }
 

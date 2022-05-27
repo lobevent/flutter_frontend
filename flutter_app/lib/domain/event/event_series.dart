@@ -20,6 +20,7 @@ class EventSeries with _$EventSeries{
     List<Event>? recentEvents,
     int? subscribersCount,
     int? eventCount,
+    bool? subscribed,
     //List<Event>? events
   }) = EventSeriesNormal;
 }

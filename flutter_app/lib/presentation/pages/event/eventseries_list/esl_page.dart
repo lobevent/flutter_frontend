@@ -62,8 +62,8 @@ class EventSeriesListPage extends StatelessWidget {
 
   Widget EventSeriesList(List<EventSeries> series){
     return ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
+        // shrinkWrap: true,
+        // physics: NeverScrollableScrollPhysics(),
         itemCount: series.length,
         itemBuilder: (context, i) {
           return Card(child: ListTile(

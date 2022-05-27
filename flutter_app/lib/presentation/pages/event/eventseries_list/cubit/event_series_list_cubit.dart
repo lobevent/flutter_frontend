@@ -32,6 +32,23 @@ class EventSeriesListCubit extends Cubit<EventSeriesListState> {
         }));
   }
 
+  Future<void> deleteSeries(EventSeries es, bool own) async {
+    state.maybeMap(orElse: (){}, ready: (readyState){
+      repository.delete(es).then((value) => value.fold(
+              (failure) {
+            emit(EventSeriesListState.failure(failure));
+          },
+              (series) {
+                if(own)
+                  readyState.seriesList.own.removeWhere((element) => element.id.value == series.id.value);
+                else
+                  readyState.seriesList.subscribed.removeWhere((element) => element.id.value == series.id.value);
+            emit(EventSeriesListState.ready(readyState.seriesList));
+          }));
+    });
+
+  }
+
   // loadMore(){
   //
   // }

@@ -88,7 +88,20 @@ class EventSeriesRepository extends Repository{
     });
   }
 
+  ///
+  /// saves an new series in the backend
+  ///
+  Future<Either<NetWorkFailure, EventSeries>> delete(EventSeries series) async{
+    return localErrorHandler(() async {
+      return right((await remoteService.delete(series.id.value)).toDomain());
+    });
+  }
 
+
+
+  // ----------------------------------------------------------------------------------------------
+  // ---------------------------------------- Subscription ----------------------------------------
+  // ----------------------------------------------------------------------------------------------
 
   ///
   /// subscribes the current user to an eventseries

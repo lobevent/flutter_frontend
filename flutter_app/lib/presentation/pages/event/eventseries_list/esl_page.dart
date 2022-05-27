@@ -27,7 +27,7 @@ class EventSeriesListPage extends StatelessWidget {
               child_ren: left([
                   Text(AppStrings.ownEventSeriesOverviewTitle, style: Theme.of(context).textTheme.headline3),
                   state.maybeMap(orElse: () {return Spacer();}, ready: (lists) {
-                    return EventSeriesList(lists.seriesList);
+                    return EventSeriesTabs(lists.seriesList.own, lists.seriesList.subscribed);
                   })
 
               ]),
@@ -37,14 +37,33 @@ class EventSeriesListPage extends StatelessWidget {
    
   }
 
+  Widget EventSeriesTabs(List<EventSeries> own, List<EventSeries> subscribed){
+    return DefaultTabController(
+        length: 2,
+        child: Expanded(child: Column(mainAxisSize: MainAxisSize.min, children: [
+          const TabBar(
+            indicatorColor: AppColors.stdIndicatedTabColor,
+            tabs: [
+              StdSpacedIconTextTab(text: "Own", iconHere: Icons.upcoming),
+              StdSpacedIconTextTab(text: "Subscribed", iconHere: Icons.recent_actors_outlined),
+            ],
+          ),
+
+          Expanded(child: Container(
+              child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [
+                    EventSeriesList(own),
+                    EventSeriesList(subscribed)
+                  ])))
+        ])));
+  }
 
 
   Widget EventSeriesList(List<EventSeries> series){
-    return Expanded(
-
-        child: ListView.builder(
-        //shrinkWrap: true,
-        //physics: NeverScrollableScrollPhysics(),
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
         itemCount: series.length,
         itemBuilder: (context, i) {
           return Card(child: ListTile(
@@ -60,6 +79,6 @@ class EventSeriesListPage extends StatelessWidget {
             ),
 
           ));
-        }));
+        });
   }
 }

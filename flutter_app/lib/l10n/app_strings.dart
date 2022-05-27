@@ -58,7 +58,7 @@ class AppStrings {
   static const String createSeries = "Create an event series!";
   static const String enterSeriesName = "Enter a name for the series";
   static const String enterSeriesDescription = "Enter a description for the series";
-  static const String ownEventSeriesOverviewTitle = "Own event series";
+  static const String ownEventSeriesOverviewTitle = "Event Series";
   static const String followedEventSeriesOverviewTitle = "Followed event series";
 
 }

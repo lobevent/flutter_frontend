@@ -6,6 +6,7 @@ import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/event_series/eventSeries_dtos.dart';
+import 'package:flutter_frontend/infrastructure/event_series/helper_responses/event_series_helper_own_and_subscribed.dart';
 import 'package:flutter_frontend/infrastructure/invitation/invitation_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 
@@ -15,6 +16,7 @@ class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
   static const String getSubscribedESRoute = "";
   static const String getSeriesByIdRoute = "/series/%seriesId%";
   static const String getOwnSeriesRoute = "/eventSeries/%amount%/%lastEventTime%/%descending%";
+  static const String getOwnAndSubscribedRoute = "/eventSeriesEs";
   static const String addSeriesRoute = "/eventSeries";
   static const String addSubscriptionRoute = "/eventSeries/subscription/%seriesId%";
   static const String revokeSubscriptionRoute = "/eventSeries/subscription/%seriesId%";
@@ -56,5 +58,10 @@ class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
 
   Future<EventSeriesDto> revokeSubscription(String seriesId) async{
     return EventSeriesDto.fromJson(jsonDecode((await this.client.delete(revokeSubscriptionRoute.interpolate({'seriesId': seriesId}))).body) as Map<String, dynamic>);
+  }
+
+
+  Future<OwnAndSubscribedEventSeriesDto> getOwnAndSubscribedSeries()async{
+    return OwnAndSubscESFull.fromJson(jsonDecode((await this.client.get(getOwnAndSubscribedRoute)).body)as Map<String, dynamic>);
   }
 }

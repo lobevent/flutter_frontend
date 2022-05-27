@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/event/event_series.dart';
+import 'package:flutter_frontend/domain/event/helpers/event_series_own_subscribed.dart';
 import 'package:flutter_frontend/infrastructure/event_series/eventSeries_repository.dart';
 import 'package:flutter_frontend/presentation/core/utils/loading/scroll_listener.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -22,7 +23,7 @@ class EventSeriesListCubit extends Cubit<EventSeriesListState> {
 
 
   Future<void> loadEventSeriesLists()async{
-    repository.getOwnedEventSeries(lastEventTime: DateTime.now(), amount: 20).then((value) => value.fold(
+    repository.getOwnAndSubscribedSeries().then((value) => value.fold(
         (failure) {
           emit(EventSeriesListState.failure(failure));
         },

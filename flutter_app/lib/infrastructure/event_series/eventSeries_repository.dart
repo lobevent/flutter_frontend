@@ -4,10 +4,12 @@ import 'package:flutter_frontend/domain/core/repository.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/event_series.dart';
+import 'package:flutter_frontend/domain/event/helpers/event_series_own_subscribed.dart';
 import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/event_series/eventSeries_remote_service.dart';
+import 'package:flutter_frontend/infrastructure/event_series/helper_responses/event_series_helper_own_and_subscribed.dart';
 import 'package:flutter_frontend/infrastructure/invitation/invitation_remote_service.dart';
 
 import 'eventSeries_dtos.dart';
@@ -42,7 +44,28 @@ class EventSeriesRepository extends Repository{
     if(lastEventTime == null) lastEventTime = DateTime.now();
     return _getList(() => remoteService.getOwnedEventSeries(lastEventTime!, amount));
   }
-  
+
+
+
+
+  ///
+  /// this function fetches all the event series that the user owns and all that they have subscribed
+  /// the first is own, the second is subscribed
+  ///
+  Future<Either<NetWorkFailure, OwnAndSubscribedEventSeries>> getOwnAndSubscribedSeries() async{
+    return localErrorHandler(() async{
+      OwnAndSubscribedEventSeries oses = new OwnAndSubscribedEventSeries();
+      final ownAndSubscribed = await remoteService.getOwnAndSubscribedSeries();
+      //convert the dto objects to domain Objects
+      oses.subscribed = ownAndSubscribed.subscribed.map((idto) => idto.toDomain()).toList();
+      oses.own = ownAndSubscribed.own.map((idto) => idto.toDomain()).toList();
+      return right(oses);
+    });
+  }
+
+
+
+
 
 
   // ----------------------------------------------------------------------------------------------

@@ -9,7 +9,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/animations/load
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_series_screen/cubit/event_series_screen_cubit.dart';
-import 'package:flutter_frontend/presentation/pages/event/eventseries_list/widgets/esl_page_eventTabs.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_series_screen/widgets_tabs/ess_page_eventTabs.dart';
 
 class EventSeriesScreenPage extends StatelessWidget {
   final UniqueId seriesId;

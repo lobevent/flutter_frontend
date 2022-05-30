@@ -91,9 +91,9 @@ class EventSeriesRepository extends Repository{
   ///
   /// saves an new series in the backend
   ///
-  Future<Either<NetWorkFailure, EventSeries>> delete(EventSeries series) async{
+  Future<Either<NetWorkFailure, EventSeries>> delete(EventSeries series, bool withEvents) async{
     return localErrorHandler(() async {
-      return right((await remoteService.delete(series.id.value)).toDomain());
+      return right((await remoteService.delete(series.id.value, withEvents)).toDomain());
     });
   }
 

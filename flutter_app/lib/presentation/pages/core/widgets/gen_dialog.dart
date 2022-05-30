@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class GenDialog {
   ///generates a generic dialog with some strings and asks for an answer to the showdialog to confirm or
   ///abort the action, also u can set barrierdismisible false or true

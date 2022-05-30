@@ -18,7 +18,7 @@ class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
   static const String getOwnSeriesRoute = "/eventSeries/%amount%/%lastEventTime%/%descending%";
   static const String getOwnAndSubscribedRoute = "/eventSeriesEs";
   static const String addSeriesRoute = "/eventSeries";
-  static const String deleteSeriesRoute = "/eventSeries/%seriesId%";
+  static const String deleteSeriesRoute = "/series/%seriesId%/%withEvents%";
   static const String addSubscriptionRoute = "/eventSeries/subscription/%seriesId%";
   static const String revokeSubscriptionRoute = "/eventSeries/subscription/%seriesId%";
 
@@ -43,8 +43,8 @@ class EventSeriesRemoteService extends RemoteService<EventSeriesDto>{
   Future<EventSeriesDto> addSeries(EventSeriesDto seriesDto) async{
     return EventSeriesDto.fromJson(jsonDecode((await this.client.post(addSeriesRoute, jsonEncode(seriesDto.toJson()))).body) as Map<String, dynamic>);
   }
-  Future<EventSeriesDto> delete(String seriesId) async{
-    return EventSeriesDto.fromJson(jsonDecode((await this.client.delete(addSeriesRoute.interpolate({'seriesId': seriesId}))).body) as Map<String, dynamic>);
+  Future<EventSeriesDto> delete(String seriesId, bool withEvents) async{
+    return EventSeriesDto.fromJson(jsonDecode((await this.client.delete(deleteSeriesRoute.interpolate({'seriesId': seriesId, "withEvents": withEvents.toString()}))).body) as Map<String, dynamic>);
   }
 
   Future<EventSeriesDto> getSeriesById(String id) async{

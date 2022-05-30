@@ -89,6 +89,15 @@ class EventSeriesRepository extends Repository{
   }
 
   ///
+  /// updates exitsing series
+  ///
+  Future<Either<NetWorkFailure, EventSeries>> update(EventSeries series) async{
+    return localErrorHandler(() async {
+      return right((await remoteService.update(EventSeriesDto.fromDomain(series))).toDomain());
+    });
+  }
+
+  ///
   /// saves an new series in the backend
   ///
   Future<Either<NetWorkFailure, EventSeries>> delete(EventSeries series, bool withEvents) async{

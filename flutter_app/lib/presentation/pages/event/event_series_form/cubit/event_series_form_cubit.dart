@@ -13,16 +13,20 @@ part 'event_series_form_state.dart';
 
 class EventSeriesFormCubit extends Cubit<EventSeriesFormState> {
 
-  final bool isEdit;
-  
+  late bool isEdit;
+  EventSeries? series;
   EventSeriesRepository repository = GetIt.I<EventSeriesRepository>();
 
 
-  EventSeriesFormCubit(this.isEdit) : super(EventSeriesFormState.initial()){
+  EventSeriesFormCubit(this.series) : super(EventSeriesFormState.initial()){
+    isEdit = series!=null;
     // if the series is not edited but created, we have to generate a new eventseries object and pass it in the ready state
     if(!isEdit){
       EventSeries series = EventSeries(id: UniqueId(), description: EventDescription(''), name: EventName(''));
       emit(EventSeriesFormState.ready(series));
+    }
+    if(isEdit){
+      loadSeries(this.series!);
     }
   }
 
@@ -32,6 +36,10 @@ class EventSeriesFormCubit extends Cubit<EventSeriesFormState> {
   /// errorstate, or the saveReady state
   ///
   Future<void> saveSeries() async {
+    if(isEdit){
+      updateSeries();
+      return;
+    }
     repository.addSeries(retrieveFormReadyStateOrCrash().series).then(
             (response){
               response.fold(
@@ -43,10 +51,30 @@ class EventSeriesFormCubit extends Cubit<EventSeriesFormState> {
   }
 
 
+
   /// we want to only retrieve the form ready state, if its not there we crash
   ESF_Ready retrieveFormReadyStateOrCrash(){
     return state.maybeMap(orElse: (){throw UnimplementedError();}, ready: (readyState) => readyState);
   }
+
+  void loadSeries(EventSeries series) async{
+    emit(EventSeriesFormState.loading());
+    await Future.delayed(Duration(microseconds: 2));
+    emit(EventSeriesFormState.ready(this.series!));
+  }
+
+  Future<void> updateSeries()async{
+    repository.update(retrieveFormReadyStateOrCrash().series).then(
+            (response){
+          response.fold(
+                  (Netfailure) => emit(EventSeriesFormState.networkError(Netfailure)) ,
+                  (series) => emit(EventSeriesFormState.savedReady())
+          );
+        });
+    emit(const EventSeriesFormState.saving());
+  }
+
+
 
 
 }

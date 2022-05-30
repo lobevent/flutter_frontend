@@ -36,7 +36,7 @@ class _EventSeriesCardState extends State<EventSeriesCard> {
               // show the loading animation when we delete
               if(deleting) SpinKitRotatingCircle(color: AppColors.primaryColor, size: 20,),
               // dont show this if we are deleting
-              if(!deleting) IconButton(icon: Icon(Icons.edit), onPressed: (){context.router.push(EventSeriesFormMainRoute());},),
+              if(!deleting) IconButton(icon: Icon(Icons.edit), onPressed: (){context.router.push(EventSeriesFormMainRoute(series: widget.series));},),
               if(!deleting) IconButton(onPressed: (){deleteSeries(context, widget.series);}, icon: Icon(Icons.delete))]
         ),
 

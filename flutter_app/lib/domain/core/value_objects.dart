@@ -22,6 +22,13 @@ abstract class ValueObject<T> {
     return value.fold((f) => throw UnexpectedValueError(f), id);
   }
 
+  String getOrEmptyString(){
+    if(!(T.toString() == "String")){
+      throw UnexpectedTypeError();
+    }
+    return value.fold((f) => "", id).toString();
+  }
+
   bool isValid() => value.isRight();
 
   @override

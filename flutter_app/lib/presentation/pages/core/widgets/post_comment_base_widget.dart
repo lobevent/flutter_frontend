@@ -89,7 +89,7 @@ class PostCommentBaseWidget extends StatelessWidget {
       children: [
         // get avatar image or from assets
         CircleAvatar(
-          backgroundImage: ProfileImage.getAssetOrNetwork(null),
+          backgroundImage: ProfileImage.getAssetOrNetwork(profile.images?[0]),
           radius: 10,
         ),
         // sized box for little distance

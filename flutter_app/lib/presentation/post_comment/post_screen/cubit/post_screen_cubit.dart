@@ -46,7 +46,7 @@ class PostScreenCubit extends Cubit<PostScreenState> {
         creationDate: DateTime.now(),
         postContent: PostContent(postDesc),
         event: event,
-        owner: Profile(id: UniqueId(), name: ProfileName("test")));
+        owner: Profile(id: UniqueId(), name: ProfileName("test"), ownProfile: false));
     await state.maybeMap(
       loaded: (value) async {
         emit(PostScreenState.loading());

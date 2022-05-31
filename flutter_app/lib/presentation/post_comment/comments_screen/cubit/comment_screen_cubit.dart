@@ -71,7 +71,7 @@ class CommentScreenCubit extends Cubit<CommentScreenState> {
     Comment comment = Comment(
       id: UniqueId(),
       creationDate: DateTime.now(),
-      owner: Profile(id: UniqueId(), name: ProfileName("fake")),
+      owner: Profile(id: UniqueId(), name: ProfileName("fake"), ownProfile: false),
       post: loadedPost,
       //decide if parent has comment or only post
       commentParent: parentComment != null ? parentComment : null,

@@ -99,10 +99,8 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
             try {
               invitation = widget.invitedFriends.firstWhere((element) => element.profile.id.value.toString() == results[i].id.value.toString());
             } catch(e){
-              print("wrong");
             }
 
-            print(invitation);
             // Here the list tiles are generated
             return FriendListTile(
               profile: results[i],

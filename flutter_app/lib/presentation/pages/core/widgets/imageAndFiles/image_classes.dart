@@ -36,6 +36,6 @@ class ProfileImage {
   }
 
   static ImageProvider getAssetOrNetworkFromProfile(Profile profile) {
-    return getAssetOrNetwork(profile.images?[1]);
+    return getAssetOrNetwork(profile.images?[0]);
   }
 }

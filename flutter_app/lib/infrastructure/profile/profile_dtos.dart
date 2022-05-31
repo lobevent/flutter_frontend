@@ -23,7 +23,8 @@ class ProfileDto extends BaseDto with _$ProfileDto {
     int? friendshipCount,
     List<PostDto>? posts,
     List<CommentDto>? comments,
-    List<String>? images
+    List<String>? images,
+    required bool ownProfile
   }) = _ProfileDto;
 
   factory ProfileDto.fromDomain(Profile profile) {
@@ -31,9 +32,11 @@ class ProfileDto extends BaseDto with _$ProfileDto {
         (value) => ProfileDto(
               id: profile.id.value,
               username: profile.name.getOrCrash(),
+              ownProfile: value.ownProfile
             ),
         full: (detailedProfile) => ProfileDto(
             id: detailedProfile.id.value,
+            ownProfile: detailedProfile.ownProfile,
             username: detailedProfile.name.getOrCrash(),
             ownedEvents: detailedProfile.ownedEvents != null
                 ? detailedProfile.ownedEvents!
@@ -66,9 +69,13 @@ class ProfileDto extends BaseDto with _$ProfileDto {
   Profile toDomain() {
     if (posts == null) {
       return Profile(
-          id: UniqueId.fromUniqueString(id), name: ProfileName(username));
+          ownProfile: ownProfile,
+          id: UniqueId.fromUniqueString(id), name: ProfileName(username),
+          // that is done, so we dont have empty arrays as images (so there is no need for index checks!)
+          images: images != null && images!.length == 0 ? null : images);
     } else {
       return Profile.full(
+          ownProfile: ownProfile,
           id: UniqueId.fromUniqueString(id),
           name: ProfileName(username),
           ownedEvents: ownedEvents != null

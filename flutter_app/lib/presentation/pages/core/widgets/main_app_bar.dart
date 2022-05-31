@@ -15,6 +15,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
   final Size preferredSize;
 
 
+
   MainAppBar({Key? key}): preferredSize = Size.fromHeight(40), super(key: key);
 
 
@@ -53,12 +54,18 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
 
 
   Widget OwnProfile(BuildContext context){
-    return IconButton(onPressed: (){
-      context.router.push(ProfilePageRoute(profileId: UniqueId.fromUniqueString('')));
-    }, icon: CircleAvatar(
-      radius: 30,
-      backgroundImage: ProfileImage.getAssetOrNetwork(StorageShared().getOwnProfileImage()),
-    ));
+    Future<String?> image = StorageShared().getOwnProfileImage();
+    return FutureBuilder<String?>(
+      future: image,
+        builder: (BuildContext context, AsyncSnapshot<String?> snapshot){
+          return IconButton(onPressed: (){
+            context.router.push(ProfilePageRoute(profileId: UniqueId.fromUniqueString('')));
+          }, icon: CircleAvatar(
+            radius: 30,
+            backgroundImage: ProfileImage.getAssetOrNetwork(snapshot.data),
+          ));
+        }
+    );
   }
 
 
@@ -80,3 +87,40 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
 
 
 }
+//
+//
+// class OwnProfile extends StatefulWidget {
+//   const OwnProfile({Key? key}) : super(key: key);
+//
+//   @override
+//   State<OwnProfile> createState() => _OwnProfileState();
+// }
+//
+// class _OwnProfileState extends State<OwnProfile> {
+//   Future<String?> image = StorageShared().getOwnProfileImage();
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return FutureBuilder<String?>(
+//         future: image,
+//         builder: (BuildContext context, AsyncSnapshot<String?> snapshot){
+//           if(snapshot.hasData){
+//             print(snapshot.data);
+//             print(snapshot.data);
+//             return IconButton(onPressed: (){
+//               context.router.push(ProfilePageRoute(profileId: UniqueId.fromUniqueString('')));
+//             }, icon: CircleAvatar(
+//               radius: 30,
+//               backgroundImage: ProfileImage.getAssetOrNetwork(snapshot.data),
+//             ));
+//           }
+//           if(snapshot.hasError){
+//             print("error");
+//           }
+//
+//           return Text("2");
+//         }
+//     );
+//   }
+// }

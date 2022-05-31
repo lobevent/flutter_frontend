@@ -35,7 +35,7 @@ class _ProfilePageHeaderVisualState extends State<ProfilePageHeaderVisual> {
         InkWell(
           onTap: () async {
             //context.router.push(ProfileImagePickerWidgetRoute());
-            if (widget.profile != null && widget.profile!.ownProfile) {
+            if (widget.profile != null && widget.profile!.ownProfile != null) {
               if (widget.profile!.images == null) {
                 showImagePickerOverlay(context);
               } else {

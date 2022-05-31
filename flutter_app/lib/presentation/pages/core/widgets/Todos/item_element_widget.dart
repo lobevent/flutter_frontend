@@ -3,6 +3,9 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
+import 'package:get_it/get_it.dart';
+
+import '../../../../../data/storage_shared.dart';
 
 class ItemElementWidget extends StatefulWidget {
   final Item item;
@@ -12,6 +15,7 @@ class ItemElementWidget extends StatefulWidget {
   final Function(Item item)? deleteItemFunc;
   final Function(Item item)? editItemFunc;
   final Function(Item item)? assignProf;
+  final Function(Item item)? deassignProf;
 
   const ItemElementWidget(
       {required this.item,
@@ -20,7 +24,8 @@ class ItemElementWidget extends StatefulWidget {
       required this.profiles,
       this.deleteItemFunc,
       this.editItemFunc,
-      this.assignProf});
+      this.assignProf,
+      this.deassignProf});
 
   @override
   State<ItemElementWidget> createState() => _ItemElementWidgetState();
@@ -48,8 +53,14 @@ class _ItemElementWidgetState extends State<ItemElementWidget> {
         widget.editItemFunc!(widget.item);
       },
       onLongPress: () {
-        //assign profile to todo item
-        widget.assignProf!(widget.item);
+        //TODO: deassignen verbieten wenn paar h vorher?
+        //deassign profile to todo item
+        String? ownId=GetIt.I<StorageShared>().getOwnProfileId();
+        if(widget.item.profiles!.map((e) => e.id.value).contains(GetIt.I<StorageShared>().getOwnProfileId())){
+          widget.deassignProf!(widget.item);
+        }else{
+          widget.assignProf!(widget.item);
+        }
       },
     );
   }

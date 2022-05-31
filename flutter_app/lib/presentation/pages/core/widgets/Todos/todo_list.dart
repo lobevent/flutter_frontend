@@ -70,6 +70,10 @@ class _TodoListState extends State<TodoList> {
           //add support for adding other profiles and not only the own maybe
           context.read<EventScreenCubit>().assignProfile(item, null);
         },
+        deassignProf: (Item item){
+          //add support for deadding other profiles and not only the own maybe
+          context.read<EventScreenCubit>().deassignProfile(item, null);
+        },
       );
       itemElements.add(elements);
     });

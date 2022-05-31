@@ -51,8 +51,11 @@ class EventCardDraggable extends StatelessWidget {
                     //display eventdesc
                     OverflowSafeString(
                       child: Text(
+                        event!.description!=null?
                           event!.description!.value
-                              .fold((l) => "Failure", (r) => r.toString()),
+                              .fold((l) => "Failure", (r) => r.toString()):
+                          "No Description available"
+                          ,
                           textAlign: TextAlign.start),
                     )
                   ],

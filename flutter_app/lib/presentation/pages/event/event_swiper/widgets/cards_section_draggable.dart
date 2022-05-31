@@ -125,7 +125,7 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
   void changeCardsOrder() {
     setState(() {
       //check if out of array bound
-      if (cardsCounter > widget.eventsList.length - 1) {
+      if (cardsCounter+cards.length >= widget.eventsList.length) {
         cards[0] = EventCardDraggable(cardsCounter, null);
         cards[1] = EventCardDraggable(cardsCounter, null);
         cards[2] = EventCardDraggable(cardsCounter, null);
@@ -154,9 +154,11 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
       }, onAccept: (_) {
         //for attending the event
         //if (cardsCounter + cards.length > widget.eventsList.length) {
-        eventScreenContext
+        /*eventScreenContext
             .read<EventScreenCubit>()
             .changeStatus(EventStatus.attending);
+
+         */
         //}
 
         changeCardsOrder();
@@ -164,9 +166,11 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
       }, onLeave: (_) {
         setState(() => dragOverTarget = false);
         //if (cardsCounter + cards.length > widget.eventsList.length) {
-        eventScreenContext
+        /*eventScreenContext
             .read<EventScreenCubit>()
             .changeStatus(EventStatus.notAttending);
+
+         */
 
         //}
       }),

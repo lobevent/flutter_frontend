@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 
+// ignore: avoid_classes_with_only_static_members
 /// contains functions for the profile images in one class
 /// (like loading the same asset image)
 class ProfileImage {
@@ -35,6 +36,6 @@ class ProfileImage {
   }
 
   static ImageProvider getAssetOrNetworkFromProfile(Profile profile) {
-    return getAssetOrNetwork(null);
+    return getAssetOrNetwork(profile.images?[1]);
   }
 }

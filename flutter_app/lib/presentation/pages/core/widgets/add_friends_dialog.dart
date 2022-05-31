@@ -95,13 +95,21 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
           shrinkWrap: true,
           itemCount: results.length,
           itemBuilder: (context, i) {
+            Invitation? invitation;
+            try {
+              invitation = widget.invitedFriends.firstWhere((element) => element.profile.id.value.toString() == results[i].id.value.toString());
+            } catch(e){
+              print("wrong");
+            }
+
+            print(invitation);
             // Here the list tiles are generated
             return FriendListTile(
               profile: results[i],
               // here we check if that person is invited or only a friend. this map and contains returns an bool
-              isInvited: widget.invitedFriends
-                  .map((e) => e.profile.id.value.toString())
-                  .contains(results[i].id.value.toString()),
+              isInvited: invitation != null,
+              isHost: invitation?.addHost ?? false,
+
               // the function given for the button on invitation!
               onAddFriend: (Profile profile) {
                 widget.onAddFriend(profile);

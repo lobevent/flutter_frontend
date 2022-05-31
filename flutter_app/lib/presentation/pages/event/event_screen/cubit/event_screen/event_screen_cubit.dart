@@ -122,4 +122,19 @@ class EventScreenCubit extends Cubit<EventScreenState> {
   }
 
 
+
+  ///
+  /// this alters the local invitation list and add host
+  ///
+  void addHost(Invitation invitation){
+    state.maybeMap(orElse: (){}, loaded: (loaded){
+      Invitation invitationInList = loaded.event.invitations.firstWhere((inv) => inv.id.value == invitation.id.value);
+      invitationInList.addHost = true;
+      emit(EventScreenState.loading());
+      emit(loaded);
+    });
+  }
+
+
+
 }

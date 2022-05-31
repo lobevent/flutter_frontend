@@ -12,6 +12,7 @@ class InvitationRemoteService extends RemoteService<InvitationDto>{
   static const String getInvitationsRoute = "/user/invitations/%amount%/%lastEventTime%/%descending%";
   static const String sendInvitationRoute = "/invitation/%eventId%/%profileId%/%addHost%";
   static const String revokeInvitationRoute = "/invitation/%eventId%/%profileId%";
+  static const String addHostRoute = "/addHost/%eventId%/%profileId%";
 
   final SymfonyCommunicator client;
 
@@ -32,5 +33,9 @@ class InvitationRemoteService extends RemoteService<InvitationDto>{
 
   Future<InvitationDto> revokeInvitation(String profileId, String eventId) async{
     return InvitationDto.fromJson(jsonDecode((await this.client.delete(revokeInvitationRoute.interpolate({'eventId': eventId, 'profileId': profileId}))).body) as Map<String, dynamic>);
+  }
+
+  Future<InvitationDto> addHost(String profileId, String eventId) async{
+    return InvitationDto.fromJson(jsonDecode((await this.client.post(addHostRoute.interpolate({'eventId': eventId, 'profileId': profileId}), {})).body) as Map<String, dynamic>);
   }
 }

@@ -60,6 +60,14 @@ class AddFriendsCubit extends Cubit<AddFriendsState> {
 
 
   Future<void> onAddHost(Profile profile, Event event, EventScreenCubit cubit) async{
-    throw UnimplementedError();
+    invitationRepository.addHost(profile, event).then((value) => value.fold(
+            (failure) => emit(AddFriendsState.error(failure: failure)),
+            (invitation){
+              AddFriendsState currentState = state;
+              emit(AddFriendsState.loadingFriends());
+              emit(currentState);
+              // with this one the view is updated!
+              cubit.addHost(invitation);
+            }));
   }
 }

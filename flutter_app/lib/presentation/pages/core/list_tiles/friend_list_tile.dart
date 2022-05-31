@@ -8,6 +8,7 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 class FriendListTile extends StatelessWidget {
   final bool isInvited;
   final bool showUninviteButton;
+  final bool isHost;
   final Profile profile;
   final Function(Profile) onAddFriend;
   final Function(Profile) onRemoveFriend;
@@ -20,6 +21,7 @@ class FriendListTile extends StatelessWidget {
       required this.isInvited,
       required this.onAddFriend,
       required this.onRemoveFriend,
+      this.isHost = false,
       this.onAddHost})
       : super(key: key);
 
@@ -92,7 +94,7 @@ class FriendListTile extends StatelessWidget {
       backgroundImage: ProfileImage.getAssetOrNetworkFromProfile(profile),
       child: !isInvited
           ? const Text('')
-          : Stack(children: const [
+          : Stack(children: [
               Align(
                 // the alignment, so its bottom right
                 alignment: Alignment(0.5, 0.5),
@@ -101,7 +103,7 @@ class FriendListTile extends StatelessWidget {
                   // transparent, so its not blue
                   backgroundColor: Colors.transparent,
                   child: Icon(
-                    Icons.check_circle,
+                    isHost ? Icons.castle_rounded : Icons.check_circle,
                     color: Colors.green,
                   ),
                 ),

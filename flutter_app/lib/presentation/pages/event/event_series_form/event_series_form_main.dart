@@ -36,12 +36,7 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
         create: (context) => EventSeriesFormCubit(widget.series),
         child: BlocConsumer<EventSeriesFormCubit, EventSeriesFormState>(
           listener: (context, state) {
-            // somehow this is not called during builder
-            // state.maybeMap(orElse: (){}, ready: (readyState) {
-            //   title_controller.text = readyState.series.name.getOrEmptyString();
-            //   desc_controller.text = readyState.series.description.getOrEmptyString();
-            //   setState(() {});
-            // });
+
             if(state is ESF_SavedReady){
               // display snackbar
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("+++++ Successfully created ++++++")));

@@ -6,6 +6,8 @@ import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/core/list_tiles/friend_list_tile.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 
+import '../../../../domain/todo/item.dart';
+
 class AddFriendsDialog extends StatefulWidget {
   /// the list with all the friends of the user
   final List<Profile> friends;
@@ -18,6 +20,7 @@ class AddFriendsDialog extends StatefulWidget {
   final Function(Profile) onRemoveFriend;
   // callback function for adding hosts
   final Function(Profile)? onAddHost;
+  final Item? assignedTodoItem;
 
   const AddFriendsDialog(
       {Key? key,
@@ -25,7 +28,8 @@ class AddFriendsDialog extends StatefulWidget {
       required this.invitedFriends,
       required this.onAddFriend,
       required this.onRemoveFriend,
-      this.onAddHost})
+      this.onAddHost,
+      this.assignedTodoItem})
       : super(key: key);
 
   AddFriendsDialogState createState() => AddFriendsDialogState();
@@ -86,45 +90,54 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
     //for(int i = 0; i < 30; i++){results.add(results[0].copyWith(name: ProfileName("input")));}
 
     return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height*0.7,
-        maxWidth: MediaQuery.of(context).size.width*0.8,
-      ),
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.7,
+          maxWidth: MediaQuery.of(context).size.width * 0.8,
+        ),
         child: ListView.builder(
-          //physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: results.length,
-          itemBuilder: (context, i) {
-            Invitation? invitation;
-            try {
-              invitation = widget.invitedFriends.firstWhere((element) => element.profile.id.value.toString() == results[i].id.value.toString());
-            } catch(e){
-            }
-
-            // Here the list tiles are generated
-            return FriendListTile(
-              profile: results[i],
-              // here we check if that person is invited or only a friend. this map and contains returns an bool
-              isInvited: invitation != null,
-              isHost: invitation?.addHost ?? false,
-
-              // the function given for the button on invitation!
-              onAddFriend: (Profile profile) {
-                widget.onAddFriend(profile);
-                setState(() {});
-              },
-              onRemoveFriend: (Profile profile) {
-                widget.onRemoveFriend(profile);
-                setState(() {});
-              },
-              //TODO: check if the inviter is host
-              onAddHost: (Profile profile) {
-                if(widget.onAddHost != null){
-                  widget.onAddHost!(profile);
+            //physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: results.length,
+            itemBuilder: (context, i) {
+              Invitation? invitation;
+              Profile? assignedToItem;
+              try {
+                invitation = widget.invitedFriends.firstWhere((element) =>
+                    element.profile.id.value.toString() ==
+                    results[i].id.value.toString());
+                if (widget.assignedTodoItem != null) {
+                  Profile assignedToItem = widget.friends.firstWhere(
+                      (element) =>
+                          element.id.value.toString() ==
+                          results[i].id.value.toString());
                 }
-                setState(() {});
-              },
-            );
-          }));
+              } catch (e) {}
+
+              // Here the list tiles are generated
+              return FriendListTile(
+                profile: results[i],
+                // here we check if that person is invited or only a friend. this map and contains returns an bool
+                isInvited: invitation != null,
+                isHost: invitation?.addHost ?? false,
+
+                // the function given for the button on invitation!
+                onAddFriend: (Profile profile) {
+                  widget.onAddFriend(profile);
+                  setState(() {});
+                },
+                onRemoveFriend: (Profile profile) {
+                  widget.onRemoveFriend(profile);
+                  setState(() {});
+                },
+                //TODO: check if the inviter is host
+                onAddHost: (Profile profile) {
+                  if (widget.onAddHost != null) {
+                    widget.onAddHost!(profile);
+                  }
+                  setState(() {});
+                },
+                isAssignedToItem: assignedToItem != null,
+              );
+            }));
   }
 }

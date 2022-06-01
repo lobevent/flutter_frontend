@@ -12,11 +12,18 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:provider/src/provider.dart';
 import 'package:auto_route/auto_route.dart';
 
+import '../../../../../domain/profile/profile.dart';
+
 class TodoList extends StatefulWidget {
   final Event event;
   final Todo? todo;
   final bool showLoading;
-  const TodoList({Key? key, required this.todo, required this.event, this.showLoading = false}) : super(key: key);
+  const TodoList(
+      {Key? key,
+      required this.todo,
+      required this.event,
+      this.showLoading = false})
+      : super(key: key);
 
   @override
   State<TodoList> createState() => _TodoListState();
@@ -37,9 +44,8 @@ class _TodoListState extends State<TodoList> {
   List<Widget> getTodoItems(List<Item> items, BuildContext context) {
     final List<Widget> itemElements = [];
 
-
     // show loading animation on request still out
-    if(widget.showLoading){
+    if (widget.showLoading) {
       itemElements.add(const Padding(
           padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
           child: Center(
@@ -59,6 +65,7 @@ class _TodoListState extends State<TodoList> {
         name: element.name.getOrCrash(),
         profiles: element.profiles!,
         description: element.description.getOrCrash(),
+        event: widget.event,
 
         ///for function passing for the buttons
         deleteItemFunc: (Item item) {
@@ -66,20 +73,21 @@ class _TodoListState extends State<TodoList> {
         },
         //edit items, pass the item
         editItemFunc: (Item item) {},
-        assignProf: (Item item) {
+        assignProf: (Item item, Profile? profile) {
           //add support for adding other profiles and not only the own maybe
-          context.read<EventScreenCubit>().assignProfile(item, null);
+          context
+              .read<EventScreenCubit>()
+              .assignProfile(item, profile != null ? profile : null);
         },
-        deassignProf: (Item item){
+        deassignProf: (Item item, Profile? profile) {
           //add support for deadding other profiles and not only the own maybe
-          context.read<EventScreenCubit>().deassignProfile(item, null);
+          context
+              .read<EventScreenCubit>()
+              .deassignProfile(item, profile != null ? profile : null);
         },
       );
       itemElements.add(elements);
     });
-
-
-
 
     return itemElements;
   }

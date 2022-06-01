@@ -21,12 +21,13 @@ class ProfileRepository extends Repository {
 
   ProfileRepository(this._profileRemoteService);
 
-
   // ---------------------------------- Image Crud ------------------------------------------
 
-  Future<Either<NetWorkFailure, String>> uploadImages(UniqueId postId, XFile image) async{
+  Future<Either<NetWorkFailure, String>> uploadImages(
+      UniqueId postId, XFile image) async {
     return localErrorHandler(() async {
-      return right(await _profileRemoteService.uploadImageToEvent(postId.value, File(image.path)));
+      return right(await _profileRemoteService.uploadImageToEvent(
+          postId.value, File(image.path)));
     });
   }
 
@@ -109,10 +110,10 @@ class ProfileRepository extends Repository {
   /// gets the profiles atten
   ///
   Future<Either<NetWorkFailure, List<Profile>>> getAttendingProfiles(
-      {required int amount, required Profile profile}) async {
+      {required int amount, required Event event}) async {
     return localErrorHandler(() async {
       final List<ProfileDto> profileDtos = await _profileRemoteService
-          .getAttendingUsersToEvent(amount, profile.id.value.toString());
+          .getAttendingUsersToEvent(amount, event.id.value.toString());
       return right(_convertToDomainList(profileDtos));
     });
   }

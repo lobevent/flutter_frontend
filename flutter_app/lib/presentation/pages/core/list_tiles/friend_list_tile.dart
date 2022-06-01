@@ -6,6 +6,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/i
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class FriendListTile extends StatelessWidget {
+  final bool? isAssignedToItem;
   final bool isInvited;
   final bool showUninviteButton;
   final bool isHost;
@@ -22,8 +23,9 @@ class FriendListTile extends StatelessWidget {
       required this.isInvited,
       required this.onAddFriend,
       required this.onRemoveFriend,
+      this.isAssignedToItem = false,
       this.isHost = false,
-      this.onAddHost/*, this.overlayEntry*/})
+      this.onAddHost /*, this.overlayEntry*/})
       : super(key: key);
 
   @override
@@ -54,7 +56,8 @@ class FriendListTile extends StatelessWidget {
   /// action buttons for the event, can be made invisible, if its not own events
   List<Widget> actionButtons(BuildContext context) {
     return <Widget>[
-      if (!isInvited && !showUninviteButton)
+      //TODO: third condition may be fcking things up for inviting people idk
+      if (!isInvited && !showUninviteButton && isAssignedToItem == null)
         IconButton(icon: Icon(Icons.add), onPressed: () => {addFriend(context)})
       else
         IconButton(

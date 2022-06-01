@@ -12,8 +12,6 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 extension TodoOverlayCubit on EventScreenCubit {
-
-
   ///CRUD
 
   ///
@@ -23,13 +21,16 @@ extension TodoOverlayCubit on EventScreenCubit {
   /// [todo] the todolist
   ///
   Future<void> postItem(
-      {required String itemName, required String itemDescription, required Todo todo}) async {
+      {required String itemName,
+      required String itemDescription,
+      required Todo todo}) async {
     // new generated Item
-    final Item newItem =
-    Item(id: UniqueId(),
+    final Item newItem = Item(
+      id: UniqueId(),
       name: ItemName(itemName),
       description: ItemDescription(itemDescription),
-      maxProfiles: ItemMaxProfiles(3),);
+      maxProfiles: ItemMaxProfiles(3),
+    );
     // //fake profile list //what do we have this for????
     // profiles: [Profile(id: UniqueId(), name: ProfileName("fake2")), Profile(id: UniqueId(), name: ProfileName("fake3"))]);
 
@@ -40,15 +41,15 @@ extension TodoOverlayCubit on EventScreenCubit {
           //emit(EventScreenState.loading());
           await todoRepository.addItem(todo, newItem).then((itemOrFailure) =>
               itemOrFailure.fold(
-                // if we have an failure make an add EditItem Failure state, where the event is preserved
-                      (failure) => emit(EventScreenState.addEditItemFailute(
+                  // if we have an failure make an add EditItem Failure state, where the event is preserved
+                  (failure) => emit(EventScreenState.addEditItemFailute(
                       failure: failure, event: value.event)),
                   // if successfull emit new state with the added item
-                      (item) {
-                    //add item to the eventOrgalist
-                    value.event.todo!.items.insert(0, item);
-                    emit(value.copyWith(addingItem: false));
-                  }));
+                  (item) {
+                //add item to the eventOrgalist
+                value.event.todo!.items.insert(0, item);
+                emit(value.copyWith(addingItem: false));
+              }));
         },
         // if we are not in the loaded state we have an error, we should not be here
         orElse: () => throw LogicError());
@@ -70,8 +71,8 @@ extension TodoOverlayCubit on EventScreenCubit {
             emit(EventScreenState.loading());
             //and then remove the item and emit new state with the item deleted
 
-            loadedState.event.todo!.items.removeWhere((i) =>
-            i.id.value == item.id.value);
+            loadedState.event.todo!.items
+                .removeWhere((i) => i.id.value == item.id.value);
             emit(EventScreenState.loaded(event: loadedState.event));
           } else {
             // TODO: Fix this garbage! Never return booleans from requests, what if we have an networkfailure? The user will never know which??
@@ -87,19 +88,19 @@ extension TodoOverlayCubit on EventScreenCubit {
   /// [item] the item to edit
   ///
   Future<void> editItem(Todo todo, Item item) async {
-    Either<NetWorkFailure, Item> failureOrSuccess = await todoRepository
-        .updateItem(item);
+    Either<NetWorkFailure, Item> failureOrSuccess =
+        await todoRepository.updateItem(item);
 
     state.maybeMap(
         loaded: (loadedState) {
           todoRepository.updateItem(item).then((itemOrFailure) =>
               itemOrFailure.fold(
-                // if we have an failure make an add EditItem Failure state, where the event is preserved
-                      (failure) => emit(EventScreenState.addEditItemFailute(
+                  // if we have an failure make an add EditItem Failure state, where the event is preserved
+                  (failure) => emit(EventScreenState.addEditItemFailute(
                       failure: failure, event: loadedState.event)), (itemBack) {
                 //find position of the item
-                int itemPos = todo.items.indexWhere((i) =>
-                i.id.value == item.id.value);
+                int itemPos =
+                    todo.items.indexWhere((i) => i.id.value == item.id.value);
                 // set the item at the position to the returned Item
                 todo.items[itemPos] = itemBack;
 
@@ -110,27 +111,26 @@ extension TodoOverlayCubit on EventScreenCubit {
         orElse: () => throw LogicError());
   }
 
-
   ///
   /// assigns profile to an item, and sends the request to backend. emits new state with the assigned profile at the item
   /// [item] the item where a profile should be assigned to
   /// [profile] the profile which has to be assigned, if no profile is given, the current profile will be assigned
   ///
   Future<void> assignProfile(Item item, Profile? profile) async {
-    Either<NetWorkFailure, Item> itemFailure = await todoRepository
-        .assignProfileToItem(item, null);
+    Either<NetWorkFailure, Item> itemFailure =
+        await todoRepository.assignProfileToItem(item, profile);
 
     state.maybeMap(
         loaded: (loadedState) async {
           // await the deleteion
-          todoRepository.assignProfileToItem(item, null).then((itemOrFailure) =>
-              itemOrFailure.fold(
+          todoRepository.assignProfileToItem(item, profile).then(
+              (itemOrFailure) => itemOrFailure.fold(
                       (fail) => emit(EventScreenState.addEditItemFailute(
-                      event: loadedState.event, failure: fail)),
-                      (itemBack) {
+                          event: loadedState.event,
+                          failure: fail)), (itemBack) {
                     emit(EventScreenState.loading());
-                    int itemPos = loadedState.event.todo!.items.indexWhere((
-                        i) => i.id.value == item.id.value);
+                    int itemPos = loadedState.event.todo!.items
+                        .indexWhere((i) => i.id.value == item.id.value);
                     loadedState.event.todo!.items[itemPos] = itemBack;
 
                     emit(EventScreenState.loaded(event: loadedState.event));
@@ -140,21 +140,20 @@ extension TodoOverlayCubit on EventScreenCubit {
   }
 
   Future<void> deassignProfile(Item item, Profile? profile) async {
-    Either<NetWorkFailure, Item> itemFailure = await todoRepository
-        .deassignProfileToItem(item, null);
+    Either<NetWorkFailure, Item> itemFailure =
+        await todoRepository.deassignProfileToItem(item, profile);
 
     state.maybeMap(
         loaded: (loadedState) async {
           // await the deleteion
-          todoRepository.deassignProfileToItem(item, null).then((
-              itemOrFailure) =>
-              itemOrFailure.fold(
+          todoRepository.deassignProfileToItem(item, profile).then(
+              (itemOrFailure) => itemOrFailure.fold(
                       (fail) => emit(EventScreenState.addEditItemFailute(
-                      event: loadedState.event, failure: fail)),
-                      (itemBack) {
+                          event: loadedState.event,
+                          failure: fail)), (itemBack) {
                     emit(EventScreenState.loading());
-                    int itemPos = loadedState.event.todo!.items.indexWhere((
-                        i) => i.id.value == item.id.value);
+                    int itemPos = loadedState.event.todo!.items
+                        .indexWhere((i) => i.id.value == item.id.value);
                     loadedState.event.todo!.items[itemPos] = itemBack;
 
                     emit(EventScreenState.loaded(event: loadedState.event));

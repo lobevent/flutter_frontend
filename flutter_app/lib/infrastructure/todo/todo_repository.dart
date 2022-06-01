@@ -93,11 +93,12 @@ class TodoRepository extends ITodoRepository {
   }
 
   @override
-  Future<Either<NetWorkFailure, Item>> assignProfileToItem(Item item, Profile? profile) async {
+  Future<Either<NetWorkFailure, Item>> assignProfileToItem(
+      Item item, Profile? profile) async {
     try {
       //try if the request can be made, if not we will get an NetworkFailure
       return right((await _itemRemoteService.assignProfile(
-          item.id.value, null))
+              item.id.value, profile != null ? profile.id.value : null))
           .toDomain());
     } on CommunicationException catch (e) {
       return left(ExceptionsHandler.reactOnCommunicationException(e));
@@ -105,11 +106,12 @@ class TodoRepository extends ITodoRepository {
   }
 
   @override
-  Future<Either<NetWorkFailure, Item>> deassignProfileToItem(Item item, Profile? profile) async {
+  Future<Either<NetWorkFailure, Item>> deassignProfileToItem(
+      Item item, Profile? profile) async {
     try {
       //try if the request can be made, if not we will get an NetworkFailure
       return right((await _itemRemoteService.deassignProfile(
-          item.id.value, null))
+              item.id.value, profile != null ? profile.id.value : null))
           .toDomain());
     } on CommunicationException catch (e) {
       return left(ExceptionsHandler.reactOnCommunicationException(e));

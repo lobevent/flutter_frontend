@@ -11,7 +11,7 @@ import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/lik
 import 'package:http/http.dart';
 
 class ProfileRemoteService extends RemoteService<ProfileDto> {
-  static const String profileIdPath = "/profile/"; //TODO dont know path
+  static const String profileIdPath = "/profile/";
 
   //commented out unused Routes
   /*static const String _deleteProfilePicture = "/profile/{id}";
@@ -21,7 +21,8 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   //List Routes
   ///TODO: change the searchProfilepath page 0
   static const String searchProfilePath = "/profile/search/%needle%/%amount%/0";
-  static const String attendingUsersPath = "/profile/%profileId%/%amount%/";
+  static const String attendingUsersPath =
+      "/event/%eventId%/profiles/%maxResults%/0";
   static const String followerPath = "/profile/%profileId%/%amount%/";
   static const String postProfilePath = "/profile/%postId%/%amount%/";
 
@@ -101,10 +102,11 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
         .interpolate({"needle": searchString, "amount": amount.toString()}));
   }
 
+  //event/%eventId%/profiles/%maxResults%/0
   Future<List<ProfileDto>> getAttendingUsersToEvent(
-      int amount, String profileId) async {
+      int amount, String eventId) async {
     return _getProfileList(attendingUsersPath
-        .interpolate({"profileId": profileId, "amount": amount.toString()}));
+        .interpolate({"eventId": eventId, "maxResults": amount.toString()}));
   }
 
   Future<List<ProfileDto>> getFollower(int amount, String profileId) async {

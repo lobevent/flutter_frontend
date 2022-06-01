@@ -15,8 +15,12 @@ class ItemRemoteService extends RemoteService<ItemDto> {
   static const String assignProfPath = "orgalist/item/add/";
   static const String deletePath = "/orgalist/item/%itemId%";
   static const String updatePath = "/orgalist/item/%itemId%";
-  static const String assignProfilePath = "/orgalist/item/add/%itemId%";
-  static const String deassignProfilePath = "/orgalist/item/deadd/%itemId%";
+  static const String assignOwnProfilePath = "/orgalist/item/add/%itemId%";
+  static const String assignProfilePath =
+      "/orgalist/item/add/%itemId%/%profileId%";
+  static const String deassignOwnProfilePath = "/orgalist/item/deadd/%itemId%";
+  static const String deassignProfilePath =
+      "/orgalist/item/deadd/%itemId%/%profileId%";
 
   final SymfonyCommunicator client;
 
@@ -29,13 +33,27 @@ class ItemRemoteService extends RemoteService<ItemDto> {
   }
 
   Future<ItemDto> assignProfile(String itemId, String? profileId) async {
-    return _decodeItem(await client.post(
-    assignProfilePath.interpolate({"itemId": itemId}), null));
+    if (profileId != null) {
+      return _decodeItem(await client.post(
+          assignProfilePath
+              .interpolate({"itemId": itemId, "profileId": profileId}),
+          null));
+    } else {
+      return _decodeItem(await client.post(
+          assignOwnProfilePath.interpolate({"itemId": itemId}), null));
+    }
   }
 
   Future<ItemDto> deassignProfile(String itemId, String? profileId) async {
-    return _decodeItem(await client.post(
-        deassignProfilePath.interpolate({"itemId": itemId}), null));
+    if (profileId != null) {
+      return _decodeItem(await client.post(
+          deassignProfilePath
+              .interpolate({"itemId": itemId, "profileId": profileId}),
+          null));
+    } else {
+      return _decodeItem(await client.post(
+          deassignOwnProfilePath.interpolate({"itemId": itemId}), null));
+    }
   }
 
   Future<bool> deleteItem(String itemId) async {

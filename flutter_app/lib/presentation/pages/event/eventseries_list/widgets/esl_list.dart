@@ -26,7 +26,7 @@ class _EventSeriesListState extends State<EventSeriesList> {
         listener: (previuos, current) {
           current.maybeMap(
               orElse: (){},
-              ready: (readyState) => setState((){series = widget.own ? readyState.seriesList.own : readyState.seriesList.subscribed;}));
+              ready: (readyState) => setState((){series = widget.own ? readyState.seriesList.own : readyState.seriesList.subscribed;}));;
         },
         builder: (context, state)
         {

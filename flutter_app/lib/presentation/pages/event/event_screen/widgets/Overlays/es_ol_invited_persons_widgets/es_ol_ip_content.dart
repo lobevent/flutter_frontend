@@ -76,7 +76,7 @@ class InvitedPersonsContent extends StatelessWidget {
     return ListView.builder(
         itemCount: invites.length,
         itemBuilder: (context, i) {
-          return FriendListTile(profile: invites[i].profile, isInvited: false /* so we dont show the green checker */, onAddFriend: (Profile profile){}, onRemoveFriend: (Profile profile){}, showUninviteButton: true,);
+          return FriendListTile(profile: invites[i].profile, showCheck: false /* so we dont show the green checker */, onAddFriend: (Profile profile){}, onRemoveFriend: (Profile profile){}, showUninviteButton: true,);
         });
   }
 

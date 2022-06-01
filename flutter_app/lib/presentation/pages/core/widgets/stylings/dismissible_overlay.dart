@@ -48,7 +48,7 @@ class _DismissibleOverlayState extends State<DismissibleOverlay> with AutoRouteA
     return BackButtonListener(
         onBackButtonPressed: () async { widget.overlayEntry.remove(); return Future.value(true);},
         child: Dismissible(
-            //onDismissed: (dismissDirection) => widget.overlayEntry.remove(),
+            onDismissed: (dismissDirection) => widget.overlayEntry.remove(),
             direction: DismissDirection.vertical,
             key: Key(''),
             child: ColorfulSafeArea(child: widget.child)

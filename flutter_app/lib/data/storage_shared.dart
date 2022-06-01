@@ -68,6 +68,6 @@ class StorageShared {
     this.ownProfile = profile;
     sharedStorage.setString(
         StorageStrings.ownProfileId, profile?.id.value.toString()?? '');
-    sharedStorage.setString(StorageStrings.ownProfileImage, profile?.images?[0]??'');
+    sharedStorage.setString(StorageStrings.ownProfileImage, profile?.images?.length == 0 ? '' : (profile?.images?[0]??''));
   }
 }

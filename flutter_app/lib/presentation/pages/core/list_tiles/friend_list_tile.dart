@@ -6,8 +6,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/i
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class FriendListTile extends StatelessWidget {
-  final bool? isAssignedToItem;
-  final bool isInvited;
+  final bool showCheck;
   final bool showUninviteButton;
   final bool isHost;
   final Profile profile;
@@ -20,10 +19,9 @@ class FriendListTile extends StatelessWidget {
       {Key? key,
       this.showUninviteButton = false,
       required this.profile,
-      required this.isInvited,
+      required this.showCheck,
       required this.onAddFriend,
       required this.onRemoveFriend,
-      this.isAssignedToItem = false,
       this.isHost = false,
       this.onAddHost /*, this.overlayEntry*/})
       : super(key: key);
@@ -57,7 +55,7 @@ class FriendListTile extends StatelessWidget {
   List<Widget> actionButtons(BuildContext context) {
     return <Widget>[
       //TODO: third condition may be fcking things up for inviting people idk
-      if (!isInvited && !showUninviteButton && isAssignedToItem == null)
+      if (!showCheck && !showUninviteButton)
         IconButton(icon: Icon(Icons.add), onPressed: () => {addFriend(context)})
       else
         IconButton(
@@ -97,7 +95,7 @@ class FriendListTile extends StatelessWidget {
     return CircleAvatar(
       radius: 20,
       backgroundImage: ProfileImage.getAssetOrNetworkFromProfile(profile),
-      child: !isInvited
+      child: !showCheck
           ? const Text('')
           : Stack(children: [
               Align(

@@ -117,7 +117,7 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
               return FriendListTile(
                 profile: results[i],
                 // here we check if that person is invited or only a friend. this map and contains returns an bool
-                isInvited: invitation != null,
+                showCheck: invitation != null || assignedToItem != null,
                 isHost: invitation?.addHost ?? false,
 
                 // the function given for the button on invitation!
@@ -136,7 +136,6 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
                   }
                   setState(() {});
                 },
-                isAssignedToItem: assignedToItem != null,
               );
             }));
   }

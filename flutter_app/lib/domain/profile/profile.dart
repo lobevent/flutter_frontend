@@ -16,7 +16,6 @@ class Profile with _$Profile {
   const factory Profile({
     required UniqueId id,
     required ProfileName name,
-    required bool ownProfile,
     List<String>? images
   }) = BaseProfile;
 
@@ -29,7 +28,6 @@ class Profile with _$Profile {
     List<Post>? posts,
     List<Comment>? comments,
     List<String>? images,
-    required bool ownProfile,
   }) = _FullProfile;
 
   //check if the whole object is no failure

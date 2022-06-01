@@ -34,7 +34,6 @@ class ProfileFriendsCubit extends Cubit<ProfileFriendsState> {
               profile: profileId == null
                   ? null
                   : Profile(
-                      ownProfile: false,
                       name: ProfileName("thisNameIsFake"), id: profileId!));
       //load the pending friends and mapping
       final Either<NetWorkFailure, List<Profile>> pendingFriendsList =

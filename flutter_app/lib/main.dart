@@ -30,6 +30,7 @@ Future<void> main() async {
 
   await Firebase.initializeApp();
   await InjectionContainer.injectDependencies();
+  await InjectionContainer.loadNecessities();
   runApp(MyApp());
 }
 

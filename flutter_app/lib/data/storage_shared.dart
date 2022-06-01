@@ -13,7 +13,10 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageShared {
+
+
   String? ownProfileId;
+  Profile? ownProfile;
 
   //TODO: Maybe we should store it in fluttersecurestorage tho, idk if its harmful to know the string of uuid of an user
 
@@ -61,6 +64,8 @@ class StorageShared {
     final sharedStorage = await SharedPreferences.getInstance();
     Profile? profile =  ownProfile.fold((l) => null, (r) => r);
     //saving profile id in shared storage as string
+    ownProfileId = profile?.id.value;
+    this.ownProfile = profile;
     sharedStorage.setString(
         StorageStrings.ownProfileId, profile?.id.value.toString()?? '');
     sharedStorage.setString(StorageStrings.ownProfileImage, profile?.images?[0]??'');

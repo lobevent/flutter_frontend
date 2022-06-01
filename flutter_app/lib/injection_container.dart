@@ -46,7 +46,9 @@ class InjectionContainer {
     getIt.registerLazySingleton(() => AuthTokenService());
 
     // register Shared storage
+
     getIt.registerLazySingleton(() => StorageShared());
+
 
 
 
@@ -87,5 +89,11 @@ class InjectionContainer {
 
     getIt
         .registerLazySingleton(() => ProfileRepository(ProfileRemoteService(communicator: GetIt.I<SymfonyCommunicator>())));
+  }
+
+  /// This loads async stuff for the Container
+  /// IMPORTANT NOTE: this has to be called AFTER [InjectionContainer.injectDependencies()] !!!!!!!
+  static Future<void> loadNecessities() async{
+    GetIt.I<StorageShared>().safeOwnProfile();
   }
 }

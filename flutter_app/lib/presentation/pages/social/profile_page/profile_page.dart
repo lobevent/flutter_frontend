@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/data/storage_shared.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
@@ -54,11 +55,13 @@ class ProfilePage extends StatelessWidget {
                                 ProfilePageMeta(),
                                 ProfilePagePosts(),
                               ],
-                          loading: (loadingState) => const [
+                          loading: (loadingState) => [
                                 // the profile image
-                                ProfilePageHeaderVisual(),
-                                ProfilePageMeta(),
-                                ProfilePagePosts(),
+                                ProfilePageHeaderVisual(
+                                    imagePath: StorageShared()
+                                        .getOwnProfileImageNotFuture()),
+                                const ProfilePageMeta(),
+                                const ProfilePagePosts(),
                               ],
                           orElse: () => const [
                                 // the profile image

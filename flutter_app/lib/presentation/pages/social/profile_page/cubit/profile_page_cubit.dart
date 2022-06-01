@@ -45,11 +45,16 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
   Future<void> postProfilePics() async {
     await state.maybeMap(
       loaded: (value) async {
-        emit(ProfilePageState.loading());
-        await repository.uploadImages(value.profile.id, value.images.first!);
+        Either<NetWorkFailure, String> filePathOrFail = await repository
+            .uploadImages(value.profile.id, value.images.first!);
         //add our post to posts and emit the postsscreen
-        //value.posts.add(post);
-        emit(ProfilePageState.loaded(profile: value.profile));
+        filePathOrFail.fold(
+            (fail) => emit(ProfilePageState.error(error: fail.toString())),
+            (filePath) {
+          emit(ProfilePageState.loading());
+          value.profile.images!.insert(0, filePath);
+          emit(ProfilePageState.loaded(profile: value.profile));
+        });
       },
       orElse: () => throw LogicError(),
     );

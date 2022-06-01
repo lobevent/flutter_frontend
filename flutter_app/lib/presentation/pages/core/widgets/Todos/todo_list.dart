@@ -13,6 +13,8 @@ import 'package:provider/src/provider.dart';
 import 'package:auto_route/auto_route.dart';
 
 import '../../../../../domain/profile/profile.dart';
+import '../../../../../l10n/app_strings.dart';
+import '../gen_dialog.dart';
 
 class TodoList extends StatefulWidget {
   final Event event;
@@ -69,7 +71,20 @@ class _TodoListState extends State<TodoList> {
 
         ///for function passing for the buttons
         deleteItemFunc: (Item item) {
-          context.read<EventScreenCubit>().deleteItem(widget.todo!, item);
+          GenDialog.genericDialog(
+                  context,
+                  AppStrings.deleteCommentDialogAbort,
+                  AppStrings.deleteCommentDialogText,
+                  AppStrings.deleteCommentDialogConfirm,
+                  AppStrings.deleteCommentDialogAbort)
+              .then((value) async => {
+                    if (value)
+                      context
+                          .read<EventScreenCubit>()
+                          .deleteItem(widget.todo!, item)
+                    else
+                      print("abort delete todo item"),
+                  });
         },
         //edit items, pass the item
         editItemFunc: (Item item) {},

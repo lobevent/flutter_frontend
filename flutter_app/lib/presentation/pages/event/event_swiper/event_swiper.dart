@@ -50,21 +50,21 @@ class _EventSwiperState extends State<EventSwiper> {
                 BottomNavigation(selected: NavigationOptions.eventSwiper),
             backgroundColor: Colors.white,
             body: Column(
-                children: state.maybeMap((value) => [Text("tessst")],
-                    loading: (loadingState) => [Text("Loading")],
-                    loaded: (loadedState) => [
-                          CardsSectionDraggable(
-                              loadedState.eventsList, swiperContext)
-                        ],
-                    orElse: () => [Text("Something happened")])
-                //<Widget>[
-                //(showAlignmentCards)
-                //?
-                //CardsSectionAlignment(context)
-                // : CardsSectionDraggable(),
-                //buttonsRow()
-                //],
-                ),
+              children: state.maybeMap((value) => [Text("tessst")],
+                  loading: (loadingState) => [Text("Loading")],
+                  loaded: (loadedState) => [
+                        CardsSectionDraggable(
+                            loadedState.eventsList, swiperContext),
+                      ],
+                  orElse: () => [Text("Something happened")]),
+              //<Widget>[
+              //(showAlignmentCards)
+              //?
+              //CardsSectionAlignment(context)
+              // : CardsSectionDraggable(),
+              //buttonsRow();
+              //],
+            ),
           );
         },
       ),

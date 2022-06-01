@@ -13,47 +13,59 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageShared {
-
-
   String? ownProfileId;
   Profile? ownProfile;
+  String? ownImage;
 
   //TODO: Maybe we should store it in fluttersecurestorage tho, idk if its harmful to know the string of uuid of an user
 
   ///fetch out of our sharedpreferences
   Future<String?> getOwnProfileFuture() async {
     final sharedStorage = await SharedPreferences.getInstance();
-    final String ownProfile = sharedStorage.getString(StorageStrings.ownProfileId)!;
+    final String ownProfile =
+        sharedStorage.getString(StorageStrings.ownProfileId)!;
 
     return ownProfile;
   }
 
   ///helper method
-  String getOwnProfileId(){
-    getOwnProfileFuture().then((ownProfile) => ownProfileId= ownProfile);
+  String getOwnProfileId() {
+    getOwnProfileFuture().then((ownProfile) => ownProfileId = ownProfile);
     //check if its null
     ownProfileId ??= "";
     return ownProfileId!;
   }
 
-  Future<String?> getOwnProfileImage() async{
+  String? getOwnProfileImageNotFuture() {
+    // return SharedPreferences.getInstance().then(
+    //         (value) {
+    //           return value.getString(StorageStrings.ownProfileImage) == '' ? null : ownProfilePicture;
+    //         });
+    getOwnProfileImage().then((value) => ownImage = value);
+    return ownImage;
+    // final sharedStorage = await SharedPreferences.getInstance();
+    // final String ownProfilePicture =   sharedStorage.getString(StorageStrings.ownProfileImage)!;
+    //return ownProfilePicture == ''? null : ownProfilePicture;
+  }
+
+  Future<String?> getOwnProfileImage() async {
     // return SharedPreferences.getInstance().then(
     //         (value) {
     //           return value.getString(StorageStrings.ownProfileImage) == '' ? null : ownProfilePicture;
     //         });
     var insance = await SharedPreferences.getInstance();
-    return insance.getString(StorageStrings.ownProfileImage) == '' ? null : insance.getString(StorageStrings.ownProfileImage);
+    return insance.getString(StorageStrings.ownProfileImage) == ''
+        ? null
+        : insance.getString(StorageStrings.ownProfileImage);
     // final sharedStorage = await SharedPreferences.getInstance();
     // final String ownProfilePicture =   sharedStorage.getString(StorageStrings.ownProfileImage)!;
     //return ownProfilePicture == ''? null : ownProfilePicture;
-
   }
 
   ///returns true if its the id of own profile
-  bool checkIfOwnId(String checkId){
-    return getOwnProfileId()==checkId;
+  bool checkIfOwnId(String checkId) {
+    return getOwnProfileId() == checkId;
   }
-
 
   ///fetchs ownprofile id and secures it in storageshared
   Future<void> safeOwnProfile() async {
@@ -62,12 +74,14 @@ class StorageShared {
         await GetIt.I<ProfileRepository>().getOwnProfile();
     //initialising sharedstorage
     final sharedStorage = await SharedPreferences.getInstance();
-    Profile? profile =  ownProfile.fold((l) => null, (r) => r);
+    Profile? profile = ownProfile.fold((l) => null, (r) => r);
     //saving profile id in shared storage as string
     ownProfileId = profile?.id.value;
+    ownImage = profile?.images?[0];
     this.ownProfile = profile;
     sharedStorage.setString(
-        StorageStrings.ownProfileId, profile?.id.value.toString()?? '');
-    sharedStorage.setString(StorageStrings.ownProfileImage, profile?.images?.length == 0 ? '' : (profile?.images?[0]??''));
+        StorageStrings.ownProfileId, profile?.id.value.toString() ?? '');
+    sharedStorage.setString(
+        StorageStrings.ownProfileImage, profile?.images?[0] ?? '');
   }
 }

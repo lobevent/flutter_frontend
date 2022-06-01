@@ -71,6 +71,7 @@ class _ProfileImagePickerWidgetState extends State<ProfileImagePickerWidget> {
             TextWithIconButton(
                 onPressed: () {
                   cubitContext.read<ProfilePageCubit>().postProfilePics();
+                  widget.overlayEntry.remove();
                   setState(() {});
                 },
                 text: "Upload profile pictures"),

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -116,6 +114,7 @@ class _ItemElementWidgetState extends State<ItemElementWidget> {
                             loadedPeople: (state) {
                               // show the add friends dialog
                               return AddFriendsDialog(
+                                //TODO: maybe remove the already assigned people from item
                                 friends: state.people,
                                 //get the invitations from the event
                                 invitedFriends: [],
@@ -152,7 +151,7 @@ class _ItemElementWidgetState extends State<ItemElementWidget> {
             onPressed: () {
               //deactivate button if deleting is alredy ongoing
               if (!isDeleting) widget.deleteItemFunc!(widget.item);
-              this.isDeleting = true;
+              //this.isDeleting = true;
               setState(() {});
             },
             icon: Icon(Icons.delete))

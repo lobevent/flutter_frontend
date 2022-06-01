@@ -36,38 +36,55 @@ class _ProfilePageHeaderVisualState extends State<ProfilePageHeaderVisual> {
         InkWell(
           onTap: () async {
             //context.router.push(ProfileImagePickerWidgetRoute());
-            if (widget.profile != null && widget.profile!.id.value == GetIt.I<StorageShared>().ownProfileId) {
+            if (widget.profile != null &&
+                widget.profile!.id.value ==
+                    GetIt.I<StorageShared>().ownProfileId) {
               if (widget.profile!.images == null) {
                 showImagePickerOverlay(context);
               } else {
-                showImagePickerOverlay(context);
-                /*await showDialog(
+                await showDialog(
                     context: context,
-                    builder: (_) => ImageDialog(
+                    builder: (_) => FittedBox(
+                        //TODO fix bs design
+                        fit: BoxFit.contain,
+                        child: ImageDialog(
                             image: ProfileImage.getAssetsOrNetwork(
                           widget.profile!.images!,
-                        )));
-
-                 */
-                //return ImageDialog(image: );
+                        ))));
               }
             }
           },
           child: CircleAvatar(
             radius: 90,
-            //child: widget.profile == null
-            //  ? Text("")
-            // : imageCarousell(widget.profile!.images!),
-            //check if profile null, then display in loading state asset in loaded the profilepic or asset
-            backgroundImage: widget.profile == null
-                ? ProfileImage.returnProfileAsset()
-                : ProfileImage.getAssetsOrNetwork(widget.profile!.images!),
-            //child: imageCarousell(widget.profile!.images!)
+            backgroundImage: decidePic(),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: InkWell(
+                onTap: () {
+                  showImagePickerOverlay(context);
+                },
+                child: Container(
+                  color: Colors.grey.withOpacity(0.3),
+                  child: Text("Upload"),
+                ),
+              ),
+            ),
           ),
         ),
         const Spacer(),
       ]);
     });
+  }
+
+  ImageProvider decidePic() {
+    if (widget.profile == null) {
+      if (widget.imagePath != null) {
+        ProfileImage.getAssetOrNetwork(widget.imagePath);
+      }
+      return ProfileImage.returnProfileAsset();
+    } else {
+      return ProfileImage.getAssetsOrNetwork(widget.profile!.images!);
+    }
   }
 
   Widget imageCarousell(List<String> images) {

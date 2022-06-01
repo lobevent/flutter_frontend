@@ -12,16 +12,18 @@ class InvitedPersonsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(length: 3, child:
+    return DefaultTabController(length: 4, child:
       Scaffold(
           appBar: TabBar(tabs: [
-              Tab(child: TextWithIcon(text: "Invited", icon: Icons.person,)),
-              Tab(child: TextWithIcon(text: "Attending", icon: Icons.person,)),
-              Tab(child: TextWithIcon(text: "Refused", icon: Icons.person,)),
+              Tab(child: FittedBox(child: TextWithIcon(text: "Invited", icon: Icons.person,))),
+              Tab(child: FittedBox(child: TextWithIcon(text: "Interested", icon: Icons.person,))),
+              Tab(child: FittedBox(child: TextWithIcon(text: "Attending", icon: Icons.person,))),
+              Tab(child: FittedBox(child: TextWithIcon(text: "Refused", icon: Icons.person,))),
             ],
           ),
         body: TabBarView(children: [
           _InvitedPersons(),
+          _InterestedPersons(),
           _AttendingPersons(),
           _NotAttendingPersons()
         ],
@@ -39,6 +41,13 @@ class InvitedPersonsContent extends StatelessWidget {
    */
   Widget _InvitedPersons(){
     List<Invitation> noReactionInvitations = invitations.where((invitation) => invitation.userEventStatus == EventStatus.invited).toList();
+    return _generateListView(noReactionInvitations);
+  }
+  /**
+   * returns an Widget with the invited profiles as list
+   */
+  Widget _InterestedPersons(){
+    List<Invitation> noReactionInvitations = invitations.where((invitation) => invitation.userEventStatus == EventStatus.interested).toList();
     return _generateListView(noReactionInvitations);
   }
 

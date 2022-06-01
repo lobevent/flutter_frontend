@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
                 create: (context) => GetIt.I<SignInFormCubit>()),
           ],
           child: MaterialApp.router(
-              routerDelegate: _appRouter.delegate(),
+              routerDelegate: AutoRouterDelegate(_appRouter, navigatorObservers: () => [RouteObserver()]),
               routeInformationParser: _appRouter.defaultRouteParser()),
         )
     );

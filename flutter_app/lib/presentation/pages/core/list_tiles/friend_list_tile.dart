@@ -13,6 +13,7 @@ class FriendListTile extends StatelessWidget {
   final Function(Profile) onAddFriend;
   final Function(Profile) onRemoveFriend;
   final Function(Profile)? onAddHost;
+  //final OverlayEntry? overlayEntry;
 
   const FriendListTile(
       {Key? key,
@@ -22,7 +23,7 @@ class FriendListTile extends StatelessWidget {
       required this.onAddFriend,
       required this.onRemoveFriend,
       this.isHost = false,
-      this.onAddHost})
+      this.onAddHost/*, this.overlayEntry*/})
       : super(key: key);
 
   @override
@@ -34,6 +35,7 @@ class FriendListTile extends StatelessWidget {
           //load the avatar
           icon: _CircularAvatarWithIcon(),
           onPressed: () {
+            //overlayEntry?.dispose();
             showFriend(context);
           },
         ),

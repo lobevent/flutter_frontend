@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/invitation.dart';
@@ -28,6 +29,8 @@ class InvitedPersonsOverlay extends StatefulWidget {
     {
       return InvitedPersonsOverlay(overlayEntry: overlayEntry!, eventCubitContext: eventCubitContextLocal);
     });
+
+
     //insert the entry in the state to make it accesible
     overlayState.insert(overlayEntry);
   }
@@ -42,9 +45,13 @@ class InvitedPersonsOverlay extends StatefulWidget {
 class _InvitedPersonsOverlayState extends State<InvitedPersonsOverlay> {
   
   List<Invitation> invitations = [];
-  
+
+
+
+
   @override
   Widget build(BuildContext context) {
+
 
     return
       BlocBuilder<EventScreenCubit, EventScreenState>(

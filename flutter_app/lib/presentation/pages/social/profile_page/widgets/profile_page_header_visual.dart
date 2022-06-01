@@ -5,6 +5,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/Profile/Profile
 import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_classes.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/cubit/profile_page_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../../../data/storage_shared.dart';
 import '../../../../../domain/core/value_objects.dart';
@@ -35,7 +36,7 @@ class _ProfilePageHeaderVisualState extends State<ProfilePageHeaderVisual> {
         InkWell(
           onTap: () async {
             //context.router.push(ProfileImagePickerWidgetRoute());
-            if (widget.profile != null && widget.profile!.ownProfile != null) {
+            if (widget.profile != null && widget.profile!.id.value == GetIt.I<StorageShared>().ownProfileId) {
               if (widget.profile!.images == null) {
                 showImagePickerOverlay(context);
               } else {

@@ -42,11 +42,44 @@ class InvitedPersonsOverlay extends StatefulWidget {
 // ---------------------------------------------------------------------------------------------- STATE -----------------------------------------------------------------------------------
 // ======================// ======================// ======================// ======================// ======================// ======================// ======================// ======================
 
-class _InvitedPersonsOverlayState extends State<InvitedPersonsOverlay> {
+class _InvitedPersonsOverlayState extends State<InvitedPersonsOverlay> with AutoRouteAware{
   
   List<Invitation> invitations = [];
 
+  AutoRouteObserver? _observer;
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // RouterScope exposes the list of provided observers
+    // including inherited observers
+
+    _observer = RouterScope.of(widget.eventCubitContext).firstObserverOfType<AutoRouteObserver>();
+    if (_observer != null) {
+      // we subscribe to the observer by passing our
+      // AutoRouteAware state and the scoped routeData
+      _observer!.subscribe(this, widget.eventCubitContext.routeData);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // don't forget to unsubscribe from the
+    // observer on dispose
+    _observer!.unsubscribe(this);
+  }
+
+  @override
+  void didPushNext() {
+    widget.overlayEntry.remove();
+    super.didPush();
+  }
+  //
+  // @override
+  // void didPopNext() {
+  //   Overlay.of(context)?.insert(widget.overlayEntry);
+  // }
 
 
   @override

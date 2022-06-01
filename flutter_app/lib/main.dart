@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubit.dart';
 import 'package:flutter_frontend/injection_container.dart';
+import 'package:flutter_frontend/presentation/core/utils/observers/RouterObserver.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart'
     as _app_router;
 import 'package:get_it/get_it.dart';
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
                 create: (context) => GetIt.I<SignInFormCubit>()),
           ],
           child: MaterialApp.router(
-              routerDelegate: AutoRouterDelegate(_appRouter, navigatorObservers: () => [RouteObserver()]),
+              routerDelegate: AutoRouterDelegate(_appRouter, navigatorObservers: () => [AutoRouteObserver()]),
               routeInformationParser: _appRouter.defaultRouteParser()),
         )
     );

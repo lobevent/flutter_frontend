@@ -21,19 +21,24 @@ class _EventSeriesListState extends State<EventSeriesList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<EventSeriesListCubit, EventSeriesListState>(
+
+    return BlocConsumer<EventSeriesListCubit, EventSeriesListState>(
         listener: (previuos, current) {
           current.maybeMap(
               orElse: (){},
               ready: (readyState) => setState((){series = widget.own ? readyState.seriesList.own : readyState.seriesList.subscribed;}));
         },
-        child:  ListView.builder(
-          // shrinkWrap: true,
-          // physics: NeverScrollableScrollPhysics(),
-            itemCount: series.length,
-            itemBuilder: (context, i) {
-              return EventSeriesCard(series: series[i]);
-            }));
+        builder: (context, state)
+        {
+          state.maybeMap(orElse: (){}, ready: (readyState) => series = widget.own ? readyState.seriesList.own : readyState.seriesList.subscribed);
+            return  ListView.builder(
+                  // shrinkWrap: true,
+                  // physics: NeverScrollableScrollPhysics(),
+                  itemCount: series.length,
+                  itemBuilder: (context, i) {
+                    return EventSeriesCard(series: series[i]);
+                  });
+        });
   }
 
 

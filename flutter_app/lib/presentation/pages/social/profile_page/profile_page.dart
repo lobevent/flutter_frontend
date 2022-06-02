@@ -10,6 +10,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets
 import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_header_visual.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_meta.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/widgets/profile_page_posts.dart';
+import 'package:get_it/get_it.dart';
 
 import 'cubit/profile_page_cubit.dart';
 
@@ -57,11 +58,9 @@ class ProfilePage extends StatelessWidget {
                               ],
                           loading: (loadingState) => [
                                 // the profile image
-                                ProfilePageHeaderVisual(
-                                    imagePath: StorageShared()
-                                        .getOwnProfileImageNotFuture()),
-                                const ProfilePageMeta(),
-                                const ProfilePagePosts(),
+                                ProfilePageHeaderVisual(imagePath: GetIt.I<StorageShared>().getOwnProfileImageNotFuture(),),
+                                ProfilePageMeta(),
+                                ProfilePagePosts(),
                               ],
                           orElse: () => const [
                                 // the profile image

@@ -79,9 +79,10 @@ class _ProfilePageHeaderVisualState extends State<ProfilePageHeaderVisual> {
   ImageProvider decidePic() {
     if (widget.profile == null) {
       if (widget.imagePath != null) {
-        ProfileImage.getAssetOrNetwork(widget.imagePath);
+        return ProfileImage.getAssetOrNetwork(widget.imagePath);
+      }else{
+        return ProfileImage.returnProfileAsset();
       }
-      return ProfileImage.returnProfileAsset();
     } else {
       return ProfileImage.getAssetsOrNetwork(widget.profile!.images!);
     }

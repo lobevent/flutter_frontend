@@ -4,7 +4,7 @@ import 'package:flutter_frontend/presentation/core/styles/sizes.dart';
 
 class AppTextStyles {
   static const basic = TextStyle(
-    color: AppColors.black,
+    color: AppColors.stdTextColor,
   );
 
   static const stdText = TextStyle(
@@ -18,13 +18,13 @@ class AppTextStyles {
   );
 
   static const loginText = TextStyle(
-    color: AppColors.white,
+    color: AppColors.stdTextColor,
     fontWeight: FontWeight.bold,
     fontSize: 25.0,
   );
 
   static const TextStyle loginTextField =
-      TextStyle(fontSize: 20.0, color: AppColors.black);
+      TextStyle(fontSize: 20.0, color: AppColors.stdTextColor);
 
   static const TextStyle stdSubTextStyle = TextStyle(
     color: AppColors.stdTextColor,

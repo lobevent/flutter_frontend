@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_classes.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
@@ -107,7 +108,7 @@ class FriendListTile extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   child: Icon(
                     isHost ? Icons.castle_rounded : Icons.check_circle,
-                    color: Colors.green,
+                    color: AppColors.backGroundColor,
                   ),
                 ),
               ),

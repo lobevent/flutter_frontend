@@ -341,7 +341,7 @@ class GenericSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.black.withOpacity(0.5),
+        color: AppColors.overlayBGColor.withOpacity(0.5),
         child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Card(

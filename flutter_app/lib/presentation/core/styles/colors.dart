@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const checkboxColor = Color(0xF5F67F41);
+  static const Color primaryColor = Color(0xFF040C0C);
+  static const Color backGroundColor = Color(0xFF081919);
+  static const Color stdTextColor = Color(0xFFECF8F8);
+  static const Color stdButtonBackground = Color(0xFF081919);
+  static const Color mainIcon = Color(0xFFECF8F8);
+
+  static const checkboxColor = Color(0xFFF28D8D);
+
+  static const overlayBGColor = Colors.black;
 
   static const white = Colors.white;
   static const black = Colors.black;
@@ -9,16 +17,11 @@ class AppColors {
   static const lightGrey = Colors.grey;
   static const darkGrey = Colors.black54;
 
-  static const mainIcon = Colors.grey;
-
-  static const Color stdTextColor = Colors.black38;
-
-  static const Color stdButtonBackground = Color(0x2ABBBBBB);
-
-  static const Color stdIndicatedTabColor = Colors.black;
+  static const stdIndicatedTabColor = Color(0xFFF2DFAA);
 
 
-  static const Color primaryColor = Color(0xFFFF851C);
+
+
 
   static const Color selectedColor = Color(0xFFFF851C);
   static const Color unselectedColor = Color(0xFFAA5B07);

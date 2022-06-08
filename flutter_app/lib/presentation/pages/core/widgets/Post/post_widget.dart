@@ -27,6 +27,7 @@ class PostWidget extends StatelessWidget {
   final Event? event;
   final bool showAuthor;
   final bool showCommentAction;
+
   const PostWidget(
       {Key? key,
       required this.post,
@@ -46,39 +47,37 @@ class PostWidget extends StatelessWidget {
   }
 
   Widget ActionWidgets(BuildContext context) {
-    return PaddingRowWidget(
-      children: [
+    return PaddingRowWidget(children: [
+      StdTextButton(
+          onPressed: () => context.router.push(CommentsScreenRoute(post: post)),
+          child: Row(
+            children: [
+              Icon(Icons.comment),
+              Text(post.commentCount.toString(),
+                  style: TextStyle(color: AppColors.stdTextColor))
+            ],
+          )),
+      //delete a post
+      if (GetIt.I<StorageShared>()
+          .checkIfOwnId(post.owner!.id.value.toString())) ...[
         StdTextButton(
-            onPressed: () =>
-                context.router.push(CommentsScreenRoute(post: post)),
-            child: Row(
-              children: [
-                Icon(Icons.comment),
-                Text(post.commentCount.toString(),
-                    style: TextStyle(color: AppColors.stdTextColor))
-              ],
-            )),
-        //delete a post
-        if(GetIt.I<StorageShared>().checkIfOwnId(post.owner!.id.value.toString()))...[
-          StdTextButton(
-              onPressed: () {
-                GenDialog.genericDialog(
-                    context,
-                    AppStrings.deleteCommentDialogAbort,
-                    AppStrings.deleteCommentDialogText,
-                    AppStrings.deleteCommentDialogConfirm,
-                    AppStrings.deleteCommentDialogAbort)
-                    .then((value) async => {
-                  if (value)
-                    context.read<PostScreenCubit>().deletePost(post)
-                  else
-                    print("abort delete post"),
-                });
-              },
-              child: Icon(Icons.delete))
+            onPressed: () {
+              GenDialog.genericDialog(
+                      context,
+                      AppStrings.deleteCommentDialogAbort,
+                      AppStrings.deleteCommentDialogText,
+                      AppStrings.deleteCommentDialogConfirm,
+                      AppStrings.deleteCommentDialogAbort)
+                  .then((value) async => {
+                        if (value)
+                          context.read<PostScreenCubit>().deletePost(post)
+                        else
+                          print("abort delete post"),
+                      });
+            },
+            child: Icon(Icons.delete))
       ],
-    ]
-    );
+    ]);
   }
 }
 
@@ -93,8 +92,7 @@ Widget generateUnscrollablePostContainer(
     return Column(
       children: [
         Text("No Posts available."),
-       if(event!=null&&context!=null) WriteWidget(context, event)
-
+        if (event != null && context != null) WriteWidget(context, event)
       ],
     );
 
@@ -135,9 +133,7 @@ Widget generateUnscrollablePostContainer(
 Widget WriteWidget(BuildContext context, Event event) {
   TextEditingController postWidgetController = TextEditingController();
   return Container(
-    decoration: BoxDecoration(
-        border: Border.all(color: Colors.blueAccent)
-      ),
+      decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
       width: 300,
       child: Title(
         title: "Post something.",

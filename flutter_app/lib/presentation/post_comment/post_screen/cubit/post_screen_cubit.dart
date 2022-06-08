@@ -50,18 +50,17 @@ class PostScreenCubit extends Cubit<PostScreenState> {
     await state.maybeMap(
       loaded: (value) async {
         emit(PostScreenState.loading());
-        await repository
-            .createPost(post, eventId)
-            .then((postOrFailure) => postOrFailure.fold(
+        await repository.createPost(post, eventId).then((postOrFailure) =>
+            postOrFailure.fold(
                 (failure) =>
                     //if failure emit to error screen
                     emit(PostScreenState.error(error: failure.toString())),
-                (post) async {
-                      post = await uploadImages(post, value);
-                      //add our post to posts and emit the postsscreen
-                      value.posts.add(post);
-                      emit(PostScreenState.loaded(posts: value.posts));
-                    }));
+                (postReturned) async {
+              post = await uploadImages(postReturned, value);
+              //add our post to posts and emit the postsscreen
+              value.posts.add(postReturned);
+              emit(PostScreenState.loaded(posts: value.posts));
+            }));
       },
       orElse: () => throw LogicError(),
     );
@@ -93,28 +92,29 @@ class PostScreenCubit extends Cubit<PostScreenState> {
         (payload) => payload);
   }
 
-  void changePictures(List<XFile?> images){
-    state.maybeMap(orElse: (){}, loaded: (loadedState){ emit(loadedState.copyWith(images: images));});
+  void changePictures(List<XFile?> images) {
+    state.maybeMap(
+        orElse: () {},
+        loaded: (loadedState) {
+          emit(loadedState.copyWith(images: images));
+        });
   }
-
 
   ///
   /// Uploads all images in the state one by one to the server and returns altered Post with the images inside
   ///
   Future<Post> uploadImages(Post post, _Loaded loaded) async {
-    if(post.images == null){
+    if (post.images == null) {
       post = post.copyWith(images: []);
     }
-    for (XFile? element in loaded.images){
-      if(element != null){
+    for (XFile? element in loaded.images) {
+      if (element != null) {
         await repository.uploadImages(post.id!, element).then((value) {
-          value.fold((l) => null,
-                  (imagePath) => post.images!.add(imagePath));
+          value.fold((l) => null, (imagePath) => post.images!.add(imagePath));
         });
-      }};
+      }
+    }
+    ;
     return post;
   }
-
-
-
 }

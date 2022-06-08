@@ -71,9 +71,12 @@ class _ImageCarouselState extends State<ImageCarousel> {
                   onTap: () async {
                     await showDialog(
                         context: context,
-                        builder: (_) => ImageDialog(
+                        builder: (_) => FittedBox(
+                            //TODO fix bs design
+                            fit: BoxFit.contain,
+                            child: ImageDialog(
                               image: image,
-                            ));
+                            )));
                   },
                 ),
                 // so the images dont overlap

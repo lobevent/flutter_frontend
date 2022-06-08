@@ -26,6 +26,8 @@ import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/O
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../../domain/post/post.dart';
+
 class EventContent extends StatelessWidget {
   ///the color used to display the text on this page
   final Color textColor = AppColors.stdTextColor;
@@ -49,7 +51,11 @@ class EventContent extends StatelessWidget {
                   /// Used as space
                   const SizedBox(height: 20),
 
-                  AttendingAndOwnStatus(stateLoaded.event.attendingCount??0, stateLoaded.event.status, context, stateLoaded.loadingStatus),
+                  AttendingAndOwnStatus(
+                      stateLoaded.event.attendingCount ?? 0,
+                      stateLoaded.event.status,
+                      context,
+                      stateLoaded.loadingStatus),
 
                   /// Used as space
                   const SizedBox(height: 20),
@@ -62,7 +68,8 @@ class EventContent extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   ///likebutton and information
-                  LikeWidget(stateLoaded.event, stateLoaded.event.series, context),
+                  LikeWidget(
+                      stateLoaded.event, stateLoaded.event.series, context),
 
                   /// Used as space
                   const SizedBox(
@@ -74,7 +81,7 @@ class EventContent extends StatelessWidget {
                   /// Used as space
                   const SizedBox(height: 20),
 
-                  PostWidget(stateLoaded.event, context),
+                  PostWidget(stateLoaded.event, context, stateLoaded.lastPost),
 
                   /// Used as space
                   const SizedBox(height: 20),
@@ -126,12 +133,12 @@ class EventContent extends StatelessWidget {
       children: [
         Icon(Icons.group),
         GestureDetector(
-            child: Text(
-              AppStrings.participants + ':' + attending.toString(),
-              style: TextStyle(color: textColor),
-            ),
-          onTap: (){
-              InvitedPersonsOverlay.showInvitedPersonsOverlay(context);
+          child: Text(
+            AppStrings.participants + ':' + attending.toString(),
+            style: TextStyle(color: textColor),
+          ),
+          onTap: () {
+            InvitedPersonsOverlay.showInvitedPersonsOverlay(context);
           },
         ),
         Spacer(),
@@ -227,27 +234,37 @@ class EventContent extends StatelessWidget {
         ),
       ),
       Spacer(),
-      if(series != null )TextWithIconButton(onPressed: ()=> context.router.push(EventSeriesScreenPageRoute(seriesId: series.id)), text: series.name.getOrCrash(), icon: AppIcons.eventSeriesIcon,)
+      if (series != null)
+        TextWithIconButton(
+          onPressed: () => context.router
+              .push(EventSeriesScreenPageRoute(seriesId: series.id)),
+          text: series.name.getOrCrash(),
+          icon: AppIcons.eventSeriesIcon,
+        )
     ]);
   }
 
-  Widget PostWidget(Event event, BuildContext context) {
-    /*return InkWell(
-      child: PostCommentBaseWidget(
-          date: event. post.creationDate,
-          content: post.postContent.getOrCrash(),
-          images: post.images == null ? [] : post.images!,
-          autor: showAuthor ? post.owner : null,
-          actionButtonsWidgets: ActionWidgets(context)),
-      ),
-
-     */
-    return MaterialButton(
-      onPressed: () {
-        context.router.push(PostsScreenRoute(event: event));
-      },
-      child: Icon(Icons.local_post_office_outlined),
-    );
+  Widget PostWidget(Event event, BuildContext context, Post? lastPost) {
+    if (lastPost != null) {
+      return InkWell(
+        child: PostCommentBaseWidget(
+            date: lastPost.creationDate,
+            content: lastPost.postContent.getOrCrash(),
+            images: lastPost.images == null ? [] : lastPost.images!,
+            autor: lastPost.owner,
+            actionButtonsWidgets: Text("")),
+        onTap: () {
+          context.router.push(PostsScreenRoute(event: event));
+        },
+      );
+    } else {
+      return MaterialButton(
+        onPressed: () {
+          context.router.push(PostsScreenRoute(event: event));
+        },
+        child: Icon(Icons.local_post_office_outlined),
+      );
+    }
   }
 
   /// Widget used for making padding with a row, so the children start on the

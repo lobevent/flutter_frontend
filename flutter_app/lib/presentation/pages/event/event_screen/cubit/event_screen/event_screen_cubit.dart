@@ -15,17 +15,17 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../../../domain/post/post.dart';
+import '../../../../../../infrastructure/post/post_repository.dart';
+
 part 'event_screen_cubit.freezed.dart';
 part 'event_screen_state.dart';
 
 class EventScreenCubit extends Cubit<EventScreenState> {
-
-
   EventScreenCubit(UniqueId id) : super(EventScreenState.loading()) {
     emit(EventScreenState.loading());
     getEvent(id);
   }
-
 
   EventRepository repository = GetIt.I<EventRepository>();
 
@@ -35,14 +35,23 @@ class EventScreenCubit extends Cubit<EventScreenState> {
   /// is created for the invited Persons Cubit extension
   InvitationRepository invitationRepository = GetIt.I<InvitationRepository>();
 
+  /// this one is created for the 1 last posts that gets fetched
+  PostRepository postRepository = GetIt.I<PostRepository>();
 
   Future<void> getEvent(UniqueId id) async {
-    repository.getSingle(id).then((eventOrFailure) => eventOrFailure.fold(
-        (failure) => emit(EventScreenState.error(failure: failure)),
-        (event) => emit(EventScreenState.loaded(event: event))));
+    repository.getSingle(id).then((eventOrFailure) => eventOrFailure
+            .fold((failure) => emit(EventScreenState.error(failure: failure)),
+                (event) {
+          postRepository
+              .getPostsFromEvent(
+                  lastPostTime: DateTime.now(), amount: 1, event: event)
+              .then((postOrFailure) => postOrFailure.fold(
+                  (failure) => emit(EventScreenState.error(failure: failure)),
+                  (post) => emit(EventScreenState.loaded(
+                      event: event,
+                      lastPost: post.isNotEmpty ? post.first : null))));
+        }));
   }
-
-
 
   Future<void> createOrgaEvent(
       Event event, String orgaName, String orgaDesc) async {
@@ -58,83 +67,89 @@ class EventScreenCubit extends Cubit<EventScreenState> {
     todoRepository.createOrga(event, newTodo).then((todoOrFailure) =>
         todoOrFailure.fold(
             (failure) => emit(EventScreenState.error(failure: failure)),
-            (todo) => emit(EventScreenState.loaded(event: event.copyWith(todo: todo)))));
+            (todo) => emit(
+                EventScreenState.loaded(event: event.copyWith(todo: todo)))));
   }
 
+  Future<void> changeStatus(EventStatus status) async {
+    state.maybeMap(
+        orElse: () {},
+        loaded: (loadedState) async {
+          emit(loadedState.copyWith(loadingStatus: true));
+          await repository
+              .changeStatus(loadedState.event, status)
+              .then((value) {
+            value.fold(
+                (failute) => emit(EventScreenState.error(failure: failute)),
+                (event) {
+              //------------------ the attending stuff is just for refreshing the participants count ------------------
+              // here we initialize the attending part from before
+              int attending = loadedState.event.attendingCount ?? 0;
+              // checking if the status has changed to attending. If so, increment attending
+              if (status == EventStatus.attending &&
+                  loadedState.event.status != status) {
+                attending++;
+              }
+              // check if the status was change to anything but attending (but was attending before), if so decrement attending
+              if (status !=
+                  EventStatus.attending && /* previous status -> */ loadedState
+                      .event.status ==
+                  EventStatus.attending) {
+                attending--;
+              }
 
-  Future<void> changeStatus(EventStatus status) async{
+              //------------ here lives all the other stuff for updating the view----------------
 
-    state.maybeMap(orElse: (){}, loaded: (loadedState) async{
-      emit(loadedState.copyWith(loadingStatus: true));
-      await repository.changeStatus(loadedState.event, status).then((value){
+              var event = loadedState.event
+                  .copyWith(status: status, attendingCount: attending);
 
-        value.fold((failute) => emit(EventScreenState.error(failure: failute)), (event) {
-          //------------------ the attending stuff is just for refreshing the participants count ------------------
-          // here we initialize the attending part from before
-         int attending = loadedState.event.attendingCount??0;
-         // checking if the status has changed to attending. If so, increment attending
-         if(status == EventStatus.attending && loadedState.event.status != status){
-            attending++;
-         }
-         // check if the status was change to anything but attending (but was attending before), if so decrement attending
-         if (status != EventStatus.attending && /* previous status -> */loadedState.event.status == EventStatus.attending){
-           attending--;
-         }
+              emit(EventScreenState.loading());
 
-         //------------ here lives all the other stuff for updating the view----------------
-
-          var event = loadedState.event.copyWith(status: status, attendingCount: attending);
-
-          emit(EventScreenState.loading());
-
-          emit(EventScreenState.loaded(event: event));
-
-
-
+              emit(EventScreenState.loaded(event: event));
+            });
+          });
         });
-
-      });
-    });
   }
-
 
   ///
   /// this alters the local invitation list and adds an invitation
   ///
-  void addedInvitation(Invitation invitation){
-    state.maybeMap(orElse: (){}, loaded: (loaded){
-      emit(EventScreenState.loading());
-      loaded.event.invitations.add(invitation);
-      emit(loaded);
-    });
+  void addedInvitation(Invitation invitation) {
+    state.maybeMap(
+        orElse: () {},
+        loaded: (loaded) {
+          emit(EventScreenState.loading());
+          loaded.event.invitations.add(invitation);
+          emit(loaded);
+        });
   }
-
 
   ///
   /// this alters the local invitation list and removes an invitation
   ///
-  void revokedInvitation(Invitation invitation){
-    state.maybeMap(orElse: (){}, loaded: (loaded){
-      loaded.event.invitations.removeWhere((inv) => inv.id.value == invitation.id.value);
-      emit(EventScreenState.loading());
-      emit(loaded);
-    });
+  void revokedInvitation(Invitation invitation) {
+    state.maybeMap(
+        orElse: () {},
+        loaded: (loaded) {
+          loaded.event.invitations
+              .removeWhere((inv) => inv.id.value == invitation.id.value);
+          emit(EventScreenState.loading());
+          emit(loaded);
+        });
   }
-
-
 
   ///
   /// this alters the local invitation list and add host
   ///
-  void addHost(Invitation invitation){
-    state.maybeMap(orElse: (){}, loaded: (loaded){
-      Invitation invitationInList = loaded.event.invitations.firstWhere((inv) => inv.id.value == invitation.id.value);
-      invitationInList.addHost = true;
-      emit(EventScreenState.loading());
-      emit(loaded);
-    });
+  void addHost(Invitation invitation) {
+    state.maybeMap(
+        orElse: () {},
+        loaded: (loaded) {
+          Invitation invitationInList = loaded.event.invitations
+              .firstWhere((inv) => inv.id.value == invitation.id.value);
+          invitationInList.addHost = true;
+          emit(EventScreenState.loading());
+          emit(loaded);
+        });
   }
-
-
-
 }

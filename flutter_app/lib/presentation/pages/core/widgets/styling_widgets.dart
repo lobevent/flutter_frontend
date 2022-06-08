@@ -8,12 +8,14 @@ import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/core_widgets_stylings_text_with_icon.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/std_choice_text_chip.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/chip_choice.dart';
 
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/CarouselIndicators.dart';
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/dismissible_overlay.dart';
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/outlined_non_overflow_button_with_text.dart';
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/core_widgets_stylings_text_with_icon.dart';
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/std_choice_text_chip.dart';
+export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/chip_choice.dart';
 
 //TODO: Move this all to seperate files
 

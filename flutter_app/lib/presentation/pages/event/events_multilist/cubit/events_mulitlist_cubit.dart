@@ -21,7 +21,7 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
   EventsMultilistCubit({this.option = EventScreenOptions.owned, this.profile})
       : super(EventsMultilistState.initial()) {
     emit(EventsMultilistState.initial());
-    getEvents(EventScreenOptions.owned);
+    getEvents(this.option);
   }
   EventRepository repository = GetIt.I<EventRepository>();
   InvitationRepository invRepo = GetIt.I<InvitationRepository>();
@@ -54,7 +54,7 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
           eventsList = await repository.getUnreactedEvents(DateTime.now(), 30);
           break;
         case EventScreenOptions.recent:
-          eventsList = await repository.getOwnedEvents(DateTime.now(), 30, descending: false);
+          eventsList = await repository.getRecentEvents(DateTime.now(), 30, descending: true);
           break;
         case EventScreenOptions.invited:
           {

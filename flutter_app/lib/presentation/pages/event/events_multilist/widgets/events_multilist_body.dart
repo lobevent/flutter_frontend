@@ -4,12 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/std_choice_text_chip.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/cubit/events_mulitlist_cubit.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 class EventsMultilistBody extends StatefulWidget {
+  final bool foreign;
+
+  const EventsMultilistBody({Key? key, required this.foreign}) : super(key: key);
   @override
   EventsMultilistBodyState createState() => EventsMultilistBodyState();
 }
@@ -38,26 +42,13 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
           return current.maybeMap((value) => true, deleted: (state) => false, orElse: () => true);
         },
         builder: (context, state) {
+          // ---------------------------------------------------------------------------------------------------------------
+          // -------------------------------------------------- WIDGET FROM HERE -------------------------------------------
+          // ---------------------------------------------------------------------------------------------------------------
           return CustomScrollView(
             slivers: [
               // Add the app bar to the CustomScrollView.
-              SliverAppBar(
-                elevation: 10.0,
-                backgroundColor: AppColors.appBarCollor,
-                automaticallyImplyLeading: false,
-                pinned: true,
-                flexibleSpace: Row(
-                  children: [
-                    ChipChoice(list: {
-                      "recent" : (bool bla) {context.read<EventsMultilistCubit>().getEvents(EventScreenOptions.recent);},
-                      "invited" : (bool bla) {
-                        context.read<EventsMultilistCubit>().getEvents(EventScreenOptions.invited);},
-                      "own" : (bool bla) {print("invited");},
-                      "attending" : (bool bla) {print("attending");},
-                    },),
-                  ],
-                ),
-              ),
+              if(!widget.foreign) EventList_Bar(),
               // Next, create a SliverList
               SliverList(
                 // Use a delegate to build items as they're scrolled on screen.
@@ -110,38 +101,31 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
   }
 }
 
-class ChipChoice extends StatefulWidget {
-  final Map<String, Function(bool)> list;
-
-  const ChipChoice({Key? key, required this.list}) : super(key: key);
-
-  @override
-  State<ChipChoice> createState() => _ChipChoiceState();
-}
-
-class _ChipChoiceState extends State<ChipChoice> {
-  int? _value = 1;
+class EventList_Bar extends StatelessWidget {
+  const EventList_Bar({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Wrap(
-      alignment: WrapAlignment.spaceAround,
-      children: List<Widget>.generate(
-        widget.list.length,
-        (int index) {
-          return StdChoiceTextChip(
-            label: (widget.list.keys.toList()[index]),
-            selected: _value == index,
-            onSelected: (bool selected) {
-              widget.list.values.toList()[index](selected);
-              setState(() {
-                _value = index;
-              });
-            },
-          );
-        },
-      ).toList(),
-    ));
+    return SliverAppBar(
+      elevation: 10.0,
+      backgroundColor: AppColors.appBarCollor,
+      automaticallyImplyLeading: false,
+      pinned: true,
+      flexibleSpace: Row(
+        children: [
+          ChipChoice(list: {
+            "own" : (bool bla) {print("invited");},
+            "recent" : (bool bla) {context.read<EventsMultilistCubit>().getEvents(EventScreenOptions.recent);},
+            "invited" : (bool bla) {
+              context.read<EventsMultilistCubit>().getEvents(EventScreenOptions.invited);},
+            "attending" : (bool bla) {print("attending");},
+          },),
+        ],
+      ),
+    );
   }
 }
+
+

@@ -109,6 +109,12 @@ class EventRepository extends Repository {
         () => _eventRemoteService.getAttendingEvents(lastEventTime, amount));
   }
 
+  Future<Either<NetWorkFailure, List<Event>>> getRecentEvents(
+      DateTime lastEventTime, int amount, {bool descending = true}) async {
+    return _getList(
+        () => _eventRemoteService.getRecentEvents(lastEventTime, amount, descending));
+  }
+
   Future<Either<NetWorkFailure, List<Event>>> getUnreactedEvents(
       DateTime lastEventTime, int amount) async {
     return _getList(

@@ -47,25 +47,6 @@ class OwnEventScreenHolder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var navigation = NavigationOptions.ownEvents;
-    String appBarText = "";
-    switch (context.read<EventsMultilistCubit>().option) {
-      case EventScreenOptions.owned:
-        appBarText = "Own events";
-        break;
-      case EventScreenOptions.fromUser:
-        appBarText = "Events from ${profile?.name.getOrCrash() ?? ""}";
-        break;
-      case EventScreenOptions.ownAttending:
-        appBarText = "Own Attending Events";
-        break;
-      case EventScreenOptions.unreacted:
-        appBarText = "Unreacted Events";
-        break;
-      case EventScreenOptions.invited:
-        appBarText = "Invited Events";
-        navigation = NavigationOptions.invited;
-        break;
-    }
 
     // var tabs = <Tab>[
     //   Tab(child: TextWithIcon(text: "Own", icon: Icons.person,)),
@@ -75,7 +56,7 @@ class OwnEventScreenHolder extends StatelessWidget {
 
     return BasicContentContainer(
         bottomNavigationBar: BottomNavigation(selected: navigation),
-        child_ren: right( Container(child: EventsMultilistBody())),
+        child_ren: right( Container(child: EventsMultilistBody(foreign: profile!=null,))),
         isLoading: isLoading);
   }
 }

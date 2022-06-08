@@ -18,6 +18,8 @@ class EventRemoteService extends RemoteService<EventDto> {
       "/user/events/%amount%/%lastEventTime%/%descending%";
   static const String profileEventPath =
       "/profile/events/%profileId%/%amount%/%lastEventTime%/%descending%";
+  static const String recentEventPath =
+      "/profile/recent/events/%amount%/%lastEventTime%/%descending%";
   static const String invitedEventsPath =
       "/user/events/invited/%amount%/%lastEventTime%/%descending%";
   static const String attendingEventsPath =
@@ -115,6 +117,17 @@ class EventRemoteService extends RemoteService<EventDto> {
     return _getEventList(unreactedEventsPath.interpolate({
       "amount": amount.toString(),
       "lastEventTime": lastEventTime.toString()
+    }));
+  }
+
+  Future<List<EventDto>> getRecentEvents(
+      //TODO reaction?
+      DateTime lastEventTime,
+      int amount, [bool descending = true]) async {
+    return _getEventList(recentEventPath.interpolate({
+      "amount": amount.toString(),
+      "lastEventTime": lastEventTime.toString(),
+      "descending": descending ? '1' : '0'
     }));
   }
 

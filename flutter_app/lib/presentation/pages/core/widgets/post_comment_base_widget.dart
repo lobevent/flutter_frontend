@@ -50,12 +50,13 @@ class PostCommentBaseWidget extends StatelessWidget {
   /// contains the content of the post
   Widget ContentWidget(String content) {
     return PaddingRowWidget(children: [
-      Text(
-        content,
-        style: const TextStyle(color: Color(0xFF400909)),
-        overflow: TextOverflow.ellipsis,
-        maxLines: 8,
-      ),
+      //prevent overflowing textlines
+      Expanded(
+        child: Text(
+          content,
+          style: const TextStyle(color: Color(0xFF400909)),
+        ),
+      )
     ]);
   }
 

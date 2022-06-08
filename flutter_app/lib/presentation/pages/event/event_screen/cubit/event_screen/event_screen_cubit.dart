@@ -44,12 +44,12 @@ class EventScreenCubit extends Cubit<EventScreenState> {
                 (event) {
           postRepository
               .getPostsFromEvent(
-                  lastPostTime: DateTime.now(), amount: 1, event: event)
+                  lastPostTime: DateTime.now(), amount: 2, event: event)
               .then((postOrFailure) => postOrFailure.fold(
                   (failure) => emit(EventScreenState.error(failure: failure)),
                   (post) => emit(EventScreenState.loaded(
                       event: event,
-                      lastPost: post.isNotEmpty ? post.first : null))));
+                      last2Posts: post.isNotEmpty ? post : null))));
         }));
   }
 

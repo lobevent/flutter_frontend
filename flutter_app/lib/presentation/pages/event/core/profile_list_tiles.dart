@@ -7,6 +7,9 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/i
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/gen_dialog.dart';
+import 'package:get_it/get_it.dart';
+
+import '../../../../data/storage_shared.dart';
 
 class ProfileListTiles extends StatelessWidget {
   final Profile profile;
@@ -51,6 +54,10 @@ class ProfileListTiles extends StatelessWidget {
   //build the send friendrequest buttons
   Widget actionButtons(
       bool acceptOrSend, bool deleteOrDeny, BuildContext context) {
+    //only build friend buttons if its not our own profile
+    if (GetIt.I<StorageShared>().checkIfOwnId(profile.id.value)) {
+      return Text("");
+    }
     //for building both buttons to accept or decline the friendrequest
     if (acceptOrSend && deleteOrDeny) {
       return PaddingRowWidget(
@@ -94,7 +101,10 @@ class ProfileListTiles extends StatelessWidget {
                     AppStrings.deleteFriendDialogConfirm,
                     AppStrings.deleteFriendDialogAbort)
                 .then((value) async => {
-                      if (value) onDeleteFriend!(profile) else print("abort delete Friend"),
+                      if (value)
+                        onDeleteFriend!(profile)
+                      else
+                        print("abort delete Friend"),
                     });
           });
       //only build the send friendrequest button

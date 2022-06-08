@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Profile/ProfileImagePickerWidget.dart';
@@ -35,32 +36,59 @@ class _ProfilePageHeaderVisualState extends State<ProfilePageHeaderVisual> {
         //inkwell for tap actions
         InkWell(
           onTap: () async {
-            //context.router.push(ProfileImagePickerWidgetRoute());
+            //check  if its own profile page for uploading
             if (widget.profile != null &&
                 widget.profile!.id.value ==
                     GetIt.I<StorageShared>().ownProfileId) {
+              //no pic is uploaded, so upload 1
               if (widget.profile!.images == null) {
                 showImagePickerOverlay(context);
               } else {
+                //show the picture as dialog
                 await showDialog(
                     context: context,
-                    builder: (_) => FittedBox(
-                        //TODO fix bs design
-                        fit: BoxFit.contain,
-                        child: ImageDialog(
+                    builder: (_) {
+                      //check if we display the caroussel
+                      if (widget.profile!.images!.length > 1) {
+                        return OverflowBox(
+                            child: Column(
+                          //global align in center
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            //return imagecaroussel and u can click on the seperate images again
+                            ImageCarousel(
+                                //white colors because showDialog makes everything grey
+                                activeColor: Colors.white,
+                                inactiveColor: Colors.white24,
+                                maxHeight: 100,
+                                isLoadetFromWeb: true,
+                                imagePaths: widget.profile!.images!),
+                          ],
+                        ));
+                      } else {
+                        //just show the 1 profilepic on click
+                        return FittedBox(
+                          fit: BoxFit.contain,
+                          child: ImageDialog(
                             image: ProfileImage.getAssetsOrNetwork(
-                          widget.profile!.images!,
-                        ))));
+                                widget.profile!.images!),
+                          ),
+                        );
+                      }
+                    });
               }
             }
           },
+          //our avatar
           child: CircleAvatar(
             radius: 90,
+            //assetpic or uploaded pic?
             backgroundImage: decidePic(),
             child: Align(
               alignment: Alignment.bottomCenter,
               child: InkWell(
                 onTap: () {
+                  //upload profilepictures
                   showImagePickerOverlay(context);
                 },
                 child: Container(
@@ -76,23 +104,17 @@ class _ProfilePageHeaderVisualState extends State<ProfilePageHeaderVisual> {
     });
   }
 
+  //show profilepic or assetimage
   ImageProvider decidePic() {
     if (widget.profile == null) {
       if (widget.imagePath != null) {
         return ProfileImage.getAssetOrNetwork(widget.imagePath);
-      }else{
+      } else {
         return ProfileImage.returnProfileAsset();
       }
     } else {
       return ProfileImage.getAssetsOrNetwork(widget.profile!.images!);
     }
-  }
-
-  Widget imageCarousell(List<String> images) {
-    return ImageCarousel(
-      imagePaths: images,
-      isLoadetFromWeb: true,
-    );
   }
 
   //overlay for image upload

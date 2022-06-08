@@ -16,11 +16,15 @@ class ImageCarousel extends StatefulWidget {
   final List<String> imagePaths;
   final bool isLoadetFromWeb;
   final double maxHeight;
+  final Color? activeColor;
+  final Color? inactiveColor;
   const ImageCarousel(
       {Key? key,
       this.imagePaths = const [],
       this.isLoadetFromWeb = false,
-      this.maxHeight = 120})
+      this.maxHeight = 120,
+      this.activeColor,
+      this.inactiveColor})
       : super(key: key);
 
   @override
@@ -72,7 +76,6 @@ class _ImageCarouselState extends State<ImageCarousel> {
                     await showDialog(
                         context: context,
                         builder: (_) => FittedBox(
-                            //TODO fix bs design
                             fit: BoxFit.contain,
                             child: ImageDialog(
                               image: image,
@@ -88,7 +91,11 @@ class _ImageCarouselState extends State<ImageCarousel> {
       ),
       // The indicators!
       CarouselIndicators(
-          length: widget.imagePaths.length, activePage: activePage)
+        length: widget.imagePaths.length,
+        activePage: activePage,
+        activeColor: widget.activeColor,
+        inactiveColor: widget.inactiveColor,
+      )
     ]
         // Pageview so we have a nice little carousel
 

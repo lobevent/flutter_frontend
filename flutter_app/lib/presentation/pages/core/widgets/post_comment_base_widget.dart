@@ -53,7 +53,9 @@ class PostCommentBaseWidget extends StatelessWidget {
       Text(
         content,
         style: const TextStyle(color: Color(0xFF400909)),
-      )
+        overflow: TextOverflow.ellipsis,
+        maxLines: 8,
+      ),
     ]);
   }
 
@@ -78,8 +80,11 @@ class PostCommentBaseWidget extends StatelessWidget {
     );
   }
 
-  Widget imageCarousell(){
-    return ImageCarousel(imagePaths: images, isLoadetFromWeb: true,);
+  Widget imageCarousell() {
+    return ImageCarousel(
+      imagePaths: images,
+      isLoadetFromWeb: true,
+    );
   }
 
   /// the widget for displaying the author (Overflow Safe)

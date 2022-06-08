@@ -81,7 +81,8 @@ class EventContent extends StatelessWidget {
                   /// Used as space
                   const SizedBox(height: 20),
 
-                  PostWidget(stateLoaded.event, context, stateLoaded.lastPost),
+                  PostWidget(
+                      stateLoaded.event, context, stateLoaded.last2Posts),
 
                   /// Used as space
                   const SizedBox(height: 20),
@@ -244,20 +245,28 @@ class EventContent extends StatelessWidget {
     ]);
   }
 
-  Widget PostWidget(Event event, BuildContext context, Post? lastPost) {
-    if (lastPost != null) {
-      return InkWell(
-        child: PostCommentBaseWidget(
-            date: lastPost.creationDate,
-            content: lastPost.postContent.getOrCrash(),
-            images: lastPost.images == null ? [] : lastPost.images!,
-            autor: lastPost.owner,
-            actionButtonsWidgets: Text("")),
-        onTap: () {
-          context.router.push(PostsScreenRoute(event: event));
-        },
-      );
+  Widget rollPostsOpen(Event event, BuildContext context) {
+    return MaterialButton(
+      onPressed: () {
+        context.router.push(PostsScreenRoute(event: event));
+      },
+      child: Icon(Icons.arrow_downward_rounded),
+    );
+  }
+
+  Widget PostWidget(
+      Event event, BuildContext context, List<Post?>? last2Posts) {
+    if (last2Posts != null && last2Posts.isNotEmpty) {
+      //last2posts is min 1
+      if (last2Posts.length > 1) {
+        //only 1 post
+        return generate2PostsWithOpacity(last2Posts, event, context);
+      } else {
+        //build 2 posts
+        return generate1HalfPostWithOpacity(last2Posts.first!, event, context);
+      }
     } else {
+      //no posts there, so go to postsscreen button
       return MaterialButton(
         onPressed: () {
           context.router.push(PostsScreenRoute(event: event));
@@ -271,5 +280,75 @@ class EventContent extends StatelessWidget {
   /// correct side and is padded from the side
   Widget PaddingWidget({required List<Widget> children}) {
     return PaddingRowWidget(children: children);
+  }
+
+  /// widget which is 1 half of a post, also it got gradient and an postscreen button
+  Widget generate1HalfPostWithOpacity(
+      Post last2Posts, Event event, BuildContext context) {
+    //stack so we can put some gradient over half post
+    return Stack(
+      children: [
+        ClipRect(
+          child: Align(
+            alignment: Alignment.topCenter,
+            //make it 1/2 big of height
+            heightFactor: 0.5,
+            //gen post widget
+            child: PostCommentBaseWidget(
+                date: last2Posts.creationDate,
+                content: last2Posts.postContent.getOrCrash(),
+                images: last2Posts.images == null ? [] : last2Posts.images!,
+                autor: last2Posts.owner,
+                //dont need no action buttons here
+                actionButtonsWidgets: Text("")),
+          ),
+        ),
+        Positioned.fill(
+            child: Container(
+          child: Text(""),
+          //gradient for displaying the opacity
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.white.withOpacity(0.1),
+              Colors.white,
+            ],
+          )),
+        )),
+        Positioned.fill(
+            child: Align(
+                //put the button on top of stack and align it bottom center
+                alignment: Alignment.bottomCenter,
+                child: rollPostsOpen(event, context)))
+      ],
+    );
+  }
+
+  /// build 1 post and 1 opacitied half post
+  Widget generate2PostsWithOpacity(
+      List<Post?> last2Posts, Event event, BuildContext context) {
+    //clickable, we can go to postscreen
+    return InkWell(
+      child: Column(
+        children: [
+          //gen post ...
+          PostCommentBaseWidget(
+              date: last2Posts.first!.creationDate,
+              content: last2Posts.first!.postContent.getOrCrash(),
+              images: last2Posts.first!.images == null
+                  ? []
+                  : last2Posts.first!.images!,
+              autor: last2Posts.first!.owner,
+              actionButtonsWidgets: Text("")),
+          //generate the half post after the 1st full post
+          generate1HalfPostWithOpacity(last2Posts[1]!, event, context)
+        ],
+      ),
+      onTap: () {
+        context.router.push(PostsScreenRoute(event: event));
+      },
+    );
   }
 }

@@ -5,7 +5,7 @@ class EventScreenState with _$EventScreenState {
   const factory EventScreenState.loading() = LoadInProgress;
   const factory EventScreenState.loaded(
       {required Event event,
-      Post? lastPost,
+      List<Post?>? last2Posts,
       @Default(false) bool loadingStatus,
       @Default(false) bool addingItem}) = Loaded;
 

@@ -1,4 +1,4 @@
-import 'package:dartz/dartz.dart' show left, Either;
+import 'package:dartz/dartz.dart' show Either, left, right;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
@@ -75,7 +75,7 @@ class OwnEventScreenHolder extends StatelessWidget {
 
     return BasicContentContainer(
         bottomNavigationBar: BottomNavigation(selected: navigation),
-        child_ren: left( [Container(child: EventsMultilistBody())]),
+        child_ren: right( Container(child: EventsMultilistBody())),
         isLoading: isLoading);
   }
 }

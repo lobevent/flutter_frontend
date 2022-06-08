@@ -13,7 +13,7 @@ import 'package:get_it/get_it.dart';
 part 'events_mulitlist_cubit.freezed.dart';
 part 'events_mulitlist_state.dart';
 
-enum EventScreenOptions { owned, fromUser, ownAttending, unreacted, invited }
+enum EventScreenOptions { owned, fromUser, recent, ownAttending, unreacted, invited }
 
 class EventsMultilistCubit extends Cubit<EventsMultilistState> {
   EventScreenOptions option = EventScreenOptions.owned;
@@ -21,22 +21,22 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
   EventsMultilistCubit({this.option = EventScreenOptions.owned, this.profile})
       : super(EventsMultilistState.initial()) {
     emit(EventsMultilistState.initial());
-    getEvents();
+    getEvents(EventScreenOptions.owned);
   }
   EventRepository repository = GetIt.I<EventRepository>();
   InvitationRepository invRepo = GetIt.I<InvitationRepository>();
 
   /// gets events from backend, swiches on the options
-  Future<void> getEvents() async {
+  Future<void> getEvents(EventScreenOptions option) async {
     final Either<NetWorkFailure, List<Event>> eventsList;
     final Either<NetWorkFailure, List<Invitation>> invitationList;
     // try {
       emit(EventsMultilistState.loading());
       bool isInvite = false;
-      switch (this.option) {
+      switch (option) {
         case EventScreenOptions.owned:
           eventsList = await repository.getOwnedEvents(DateTime.now(), 30,
-              descending: true);
+              descending: false);
           break;
         case EventScreenOptions.fromUser:
           if (profile == null) {
@@ -53,6 +53,9 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
         case EventScreenOptions.unreacted:
           eventsList = await repository.getUnreactedEvents(DateTime.now(), 30);
           break;
+        case EventScreenOptions.recent:
+          eventsList = await repository.getOwnedEvents(DateTime.now(), 30, descending: false);
+          break;
         case EventScreenOptions.invited:
           {
             invitationList = await invRepo.getInvitations(DateTime.now(), 30, descending: false);
@@ -61,6 +64,7 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
           }
           return;
           break;
+
       }
         emit(EventsMultilistState.loaded(
           events: eventsList.fold((l) => throw Exception, (r) => r)));

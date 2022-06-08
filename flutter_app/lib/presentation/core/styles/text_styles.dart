@@ -12,6 +12,11 @@ class AppTextStyles {
     fontWeight: FontWeight.bold
   );
 
+  static const stdSelectedText = TextStyle(
+    color: AppColors.selectedColor,
+    fontWeight: FontWeight.bold
+  );
+
   static const loginText = TextStyle(
     color: AppColors.white,
     fontWeight: FontWeight.bold,

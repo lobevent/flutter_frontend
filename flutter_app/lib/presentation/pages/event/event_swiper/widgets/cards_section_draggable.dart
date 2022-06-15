@@ -48,18 +48,9 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.eventsList.isEmpty || widget.eventsList[0] == null) {
-      return buildNoEvents();
-    } else {
       return buildEventCards();
-    }
   }
 
-  Widget buildNoEvents() {
-    return Center(
-      child: Text("No events available"),
-    );
-  }
 
   Widget buildEventCards() {
     return BlocProvider(
@@ -128,18 +119,12 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
         if(cards.length == 0){
           cards.add(EventCardDraggable(cardsCounter, null));
         }
-        // cards[1] = EventCardDraggable(cardsCounter, null);
-        // cards[2] = EventCardDraggable(cardsCounter, null);
       } else {
         // Swap cards
         var temp = EventCardDraggable(cardsCounter, widget.eventsList[cards.length + cardsCounter]);
-        //change cards order ...
+        //remove the first card and add the new to the end
         cards.remove(cards[0]);
         cards.add(temp);
-        // cards[0] = cards[1];
-        // cards[1] = cards[2];
-        // cards[2] = temp;
-
         cardsCounter++;
       }
     });

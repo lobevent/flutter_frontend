@@ -100,7 +100,7 @@ class PostWidget extends StatelessWidget {
       return DismissibleOverlay(
         overlayEntry: overlayEntry!,
         child: Scaffold(
-          body: WriteWidget(cubitContextLocal, event!, post: post),
+          body: WriteWidget(cubitContext: cubitContextLocal, event: event!, post: post),
         ),
       );
     });
@@ -121,7 +121,7 @@ Widget generateUnscrollablePostContainer(
     return Column(
       children: [
         Text("No Posts available."),
-        if (event != null && context != null) WriteWidget(context, event)
+        if (event != null && context != null) WriteWidget(cubitContext: context, event: event)
       ],
     );
 
@@ -152,44 +152,121 @@ Widget generateUnscrollablePostContainer(
       ),
       //check if we need to build it or if we are on the feedscreen
       if (event != null && context != null)
-        WriteWidget(context, event)
+        WriteWidget(cubitContext: context, event: event)
       else
         Text("")
     ],
   );
 }
 
-Widget WriteWidget(BuildContext cubitContext, Event event, {Post? post}) {
-  TextEditingController postWidgetController = TextEditingController();
-  //post!=null? post.postContent.value
-  //    .fold((l) => l.toString(), (postContent) => postContent.toString())
 
-  return Container(
-      decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
-      width: 300,
-      child: Title(
-        title: "Post something.",
-        color: Colors.black,
-        child: Column(
-          children: [
-            FullWidthPaddingInput(
-              password: false,
-              maxLines: 6,
-              controller: postWidgetController,
-            ),
-            if (post == null) PostImagePickerWidget() else Text(""),
-            TextWithIconButton(
-                onPressed: () {
-                  post == null
-                      ? cubitContext.read<PostScreenCubit>().postPost(
-                          postWidgetController.text, event.id.value.toString())
-                      : cubitContext.read<PostScreenCubit>().editPost(
-                          post.copyWith(
-                              postContent:
-                                  PostContent(postWidgetController.text)));
-                },
-                text: "Post")
-          ],
-        ),
-      ));
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------Write Widget    Todo: export to own file
+//------------------------------------------------------------------------------------------------------------------------
+
+class WriteWidget extends StatefulWidget{
+  final Event event;
+  final Post? post;
+  final BuildContext cubitContext;
+  WriteWidget({
+    Key? key,
+    required this.cubitContext,
+    required this.event,
+    this.post
+  }): super(key: key);
+
+  @override
+  State<WriteWidget> createState() => _WriteWidgetState();
 }
+
+class _WriteWidgetState extends State<WriteWidget> {
+  late TextEditingController postWidgetController;
+
+  @override
+  void initState(){
+    super.initState();
+    if(this.widget.post != null){
+      postWidgetController = TextEditingController(text: widget.post!.postContent.getOrEmptyString());
+    }
+    else {
+      postWidgetController = TextEditingController();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+        decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+        width: 300,
+        child: Title(
+          title: "Post something.",
+          color: Colors.black,
+          child: Column(
+            children: [
+              FullWidthPaddingInput(
+                password: false,
+                maxLines: 6,
+                controller: postWidgetController,
+              ),
+              if (widget.post == null) PostImagePickerWidget() else Text(""),
+              TextWithIconButton(
+                  onPressed: () {
+                    widget.post == null
+                        ? widget.cubitContext.read<PostScreenCubit>().postPost(
+                        postWidgetController.text, widget.event.id.value.toString())
+                        : widget.cubitContext.read<PostScreenCubit>().editPost(
+                        widget.post!.copyWith(
+                            postContent:
+                            PostContent(postWidgetController.text)));
+                  },
+                  text: "Post")
+            ],
+          ),
+        ));
+  }
+}
+// Widget WriteWidget(BuildContext cubitContext, Event event, {Post? post}) {
+//   TextEditingController postWidgetController = TextEditingController();
+//   if(post != null){
+//     postWidgetController.text = post.postContent.getOrEmptyString();
+//   }
+//   // post!=null? post.postContent.value
+//   //    .fold((l) => l.toString(), (postContent) => postContent.toString())
+//
+//   return Container(
+//       decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+//       width: 300,
+//       child: Title(
+//         title: "Post something.",
+//         color: Colors.black,
+//         child: Column(
+//           children: [
+//             FullWidthPaddingInput(
+//               password: false,
+//               maxLines: 6,
+//               controller: postWidgetController,
+//             ),
+//             if (post == null) PostImagePickerWidget() else Text(""),
+//             TextWithIconButton(
+//                 onPressed: () {
+//                   post == null
+//                       ? cubitContext.read<PostScreenCubit>().postPost(
+//                           postWidgetController.text, event.id.value.toString())
+//                       : cubitContext.read<PostScreenCubit>().editPost(
+//                           post.copyWith(
+//                               postContent:
+//                                   PostContent(postWidgetController.text)));
+//                 },
+//                 text: "Post")
+//           ],
+//         ),
+//       ));
+// }

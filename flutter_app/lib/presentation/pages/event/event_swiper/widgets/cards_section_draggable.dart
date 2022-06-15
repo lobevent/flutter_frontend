@@ -61,61 +61,104 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
   }
 
   Widget buildEventCards() {
+
+
+
+
+
+
     return BlocProvider(
       create: (eventScreenContext) => EventScreenCubit(widget.eventsList[0].id),
       child: BlocBuilder<EventScreenCubit, EventScreenState>(
         builder: (eventScreenContext, state) {
+
+          List<Widget> list = [Row(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              dragTarget(eventScreenContext),
+              Flexible(flex: 2, child: Container()),
+              dragTarget(eventScreenContext)
+            ],
+          )];
+          list.addAll(
+              List.generate(cards.length, (index) {
+                Widget card = SizedBox.fromSize(
+                  size: Size(MediaQuery.of(context).size.width * (0.9-index*0.1),
+                      MediaQuery.of(context).size.height * (0.6-index*0.05)),
+                  child: cards[index],
+                );
+
+                return Align(
+                  alignment: Alignment(0.0, index == 0 ? 0.0 : index == 2 ? 1.0 : 0.8),
+                  child: index == 0 ? Draggable(
+                    data: [],
+                    feedback: SizedBox.fromSize(
+                      size: Size(MediaQuery.of(context).size.width * (0.9-index*0.1),
+                          MediaQuery.of(context).size.height * (0.6 - index*0.05)),
+                      child: cards[0],
+                    ),
+                    child: card,
+                    childWhenDragging: Container(),
+                  ) :
+                IgnorePointer( child: card),
+                );
+              }, ));
+
+
+
           return Expanded(
               child: Stack(
-            children: <Widget>[
-              // Drag target row
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  dragTarget(eventScreenContext),
-                  Flexible(flex: 2, child: Container()),
-                  dragTarget(eventScreenContext)
-                ],
-              ),
-              // Back card
-              Align(
-                alignment: Alignment(0.0, 1.0),
-                child: IgnorePointer(
-                    child: SizedBox.fromSize(
-                  size: Size(MediaQuery.of(context).size.width * 0.7,
-                      MediaQuery.of(context).size.height * 0.5),
-                  child: cards[2],
-                )),
-              ),
-              // Middle card
-              Align(
-                alignment: Alignment(0.0, 0.8),
-                child: IgnorePointer(
-                    child: SizedBox.fromSize(
-                  size: Size(MediaQuery.of(context).size.width * 0.85,
-                      MediaQuery.of(context).size.height * 0.55),
-                  child: cards[1],
-                )),
-              ),
-              // Front card
-              Align(
-                alignment: Alignment(0.0, 0.0),
-                child: Draggable(
-                  data: [1, 2, 3],
-                  feedback: SizedBox.fromSize(
-                    size: Size(MediaQuery.of(context).size.width * 0.9,
-                        MediaQuery.of(context).size.height * 0.6),
-                    child: cards[0],
-                  ),
-                  child: SizedBox.fromSize(
-                    size: Size(MediaQuery.of(context).size.width * 0.9,
-                        MediaQuery.of(context).size.height * 0.6),
-                    child: cards[0],
-                  ),
-                  childWhenDragging: Container(),
-                ),
-              ),
-            ],
+            children: list.reversed.toList()
+
+            //     <Widget>[
+            //   // Drag target row
+            //   Row(
+            //     mainAxisSize: MainAxisSize.max,
+            //     children: <Widget>[
+            //       dragTarget(eventScreenContext),
+            //       Flexible(flex: 2, child: Container()),
+            //       dragTarget(eventScreenContext)
+            //     ],
+            //   ),
+            //   // Back card
+            //   Align(
+            //     alignment: Alignment(0.0, 1.0),
+            //     child: IgnorePointer(
+            //         child: SizedBox.fromSize(
+            //       size: Size(MediaQuery.of(context).size.width * 0.7,
+            //           MediaQuery.of(context).size.height * 0.5),
+            //       child: cards[2],
+            //     )),
+            //   ),
+            //   // Middle card
+            //   Align(
+            //     alignment: Alignment(0.0, 0.8),
+            //     child: IgnorePointer(
+            //         child: SizedBox.fromSize(
+            //       size: Size(MediaQuery.of(context).size.width * 0.85,
+            //           MediaQuery.of(context).size.height * 0.55),
+            //       child: cards[1],
+            //     )),
+            //   ),
+            //   // Front card
+            //   Align(
+            //     alignment: Alignment(0.0, 0.0),
+            //     child: Draggable(
+            //       data: [1, 2, 3],
+            //       feedback: SizedBox.fromSize(
+            //         size: Size(MediaQuery.of(context).size.width * 0.9,
+            //             MediaQuery.of(context).size.height * 0.6),
+            //         child: cards[0],
+            //       ),
+            //       child: SizedBox.fromSize(
+            //         size: Size(MediaQuery.of(context).size.width * 0.9,
+            //             MediaQuery.of(context).size.height * 0.6),
+            //         child: cards[0],
+            //       ),
+            //       childWhenDragging: Container(),
+            //     ),
+            //   ),
+            // ],
           ));
         },
       ),

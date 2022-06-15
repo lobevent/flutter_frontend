@@ -38,7 +38,7 @@ class EventListTiles extends StatelessWidget {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: actionButtons(onDeletion != null, context),
+            children: event.isHost ? actionButtons(onDeletion != null, context) : [],
           ),
       ),])
     );

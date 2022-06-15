@@ -110,17 +110,17 @@ class EventList_Bar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       elevation: 10.0,
-      backgroundColor: AppColors.appBarCollor,
+      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       automaticallyImplyLeading: false,
       pinned: true,
       flexibleSpace: Row(
         children: [
           ChipChoice(list: {
-            "own" : (bool bla) {print("invited");},
+            "own" : (bool bla) {context.read<EventsMultilistCubit>().getEvents(EventScreenOptions.owned);},
             "recent" : (bool bla) {context.read<EventsMultilistCubit>().getEvents(EventScreenOptions.recent);},
             "invited" : (bool bla) {
               context.read<EventsMultilistCubit>().getEvents(EventScreenOptions.invited);},
-            "attending" : (bool bla) {print("attending");},
+            "attending" : (bool bla) {context.read<EventsMultilistCubit>().getEvents(EventScreenOptions.ownAttending);},
           },),
         ],
       ),

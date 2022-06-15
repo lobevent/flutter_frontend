@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart' hide State;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,30 +27,10 @@ class _EventSwiperState extends State<EventSwiper> {
       create: (swiperContext) => EventSwiperCubit(),
       child: BlocBuilder<EventSwiperCubit, EventSwiperState>(
         builder: (swiperContext, state) {
-          return Scaffold(
-            /*appBar: AppBar(
-            elevation: 0.0,
-            centerTitle: true,
-            backgroundColor: Colors.white,
-            leading: IconButton(
-                onPressed: () {}, icon: Icon(Icons.settings, color: Colors.grey)),
-            title: Switch(
-              onChanged: (bool value) => setState(() => showAlignmentCards = value),
-              value: showAlignmentCards,
-              activeColor: Colors.red,
-            ),
-            actions: <Widget>[
-              IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.question_answer, color: Colors.grey)),
-            ],
-          ),
-
-           */
+          return BasicContentContainer(
             bottomNavigationBar:
                 BottomNavigation(selected: NavigationOptions.eventSwiper),
-            backgroundColor: Colors.white,
-            body: Column(
+            child_ren: right(Column(
               children: state.maybeMap((value) => [Text("tessst")],
                   loading: (loadingState) => [Text("Loading")],
                   loaded: (loadedState) => [
@@ -64,7 +45,7 @@ class _EventSwiperState extends State<EventSwiper> {
               // : CardsSectionDraggable(),
               //buttonsRow();
               //],
-            ),
+            )),
           );
         },
       ),

@@ -14,10 +14,11 @@ class StdChoiceTextChip extends StatelessWidget {
     return ChoiceChip(
       clipBehavior: Clip.antiAlias,
       shadowColor: selected? AppColors.selectedColor : AppColors.unselectedColor,
-      shape: StadiumBorder(
-          side: BorderSide(
-            width: 2.0,
-              color: selected? AppColors.selectedColor : AppColors.unselectedColor)),
+      // shape: StadiumBorder(
+      //     side: BorderSide(
+      //       width: 2.0,
+      //         color: selected? AppColors.selectedColor : AppColors.unselectedColor)
+      // ),
       elevation: 10.0,
       selectedColor: Color(AppColors.selectedColor.value - 0x99000000),
       backgroundColor: Color(AppColors.unselectedColor.value - 0x99000000),

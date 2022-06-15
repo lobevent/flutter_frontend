@@ -70,4 +70,17 @@ class AddFriendsCubit extends Cubit<AddFriendsState> {
               cubit.addHost(invitation);
             }));
   }
+
+
+  Future<void> onRemoveHost(Profile profile, Event event, EventScreenCubit cubit) async{
+    invitationRepository.removeHost(profile, event).then((value) => value.fold(
+            (failure) => emit(AddFriendsState.error(failure: failure)),
+            (invitation){
+              AddFriendsState currentState = state;
+              emit(AddFriendsState.loadingFriends());
+              emit(currentState);
+              // with this one the view is updated!
+              cubit.removeHost(invitation);
+            }));
+  }
 }

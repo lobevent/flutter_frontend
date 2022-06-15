@@ -20,6 +20,7 @@ class AddFriendsDialog extends StatefulWidget {
   final Function(Profile) onRemoveFriend;
   // callback function for adding hosts
   final Function(Profile)? onAddHost;
+  final Function(Profile)? onRemoveHost;
   final Item? assignedTodoItem;
 
   const AddFriendsDialog(
@@ -29,7 +30,7 @@ class AddFriendsDialog extends StatefulWidget {
       required this.onAddFriend,
       required this.onRemoveFriend,
       this.onAddHost,
-      this.assignedTodoItem})
+      this.assignedTodoItem, this.onRemoveHost})
       : super(key: key);
 
   AddFriendsDialogState createState() => AddFriendsDialogState();
@@ -133,6 +134,12 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
                 onAddHost: (Profile profile) {
                   if (widget.onAddHost != null) {
                     widget.onAddHost!(profile);
+                  }
+                  setState(() {});
+                },
+                onRemoveHost: (Profile profile){
+                  if (widget.onRemoveHost != null) {
+                    widget.onRemoveHost!(profile);
                   }
                   setState(() {});
                 },

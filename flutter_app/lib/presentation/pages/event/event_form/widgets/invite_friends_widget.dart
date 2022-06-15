@@ -56,6 +56,10 @@ class _InviteFriendsWidgetState extends State<InviteFriendsWidget> {
               onAddHost: (Profile profile) {
                 contextWCubit.read<EventFormCubit>().addFriendAsHost(profile);
               },
+              onRemoveHost: (Profile profile) {
+                contextWCubit.read<EventFormCubit>().removeFriendAsHost(profile);
+              },
+
             );
           });
         });

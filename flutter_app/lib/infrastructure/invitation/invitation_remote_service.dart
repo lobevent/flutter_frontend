@@ -38,4 +38,8 @@ class InvitationRemoteService extends RemoteService<InvitationDto>{
   Future<InvitationDto> addHost(String profileId, String eventId) async{
     return InvitationDto.fromJson(jsonDecode((await this.client.post(addHostRoute.interpolate({'eventId': eventId, 'profileId': profileId}), {})).body) as Map<String, dynamic>);
   }
+
+  Future<InvitationDto> removeHost(String profileId, String eventId) async{
+    return InvitationDto.fromJson(jsonDecode((await this.client.delete(addHostRoute.interpolate({'eventId': eventId, 'profileId': profileId}))).body) as Map<String, dynamic>);
+  }
 }

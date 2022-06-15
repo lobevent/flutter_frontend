@@ -77,11 +77,16 @@ class StorageShared {
     Profile? profile = ownProfile.fold((l) => null, (r) => r);
     //saving profile id in shared storage as string
     ownProfileId = profile?.id.value;
-    ownImage = profile?.images?[0];
+    try{
+      ownImage = profile?.images?[0];
+    }
+    on RangeError catch (exception){
+      ownImage = null;
+    }
     this.ownProfile = profile;
     sharedStorage.setString(
         StorageStrings.ownProfileId, profile?.id.value.toString() ?? '');
     sharedStorage.setString(
-        StorageStrings.ownProfileImage, profile?.images?[0] ?? '');
+        StorageStrings.ownProfileImage, ownImage ?? "");
   }
 }

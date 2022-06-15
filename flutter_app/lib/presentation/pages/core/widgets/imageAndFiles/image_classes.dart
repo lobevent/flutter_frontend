@@ -8,13 +8,25 @@ import 'package:flutter_frontend/domain/profile/profile.dart';
 class ProfileImage {
   /// check if an image string is given, and if not give back an image from assets
   static ImageProvider getAssetOrNetwork(String? imagePath) {
+
     if (imagePath != null) {
+      // TODO: This is a common problem, but networlimage has no fallback... so it throws an error if the file doesnt exits!
       return NetworkImage(dotenv.env['ipSim']!.toString() + imagePath);
     } else {
       return const AssetImage(
         "assets/images/partypeople.jpg",
       );
     }
+  }
+
+
+  static Widget getAssetOrNetworkFading(String? imagePath){
+    return FadeInImage.assetNetwork(placeholder: "assets/images/partypeople.jpg", image: dotenv.env['ipSim']!.toString() + (imagePath ?? ""),
+      imageErrorBuilder: (e, b ,c) {
+        return Image(image: AssetImage(
+          "assets/images/partypeople.jpg",
+        ));
+      },);
   }
 
   // TODO: make it viable for a list of images

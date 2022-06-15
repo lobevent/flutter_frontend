@@ -86,8 +86,24 @@ class EventFormCubit extends Cubit<EventFormState> {
   /// invites an friend and makes him host
   void addFriendAsHost(Profile profile) {
     if (!state.event.invitations.map((e) => e.profile).contains(profile)) {
-      state.event.invitations.add(Invitation(
-          profile: profile, event: state.event, id: UniqueId(), addHost: true));
+      Invitation foundInvitation = state.event.invitations.where((element) => element.profile == profile).first;
+      if(foundInvitation != null){
+        foundInvitation.addHost = true;
+      }
+      else{
+        state.event.invitations.add(Invitation(
+            profile: profile, event: state.event, id: UniqueId(), addHost: true));
+      }
+      emit(state);
+    }
+  }
+
+  void removeFriendAsHost(Profile profile){
+    if (!state.event.invitations.map((e) => e.profile).contains(profile)) {
+      Invitation foundInvitation = state.event.invitations.where((element) => element.profile == profile).first;
+      if(foundInvitation != null){
+        foundInvitation.addHost = false;
+      }
       emit(state);
     }
   }

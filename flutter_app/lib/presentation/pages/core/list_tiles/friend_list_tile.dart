@@ -14,6 +14,7 @@ class FriendListTile extends StatelessWidget {
   final Function(Profile) onAddFriend;
   final Function(Profile) onRemoveFriend;
   final Function(Profile)? onAddHost;
+  final Function(Profile)? onRemoveHost;
   //final OverlayEntry? overlayEntry;
 
   const FriendListTile(
@@ -24,7 +25,7 @@ class FriendListTile extends StatelessWidget {
       required this.onAddFriend,
       required this.onRemoveFriend,
       this.isHost = false,
-      this.onAddHost /*, this.overlayEntry*/})
+      this.onAddHost, this.onRemoveHost /*, this.overlayEntry*/})
       : super(key: key);
 
   @override
@@ -61,7 +62,7 @@ class FriendListTile extends StatelessWidget {
       else
         IconButton(
             icon: Icon(Icons.close), onPressed: () => {removeFriend(context)}),
-      if (onAddHost != null)
+      if (isHost == false)
         IconButton(
             icon: Icon(Icons.account_box), onPressed: () => {addHost(context)})
       else
@@ -85,7 +86,9 @@ class FriendListTile extends StatelessWidget {
     onAddHost!(profile);
   }
 
-  void removeHost(BuildContext context) {}
+  void removeHost(BuildContext context) {
+    onRemoveHost!(profile);
+  }
 
   void showFriend(BuildContext context) {
     context.router.push(ProfilePageRoute(profileId: profile.id));

@@ -44,4 +44,12 @@ class InvitationRepository extends Repository{
       return right(( await remoteService.addHost(profile.id.value, event.id.value)).toDomain());
     });
   }
+
+
+
+  Future<Either<NetWorkFailure, Invitation>> removeHost(Profile profile, Event event){
+    return localErrorHandler(() async {
+      return right(( await remoteService.removeHost(profile.id.value, event.id.value)).toDomain());
+    });
+  }
 }

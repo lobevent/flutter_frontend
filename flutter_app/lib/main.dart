@@ -15,7 +15,6 @@ import 'dart:io' show Platform;
 
 final _app_router.Router _appRouter = _app_router.Router();
 
-
 Future<void> main() async {
   if (Platform.isAndroid) {
     await dotenv.load(fileName: ".env");
@@ -24,11 +23,8 @@ Future<void> main() async {
   }
   WidgetsFlutterBinding.ensureInitialized();
 
-
   // save router to getIt so we can route from everywhere
   InjectionContainer.getIt.registerLazySingleton(() => _appRouter);
-
-
 
   await Firebase.initializeApp();
   await InjectionContainer.injectDependencies();
@@ -37,14 +33,8 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-
-
-
-
   @override
   Widget build(BuildContext context) {
-
-
     return GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: MultiBlocProvider(
@@ -56,13 +46,12 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 brightness: Brightness.dark,
                 primaryColor: AppColors.backGroundColor,
-
                 fontFamily: 'Prompt',
               ),
-              routerDelegate: AutoRouterDelegate(_appRouter, navigatorObservers: () => [AutoRouteObserver()]),
+              routerDelegate: AutoRouterDelegate(_appRouter,
+                  navigatorObservers: () => [AutoRouteObserver()]),
               routeInformationParser: _appRouter.defaultRouteParser()),
-        )
-    );
+        ));
     //   (
     //   title: 'Material App',
     //   builder: ExtendedNavigator.builder<app_router.Router>(router: app_router.Router()),
@@ -73,5 +62,4 @@ class MyApp extends StatelessWidget {
     //),
     // );
   }
-
 }

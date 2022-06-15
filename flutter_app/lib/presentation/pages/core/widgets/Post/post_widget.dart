@@ -18,6 +18,7 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/src/provider.dart';
 
+import '../../../../../domain/post/value_objects.dart';
 import '../gen_dialog.dart';
 
 /// this is the post widget, which should be used everywhere
@@ -62,6 +63,11 @@ class PostWidget extends StatelessWidget {
           .checkIfOwnId(post.owner!.id.value.toString())) ...[
         StdTextButton(
             onPressed: () {
+              showPostEditOverlay(context);
+            },
+            child: Icon(Icons.edit)),
+        StdTextButton(
+            onPressed: () {
               GenDialog.genericDialog(
                       context,
                       AppStrings.deleteCommentDialogAbort,
@@ -78,6 +84,29 @@ class PostWidget extends StatelessWidget {
             child: Icon(Icons.delete))
       ],
     ]);
+  }
+
+  /// build this Widget as overlay!
+  void showPostEditOverlay(
+      BuildContext
+          cubitContextLocal /* this is used to access the cubit inside of the overlay*/) async {
+    //initialise overlaystate and entries
+    final OverlayState overlayState = Overlay.of(cubitContextLocal)!;
+    //have to do it nullable
+    OverlayEntry? overlayEntry;
+
+    //this is the way to work with overlays
+    overlayEntry = OverlayEntry(builder: (buildContext) {
+      return DismissibleOverlay(
+        overlayEntry: overlayEntry!,
+        child: Scaffold(
+          body: WriteWidget(cubitContextLocal, event!, post: post),
+        ),
+      );
+    });
+
+    //insert the entry in the state to make it accesible
+    overlayState.insert(overlayEntry);
   }
 }
 
@@ -130,8 +159,11 @@ Widget generateUnscrollablePostContainer(
   );
 }
 
-Widget WriteWidget(BuildContext context, Event event) {
+Widget WriteWidget(BuildContext cubitContext, Event event, {Post? post}) {
   TextEditingController postWidgetController = TextEditingController();
+  //post!=null? post.postContent.value
+  //    .fold((l) => l.toString(), (postContent) => postContent.toString())
+
   return Container(
       decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
       width: 300,
@@ -145,11 +177,16 @@ Widget WriteWidget(BuildContext context, Event event) {
               maxLines: 6,
               controller: postWidgetController,
             ),
-            PostImagePickerWidget(),
+            if (post == null) PostImagePickerWidget() else Text(""),
             TextWithIconButton(
                 onPressed: () {
-                  context.read<PostScreenCubit>().postPost(
-                      postWidgetController.text, event.id.value.toString());
+                  post == null
+                      ? cubitContext.read<PostScreenCubit>().postPost(
+                          postWidgetController.text, event.id.value.toString())
+                      : cubitContext.read<PostScreenCubit>().editPost(
+                          post.copyWith(
+                              postContent:
+                                  PostContent(postWidgetController.text)));
                 },
                 text: "Post")
           ],

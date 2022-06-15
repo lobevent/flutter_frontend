@@ -150,8 +150,12 @@ class CommentRepository extends Repository {
     });
   }
 
-  Future<void> deletePostComment(String postOrCommentId) async {
-    final answer =
-        await _commentRemoteService.deletePostOrComment(postOrCommentId);
+  Future<Either<NetWorkFailure, Comment>> deletePostComment(
+      String postOrCommentId) async {
+    return localErrorHandler<Comment>(() async {
+      final CommentDto commentDto =
+          await _commentRemoteService.deletePostOrComment(postOrCommentId);
+      return right(commentDto.toDomain());
+    });
   }
 }

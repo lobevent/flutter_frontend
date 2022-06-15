@@ -66,6 +66,23 @@ class PostScreenCubit extends Cubit<PostScreenState> {
     );
   }
 
+  Future<void> editPost(Post post) async {
+    await state.maybeMap(
+        loaded: (postLoaded) async {
+          repository.update(post).then((value) {
+            //emit the loading bar
+            emit(PostScreenState.loading());
+            //delete post out of postlist and emit updated postlist
+            List<Post> updatedPostList = postLoaded.posts;
+            //returns true if element is in there and removed
+            updatedPostList.remove(post);
+            //emit our updated postlist
+            emit(PostScreenState.loaded(posts: updatedPostList));
+          });
+        },
+        orElse: () => throw LogicError());
+  }
+
   //we dont use this
   Future<void> deletePost(Post post) async {
     await state.maybeMap(

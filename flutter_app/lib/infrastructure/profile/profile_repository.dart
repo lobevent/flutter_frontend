@@ -196,6 +196,7 @@ class ProfileRepository extends Repository {
   }
 
   ///Like functionalities
+  //TODO: make this to show backend errors ...
   Future<bool> like(UniqueId objectId, LikeTypeOption option) async {
     try {
       final bool success =

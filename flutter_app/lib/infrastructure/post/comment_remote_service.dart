@@ -123,9 +123,9 @@ class CommentRemoteService extends RemoteService<CommentDto> {
         jsonEncode(commentDto.toJson())));
   }
 
-  Future<void> deletePostOrComment(String commentId) async {
-    final answer = await client.delete(deleteCommentPath.interpolate({
+  Future<CommentDto> deletePostOrComment(String commentId) async {
+    return _decodeComment(await client.delete(deleteCommentPath.interpolate({
       "commentId": commentId,
-    }));
+    })));
   }
 }

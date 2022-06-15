@@ -18,14 +18,15 @@ class PostRepository extends Repository {
 
   PostRepository(this._postRemoteService);
   // ---------------------------------- Image Crud ------------------------------------------
-  
-  Future<Either<NetWorkFailure, String>> uploadImages(UniqueId postId, XFile image) async{
+
+  Future<Either<NetWorkFailure, String>> uploadImages(
+      UniqueId postId, XFile image) async {
     return localErrorHandler(() async {
-      return right(await _postRemoteService.uploadImageToEvent(postId.value, File(image.path)));
+      return right(await _postRemoteService.uploadImageToEvent(
+          postId.value, File(image.path)));
     });
   }
 
-  
   // ---------------------------------- Simple CRUD ------------------------------------
   ///
   /// Creates an post in the backend or returns failure
@@ -149,7 +150,11 @@ class PostRepository extends Repository {
     });
   }
 
-  Future<void> deletePost(Post post) async {
-    await _postRemoteService.deletedPost(post.id!.value.toString());
+  Future<Either<NetWorkFailure, Post>> deletePost(Post post) async {
+    return localErrorHandler<Post>(() async {
+      final PostDto postDto =
+          await _postRemoteService.deletedPost(post.id!.value.toString());
+      return right(postDto.toDomain());
+    });
   }
 }

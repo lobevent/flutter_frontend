@@ -44,10 +44,9 @@ class PostRemoteService extends RemoteService<PostDto> {
     return PostDto.fromJson(jsonDecode(json.body) as Map<String, dynamic>);
   }
 
-  Future<String> uploadImageToEvent(String postId, File image) async{
+  Future<String> uploadImageToEvent(String postId, File image) async {
     return client.postFile(uploadImage.interpolate({"postId": postId}), image);
   }
-
 
   Future<List<PostDto>> getOwnPosts(DateTime lastPostTime, int amount) async {
     return _getPostList(ownPostsPath.interpolate({
@@ -116,7 +115,8 @@ class PostRemoteService extends RemoteService<PostDto> {
     return convertList(response);
   }
 
-  Future<void> deletedPost(String postId) async {
-    final answer = client.delete(deletePath.interpolate({"postId": postId}));
+  Future<PostDto> deletedPost(String postId) async {
+    return _decodePost(
+        await client.delete(deletePath.interpolate({"postId": postId})));
   }
 }

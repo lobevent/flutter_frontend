@@ -94,13 +94,19 @@ class StdSpacedIconTextTab extends StatelessWidget {
   final String text;
   final IconData iconHere;
   //late Widget child;
-  const StdSpacedIconTextTab({Key? key, required this.text, required this.iconHere}) : super(key: key);
+  const StdSpacedIconTextTab(
+      {Key? key, required this.text, required this.iconHere})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [const Spacer(), Tab(child: TextWithIcon(text: text, icon: iconHere)), const Spacer()],
+      children: [
+        const Spacer(),
+        Tab(child: TextWithIcon(text: text, icon: iconHere)),
+        const Spacer()
+      ],
     );
   }
 }
@@ -137,17 +143,19 @@ class PaddingRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(centered){
-      return Center(child: ThePaddingWidged(),);
-    }
-    else{
+    if (centered) {
+      return Center(
+        child: ThePaddingWidged(),
+      );
+    } else {
       return ThePaddingWidged();
     }
   }
 
   Widget ThePaddingWidged() {
     return Padding(
-      padding: EdgeInsets.fromLTRB(paddinfLeft, paddingTop, paddingRight, paddingBottom),
+      padding: EdgeInsets.fromLTRB(
+          paddinfLeft, paddingTop, paddingRight, paddingBottom),
       child: Row(children: children),
     );
   }
@@ -181,7 +189,8 @@ class PaddingContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(paddinfLeft, paddingTop, paddingRight, paddingBottom),
+      padding: EdgeInsets.fromLTRB(
+          paddinfLeft, paddingTop, paddingRight, paddingBottom),
       child: child,
     );
   }
@@ -210,7 +219,12 @@ class StdTextButton extends StatelessWidget {
   final Widget child;
   final VoidCallback? onPressed;
   final bool disabled;
-  const StdTextButton({Key? key, required this.child, required this.onPressed, this.disabled = false}) : super(key: key);
+  const StdTextButton(
+      {Key? key,
+      required this.child,
+      required this.onPressed,
+      this.disabled = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -221,8 +235,11 @@ class StdTextButton extends StatelessWidget {
                   color:  Color(0x6BBBBBBB)),*/
             borderRadius: BorderRadius.circular(10)),
         child: TextButton(
-            style: ButtonStyle(overlayColor: MaterialStateColor.resolveWith((states) => Color(0xFFCECECE))),
-            onPressed: () => onPressed == null || disabled ? null : onPressed!(),
+            style: ButtonStyle(
+                overlayColor: MaterialStateColor.resolveWith(
+                    (states) => Color(0xFFCECECE))),
+            onPressed: () =>
+                onPressed == null || disabled ? null : onPressed!(),
             child: child));
   }
 }
@@ -233,7 +250,13 @@ class TextWithIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final IconData? icon;
   final bool disabled;
-  const TextWithIconButton({Key? key, required this.onPressed, required this.text, this.icon, this.disabled = false}) : super(key: key);
+  const TextWithIconButton(
+      {Key? key,
+      required this.onPressed,
+      required this.text,
+      this.icon,
+      this.disabled = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -268,7 +291,9 @@ class TextCheckbox extends StatefulWidget {
   // the checkbox on changed function
   final void Function(bool)? onChanged;
 
-  TextCheckbox({Key? key, required this.onChanged, this.text, required this.value}) : super(key: key);
+  TextCheckbox(
+      {Key? key, required this.onChanged, this.text, required this.value})
+      : super(key: key);
 
   @override
   _TextCheckBoxState createState() => _TextCheckBoxState();
@@ -322,7 +347,8 @@ class _TextCheckBoxState extends State<TextCheckbox> {
               value: value,
             ),
             // the text in this checkbox, with styling
-            Text(widget.text != null ? widget.text! : '', style: TextStyle(color: AppColors.stdTextColor)),
+            Text(widget.text != null ? widget.text! : '',
+                style: TextStyle(color: AppColors.stdTextColor)),
           ],
         ));
   }
@@ -338,7 +364,9 @@ class _TextCheckBoxState extends State<TextCheckbox> {
 class GenericSearchBar extends StatelessWidget {
   final TextEditingController controller;
   final void Function(String) onSearchTextChanged;
-  GenericSearchBar({Key? key, required this.controller, required this.onSearchTextChanged}) : super(key: key);
+  GenericSearchBar(
+      {Key? key, required this.controller, required this.onSearchTextChanged})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -351,7 +379,8 @@ class GenericSearchBar extends StatelessWidget {
                     leading: const Icon(Icons.search),
                     title: TextField(
                       controller: controller,
-                      decoration: const InputDecoration(hintText: 'Search', border: InputBorder.none),
+                      decoration: const InputDecoration(
+                          hintText: 'Search', border: InputBorder.none),
                       onChanged: onSearchTextChanged,
                     ),
                     trailing: IconButton(
@@ -375,7 +404,14 @@ class FullWidthPaddingInput extends StatelessWidget {
   final ValueChanged<String>? onChanged;
 
   FullWidthPaddingInput(
-      {this.controller, this.labelText, this.hintText, this.password = false, this.maxLines, this.maxLength, this.validator, this.onChanged});
+      {this.controller,
+      this.labelText,
+      this.hintText,
+      this.password = false,
+      this.maxLines,
+      this.maxLength,
+      this.validator,
+      this.onChanged});
 
   @override
   Widget build(BuildContext context) {

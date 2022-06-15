@@ -56,6 +56,8 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 brightness: Brightness.dark,
                 primaryColor: AppColors.backGroundColor,
+
+                fontFamily: 'Prompt',
               ),
               routerDelegate: AutoRouterDelegate(_appRouter, navigatorObservers: () => [AutoRouteObserver()]),
               routeInformationParser: _appRouter.defaultRouteParser()),

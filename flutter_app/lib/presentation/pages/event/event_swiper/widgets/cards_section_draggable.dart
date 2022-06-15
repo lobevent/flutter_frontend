@@ -26,16 +26,17 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
   int cardsCounter = 0;
 
   void addCards() {
+
     //add 3 cards for displaying blank cards
-    for (cardsCounter = 0; cardsCounter < 3; cardsCounter++) {
-      if (widget.eventsList.length <= cardsCounter) {
-        //add blank cards
-        cards.add(EventCardDraggable(cardsCounter, null));
-      } else {
+    for (cardsCounter = 0; cardsCounter < 3 && cardsCounter <= widget.eventsList.length - 1; cardsCounter++) {
         //add event cardsf
-        cards.add(
-            EventCardDraggable(cardsCounter, widget.eventsList[cardsCounter]));
-      }
+        Event event = widget.eventsList[cardsCounter];
+        cards.add(EventCardDraggable(cardsCounter, widget.eventsList[cardsCounter]));
+    }
+    cardsCounter--;
+    if (widget.eventsList.length == 0) {
+      //add blank cards
+      cards.add(EventCardDraggable(cardsCounter, null));
     }
   }
 
@@ -61,105 +62,59 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
   }
 
   Widget buildEventCards() {
-
-
-
-
-
-
     return BlocProvider(
       create: (eventScreenContext) => EventScreenCubit(widget.eventsList[0].id),
       child: BlocBuilder<EventScreenCubit, EventScreenState>(
         builder: (eventScreenContext, state) {
+          // ------------------------------------------------ GENERATE LIST OF WIDGETS -----------------------
 
-          List<Widget> list = [Row(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              dragTarget(eventScreenContext),
-              Flexible(flex: 2, child: Container()),
-              dragTarget(eventScreenContext)
-            ],
-          )];
-          list.addAll(
-              List.generate(cards.length, (index) {
-                Widget card = SizedBox.fromSize(
-                  size: Size(MediaQuery.of(context).size.width * (0.9-index*0.1),
-                      MediaQuery.of(context).size.height * (0.6-index*0.05)),
-                  child: cards[index],
-                );
+          //this is the first list, so we can add the drag Targets!
+          List<Widget> list = [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[dragTarget(eventScreenContext), Flexible(flex: 2, child: Container()), dragTarget(eventScreenContext)],
+            )
+          ];
+          // here are the cards
+          list.addAll(List.generate(
+            cards.length,
+            (index) {
+              Widget card = SizedBox.fromSize(
+                size: Size(MediaQuery.of(context).size.width * (0.9 - index * 0.1), MediaQuery.of(context).size.height * (0.6 - index * 0.05)),
+                child: cards[index],
+              );
 
-                return Align(
-                  alignment: Alignment(0.0, index == 0 ? 0.0 : index == 2 ? 1.0 : 0.8),
-                  child: index == 0 ? Draggable(
-                    data: [],
-                    feedback: SizedBox.fromSize(
-                      size: Size(MediaQuery.of(context).size.width * (0.9-index*0.1),
-                          MediaQuery.of(context).size.height * (0.6 - index*0.05)),
-                      child: cards[0],
-                    ),
-                    child: card,
-                    childWhenDragging: Container(),
-                  ) :
-                IgnorePointer( child: card),
-                );
-              }, ));
+              return Align(
+                alignment: Alignment(
+                    0.0,
+                    index == 0
+                        ? 0.0
+                        : index == 2
+                            ? 1.0
+                            : 0.8),
+                child: index == 0
+                    ? Draggable(
+                        data: [],
+                        feedback: SizedBox.fromSize(
+                          size: Size(
+                              MediaQuery.of(context).size.width * (0.9 - index * 0.1), MediaQuery.of(context).size.height * (0.6 - index * 0.05)),
+                          child: cards[0],
+                        ),
+                        child: card,
+                        childWhenDragging: Container(),
+                      )
+                    : IgnorePointer(child: card),
+              );
+            },
+          ));
 
-
-
+          // ----------------------------------------------------------------------------------------------------------------------
+          // -------------------------------------------Here is the actual return   -------------------------------------------
+          // ----------------------------------------------------------------------------------------------------------------------
           return Expanded(
               child: Stack(
-            children: list.reversed.toList()
-
-            //     <Widget>[
-            //   // Drag target row
-            //   Row(
-            //     mainAxisSize: MainAxisSize.max,
-            //     children: <Widget>[
-            //       dragTarget(eventScreenContext),
-            //       Flexible(flex: 2, child: Container()),
-            //       dragTarget(eventScreenContext)
-            //     ],
-            //   ),
-            //   // Back card
-            //   Align(
-            //     alignment: Alignment(0.0, 1.0),
-            //     child: IgnorePointer(
-            //         child: SizedBox.fromSize(
-            //       size: Size(MediaQuery.of(context).size.width * 0.7,
-            //           MediaQuery.of(context).size.height * 0.5),
-            //       child: cards[2],
-            //     )),
-            //   ),
-            //   // Middle card
-            //   Align(
-            //     alignment: Alignment(0.0, 0.8),
-            //     child: IgnorePointer(
-            //         child: SizedBox.fromSize(
-            //       size: Size(MediaQuery.of(context).size.width * 0.85,
-            //           MediaQuery.of(context).size.height * 0.55),
-            //       child: cards[1],
-            //     )),
-            //   ),
-            //   // Front card
-            //   Align(
-            //     alignment: Alignment(0.0, 0.0),
-            //     child: Draggable(
-            //       data: [1, 2, 3],
-            //       feedback: SizedBox.fromSize(
-            //         size: Size(MediaQuery.of(context).size.width * 0.9,
-            //             MediaQuery.of(context).size.height * 0.6),
-            //         child: cards[0],
-            //       ),
-            //       child: SizedBox.fromSize(
-            //         size: Size(MediaQuery.of(context).size.width * 0.9,
-            //             MediaQuery.of(context).size.height * 0.6),
-            //         child: cards[0],
-            //       ),
-            //       childWhenDragging: Container(),
-            //     ),
-            //   ),
-            // ],
-          ));
+                  // -------------- HERE THE LIST FROM ABOVE IS USED -----------------------------
+                  children: list.reversed.toList()));
         },
       ),
     );
@@ -169,17 +124,21 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
     setState(() {
       //check if out of array bound
       if (cardsCounter + cards.length >= widget.eventsList.length) {
-        cards[0] = EventCardDraggable(cardsCounter, null);
-        cards[1] = EventCardDraggable(cardsCounter, null);
-        cards[2] = EventCardDraggable(cardsCounter, null);
+        cards.remove(cards[0]);
+        if(cards.length == 0){
+          cards.add(EventCardDraggable(cardsCounter, null));
+        }
+        // cards[1] = EventCardDraggable(cardsCounter, null);
+        // cards[2] = EventCardDraggable(cardsCounter, null);
       } else {
         // Swap cards
-        var temp = EventCardDraggable(
-            cardsCounter, widget.eventsList[cards.length + cardsCounter]);
+        var temp = EventCardDraggable(cardsCounter, widget.eventsList[cards.length + cardsCounter]);
         //change cards order ...
-        cards[0] = cards[1];
-        cards[1] = cards[2];
-        cards[2] = temp;
+        cards.remove(cards[0]);
+        cards.add(temp);
+        // cards[0] = cards[1];
+        // cards[1] = cards[2];
+        // cards[2] = temp;
 
         cardsCounter++;
       }

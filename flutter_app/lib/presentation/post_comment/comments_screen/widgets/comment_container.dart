@@ -86,8 +86,8 @@ class CommentContainer extends StatelessWidget {
     );
   }
 
-  Widget WriteWidget(BuildContext context, Post loadedPost,
-      [Comment? parentComment = null]) {
+  Widget WriteWidget(BuildContext context, Post? loadedPost,
+      [Comment? parentComment, OverlayEntry? overlay,]) {
     TextEditingController postWidgetController = TextEditingController();
     return Container(
         width: 300,
@@ -116,10 +116,10 @@ class CommentContainer extends StatelessWidget {
                     parentComment == null
                         ? context
                             .read<CommentScreenCubit>()
-                            .postComment(postWidgetController.text, loadedPost)
+                            .postComment(postWidgetController.text, loadedPost!)
                         : context.read<CommentScreenCubit>().postComment(
                             postWidgetController.text,
-                            loadedPost,
+                            loadedPost!,
                             parentComment);
                   },
                   text: "Post"),
@@ -147,6 +147,11 @@ class CommentContainer extends StatelessWidget {
         if(GetIt.I<StorageShared>().checkIfOwnId(comment.owner.id.value.toString()))...[
           StdTextButton(
               onPressed: () {
+            showCommentEditOverlay(context, comment);
+    },
+    child: Icon(Icons.edit)),
+          StdTextButton(
+              onPressed: () {
                 GenDialog.genericDialog(
                     context,
                     AppStrings.deleteCommentDialogAbort,
@@ -159,11 +164,35 @@ class CommentContainer extends StatelessWidget {
                   else
                     print("abort delete Comment"),
                 });
-                },
+              },
               child: Icon(Icons.delete))
 
         ],
       ],
     );
+  }
+  /// build this Widget as overlay!
+  void showCommentEditOverlay(
+      BuildContext
+      cubitContextLocal /* this is used to access the cubit inside of the overlay*/,
+      Comment comment) async {
+    //initialise overlaystate and entries
+    final OverlayState overlayState = Overlay.of(cubitContextLocal)!;
+    //have to do it nullable
+    OverlayEntry? overlayEntry;
+
+    //this is the way to work with overlays
+    overlayEntry = OverlayEntry(builder: (buildContext) {
+      return DismissibleOverlay(
+        overlayEntry: overlayEntry!,
+        child: Scaffold(
+          body: WriteWidget(cubitContextLocal, null, comment, overlayEntry)
+          //WriteWidget(context: cubitContextLocal, event: event!, post: post, overlayEntry: overlayEntry),
+        ),
+      );
+    });
+
+    //insert the entry in the state to make it accesible
+    overlayState.insert(overlayEntry);
   }
 }

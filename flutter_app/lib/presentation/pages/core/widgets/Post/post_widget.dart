@@ -69,17 +69,17 @@ class PostWidget extends StatelessWidget {
         StdTextButton(
             onPressed: () {
               GenDialog.genericDialog(
-                      context,
-                      AppStrings.deleteCommentDialogAbort,
-                      AppStrings.deleteCommentDialogText,
-                      AppStrings.deleteCommentDialogConfirm,
-                      AppStrings.deleteCommentDialogAbort)
+                  context,
+                  AppStrings.deleteCommentDialogAbort,
+                  AppStrings.deleteCommentDialogText,
+                  AppStrings.deleteCommentDialogConfirm,
+                  AppStrings.deleteCommentDialogAbort)
                   .then((value) async => {
-                        if (value)
-                          context.read<PostScreenCubit>().deletePost(post)
-                        else
-                          print("abort delete post"),
-                      });
+                if (value)
+                  context.read<PostScreenCubit>().deletePost(post)
+                else
+                  print("abort delete post"),
+              });
             },
             child: Icon(Icons.delete))
       ],
@@ -100,7 +100,7 @@ class PostWidget extends StatelessWidget {
       return DismissibleOverlay(
         overlayEntry: overlayEntry!,
         child: Scaffold(
-          body: WriteWidget(cubitContext: cubitContextLocal, event: event!, post: post),
+          body: WriteWidget(cubitContext: cubitContextLocal, event: event!, post: post, overlayEntry: overlayEntry),
         ),
       );
     });
@@ -175,11 +175,12 @@ class WriteWidget extends StatefulWidget{
   final Event event;
   final Post? post;
   final BuildContext cubitContext;
+  final OverlayEntry? overlayEntry;
   WriteWidget({
     Key? key,
     required this.cubitContext,
     required this.event,
-    this.post
+    this.post, this.overlayEntry
   }): super(key: key);
 
   @override
@@ -219,13 +220,19 @@ class _WriteWidgetState extends State<WriteWidget> {
               if (widget.post == null) PostImagePickerWidget() else Text(""),
               TextWithIconButton(
                   onPressed: () {
+                    //post or edit the post
                     widget.post == null
                         ? widget.cubitContext.read<PostScreenCubit>().postPost(
                         postWidgetController.text, widget.event.id.value.toString())
-                        : widget.cubitContext.read<PostScreenCubit>().editPost(
-                        widget.post!.copyWith(
-                            postContent:
-                            PostContent(postWidgetController.text)));
+                        : {
+                      widget.cubitContext.read<PostScreenCubit>().editPost(
+                          widget.post!.copyWith(
+                              postContent:
+                              PostContent(postWidgetController.text))),
+                      //remove overlayentry
+                      widget.overlayEntry?.remove(),
+
+                    };
                   },
                   text: "Post")
             ],

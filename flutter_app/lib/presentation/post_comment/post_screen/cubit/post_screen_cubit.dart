@@ -67,18 +67,25 @@ class PostScreenCubit extends Cubit<PostScreenState> {
   }
 
   Future<void> editPost(Post post) async {
+    Either<NetWorkFailure, Post> failureOrSuccess =
+    await repository.update(post);
+
     await state.maybeMap(
         loaded: (postLoaded) async {
-          repository.update(post).then((value) {
-            //emit the loading bar
-            emit(PostScreenState.loading());
-            //delete post out of postlist and emit updated postlist
-            List<Post> updatedPostList = postLoaded.posts;
-            //returns true if element is in there and removed
-            updatedPostList.remove(post);
-            //emit our updated postlist
-            emit(PostScreenState.loaded(posts: updatedPostList));
-          });
+          repository.update(post).then((postOrFailure) => postOrFailure.fold(
+                  (failure) => emit(PostScreenState.error(error: failure.toString())),
+                  (updatedPost) {
+                  //emit the loading bar
+                  emit(PostScreenState.loading());
+
+                   //delete post out of postlist and emit updated postlist
+                   List<Post> oldPostList = postLoaded.posts;
+                   int postPos = postLoaded.posts.indexWhere((element) => element.id?.value == post.id?.value);
+                     oldPostList[postPos]= updatedPost;
+                    //emit our updated postlist
+                  emit(PostScreenState.loaded(posts: oldPostList));
+                  }
+                  ));
         },
         orElse: () => throw LogicError());
   }

@@ -29,7 +29,7 @@ class PostRemoteService extends RemoteService<PostDto> {
   static const String postPath = "/event/post/";
   static const String createPostPath = "/event/%eventId%/post";
   static const String deletePath = "/event/post/%postId%";
-  static const String updatePath = "/post/";
+  static const String updatePath = "/event/post/";
 
   static const String uploadImage = '/post/uploadImage/%postId%';
 

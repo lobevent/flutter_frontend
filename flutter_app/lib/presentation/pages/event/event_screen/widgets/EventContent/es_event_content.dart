@@ -312,8 +312,8 @@ class EventContent extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.white.withOpacity(0.1),
-              Colors.white,
+              AppColors.black.withOpacity(0.2),
+              AppColors.black,
             ],
           )),
         )),

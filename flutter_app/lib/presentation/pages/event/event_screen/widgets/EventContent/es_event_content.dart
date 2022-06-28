@@ -229,13 +229,14 @@ class EventContent extends StatelessWidget {
       BuildContext context, double? latitude, double? longitude, Event event) {
     bool nearby = false;
     nearby = GeoFunctions().checkIfNearEvent(longitude!, latitude!);
-    if (nearby == true)
+    if (nearby == false)
       return TextWithIconButton(
         onPressed: () {
+          double xD = GeoFunctions().position!.longitude;
           context.read<EventScreenCubit>().UserConfirmAtEvent(
               event,
-              GeoFunctions().position?.longitude,
-              GeoFunctions().position?.latitude);
+              GeoFunctions().position!.longitude,
+              GeoFunctions().position!.latitude);
         },
         text: "I am here!",
       );

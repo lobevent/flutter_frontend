@@ -189,7 +189,11 @@ class EventRemoteService extends RemoteService<EventDto> {
   Future<bool> confirmUserAtEvent(
       String id, double longitude, double latitude) async {
     final Response response = await client.post(
-        eventConfirmUser.interpolate({"eventId": eventConfirmUser}),
+        eventConfirmUser.interpolate({
+          "eventId": id,
+          "longitude": longitude.toString(),
+          "latitude": latitude.toString()
+        }),
         "$longitude+$latitude");
     return true;
   }

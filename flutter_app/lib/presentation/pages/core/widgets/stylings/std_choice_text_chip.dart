@@ -22,7 +22,7 @@ class StdChoiceTextChip extends StatelessWidget {
       elevation: 10.0,
       selectedColor: Color(AppColors.selectedColor.value - 0x99000000),
       backgroundColor: Color(AppColors.unselectedColor.value - 0x99000000),
-      label: Text(label, style: selected ? AppTextStyles.stdSelectedText : AppTextStyles.stdText,),
+      label: Text(label, style: AppTextStyles.stdText),
       selected: selected,
       onSelected: onSelected,
   );

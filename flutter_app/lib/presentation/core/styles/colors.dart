@@ -23,8 +23,8 @@ class AppColors {
 
 
 
-  static const Color selectedColor = Color(0xFFFF851C);
-  static const Color unselectedColor = Color(0xFFAA5B07);
+  static const Color selectedColor = Color(0xFF48BFBF);
+  static const Color unselectedColor = Color(0xFF1A4949);
 
   static const Color appBarCollor = Colors.white;
 }

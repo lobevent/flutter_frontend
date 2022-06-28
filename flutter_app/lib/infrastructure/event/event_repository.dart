@@ -110,9 +110,10 @@ class EventRepository extends Repository {
   }
 
   Future<Either<NetWorkFailure, List<Event>>> getRecentEvents(
-      DateTime lastEventTime, int amount, {bool descending = true}) async {
-    return _getList(
-        () => _eventRemoteService.getRecentEvents(lastEventTime, amount, descending));
+      DateTime lastEventTime, int amount,
+      {bool descending = true}) async {
+    return _getList(() =>
+        _eventRemoteService.getRecentEvents(lastEventTime, amount, descending));
   }
 
   Future<Either<NetWorkFailure, List<Event>>> getUnreactedEvents(
@@ -150,6 +151,12 @@ class EventRepository extends Repository {
       DateTime lastEventTime, int amount) {
     return _getList(
         () => _eventRemoteService.getEventsOfInterest(lastEventTime, amount));
+  }
+
+  Future<bool> confirmUserAtEvent(
+      Event event, double longitude, double latitude) async {
+    return _eventRemoteService.confirmUserAtEvent(
+        event.id.value, longitude, latitude);
   }
   // Future<Either<NetWorkFailure, bool>> sendInvitation(Event event, Profile profile)async{
   //   return localErrorHandler(() async {

@@ -43,11 +43,11 @@ class EventFormCubit extends Cubit<EventFormState> {
     saveEvent();
   }
 
-  void changePicture(XFile picture){
+  void changePicture(XFile picture) {
     emit(state.copyWith(picture: picture));
   }
-  
-  void setEventSeries(EventSeries? series){
+
+  void setEventSeries(EventSeries? series) {
     emit(state.copyWith(event: state.event.copyWith(series: series)));
   }
 
@@ -62,6 +62,14 @@ class EventFormCubit extends Cubit<EventFormState> {
 
   void changeDate(DateTime date) {
     emit(state.copyWith(event: state.event.copyWith(date: date.toUtc())));
+  }
+
+  void changeLatitude(double? latitude) {
+    emit(state.copyWith(event: state.event.copyWith(latitude: latitude)));
+  }
+
+  void changeLongitude(double? longitude) {
+    emit(state.copyWith(event: state.event.copyWith(latitude: longitude)));
   }
 
   void changePublic(bool public) {
@@ -86,22 +94,28 @@ class EventFormCubit extends Cubit<EventFormState> {
   /// invites an friend and makes him host
   void addFriendAsHost(Profile profile) {
     if (!state.event.invitations.map((e) => e.profile).contains(profile)) {
-      Invitation foundInvitation = state.event.invitations.where((element) => element.profile == profile).first;
-      if(foundInvitation != null){
+      Invitation foundInvitation = state.event.invitations
+          .where((element) => element.profile == profile)
+          .first;
+      if (foundInvitation != null) {
         foundInvitation.addHost = true;
-      }
-      else{
+      } else {
         state.event.invitations.add(Invitation(
-            profile: profile, event: state.event, id: UniqueId(), addHost: true));
+            profile: profile,
+            event: state.event,
+            id: UniqueId(),
+            addHost: true));
       }
       emit(state);
     }
   }
 
-  void removeFriendAsHost(Profile profile){
+  void removeFriendAsHost(Profile profile) {
     if (!state.event.invitations.map((e) => e.profile).contains(profile)) {
-      Invitation foundInvitation = state.event.invitations.where((element) => element.profile == profile).first;
-      if(foundInvitation != null){
+      Invitation foundInvitation = state.event.invitations
+          .where((element) => element.profile == profile)
+          .first;
+      if (foundInvitation != null) {
         foundInvitation.addHost = false;
       }
       emit(state);
@@ -126,21 +140,17 @@ class EventFormCubit extends Cubit<EventFormState> {
         // compare the complete friendlist with the invitations for this event
         // set isLoadingFriends false, as they are loaded now obviously
         (friends) {
-          _getEventOwnedSeries().then((series) => series.fold(
-                  (failure) =>
-                      EventFormState.error(failure),
-                  (mySeries) =>
-                      emit(state.copyWith(
-                        event: removeNoneFriends(state.event, friends),
-                        friends: friends,
-                        isLoadingFriends: false,
-                        isLoadingSeries: false,
-                        series: mySeries
-                      )),
+      _getEventOwnedSeries().then((series) => series.fold(
+            (failure) => EventFormState.error(failure),
+            (mySeries) => emit(state.copyWith(
+                event: removeNoneFriends(state.event, friends),
+                friends: friends,
+                isLoadingFriends: false,
+                isLoadingSeries: false,
+                series: mySeries)),
           ));
     });
   }
-
 
   Future<void> loadEvent(String id) async {
     emit(EventFormState.loading());
@@ -167,20 +177,19 @@ class EventFormCubit extends Cubit<EventFormState> {
       //failureOrSuccess =  await right(unit);
       //failureOrSuccess =  await left(EventFailure.insufficientPermissions());
       failureOrSuccess =
-         await (await serverCall()).fold((l) => left(l), (r) async {
-            if(state.picture != null){
-              (await repository.uploadImageToEvent(r.id, state.picture!)).fold((l) => left(l), (r) => right(unit));
-            }
+          await (await serverCall()).fold((l) => left(l), (r) async {
+        if (state.picture != null) {
+          (await repository.uploadImageToEvent(r.id, state.picture!))
+              .fold((l) => left(l), (r) => right(unit));
+        }
 
-            return right(unit);
-          });
+        return right(unit);
+      });
     }
     emit(state.copyWith(
         isSaving: false,
         showErrorMessages: true,
         saveFailureOrSuccessOption: optionOf(failureOrSuccess)));
-
-
   }
 
   /// compare event invitations with an friendlist, and generate list with the intersection
@@ -196,7 +205,7 @@ class EventFormCubit extends Cubit<EventFormState> {
     return invitedFriends;
   }*/
 
-  Future<Either<NetWorkFailure, List<EventSeries>>> _getEventOwnedSeries(){
+  Future<Either<NetWorkFailure, List<EventSeries>>> _getEventOwnedSeries() {
     return repositorySeries.getOwnedEventSeries();
   }
 

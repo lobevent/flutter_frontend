@@ -111,6 +111,15 @@ class EventScreenCubit extends Cubit<EventScreenState> {
         });
   }
 
+  Future<void> UserConfirmAtEvent(
+      Event event, double? longitude, double? latitude) async {
+    state.maybeMap(
+        orElse: () {},
+        loaded: (loadedState) async {
+          await repository.confirmUserAtEvent(event, longitude!, latitude!);
+        });
+  }
+
   ///
   /// this alters the local invitation list and adds an invitation
   ///
@@ -152,8 +161,7 @@ class EventScreenCubit extends Cubit<EventScreenState> {
     toggleHost(invitation, false);
   }
 
-
-  void toggleHost(Invitation invitation, bool hostStatus){
+  void toggleHost(Invitation invitation, bool hostStatus) {
     state.maybeMap(
         orElse: () {},
         loaded: (loaded) {

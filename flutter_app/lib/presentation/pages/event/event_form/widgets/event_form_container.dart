@@ -8,6 +8,7 @@ import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/inv
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/pick_image_widget.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'coords_picker.dart';
 import 'description_body_widged.dart';
 import 'event_series/add_to_series.dart';
 import 'title_widget.dart';
@@ -16,7 +17,11 @@ class EventFormContainer extends StatelessWidget {
   final bool showErrorMessages;
   final bool isEditing;
   final Event? event;
-  const EventFormContainer({Key? key, this.showErrorMessages = true, required this.isEditing, this.event})
+  const EventFormContainer(
+      {Key? key,
+      this.showErrorMessages = true,
+      required this.isEditing,
+      this.event})
       : super(key: key);
 
   @override
@@ -28,8 +33,14 @@ class EventFormContainer extends StatelessWidget {
           : AutovalidateMode.disabled,
       child: SingleChildScrollView(
         child: Column(
-          children:  [
-            if(event != null && event!.image != null) PickImageWidget(loadetFile: event!.image,) else const PickImageWidget(),
+          children: [
+            if (event != null && event!.image != null)
+              PickImageWidget(
+                loadetFile: event!.image,
+              )
+            else
+              const PickImageWidget(),
+
             /// the input field, where the name is typed
             const EventNameField(), // ATTENTION: the textfieldclasses have to be constant ( research has to be done into this! )
 
@@ -38,11 +49,13 @@ class EventFormContainer extends StatelessWidget {
 
             const DatePicker(),
 
+            const CoordsPicker(),
+
             const CheckBoxArea(),
 
-            if(!isEditing) InviteFriendsWidget(),
+            if (!isEditing) InviteFriendsWidget(),
 
-            if(!isEditing) AddToSeries(),
+            if (!isEditing) AddToSeries(),
 
             //const PickImageWidget(),
           ],

@@ -26,6 +26,7 @@ import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/O
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../../application/core/geo_functions.dart';
 import '../../../../../../domain/post/post.dart';
 
 class EventContent extends StatelessWidget {
@@ -63,6 +64,15 @@ class EventContent extends StatelessWidget {
                   /// the date of the event
                   DateAndOwner(stateLoaded.event.date, stateLoaded.event.owner!,
                       context),
+
+                  /// Used as space
+                  const SizedBox(height: 20),
+
+                  /// coords of the event
+                  CoordsWidget(
+                      stateLoaded.event.longitude, stateLoaded.event.latitude),
+                  ImHereButton(context, stateLoaded.event.longitude,
+                      stateLoaded.event.latitude, stateLoaded.event),
 
                   /// Used as space
                   const SizedBox(height: 20),
@@ -207,6 +217,32 @@ class EventContent extends StatelessWidget {
     ]);
   }
 
+  Widget CoordsWidget(double? latitude, double? longitude) {
+    return PaddingWidget(children: [
+      Icon(Icons.my_location),
+      Text("Latitude: ${latitude!}"),
+      Text(" Longitude: ${longitude!}"),
+    ]);
+  }
+
+  Widget ImHereButton(
+      BuildContext context, double? latitude, double? longitude, Event event) {
+    bool nearby = false;
+    nearby = GeoFunctions().checkIfNearEvent(longitude!, latitude!);
+    if (nearby == true)
+      return TextWithIconButton(
+        onPressed: () {
+          context.read<EventScreenCubit>().UserConfirmAtEvent(
+              event,
+              GeoFunctions().position?.longitude,
+              GeoFunctions().position?.latitude);
+        },
+        text: "I am here!",
+      );
+    else
+      return Text("");
+  }
+
   /// returns widget, that ist padded and expands
   Widget DescriptionWidget(String description) {
     return PaddingWidget(children: [
@@ -259,10 +295,10 @@ class EventContent extends StatelessWidget {
     if (last2Posts != null && last2Posts.isNotEmpty) {
       //last2posts is min 1
       if (last2Posts.length > 1) {
-        //only 1 post
+        //build 2 paths with opacity
         return generate2PostsWithOpacity(last2Posts, event, context);
       } else {
-        //build 2 posts
+        //build 1 post
         return generate1HalfPostWithOpacity(last2Posts.first!, event, context);
       }
     } else {

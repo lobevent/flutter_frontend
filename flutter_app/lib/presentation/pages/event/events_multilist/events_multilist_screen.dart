@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/main_app_bar.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/widgets/events_multilist_body.dart';
 
@@ -55,6 +56,7 @@ class OwnEventScreenHolder extends StatelessWidget {
     // ];
 
     return BasicContentContainer(
+        appBar: MainAppBar(),
         bottomNavigationBar: BottomNavigation(selected: navigation),
         child_ren: right( Container(child: EventsMultilistBody(foreign: profile!=null,))),
         isLoading: isLoading);

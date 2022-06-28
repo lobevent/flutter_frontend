@@ -5,6 +5,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/i
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/checkbox_area.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/date_picker.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/invite_friends_widget.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/max_persons.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/pick_image_widget.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -46,6 +47,8 @@ class EventFormContainer extends StatelessWidget {
 
             /// the input filed with the decription
             const DescriptionField(),
+
+            const MaxPersons(),
 
             const DatePicker(),
 

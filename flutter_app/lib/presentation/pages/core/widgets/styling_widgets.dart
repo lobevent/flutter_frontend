@@ -4,6 +4,7 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:dartz/dartz.dart' show left, Either;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/core_widgets_stylings_text_with_icon.dart';
@@ -404,6 +405,9 @@ class FullWidthPaddingInput extends StatelessWidget {
   final FormFieldValidator<String>? validator;
   final ValueChanged<String>? onChanged;
   final TextInputType? textInputType;
+  final EdgeInsets padding;
+  final List<TextInputFormatter>? inputFormatters;
+  final AutovalidateMode? autoValidateMode;
 
   FullWidthPaddingInput(
       {this.controller,
@@ -414,12 +418,15 @@ class FullWidthPaddingInput extends StatelessWidget {
       this.maxLength,
       this.validator,
       this.onChanged,
-      this.textInputType});
+      this.textInputType,
+      this.padding = const EdgeInsets.all(10),
+      this.inputFormatters, this.autoValidateMode,
+      });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: padding,
       child: TextFormField(
         obscureText: password ? true : false,
         enableSuggestions: password ? false : true,
@@ -435,6 +442,8 @@ class FullWidthPaddingInput extends StatelessWidget {
           labelText: labelText,
         ),
         keyboardType: textInputType,
+        autovalidateMode: autoValidateMode,
+        inputFormatters: inputFormatters,
       ),
     );
   }

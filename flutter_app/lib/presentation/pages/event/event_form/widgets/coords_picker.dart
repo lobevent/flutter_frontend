@@ -25,8 +25,7 @@ class _CoordsPickerState extends State<CoordsPicker> {
         textEditingControllerLongi.text = state.event.longitude!.toString();
         textEditingControllerLati.text = state.event.latitude!.toString();
       },
-      child: Padding(
-          padding: const EdgeInsets.all(10),
+
           child: Column(
             children: [
               FullWidthPaddingInput(
@@ -48,7 +47,7 @@ class _CoordsPickerState extends State<CoordsPicker> {
                     const TextInputType.numberWithOptions(decimal: true),
               ),
             ],
-          )),
+          ),
     );
   }
 }

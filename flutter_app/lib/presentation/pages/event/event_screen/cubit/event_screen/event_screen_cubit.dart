@@ -102,10 +102,11 @@ class EventScreenCubit extends Cubit<EventScreenState> {
 
               var event = loadedState.event
                   .copyWith(status: status, attendingCount: attending);
+              var newState = loadedState.copyWith(event: event);
 
               emit(EventScreenState.loading());
 
-              emit(EventScreenState.loaded(event: event));
+              emit(newState);
             });
           });
         });

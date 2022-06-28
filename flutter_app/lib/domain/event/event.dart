@@ -22,6 +22,7 @@ class Event with _$Event {
       {required UniqueId id,
       required EventName name,
       required DateTime date,
+      int? maxPersons,
       EventDescription? description,
       required DateTime creationDate,
       Todo? todo,

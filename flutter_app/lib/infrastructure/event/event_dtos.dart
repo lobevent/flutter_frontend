@@ -36,6 +36,7 @@ class EventDto extends BaseDto with _$EventDto {
     required bool visibleWithoutLogin,
     required DateTime creationDate,
     int? attendingUsersCount,
+    int? maxPersons,
     @SeriesConverter() EventSeriesDto? eventSeries,
     @TodoConverter() TodoDto? todo,
     @OwnerConverter() ProfileDto? owner,
@@ -52,6 +53,7 @@ class EventDto extends BaseDto with _$EventDto {
   factory EventDto.fromDomain(Event event) {
     EventDto returnedDto;
     return EventDto(
+      maxPersons: event.maxPersons,
       id: event.id.value,
       name: event.name.getOrCrash(),
       public: event.public,
@@ -85,6 +87,7 @@ class EventDto extends BaseDto with _$EventDto {
             .toList() ??
         <Invitation>[];
     return Event(
+      maxPersons: maxPersons,
       id: UniqueId.fromUniqueString(id),
       name: EventName(name),
       date: date,

@@ -60,6 +60,11 @@ class EventFormCubit extends Cubit<EventFormState> {
         event: state.event.copyWith(description: EventDescription(body))));
   }
 
+  void changeMaxPersons(int maxPersons){
+    emit(state.copyWith(
+        event: state.event.copyWith(maxPersons: maxPersons)));
+  }
+
   void changeDate(DateTime date) {
     emit(state.copyWith(event: state.event.copyWith(date: date.toUtc())));
   }

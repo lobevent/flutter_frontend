@@ -23,7 +23,8 @@ const double paddingLeftConst = 30;
 const double paddingTopConst = 0;
 const double paddingRightConst = 30;
 const double paddingBottomConst = 0;
-const stdPadding = EdgeInsets.fromLTRB(paddingLeftConst, paddingTopConst, paddingRightConst, paddingBottomConst);
+const stdPadding = EdgeInsets.fromLTRB(
+    paddingLeftConst, paddingTopConst, paddingRightConst, paddingBottomConst);
 
 /// the content Container should contain no logic, but should only call the
 /// content widgets
@@ -402,6 +403,7 @@ class FullWidthPaddingInput extends StatelessWidget {
   final int? maxLength;
   final FormFieldValidator<String>? validator;
   final ValueChanged<String>? onChanged;
+  final TextInputType? textInputType;
 
   FullWidthPaddingInput(
       {this.controller,
@@ -411,7 +413,8 @@ class FullWidthPaddingInput extends StatelessWidget {
       this.maxLines,
       this.maxLength,
       this.validator,
-      this.onChanged});
+      this.onChanged,
+      this.textInputType});
 
   @override
   Widget build(BuildContext context) {
@@ -431,6 +434,7 @@ class FullWidthPaddingInput extends StatelessWidget {
           border: const OutlineInputBorder(),
           labelText: labelText,
         ),
+        keyboardType: textInputType,
       ),
     );
   }

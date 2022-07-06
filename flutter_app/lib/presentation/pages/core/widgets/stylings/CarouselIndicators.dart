@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/presentation/core/style.dart';
 
 class CarouselIndicators extends StatelessWidget {
   final int length;
@@ -41,7 +42,7 @@ class CarouselIndicators extends StatelessWidget {
     if (activeColor != null) {
       return activeColor!;
     } else {
-      return Colors.black;
+      return AppColors.black;
     }
   }
 
@@ -49,7 +50,7 @@ class CarouselIndicators extends StatelessWidget {
     if (inactiveColor != null) {
       return inactiveColor!;
     } else {
-      return Colors.black26;
+      return AppColors.darkGrey;
     }
   }
 }

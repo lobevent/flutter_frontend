@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/presentation/core/style.dart';
 
 /// this class is meant to be the main loading overlay
 class LoadingOverlay extends StatelessWidget {
@@ -35,7 +36,7 @@ class LoadingIndicator extends StatelessWidget {
       ignoring: !isLoading,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        color: isLoading ? Colors.black.withOpacity(0.8) : Colors.transparent,
+        color: isLoading ? AppColors.black : Colors.transparent,
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Visibility(
@@ -48,7 +49,7 @@ class LoadingIndicator extends StatelessWidget {
               Text(
                 text,
                 style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                      color: Colors.white,
+                      color: AppColors.white,
                       fontSize: 16,
                     ),
               ),

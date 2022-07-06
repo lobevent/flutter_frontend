@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart' hide Router;
+import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/gen_dialog.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/cubit/events_mulitlist_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
@@ -48,17 +49,17 @@ class BottomNavigation extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.primaryColor,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.event),
           label: 'OwnEvents',
-          backgroundColor: Colors.green,
+          backgroundColor: AppColors.primaryColor,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person_search),
           label: 'ProfileSearch',
-          backgroundColor: Colors.brown,
+          backgroundColor: AppColors.primaryColor,
         ),
         //logout
         // BottomNavigationBarItem(
@@ -69,11 +70,11 @@ class BottomNavigation extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(Icons.swap_horiz_outlined),
           label: 'EventSwiper',
-          backgroundColor: Colors.brown,
+          backgroundColor: AppColors.primaryColor,
         ),
       ],
       currentIndex: enumToData[selected]['key'] as int,
-      selectedItemColor: Colors.amber[800],
+      selectedItemColor: AppColors.mainIcon,
       onTap: (index) => onItemTapped != null
           ? onItemTapped!(indexToEnum[index] as NavigationOptions)
           : navigate(indexToEnum[index] as NavigationOptions, context),

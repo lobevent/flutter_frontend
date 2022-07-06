@@ -205,11 +205,11 @@ class _WriteWidgetState extends State<WriteWidget> {
   Widget build(BuildContext context) {
 
     return Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+        decoration: BoxDecoration(border: Border.all(color: AppColors.mainIcon)),
         width: 300,
         child: Title(
           title: "Post something.",
-          color: Colors.black,
+          color: AppColors.black,
           child: Column(
             children: [
               FullWidthPaddingInput(

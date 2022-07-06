@@ -54,7 +54,7 @@ class PostCommentBaseWidget extends StatelessWidget {
       Expanded(
         child: Text(
           content,
-          style: const TextStyle(color: Color(0xFF400909)),
+          style: const TextStyle(color: AppColors.stdTextColor),
         ),
       )
     ]);

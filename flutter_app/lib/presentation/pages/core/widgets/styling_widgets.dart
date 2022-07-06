@@ -56,7 +56,7 @@ class BasicContentContainer extends StatelessWidget {
       floatingActionButton: floatingActionButton ?? null,
       appBar: appBar,
       body: ColorfulSafeArea(
-          color: Colors.yellow,
+          color: AppColors.mainIcon,
           child: LoadingOverlay(
             isLoading: isLoading,
             child: ScrollOrNotChild(),
@@ -232,7 +232,7 @@ class StdTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
         decoration: BoxDecoration(
-            color: disabled ? Color(0x2A000000) : Color(0x2ABBBBBB),
+            color: disabled ? AppColors.lightGrey : AppColors.darkGrey,
             /*   border:Border.all(width: 2.0,
                   color:  Color(0x6BBBBBBB)),*/
             borderRadius: BorderRadius.circular(10)),

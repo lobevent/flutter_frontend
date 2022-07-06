@@ -29,6 +29,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../../../application/core/geo_functions_cubit.dart';
 import '../../../../../../domain/post/post.dart';
+import '../../../../core/widgets/timer_widget.dart';
 
 class EventContent extends StatelessWidget {
   ///the color used to display the text on this page
@@ -72,6 +73,12 @@ class EventContent extends StatelessWidget {
                   /// coords of the event
                   CoordsWidget(
                       stateLoaded.event.longitude, stateLoaded.event.latitude),
+
+                  /// timerwidget to display when party starts
+                  if (stateLoaded.event.status != null)
+                    TimerWidget(dateTime: stateLoaded.event.date),
+
+                  ///for confirming the attending of an event
                   ImHereButton(
                       context,
                       stateLoaded.event.longitude,
@@ -137,6 +144,10 @@ class EventContent extends StatelessWidget {
       case EventStatus.invited:
         icon = IconsWithTexts.uesWithIcons[EventStatus.invited]!.values.first;
         text = IconsWithTexts.uesWithIcons[EventStatus.invited]!.keys.first;
+        break;
+      case EventStatus.confirmAttending:
+        icon = Icons.location_on_rounded;
+        text = AppStrings.there;
         break;
       default:
         icon = Icons.lightbulb;
@@ -256,7 +267,7 @@ class EventContent extends StatelessWidget {
                       text: "I am here!",
                     );
                   } else
-                    return Text("");
+                    return Text("Confirm when you are at the location.");
                 },
                 orElse: () => const Text(""));
           }),
@@ -265,7 +276,7 @@ class EventContent extends StatelessWidget {
         return Icon(Icons.local_fire_department);
       }
     } else
-      return Text("Confirm when you are at the location.");
+      return Text("");
   }
 
   /// returns widget, that ist padded and expands

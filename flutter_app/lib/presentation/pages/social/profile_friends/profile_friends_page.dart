@@ -50,6 +50,7 @@ class ProfileFriendsScreenHolder extends StatelessWidget {
       ),
       isLoading: isLoading,
       child_ren: right(ProfileFriendsBody()),
+      scrollable: false,
     );
   }
 }

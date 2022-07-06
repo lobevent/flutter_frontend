@@ -39,38 +39,39 @@ class ProfileFriendsBodyState extends State<ProfileFriendsBody>
 
   Widget buildFriendListView(List<Profile> friendsOrPending, bool notAccepted) {
     if (friendsOrPending.isEmpty) {
-      return Center(
-        child: Text(AppStrings.noProfilesFound),
-      );
+      return Text(AppStrings.noProfilesFound);
+    } else {
+      return ListView.builder(
+          itemBuilder: (context, index) {
+            final friend = friendsOrPending[index];
+            if (friend.failureOption.isSome()) {
+              return Ink(
+                  color: Colors.red,
+                  child: ListTile(
+                    title: Text(friend.failureOption
+                        .fold(() => "", (a) => a.toString())),
+                  ));
+            } else {
+              return ProfileListTiles(
+                  key: ObjectKey(friend),
+                  profile: friendsOrPending[index],
+                  //decide if we build both buttons or only 1 for friends
+                  onFriendRequest: notAccepted == true
+                      ? (Profile profile) {
+                          context
+                              .read<ProfileFriendsCubit>()
+                              .acceptFriendship(profile);
+                        }
+                      : null,
+                  onDeleteFriend: (Profile profile) {
+                    context
+                        .read<ProfileFriendsCubit>()
+                        .deleteFriendship(profile);
+                  });
+            }
+          },
+          itemCount: friendsOrPending.length);
     }
-    return ListView.builder(
-        itemBuilder: (context, index) {
-          final friend = friendsOrPending[index];
-          if (friend.failureOption.isSome()) {
-            return Ink(
-                color: Colors.red,
-                child: ListTile(
-                  title: Text(
-                      friend.failureOption.fold(() => "", (a) => a.toString())),
-                ));
-          } else {
-            return ProfileListTiles(
-                key: ObjectKey(friend),
-                profile: friendsOrPending[index],
-                //decide if we build both buttons or only 1 for friends
-                onFriendRequest: notAccepted == true
-                    ? (Profile profile) {
-                        context
-                            .read<ProfileFriendsCubit>()
-                            .acceptFriendship(profile);
-                      }
-                    : null,
-                onDeleteFriend: (Profile profile) {
-                  context.read<ProfileFriendsCubit>().deleteFriendship(profile);
-                });
-          }
-        },
-        itemCount: friendsOrPending.length);
   }
 
   @override

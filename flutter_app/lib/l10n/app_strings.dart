@@ -28,6 +28,7 @@ class AppStrings {
   static const String notAttending = "not attending";
   static const String interested = "interested";
   static const String invited = "invited";
+  static const String there = "there";
   static const String participants = "Participants";
 
   static const String deleteFriendDialogTitle = "Are you sure?";
@@ -50,17 +51,14 @@ class AppStrings {
 
   static const String inviteFriends = "Invite Friends";
 
-
   static const String endReached = "You have reached the end!";
-
-
-
 
   static const String createSeries = "Create an event series!";
   static const String updateSeries = "Edit event series!";
   static const String enterSeriesName = "Enter a name for the series";
-  static const String enterSeriesDescription = "Enter a description for the series";
+  static const String enterSeriesDescription =
+      "Enter a description for the series";
   static const String ownEventSeriesOverviewTitle = "Event Series";
-  static const String followedEventSeriesOverviewTitle = "Followed event series";
-
+  static const String followedEventSeriesOverviewTitle =
+      "Followed event series";
 }

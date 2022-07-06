@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/data/constants.dart';
 import 'package:flutter_frontend/presentation/core/utils/converters/date_time_converter.dart';
+import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/cubit/event_tile_functions_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/es_ec_UesMenuButton.dart';
 
 import '../../../../../domain/event/event.dart';
 import '../../../core/widgets/styling_widgets.dart';
@@ -25,7 +28,7 @@ class TopInfo extends StatelessWidget {
                   child: Text(
                       event.name.getOrCrash(), style: Theme.of(context).textTheme.headline5),
                 ),
-              )
+              ),
             ],),
           SizedBox(height: Constants.stdSpacesBetweenContent),
           Row(
@@ -35,11 +38,44 @@ class TopInfo extends StatelessWidget {
                 text: event.owner?.name.getOrEmptyString() ?? '',
                 icon: Icons.location_on_outlined,
               ),
-              Text(DateTimeConverter.convertToStringWithMonthName(event.date), style: TextStyle(fontWeight: FontWeight.bold),)
+              Text(DateTimeConverter.convertToStringWithMonthName(event.date), style: TextStyle(fontWeight: FontWeight.bold),),
+              UESButton(context),
             ],),
           SizedBox(height: Constants.stdSpacesBetweenContent),
         ],
 
       );
+  }
+
+
+  Widget UESButton(BuildContext context){
+    return BlocBuilder<EventTileFunctionsCubit, EventTileFunctionsState>(
+      builder: (context, state) {
+      IconData uesIcon = Icons.error;
+      switch (state.status) {
+        case EventStatus.attending:
+          uesIcon = Icons.check;
+          break;
+        case EventStatus.notAttending:
+          uesIcon = Icons.clear;
+          break;
+        case EventStatus.interested:
+          uesIcon = Icons.lightbulb;
+          break;
+        case null:
+          break;
+        case EventStatus.invited:
+          uesIcon = Icons.lightbulb;
+          break;
+        case EventStatus.confirmAttending:
+          // TODO: Handle this case.
+          break;
+      }
+      return UesMenuButton(icon: uesIcon, onClickFunction: (EventStatus status) => {
+        context.read<EventTileFunctionsCubit>().changeStatus(status), Navigator.pop(context)},
+        isLoading: state is EventTileUESLoading,);
+
+      },
+    );
   }
 }

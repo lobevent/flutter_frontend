@@ -14,10 +14,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 ///
 class UesMenuButton extends StatefulWidget {
   final IconData icon;
-  final String text;
+  final String? text;
   final bool isLoading;
-  final VoidCallback? onClickFunction;
-  const UesMenuButton({Key? key, required this.icon, required this.text, required this.isLoading, this.onClickFunction}) : super(key: key);
+  final Function(EventStatus)? onClickFunction;
+  final double loadingButtonSize;
+  const UesMenuButton({Key? key, required this.icon, this.text, required this.isLoading, this.onClickFunction,  this.loadingButtonSize=20}) : super(key: key);
 
   @override
   _UesMenuButtonState createState() => _UesMenuButtonState();
@@ -33,12 +34,12 @@ class _UesMenuButtonState extends State<UesMenuButton> {
 
     // the request is still running show this dialog
     if (widget.isLoading) {
-      return const LoadingButton();
+      return LoadingButton(size: widget.loadingButtonSize,);
     }
 // This menu button widget updates a _selection field (of type EventStatus,
 // not shown here).
     return PopupMenuButton(
-        child: Row(children: [Icon(widget.icon), Text(widget.text, style: TextStyle(color: AppColors.stdTextColor))]),
+        child: Row(children: [Icon(widget.icon), if(widget.text != null) Text(widget.text??'', style: TextStyle(color: AppColors.stdTextColor))]),
         itemBuilder: (BuildContext context) {
           return [
             PopupMenuWidget(

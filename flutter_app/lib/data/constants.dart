@@ -27,5 +27,5 @@ class Constants {
 
 
   //--------------------------------------------------- Heights and paddings ------------------------------------------------------
-  static const double stdSpacesBetweenContent = 5;
+  static const double stdSpacesBetweenContent = 10;
 }

@@ -70,6 +70,9 @@ class EventListTiles extends StatelessWidget {
         case EventStatus.invited:
           uesIcon = Icon(Icons.lightbulb);
           break;
+        case EventStatus.confirmAttending:
+          // TODO: Handle this case.
+          break;
       }
       return <Widget>[
         IconButton(icon: uesIcon, onPressed: () => {}),

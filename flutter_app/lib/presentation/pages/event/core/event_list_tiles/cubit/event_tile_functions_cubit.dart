@@ -12,16 +12,17 @@ class EventTileFunctionsCubit extends Cubit<EventTileFunctionsState> {
   Event event;
 
 
-  EventTileFunctionsCubit(this.event) : super(EventTileFunctionsInitial());
+  EventTileFunctionsCubit(this.event) : super(EventTileFunctionsInitial(event.status));
 
   Future<void> changeStatus(EventStatus status) async {
-          emit(EventTileUESLoading());
+          emit(EventTileUESLoading(status));
           await repository
               .changeStatus(event, status)
               .then((value) {value.fold(
-                    (failure) => emit(EventTileUESError(failure)),
+                    (failure) =>
+                        emit(EventTileUESError(failure, status)),
                     (event) {
-                  emit(EventTileUESLoaded());
+                  emit(EventTileUESLoaded(status));
                 });
         });
   }

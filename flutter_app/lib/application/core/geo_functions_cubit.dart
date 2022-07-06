@@ -1,32 +1,67 @@
-import 'dart:math' as math;
-
+import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/infrastructure/core/position.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'dart:math' as math;
 
-class GeoFunctions {
+import '../../domain/event/event.dart';
+
+part 'geo_functions_cubit.freezed.dart';
+part 'geo_functions_state.dart';
+
+class GeoFunctionsCubit extends Cubit<GeoFunctionsState> {
   Position? position;
+  final Event event;
   bool? nearby;
 
-  Future<Position?> checkUserPosition() async {
-    position = await determinePosition(LocationAccuracy.high).then((value) {
-      position = value;
-      return value;
-    });
-    return position;
+  GeoFunctionsCubit({required this.event})
+      : super(GeoFunctionsState.initial()) {
+    emit(GeoFunctionsState.initial());
+    checkPosAndNearEvent();
   }
 
-  bool checkIfNearEvent(double? longitude, double? latitude, double? longitude2, double? latitude2) {
-    double distanceMeters = calcDistanceHaversine(
-          longitude2!, latitude2!, longitude!, latitude!);
-      if (distanceMeters < 200) {
-        nearby =true;
-        return true;
-      }
-      else
-        {
-          nearby =false;
-          return false;
-        }
+  ///only safe the position of the user in state
+  Future<void> checkUserPosition() async {
+    try {
+      emit(GeoFunctionsState.loading());
+      position = await determinePosition(LocationAccuracy.high).then((value) {
+        emit(GeoFunctionsState.loaded(position: value, nearby: false));
+      });
+    } catch (e) {
+      GeoFunctionsState.error(error: e.toString());
+    }
+  }
+
+  ///check position of user and calc if is in same area <200m of the event
+  Future<void> checkPosAndNearEvent() async {
+    try {
+      emit(GeoFunctionsState.loading());
+      position =
+          await determinePosition(LocationAccuracy.high).then((posValue) {
+        checkIfNearEvent(event.longitude, event.latitude, posValue.longitude,
+                posValue.latitude)
+            .then((nearbyVal) {
+          emit(GeoFunctionsState.loaded(position: posValue, nearby: nearbyVal));
+        });
+      });
+    } catch (e) {
+      GeoFunctionsState.error(error: e.toString());
+    }
+  }
+
+  ///check with haversine if distance between coords is <200m
+  Future<bool> checkIfNearEvent(double? longitude, double? latitude,
+      double? longitude2, double? latitude2) async {
+    double distanceMeters =
+        calcDistanceHaversine(longitude2!, latitude2!, longitude!, latitude!);
+    if (distanceMeters < 200) {
+      nearby = true;
+      return true;
+    } else {
+      nearby = false;
+      return false;
+    }
   }
 
   ///returns the distance in metres

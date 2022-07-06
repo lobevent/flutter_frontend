@@ -21,6 +21,7 @@ class EventDto extends BaseDto with _$EventDto {
     0: EventStatus.notAttending,
     1: EventStatus.attending,
     2: EventStatus.interested,
+    3: EventStatus.confirmAttending,
   };
 
   static final Map domainToDtoStatus =
@@ -53,29 +54,28 @@ class EventDto extends BaseDto with _$EventDto {
   factory EventDto.fromDomain(Event event) {
     EventDto returnedDto;
     return EventDto(
-      maxPersons: event.maxPersons,
-      id: event.id.value,
-      name: event.name.getOrCrash(),
-      public: event.public,
-      date: event.date,
-      eventSeries: event.series != null ? EventSeriesDto.fromDomain(event.series!) : null,
-      description:
-          event.description != null ? event.description!.getOrCrash() : null,
-      todo: event.todo != null ? TodoDto.fromDomain(event.todo!) : null,
-      creationDate: event.creationDate,
-      owner: event.owner!=null ? ProfileDto.fromDomain(event.owner!)
-          :null,
-      attendingUsersCount: event.attendingCount,
-      ownStatus: domainToDtoStatus[event.status] as int?,
-      longitude: event.longitude,
-      latitude: event.latitude,
-      visibleWithoutLogin: event.visibleWithoutLogin,
-      invitations:
-          event.invitations.map((i) => InvitationDto.fromDomain(i)).toList(),
-      image: event.image
-    );
+        maxPersons: event.maxPersons,
+        id: event.id.value,
+        name: event.name.getOrCrash(),
+        public: event.public,
+        date: event.date,
+        eventSeries: event.series != null
+            ? EventSeriesDto.fromDomain(event.series!)
+            : null,
+        description:
+            event.description != null ? event.description!.getOrCrash() : null,
+        todo: event.todo != null ? TodoDto.fromDomain(event.todo!) : null,
+        creationDate: event.creationDate,
+        owner: event.owner != null ? ProfileDto.fromDomain(event.owner!) : null,
+        attendingUsersCount: event.attendingCount,
+        ownStatus: domainToDtoStatus[event.status] as int?,
+        longitude: event.longitude,
+        latitude: event.latitude,
+        visibleWithoutLogin: event.visibleWithoutLogin,
+        invitations:
+            event.invitations.map((i) => InvitationDto.fromDomain(i)).toList(),
+        image: event.image);
   }
-
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>
       _$EventDtoFromJson(json);
@@ -87,28 +87,27 @@ class EventDto extends BaseDto with _$EventDto {
             .toList() ??
         <Invitation>[];
     return Event(
-      maxPersons: maxPersons,
-      id: UniqueId.fromUniqueString(id),
-      name: EventName(name),
-      date: date,
-      description: description == null ? null : EventDescription(description!),
-      todo: todo == null ? null : todo!.toDomain(),
-      owner: owner?.toDomain(),
-      //TODO: don't forget this one!
-      public: public,
-      liked: liked,
-      series: eventSeries?.toDomain(),
-      creationDate: creationDate,
-      attendingCount: attendingUsersCount,
-      status: dtoToDomainStatus[ownStatus] as EventStatus?,
-      longitude: longitude,
-      latitude: latitude,
-      visibleWithoutLogin: visibleWithoutLogin,
-      invitations: invitationL,
-      isHost: isHost ?? false,
-      image: image
-
-    );
+        maxPersons: maxPersons,
+        id: UniqueId.fromUniqueString(id),
+        name: EventName(name),
+        date: date,
+        description:
+            description == null ? null : EventDescription(description!),
+        todo: todo == null ? null : todo!.toDomain(),
+        owner: owner?.toDomain(),
+        //TODO: don't forget this one!
+        public: public,
+        liked: liked,
+        series: eventSeries?.toDomain(),
+        creationDate: creationDate,
+        attendingCount: attendingUsersCount,
+        status: dtoToDomainStatus[ownStatus] as EventStatus?,
+        longitude: longitude,
+        latitude: latitude,
+        visibleWithoutLogin: visibleWithoutLogin,
+        invitations: invitationL,
+        isHost: isHost ?? false,
+        image: image);
   }
 }
 

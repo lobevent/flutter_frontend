@@ -27,7 +27,7 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../../../application/core/geo_functions.dart';
+import '../../../../../../application/core/geo_functions_cubit.dart';
 import '../../../../../../domain/post/post.dart';
 
 class EventContent extends StatelessWidget {
@@ -72,8 +72,12 @@ class EventContent extends StatelessWidget {
                   /// coords of the event
                   CoordsWidget(
                       stateLoaded.event.longitude, stateLoaded.event.latitude),
-                  ImHereButton(context, stateLoaded.event.longitude,
-                      stateLoaded.event.latitude, stateLoaded.event),
+                  ImHereButton(
+                      context,
+                      stateLoaded.event.longitude,
+                      stateLoaded.event.latitude,
+                      stateLoaded.event,
+                      stateLoaded.event.status),
 
                   /// Used as space
                   const SizedBox(height: 20),
@@ -218,7 +222,7 @@ class EventContent extends StatelessWidget {
     ]);
   }
 
-  Widget CoordsWidget(double? latitude, double? longitude) {
+  Widget CoordsWidget(double? longitude, double? latitude) {
     return PaddingWidget(children: [
       Icon(Icons.my_location),
       Text("Latitude: ${latitude!}"),
@@ -226,27 +230,42 @@ class EventContent extends StatelessWidget {
     ]);
   }
 
-  Future<bool> checkNearby(double? latitude, double? longitude, GeoFunctions geo)async{
-    final Position? pos = await geo.checkUserPosition();
-    return geo.checkIfNearEvent(pos!.longitude, pos.latitude, longitude, latitude);
-  }
-  Widget ImHereButton(BuildContext context, double? latitude, double? longitude, Event event) {
-    GeoFunctions geo = GeoFunctions();
-    checkNearby(latitude!, longitude!, geo);
-
-    if ( geo.nearby == true) {
-      return TextWithIconButton(
-        onPressed: () async {
-          final Position? pos= await GeoFunctions().checkUserPosition();
-          context.read<EventScreenCubit>().UserConfirmAtEvent(
-              event,
-              pos!.longitude,
-              pos.latitude);
-        },
-        text: "I am here!",
-      );
+  Widget ImHereButton(BuildContext contextEvent, double? latitude,
+      double? longitude, Event event, EventStatus? status) {
+    //check if already confirmed attending
+    if (status != null) {
+      if (status != EventStatus.confirmAttending) {
+        return BlocProvider(
+          create: (context) => GeoFunctionsCubit(event: event),
+          child: BlocBuilder<GeoFunctionsCubit, GeoFunctionsState>(
+              builder: (context, state) {
+            return state.maybeMap(
+                loaded: (loadedState) {
+                  //check if wwe display the button
+                  if (loadedState.nearby == true) {
+                    return TextWithIconButton(
+                      onPressed: () async {
+                        //send confirm at event
+                        contextEvent
+                            .read<EventScreenCubit>()
+                            .UserConfirmAtEvent(
+                                event,
+                                loadedState.position.longitude,
+                                loadedState.position.latitude);
+                      },
+                      text: "I am here!",
+                    );
+                  } else
+                    return Text("");
+                },
+                orElse: () => const Text(""));
+          }),
+        );
+      } else {
+        return Icon(Icons.local_fire_department);
+      }
     } else
-      return Text("");
+      return Text("Confirm when you are at the location.");
   }
 
   /// returns widget, that ist padded and expands

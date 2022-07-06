@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
-import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles.dart';
+import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/event_list_tiles.dart';
 
 ///Event Tabs contains an TabController an within two tabs: Upcoming Events and recent events!
 class EventTabs extends StatelessWidget {

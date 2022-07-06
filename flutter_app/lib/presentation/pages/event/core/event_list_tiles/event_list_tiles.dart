@@ -1,12 +1,19 @@
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/data/constants.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
+import 'package:flutter_frontend/presentation/core/utils/converters/date_time_converter.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/gen_dialog.dart';
+import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/cubit/event_tile_functions_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/event_list_tile__topInfo.dart';
+import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/event_list_tiles__topImage.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
+
+import '../../../core/widgets/styling_widgets.dart';
 
 class EventListTiles extends StatelessWidget {
   final Event event;
@@ -21,51 +28,28 @@ class EventListTiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Card(
-      child: Column(children: [
-        GestureDetector(
-          onTap: () => showEvent(context),
-          child: ImageWidget(context, event.image),
-        ),
-        ListTile(
-          leading: IconButton(
-            icon: Icon(Icons.event),
-            onPressed: () => showEvent(context),
-          ),
-          title: Text(event.name.getOrCrash()),
-          //subtitle: Text(event.description?.getOrCrash()??'', style: TextStyle(color: AppColors.stdTextColor),),
-          subtitle: Text(event.date.toString(), style: TextStyle(color: AppColors.stdTextColor), ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: event.isHost ? actionButtons(onDeletion != null, context) : [],
-          ),
-      ),])
+    return BlocProvider(create:(context) => EventTileFunctionsCubit(event), child:
+      Card(
+        child: Column(children: [
+          TopInfo(event: event),
+          TopImage(event: event),
+          if (event.isHost)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: event.isHost ? actionButtons(onDeletion != null, context) : [],
+            ),
+          Row(
+            children: [
+
+            ],
+          )
+        ])
+      )
     );
   }
 
-  ///
-  /// Checks if imagePath exists and shows other stdimage if not
-  ///
-  Widget ImageWidget(BuildContext context, String? imagePath){
-    ImageProvider image;
-    if(imagePath == null){
-      image = AssetImage("assets/images/partypeople.jpg");
-    }
-    else {
-      image = NetworkImage(dotenv.env['ipSim']!.toString() +  imagePath);
-    }
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 150,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: image,
-        ),
-      ),
-    );
-  }
+
 
   /// action buttons for the event, can be made invisible, if its not own events
   List<Widget> actionButtons(bool visible, BuildContext context) {
@@ -116,8 +100,6 @@ class EventListTiles extends StatelessWidget {
     context.router.push(EventFormPageRoute(editedEventId: event.id.value));
   }
 
-  void showEvent(BuildContext context) {
-    context.router.push(EventScreenPageRoute(eventId: event.id));
-  }
+
 
 }

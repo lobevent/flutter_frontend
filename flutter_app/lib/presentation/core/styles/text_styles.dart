@@ -17,6 +17,7 @@ class AppTextStyles {
     fontWeight: FontWeight.bold
   );
 
+
   static const loginText = TextStyle(
     color: AppColors.stdTextColor,
     fontWeight: FontWeight.bold,

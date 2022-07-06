@@ -1,6 +1,7 @@
 // just a file for the beginning which should be later upgraded to real
 // internationalization!!!
 export 'app_strings_failures.dart';
+export 'recurring_strings.dart';
 
 class AppStrings {
   static const String noUsernameError = "No Username Error";

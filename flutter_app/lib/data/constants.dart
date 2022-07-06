@@ -22,4 +22,10 @@ class Constants {
   static const String countryDataName = 'name';
   static const String countryDataCode = 'code';
   static const String countryDataDialCode = 'dial_code';
+
+
+
+
+  //--------------------------------------------------- Heights and paddings ------------------------------------------------------
+  static const double stdSpacesBetweenContent = 5;
 }

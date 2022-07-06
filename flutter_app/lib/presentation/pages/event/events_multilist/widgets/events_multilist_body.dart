@@ -6,7 +6,7 @@ import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/std_choice_text_chip.dart';
-import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles.dart';
+import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/event_list_tiles.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/cubit/events_mulitlist_cubit.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 

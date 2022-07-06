@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
-import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles.dart';
+import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/event_list_tiles.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/profile_list_tiles.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 

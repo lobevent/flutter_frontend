@@ -16,7 +16,8 @@ class UesMenuButton extends StatefulWidget {
   final IconData icon;
   final String text;
   final bool isLoading;
-  const UesMenuButton({Key? key, required this.icon, required this.text, required this.isLoading}) : super(key: key);
+  final VoidCallback? onClickFunction;
+  const UesMenuButton({Key? key, required this.icon, required this.text, required this.isLoading, this.onClickFunction}) : super(key: key);
 
   @override
   _UesMenuButtonState createState() => _UesMenuButtonState();
@@ -25,7 +26,7 @@ class UesMenuButton extends StatefulWidget {
 class _UesMenuButtonState extends State<UesMenuButton> {
   @override
   Widget build(BuildContext context) {
-    final onClickFunction = (EventStatus status) {
+    final onClickFunction = widget.onClickFunction?? (EventStatus status) {
       context.read<EventScreenCubit>().changeStatus(status);
       Navigator.pop(context);
     };

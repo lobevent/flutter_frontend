@@ -95,6 +95,7 @@ dependencies:
 
   # pick image from gallery
   image_picker: ^0.8.4+4
+  flutter_osm_plugin: ^0.34.1+5
 
 
 dev_dependencies:

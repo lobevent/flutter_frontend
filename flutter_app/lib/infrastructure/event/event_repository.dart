@@ -154,9 +154,9 @@ class EventRepository extends Repository {
   }
 
   Future<bool> confirmUserAtEvent(
-      Event event, double longitude, double latitude) async {
+      UniqueId eventId, double longitude, double latitude) async {
     return _eventRemoteService.confirmUserAtEvent(
-        event.id.value, longitude, latitude);
+       eventId.value, longitude, latitude);
   }
   // Future<Either<NetWorkFailure, bool>> sendInvitation(Event event, Profile profile)async{
   //   return localErrorHandler(() async {

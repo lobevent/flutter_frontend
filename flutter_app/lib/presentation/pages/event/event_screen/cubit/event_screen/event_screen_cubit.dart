@@ -117,7 +117,7 @@ class EventScreenCubit extends Cubit<EventScreenState> {
     state.maybeMap(
         orElse: () {},
         loaded: (loadedState) async {
-          await repository.confirmUserAtEvent(event, longitude!, latitude!);
+          await repository.confirmUserAtEvent(event.id, longitude!, latitude!);
         });
   }
 

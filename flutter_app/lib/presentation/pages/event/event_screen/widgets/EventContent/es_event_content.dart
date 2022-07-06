@@ -24,6 +24,7 @@ import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/E
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/es_ec_add_friends_button.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/Overlays/es_ol_invited_persons.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../../application/core/geo_functions.dart';
@@ -225,22 +226,26 @@ class EventContent extends StatelessWidget {
     ]);
   }
 
-  Widget ImHereButton(
-      BuildContext context, double? latitude, double? longitude, Event event) {
-    bool nearby = false;
-    nearby = GeoFunctions().checkIfNearEvent(longitude!, latitude!);
-    if (nearby == false)
+  Future<bool> checkNearby(double? latitude, double? longitude, GeoFunctions geo)async{
+    final Position? pos = await geo.checkUserPosition();
+    return geo.checkIfNearEvent(pos!.longitude, pos.latitude, longitude, latitude);
+  }
+  Widget ImHereButton(BuildContext context, double? latitude, double? longitude, Event event) {
+    GeoFunctions geo = GeoFunctions();
+    checkNearby(latitude!, longitude!, geo);
+
+    if ( geo.nearby == true) {
       return TextWithIconButton(
-        onPressed: () {
-          double xD = GeoFunctions().position!.longitude;
+        onPressed: () async {
+          final Position? pos= await GeoFunctions().checkUserPosition();
           context.read<EventScreenCubit>().UserConfirmAtEvent(
               event,
-              GeoFunctions().position!.longitude,
-              GeoFunctions().position!.latitude);
+              pos!.longitude,
+              pos.latitude);
         },
         text: "I am here!",
       );
-    else
+    } else
       return Text("");
   }
 

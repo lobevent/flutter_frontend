@@ -5,24 +5,28 @@ import 'package:geolocator/geolocator.dart';
 
 class GeoFunctions {
   Position? position;
+  bool? nearby;
 
   Future<Position?> checkUserPosition() async {
-    await determinePosition(LocationAccuracy.high).then((value) {
+    position = await determinePosition(LocationAccuracy.high).then((value) {
       position = value;
+      return value;
     });
     return position;
   }
 
-  bool checkIfNearEvent(double? longitude, double? latitude) {
-    checkUserPosition().then((value) {
-      double distanceMeters = calcDistanceHaversine(
-          value!.longitude, value.latitude, longitude!, latitude!);
-      if (distanceMeters < 500) {
+  bool checkIfNearEvent(double? longitude, double? latitude, double? longitude2, double? latitude2) {
+    double distanceMeters = calcDistanceHaversine(
+          longitude2!, latitude2!, longitude!, latitude!);
+      if (distanceMeters < 200) {
+        nearby =true;
         return true;
       }
-      return false;
-    });
-    return false;
+      else
+        {
+          nearby =false;
+          return false;
+        }
   }
 
   ///returns the distance in metres

@@ -31,9 +31,9 @@ class _CoordsPickerState extends State<CoordsPicker> {
               FullWidthPaddingInput(
                 controller: textEditingControllerLongi,
                 labelText: "Longitude",
-                onChanged: (value) => context
+                onChanged: (value2) => context
                     .read<EventFormCubit>()
-                    .changeLongitude(double.parse(value)),
+                    .changeLongitude(double.parse(value2)),
                 textInputType:
                     const TextInputType.numberWithOptions(decimal: true),
               ),

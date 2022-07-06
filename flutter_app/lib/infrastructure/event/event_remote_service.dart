@@ -31,7 +31,7 @@ class EventRemoteService extends RemoteService<EventDto> {
   static const String eventsOfInterestPath =
       "/events/userInterest/%amount%/%lastEventTime%";
   static const String eventConfirmUser =
-      "/events/userInterest/%amount%/%lastEventTime%";
+      "/user/eventStatus/%eventId%/%longitude%/%latitude%/confirm";
   //event search name maxresults last
 
   // TODO combine it to event path?
@@ -187,10 +187,10 @@ class EventRemoteService extends RemoteService<EventDto> {
   }
 
   Future<bool> confirmUserAtEvent(
-      String id, double longitude, double latitude) async {
+      String eventId, double longitude, double latitude) async {
     final Response response = await client.post(
         eventConfirmUser.interpolate({
-          "eventId": id,
+          "eventId": eventId.toString(),
           "longitude": longitude.toString(),
           "latitude": latitude.toString()
         }),

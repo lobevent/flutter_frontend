@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/core/geo_functions_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
@@ -28,20 +29,20 @@ class _CoordsPickerState extends State<CoordsPicker> {
       child: Column(
         children: [
           FullWidthPaddingInput(
-            controller: textEditingControllerLongi,
             labelText: "Longitude",
+            inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[1234567890.]'))],
             onChanged: (value2) => context
                 .read<EventFormCubit>()
-                .changeLongitude(double.parse(value2)),
-            textInputType: const TextInputType.numberWithOptions(decimal: true),
+                .changeLongitude(double.parse(value2 == "" ? '0' : value2??'0')),
+            textInputType: TextInputType.numberWithOptions(decimal: true, signed: true),
           ),
           FullWidthPaddingInput(
-            controller: textEditingControllerLati,
             labelText: "Latitude",
-            onChanged: (value) => context
-                .read<EventFormCubit>()
-                .changeLatitude(double.parse(value)),
-            textInputType: const TextInputType.numberWithOptions(decimal: true),
+            inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[1234567890.]'))],
+            // onChanged: (value) => context
+            //     .read<EventFormCubit>()
+            //     .changeLatitude(double.parse(value == "" ? '0' : value??'0')),
+            textInputType: TextInputType.numberWithOptions(decimal: true, signed: true),
           ),
         ],
       ),

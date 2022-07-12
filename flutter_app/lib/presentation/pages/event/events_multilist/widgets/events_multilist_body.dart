@@ -11,9 +11,9 @@ import 'package:flutter_frontend/presentation/pages/event/events_multilist/cubit
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 class EventsMultilistBody extends StatefulWidget {
-  final bool foreign;
+  final bool profileView;
 
-  const EventsMultilistBody({Key? key, required this.foreign}) : super(key: key);
+  const EventsMultilistBody({Key? key, required this.profileView}) : super(key: key);
   @override
   EventsMultilistBodyState createState() => EventsMultilistBodyState();
 }
@@ -48,7 +48,7 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
           return CustomScrollView(
             slivers: [
               // Add the app bar to the CustomScrollView.
-              if(!widget.foreign) EventList_Bar(),
+              if(!widget.profileView) EventList_Bar(),
               // Next, create a SliverList
               SliverList(
                 // Use a delegate to build items as they're scrolled on screen.

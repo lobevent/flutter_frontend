@@ -76,7 +76,7 @@ class EventContent extends StatelessWidget {
 
                   /// timerwidget to display when party starts
                   if (stateLoaded.event.status != null)
-                    TimerWidget(dateTime: stateLoaded.event.date),
+                    if(stateLoaded.event.date.isAfter(DateTime.now())) TimerWidget(dateTime: stateLoaded.event.date),
 
                   ///for confirming the attending of an event
                   ImHereButton(

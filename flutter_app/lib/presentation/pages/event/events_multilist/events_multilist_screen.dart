@@ -58,7 +58,7 @@ class OwnEventScreenHolder extends StatelessWidget {
     return BasicContentContainer(
         appBar: MainAppBar(),
         bottomNavigationBar: BottomNavigation(selected: navigation),
-        child_ren: right( Container(child: EventsMultilistBody(foreign: profile!=null,))),
+        child_ren: right( Container(child: EventsMultilistBody(profileView: profile!=null,))),
         isLoading: isLoading);
   }
 }

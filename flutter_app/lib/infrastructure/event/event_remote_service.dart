@@ -16,8 +16,14 @@ class EventRemoteService extends RemoteService<EventDto> {
   //Routes Lists
   static const String ownedEventsPath =
       "/user/events/%amount%/%lastEventTime%/%descending%";
+  static const String ownedEventsUpcomingPath =
+      "/user/events/upcoming/%amount%/%lastEventTime%/%descending%";
   static const String profileEventPath =
       "/profile/events/%profileId%/%amount%/%lastEventTime%/%descending%";
+  static const String profileEventUpcomingPath =
+      "/profile/events/upcoming/%profileId%/%amount%/%lastEventTime%/%descending%";
+  static const String profileEventRecentPath =
+      "/profile/events/recent/%profileId%/%amount%/%lastEventTime%/%descending%";
   static const String recentEventPath =
       "/profile/recent/events/%amount%/%lastEventTime%/%descending%";
   static const String invitedEventsPath =
@@ -95,6 +101,28 @@ class EventRemoteService extends RemoteService<EventDto> {
       DateTime lastEventTime, int amount, UniqueId profileId,
       [bool descending = false]) async {
     return _getEventList(profileEventPath.interpolate({
+      "profileId": profileId.value,
+      "amount": amount.toString(),
+      "lastEventTime": lastEventTime.toString(),
+      "descending": descending.toString()
+    }));
+  }
+
+  Future<List<EventDto>> getEventsFromUserUpcoming(
+      DateTime lastEventTime, int amount, UniqueId profileId,
+      [bool descending = false]) async {
+    return _getEventList(profileEventUpcomingPath.interpolate({
+      "profileId": profileId.value,
+      "amount": amount.toString(),
+      "lastEventTime": lastEventTime.toString(),
+      "descending": descending.toString()
+    }));
+  }
+
+  Future<List<EventDto>> getEventsFromUserRecent(
+      DateTime lastEventTime, int amount, UniqueId profileId,
+      [bool descending = false]) async {
+    return _getEventList(profileEventRecentPath.interpolate({
       "profileId": profileId.value,
       "amount": amount.toString(),
       "lastEventTime": lastEventTime.toString(),

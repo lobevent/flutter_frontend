@@ -7,19 +7,22 @@ import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/std_choice_text_chip.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/event_list_tiles.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_series_screen/widgets_tabs/ess_page_eventTabs.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/cubit/events_mulitlist_cubit.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 class EventsMultilistBody extends StatefulWidget {
   final bool profileView;
 
-  const EventsMultilistBody({Key? key, required this.profileView}) : super(key: key);
+  const EventsMultilistBody({Key? key, required this.profileView})
+      : super(key: key);
   @override
   EventsMultilistBodyState createState() => EventsMultilistBodyState();
 }
 
 class EventsMultilistBodyState extends State<EventsMultilistBody> {
   List<Event> events = [];
+  List<Event> eventsRecent = [];
   List<Invitation> invitations = [];
   bool isInvites = false;
   @override
@@ -29,26 +32,44 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
         listener: (context, state) => {
               //this is the deletion and loading
               state.maybeMap((value) => {},
-                  loaded: (state) => {this.events = state.events, this.isInvites = false, setState(() {})},
+                  loaded: (state) => {
+                        this.events = state.events,
+                        this.isInvites = false,
+                        setState(() {})
+                      },
+                  loadedOwnBoth: (state) => {
+                        this.events = state.eventsUpcoming,
+                        this.eventsRecent = state.eventsRecent,
+                        setState(() {})
+                      },
                   deleted: (state) => {
                         //this is for updating the listview when deleting
                         this.events.remove(state.event),
                         setState(() {})
                       },
-                  loadedInvited: (state) => {this.invitations = state.invites, isInvites = true, setState(() {})},
+                  loadedInvited: (state) => {
+                        this.invitations = state.invites,
+                        isInvites = true,
+                        setState(() {})
+                      },
                   orElse: () => {})
             },
         buildWhen: (previous, current) {
-          return current.maybeMap((value) => true, deleted: (state) => false, orElse: () => true);
+          return current.maybeMap((value) => true,
+              deleted: (state) => false, orElse: () => true);
         },
         builder: (context, state) {
           // ---------------------------------------------------------------------------------------------------------------
           // -------------------------------------------------- WIDGET FROM HERE -------------------------------------------
           // ---------------------------------------------------------------------------------------------------------------
+          if (eventsRecent.isNotEmpty) {
+            return EventTabs(upcoming: events, recendEvents: eventsRecent);
+          }
+
           return CustomScrollView(
             slivers: [
               // Add the app bar to the CustomScrollView.
-              if(!widget.profileView) EventList_Bar(),
+              if (!widget.profileView) EventList_Bar(),
               // Next, create a SliverList
               SliverList(
                 // Use a delegate to build items as they're scrolled on screen.
@@ -57,13 +78,15 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
                   // displays the index of the current item.
                   (context, index) {
                     if (isInvites) {
-                      return ItemBuilder(index, this.invitations[index].event!, this.invitations[index].userEventStatus);
+                      return ItemBuilder(index, this.invitations[index].event!,
+                          this.invitations[index].userEventStatus);
                     } else {
                       return ItemBuilder(index, events[index], null);
                     }
                   },
                   // Builds 1000 ListTiles
-                  childCount: isInvites ? this.invitations.length : this.events.length,
+                  childCount:
+                      isInvites ? this.invitations.length : this.events.length,
                 ),
               ),
             ],
@@ -80,18 +103,23 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
       return Ink(
           color: Colors.red,
           child: ListTile(
-            title: Text(event.failureOption.fold(() => "", (a) => a.toString())),
+            title:
+                Text(event.failureOption.fold(() => "", (a) => a.toString())),
           ));
     }
-    if (this.events.isEmpty && !this.isInvites || this.invitations.isEmpty && this.isInvites) {
-      return Ink(color: Colors.red, child: ListTile(title: Text("No events available")));
+    if (this.events.isEmpty && !this.isInvites ||
+        this.invitations.isEmpty && this.isInvites) {
+      return Ink(
+          color: Colors.red,
+          child: ListTile(title: Text("No events available")));
     } else {
       return EventListTiles(
         key: ObjectKey(event),
         eventStatus: userEventStatus,
         isInvitation: isInvites,
         event: event,
-        onDeletion: context.read<EventsMultilistCubit>().option == EventScreenOptions.owned
+        onDeletion: context.read<EventsMultilistCubit>().option ==
+                EventScreenOptions.owned
             ? (Event event) {
                 context.read<EventsMultilistCubit>().deleteEvent(event);
               }
@@ -115,17 +143,32 @@ class EventList_Bar extends StatelessWidget {
       pinned: true,
       flexibleSpace: Row(
         children: [
-          ChipChoice(list: {
-            "own" : (bool bla) {context.read<EventsMultilistCubit>().getEvents(EventScreenOptions.owned);},
-            "recent" : (bool bla) {context.read<EventsMultilistCubit>().getEvents(EventScreenOptions.recent);},
-            "invited" : (bool bla) {
-              context.read<EventsMultilistCubit>().getEvents(EventScreenOptions.invited);},
-            "attending" : (bool bla) {context.read<EventsMultilistCubit>().getEvents(EventScreenOptions.ownAttending);},
-          },),
+          ChipChoice(
+            list: {
+              "own": (bool bla) {
+                context
+                    .read<EventsMultilistCubit>()
+                    .getEvents(EventScreenOptions.owned);
+              },
+              "recent": (bool bla) {
+                context
+                    .read<EventsMultilistCubit>()
+                    .getEvents(EventScreenOptions.recent);
+              },
+              "invited": (bool bla) {
+                context
+                    .read<EventsMultilistCubit>()
+                    .getEvents(EventScreenOptions.invited);
+              },
+              "attending": (bool bla) {
+                context
+                    .read<EventsMultilistCubit>()
+                    .getEvents(EventScreenOptions.ownAttending);
+              },
+            },
+          ),
         ],
       ),
     );
   }
 }
-
-

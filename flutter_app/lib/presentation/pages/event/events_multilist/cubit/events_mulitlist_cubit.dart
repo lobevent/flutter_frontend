@@ -13,7 +13,14 @@ import 'package:get_it/get_it.dart';
 part 'events_mulitlist_cubit.freezed.dart';
 part 'events_mulitlist_state.dart';
 
-enum EventScreenOptions { owned, fromUser, recent, ownAttending, unreacted, invited }
+enum EventScreenOptions {
+  owned,
+  fromUser,
+  recent,
+  ownAttending,
+  unreacted,
+  invited
+}
 
 class EventsMultilistCubit extends Cubit<EventsMultilistState> {
   EventScreenOptions option = EventScreenOptions.owned;
@@ -29,45 +36,61 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
   /// gets events from backend, swiches on the options
   Future<void> getEvents(EventScreenOptions option) async {
     final Either<NetWorkFailure, List<Event>> eventsList;
+    final Either<NetWorkFailure, List<Event>> eventsListRecent;
     final Either<NetWorkFailure, List<Invitation>> invitationList;
     // try {
-      emit(EventsMultilistState.loading());
-      bool isInvite = false;
-      switch (option) {
-        case EventScreenOptions.owned:
-          eventsList = await repository.getOwnedEvents(DateTime.now(), 30,
-              descending: false);
-          break;
-        case EventScreenOptions.fromUser:
-          if (profile == null) {
-            // profile must be set for this!
-            throw UnexpectedTypeError();
-          }
-          eventsList = await repository.getEventsFromUser(
-              DateTime.now(), 30, profile!,
-              descending: true);
-          break;
-        case EventScreenOptions.ownAttending:
-          eventsList = await repository.getAttendingEvents(DateTime.now(), 30);
-          break;
-        case EventScreenOptions.unreacted:
-          eventsList = await repository.getUnreactedEvents(DateTime.now(), 30);
-          break;
-        case EventScreenOptions.recent:
-          eventsList = await repository.getRecentEvents(DateTime.now(), 30, descending: true);
-          break;
-        case EventScreenOptions.invited:
-          {
-            invitationList = await invRepo.getInvitations(DateTime.now(), 30, descending: false);
-            isInvite = true;
-            invitationList.fold((l) => EventsMultilistState.error(error: l.toString()), (r) => emit(EventsMultilistState.loadedInvited(invites: r)));
-          }
-          return;
-          break;
+    emit(EventsMultilistState.loading());
+    bool isInvite = false;
+    switch (option) {
+      case EventScreenOptions.owned:
+        eventsList = await repository.getOwnedEvents(DateTime.now(), 30,
+            descending: false);
+        /*return emit(EventsMultilistState.loadedOwnBoth(
+            eventsUpcoming: eventsList.fold((l) => throw Exception, (r) => r),
+            eventsRecent:
+                eventsListRecent.fold((l) => throw Exception, (r) => r)));
 
-      }
-        emit(EventsMultilistState.loaded(
-          events: eventsList.fold((l) => throw Exception, (r) => r)));
+         */
+        break;
+      case EventScreenOptions.fromUser:
+        if (profile == null) {
+          // profile must be set for this!
+          throw UnexpectedTypeError();
+        }
+        eventsList = await repository.getEventsFromUserUpcoming(
+            DateTime.now(), 30, profile!);
+        eventsListRecent = await repository.getEventsFromUserRecent(
+            DateTime.now(), 30, profile!,
+            descending: true);
+        return emit(EventsMultilistState.loadedOwnBoth(
+            eventsUpcoming: eventsList.fold((l) => throw Exception, (r) => r),
+            eventsRecent:
+                eventsListRecent.fold((l) => throw Exception, (r) => r)));
+        break;
+      case EventScreenOptions.ownAttending:
+        eventsList = await repository.getAttendingEvents(DateTime.now(), 30);
+        break;
+      case EventScreenOptions.unreacted:
+        eventsList = await repository.getUnreactedEvents(DateTime.now(), 30);
+        break;
+      case EventScreenOptions.recent:
+        eventsList = await repository.getRecentEvents(DateTime.now(), 30,
+            descending: true);
+        break;
+      case EventScreenOptions.invited:
+        {
+          invitationList = await invRepo.getInvitations(DateTime.now(), 30,
+              descending: false);
+          isInvite = true;
+          invitationList.fold(
+              (l) => EventsMultilistState.error(error: l.toString()),
+              (r) => emit(EventsMultilistState.loadedInvited(invites: r)));
+        }
+        return;
+        break;
+    }
+    emit(EventsMultilistState.loaded(
+        events: eventsList.fold((l) => throw Exception, (r) => r)));
 
     // } catch (e) {
     //   throw e;

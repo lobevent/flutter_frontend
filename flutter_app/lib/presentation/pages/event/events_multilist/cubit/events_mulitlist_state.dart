@@ -5,6 +5,7 @@ class EventsMultilistState with _$EventsMultilistState {
   const factory EventsMultilistState({
     required List<Event> ownEventsList,
     required bool showErrorMessages,
+    List<Event>? eventsListRecent,
   }) = _OwnEventsState;
 
   factory EventsMultilistState.initial() = _Initial;
@@ -13,7 +14,12 @@ class EventsMultilistState with _$EventsMultilistState {
 
   factory EventsMultilistState.loaded({required List<Event> events}) = _Loaded;
 
-  factory EventsMultilistState.loadedInvited({required List<Invitation> invites}) = _LoadedInvited;
+  factory EventsMultilistState.loadedOwnBoth(
+      {required List<Event> eventsUpcoming,
+      required List<Event> eventsRecent}) = _LoadedBoth;
+
+  factory EventsMultilistState.loadedInvited(
+      {required List<Invitation> invites}) = _LoadedInvited;
 
   factory EventsMultilistState.error({required String error}) = _LoadFailure;
 

@@ -395,6 +395,7 @@ class GenericSearchBar extends StatelessWidget {
   }
 }
 
+
 class FullWidthPaddingInput extends StatelessWidget {
   final TextEditingController? controller;
   final String? labelText;
@@ -408,6 +409,7 @@ class FullWidthPaddingInput extends StatelessWidget {
   final EdgeInsets padding;
   final List<TextInputFormatter>? inputFormatters;
   final AutovalidateMode? autoValidateMode;
+  final FocusNode? fieldFocusNode;
 
   FullWidthPaddingInput(
       {this.controller,
@@ -420,7 +422,7 @@ class FullWidthPaddingInput extends StatelessWidget {
       this.onChanged,
       this.textInputType,
       this.padding = const EdgeInsets.all(10),
-      this.inputFormatters, this.autoValidateMode,
+      this.inputFormatters, this.autoValidateMode, this.fieldFocusNode,
       });
 
   @override
@@ -431,6 +433,7 @@ class FullWidthPaddingInput extends StatelessWidget {
         obscureText: password ? true : false,
         enableSuggestions: password ? false : true,
         autocorrect: password ? false : true,
+        focusNode: fieldFocusNode,
         controller: controller,
         maxLength: maxLength,
         validator: validator,

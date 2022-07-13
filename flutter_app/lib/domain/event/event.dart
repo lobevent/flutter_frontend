@@ -60,8 +60,6 @@ class Event with _$Event {
       public: false,
       attendingCount: 0,
       status: EventStatus.attending,
-      longitude: 0,
-      latitude: 0,
       visibleWithoutLogin: false,
       isHost: false,
       invitations: <Invitation>[]);

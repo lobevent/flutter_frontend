@@ -15,6 +15,9 @@ class _MaxPersonsState extends State<MaxPersons> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EventFormCubit, EventFormState>(builder: (context, state) {
+      if(!state.event.public){
+        return SizedBox.shrink();
+      }
       return FullWidthPaddingInput(
         padding: EdgeInsets.only(left: 50, right: 50, bottom: 10, top: 10),
         labelText: "max persons count",

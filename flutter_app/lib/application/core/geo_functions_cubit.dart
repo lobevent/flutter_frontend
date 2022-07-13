@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/infrastructure/core/position.dart';
+import 'package:flutter_frontend/presentation/core/utils/validators/distanceCoordinatesValidator.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'dart:math' as math;
@@ -67,20 +68,7 @@ class GeoFunctionsCubit extends Cubit<GeoFunctionsState> {
   ///returns the distance in metres
   double calcDistanceHaversine(double longitude1, double latitude1,
       double longitude2, double latitude2) {
-    double R = 6371000;
-    double phi1 = latitude1 * math.pi / 180;
-    double phi2 = latitude2 * math.pi / 180;
-    double deltaPhi = (latitude2 - latitude1) * math.pi / 180;
-    double deltaLambda = (longitude2 - longitude1) * math.pi / 180;
-    double a = math.sin(deltaPhi / 2) * math.sin(deltaPhi / 2) +
-        math.cos(phi1) *
-            math.cos(phi2) *
-            math.sin(deltaLambda / 2) *
-            math.sin(deltaLambda / 2);
-    double c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
-    double distance = R * c;
-
-    return distance;
+    return DistanceCoordinatesValidator.calcDistanceHaversine(longitude1, latitude1, longitude2, latitude2);
   }
 
   /// Determine the current position of the device.

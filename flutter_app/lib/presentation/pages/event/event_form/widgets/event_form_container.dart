@@ -48,13 +48,14 @@ class EventFormContainer extends StatelessWidget {
             /// the input filed with the decription
             const DescriptionField(),
 
-            const MaxPersons(),
 
             const DatePicker(),
 
             const CoordsPicker(),
 
             const CheckBoxArea(),
+
+            const MaxPersons(),
 
             if (!isEditing) InviteFriendsWidget(),
 

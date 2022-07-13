@@ -128,26 +128,27 @@ class EventContent extends StatelessWidget {
     IconData icon;
     String text;
 
+
     switch (status) {
       case EventStatus.attending:
-        icon = Icons.check;
-        text = AppStrings.attending;
+        icon = IconsWithTexts.uesWithIcons[EventStatus.attending]!.values.first;
+        text = IconsWithTexts.uesWithIcons[EventStatus.attending]!.keys.first;
         break;
       case EventStatus.notAttending:
-        icon = Icons.block;
-        text = AppStrings.notAttending;
+        icon = IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.values.first;
+        text = IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.keys.first;
         break;
       case EventStatus.interested:
-        icon = Icons.lightbulb;
-        text = AppStrings.interested;
+        icon = IconsWithTexts.uesWithIcons[EventStatus.interested]!.values.first;
+        text = IconsWithTexts.uesWithIcons[EventStatus.interested]!.keys.first;
         break;
       case EventStatus.invited:
         icon = IconsWithTexts.uesWithIcons[EventStatus.invited]!.values.first;
         text = IconsWithTexts.uesWithIcons[EventStatus.invited]!.keys.first;
         break;
       case EventStatus.confirmAttending:
-        icon = Icons.location_on_rounded;
-        text = AppStrings.there;
+        icon = IconsWithTexts.uesWithIcons[EventStatus.confirmAttending]!.values.first;
+        text = IconsWithTexts.uesWithIcons[EventStatus.confirmAttending]!.keys.first;
         break;
       default:
         icon = Icons.lightbulb;
@@ -171,6 +172,7 @@ class EventContent extends StatelessWidget {
         Spacer(),
         //Icon(icon),
         UesMenuButton(
+          deactivated: status == EventStatus.confirmAttending,
           icon: icon,
           text: text,
           isLoading: isLoadingStatus,
@@ -236,8 +238,8 @@ class EventContent extends StatelessWidget {
   Widget CoordsWidget(double? longitude, double? latitude) {
     return PaddingWidget(children: [
       Icon(Icons.my_location),
-      Text("Latitude: ${latitude!}"),
-      Text(" Longitude: ${longitude!}"),
+      Text("Latitude: ${latitude??'NaN'}"),
+      Text(" Longitude: ${longitude??'NaN'}"),
     ]);
   }
 

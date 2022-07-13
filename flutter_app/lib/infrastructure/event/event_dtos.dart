@@ -21,7 +21,8 @@ class EventDto extends BaseDto with _$EventDto {
     0: EventStatus.notAttending,
     1: EventStatus.attending,
     2: EventStatus.interested,
-    3: EventStatus.confirmAttending,
+    3: EventStatus.invited,
+    4: EventStatus.confirmAttending,
   };
 
   static final Map domainToDtoStatus =
@@ -45,7 +46,7 @@ class EventDto extends BaseDto with _$EventDto {
     bool? liked,
     double? longitude,
     double? latitude,
-    String? adress,
+    String? address,
     int? ownStatus,
     String? image,
     //@JsonKey(ignore: true) bool? isHost,
@@ -71,6 +72,7 @@ class EventDto extends BaseDto with _$EventDto {
         attendingUsersCount: event.attendingCount,
         ownStatus: domainToDtoStatus[event.status] as int?,
         longitude: event.longitude,
+        address: event.address,
         latitude: event.latitude,
         visibleWithoutLogin: event.visibleWithoutLogin,
         invitations:
@@ -105,6 +107,7 @@ class EventDto extends BaseDto with _$EventDto {
         status: dtoToDomainStatus[ownStatus] as EventStatus?,
         longitude: longitude,
         latitude: latitude,
+        address: address,
         visibleWithoutLogin: visibleWithoutLogin,
         invitations: invitationL,
         isHost: isHost ?? false,

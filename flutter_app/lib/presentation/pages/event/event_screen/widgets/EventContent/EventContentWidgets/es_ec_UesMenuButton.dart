@@ -18,7 +18,8 @@ class UesMenuButton extends StatefulWidget {
   final bool isLoading;
   final Function(EventStatus)? onClickFunction;
   final double loadingButtonSize;
-  const UesMenuButton({Key? key, required this.icon, this.text, required this.isLoading, this.onClickFunction,  this.loadingButtonSize=20}) : super(key: key);
+  final bool deactivated;
+  const UesMenuButton({Key? key, required this.icon, this.text, required this.isLoading, this.onClickFunction,  this.loadingButtonSize=20, this.deactivated  = false}) : super(key: key);
 
   @override
   _UesMenuButtonState createState() => _UesMenuButtonState();
@@ -36,6 +37,10 @@ class _UesMenuButtonState extends State<UesMenuButton> {
     if (widget.isLoading) {
       return LoadingButton(size: widget.loadingButtonSize,);
     }
+    if(widget.deactivated){
+      return Row(children: [Icon(widget.icon), if(widget.text != null) Text(widget.text??'', style: TextStyle(color: AppColors.stdTextColor))]);
+    }
+
 // This menu button widget updates a _selection field (of type EventStatus,
 // not shown here).
     return PopupMenuButton(

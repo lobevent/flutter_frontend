@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/data/constants.dart';
+import 'package:flutter_frontend/presentation/core/styles/icons.dart';
 import 'package:flutter_frontend/presentation/core/utils/converters/date_time_converter.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/cubit/event_tile_functions_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/es_ec_UesMenuButton.dart';
@@ -54,24 +55,26 @@ class TopInfo extends StatelessWidget {
       IconData uesIcon = Icons.error;
       switch (state.status) {
         case EventStatus.attending:
-          uesIcon = Icons.check;
+          uesIcon = AppIcons.attending;
           break;
         case EventStatus.notAttending:
-          uesIcon = Icons.clear;
+          uesIcon = AppIcons.notAttending;
           break;
         case EventStatus.interested:
-          uesIcon = Icons.lightbulb;
+          uesIcon = AppIcons.interested;
           break;
         case null:
           break;
         case EventStatus.invited:
-          uesIcon = Icons.lightbulb;
+          uesIcon = AppIcons.invited;
           break;
         case EventStatus.confirmAttending:
-          // TODO: Handle this case.
+          uesIcon = AppIcons.there;
           break;
       }
-      return UesMenuButton(icon: uesIcon, onClickFunction: (EventStatus status) => {
+      return UesMenuButton(icon: uesIcon,
+        deactivated: EventStatus.confirmAttending == state.status,
+        onClickFunction:(EventStatus status) => {
         context.read<EventTileFunctionsCubit>().changeStatus(status), Navigator.pop(context)},
         isLoading: state is EventTileUESLoading,);
 

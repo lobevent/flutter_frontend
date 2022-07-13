@@ -82,6 +82,15 @@ class _CoordsPickerState extends State<CoordsPicker> {
             },
             // set coordinates
             onSelected: (SearchInfoDetailed selection) {
+              context
+                  .read<EventFormCubit>()
+                  .changeAddress(selection.addressDetailed.toString());
+              context
+                  .read<EventFormCubit>()
+                  .changeLongitude(selection.point?.longitude);
+              context
+                  .read<EventFormCubit>()
+                  .changeLatitude(selection.point?.latitude);
               // TODO: add only jena here!
               textEditingControllerLongi.text = selection.point?.longitude.toString() ?? '';
               textEditingControllerLati.text = selection.point?.latitude.toString() ?? '';
@@ -100,7 +109,7 @@ class _CoordsPickerState extends State<CoordsPicker> {
                       // autoValidateMode: AutovalidateMode.onUserInteraction,
                       labelText: "Longitude",
                       controller: textEditingControllerLongi,
-                      inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[1234567890.]'))],
+                      inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[1234567890.-]'))],
                       onChanged: (value2) => context
                           .read<EventFormCubit>()
                           .changeLongitude(double.parse(value2 == "" ? '0' : value2??'0')),

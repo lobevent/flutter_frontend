@@ -77,6 +77,10 @@ class EventFormCubit extends Cubit<EventFormState> {
     emit(state.copyWith(event: state.event.copyWith(longitude: longitude)));
   }
 
+  void changeAddress(String? address){
+    emit(state.copyWith(event: state.event.copyWith(address: address)));
+  }
+
   void changePublic(bool public) {
     emit(state.copyWith(event: state.event.copyWith(public: public)));
   }

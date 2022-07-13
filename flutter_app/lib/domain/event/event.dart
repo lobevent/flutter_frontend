@@ -41,6 +41,7 @@ class Event with _$Event {
       int? attendingCount,
       EventStatus? status,
       double? longitude,
+      String? Adress,
       double? latitude,
       required bool isHost,
       String? image}) = EventFull;

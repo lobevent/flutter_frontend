@@ -45,6 +45,7 @@ class EventDto extends BaseDto with _$EventDto {
     bool? liked,
     double? longitude,
     double? latitude,
+    String? adress,
     int? ownStatus,
     String? image,
     //@JsonKey(ignore: true) bool? isHost,

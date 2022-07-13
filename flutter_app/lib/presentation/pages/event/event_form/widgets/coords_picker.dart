@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/application/core/geo_functions_cubit.dart';
+import 'package:flutter_frontend/presentation/core/utils/geo/osm_extensions/utilities.dart';
+import 'package:flutter_frontend/presentation/core/utils/geo/search_completion.dart';
 import 'package:flutter_frontend/presentation/core/utils/validators/distanceCoordinatesValidator.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/cubit/event_form_cubit.dart';
@@ -29,14 +31,14 @@ class _CoordsPickerState extends State<CoordsPicker> {
   static const int cooldownDuration = 1000;
 
   Timer? timer;
-  List<SearchInfo> _searchInfoOtions = <SearchInfo>[];
+  List<SearchInfoDetailed> _searchInfoOtions = <SearchInfoDetailed>[];
   final textEditingControllerLongi = TextEditingController();
   final textEditingControllerLati = TextEditingController();
 
 
-  static String _displayStringForOption(SearchInfo option) {
+  static String _displayStringForOption(SearchInfoDetailed option) {
 
-    return option.address.toString();
+    return option.addressDetailed.toString();
   }
 
   @override
@@ -51,7 +53,7 @@ class _CoordsPickerState extends State<CoordsPicker> {
       child: Column(
         children: [
 
-          Autocomplete<SearchInfo>(
+          Autocomplete<SearchInfoDetailed>(
 
             fieldViewBuilder:
                 (BuildContext context, TextEditingController fieldTextEditingController, FocusNode fieldFocusNode, VoidCallback onFieldSubmitted) {
@@ -71,15 +73,15 @@ class _CoordsPickerState extends State<CoordsPicker> {
               //--------
               // check whether the value is empty
               if (textEditingValue.text == '') {
-                return const Iterable<SearchInfo>.empty();
+                return const Iterable<SearchInfoDetailed>.empty();
               }
               // get suggestion
-              _searchInfoOtions = await addressSuggestion(textEditingValue.text); // TODO: add copyright notice from OSM and photon
+              _searchInfoOtions = await addressSuggestionDetailed(textEditingValue.text); // TODO: add copyright notice from OSM and photon
               setState( (){});
               return (_searchInfoOtions);
             },
             // set coordinates
-            onSelected: (SearchInfo selection) {
+            onSelected: (SearchInfoDetailed selection) {
               // TODO: add only jena here!
               textEditingControllerLongi.text = selection.point?.longitude.toString() ?? '';
               textEditingControllerLati.text = selection.point?.latitude.toString() ?? '';
@@ -87,7 +89,7 @@ class _CoordsPickerState extends State<CoordsPicker> {
 
             // we can generate an custom view of the options
           ),
-          ConstrainedBox(constraints: BoxConstraints(maxHeight: 50),
+          ConstrainedBox(constraints: BoxConstraints(maxHeight: 56),
             child:
 
             Row(
@@ -95,6 +97,7 @@ class _CoordsPickerState extends State<CoordsPicker> {
               children: [
                 Flexible(
                     child: FullWidthPaddingInput(
+                      // autoValidateMode: AutovalidateMode.onUserInteraction,
                       labelText: "Longitude",
                       controller: textEditingControllerLongi,
                       inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[1234567890.]'))],
@@ -102,9 +105,15 @@ class _CoordsPickerState extends State<CoordsPicker> {
                           .read<EventFormCubit>()
                           .changeLongitude(double.parse(value2 == "" ? '0' : value2??'0')),
                       textInputType: TextInputType.numberWithOptions(decimal: true, signed: true),
+                      validator: (value){
+                        if(value == null || value == ''){
+                          return 'please provide an longitude';
+                        }
+                      },
                     )),
                 Flexible(
                     child: FullWidthPaddingInput(
+                      // autoValidateMode: AutovalidateMode.onUserInteraction,
                       labelText: "Latitude",
                       controller: textEditingControllerLati,
                       inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[1234567890.]'))],
@@ -112,6 +121,11 @@ class _CoordsPickerState extends State<CoordsPicker> {
                           .read<EventFormCubit>()
                           .changeLatitude(double.parse(value == "" ? '0' : value??'0')),
                       textInputType: TextInputType.numberWithOptions(decimal: true, signed: true),
+                      validator: (value){
+                        if(value == null || value == ''){
+                          return 'please provide an latitude';
+                        }
+                      },
                     ))
               ],
             ),),

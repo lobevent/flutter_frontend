@@ -26,6 +26,7 @@ import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/O
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 
 import '../../../../../../application/core/geo_functions_cubit.dart';
 import '../../../../../../domain/post/post.dart';
@@ -236,11 +237,17 @@ class EventContent extends StatelessWidget {
   }
 
   Widget CoordsWidget(double? longitude, double? latitude) {
-    return PaddingWidget(children: [
+    return InkWell(
+      onTap: (){
+        if(latitude != null && longitude != null){
+          MapsLauncher.launchCoordinates(latitude, longitude);
+        }
+      },
+        child: PaddingWidget(children: [
       Icon(Icons.my_location),
       Text("Latitude: ${latitude??'NaN'}"),
       Text(" Longitude: ${longitude??'NaN'}"),
-    ]);
+    ]));
   }
 
   Widget ImHereButton(BuildContext contextEvent, double? latitude,

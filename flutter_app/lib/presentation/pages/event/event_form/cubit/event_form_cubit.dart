@@ -188,7 +188,7 @@ class EventFormCubit extends Cubit<EventFormState> {
       failureOrSuccess =
           await (await serverCall()).fold((l) => left(l), (r) async {
         if (state.picture != null) {
-          (await repository.uploadImageToEvent(r.id, state.picture!))
+          (await repository.uploadMainImageToEvent(r.id, state.picture!))
               .fold((l) => left(l), (r) => right(unit));
         }
 

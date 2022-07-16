@@ -146,6 +146,14 @@ class EventRepository extends Repository {
     }
   }
 
+  Future<Either<NetWorkFailure, void>> uploadMainImageToEvent(
+      UniqueId eventId, XFile image) async {
+    return localErrorHandler(() async {
+      return right(_eventRemoteService.uploadMainImageToEvent(
+          eventId.value, File(image.path)));
+    });
+  }
+
   Future<Either<NetWorkFailure, void>> uploadImageToEvent(
       UniqueId eventId, XFile image) async {
     return localErrorHandler(() async {

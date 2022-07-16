@@ -31,6 +31,7 @@ import 'package:maps_launcher/maps_launcher.dart';
 import '../../../../../../application/core/geo_functions_cubit.dart';
 import '../../../../../../domain/post/post.dart';
 import '../../../../core/widgets/timer_widget.dart';
+import 'EventContentWidgets/es_ec_uploadImageButton.dart';
 
 class EventContent extends StatelessWidget {
   ///the color used to display the text on this page
@@ -86,6 +87,9 @@ class EventContent extends StatelessWidget {
                       stateLoaded.event.latitude,
                       stateLoaded.event,
                       stateLoaded.event.status),
+
+                  if(stateLoaded.event.status != null && stateLoaded.event.status == EventStatus.confirmAttending)
+                      UploadImageButton(),
 
                   /// Used as space
                   const SizedBox(height: 20),

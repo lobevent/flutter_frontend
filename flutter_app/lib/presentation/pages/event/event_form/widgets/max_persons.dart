@@ -22,7 +22,7 @@ class _MaxPersonsState extends State<MaxPersons> {
         padding: EdgeInsets.only(left: 50, right: 50, bottom: 10, top: 10),
         labelText: "max persons count",
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        onChanged: (value) => {context.read<EventFormCubit>().changeMaxPersons(int.parse(value == "" ? '0' : value??'0'))},
+        onChanged: (value) => {context.read<EventFormCubit>().changeMaxPersons(int.parse(value == "" ? '0' : value))},
         textInputType: TextInputType.numberWithOptions(decimal: true, signed: false),
         autoValidateMode: AutovalidateMode.onUserInteraction,
         validator: (value) => int.parse(value == "" ? '0' : value??'0') < 50 ? null : 'Howdy, that`s to many!',

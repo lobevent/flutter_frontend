@@ -14,7 +14,12 @@ class HeaderVisual extends StatelessWidget {
       image = AssetImage("assets/images/partypeople.jpg");
     }
     else {
-     image = NetworkImage(dotenv.env['ipSim']!.toString() +  networkImagePath!);
+      try{
+        image = NetworkImage(dotenv.env['ipSim']!.toString() +  networkImagePath!);
+      } catch (e){
+        print(e);
+        return Container();
+    }
     }
     return Container(
       width: MediaQuery.of(context).size.width,

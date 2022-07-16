@@ -112,7 +112,7 @@ class _CoordsPickerState extends State<CoordsPicker> {
                       inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[1234567890.-]'))],
                       onChanged: (value2) => context
                           .read<EventFormCubit>()
-                          .changeLongitude(double.parse(value2 == "" ? '0' : value2??'0')),
+                          .changeLongitude(double.parse(value2 == "" ? '0' : value2)),
                       textInputType: TextInputType.numberWithOptions(decimal: true, signed: true),
                       validator: (value){
                         if(value == null || value == ''){
@@ -128,7 +128,7 @@ class _CoordsPickerState extends State<CoordsPicker> {
                       inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[1234567890.]'))],
                       onChanged: (value) => context
                           .read<EventFormCubit>()
-                          .changeLatitude(double.parse(value == "" ? '0' : value??'0')),
+                          .changeLatitude(double.parse(value == "" ? '0' : value)),
                       textInputType: TextInputType.numberWithOptions(decimal: true, signed: true),
                       validator: (value){
                         if(value == null || value == ''){

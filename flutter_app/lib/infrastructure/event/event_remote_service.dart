@@ -46,7 +46,8 @@ class EventRemoteService extends RemoteService<EventDto> {
   static const String updatePath = "/event/edit/";
   static const String changeStatusPath = "/user/eventStatus/%eventId%/%status%";
 
-  static const String uploadImage = '/event/uploadImage/%eventId%';
+  static const String uploadMainImage = '/event/uploadImage/%eventId%';
+  static const String uploadImage = '/upload/profileEventImage/%eventId%';
 
   final SymfonyCommunicator client;
 
@@ -189,6 +190,10 @@ class EventRemoteService extends RemoteService<EventDto> {
   Future<EventDto> updateEvent(EventDto eventDto) async {
     return _decodeEvent(await client.put(
         "$updatePath${eventDto.id}", jsonEncode(eventDto.toJson())));
+  }
+
+  Future<void> uploadMainImageToEvent(String eventId, File image) async {
+    client.postFile(uploadMainImage.interpolate({"eventId": eventId}), image);
   }
 
   Future<void> uploadImageToEvent(String eventId, File image) async {

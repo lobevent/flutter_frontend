@@ -27,44 +27,111 @@ class EventFormContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
+    return Row(
+    /*return Form(
       // tell the form whether it should show error messages or not
       autovalidateMode: showErrorMessages
           ? AutovalidateMode.always
-          : AutovalidateMode.disabled,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            if (event != null && event!.image != null)
-              PickImageWidget(
-                loadetFile: event!.image,
-              )
-            else
-              const PickImageWidget(),
+          : AutovalidateMode.disabled,*/
+      children: [//Fehler?
+          DefaultTabController(
+            length: 4,
+            child: TabBar(
+              tabs: [
+                Tab(),//icons müssen noch hinzugefügt werden
+                Tab(),
+                Tab(),
+                Tab()
+              ],
+            ),
+          ),
+          Scaffold(
+              body: TabBarView(
+                children: [
+                  Form(
+                      autovalidateMode: showErrorMessages
+                          ? AutovalidateMode.always
+                          : AutovalidateMode.disabled,
+                      child:Column(
+                        children: [
+                        if (event != null && event!.image != null)
+                          PickImageWidget(
+                            loadetFile: event!.image,
+                          )
+                        else
+                          const PickImageWidget(),
 
-            /// the input field, where the name is typed
-            const EventNameField(), // ATTENTION: the textfieldclasses have to be constant ( research has to be done into this! )
+                        /// the input field, where the name is typed
+                        const EventNameField(), // ATTENTION: the textfieldclasses have to be constant ( research has to be done into this! )
 
-            /// the input filed with the decription
-            const DescriptionField(),
+                        /// the input filed with the decription
+                        const DescriptionField(),
+                        ],
+                      ),
+                  ),
+                  Form(
+                    autovalidateMode: showErrorMessages
+                        ? AutovalidateMode.always
+                        : AutovalidateMode.disabled,
+                    child: Column(
+                      children: const [
+                        DatePicker(),
 
+                        CoordsPicker(),
+                      ],
+                    ),
+                  ),
+                  Form(
+                    autovalidateMode: showErrorMessages
+                        ? AutovalidateMode.always
+                        : AutovalidateMode.disabled,
+                    child: Column(
+                      children: [
+                        const CheckBoxArea(),
 
-            const DatePicker(),
+                        const MaxPersons(),
 
-            const CoordsPicker(),
+                        if (!isEditing) InviteFriendsWidget(),
 
-            const CheckBoxArea(),
+                        if (!isEditing) AddToSeries(),
 
-            const MaxPersons(),
-
-            if (!isEditing) InviteFriendsWidget(),
-
-            if (!isEditing) AddToSeries(),
-
-            //const PickImageWidget(),
+                        //const PickImageWidget(),
+                      ],
+                    )
+                  )
+                ],
+              ),
+            ),
           ],
-        ),
-      ),
+            /*children: [
+              if (event != null && event!.image != null)
+                PickImageWidget(
+                  loadetFile: event!.image,
+                )
+              else
+                const PickImageWidget(),
+
+              /// the input field, where the name is typed
+              const EventNameField(), // ATTENTION: the textfieldclasses have to be constant ( research has to be done into this! )
+
+              /// the input filed with the decription
+              const DescriptionField(),
+
+
+              const DatePicker(),
+
+              const CoordsPicker(),
+
+              const CheckBoxArea(),
+
+              const MaxPersons(),
+
+              if (!isEditing) InviteFriendsWidget(),
+
+              if (!isEditing) AddToSeries(),
+
+              //const PickImageWidget(),
+            ],*/
     );
   }
 }

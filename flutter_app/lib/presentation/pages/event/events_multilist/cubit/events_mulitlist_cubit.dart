@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -8,13 +9,17 @@ import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
 import 'package:flutter_frontend/infrastructure/invitation/invitation_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
+
+import '../../../../../application/core/geo_functions_cubit.dart';
 
 part 'events_mulitlist_cubit.freezed.dart';
 part 'events_mulitlist_state.dart';
 
 enum EventScreenOptions {
   owned,
+  near,
   fromUser,
   recent,
   ownAttending,
@@ -66,6 +71,21 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
             eventsUpcoming: eventsList.fold((l) => throw Exception, (r) => r),
             eventsRecent:
                 eventsListRecent.fold((l) => throw Exception, (r) => r)));
+        break;
+      case EventScreenOptions.near:
+
+        final geof = GeoFunctionsCubit(event: null);
+        Position? position;
+        await geof.checkUserPosition();
+        geof.state.maybeMap(
+          loaded: (loadedState){
+            position = loadedState.position;
+          },
+            orElse: (){
+
+        });
+
+        eventsList = await repository.getNearEvents(position!.latitude, position!.longitude, 50, DateTime.now(), 30);
         break;
       case EventScreenOptions.ownAttending:
         eventsList = await repository.getAttendingEvents(DateTime.now(), 30);

@@ -13,7 +13,7 @@ part 'geo_functions_state.dart';
 
 class GeoFunctionsCubit extends Cubit<GeoFunctionsState> {
   Position? position;
-  final Event event;
+  final Event? event;
   bool? nearby;
 
   GeoFunctionsCubit({required this.event})
@@ -40,7 +40,7 @@ class GeoFunctionsCubit extends Cubit<GeoFunctionsState> {
       emit(GeoFunctionsState.loading());
       position =
           await determinePosition(LocationAccuracy.high).then((posValue) {
-        checkIfNearEvent(event.longitude, event.latitude, posValue.longitude,
+        checkIfNearEvent(event!.longitude, event!.latitude, posValue.longitude,
                 posValue.latitude)
             .then((nearbyVal) {
           emit(GeoFunctionsState.loaded(position: posValue, nearby: nearbyVal));

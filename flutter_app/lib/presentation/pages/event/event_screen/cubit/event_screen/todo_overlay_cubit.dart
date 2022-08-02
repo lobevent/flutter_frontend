@@ -133,7 +133,7 @@ extension TodoOverlayCubit on EventScreenCubit {
                         .indexWhere((i) => i.id.value == item.id.value);
                     loadedState.event.todo!.items[itemPos] = itemBack;
 
-                    emit(EventScreenState.loaded(event: loadedState.event));
+                    emit(EventScreenState.loaded(event: loadedState.event, last2Posts: loadedState.last2Posts));
                   }));
         },
         orElse: () => throw LogicError);
@@ -156,7 +156,7 @@ extension TodoOverlayCubit on EventScreenCubit {
                         .indexWhere((i) => i.id.value == item.id.value);
                     loadedState.event.todo!.items[itemPos] = itemBack;
 
-                    emit(EventScreenState.loaded(event: loadedState.event));
+                    emit(EventScreenState.loaded(event: loadedState.event, last2Posts: loadedState.last2Posts));
                   }));
         },
         orElse: () => throw LogicError);

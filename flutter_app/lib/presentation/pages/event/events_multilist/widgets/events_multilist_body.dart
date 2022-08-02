@@ -150,6 +150,11 @@ class EventList_Bar extends StatelessWidget {
                     .read<EventsMultilistCubit>()
                     .getEvents(EventScreenOptions.owned);
               },
+              "near": (bool bla) {
+                context
+                    .read<EventsMultilistCubit>()
+                    .getEvents(EventScreenOptions.near);
+              },
               "recent": (bool bla) {
                 context
                     .read<EventsMultilistCubit>()

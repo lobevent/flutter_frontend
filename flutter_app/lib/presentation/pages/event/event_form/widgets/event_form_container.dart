@@ -20,118 +20,51 @@ class EventFormContainer extends StatelessWidget {
   final Event? event;
   const EventFormContainer(
       {Key? key,
-      this.showErrorMessages = true,
-      required this.isEditing,
-      this.event})
+        this.showErrorMessages = true,
+        required this.isEditing,
+        this.event})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-    /*return Form(
+    return Form(
       // tell the form whether it should show error messages or not
       autovalidateMode: showErrorMessages
           ? AutovalidateMode.always
-          : AutovalidateMode.disabled,*/
-      children: [//Fehler?
-          DefaultTabController(
-            length: 4,
-            child: TabBar(
-              tabs: [
-                Tab(),//icons müssen noch hinzugefügt werden
-                Tab(),
-                Tab(),
-                Tab()
-              ],
-            ),
-          ),
-          Scaffold(
-              body: TabBarView(
-                children: [
-                  Form(
-                      autovalidateMode: showErrorMessages
-                          ? AutovalidateMode.always
-                          : AutovalidateMode.disabled,
-                      child:Column(
-                        children: [
-                        if (event != null && event!.image != null)
-                          PickImageWidget(
-                            loadetFile: event!.image,
-                          )
-                        else
-                          const PickImageWidget(),
+          : AutovalidateMode.disabled,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            if (event != null && event!.image != null)
+              PickImageWidget(
+                loadetFile: event!.image,
+              )
+            else
+              const PickImageWidget(),
 
-                        /// the input field, where the name is typed
-                        const EventNameField(), // ATTENTION: the textfieldclasses have to be constant ( research has to be done into this! )
+            /// the input field, where the name is typed
+            const EventNameField(), // ATTENTION: the textfieldclasses have to be constant ( research has to be done into this! )
 
-                        /// the input filed with the decription
-                        const DescriptionField(),
-                        ],
-                      ),
-                  ),
-                  Form(
-                    autovalidateMode: showErrorMessages
-                        ? AutovalidateMode.always
-                        : AutovalidateMode.disabled,
-                    child: Column(
-                      children: const [
-                        DatePicker(),
+            /// the input filed with the decription
+            const DescriptionField(),
 
-                        CoordsPicker(),
-                      ],
-                    ),
-                  ),
-                  Form(
-                    autovalidateMode: showErrorMessages
-                        ? AutovalidateMode.always
-                        : AutovalidateMode.disabled,
-                    child: Column(
-                      children: [
-                        const CheckBoxArea(),
 
-                        const MaxPersons(),
+            const DatePicker(),
 
-                        if (!isEditing) InviteFriendsWidget(),
+            const CoordsPicker(),
 
-                        if (!isEditing) AddToSeries(),
+            const CheckBoxArea(),
 
-                        //const PickImageWidget(),
-                      ],
-                    )
-                  )
-                ],
-              ),
-            ),
+            const MaxPersons(),
+
+            if (!isEditing) InviteFriendsWidget(),
+
+            if (!isEditing) AddToSeries(),
+
+            //const PickImageWidget(),
           ],
-            /*children: [
-              if (event != null && event!.image != null)
-                PickImageWidget(
-                  loadetFile: event!.image,
-                )
-              else
-                const PickImageWidget(),
-
-              /// the input field, where the name is typed
-              const EventNameField(), // ATTENTION: the textfieldclasses have to be constant ( research has to be done into this! )
-
-              /// the input filed with the decription
-              const DescriptionField(),
-
-
-              const DatePicker(),
-
-              const CoordsPicker(),
-
-              const CheckBoxArea(),
-
-              const MaxPersons(),
-
-              if (!isEditing) InviteFriendsWidget(),
-
-              if (!isEditing) AddToSeries(),
-
-              //const PickImageWidget(),
-            ],*/
+        ),
+      ),
     );
   }
 }

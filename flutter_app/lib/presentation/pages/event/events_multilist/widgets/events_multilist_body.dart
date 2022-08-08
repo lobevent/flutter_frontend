@@ -129,51 +129,70 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
   }
 }
 
-class EventList_Bar extends StatelessWidget {
-  const EventList_Bar({
-    Key? key,
+class EventList_Bar extends StatefulWidget {
+  const EventList_Bar({ Key? key,
   }) : super(key: key);
 
   @override
+  State<EventList_Bar> createState() => _EventList_BarState();
+}
+
+class _EventList_BarState extends State<EventList_Bar> {
+  late double kilometersVal= 5;
+  @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
-      elevation: 10.0,
-      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-      automaticallyImplyLeading: false,
-      pinned: true,
-      flexibleSpace: Row(
-        children: [
-          ChipChoice(
-            list: {
-              "own": (bool bla) {
-                context
-                    .read<EventsMultilistCubit>()
-                    .getEvents(EventScreenOptions.owned);
+        return SliverAppBar(
+        elevation: 10.0,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        automaticallyImplyLeading: false,
+        pinned: true,
+        bottom: PreferredSize(
+            preferredSize: const Size(50,50),
+              child: Slider.adaptive(
+                  value: kilometersVal,
+                  min: 0,
+                  max: 50,
+                  divisions: 50,
+                  label: kilometersVal.toString(),
+                  onChanged: (newRating){
+                    setState(() {
+                      kilometersVal = newRating;
+                    });
+                  }),
+            ),
+        flexibleSpace: Row(
+          children: [
+            ChipChoice(
+              list: {
+                "own": (bool bla) {
+                  context
+                      .read<EventsMultilistCubit>()
+                      .getEvents(EventScreenOptions.owned);
+                },
+                "near": (bool bla) {
+                  context
+                      .read<EventsMultilistCubit>()
+                      .getEvents(EventScreenOptions.near, kilometersVal.ceil());
+                },
+                "recent": (bool bla) {
+                  context
+                      .read<EventsMultilistCubit>()
+                      .getEvents(EventScreenOptions.recent);
+                },
+                "invited": (bool bla) {
+                  context
+                      .read<EventsMultilistCubit>()
+                      .getEvents(EventScreenOptions.invited);
+                },
+                "attending": (bool bla) {
+                  context
+                      .read<EventsMultilistCubit>()
+                      .getEvents(EventScreenOptions.ownAttending);
+                },
               },
-              "near": (bool bla) {
-                context
-                    .read<EventsMultilistCubit>()
-                    .getEvents(EventScreenOptions.near);
-              },
-              "recent": (bool bla) {
-                context
-                    .read<EventsMultilistCubit>()
-                    .getEvents(EventScreenOptions.recent);
-              },
-              "invited": (bool bla) {
-                context
-                    .read<EventsMultilistCubit>()
-                    .getEvents(EventScreenOptions.invited);
-              },
-              "attending": (bool bla) {
-                context
-                    .read<EventsMultilistCubit>()
-                    .getEvents(EventScreenOptions.ownAttending);
-              },
-            },
-          ),
-        ],
-      ),
-    );
+            ),
+          ],
+        ),
+      );
   }
 }

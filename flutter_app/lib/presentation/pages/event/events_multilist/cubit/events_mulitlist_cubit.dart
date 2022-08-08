@@ -39,7 +39,7 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
   InvitationRepository invRepo = GetIt.I<InvitationRepository>();
 
   /// gets events from backend, swiches on the options
-  Future<void> getEvents(EventScreenOptions option) async {
+  Future<void> getEvents(EventScreenOptions option, [int? distanceKilometers]) async {
     final Either<NetWorkFailure, List<Event>> eventsList;
     final Either<NetWorkFailure, List<Event>> eventsListRecent;
     final Either<NetWorkFailure, List<Invitation>> invitationList;
@@ -85,7 +85,7 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
 
         });
 
-        eventsList = await repository.getNearEvents(position!.latitude, position!.longitude, 50, DateTime.now(), 30);
+        eventsList = await repository.getNearEvents(position!.latitude, position!.longitude, distanceKilometers ?? 30, DateTime.now(), 30);
         break;
       case EventScreenOptions.ownAttending:
         eventsList = await repository.getAttendingEvents(DateTime.now(), 30);

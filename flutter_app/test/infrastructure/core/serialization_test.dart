@@ -1,7 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/infrastructure/core/deserialization.dart';
-import 'package:flutter_frontend/infrastructure/core/serilization.dart';
+import 'package:flutter_frontend/infrastructure/core/serialization.dart';
 import 'package:flutter_frontend/infrastructure/auth/user_dto.dart';
 
 void main() {
@@ -46,6 +47,11 @@ void main() {
     // deserialization_factory_map.dart map. This should throw an error of type
     // DtoTypeNotFoundInDeserializationFactoryMapError since dynamic has no
     // entry in the deserialization_factory_map.
-    expect(deserializeModel(expectedUserDtoString), throwsException);
+    try {
+      await deserializeModel(expectedUserDtoString);
+      fail("exception not thrown");
+    } catch (e) {
+      expect(e, isA<DtoTypeNotFoundInDeserializationFactoryMapError>());
+    }
   });
 }

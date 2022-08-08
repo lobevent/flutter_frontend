@@ -20,9 +20,9 @@ jobs:
         working-directory: flutter_app
     steps:
       - name: Checkout the git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install flutter using the stable channel
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v2
         with:
           channel: stable
       - name: Print info

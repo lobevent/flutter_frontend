@@ -43,7 +43,7 @@ class EventFormPage extends StatelessWidget {
               // the basic container, as everywhere
               child: BasicContentContainer(
                 // its scrollable, because the form might get big
-                scrollable: true,
+                scrollable: false,
 
                 /// add a sticky bottom navigation
                 bottomNavigationBar: BottomNavigation(context),

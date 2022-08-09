@@ -25,6 +25,7 @@ class _PickImageWidgetState extends State<PickImageWidget> {
     return BlocBuilder<EventFormCubit, EventFormState>(
         builder: (context, state) {
           return Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               previewImage(),
               ImageUploadPicker(returnFunction: (List<XFile?>? image) {
@@ -51,7 +52,7 @@ class _PickImageWidgetState extends State<PickImageWidget> {
     }
     if (image != null) {
       return ConstrainedBox(
-          constraints: new BoxConstraints(
+          constraints: const BoxConstraints(
             minHeight: 20.0,
             minWidth: 20.0,
             maxHeight: 90.0,

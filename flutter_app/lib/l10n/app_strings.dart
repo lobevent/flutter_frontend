@@ -61,4 +61,7 @@ class AppStrings {
   static const String ownEventSeriesOverviewTitle = "Event Series";
   static const String followedEventSeriesOverviewTitle =
       "Followed event series";
+  static const String createEventGeneralInfo = "General Info";
+  static const String createEventPlaceTime = "Place & Time";
+  static const String createEventAccess = "Access";
 }

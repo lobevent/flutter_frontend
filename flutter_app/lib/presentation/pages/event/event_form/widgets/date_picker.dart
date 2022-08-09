@@ -36,11 +36,11 @@ class _DatePickerState extends State<DatePicker> {
         }
         return
             // as there are two buttons, the paddingrowwidget is the natural choice
-            PaddingRowWidget(children: [
+            PaddingRowWidget(
+              paddinfLeft: 0,
+                children: [
           // the date button; opens datepicker
           _DateButton(context),
-
-          Spacer(),
 
           // the time button; opens time picker
           _TimeButton(context)

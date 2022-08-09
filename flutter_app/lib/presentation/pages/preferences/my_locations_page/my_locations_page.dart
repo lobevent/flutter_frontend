@@ -18,7 +18,7 @@ class MyLocationsPage extends StatelessWidget {
         child: BlocBuilder<MyLocationsCubit, MyLocationsState>(
           builder: (context, state) {
             if(state is MyLocationsLoading){
-              return CircularProgressIndicator();
+              return Row(children: [Spacer(), Column(children: [Spacer(), CircularProgressIndicator(),Spacer()],), Spacer()]);
             } else if(state is MyLocationsLoaded){
               return ListView.builder(
                       itemCount: (state).myLocations.length,

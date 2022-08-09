@@ -158,7 +158,9 @@ class PaddingRowWidget extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.fromLTRB(
           paddinfLeft, paddingTop, paddingRight, paddingBottom),
+      child: Expanded(
       child: Row(children: children),
+      ),
     );
   }
 }
@@ -266,6 +268,7 @@ class TextWithIconButton extends StatelessWidget {
       disabled: disabled,
       // the call of the on pressed. With the nullcheck, because not every button needs an onpressed
       onPressed: () => onPressed == null ? null : onPressed!(),
+      child: Expanded(
       child: Row(
         children: [
           // button and text are Prestyled
@@ -273,11 +276,13 @@ class TextWithIconButton extends StatelessWidget {
             icon,
             color: AppColors.stdTextColor,
           ),
+
           Text(
             text,
             style: TextStyle(color: AppColors.stdTextColor),
           ),
         ],
+      ),
       ),
     );
   }

@@ -42,6 +42,7 @@ class _EventFormContainerState extends State<EventFormContainer> {
           ? AutovalidateMode.always
           : AutovalidateMode.disabled,
       child: Expanded(
+        //fit: FlexFit.loose,
         child: Stepper(
           type: StepperType.vertical,
           steps: getSteps(),
@@ -71,6 +72,7 @@ class _EventFormContainerState extends State<EventFormContainer> {
           title: Text(AppStrings.createEventGeneralInfo),
           content: Container(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 if (widget.event != null && widget.event!.image != null)
                   PickImageWidget(
@@ -94,6 +96,7 @@ class _EventFormContainerState extends State<EventFormContainer> {
           title: Text(AppStrings.createEventPlaceTime),
           content: Container(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: const [
                 DatePicker(),
                 CoordsPicker(),
@@ -105,8 +108,9 @@ class _EventFormContainerState extends State<EventFormContainer> {
           state: currentStep > 2 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 2,
           title: Text(AppStrings.createEventAccess),
-          content: Expanded(
+          content: Container(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const CheckBoxArea(),
                 const MaxPersons(),

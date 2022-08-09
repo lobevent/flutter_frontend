@@ -7,6 +7,8 @@ import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions_handler.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_dtos.dart';
 
+import '../../infrastructure/core/base_dto.dart';
+
 
 class Repository<Domain>{
 
@@ -22,5 +24,16 @@ class Repository<Domain>{
       result = left(ExceptionsHandler.reactOnCommunicationException(e));
     }
     return result;
+  }
+
+
+
+  Future<Either<NetWorkFailure, List<Domain>>> getList<T extends BaseDto<Domain>>(Future<List<T>> Function() repocall) async {
+    return localErrorHandler(() async{
+      final dto = await repocall();
+      //convert the dto objects to domain Objects
+      final domainObjects = dto.map((idto) => idto.toDomain()).toList();
+      return right(domainObjects);
+    });
   }
 }

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
@@ -30,16 +31,30 @@ enum EventScreenOptions {
 class EventsMultilistCubit extends Cubit<EventsMultilistState> {
   EventScreenOptions option = EventScreenOptions.owned;
   Profile? profile;
+  double kilometersVal = 5;
   EventsMultilistCubit({this.option = EventScreenOptions.owned, this.profile})
       : super(EventsMultilistState.initial()) {
     emit(EventsMultilistState.initial());
+    controller.addListener(_scrollListener);
     getEvents(this.option);
   }
+  ScrollController controller = ScrollController();
   EventRepository repository = GetIt.I<EventRepository>();
   InvitationRepository invRepo = GetIt.I<InvitationRepository>();
 
+  _scrollListener() {
+    if (controller.offset >= controller.position.maxScrollExtent &&
+        !controller.position.outOfRange) {
+      kilometersVal = kilometersVal + 5;
+      loadMore();
+    }
+    if (controller.offset <= controller.position.minScrollExtent &&
+        !controller.position.outOfRange) {}
+  }
+
   /// gets events from backend, swiches on the options
-  Future<void> getEvents(EventScreenOptions option, [int? distanceKilometers]) async {
+  Future<void> getEvents(EventScreenOptions option,
+      [int? distanceKilometers]) async {
     final Either<NetWorkFailure, List<Event>> eventsList;
     final Either<NetWorkFailure, List<Event>> eventsListRecent;
     final Either<NetWorkFailure, List<Invitation>> invitationList;
@@ -73,19 +88,21 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
                 eventsListRecent.fold((l) => throw Exception, (r) => r)));
         break;
       case EventScreenOptions.near:
-
         final geof = GeoFunctionsCubit(event: null);
         Position? position;
         await geof.checkUserPosition();
         geof.state.maybeMap(
-          loaded: (loadedState){
-            position = loadedState.position;
-          },
-            orElse: (){
+            loaded: (loadedState) {
+              position = loadedState.position;
+            },
+            orElse: () {});
 
-        });
-
-        eventsList = await repository.getNearEvents(position!.latitude, position!.longitude, distanceKilometers ?? 30, DateTime.now(), 30);
+        eventsList = await repository.getNearEvents(
+            position!.latitude,
+            position!.longitude,
+            kilometersVal.ceil() ?? 30,
+            DateTime.now(),
+            30);
         break;
       case EventScreenOptions.ownAttending:
         eventsList = await repository.getAttendingEvents(DateTime.now(), 30);
@@ -145,5 +162,33 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
         orElse: () => throw Exception('LogicError'));
 
     return true;
+  }
+
+  Future<void> loadMore() async {
+    // if(lastLoadedDate.toIso8601String() == state.posts.last.creationDate.toIso8601String()){
+    //   return;
+    // }
+    final geof = GeoFunctionsCubit(event: null);
+    Position? position;
+    await geof.checkUserPosition();
+    geof.state.maybeMap(
+        loaded: (loadedState) {
+          position = loadedState.position;
+        },
+        orElse: () {});
+
+    final Either<NetWorkFailure, List<Event>> eventsList =
+        await repository.getNearEvents(position!.latitude, position!.longitude,
+            kilometersVal.ceil() ?? 30, DateTime.now(), 30);
+
+    List<Event> eventsNew = eventsList.fold((l) => throw Exception(), (r) => r);
+    List<Event> oldEvent = [];
+
+    state.maybeMap((value) => null, loaded: (loadedState) {
+      oldEvent = loadedState.events;
+    }, orElse: () {});
+    oldEvent.addAll(eventsNew);
+    emit(EventsMultilistState.initial());
+    emit(EventsMultilistState.loaded(events: oldEvent));
   }
 }

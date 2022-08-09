@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
+import 'package:flutter_frontend/presentation/core/utils/loading/scroll_listener.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/std_choice_text_chip.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/event_list_tiles.dart';
@@ -14,8 +15,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 class EventsMultilistBody extends StatefulWidget {
   final bool profileView;
 
-  const EventsMultilistBody({Key? key, required this.profileView})
-      : super(key: key);
+  EventsMultilistBody({Key? key, required this.profileView}) : super(key: key);
+
   @override
   EventsMultilistBodyState createState() => EventsMultilistBodyState();
 }
@@ -25,6 +26,7 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
   List<Event> eventsRecent = [];
   List<Invitation> invitations = [];
   bool isInvites = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<EventsMultilistCubit, EventsMultilistState>(
@@ -90,6 +92,7 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
                 ),
               ),
             ],
+            //controller: context.read<EventsMultilistCubit>().controller,
           );
         });
   }
@@ -130,69 +133,82 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
 }
 
 class EventList_Bar extends StatefulWidget {
-  const EventList_Bar({ Key? key,
-  }) : super(key: key);
+  const EventList_Bar({Key? key}) : super(key: key);
 
   @override
   State<EventList_Bar> createState() => _EventList_BarState();
 }
 
 class _EventList_BarState extends State<EventList_Bar> {
-  late double kilometersVal= 5;
+  final GlobalKey<ChipChoiceState> myKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
-        return SliverAppBar(
-        elevation: 10.0,
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        automaticallyImplyLeading: false,
-        pinned: true,
-        bottom: PreferredSize(
-            preferredSize: const Size(50,50),
+    return SliverAppBar(
+      elevation: 10.0,
+      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+      automaticallyImplyLeading: false,
+      pinned: true,
+      //lat 37.4219983 long -122.084
+      bottom: myKey.currentState?.value! == 1
+          ? PreferredSize(
+              preferredSize: const Size(50, 50),
               child: Slider.adaptive(
-                  value: kilometersVal,
+                  value: context.read<EventsMultilistCubit>().kilometersVal,
                   min: 0,
                   max: 50,
                   divisions: 50,
-                  label: kilometersVal.toString(),
-                  onChanged: (newRating){
+                  label: context
+                      .read<EventsMultilistCubit>()
+                      .kilometersVal
+                      .toString(),
+                  onChangeEnd: (newRating) {
+                    context
+                        .read<EventsMultilistCubit>()
+                        .getEvents(EventScreenOptions.near, newRating.ceil());
+                  },
+                  onChanged: (newRating) {
                     setState(() {
-                      kilometersVal = newRating;
+                      context.read<EventsMultilistCubit>().kilometersVal =
+                          newRating;
                     });
                   }),
-            ),
-        flexibleSpace: Row(
-          children: [
-            ChipChoice(
-              list: {
-                "own": (bool bla) {
-                  context
-                      .read<EventsMultilistCubit>()
-                      .getEvents(EventScreenOptions.owned);
-                },
-                "near": (bool bla) {
-                  context
-                      .read<EventsMultilistCubit>()
-                      .getEvents(EventScreenOptions.near, kilometersVal.ceil());
-                },
-                "recent": (bool bla) {
-                  context
-                      .read<EventsMultilistCubit>()
-                      .getEvents(EventScreenOptions.recent);
-                },
-                "invited": (bool bla) {
-                  context
-                      .read<EventsMultilistCubit>()
-                      .getEvents(EventScreenOptions.invited);
-                },
-                "attending": (bool bla) {
-                  context
-                      .read<EventsMultilistCubit>()
-                      .getEvents(EventScreenOptions.ownAttending);
-                },
+            )
+          : const PreferredSize(preferredSize: Size(0, 0), child: Text("")),
+      flexibleSpace: Row(
+        children: [
+          ChipChoice(
+            key: myKey,
+            list: {
+              "own": (bool bla) {
+                context
+                    .read<EventsMultilistCubit>()
+                    .getEvents(EventScreenOptions.owned);
               },
-            ),
-          ],
-        ),
-      );
+              "near": (bool bla) {
+                context.read<EventsMultilistCubit>().getEvents(
+                    EventScreenOptions.near,
+                    context.read<EventsMultilistCubit>().kilometersVal.ceil());
+              },
+              "recent": (bool bla) {
+                context
+                    .read<EventsMultilistCubit>()
+                    .getEvents(EventScreenOptions.recent);
+              },
+              "invited": (bool bla) {
+                context
+                    .read<EventsMultilistCubit>()
+                    .getEvents(EventScreenOptions.invited);
+              },
+              "attending": (bool bla) {
+                context
+                    .read<EventsMultilistCubit>()
+                    .getEvents(EventScreenOptions.ownAttending);
+              },
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

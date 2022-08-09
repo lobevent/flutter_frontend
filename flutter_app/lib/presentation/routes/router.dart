@@ -16,6 +16,7 @@ import 'package:flutter_frontend/presentation/pages/login/login_screen.dart';
 import 'package:flutter_frontend/presentation/pages/login/phone_number_sign_in_screen.dart';
 import 'package:flutter_frontend/presentation/pages/login/phone_number_verification_code_screen.dart';
 import 'package:flutter_frontend/presentation/pages/login_register_email/login_register.dart';
+import 'package:flutter_frontend/presentation/pages/preferences/my_locations_page/my_locations_page.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_friends/profile_friends_page.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/profile_page.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_search/profile_search_page.dart';
@@ -45,7 +46,8 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/post_scre
     AutoRoute(page: EventSwiper),
     CustomRoute(page: EventSeriesFormMain, transitionsBuilder: TransitionsBuilders.fadeIn, durationInMilliseconds: 400),
     AutoRoute(page: EventSeriesListPage),
-    AutoRoute(page: EventSeriesScreenPage)
+    AutoRoute(page: EventSeriesScreenPage),
+    AutoRoute(page: MyLocationsPage)
   ],
 )
 class $Router {}

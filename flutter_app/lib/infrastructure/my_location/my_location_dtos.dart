@@ -23,8 +23,8 @@ class MyLocationDto extends BaseDto<MyLocation> with _$MyLocationDto{
     String? id,
     required String address,
     required String name,
-    required int latitude,
-    required int longitude,
+    required double latitude,
+    required double longitude,
     @ProfileConverter() ProfileDto? profile,
   }) = MyLocationD;
 

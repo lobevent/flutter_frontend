@@ -10,10 +10,10 @@ part 'my_location.freezed.dart';
 class MyLocation with _$MyLocation{
   MyLocation._();
 
-  const factory MyLocation({
+  factory MyLocation({
     UniqueId? id,
-    required int latitude,
-    required int longitude,
+    required double latitude,
+    required double longitude,
     required String address,
     required String name,
     Profile? profile,

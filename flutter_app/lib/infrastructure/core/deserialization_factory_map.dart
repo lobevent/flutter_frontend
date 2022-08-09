@@ -2,6 +2,7 @@ import 'package:flutter_frontend/infrastructure/auth/user_dto.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/event_series/eventSeries_dtos.dart';
 import 'package:flutter_frontend/infrastructure/invitation/invitation_dtos.dart';
+import 'package:flutter_frontend/infrastructure/my_location/my_location_dtos.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_dtos.dart';
 import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
@@ -22,4 +23,5 @@ final Map<Type, dynamic> factoryMap = {
   ItemDto: (Map<String, dynamic> json) => ItemDto.fromJson(json),
   InvitationDto: (Map<String, dynamic> json) => InvitationDto.fromJson(json),
   EventSeriesDto: (Map<String, dynamic> json) => EventSeriesDto.fromJson(json),
+  MyLocationDto: (Map<String, dynamic> json) => MyLocationDto.fromJson(json),
 };

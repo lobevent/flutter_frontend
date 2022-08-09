@@ -64,4 +64,11 @@ class AppStrings {
   static const String createEventGeneralInfo = "General Info";
   static const String createEventPlaceTime = "Place & Time";
   static const String createEventAccess = "Access";
+
+
+  static const String deleteMyLocationDialogTitle = "Are you sure?";
+  static const String deleteMyLocationDialogText =
+      "You are about to delete an location. Please confirm!";
+  static const String deleteMyLocationDialogConfirm = "Delete";
+  static const String deleteMyLocationDialogAbort = "Abort";
 }

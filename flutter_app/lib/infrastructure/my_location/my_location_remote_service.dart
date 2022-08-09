@@ -7,9 +7,9 @@ import 'package:http/http.dart';
 import '../core/symfony_communicator.dart';
 
 class MyLocationRemotePaths{
-  static const getMyLocationsList = "";
-  static const saveMyLocation = "";
-  static const removeMyLocation = "";
+  static const saveMyLocation = "/myLocation/create";
+  static const removeMyLocation = "/myLocation/delete";
+  static const getMyLocationsList = "/myLocation/list";
 
 }
 

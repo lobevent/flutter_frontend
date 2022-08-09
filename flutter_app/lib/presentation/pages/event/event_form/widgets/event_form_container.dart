@@ -67,7 +67,7 @@ class _EventFormContainerState extends State<EventFormContainer> {
 
   List<Step> getSteps() => [
         Step(
-          state: currentStep > 0 ? StepState.complete : StepState.indexed,
+          state: currentStep > 0  ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 0,
           title: Text(AppStrings.createEventGeneralInfo),
           content: Container(

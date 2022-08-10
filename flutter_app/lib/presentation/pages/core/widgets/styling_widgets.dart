@@ -158,9 +158,7 @@ class PaddingRowWidget extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.fromLTRB(
           paddinfLeft, paddingTop, paddingRight, paddingBottom),
-      child: Expanded(
       child: Row(children: children),
-      ),
     );
   }
 }

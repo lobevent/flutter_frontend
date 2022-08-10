@@ -19,3 +19,8 @@ samples, guidance on mobile development, and a full API reference.
 # Some informations about the structure
 - We use ```GestureDetector``` to fix the keyboard that opens all the time im an textfield was focused 
   at the moment this is written (May 29 2022) it is implemented in the ```main.dart``` build method, wraping the whole screen.
+  
+
+
+#Some more ideas:
+- https://medium.com/coding-with-flutter/flutter-adding-animated-overlays-to-your-app-e0bb049eff39

@@ -47,16 +47,18 @@ class _MyLocationTileState extends State<MyLocationTile> {
     GenDialog.genericDialog(context, AppStrings.deleteMyLocationDialogTitle, AppStrings.deleteMyLocationDialogText, AppStrings.deleteMyLocationDialogConfirm, AppStrings.deleteMyLocationDialogAbort)
         .then((value) async {
       // unset the deleting attribute
-      this.isDeleting = true;
-      setState((){});
-      widget.onDelete!(widget.location).then((value) {
-        isDeleting = false;
-        if(!value){
-          // if there was an error deleting, set the flag
-          errorDeleting = true;
-        }
+      if(value){
+        this.isDeleting = true;
         setState((){});
-      });
+        widget.onDelete!(widget.location).then((value) {
+          isDeleting = false;
+          if(!value){
+            // if there was an error deleting, set the flag
+            errorDeleting = true;
+          }
+          setState((){});
+        });
+      }
     });
   }
 }

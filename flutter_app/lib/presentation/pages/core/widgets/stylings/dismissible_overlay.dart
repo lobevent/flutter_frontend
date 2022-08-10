@@ -11,69 +11,49 @@ class DismissibleOverlay extends StatefulWidget {
   State<DismissibleOverlay> createState() => _DismissibleOverlayState();
 }
 
-class _DismissibleOverlayState extends State<DismissibleOverlay> with AutoRouteAware{
+class _DismissibleOverlayState extends State<DismissibleOverlay> with AutoRouteAware, SingleTickerProviderStateMixin{
 
-  // AutoRouteObserver? _observer;
-  //
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   // RouterScope exposes the list of provided observers
-  //   // including inherited observers
-  //   var dar = RouterScope.of(context);
-  //
-  //   _observer = RouterScope.of(context).firstObserverOfType<AutoRouteObserver>();
-  //   if (_observer != null) {
-  //     // we subscribe to the observer by passing our
-  //     // AutoRouteAware state and the scoped routeData
-  //     _observer!.subscribe(this, context.routeData);
-  //   }
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   // don't forget to unsubscribe from the
-  //   // observer on dispose
-  //   _observer!.unsubscribe(this);
-  // }
 
+  late Animation<double> animation;
+  late AnimationController controller;
+  double opacity = 0;
+
+  @override
+  void initState() {
+    //BEGIN: --- the fade in animation
+    controller = AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
+    animation = Tween<double>(begin: 0, end: 1.0).animate(controller)..addListener(() {
+      this.opacity = animation.value;
+      setState((){});
+    });
+    controller.forward();
+    //END: --- the fade in animation
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // //context.watchRouter.
-    //context.watchRouter.addListener(() {remove(context);});
 
-    //context.watchRouter.pagelessRoutesObserver.dispose();
+
+
     return BackButtonListener(
-        onBackButtonPressed: () async { widget.overlayEntry.remove(); return Future.value(true);},
-        child: Dismissible(
-            onDismissed: (dismissDirection) => widget.overlayEntry.remove(),
-            direction: DismissDirection.vertical,
-            key: Key(''),
-            child: ColorfulSafeArea(child: widget.child)
+        onBackButtonPressed: () async {
+          // this reverses the animation when the back button is clicked, so it fades out
+          return controller.reverse().then((value) {
+            widget.overlayEntry.remove(); return Future.value(true);
+        });},
+        child: Opacity(
+          opacity: opacity,
+          child: Dismissible(
+              onDismissed: (dismissDirection) => widget.overlayEntry.remove(),
+              direction: DismissDirection.vertical,
+              key: Key(''),
+              child: ColorfulSafeArea(child: widget.child)
+          ),
         )
     );
 
   }
 
-  //
-  // @override
-  // void didPush() {
-  //   widget.overlayEntry.remove();
-  //   super.didPush();
-  // }
-
-  // @override
-  // void dispose(){
-  //   print("disposed");
-  //   print(context.watchRouter.hasListeners);
-  //   context.watchRouter.removeListener(() {remove(context);});
-  //   super.dispose();
-  // }
-
-  // void remove(watchrouter){
-  //   context.watchRouter.removeListener(() {remove(context);});
-  //   widget.overlayEntry.remove();
-  // }
 }

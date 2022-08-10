@@ -20,12 +20,12 @@ class MyLocationsPage extends StatelessWidget {
             if(state is MyLocationsLoading){
               return Row(children: [Spacer(), Column(children: [Spacer(), CircularProgressIndicator(),Spacer()],), Spacer()]);
             } else if(state is MyLocationsLoaded){
-              return ListView.builder(
+              return ListView.separated(
                       itemCount: (state).myLocations.length,
-                      itemBuilder: (context, index) => Column(children: [
-                        MyLocationTile(location: state.myLocations[index],
-                        onDelete: context.read<MyLocationsCubit>().deleteMyLocation),
-                        Divider()]));
+                      itemBuilder: (context, index) => MyLocationTile(location: state.myLocations[index],
+                      onDelete: context.read<MyLocationsCubit>().deleteMyLocation),
+                separatorBuilder: (context, index)=> Divider(),
+              );
             }
               return Spacer();
           },

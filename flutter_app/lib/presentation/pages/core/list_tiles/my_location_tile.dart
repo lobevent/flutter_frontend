@@ -20,36 +20,43 @@ class _MyLocationTileState extends State<MyLocationTile> {
 
   @override
   Widget build(BuildContext context) {
+
     return ListTile(
       tileColor: isDeleting ? AppColors.deletionOngoingColor : null,
       title:
 
-      Row(children: [
+      Row(
+        children: [
         Spacer(),
         FittedBox(child: Text(widget.location.name),),
         Spacer(),
         if(widget.onDelete != null)
           IconButton(
-              onPressed: (){
-                GenDialog.genericDialog(context, AppStrings.deleteMyLocationDialogTitle, AppStrings.deleteMyLocationDialogText, AppStrings.deleteMyLocationDialogConfirm, AppStrings.deleteMyLocationDialogAbort)
-                    .then((value) async {
-                      // unset the deleting attribute
-                      this.isDeleting = true;
-                      setState((){});
-                      widget.onDelete!(widget.location).then((value) {
-                        isDeleting = false;
-                        if(!value){
-                          // if there was an error deleting, set the flag
-                         errorDeleting = true;
-                        }
-                        setState((){});
-                      });
-                });
-              },
+              onPressed: ()=>_onPressed(),
               icon: Icon(Icons.delete))],),
 
 
       subtitle: Center(child: FittedBox(child: Text("${widget.location.address}at lat${widget.location.latitude}, long: ${widget.location.longitude}"),),)
-    );
+      );
+  }
+
+
+
+
+  void _onPressed(){
+    GenDialog.genericDialog(context, AppStrings.deleteMyLocationDialogTitle, AppStrings.deleteMyLocationDialogText, AppStrings.deleteMyLocationDialogConfirm, AppStrings.deleteMyLocationDialogAbort)
+        .then((value) async {
+      // unset the deleting attribute
+      this.isDeleting = true;
+      setState((){});
+      widget.onDelete!(widget.location).then((value) {
+        isDeleting = false;
+        if(!value){
+          // if there was an error deleting, set the flag
+          errorDeleting = true;
+        }
+        setState((){});
+      });
+    });
   }
 }

@@ -65,6 +65,8 @@ class AppStrings {
   static const String createEventPlaceTime = "Place & Time";
   static const String createEventAccess = "Access";
 
+  static const String myLocationsPageHeading = "MyLocations";
+
 
   static const String deleteMyLocationDialogTitle = "Are you sure?";
   static const String deleteMyLocationDialogText =

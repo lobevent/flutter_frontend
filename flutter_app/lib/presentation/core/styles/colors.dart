@@ -7,6 +7,11 @@ class AppColors {
   static const Color backGroundColor = Color(0xFF081919);
   static const Color stdTextColor = Color(0xFFECF8F8);
   static const Color stdButtonBackground = Color(0xFF081919);
+
+  static const Color textOnAccentColor = Color(0xFF000000);
+  static const Color accentButtonColor = Color(0xFFA57C00);
+
+
   static const Color mainIcon = Color(0xFFECF8F8);
 
   static const checkboxColor = Color(0xFFF28D8D);

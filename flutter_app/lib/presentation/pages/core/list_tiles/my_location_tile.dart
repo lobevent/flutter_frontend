@@ -5,6 +5,11 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/gen_dialog.dart
 
 import '../../../../domain/my_location/my_location.dart';
 
+///
+/// This tile is for displaying myLocation Entities in a list
+/// [location] is an [MyLocation] object, that should be displayed
+/// [onDelete] is an Function, that executes the deletion
+///
 class MyLocationTile extends StatefulWidget {
   final MyLocation location;
   final Future<bool> Function(MyLocation)? onDelete;

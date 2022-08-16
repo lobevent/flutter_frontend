@@ -104,38 +104,18 @@ class _CoordsPickerState extends State<CoordsPicker> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Flexible(
-                    child: FullWidthPaddingInput(
-                      // autoValidateMode: AutovalidateMode.onUserInteraction,
-                      labelText: "Longitude",
-                      controller: textEditingControllerLongi,
-                      inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[1234567890.-]'))],
-                      onChanged: (value2) => context
-                          .read<EventFormCubit>()
-                          .changeLongitude(double.parse(value2 == "" ? '0' : value2)),
-                      textInputType: TextInputType.numberWithOptions(decimal: true, signed: true),
-                      validator: (value){
-                        if(value == null || value == ''){
-                          return 'please provide an longitude';
-                        }
-                      },
-                    )),
-                Flexible(
-                    child: FullWidthPaddingInput(
-                      // autoValidateMode: AutovalidateMode.onUserInteraction,
-                      labelText: "Latitude",
-                      controller: textEditingControllerLati,
-                      inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[1234567890.]'))],
-                      onChanged: (value) => context
-                          .read<EventFormCubit>()
-                          .changeLatitude(double.parse(value == "" ? '0' : value)),
-                      textInputType: TextInputType.numberWithOptions(decimal: true, signed: true),
-                      validator: (value){
-                        if(value == null || value == ''){
-                          return 'please provide an latitude';
-                        }
-                      },
-                    ))
+                Flexible(child: CoordinatesPickerInput(
+                  textEditingControllerLongi: textEditingControllerLongi,
+                  labeltext: "longitude",
+                  onChanged: (value2) => context
+                      .read<EventFormCubit>()
+                      .changeLongitude(double.parse(value2 == "" ? '0' : value2)),)),
+                Flexible(child: CoordinatesPickerInput(
+                  textEditingControllerLongi: textEditingControllerLati,
+                  labeltext: "Latitude",
+                  onChanged: (value2) => context
+                      .read<EventFormCubit>()
+                      .changeLatitude(double.parse(value2 == "" ? '0' : value2)),)),
               ],
             ),),
         ],

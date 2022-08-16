@@ -24,22 +24,31 @@ class MyLocationsPage extends StatelessWidget {
             if(state is MyLocationsLoading){
               return Row(children: [Spacer(), Column(children: [Spacer(), CircularProgressIndicator(),Spacer()],), Spacer()]);
             } else if(state is MyLocationsLoaded){
-              return Stack(
-                children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                          SizedBox(height: 50,),
-                          _buildListView(state),
-                         //this is added due to the button in the bottom, so that the last location is good visible
-                         SizedBox(height: 50,)
-                      ],
+              return RefreshIndicator(
+                onRefresh: () => _reload(context),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 50, bottom: 50),
+                        child: _buildListView(state),
+                      )
+                      // Column(
+                      //   children: [
+                      //       SizedBox(height: 50,),
+                      //       _buildListView(state),
+                      //      //this is added due to the button in the bottom, so that the last location is good visible
+                      //      SizedBox(height: 50,)
+                      //   ],
+                      // ),
                     ),
-                  ),
-                  _buildTitle(),
-                  // The Positioned Button
-                  _buildAddButton(context),
-                ],
+                    _buildTitle(),
+                    // The Positioned Button
+                    _buildAddButton(context),
+                  ],
+                ),
               );
             }
               return Spacer();
@@ -50,6 +59,10 @@ class MyLocationsPage extends StatelessWidget {
     ));
   }
 
+
+  Future<void> _reload(BuildContext context) async{
+    context.read<MyLocationsCubit>().loadMyLocations();
+  }
 
 
   //--------------------------------------------------------------------------------------------------------------------------------------------------

@@ -455,3 +455,32 @@ class FullWidthPaddingInput extends StatelessWidget {
     );
   }
 }
+
+
+class CoordinatesPickerInput extends StatelessWidget {
+  const CoordinatesPickerInput({
+    Key? key,
+    required this.textEditingControllerLongi, required this.labeltext, this.onChanged,
+  }) : super(key: key);
+
+  final TextEditingController textEditingControllerLongi;
+  final String labeltext;
+  final ValueChanged<String>? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return FullWidthPaddingInput(
+      // autoValidateMode: AutovalidateMode.onUserInteraction,
+      labelText: labeltext,
+      controller: textEditingControllerLongi,
+      inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[1234567890.-]'))],
+      onChanged: (value2) => onChanged,
+      textInputType: TextInputType.numberWithOptions(decimal: true, signed: true),
+      validator: (value){
+        if(value == null || value == ''){
+          return 'please provide an $labeltext';
+        }
+      },
+    );
+  }
+}

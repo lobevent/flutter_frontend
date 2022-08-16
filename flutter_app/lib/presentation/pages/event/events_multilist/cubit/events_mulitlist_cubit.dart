@@ -100,7 +100,7 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
         eventsList = await repository.getNearEvents(
             position!.latitude,
             position!.longitude,
-            kilometersVal.ceil() ?? 30,
+            kilometersVal.ceil(),
             DateTime.now(),
             30);
         break;
@@ -179,7 +179,7 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
 
     final Either<NetWorkFailure, List<Event>> eventsList =
         await repository.getNearEvents(position!.latitude, position!.longitude,
-            kilometersVal.ceil() ?? 30, DateTime.now(), 30);
+            kilometersVal.ceil(), DateTime.now(), 30);
 
     List<Event> eventsNew = eventsList.fold((l) => throw Exception(), (r) => r);
     List<Event> oldEvent = [];

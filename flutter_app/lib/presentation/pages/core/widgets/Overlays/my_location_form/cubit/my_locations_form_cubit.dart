@@ -13,9 +13,12 @@ part 'my_locations_form_state.dart';
 class MyLocationsFormCubit extends Cubit<MyLocationsFormState> {
 
   MyLocationRepository myLocationRepository = GetIt.I<MyLocationRepository>();
-  MyLocationsFormCubit() : super(MyLocationsFormInitial());
+  MyLocationsFormCubit() : super(MyLocationsFormInitial()){generateNewLocation();}
 
 
+  generateNewLocation(){
+    emit(MyLocationFormAdding(MyLocation(latitude: 0.0, longitude: 0.0, address: MyLocationAddress(""), name: MyLocationName(""))));
+  }
 
 
   Future<void> changeName(String name) async{

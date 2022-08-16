@@ -33,7 +33,7 @@ class _MyLocationTileState extends State<MyLocationTile> {
       Row(
         children: [
         Spacer(),
-        FittedBox(child: Text(widget.location.name),),
+        FittedBox(child: Text(widget.location.name.getOrEmptyString()),),
         Spacer(),
         if(widget.onDelete != null)
           IconButton(
@@ -41,7 +41,7 @@ class _MyLocationTileState extends State<MyLocationTile> {
               icon: Icon(Icons.delete))],),
 
 
-      subtitle: Center(child: FittedBox(child: Text("${widget.location.address}at lat${widget.location.latitude}, long: ${widget.location.longitude}"),),)
+      subtitle: Center(child: FittedBox(child: Text("${widget.location.address.getOrEmptyString()} at lat${widget.location.latitude}, long: ${widget.location.longitude}"),),)
       );
   }
 

@@ -30,19 +30,12 @@ class MyLocationsPage extends StatelessWidget {
                   fit: StackFit.expand,
                   children: [
                     SingleChildScrollView(
+                      // this is done so the refresh indicator always works
                       physics: AlwaysScrollableScrollPhysics(),
                       child: Padding(
                         padding: EdgeInsets.only(top: 50, bottom: 50),
                         child: _buildListView(state),
                       )
-                      // Column(
-                      //   children: [
-                      //       SizedBox(height: 50,),
-                      //       _buildListView(state),
-                      //      //this is added due to the button in the bottom, so that the last location is good visible
-                      //      SizedBox(height: 50,)
-                      //   ],
-                      // ),
                     ),
                     _buildTitle(),
                     // The Positioned Button

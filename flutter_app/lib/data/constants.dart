@@ -25,6 +25,10 @@ class Constants {
 
 
 
+  static const int maxLocationName = 200;
+  static const int maxLocationAddres = 250;
+
+
 
   //--------------------------------------------------- Heights and paddings ------------------------------------------------------
   static const double stdSpacesBetweenContent = 10;

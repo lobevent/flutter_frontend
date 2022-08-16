@@ -73,4 +73,9 @@ class AppStrings {
       "You are about to delete an location. Please confirm!";
   static const String deleteMyLocationDialogConfirm = "Delete";
   static const String deleteMyLocationDialogAbort = "Abort";
+  static const String latitude = "latitude";
+  static const String longitude = "longitude";
+  static const String address = "address";
+  static const String name = 'name';
+  static const String addLocation = "Add Location";
 }

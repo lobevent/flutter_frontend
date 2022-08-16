@@ -12,7 +12,7 @@ class MyLocationRepository extends Repository<MyLocation>{
   MyLocationRepository({required this.remoteService});
 
 
-  Future<Future<Either<NetWorkFailure, MyLocation>>> saveLocation(MyLocation location) async{
+  Future<Either<NetWorkFailure, MyLocation>> saveLocation(MyLocation location) async{
     return localErrorHandler(() async {
       return right((await remoteService.create(MyLocationDto.fromDomain(location))).toDomain());
     });

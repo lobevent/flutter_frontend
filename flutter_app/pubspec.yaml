@@ -13,7 +13,7 @@ dependencies:
     sdk: flutter
 
   # generates routes and handles all the navigation stuff
-  auto_route: ^3.0.4
+  auto_route: ^4.2.1
 
   # annotations for json code generation
   json_annotation: ^4.3.0
@@ -22,7 +22,7 @@ dependencies:
   shared_preferences: ^2.0.12
 
   # annotations for freezed data and union classes code generation
-  freezed_annotation: ^1.1.0
+  freezed_annotation: ^2.1.0
 
   # dartz for a ton of useful utils (like Either type and so on)
   dartz: ^0.10.0-nullsafety.1
@@ -52,7 +52,7 @@ dependencies:
   google_sign_in: ^5.0.1
 
   # this plugin will handle the apple part of signing in with apple
-  sign_in_with_apple: ^3.0.0
+  sign_in_with_apple: ^4.1.0
 
   # we need to check that the iOS version is at least 13 since 12 won't support apple sign in
   device_info: ^2.0.0
@@ -78,7 +78,7 @@ dependencies:
   equatable: ^2.0.3
 
   # postion calculation
-  geolocator: ^8.0.1
+  geolocator: ^9.0.1
 
   # nice colorfull safearea
   colorful_safe_area: ^0.3.0
@@ -88,14 +88,14 @@ dependencies:
   expand_widget: ^2.1.0
 
   # safe encryped stuff / login credentials /not nessesary if connection is avaible firebase makes it persitent https://firebase.google.com/docs/auth/web/auth-state-persistence
-  flutter_secure_storage: ^5.0.2
+  flutter_secure_storage: ^6.0.0
 
   # set .env variable for emulator
   flutter_dotenv: ^5.0.2
 
   # pick image from gallery
   image_picker: ^0.8.4+4
-  flutter_osm_plugin: ^0.34.1+5
+  flutter_osm_plugin: ^0.39.0
   maps_launcher: ^2.0.1
 
 
@@ -105,10 +105,10 @@ dev_dependencies:
   build_runner: ^2.1.4
 
   # generator for the auto route plugin
-  auto_route_generator: ^3.0.1
+  auto_route_generator: ^4.2.1
 
   # data and union classes generator
-  freezed: ^1.1.0
+  freezed: ^2.1.0+1
 
   # json serializable code generation
   json_serializable: ^6.0.1
@@ -117,7 +117,7 @@ dev_dependencies:
   mockito: ^5.0.3
 
   # mocktails to easy mock with nullsafety support
-  mocktail: ^0.2.0
+  mocktail: ^0.3.0
 
 flutter:
   uses-material-design: true

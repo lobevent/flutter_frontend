@@ -2,6 +2,7 @@
 
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/my_location/my_location.dart';
+import 'package:flutter_frontend/domain/my_location/my_location_value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
@@ -29,12 +30,12 @@ class MyLocationDto extends BaseDto<MyLocation> with _$MyLocationDto{
   }) = MyLocationD;
 
   factory MyLocationDto.fromDomain(MyLocation myLocation){
-    return MyLocationDto(address: myLocation.address, name: myLocation.name, latitude: myLocation.latitude, longitude: myLocation.longitude);
+    return MyLocationDto(address: myLocation.address.getOrEmptyString(), name: myLocation.name.getOrEmptyString(), latitude: myLocation.latitude, longitude: myLocation.longitude);
   }
 
   @override
   MyLocation toDomain() {
-    return MyLocation(id: id != null ? UniqueId.fromUniqueString(id!): null, latitude: latitude, longitude: longitude, address: address, name: name);
+    return MyLocation(id: id != null ? UniqueId.fromUniqueString(id!): null, latitude: latitude, longitude: longitude, address: MyLocationAddress(address), name: MyLocationName(name));
   }
 
 

@@ -85,6 +85,9 @@ class MyLocationsPage extends StatelessWidget {
                         child: IconButton(onPressed: () => MyLocationFormOverlay(context: context), icon: Icon(Icons.add), color: AppColors.textOnAccentColor,)));
   }
 
+
+
+
   /// Generates Listview of the Locations
   /// [state] is the state of the cubit, it contains the locations
   /// The Listview is not scrollable

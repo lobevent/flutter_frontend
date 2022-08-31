@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:dartz/dartz.dart' hide State;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,11 +19,60 @@ class MyLocationFormOverlay {
   MyLocationFormOverlay({MyLocation? myLocation, required BuildContext context}) {
     final OverlayState overlayState = Overlay.of(context)!;
     OverlayEntry? overlayEntry;
+    // overlayEntry =
+    //     OverlayEntry(builder: (context) {
+    //       return DismissibleOverlay(overlayEntry: overlayEntry! ,child: test());
+    //     });
     overlayEntry =
         OverlayEntry(builder: (context) => DismissibleOverlay(overlayEntry: overlayEntry!, child: MyLocationForm(location: myLocation,),));
     overlayState.insert(overlayEntry);
   }
 }
+// ---------------------------------------------------------------------------------------------------- Just testing ----------------------------------
+// class test extends StatefulWidget {
+//   const test({Key? key}) : super(key: key);
+//
+//   @override
+//   State<test> createState() => _testState();
+// }
+//
+// class _testState extends State<test> {
+//
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//   }
+//
+//
+//   final orgaNameController = TextEditingController();
+//   final orgaDescriptionController = TextEditingController();
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//         body: Column(
+//           children: [
+//             const SizedBox(height: 20),
+//             Text('Create Orgalist', style: Theme.of(context).textTheme.headline3),
+//             const SizedBox(height: 20),
+//             FullWidthPaddingInput(controller:  orgaNameController, labelText: 'Enter the Organame'),
+//             const SizedBox(height: 20),
+//             FullWidthPaddingInput(controller:  orgaDescriptionController, labelText: 'Enter the Orgadescription'),
+//             StdTextButton(
+//                 onPressed: () {
+//                 },
+//                 child: const Icon(Icons.add, color: AppColors.stdTextColor))
+//           ],
+//         ));
+//   }
+// }
+
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 class MyLocationForm extends StatefulWidget {
 
@@ -78,7 +128,7 @@ class _MyLocationFormState extends State<MyLocationForm> {
     );
   }
 
-  CoordinatesPickerAndAutoCompleteAdress _buildCoordinatesPickerAndAutoCompleteAdress(BuildContext context) {
+  Widget _buildCoordinatesPickerAndAutoCompleteAdress(BuildContext context) {
     return CoordinatesPickerAndAutoCompleteAdress(
                           textEditingControllerLongi: controller_longitude,
                           textEditingControllerLati: controller_latitude,
@@ -92,6 +142,39 @@ class _MyLocationFormState extends State<MyLocationForm> {
   }
 }
 
+
+
+class AutocompleteBasicExample extends StatelessWidget {
+  const AutocompleteBasicExample();
+
+  static const List<String> _kOptions = <String>[
+    'aardvark',
+    'bobcat',
+    'chameleon',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Autocomplete<String>(
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text == '') {
+          return const Iterable<String>.empty();
+        }
+        return _kOptions.where((String option) {
+          return option.contains(textEditingValue.text.toLowerCase());
+        });
+      },
+      onSelected: (String selection) {
+        debugPrint('You just selected $selection');
+      },
+    );
+  }
+}
+
+
+
+
+//
 // class MyLocationForm extends StatefulWidget {
 //
 //
@@ -152,7 +235,9 @@ class _MyLocationFormState extends State<MyLocationForm> {
 //                             hintText: AppStrings.name,
 //                             onChanged: (value) => _formCubit(context).changeName(value),
 //                           ),
+//                           ///////---------------------------------------------------------------------------
 //                           _buildAdressAutocomplete(context),
+//                           ///////---------------------------------------------------------------------------
 //                           _buildCoordFields(context),
 //                           //_buildCoordinatesPickerAndAutoCompleteAdress(context)
 //                         ],
@@ -201,8 +286,8 @@ class _MyLocationFormState extends State<MyLocationForm> {
 //           return _searchInfoOtions;
 //         }
 //         // this sets the cooldown
-//         Timer(Duration(milliseconds: cooldownDuration), () async { this.isCooldown = false; });
-//         this.isCooldown = true;
+//         //Timer(Duration(milliseconds: cooldownDuration), () async { this.isCooldown = false; });
+//         //this.isCooldown = true;
 //         //--------
 //         // check whether the value is empty
 //         if (textEditingValue.text == '') {
@@ -249,4 +334,4 @@ class _MyLocationFormState extends State<MyLocationForm> {
 //       ),);
 //   }
 // }
-//
+

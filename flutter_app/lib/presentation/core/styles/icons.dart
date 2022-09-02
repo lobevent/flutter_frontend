@@ -7,6 +7,8 @@ class AppIcons{
   static const IconData subscribe = Icons.subdirectory_arrow_left;
   static const IconData revokeSubscription = Icons.remove_done;
 
+  static const IconData uploadImage = Icons.add_a_photo;
+
   static const IconData attending = Icons.check;
   static const IconData notAttending = Icons.block;
   static const IconData interested = Icons.lightbulb;

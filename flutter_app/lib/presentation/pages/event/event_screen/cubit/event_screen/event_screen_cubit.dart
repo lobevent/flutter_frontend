@@ -13,6 +13,7 @@ import 'package:flutter_frontend/infrastructure/invitation/invitation_repository
 import 'package:flutter_frontend/infrastructure/todo/todo_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../../../domain/post/post.dart';
@@ -182,5 +183,12 @@ class EventScreenCubit extends Cubit<EventScreenState> {
           emit(EventScreenState.loading());
           emit(loaded);
         });
+  }
+
+
+  Future<bool> uploadImage(XFile image){
+    return state.maybeMap(orElse: (){return Future(() => false);}, loaded: (loaded){
+      return repository.uploadImageToEvent(loaded.event.id, image).then((value) => value.fold((failure) => false, (r) => true));
+    });
   }
 }

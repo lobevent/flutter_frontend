@@ -38,12 +38,14 @@ class ImageUploadPicker extends StatefulWidget {
       this.title = "bla",
       required this.returnFunction,
       this.showMultiPic = false,
-      this.showPreview = false})
+      this.showPreview = false,
+      this.hideGalery = false})
       : super(key: key);
 
   final void Function(List<XFile?>?) returnFunction;
   final bool showMultiPic;
   final bool showPreview;
+  final bool hideGalery;
   final String? title;
 
   @override
@@ -54,6 +56,8 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
   bool kIsWeb = false;
 
   List<XFile>? _imageFileList;
+
+
 
   set _imageFile(XFile? value) {
     _imageFileList = value == null ? null : <XFile>[value];
@@ -108,13 +112,15 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            if(!widget.hideGalery)
             Spacer(),
-            TextWithIconButton(
-                onPressed: () {
-                  _onImageButtonPressed(ImageSource.gallery, context: context);
-                },
-                text: "",
-                icon: Icons.photo),
+            if(!widget.hideGalery)
+              TextWithIconButton(
+                  onPressed: () {
+                    _onImageButtonPressed(ImageSource.gallery, context: context);
+                  },
+                  text: "",
+                  icon: Icons.photo),
             Spacer(),
             if (widget.showMultiPic)
               TextWithIconButton(
@@ -129,6 +135,7 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
                 text: "",
                 icon: Icons.photo_library,
               ),
+            if (widget.showMultiPic)
             Spacer(),
             TextWithIconButton(
               onPressed: () {

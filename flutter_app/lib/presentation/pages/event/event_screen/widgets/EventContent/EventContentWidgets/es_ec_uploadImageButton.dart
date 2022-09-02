@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/presentation/core/styles/icons.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_upload.dart';
 
 class UploadImageButton extends StatefulWidget {
   const UploadImageButton({Key? key}) : super(key: key);
@@ -10,6 +12,14 @@ class UploadImageButton extends StatefulWidget {
 class _UploadImageButtonState extends State<UploadImageButton> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return IconButton(onPressed: () => _onClick(), icon: Icon(AppIcons.uploadImage));
   }
+
+
+  _onClick(){
+    showDialog(context: context, builder: (BuildContext context){
+       return Dialog(child: Expanded(child: ImageUploadPicker(returnFunction: (files){}, hideGalery: true,)));
+    });
+  }
+
 }

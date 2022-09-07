@@ -92,7 +92,7 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
                 ),
               ),
             ],
-            //controller: context.read<EventsMultilistCubit>().controller,
+            controller: context.read<EventsMultilistCubit>().controller,
           );
         });
   }

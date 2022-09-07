@@ -177,18 +177,24 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
         },
         orElse: () {});
 
+    List<Event> oldEvent = [];
+    state.maybeMap((value) => null, loaded: (loadedState) {
+      oldEvent = loadedState.events;
+    }, orElse: () {});
+
+
     final Either<NetWorkFailure, List<Event>> eventsList =
         await repository.getNearEvents(position!.latitude, position!.longitude,
-            kilometersVal.ceil(), DateTime.now(), 30);
+            kilometersVal.ceil(), oldEvent.last.creationDate, 30);
 
     List<Event> eventsNew = eventsList.fold((l) => throw Exception(), (r) => r);
-    List<Event> oldEvent = [];
+
 
     state.maybeMap((value) => null, loaded: (loadedState) {
       oldEvent = loadedState.events;
     }, orElse: () {});
-    oldEvent.addAll(eventsNew);
+    //oldEvent.addAll(eventsNew);
     emit(EventsMultilistState.initial());
-    emit(EventsMultilistState.loaded(events: oldEvent));
+    emit(EventsMultilistState.loaded(events: eventsNew));
   }
 }

@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/calender_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/cubit/events_mulitlist_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/cubit/profile_page_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class ProfilePageMeta extends StatelessWidget {
   ///the color used to display the text on this page
@@ -81,7 +83,12 @@ class ProfilePageMeta extends StatelessWidget {
 
           ,*/
       Spacer(),
+      TextWithIconButton(
+          onPressed: ()=> showOverlay(context),
+          text: 'Calender'),
+      //TableCalendar(focusedDay: DateTime.now(), firstDay: DateTime.now(), lastDay: DateTime(2022, DateTime.september, 30)),
       // The Events Button
+      Spacer(),
       TextWithIconButton(
           onPressed: () => context.router.push(EventsMultilistScreenRoute(
               option: EventScreenOptions.fromUser, profile: profile)),
@@ -100,5 +107,29 @@ class ProfilePageMeta extends StatelessWidget {
               Text(eventcount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
             ],),)*/
     ]);
+  }
+  void showOverlay(BuildContext buildContext)async {
+    final OverlayState overlayState = Overlay.of(buildContext)!;
+
+    //have to do it nullable
+    OverlayEntry? overlayEntry;
+
+    //this is the way to work with overlays
+    overlayEntry = OverlayEntry(builder: (context) {
+      return CalenderOverlay(context, overlayEntry!);
+        //ItemCreateWidget(overlayEntry: overlayEntry!, todo: widget.todo!, cubitContext: buildContext);
+    });
+    overlayState.insert(overlayEntry);
+  }
+
+  Widget CalenderOverlay(BuildContext context, OverlayEntry overlayEntry){
+    DateTime _focusedDay = DateTime.now();
+    DateTime? _selectedDay;
+
+    return DismissibleOverlay(
+    overlayEntry: overlayEntry,
+    child: Scaffold(
+      body: CalenderWidget(),
+    ));
   }
 }

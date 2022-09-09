@@ -10,8 +10,9 @@ import 'package:intl/intl.dart';
 /// they are opening an datepicker and timepicker respectively
 class DatePicker extends StatefulWidget {
   //TODO: Fix localization problem
+  final DateTime? selectedCalenderDate;
 
-  const DatePicker({Key? key}) : super(key: key);
+  const DatePicker(this.selectedCalenderDate, {Key? key}) : super(key: key);
 
   @override
   _DatePickerState createState() => _DatePickerState();
@@ -26,6 +27,15 @@ class _DatePickerState extends State<DatePicker> {
   Widget build(BuildContext context) {
     return BlocBuilder<EventFormCubit, EventFormState>(
       builder: (context, state) {
+        // if acces is over calender then there should be a date
+        if(widget.selectedCalenderDate!=null){
+          context.read<EventFormCubit>().changeDate(widget.selectedCalenderDate!);
+          date=widget.selectedCalenderDate;
+          // set the button string
+          dateButtonText = _formatDateOrTime(dateTime: widget.selectedCalenderDate!);
+          // set the button string
+          timeButtonText = _formatDateOrTime(dateTime: widget.selectedCalenderDate!, time: true);
+        }
         // if its editing, there should be a date, then
         if (state.isEditing) {
           date = state.event.date;

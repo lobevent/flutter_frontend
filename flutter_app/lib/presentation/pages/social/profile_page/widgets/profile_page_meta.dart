@@ -83,6 +83,7 @@ class ProfilePageMeta extends StatelessWidget {
 
           ,*/
       Spacer(),
+      //for the calender
       TextWithIconButton(
           onPressed: ()=> showOverlay(context),
           text: 'Calender'),
@@ -129,7 +130,7 @@ class ProfilePageMeta extends StatelessWidget {
     return DismissibleOverlay(
     overlayEntry: overlayEntry,
     child: Scaffold(
-      body: CalenderWidget(),
+      body: CalenderWidget(overlayEntry: overlayEntry,),
     ));
   }
 }

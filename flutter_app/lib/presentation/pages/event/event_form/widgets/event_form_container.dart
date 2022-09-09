@@ -19,11 +19,12 @@ class EventFormContainer extends StatefulWidget {
   final bool showErrorMessages;
   final bool isEditing;
   final Event? event;
+  final DateTime? selectedCalenderDate;
   const EventFormContainer(
       {Key? key,
       this.showErrorMessages = true,
       required this.isEditing,
-      this.event})
+      this.event, this.selectedCalenderDate})
       : super(key: key);
 
   @override
@@ -97,8 +98,8 @@ class _EventFormContainerState extends State<EventFormContainer> {
           content: Container(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: const [
-                DatePicker(),
+              children:  [
+                DatePicker(widget.selectedCalenderDate),
                 CoordsPicker(),
               ],
             ),

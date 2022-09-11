@@ -98,6 +98,8 @@ dependencies:
   flutter_osm_plugin: ^0.39.0
   maps_launcher: ^2.0.1
   table_calendar: ^3.0.7
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
 
 
 dev_dependencies:

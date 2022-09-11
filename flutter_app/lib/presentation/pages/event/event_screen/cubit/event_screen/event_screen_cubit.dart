@@ -16,6 +16,7 @@ import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../../../data/common_hive.dart';
 import '../../../../../../domain/post/post.dart';
 import '../../../../../../infrastructure/post/post_repository.dart';
 
@@ -112,7 +113,7 @@ class EventScreenCubit extends Cubit<EventScreenState> {
           });
         });
   }
-
+  ///confirm user at event with confirmAttending
   Future<void> UserConfirmAtEvent(
       Event event, double? longitude, double? latitude) async {
     state.maybeMap(
@@ -123,6 +124,7 @@ class EventScreenCubit extends Cubit<EventScreenState> {
               .then((value) {
             emit(EventScreenState.loading());
 
+            saveConfirmAttendingScore(event);
             var eventUpdated = loadedState.event
                 .copyWith(status: EventStatus.confirmAttending);
             var newState = loadedState.copyWith(event: eventUpdated);
@@ -130,6 +132,14 @@ class EventScreenCubit extends Cubit<EventScreenState> {
             emit(newState);
           });
         });
+  }
+
+  //save confirmattending to event, and also delete if confirmattending is revoked
+  void saveConfirmAttendingScore(Event event){
+      if(CommonHive.getAttendingConfirmed(event.id.value.toString())==event.id.value.toString()) {
+        CommonHive.deleteAttendingConfirmed(event.id.value.toString());
+    }
+      CommonHive.saveAttendingConfirmed(event.id.value.toString());
   }
 
   ///

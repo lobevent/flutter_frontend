@@ -17,6 +17,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../../data/common_hive.dart';
 import '../../../../../infrastructure/event_series/eventSeries_repository.dart';
 
 part 'event_form_cubit.freezed.dart';
@@ -170,6 +171,8 @@ class EventFormCubit extends Cubit<EventFormState> {
 
   /// save event to database
   Future<void> saveEvent() async {
+    //safe for score
+    CommonHive.saveBoxEntry(state.event.id.value.toString(), CommonHive.ownEvents);
     return updateEditEvent(() => repository.create(state.event));
   }
 

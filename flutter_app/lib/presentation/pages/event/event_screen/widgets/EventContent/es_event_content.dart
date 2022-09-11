@@ -29,6 +29,7 @@ import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
 import '../../../../../../application/core/geo_functions_cubit.dart';
+import '../../../../../../data/common_hive.dart';
 import '../../../../../../domain/post/post.dart';
 import '../../../../core/widgets/timer_widget.dart';
 import 'EventContentWidgets/es_ec_uploadImageButton.dart';
@@ -279,8 +280,9 @@ class EventContent extends StatelessWidget {
                       },
                       text: "I am here!",
                     );
-                  } else
-                    return Text("Confirm when you are at the location.");
+                  } else {
+                    return const Text("Confirm when you are at the location.");
+                  }
                 },
                 orElse: () => const Text(""));
           }),

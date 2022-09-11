@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/data/common_hive.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/calender_widget.dart';
@@ -28,7 +29,7 @@ class ProfilePageMeta extends StatelessWidget {
                       minHeight: 150.0,
                       minWidth: 50.0,
                     ),
-                    child: Column(children: [
+                    child:  Column(children: [
                       PaddingRowWidget(
                         children: [TitleText(st.profile.name.getOrCrash())],
                       ),
@@ -60,54 +61,60 @@ class ProfilePageMeta extends StatelessWidget {
   /// Widget displays tags with the count of events and friends
   Widget EventAndFriends(int? friendscount, int? eventcount, Profile profile,
       BuildContext context) {
-    return PaddingRowWidget(children: [
-      // Null friends is not tested yet. Maybe not working
-      // The Friends Button
-      TextWithIconButton(
-          // On Pressed Navigate to the FriendsScreenRoute
-          onPressed: () => context.router.push(ProfileFriendsScreenRoute()),
-          text: " Friends: ${friendscount?.toString() ?? 0.toString()}",
-          icon: Icons.emoji_people_outlined),
+    return Column(
+      children: [
+        Score(),
+        PaddingRowWidget(children: [
+          // Null friends is not tested yet. Maybe not working
+          // The Friends Button
+          TextWithIconButton(
+              // On Pressed Navigate to the FriendsScreenRoute
+              onPressed: () => context.router.push(ProfileFriendsScreenRoute()),
+              text: " Friends: ${friendscount?.toString() ?? 0.toString()}",
+              icon: Icons.emoji_people_outlined),
 
 /*          StdTextButton(
-            onPressed: () =>  context.router.push(ProfileFriendsScreenRoute()),
-            child: Row(children: [
-              const Icon(
-                Icons.emoji_people_outlined,
-                color: AppColors.stdTextColor,
-              ),
-              // divide in two texts, as count could be null, and the whole thing isnt diplayed
-              Text(" Friends: ", style: TextStyle(color: AppColors.stdTextColor),),
-              Text(friendscount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
-            ],),)
+                onPressed: () =>  context.router.push(ProfileFriendsScreenRoute()),
+                child: Row(children: [
+                  const Icon(
+                    Icons.emoji_people_outlined,
+                    color: AppColors.stdTextColor,
+                  ),
+                  // divide in two texts, as count could be null, and the whole thing isnt diplayed
+                  Text(" Friends: ", style: TextStyle(color: AppColors.stdTextColor),),
+                  Text(friendscount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
+                ],),)
 
-          ,*/
-      Spacer(),
-      //for the calender
-      TextWithIconButton(
-          onPressed: ()=> showOverlay(context),
-          text: 'Calender'),
-      //TableCalendar(focusedDay: DateTime.now(), firstDay: DateTime.now(), lastDay: DateTime(2022, DateTime.september, 30)),
-      // The Events Button
-      Spacer(),
-      TextWithIconButton(
-          onPressed: () => context.router.push(EventsMultilistScreenRoute(
-              option: EventScreenOptions.fromUser, profile: profile)),
-          text: " Events: ${eventcount?.toString() ?? 0.toString()}",
-          icon: Icons.tapas_outlined)
+              ,*/
+          Spacer(),
+          //for the calender
+          TextWithIconButton(
+              onPressed: ()=> showOverlay(context),
+              text: 'Calender'),
+          //TableCalendar(focusedDay: DateTime.now(), firstDay: DateTime.now(), lastDay: DateTime(2022, DateTime.september, 30)),
+          // The Events Button
+          Spacer(),
+
+          TextWithIconButton(
+              onPressed: () => context.router.push(EventsMultilistScreenRoute(
+                  option: EventScreenOptions.fromUser, profile: profile)),
+              text: " Events: ${eventcount?.toString() ?? 0.toString()}",
+              icon: Icons.tapas_outlined)
 
 /*          StdTextButton(
-            onPressed: () => context.router.push(EventsMultilistScreenRoute(option: EventScreenOptions.fromUser, profile: profile )),
-            child: Row(children: [
-              const Icon(
-                Icons.tapas_outlined,
-                color: AppColors.stdTextColor,
-              ),
-              // divide in two texts, as count could be null, and the whole thing isnt diplayed
-              Text(" Events: ", style: TextStyle(color: AppColors.stdTextColor),),
-              Text(eventcount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
-            ],),)*/
-    ]);
+                onPressed: () => context.router.push(EventsMultilistScreenRoute(option: EventScreenOptions.fromUser, profile: profile )),
+                child: Row(children: [
+                  const Icon(
+                    Icons.tapas_outlined,
+                    color: AppColors.stdTextColor,
+                  ),
+                  // divide in two texts, as count could be null, and the whole thing isnt diplayed
+                  Text(" Events: ", style: TextStyle(color: AppColors.stdTextColor),),
+                  Text(eventcount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
+                ],),)*/
+        ]),
+      ],
+    );
   }
   void showOverlay(BuildContext buildContext)async {
     final OverlayState overlayState = Overlay.of(buildContext)!;
@@ -124,7 +131,6 @@ class ProfilePageMeta extends StatelessWidget {
   }
 
   Widget CalenderOverlay(BuildContext context, OverlayEntry overlayEntry){
-    DateTime _focusedDay = DateTime.now();
     DateTime? _selectedDay;
 
     return DismissibleOverlay(
@@ -132,5 +138,19 @@ class ProfilePageMeta extends StatelessWidget {
     child: Scaffold(
       body: CalenderWidget(overlayEntry: overlayEntry,),
     ));
+  }
+
+  //score widget for counting entries in box and displaying them as profile score
+  Widget Score() {
+    return Text(countScore().toString());
+    
+  }
+
+  int countScore(){
+    int ownEventsScore = CommonHive.getBoxEntries('', CommonHive.ownEvents).length;
+    int attendingConfScore = CommonHive.getBoxEntries('', CommonHive.attendingConfirmedEvents).length;
+    int scoreRes = ownEventsScore + attendingConfScore;
+
+    return scoreRes;
   }
 }

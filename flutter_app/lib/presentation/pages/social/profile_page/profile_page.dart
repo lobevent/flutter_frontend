@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/data/common_hive.dart';
 import 'package:flutter_frontend/data/storage_shared.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
@@ -58,7 +59,9 @@ class ProfilePage extends StatelessWidget {
                               ],
                           loading: (loadingState) => [
                                 // the profile image
-                                ProfilePageHeaderVisual(imagePath: GetIt.I<StorageShared>().getOwnProfileImageNotFuture(),),
+                                ProfilePageHeaderVisual(imagePath: GetIt.I<StorageShared>().getOwnProfileImageNotFuture(),
+                                //GetIt.I<CommonHive>().getBoxEntry("ownProfilePic", CommonHive.ownProfileIdAndPic)
+                          ),
                                 ProfilePageMeta(),
                                 ProfilePagePosts(),
                               ],

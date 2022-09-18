@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/data/common_hive.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:get_it/get_it.dart';
@@ -70,10 +71,10 @@ class _ItemElementWidgetState extends State<ItemElementWidget> {
       onLongPress: () {
         //TODO: deassignen verbieten wenn paar h vorher?
         //deassign profile to todo item
-        String? ownId = GetIt.I<StorageShared>().getOwnProfileId();
+        final String? ownId = GetIt.I<StorageShared>().getOwnProfileId();
         if (widget.item.profiles!
             .map((e) => e.id.value)
-            .contains(GetIt.I<StorageShared>().getOwnProfileId())) {
+            .contains(ownId)) {
           widget.deassignProf!(widget.item, null);
         } else {
           widget.assignProf!(widget.item, null);

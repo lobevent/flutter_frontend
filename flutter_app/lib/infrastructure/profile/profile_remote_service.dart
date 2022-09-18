@@ -50,6 +50,7 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String commentUnLikePath = "/comment/%objectId%/unlike";
 
   static const String addFriendsToEventPath = "/event/addFriends/";
+  static const String scorePath = "/profile/%profileId%/score";
 
   SymfonyCommunicator client;
 
@@ -230,5 +231,12 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
         "$addFriendsToEventPath${event.id.value}",
         jsonEncode(friends.map((e) => e.toJson())));
     return convertList(response);
+  }
+
+  Future<Response> getProfileScore(String profileId)async{
+
+    final Response response = await client.get(scorePath.interpolate({"profileId": profileId}));
+
+    return response;
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -258,4 +259,13 @@ class ProfileRepository extends Repository {
       return left(ExceptionsHandler.reactOnCommunicationException(e));
     }
   }
+
+  Future<Either<NetWorkFailure, String>> getScore(String profileId) async{
+    try{
+      final resp = await _profileRemoteService.getProfileScore(profileId);
+      return right(utf8.decode(resp.bodyBytes));
+    }on CommunicationException catch (e){
+      return left(ExceptionsHandler.reactOnCommunicationException(e));
+    }
+}
 }

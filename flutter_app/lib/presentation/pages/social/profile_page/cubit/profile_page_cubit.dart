@@ -79,4 +79,12 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
     ;
     return profile;
   }
+
+  //gets own profilescore as string, or shows 0
+  Future<String>getProfileScore(Profile profile) async {
+
+    return await repository.getScore(profile.id.value.toString()).then((value) =>  value.fold(
+            (l) => '0',
+            (r) => r));
+  }
 }

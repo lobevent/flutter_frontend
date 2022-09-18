@@ -24,6 +24,7 @@ import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 
+import 'data/common_hive.dart';
 import 'infrastructure/auth/symfonyLogin.dart';
 import 'infrastructure/invitation/invitation_remote_service.dart';
 import 'infrastructure/profile/profile_remote_service.dart';
@@ -50,6 +51,7 @@ class InjectionContainer {
     // register Shared storage
 
     getIt.registerLazySingleton(() => StorageShared());
+    getIt.registerLazySingleton(() => CommonHive());
 
 
 
@@ -99,6 +101,7 @@ class InjectionContainer {
   /// This loads async stuff for the Container
   /// IMPORTANT NOTE: this has to be called AFTER [InjectionContainer.injectDependencies()] !!!!!!!
   static Future<void> loadNecessities() async{
+    //GetIt.I<CommonHive>().safeOwnProfileIdAndPic();
     GetIt.I<StorageShared>().safeOwnProfile();
   }
 }

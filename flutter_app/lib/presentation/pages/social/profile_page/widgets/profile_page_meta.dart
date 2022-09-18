@@ -22,9 +22,9 @@ class ProfilePageMeta extends StatelessWidget {
     return BlocBuilder<ProfilePageCubit, ProfilePageState>(
       builder: (context, state) {
         return state.maybeMap(
-            loaded: (st) =>
+            loaded: (st) {
                 // ConstrainedBox is for fin height of the Meta
-                ConstrainedBox(
+                return ConstrainedBox(
                     constraints: const BoxConstraints(
                       minHeight: 150.0,
                       minWidth: 50.0,
@@ -40,7 +40,8 @@ class ProfilePageMeta extends StatelessWidget {
                               profile.ownedEvents?.length,
                               profile,
                               context))
-                    ])),
+                    ]));
+            },
             orElse: () => Text(''));
       },
     );
@@ -63,7 +64,7 @@ class ProfilePageMeta extends StatelessWidget {
       BuildContext context) {
     return Column(
       children: [
-        Score(),
+       Score(context, profile),
         PaddingRowWidget(children: [
           // Null friends is not tested yet. Maybe not working
           // The Friends Button
@@ -141,9 +142,12 @@ class ProfilePageMeta extends StatelessWidget {
   }
 
   //score widget for counting entries in box and displaying them as profile score
-  Widget Score() {
-    return Text(countScore().toString());
-    
+  Widget Score(BuildContext context, Profile profile) {
+    return FutureBuilder<String?>(
+        future: context.read<ProfilePageCubit>().getProfileScore(profile),
+        builder: (BuildContext context, AsyncSnapshot<String?> snapshot){
+          return Text("Score: ${snapshot.data ?? 0.toString()}");
+        });
   }
 
   int countScore(){

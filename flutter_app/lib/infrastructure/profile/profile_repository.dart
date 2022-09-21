@@ -17,6 +17,8 @@ import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/lik
 import 'package:flutter_frontend/domain/core/repository.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'achievements_dtos.dart';
+
 class ProfileRepository extends Repository {
   final ProfileRemoteService _profileRemoteService;
 
@@ -260,12 +262,23 @@ class ProfileRepository extends Repository {
     }
   }
 
-  Future<Either<NetWorkFailure, String>> getScore(String profileId) async{
-    try{
+  Future<Either<NetWorkFailure, String>> getScore(String profileId) async {
+    try {
       final resp = await _profileRemoteService.getProfileScore(profileId);
       return right(utf8.decode(resp.bodyBytes));
-    }on CommunicationException catch (e){
+    } on CommunicationException catch (e) {
       return left(ExceptionsHandler.reactOnCommunicationException(e));
     }
-}
+  }
+
+  Future<Either<NetWorkFailure, AchievementsDto>> getAchievements(
+      String profileId) async {
+    try {
+      final AchievementsDto achievements =
+          await _profileRemoteService.getAchievements(profileId);
+      return right(achievements);
+    } on CommunicationException catch (e) {
+      return left(ExceptionsHandler.reactOnCommunicationException(e));
+    }
+  }
 }

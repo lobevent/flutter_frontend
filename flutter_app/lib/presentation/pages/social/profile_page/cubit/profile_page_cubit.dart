@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../../domain/core/errors.dart';
+import '../../../../../infrastructure/profile/achievements_dtos.dart';
 
 part 'profile_page_cubit.freezed.dart';
 part 'profile_page_state.dart';
@@ -91,5 +92,12 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
                   r, "profileScore", CommonHive.ownProfileIdAndPic);
               return r;
             }));
+  }
+
+  //fetch profiles and maybe do some logic here
+  Future<void> getAchievements(Profile profile) async {
+    return await repository
+        .getAchievements(profile.id.value.toString())
+        .then((value) => value.fold((l) => null, (r) => r));
   }
 }

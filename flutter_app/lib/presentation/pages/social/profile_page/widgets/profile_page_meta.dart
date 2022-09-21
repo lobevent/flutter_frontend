@@ -160,6 +160,7 @@ class ProfilePageMeta extends StatelessWidget {
         ),
       ),
       onTap: () {
+        context.read<ProfilePageCubit>().getAchievements(profile);
         FutureBuilder<String?>(
             future: context.read<ProfilePageCubit>().getProfileScore(profile),
             builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {

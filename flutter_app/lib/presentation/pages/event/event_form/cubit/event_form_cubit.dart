@@ -61,9 +61,8 @@ class EventFormCubit extends Cubit<EventFormState> {
         event: state.event.copyWith(description: EventDescription(body))));
   }
 
-  void changeMaxPersons(int maxPersons){
-    emit(state.copyWith(
-        event: state.event.copyWith(maxPersons: maxPersons)));
+  void changeMaxPersons(int maxPersons) {
+    emit(state.copyWith(event: state.event.copyWith(maxPersons: maxPersons)));
   }
 
   void changeDate(DateTime date) {
@@ -78,7 +77,7 @@ class EventFormCubit extends Cubit<EventFormState> {
     emit(state.copyWith(event: state.event.copyWith(longitude: longitude)));
   }
 
-  void changeAddress(String? address){
+  void changeAddress(String? address) {
     emit(state.copyWith(event: state.event.copyWith(address: address)));
   }
 
@@ -172,7 +171,6 @@ class EventFormCubit extends Cubit<EventFormState> {
   /// save event to database
   Future<void> saveEvent() async {
     //safe for score
-    CommonHive.saveBoxEntry(state.event.id.value.toString(), CommonHive.ownEvents);
     return updateEditEvent(() => repository.create(state.event));
   }
 

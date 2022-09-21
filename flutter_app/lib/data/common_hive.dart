@@ -9,9 +9,9 @@ import '../infrastructure/profile/profile_repository.dart';
 //TODO: use this also for profileid and token, its way faster and easier
 
 class CommonHive {
-  static const String achievements= 'achievements';
-  static const String ownEvents= 'ownEvents';
-  static const String attendingConfirmedEvents= 'attendingConfirmedEvents';
+  static const String achievements = 'achievements';
+  static const String ownEvents = 'ownEvents';
+  static const String attendingConfirmedEvents = 'attendingConfirmedEvents';
   static const String ownProfileIdAndPic = 'ownProfileIdAndPic';
 
   ///init the boxes we need
@@ -32,24 +32,23 @@ class CommonHive {
     final box = Hive.box(achievements);
 
     //fetch the own profile from backend
-    final Either<NetWorkFailure, Profile> ownProf= await GetIt.I<ProfileRepository>().getOwnProfile();
-    final Profile? ownProfile = ownProf.fold((failure) => null,
-            (prof) => prof);
-                      //try to get the profilePic String
+    final Either<NetWorkFailure, Profile> ownProf =
+        await GetIt.I<ProfileRepository>().getOwnProfile();
+    final Profile? ownProfile = ownProf.fold((failure) => null, (prof) => prof);
+    //try to get the profilePic String
     ownProfileId = ownProfile?.id.value;
-                      try{
-                        ownImage = ownProfile?.images?[0];
-                      }
-                      on RangeError catch (exception){
-                        ownImage = null;
-                      }
-                      //set the values to the box, with the keys
-                      box.put('ownProfileId', ownProfileId);
-                      box.put('ownProfilePic', ownImage ?? "");
+    try {
+      ownImage = ownProfile?.images?[0];
+    } on RangeError catch (exception) {
+      ownImage = null;
+    }
+    //set the values to the box, with the keys
+    box.put('ownProfileId', ownProfileId);
+    box.put('ownProfilePic', ownImage ?? "");
   }
 
-  Future<String?> getOwnPic()async{
-    return await CommonHive().getBoxEntry("ownProfilePic", ownProfileIdAndPic);
+  Future<String?> getOwnPic() async {
+    return await CommonHive.getBoxEntry("ownProfilePic", ownProfileIdAndPic);
   }
 
   ///checks if some id is ownProfileId
@@ -57,51 +56,50 @@ class CommonHive {
     return getBoxEntry('ownProfileId', ownProfileIdAndPic) == checkId;
   }
 
-  static void saveAchievement(String name, bool value){
+  static void saveAchievement(String name, bool value) {
     final box = Hive.box(achievements);
     box.put(name, value);
   }
 
-static bool? getAchievement(String name){
+  static bool? getAchievement(String name) {
     final box = Hive.box(achievements);
   }
 
-  static void saveBoxEntry(String value, String boxName){
+  static void saveBoxEntry(String value, String key, String boxName) {
     final box = Hive.box(boxName);
-    box.put(value, value);
+    box.put(key, value);
   }
 
-  static void deleteBoxEntry(String value, String boxName){
+  static void deleteBoxEntry(String value, String boxName) {
     final box = Hive.box(boxName);
     box.delete(value);
   }
 
-  String? getBoxEntry(String value, String boxName){
+  static String? getBoxEntry(String key, String boxName) {
     final box = Hive.box(boxName);
-    return box.get(value).toString();
+    final String? val = box.get(key).toString();
+    return val;
   }
 
-  static List getBoxEntries(String value, String boxName){
+  static List getBoxEntries(String value, String boxName) {
     final box = Hive.box(boxName);
-    List vals= box.values.toList();
+    List vals = box.values.toList();
     return vals;
   }
 
-
-  static void saveAttendingConfirmed(String value){
+  static void saveAttendingConfirmed(String value) {
     final box = Hive.box(attendingConfirmedEvents);
     box.put(value, value);
   }
 
-  static void deleteAttendingConfirmed(String value){
+  static void deleteAttendingConfirmed(String value) {
     final box = Hive.box<String>(attendingConfirmedEvents);
     box.delete(value);
   }
 
-  static List getAttendingConfirmed(String value)  {
+  static List getAttendingConfirmed(String value) {
     final box = Hive.box(attendingConfirmedEvents);
-    List vals= box.values.toList();
+    List vals = box.values.toList();
     return vals;
   }
-
 }

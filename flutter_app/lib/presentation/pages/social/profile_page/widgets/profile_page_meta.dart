@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/data/common_hive.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/calender_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/cubit/events_mulitlist_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/cubit/profile_page_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
+import 'package:hive/hive.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class ProfilePageMeta extends StatelessWidget {
@@ -23,24 +25,24 @@ class ProfilePageMeta extends StatelessWidget {
       builder: (context, state) {
         return state.maybeMap(
             loaded: (st) {
-                // ConstrainedBox is for fin height of the Meta
-                return ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      minHeight: 150.0,
-                      minWidth: 50.0,
+              // ConstrainedBox is for fin height of the Meta
+              return ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minHeight: 150.0,
+                    minWidth: 50.0,
+                  ),
+                  child: Column(children: [
+                    PaddingRowWidget(
+                      children: [TitleText(st.profile.name.getOrCrash())],
                     ),
-                    child:  Column(children: [
-                      PaddingRowWidget(
-                        children: [TitleText(st.profile.name.getOrCrash())],
-                      ),
-                      // TODO: The unexpected Type Error comes when somone is not a friend yet. they cant load the full profile, but only the name and id. Fix to error message
-                      st.profile.map((value) => throw UnexpectedTypeError(),
-                          full: (profile) => EventAndFriends(
-                              profile.friendshipCount ?? 0,
-                              profile.ownedEvents?.length,
-                              profile,
-                              context))
-                    ]));
+                    // TODO: The unexpected Type Error comes when somone is not a friend yet. they cant load the full profile, but only the name and id. Fix to error message
+                    st.profile.map((value) => throw UnexpectedTypeError(),
+                        full: (profile) => EventAndFriends(
+                            profile.friendshipCount ?? 0,
+                            profile.ownedEvents?.length,
+                            profile,
+                            context))
+                  ]));
             },
             orElse: () => Text(''));
       },
@@ -64,7 +66,7 @@ class ProfilePageMeta extends StatelessWidget {
       BuildContext context) {
     return Column(
       children: [
-       Score(context, profile),
+        Score(context, profile),
         PaddingRowWidget(children: [
           // Null friends is not tested yet. Maybe not working
           // The Friends Button
@@ -90,8 +92,7 @@ class ProfilePageMeta extends StatelessWidget {
           Spacer(),
           //for the calender
           TextWithIconButton(
-              onPressed: ()=> showOverlay(context),
-              text: 'Calender'),
+              onPressed: () => showOverlay(context), text: 'Calender'),
           //TableCalendar(focusedDay: DateTime.now(), firstDay: DateTime.now(), lastDay: DateTime(2022, DateTime.september, 30)),
           // The Events Button
           Spacer(),
@@ -117,7 +118,8 @@ class ProfilePageMeta extends StatelessWidget {
       ],
     );
   }
-  void showOverlay(BuildContext buildContext)async {
+
+  void showOverlay(BuildContext buildContext) async {
     final OverlayState overlayState = Overlay.of(buildContext)!;
 
     //have to do it nullable
@@ -126,33 +128,53 @@ class ProfilePageMeta extends StatelessWidget {
     //this is the way to work with overlays
     overlayEntry = OverlayEntry(builder: (context) {
       return CalenderOverlay(context, overlayEntry!);
-        //ItemCreateWidget(overlayEntry: overlayEntry!, todo: widget.todo!, cubitContext: buildContext);
+      //ItemCreateWidget(overlayEntry: overlayEntry!, todo: widget.todo!, cubitContext: buildContext);
     });
     overlayState.insert(overlayEntry);
   }
 
-  Widget CalenderOverlay(BuildContext context, OverlayEntry overlayEntry){
+  Widget CalenderOverlay(BuildContext context, OverlayEntry overlayEntry) {
     DateTime? _selectedDay;
 
     return DismissibleOverlay(
-    overlayEntry: overlayEntry,
-    child: Scaffold(
-      body: CalenderWidget(overlayEntry: overlayEntry,),
-    ));
+        overlayEntry: overlayEntry,
+        child: Scaffold(
+          body: CalenderWidget(
+            overlayEntry: overlayEntry,
+          ),
+        ));
   }
 
   //score widget for counting entries in box and displaying them as profile score
   Widget Score(BuildContext context, Profile profile) {
-    return FutureBuilder<String?>(
-        future: context.read<ProfilePageCubit>().getProfileScore(profile),
-        builder: (BuildContext context, AsyncSnapshot<String?> snapshot){
-          return Text("Score: ${snapshot.data ?? 0.toString()}");
-        });
+    return InkWell(
+      child: Container(
+        width: 60,
+        height: 60,
+        decoration: new BoxDecoration(
+            shape: BoxShape.circle, color: AppColors.accentButtonColor),
+        child: Center(
+          child: Text(
+            "Score: ${CommonHive.getBoxEntry("profileScore", CommonHive.ownProfileIdAndPic) ?? "0"}",
+          ),
+        ),
+      ),
+      onTap: () {
+        FutureBuilder<String?>(
+            future: context.read<ProfilePageCubit>().getProfileScore(profile),
+            builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+              return Text("Score: ${snapshot.data ?? 0.toString()}");
+            });
+      },
+    );
   }
 
-  int countScore(){
-    int ownEventsScore = CommonHive.getBoxEntries('', CommonHive.ownEvents).length;
-    int attendingConfScore = CommonHive.getBoxEntries('', CommonHive.attendingConfirmedEvents).length;
+  int countScore() {
+    int ownEventsScore =
+        CommonHive.getBoxEntries('', CommonHive.ownEvents).length;
+    int attendingConfScore =
+        CommonHive.getBoxEntries('', CommonHive.attendingConfirmedEvents)
+            .length;
     int scoreRes = ownEventsScore + attendingConfScore;
 
     return scoreRes;

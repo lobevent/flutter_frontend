@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/data/common_hive.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
@@ -81,10 +82,14 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
   }
 
   //gets own profilescore as string, or shows 0
-  Future<String>getProfileScore(Profile profile) async {
-
-    return await repository.getScore(profile.id.value.toString()).then((value) =>  value.fold(
-            (l) => '0',
-            (r) => r));
+  Future<String> getProfileScore(Profile profile) async {
+    return await repository
+        .getScore(profile.id.value.toString())
+        .then((value) => value.fold((l) => '0', (r) {
+              //safe profilescore in commonhive
+              CommonHive.saveBoxEntry(
+                  r, "profileScore", CommonHive.ownProfileIdAndPic);
+              return r;
+            }));
   }
 }

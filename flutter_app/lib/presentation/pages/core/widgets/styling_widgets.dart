@@ -266,7 +266,8 @@ class TextWithIconButton extends StatelessWidget {
       disabled: disabled,
       // the call of the on pressed. With the nullcheck, because not every button needs an onpressed
       onPressed: () => onPressed == null ? null : onPressed!(),
-      child: Expanded(
+      // commented out, if error arises, pls make an bool with expanded or not
+      //child: Expanded(
       child: Row(
         children: [
           // button and text are Prestyled
@@ -280,7 +281,7 @@ class TextWithIconButton extends StatelessWidget {
             style: TextStyle(color: AppColors.stdTextColor),
           ),
         ],
-      ),
+      //),
       ),
     );
   }

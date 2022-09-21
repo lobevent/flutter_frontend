@@ -18,7 +18,8 @@ class _UploadImageButtonState extends State<UploadImageButton> {
 
   _onClick(){
     showDialog(context: context, builder: (BuildContext context){
-       return Dialog(child: Expanded(child: ImageUploadPicker(returnFunction: (files){}, hideGalery: true,)));
+       return AlertDialog(
+           content:       ImageUploadPicker(returnFunction: (files){}, hideGalery: true, showPreview: true,));
     });
   }
 

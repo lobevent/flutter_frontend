@@ -59,9 +59,18 @@ class ProfilePage extends StatelessWidget {
                               ],
                           loading: (loadingState) => [
                                 // the profile image
-                                ProfilePageHeaderVisual(imagePath: GetIt.I<StorageShared>().getOwnProfileImageNotFuture(),
-                                //GetIt.I<CommonHive>().getBoxEntry("ownProfilePic", CommonHive.ownProfileIdAndPic)
-                          ),
+                                ProfilePageHeaderVisual(
+                                  imagePath: GetIt.I<StorageShared>()
+                                      .getOwnProfileImageNotFuture(),
+                                  //GetIt.I<CommonHive>().getBoxEntry("ownProfilePic", CommonHive.ownProfileIdAndPic)
+                                ),
+                                ProfilePageMeta(),
+                                ProfilePagePosts(),
+                              ],
+                          reloadScore: (reloadedState) => [
+                                // the profile image
+                                ProfilePageHeaderVisual(
+                                    profile: reloadedState.profile),
                                 ProfilePageMeta(),
                                 ProfilePagePosts(),
                               ],

@@ -26,27 +26,33 @@ class ProfilePageMeta extends StatelessWidget {
         return state.maybeMap(
             loaded: (st) {
               // ConstrainedBox is for fin height of the Meta
-              return ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    minHeight: 150.0,
-                    minWidth: 50.0,
-                  ),
-                  child: Column(children: [
-                    PaddingRowWidget(
-                      children: [TitleText(st.profile.name.getOrCrash())],
-                    ),
-                    // TODO: The unexpected Type Error comes when somone is not a friend yet. they cant load the full profile, but only the name and id. Fix to error message
-                    st.profile.map((value) => throw UnexpectedTypeError(),
-                        full: (profile) => EventAndFriends(
-                            profile.friendshipCount ?? 0,
-                            profile.ownedEvents?.length,
-                            profile,
-                            context))
-                  ]));
+              return ProfilePageMetaFull(context, st.profile);
+            },
+            reloadScore: (reloadSt) {
+              return ProfilePageMetaFull(
+                  context, reloadSt.profile, reloadSt.score);
             },
             orElse: () => Text(''));
       },
     );
+  }
+
+  Widget ProfilePageMetaFull(BuildContext context, Profile profile,
+      [String? score]) {
+    return ConstrainedBox(
+        constraints: const BoxConstraints(
+          minHeight: 150.0,
+          minWidth: 50.0,
+        ),
+        child: Column(children: [
+          PaddingRowWidget(
+            children: [TitleText(profile.name.getOrCrash())],
+          ),
+          // TODO: The unexpected Type Error comes when somone is not a friend yet. they cant load the full profile, but only the name and id. Fix to error message
+          profile.map((value) => throw UnexpectedTypeError(),
+              full: (profile) => EventAndFriends(profile.friendshipCount ?? 0,
+                  profile.ownedEvents?.length, profile, context, score))
+        ]));
   }
 
   /// A text widget, styled for headings
@@ -62,11 +68,12 @@ class ProfilePageMeta extends StatelessWidget {
   }
 
   /// Widget displays tags with the count of events and friends
-  Widget EventAndFriends(int? friendscount, int? eventcount, Profile profile,
-      BuildContext context) {
+  Widget EventAndFriends(
+      int? friendscount, int? eventcount, Profile profile, BuildContext context,
+      [String? score]) {
     return Column(
       children: [
-        Score(context, profile),
+        Score(context, profile, score),
         PaddingRowWidget(children: [
           // Null friends is not tested yet. Maybe not working
           // The Friends Button
@@ -133,6 +140,7 @@ class ProfilePageMeta extends StatelessWidget {
     overlayState.insert(overlayEntry);
   }
 
+  //our calender widget as overlay
   Widget CalenderOverlay(BuildContext context, OverlayEntry overlayEntry) {
     DateTime? _selectedDay;
 
@@ -146,38 +154,25 @@ class ProfilePageMeta extends StatelessWidget {
   }
 
   //score widget for counting entries in box and displaying them as profile score
-  Widget Score(BuildContext context, Profile profile) {
+  Widget Score(BuildContext context, Profile profile, [String? score]) {
     return InkWell(
       child: Container(
         width: 60,
         height: 60,
-        decoration: new BoxDecoration(
+        decoration: const BoxDecoration(
             shape: BoxShape.circle, color: AppColors.accentButtonColor),
         child: Center(
-          child: Text(
-            "Score: ${CommonHive.getBoxEntry("profileScore", CommonHive.ownProfileIdAndPic) ?? "0"}",
-          ),
+          child: score != null
+              ? Text("Score:$score")
+              : Text(
+                  "Score: ${CommonHive.getBoxEntry("profileScore", CommonHive.ownProfileIdAndPic) ?? "0"}",
+                ),
         ),
       ),
       onTap: () {
+        context.read<ProfilePageCubit>().getProfileScore(profile);
         context.read<ProfilePageCubit>().getAchievements(profile);
-        FutureBuilder<String?>(
-            future: context.read<ProfilePageCubit>().getProfileScore(profile),
-            builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
-              return Text("Score: ${snapshot.data ?? 0.toString()}");
-            });
       },
     );
-  }
-
-  int countScore() {
-    int ownEventsScore =
-        CommonHive.getBoxEntries('', CommonHive.ownEvents).length;
-    int attendingConfScore =
-        CommonHive.getBoxEntries('', CommonHive.attendingConfirmedEvents)
-            .length;
-    int scoreRes = ownEventsScore + attendingConfScore;
-
-    return scoreRes;
   }
 }

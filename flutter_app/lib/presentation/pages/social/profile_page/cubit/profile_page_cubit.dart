@@ -18,8 +18,9 @@ part 'profile_page_state.dart';
 
 class ProfilePageCubit extends Cubit<ProfilePageState> {
   final UniqueId profileId;
+  AchievementsDto? achievements;
 
-  ProfilePageCubit({required UniqueId this.profileId})
+  ProfilePageCubit({required UniqueId this.profileId, this.achievements})
       : super(ProfilePageState.loading()) {
     loadProfile(profileId);
   }
@@ -83,21 +84,24 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
   }
 
   //gets own profilescore as string, or shows 0
-  Future<String> getProfileScore(Profile profile) async {
-    return await repository
+  Future<void> getProfileScore(Profile profile) async {
+    return repository
         .getScore(profile.id.value.toString())
         .then((value) => value.fold((l) => '0', (r) {
               //safe profilescore in commonhive
               CommonHive.saveBoxEntry(
                   r, "profileScore", CommonHive.ownProfileIdAndPic);
-              return r;
+              emit(ProfilePageState.reloadScore(profile: profile, score: r));
             }));
   }
 
   //fetch profiles and maybe do some logic here
   Future<void> getAchievements(Profile profile) async {
-    return await repository
-        .getAchievements(profile.id.value.toString())
-        .then((value) => value.fold((l) => null, (r) => r));
+    return await repository.getAchievements(profile.id.value.toString()).then(
+        (value) => value.fold(
+                (l) => emit(ProfilePageState.error(error: "Couldnt fetch")),
+                (r) {
+              emit(ProfilePageState.loaded(profile: profile));
+            }));
   }
 }

@@ -20,12 +20,23 @@ class ProfilePagePosts extends StatelessWidget {
               // if we have the loaded state, map over the profile
               // profile has the base profile (list view) and an full profile
               return profileState.profile.map(
-                //if we have base(list) profile, we dont show anything
-                      (value) => Text(""),
+                  //if we have base(list) profile, we dont show anything
+                  (value) => Text(""),
                   // if we have the correct full profile, build the list
                   full: (profile) {
-                    return PostList(profile.posts!, profile);
-                  });
+                return PostList(profile.posts!, profile);
+              });
+            },
+            reloadScore: (profileState) {
+              // if we have the loaded state, map over the profile
+              // profile has the base profile (list view) and an full profile
+              return profileState.profile.map(
+                  //if we have base(list) profile, we dont show anything
+                  (value) => Text(""),
+                  // if we have the correct full profile, build the list
+                  full: (profile) {
+                return PostList(profile.posts!, profile);
+              });
             },
             orElse: () => Text(""));
       },
@@ -33,7 +44,7 @@ class ProfilePagePosts extends StatelessWidget {
   }
 }
 
-  /// generate list of posts
-  Widget PostList(List<Post> posts, Profile profile) {
-    return generateUnscrollablePostContainer(posts: posts, profile: profile);
+/// generate list of posts
+Widget PostList(List<Post> posts, Profile profile) {
+  return generateUnscrollablePostContainer(posts: posts, profile: profile);
 }

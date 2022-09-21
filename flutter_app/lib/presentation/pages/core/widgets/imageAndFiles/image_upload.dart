@@ -75,7 +75,9 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+        children: [
       if (!kIsWeb &&
           defaultTargetPlatform == TargetPlatform.android &&
           widget.showPreview)

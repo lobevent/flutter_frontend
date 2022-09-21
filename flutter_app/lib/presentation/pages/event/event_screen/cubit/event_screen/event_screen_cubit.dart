@@ -125,6 +125,7 @@ class EventScreenCubit extends Cubit<EventScreenState> {
               .then((value) {
             emit(EventScreenState.loading());
 
+            saveConfirmAttendingScore(event);
             var eventUpdated = loadedState.event
                 .copyWith(status: EventStatus.confirmAttending);
             var newState = loadedState.copyWith(event: eventUpdated);
@@ -187,13 +188,12 @@ class EventScreenCubit extends Cubit<EventScreenState> {
         });
   }
 
-  Future<bool> uploadImage(XFile image) {
-    return state.maybeMap(orElse: () {
-      return Future(() => false);
-    }, loaded: (loaded) {
-      return repository
-          .uploadImageToEvent(loaded.event.id, image)
-          .then((value) => value.fold((failure) => false, (r) => true));
+
+  Future<bool> uploadImage(XFile image){
+    return state.maybeMap(orElse: (){return Future(() => false);}, loaded: (loaded){
+      return repository.uploadImageToEvent(loaded.event.id, image).then(
+              (value) => value.fold((failure) => false, (r) => true)
+      );
     });
   }
 }

@@ -160,10 +160,10 @@ class EventRepository extends Repository {
     });
   }
 
-  Future<Either<NetWorkFailure, void>> uploadImageToEvent(
+  Future<Either<NetWorkFailure, String>> uploadImageToEvent(
       UniqueId eventId, XFile image) async {
     return localErrorHandler(() async {
-      return right(_eventRemoteService.uploadImageToEvent(
+      return right(await _eventRemoteService.uploadImageToEvent(
           eventId.value, File(image.path)));
     });
   }

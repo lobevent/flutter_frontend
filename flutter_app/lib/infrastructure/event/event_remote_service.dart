@@ -212,8 +212,8 @@ class EventRemoteService extends RemoteService<EventDto> {
     client.postFile(uploadMainImage.interpolate({"eventId": eventId}), image);
   }
 
-  Future<void> uploadImageToEvent(String eventId, File image) async {
-    client.postFile(uploadImage.interpolate({"eventId": eventId}), image);
+  Future<String> uploadImageToEvent(String eventId, File image) async {
+    return client.postFile(uploadImage.interpolate({"eventId": eventId}), image);
   }
 
   /*static String generatePaginatedRoute(

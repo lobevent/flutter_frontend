@@ -60,6 +60,26 @@ class _EventFormContainerState extends State<EventFormContainer> {
           onStepTapped: (step) => setState(() => currentStep = step),
           onStepCancel:
               currentStep == 0 ? null : () => setState(() => currentStep -= 1),
+          controlsBuilder: (BuildContext context, ControlsDetails details) {
+            return Row(
+              children: [
+                if (currentStep < 2)
+                  Expanded(
+                    child: ElevatedButton(
+                      child: Text("NEXT"),
+                      onPressed: details.onStepContinue,
+                    ),
+                  ),
+                if (currentStep != 0)
+                  Expanded(
+                    child: ElevatedButton(
+                      child: Text("BACK"),
+                      onPressed: details.onStepCancel,
+                    ),
+                  )
+              ],
+            );
+          },
         ),
       ),
     );
@@ -67,7 +87,7 @@ class _EventFormContainerState extends State<EventFormContainer> {
 
   List<Step> getSteps() => [
         Step(
-          state: currentStep > 0  ? StepState.complete : StepState.indexed,
+          state: currentStep > 0 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 0,
           title: Text(AppStrings.createEventGeneralInfo),
           content: Container(

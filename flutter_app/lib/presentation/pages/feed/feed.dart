@@ -6,12 +6,14 @@ import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/feed_event_timer.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/main_app_bar.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/feed/cubit/feed_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
+
 
 
 class FeedScreen extends StatefulWidget {
@@ -62,6 +64,7 @@ class _FeedScreenState extends State<FeedScreen> {
                       isLoading: state.isLoading,
                       child:  Column(
                           children: [
+                            //(child: FeedEventTimer() ),
                             child,
                             LoadingIndicatorOrEnd
                           ]), )

@@ -6,6 +6,7 @@ import 'package:flutter_frontend/data/icons_with_texts.dart';
 import 'package:flutter_frontend/data/icons_with_texts.dart';
 import 'package:flutter_frontend/data/icons_with_texts.dart';
 import 'package:flutter_frontend/data/icons_with_texts.dart';
+import 'package:flutter_frontend/data/storage_shared.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/event_series.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
@@ -77,7 +78,7 @@ class EventContent extends StatelessWidget {
                       stateLoaded.event.longitude, stateLoaded.event.latitude),
 
                   /// timerwidget to display when party starts
-                  if (stateLoaded.event.status != null)
+                  if (stateLoaded.event.status != null || StorageShared().checkIfOwnId(stateLoaded.event.owner!.id.value.toString()))
                     if(stateLoaded.event.date.isAfter(DateTime.now())) TimerWidget(dateTime: stateLoaded.event.date),
 
                   ///for confirming the attending of an event

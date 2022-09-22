@@ -125,7 +125,6 @@ class EventScreenCubit extends Cubit<EventScreenState> {
               .then((value) {
             emit(EventScreenState.loading());
 
-            saveConfirmAttendingScore(event);
             var eventUpdated = loadedState.event
                 .copyWith(status: EventStatus.confirmAttending);
             var newState = loadedState.copyWith(event: eventUpdated);

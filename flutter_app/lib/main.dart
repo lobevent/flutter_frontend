@@ -31,10 +31,11 @@ Future<void> main() async {
   // save router to getIt so we can route from everywhere
   InjectionContainer.getIt.registerLazySingleton(() => _appRouter);
 
-  //pathprovider and hive for saving stuff to nosql database
+
+  //initialize some boxes, for storing score related entries
+  await CommonHive.deleteHive();
   final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
   await Hive.initFlutter(appDocumentDirectory.path);
-  //initialize some boxes, for storing score related entries
   await CommonHive.initBoxes();
 
   await Firebase.initializeApp();

@@ -13,6 +13,8 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:hive/hive.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../profile_score and achievements/profile_score_cubit.dart';
+
 class ProfilePageMeta extends StatelessWidget {
   ///the color used to display the text on this page
   final Color textColor = Colors.black38;
@@ -27,10 +29,6 @@ class ProfilePageMeta extends StatelessWidget {
             loaded: (st) {
               // ConstrainedBox is for fin height of the Meta
               return ProfilePageMetaFull(context, st.profile);
-            },
-            reloadScore: (reloadSt) {
-              return ProfilePageMetaFull(
-                  context, reloadSt.profile, reloadSt.score);
             },
             orElse: () => Text(''));
       },
@@ -51,7 +49,7 @@ class ProfilePageMeta extends StatelessWidget {
           // TODO: The unexpected Type Error comes when somone is not a friend yet. they cant load the full profile, but only the name and id. Fix to error message
           profile.map((value) => throw UnexpectedTypeError(),
               full: (profile) => EventAndFriends(profile.friendshipCount ?? 0,
-                  profile.ownedEvents?.length, profile, context, score))
+                  profile.ownedEvents?.length, profile, context))
         ]));
   }
 
@@ -68,12 +66,13 @@ class ProfilePageMeta extends StatelessWidget {
   }
 
   /// Widget displays tags with the count of events and friends
-  Widget EventAndFriends(
-      int? friendscount, int? eventcount, Profile profile, BuildContext context,
-      [String? score]) {
+  Widget EventAndFriends(int? friendscount, int? eventcount, Profile profile,
+      BuildContext context) {
     return Column(
       children: [
-        Score(context, profile, score),
+        //our ProfileScore and Achievements
+        ScoreAndAchievements(profile),
+
         PaddingRowWidget(children: [
           // Null friends is not tested yet. Maybe not working
           // The Friends Button
@@ -154,7 +153,40 @@ class ProfilePageMeta extends StatelessWidget {
   }
 
   //score widget for counting entries in box and displaying them as profile score
-  Widget Score(BuildContext context, Profile profile, [String? score]) {
+  Widget ScoreAndAchievements(Profile profile) {
+    return BlocProvider(
+      create: (context) => ProfileScoreCubit(profileId: profile.id),
+      child: BlocBuilder<ProfileScoreCubit, ProfileScoreState>(
+          builder: (context, state) {
+        return state.maybeMap(loading: (st) {
+          return Column(
+            children: [
+              AchievementTile(),
+              ScoreHelperWidget(context, null, profile)
+            ],
+          );
+        }, loaded: (st) {
+          return Column(
+              children: [
+                AchievementTile(),
+                ScoreHelperWidget(context, st.score, profile)
+          ]);
+        }, orElse: () {
+          return ScoreHelperWidget(context, null, profile);
+        });
+      }),
+    );
+  }
+
+  Widget AchievementTile() {
+    return ExpansionTile(
+      title: Text("Achievements"),
+      children: [Text("${CommonHive.getAchievements()}")],
+    );
+  }
+
+  Widget ScoreHelperWidget(
+      BuildContext context, String? score, Profile profile) {
     return InkWell(
       child: Container(
         width: 60,
@@ -165,13 +197,12 @@ class ProfilePageMeta extends StatelessWidget {
           child: score != null
               ? Text("Score:$score")
               : Text(
-                  "Score: ${CommonHive.getBoxEntry("profileScore", CommonHive.ownProfileIdAndPic) ?? "0"}",
+                  "Score: ${CommonHive.getBoxEntry<String>("profileScore", CommonHive.ownProfileIdAndPic) ?? "0"}",
                 ),
         ),
       ),
       onTap: () {
-        context.read<ProfilePageCubit>().getProfileScore(profile);
-        context.read<ProfilePageCubit>().getAchievements(profile);
+        context.read<ProfileScoreCubit>().getProfileScore(profile);
       },
     );
   }

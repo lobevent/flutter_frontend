@@ -67,13 +67,6 @@ class ProfilePage extends StatelessWidget {
                                 ProfilePageMeta(),
                                 ProfilePagePosts(),
                               ],
-                          reloadScore: (reloadedState) => [
-                                // the profile image
-                                ProfilePageHeaderVisual(
-                                    profile: reloadedState.profile),
-                                ProfilePageMeta(),
-                                ProfilePagePosts(),
-                              ],
                           orElse: () => const [
                                 // the profile image
                                 ProfilePageHeaderVisual(),

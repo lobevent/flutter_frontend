@@ -82,26 +82,4 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
     ;
     return profile;
   }
-
-  //gets own profilescore as string, or shows 0
-  Future<void> getProfileScore(Profile profile) async {
-    return repository
-        .getScore(profile.id.value.toString())
-        .then((value) => value.fold((l) => '0', (r) {
-              //safe profilescore in commonhive
-              CommonHive.saveBoxEntry(
-                  r, "profileScore", CommonHive.ownProfileIdAndPic);
-              emit(ProfilePageState.reloadScore(profile: profile, score: r));
-            }));
-  }
-
-  //fetch profiles and maybe do some logic here
-  Future<void> getAchievements(Profile profile) async {
-    return await repository.getAchievements(profile.id.value.toString()).then(
-        (value) => value.fold(
-                (l) => emit(ProfilePageState.error(error: "Couldnt fetch")),
-                (r) {
-              emit(ProfilePageState.loaded(profile: profile));
-            }));
-  }
 }

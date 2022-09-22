@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter_frontend/data/storage_shared.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/infrastructure/profile/achievements_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_repository.dart';

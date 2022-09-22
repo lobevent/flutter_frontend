@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/data/storage_shared.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
@@ -8,6 +8,7 @@ import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Post/PostImagePickerWidget.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/pick_image_widget.dart';
@@ -18,49 +19,58 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/src/provider.dart';
 
+import '../../../../../data/common_hive.dart';
 import '../../../../../domain/post/value_objects.dart';
+import '../../../../post_comment/post_screen/widgets/post_widget_cubit/post_widget_cubit.dart';
 import '../gen_dialog.dart';
+import '../write_widget.dart';
 
 /// this is the post widget, which should be used everywhere
-class PostWidget extends StatelessWidget {
+class PostWidget extends StatefulWidget {
   /// the post attribute, which contains all the post data
   final Post post;
   final Event? event;
   final bool showAuthor;
   final bool showCommentAction;
+  final BuildContext context;
 
   const PostWidget(
       {Key? key,
       required this.post,
       this.event,
       this.showAuthor = true,
-      this.showCommentAction = true})
+      this.showCommentAction = true,
+      required this.context})
       : super(key: key);
 
   @override
+  State<PostWidget> createState() => _PostWidgetState();
+}
+
+class _PostWidgetState extends State<PostWidget> {
+  @override
   Widget build(BuildContext context) {
     return PostCommentBaseWidget(
-        date: post.creationDate,
-        content: post.postContent.getOrCrash(),
-        images: post.images == null ? [] : post.images!,
-        autor: showAuthor ? post.owner : null,
+        date: widget.post.creationDate,
+        content: widget.post.postContent.getOrCrash(),
+        images: widget.post.images == null ? [] : widget.post.images!,
+        autor: widget.showAuthor ? widget.post.owner : null,
         actionButtonsWidgets: ActionWidgets(context));
   }
 
   Widget ActionWidgets(BuildContext context) {
     return PaddingRowWidget(children: [
       StdTextButton(
-          onPressed: () => context.router.push(CommentsScreenRoute(post: post)),
+          onPressed: () => context.router.push(CommentsScreenRoute(post: widget.post)),
           child: Row(
             children: [
               Icon(Icons.comment),
-              Text(post.commentCount.toString(),
+              Text(widget.post.commentCount.toString(),
                   style: TextStyle(color: AppColors.stdTextColor))
             ],
           )),
       //delete a post
-      if (GetIt.I<StorageShared>()
-          .checkIfOwnId(post.owner!.id.value.toString())) ...[
+      if (CommonHive.checkIfOwnId(widget.post.owner!.id.value.toString())) ...[
         StdTextButton(
             onPressed: () {
               showPostEditOverlay(context);
@@ -69,17 +79,19 @@ class PostWidget extends StatelessWidget {
         StdTextButton(
             onPressed: () {
               GenDialog.genericDialog(
-                  context,
-                  AppStrings.deleteCommentDialogAbort,
-                  AppStrings.deleteCommentDialogText,
-                  AppStrings.deleteCommentDialogConfirm,
-                  AppStrings.deleteCommentDialogAbort)
+                      context,
+                      AppStrings.deleteCommentDialogAbort,
+                      AppStrings.deleteCommentDialogText,
+                      AppStrings.deleteCommentDialogConfirm,
+                      AppStrings.deleteCommentDialogAbort)
                   .then((value) async => {
-                if (value)
-                  context.read<PostScreenCubit>().deletePost(post)
-                else
-                  print("abort delete post"),
-              });
+                        {
+                          if (value)
+                            context.read<PostWidgetCubit>().deletePost(widget.post)
+                          else
+                            print("abort delete post"),
+                        }
+                      });
             },
             child: Icon(Icons.delete))
       ],
@@ -100,7 +112,11 @@ class PostWidget extends StatelessWidget {
       return DismissibleOverlay(
         overlayEntry: overlayEntry!,
         child: Scaffold(
-          body: WriteWidget(cubitContext: cubitContextLocal, event: event!, post: post, overlayEntry: overlayEntry),
+          body: WriteWidget(
+              cubitContext: cubitContextLocal,
+              event: widget.event!,
+              post: widget.post,
+              overlayEntry: overlayEntry),
         ),
       );
     });
@@ -121,13 +137,9 @@ Widget generateUnscrollablePostContainer(
     return Column(
       children: [
         Text("No Posts available."),
-        if (event != null && context != null) WriteWidget(cubitContext: context, event: event)
       ],
     );
-
-    //return Text("Nothing here yet");
   }
-  // Expanded because if you leave it, it expands infinitely and throws errors
   return Column(
     children: [
       Container(
@@ -140,140 +152,43 @@ Widget generateUnscrollablePostContainer(
           scrollDirection: Axis.vertical,
           itemCount: posts.length,
           itemBuilder: (context, index) {
-            return PostWidget(
-                post: profile != null
-                    ? posts[index].copyWith(owner: profile)
-                    : posts[index],
-                showAuthor: showAutor,
-                event: event);
+            return BlocProvider(
+              create: (context) =>
+                  PostWidgetCubit(post: posts[index]),
+              child: BlocBuilder<PostWidgetCubit, PostWidgetState>(
+                  builder: (context, state) {
+                return state.maybeMap(
+                  initial: (init) {
+                    return PostWidget(
+                        post: posts[index],
+                        showAuthor: showAutor,
+                        event: posts[index].event,
+                        context: context);
+                  },
+                    loaded: (st) {
+                      return PostWidget(
+                          post: posts[index],
+                          showAuthor: showAutor,
+                          event: posts[index].event,
+                          context: context);
+                    },
+                    edited: (ed) {
+                      return PostWidget(
+                          post: ed.post,
+                          showAuthor: showAutor,
+                          event: posts[index].event,
+                          context: context);
+                    },
+                    error: (err) {
+                      return Text(err.toString());
+                    },
+                    deleted: (del) => SizedBox.shrink(),
+                    orElse: () => const Text("OrELse error in post widget"));
+              }),
+            );
           },
         ),
-        //WriteWidget(context!, event!)
       ),
-      //check if we need to build it or if we are on the feedscreen
-      if (event != null && context != null)
-        WriteWidget(cubitContext: context, event: event)
-      else
-        Text("")
     ],
   );
 }
-
-
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------Write Widget    Todo: export to own file
-//------------------------------------------------------------------------------------------------------------------------
-
-class WriteWidget extends StatefulWidget{
-  final Event event;
-  final Post? post;
-  final BuildContext cubitContext;
-  final OverlayEntry? overlayEntry;
-  WriteWidget({
-    Key? key,
-    required this.cubitContext,
-    required this.event,
-    this.post, this.overlayEntry
-  }): super(key: key);
-
-  @override
-  State<WriteWidget> createState() => _WriteWidgetState();
-}
-
-class _WriteWidgetState extends State<WriteWidget> {
-  late TextEditingController postWidgetController;
-
-  @override
-  void initState(){
-    super.initState();
-    if(this.widget.post != null){
-      postWidgetController = TextEditingController(text: widget.post!.postContent.getOrEmptyString());
-    }
-    else {
-      postWidgetController = TextEditingController();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Container(
-        decoration: BoxDecoration(border: Border.all(color: AppColors.mainIcon)),
-        width: 300,
-        child: Title(
-          title: "Post something.",
-          color: AppColors.black,
-          child: Column(
-            children: [
-              FullWidthPaddingInput(
-                password: false,
-                maxLines: 6,
-                controller: postWidgetController,
-              ),
-              if (widget.post == null) PostImagePickerWidget() else Text(""),
-              TextWithIconButton(
-                  onPressed: () {
-                    //post or edit the post
-                    widget.post == null
-                        ? widget.cubitContext.read<PostScreenCubit>().postPost(
-                        postWidgetController.text, widget.event.id.value.toString())
-                        : {
-                      widget.cubitContext.read<PostScreenCubit>().editPost(
-                          widget.post!.copyWith(
-                              postContent:
-                              PostContent(postWidgetController.text))),
-                      //remove overlayentry
-                      widget.overlayEntry?.remove(),
-
-                    };
-                  },
-                  text: "Post")
-            ],
-          ),
-        ));
-  }
-}
-// Widget WriteWidget(BuildContext cubitContext, Event event, {Post? post}) {
-//   TextEditingController postWidgetController = TextEditingController();
-//   if(post != null){
-//     postWidgetController.text = post.postContent.getOrEmptyString();
-//   }
-//   // post!=null? post.postContent.value
-//   //    .fold((l) => l.toString(), (postContent) => postContent.toString())
-//
-//   return Container(
-//       decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
-//       width: 300,
-//       child: Title(
-//         title: "Post something.",
-//         color: Colors.black,
-//         child: Column(
-//           children: [
-//             FullWidthPaddingInput(
-//               password: false,
-//               maxLines: 6,
-//               controller: postWidgetController,
-//             ),
-//             if (post == null) PostImagePickerWidget() else Text(""),
-//             TextWithIconButton(
-//                 onPressed: () {
-//                   post == null
-//                       ? cubitContext.read<PostScreenCubit>().postPost(
-//                           postWidgetController.text, event.id.value.toString())
-//                       : cubitContext.read<PostScreenCubit>().editPost(
-//                           post.copyWith(
-//                               postContent:
-//                                   PostContent(postWidgetController.text)));
-//                 },
-//                 text: "Post")
-//           ],
-//         ),
-//       ));
-// }

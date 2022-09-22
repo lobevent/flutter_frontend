@@ -8,7 +8,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/core/Utils/LoginControllFunctions.dart';
 import 'package:flutter_frontend/core/services/AuthTokenService.dart';
 import 'package:flutter_frontend/data/common_hive.dart';
-import 'package:flutter_frontend/data/storage_shared.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
@@ -107,8 +106,8 @@ class SymfonyCommunicator {
     headers = {"Authorization": "Bearer $token"};
 
     //fetch and save profile in sharedstorage
-    GetIt.I<StorageShared>().safeOwnProfile();
-    //GetIt.I<CommonHive>().safeOwnProfileIdAndPic();
+    //GetIt.I<StorageShared>().safeOwnProfile();
+    CommonHive.safeOwnProfileIdAndPic();
   }
 
   /// The [requestFunction] is an lambda function, containing a request to execute

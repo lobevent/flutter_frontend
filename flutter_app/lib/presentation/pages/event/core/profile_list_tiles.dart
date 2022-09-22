@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/data/common_hive.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_classes.dart';
@@ -8,8 +9,6 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/gen_dialog.dart';
 import 'package:get_it/get_it.dart';
-
-import '../../../../data/storage_shared.dart';
 
 class ProfileListTiles extends StatelessWidget {
   final Profile profile;
@@ -55,7 +54,7 @@ class ProfileListTiles extends StatelessWidget {
   Widget actionButtons(
       bool acceptOrSend, bool deleteOrDeny, BuildContext context) {
     //only build friend buttons if its not our own profile
-    if (GetIt.I<StorageShared>().checkIfOwnId(profile.id.value)) {
+    if (CommonHive.checkIfOwnId(profile.id.value)) {
       return Text("");
     }
     //for building both buttons to accept or decline the friendrequest

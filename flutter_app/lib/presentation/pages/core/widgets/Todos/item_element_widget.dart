@@ -6,7 +6,6 @@ import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../../../../data/storage_shared.dart';
 import '../../../../../domain/event/event.dart';
 import '../../../event/event_screen/cubit/add_people_item/add_people_item_cubit.dart';
 import '../add_friends_dialog.dart';
@@ -71,7 +70,7 @@ class _ItemElementWidgetState extends State<ItemElementWidget> {
       onLongPress: () {
         //TODO: deassignen verbieten wenn paar h vorher?
         //deassign profile to todo item
-        final String? ownId = GetIt.I<StorageShared>().getOwnProfileId();
+        final String? ownId = CommonHive.getBoxEntry<String?>("ownProfileId", CommonHive.ownProfileIdAndPic);
         if (widget.item.profiles!
             .map((e) => e.id.value)
             .contains(ownId)) {

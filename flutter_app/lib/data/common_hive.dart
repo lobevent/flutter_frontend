@@ -34,35 +34,31 @@ class CommonHive {
   /// PROFILE Stuff
 
   ///saves ownprofile id and pic in hive
-  Future<void> safeOwnProfileIdAndPic() async {
+  static Future<void> safeOwnProfileIdAndPic() async {
     String? ownImage;
     String? ownProfileId;
-    //box for storage
-    final box = Hive.box(ownProfileIdAndPic);
-
     //fetch the own profile from backend
-    final Either<NetWorkFailure, Profile> ownProf =
-        await GetIt.I<ProfileRepository>().getOwnProfile();
-    final Profile? ownProfile = ownProf.fold((failure) => null, (prof) => prof);
-    //try to get the profilePic String
-    ownProfileId = ownProfile?.id.value;
-    try {
-      ownImage = ownProfile?.images?[0];
-    } on RangeError catch (exception) {
-      ownImage = null;
-    }
-    //set the values to the box, with the keys
-    box.put('ownProfileId', ownProfileId);
-    box.put('ownProfilePic', ownImage ?? "");
+    await GetIt.I<ProfileRepository>().getOwnProfile().then((value) => value.fold(
+            (l) => null, (ownProfile) {
+              CommonHive.saveBoxEntry<String>(ownProfile.id.value.toString(), "ownProfileId", ownProfileIdAndPic);
+              try {
+                ownImage = ownProfile.images?[0];
+              } on RangeError catch (exception) {
+                ownImage = null;
+              }
+              if(ownImage!=null){
+                CommonHive.saveBoxEntry<String>(ownImage!, "ownProfilePic", ownProfileIdAndPic);
+              }
+      } ));
   }
 
-  Future<String?> getOwnPic() async {
-    return await CommonHive.getBoxEntry<String?>("ownProfilePic", ownProfileIdAndPic);
+  static Future<String?> getOwnPic() async {
+    return CommonHive.getBoxEntry<String>("ownProfilePic", ownProfileIdAndPic);
   }
 
   ///checks if some id is ownProfileId
-  bool checkIfOwnId(String checkId) {
-    return getBoxEntry('ownProfileId', ownProfileIdAndPic) == checkId;
+  static bool checkIfOwnId(String checkId) {
+    return CommonHive.getBoxEntry<String>('ownProfileId', ownProfileIdAndPic) == checkId;
   }
 
   static void saveAchievement(String key) {

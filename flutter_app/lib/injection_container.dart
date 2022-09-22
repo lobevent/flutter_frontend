@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubit.dart';
 import 'package:flutter_frontend/core/services/AuthTokenService.dart';
-import 'package:flutter_frontend/data/storage_shared.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:flutter_frontend/infrastructure/auth/firebase_auth_facade.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
@@ -48,15 +47,6 @@ class InjectionContainer {
     // register Token Service for retrieving login tokens
     getIt.registerLazySingleton(() => AuthTokenService());
 
-    // register Shared storage
-
-    getIt.registerLazySingleton(() => StorageShared());
-    getIt.registerLazySingleton(() => CommonHive());
-
-
-
-
-
     getIt.registerLazySingleton<FirebaseAuthFacade>(() => FirebaseAuthFacade(
         FirebaseAuth.instance,
         GoogleSignIn.standard(scopes: ["email", "profile"])));
@@ -101,7 +91,7 @@ class InjectionContainer {
   /// This loads async stuff for the Container
   /// IMPORTANT NOTE: this has to be called AFTER [InjectionContainer.injectDependencies()] !!!!!!!
   static Future<void> loadNecessities() async{
-    //GetIt.I<CommonHive>().safeOwnProfileIdAndPic();
-    GetIt.I<StorageShared>().safeOwnProfile();
+    CommonHive.safeOwnProfileIdAndPic();
+    //GetIt.I<StorageShared>().safeOwnProfile();
   }
 }

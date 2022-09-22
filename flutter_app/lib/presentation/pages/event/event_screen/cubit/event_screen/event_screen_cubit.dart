@@ -113,7 +113,6 @@ class EventScreenCubit extends Cubit<EventScreenState> {
           });
         });
   }
-
   ///confirm user at event with confirmAttending
   Future<void> UserConfirmAtEvent(
       Event event, double? longitude, double? latitude) async {
@@ -132,6 +131,14 @@ class EventScreenCubit extends Cubit<EventScreenState> {
             emit(newState);
           });
         });
+  }
+
+  //save confirmattending to event, and also delete if confirmattending is revoked
+  void saveConfirmAttendingScore(Event event){
+      if(CommonHive.getAttendingConfirmed(event.id.value.toString())==event.id.value.toString()) {
+        CommonHive.deleteAttendingConfirmed(event.id.value.toString());
+    }
+      CommonHive.saveAttendingConfirmed(event.id.value.toString());
   }
 
   ///
@@ -190,9 +197,7 @@ class EventScreenCubit extends Cubit<EventScreenState> {
 
   Future<bool> uploadImage(XFile image){
     return state.maybeMap(orElse: (){return Future(() => false);}, loaded: (loaded){
-      return repository.uploadImageToEvent(loaded.event.id, image).then(
-              (value) => value.fold((failure) => false, (r) => true)
-      );
+      return repository.uploadImageToEvent(loaded.event.id, image).then((value) => value.fold((failure) => false, (r) => true));
     });
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/core/styles/icons.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/animations/animated_check.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/animations/loading_button.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_upload.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
@@ -76,50 +77,66 @@ class _ImagePickerEventScreenState extends State<_ImagePickerEventScreen> with S
 
   XFile? preview;
   bool loading = false;
-  late AnimationController _animationController;
-
-  @override
-  initState(){
-    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
-  }
+  bool uploadSuccessfull = false;
 
   @override
   Widget build(BuildContext context) {
-    _animationController.forward();
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // the image preview function
-        previewImage(),
-        // The image picker; it takes an function which is called when an image is returned
-        ImageUploadPicker(returnFunction: (List<XFile?>? image) {
-          if (image != null && image.length > 0) {
-            preview = image[0];
-            print(preview!.path);
-            setState(() {});
-          }
-        }, hideGalery: true, showPreview: false,),
+    if(!uploadSuccessfull) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // the image preview function
+          previewImage(),
+          // The image picker; it takes an function which is called when an image is returned
+          ImageUploadPicker(
+            returnFunction: (List<XFile?>? image) {
+              if (image != null && image.length > 0) {
+                preview = image[0];
+                print(preview!.path);
+                setState(() {});
+              }
+            },
+            hideGalery: true,
+            showPreview: false,
+          ),
 
-        // only show this button if an image is selected and the image isnt uploadet at the moment!
-        if(preview != null && !loading)
-          TextWithIconButton(text: "Upload Publicly", icon: AppIcons.uploadToEvent, onPressed: () async {
-            setState(() {
-              loading  = true;
-            });
-            widget.onPressedUpload(preview!).then((value) => Navigator.pop(context));
+          // only show this button if an image is selected and the image isnt uploadet at the moment!
+          if (preview != null && !loading)
+            TextWithIconButton(
+              text: "Upload Publicly",
+              icon: AppIcons.uploadToEvent,
+              onPressed: () async {
+                setState(() {
+                  loading = true;
+                });
+                widget.onPressedUpload(preview!).then((value) async {
 
-          },),
+                  // opens the successfull notification
+                  setState(() {
+                    uploadSuccessfull = true;
+                  });
+                  Future.delayed(Duration(milliseconds: 1000)).then((value) => Navigator.pop(context));
 
-        AnimatedIcon(
-          icon: AnimatedIcons.event_add,
-          progress: _animationController,
-          semanticLabel: 'Show menu',
-        ),
-        // show the loading button if the image is being uploaded
-        if(loading)
-          LoadingButton(size: 35,)
-      ],
-    );
+
+                });
+              },
+            ),
+          // show the loading button if the image is being uploaded
+          if (loading)
+            LoadingButton(
+              size: 35,
+            )
+        ],
+      );
+    }
+    else{
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(padding: EdgeInsets.only(top: 20, bottom: 20), child: AnimatedCheck(),)
+        ],
+      );
+    }
   }
 
 

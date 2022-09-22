@@ -31,6 +31,7 @@ import 'package:maps_launcher/maps_launcher.dart';
 import '../../../../../../application/core/geo_functions_cubit.dart';
 import '../../../../../../data/common_hive.dart';
 import '../../../../../../domain/post/post.dart';
+import '../../../../core/widgets/animations/animated_check.dart';
 import '../../../../core/widgets/timer_widget.dart';
 import 'EventContentWidgets/es_ec_uploadImageButton.dart';
 
@@ -91,6 +92,7 @@ class EventContent extends StatelessWidget {
 
                   if(stateLoaded.event.status != null && stateLoaded.event.status == EventStatus.confirmAttending)
                       UploadImageButton(),
+
 
                   /// Used as space
                   const SizedBox(height: 20),

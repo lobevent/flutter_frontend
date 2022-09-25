@@ -94,6 +94,7 @@ class EventContent extends StatelessWidget {
                       UploadImageButton(),
 
 
+
                   /// Used as space
                   const SizedBox(height: 20),
 
@@ -244,17 +245,19 @@ class EventContent extends StatelessWidget {
   }
 
   Widget CoordsWidget(double? longitude, double? latitude) {
-    return InkWell(
-      onTap: (){
-        if(latitude != null && longitude != null){
-          MapsLauncher.launchCoordinates(latitude, longitude);
-        }
-      },
-        child: PaddingWidget(children: [
-      Icon(Icons.my_location),
-      Text("Latitude: ${latitude??'NaN'}"),
-      Text(" Longitude: ${longitude??'NaN'}"),
-    ]));
+    return FittedBox(
+      child: InkWell(
+        onTap: (){
+          if(latitude != null && longitude != null){
+            MapsLauncher.launchCoordinates(latitude, longitude);
+          }
+        },
+          child: PaddingWidget(children: [
+        Icon(Icons.my_location),
+        Text("Latitude: ${latitude??'NaN'}"),
+        Text(" Longitude: ${longitude??'NaN'}"),
+      ])),
+    );
   }
 
   Widget ImHereButton(BuildContext contextEvent, double? latitude,
@@ -370,6 +373,8 @@ class EventContent extends StatelessWidget {
   Widget PaddingWidget({required List<Widget> children}) {
     return PaddingRowWidget(children: children);
   }
+
+
 
   /// widget which is 1 half of a post, also it got gradient and an postscreen button
   Widget generate1HalfPostWithOpacity(

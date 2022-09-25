@@ -70,7 +70,7 @@ class _PostWidgetState extends State<PostWidget> {
             ],
           )),
       //delete a post
-      if (CommonHive.checkIfOwnId(widget.post.owner!.id.value.toString())) ...[
+      if (widget.post.owner == null || CommonHive.checkIfOwnId(widget.post.owner?.id.value.toString()??"")) ...[
         StdTextButton(
             onPressed: () {
               showPostEditOverlay(context);

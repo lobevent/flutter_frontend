@@ -10,6 +10,8 @@ import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/infrastructure/todo/item_dtos.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_dtos.dart';
 
+import '../event_profile_picture/event_profile_picture_dtos.dart';
+
 // import 'package:flutter_frontend/infrastructure/';
 
 // I call this the one single point of ugliness
@@ -25,6 +27,7 @@ final Map<Type, dynamic> factoryMap = {
   InvitationDto: (Map<String, dynamic> json) => InvitationDto.fromJson(json),
   EventSeriesDto: (Map<String, dynamic> json) => EventSeriesDto.fromJson(json),
   MyLocationDto: (Map<String, dynamic> json) => MyLocationDto.fromJson(json),
+  EventProfilePictureDto: (Map<String, dynamic> json) => MyLocationDto.fromJson(json),
   AchievementsDto: (Map<String, dynamic> json) =>
       AchievementsDto.fromJson(json),
 };

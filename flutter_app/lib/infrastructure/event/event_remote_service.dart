@@ -55,7 +55,8 @@ class EventRemoteService extends RemoteService<EventDto> {
 
   EventRemoteService({SymfonyCommunicator? communicator})
       : client = communicator ??
-            SymfonyCommunicator(); // TODO this doesn't work on runtime -> will throw an error!
+            SymfonyCommunicator();
+
 
   Future<EventDto> getSingle(UniqueId id) async {
     final String uri = "$eventByIdPath${id.value}";

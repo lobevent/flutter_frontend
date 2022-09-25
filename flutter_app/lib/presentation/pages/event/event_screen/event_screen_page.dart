@@ -34,44 +34,52 @@ class EventScreenPage extends StatelessWidget {
             ///the loading Overlay wraps the whole tree
             return LoadingOverlay(
               isLoading: state is LoadInProgress,
-              child: BasicContentContainer(
-                bottomNavigationBar: const BottomNavigation(
-                  selected: NavigationOptions.ownEvents,
+              child: RefreshIndicator(
+                onRefresh: () => _reload(context),
+                child: BasicContentContainer(
+                  bottomNavigationBar: const BottomNavigation(
+                    selected: NavigationOptions.ownEvents,
+                  ),
+                  child_ren: state.maybeMap(
+
+                      /// check if an error has occured and show error message in that case
+                      /// wrapped in a list to match closure context
+                      error: (failure) => left([
+                            ErrorMessage(
+                              errorText: failure.toString(),
+                            )
+                          ]),
+
+                      loaded: (loadetState) => left([
+                        /// the Header with the pictures etc
+                        HeaderVisual(networkImagePath: loadetState.event.image),
+
+                        /// the event contents and information
+                        EventContent(),
+
+                        /// todoevents list
+                        TodoWidget(),
+                      ]),
+                      /// if the error state is not active, load the contentS
+                      orElse: () => left([
+                            /// the Header with the pictures etc
+                            HeaderVisual(),
+
+                            /// the event contents and information
+                            EventContent(),
+
+                            /// todoevents list
+                            TodoWidget(),
+                          ])),
                 ),
-                child_ren: state.maybeMap(
-
-                    /// check if an error has occured and show error message in that case
-                    /// wrapped in a list to match closure context
-                    error: (failure) => left([
-                          ErrorMessage(
-                            errorText: failure.toString(),
-                          )
-                        ]),
-
-                    loaded: (loadetState) => left([
-                      /// the Header with the pictures etc
-                      HeaderVisual(networkImagePath: loadetState.event.image),
-
-                      /// the event contents and information
-                      EventContent(),
-
-                      /// todoevents list
-                      TodoWidget(),
-                    ]),
-                    /// if the error state is not active, load the contentS
-                    orElse: () => left([
-                          /// the Header with the pictures etc
-                          HeaderVisual(),
-
-                          /// the event contents and information
-                          EventContent(),
-
-                          /// todoevents list
-                          TodoWidget(),
-                        ])),
               ),
             );
           },
         ));
+  }
+
+
+  Future<void> _reload(BuildContext context)async {
+    context.read<EventScreenCubit>().reload();
   }
 }

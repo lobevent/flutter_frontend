@@ -55,6 +55,11 @@ class EventScreenCubit extends Cubit<EventScreenState> {
         }));
   }
 
+
+  Future<void> reload() async {
+    state.maybeMap(orElse: (){}, loaded: (state)=> getEvent(state.event.id));
+  }
+
   Future<void> createOrgaEvent(
       Event event, String orgaName, String orgaDesc) async {
     Either<NetWorkFailure, Todo> todoOrFailure;
@@ -148,9 +153,10 @@ class EventScreenCubit extends Cubit<EventScreenState> {
     state.maybeMap(
         orElse: () {},
         loaded: (loaded) {
+          List<Invitation> invitations = List.from(loaded.event.invitations);
           emit(EventScreenState.loading());
-          loaded.event.invitations.add(invitation);
-          emit(loaded);
+          invitations.add(invitation);
+          emit(loaded.copyWith(event: loaded.event.copyWith(invitations: invitations)));
         });
   }
 
@@ -171,7 +177,7 @@ class EventScreenCubit extends Cubit<EventScreenState> {
   ///
   /// this alters the local invitation list and add host
   ///
-  void addHost(Invitation invitation) {
+  void addHost( Invitation invitation) {
     toggleHost(invitation, true);
   }
 

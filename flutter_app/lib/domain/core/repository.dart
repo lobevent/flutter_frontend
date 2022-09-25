@@ -6,6 +6,7 @@ import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions.dart';
 import 'package:flutter_frontend/infrastructure/core/exceptions_handler.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_dtos.dart';
+import 'package:http/http.dart';
 
 import '../../infrastructure/core/base_dto.dart';
 
@@ -22,6 +23,8 @@ class Repository<Domain>{
       //return function();
     } on CommunicationException catch (e) {
       result = left(ExceptionsHandler.reactOnCommunicationException(e));
+    } on ClientException catch (allOthers){
+      result = left(ExceptionsHandler.reactOnCommunicationException(ConnectionException()));
     }
     return result;
   }

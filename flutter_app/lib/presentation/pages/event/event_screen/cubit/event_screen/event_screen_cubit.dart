@@ -133,13 +133,13 @@ class EventScreenCubit extends Cubit<EventScreenState> {
         });
   }
 
-  //save confirmattending to event, and also delete if confirmattending is revoked
-  void saveConfirmAttendingScore(Event event){
-      if(CommonHive.getAttendingConfirmed(event.id.value.toString())==event.id.value.toString()) {
-        CommonHive.deleteAttendingConfirmed(event.id.value.toString());
-    }
-      CommonHive.saveAttendingConfirmed(event.id.value.toString());
-  }
+  // //save confirmattending to event, and also delete if confirmattending is revoked
+  // void saveConfirmAttendingScore(Event event){
+  //     if(CommonHive.getAttendingConfirmed(event.id.value.toString())==event.id.value.toString()) {
+  //       CommonHive.deleteAttendingConfirmed(event.id.value.toString());
+  //   }
+  //     CommonHive.saveAttendingConfirmed(event.id.value.toString());
+  // }
 
   ///
   /// this alters the local invitation list and adds an invitation

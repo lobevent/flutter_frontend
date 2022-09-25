@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+///
+/// Animated check displays an circle with an check in it
+/// the circle bounces
+/// the check appears from left to right
+///
 class AnimatedCheck extends StatefulWidget {
   @override
   _AnimatedCheckState createState() => _AnimatedCheckState();
@@ -33,6 +39,7 @@ class _AnimatedCheckState extends State<AnimatedCheck> with TickerProviderStateM
   Widget build(BuildContext context) {
     double circleSize = 140;
     double iconSize = 108;
+
 
     return Stack(
       children: [

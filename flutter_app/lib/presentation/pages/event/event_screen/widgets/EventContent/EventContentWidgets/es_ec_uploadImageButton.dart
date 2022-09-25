@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/l10n/app_strings.dart';
+import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/core/styles/icons.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/animations/animated_check.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/animations/loading_button.dart';
@@ -34,6 +37,7 @@ class _UploadImageButtonState extends State<UploadImageButton> {
   /// The onClick Function opens an Dialog with the Image picker
   /// it should close after successfully submitting a picture
   _onClick(BuildContext cubitContext){
+    //SystemSound.play(SystemSoundType.click);
     showGeneralDialog(
         transitionBuilder: (context, a1, a2, widget) {
           return Transform.scale(
@@ -78,6 +82,7 @@ class _ImagePickerEventScreenState extends State<_ImagePickerEventScreen> with S
   XFile? preview;
   bool loading = false;
   bool uploadSuccessfull = false;
+  bool errorHappened = false;
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +105,9 @@ class _ImagePickerEventScreenState extends State<_ImagePickerEventScreen> with S
             showPreview: false,
           ),
 
+          if(errorHappened)
+            Text(AppStrings.errorHappend, style: AppTextStyles.error,),
+
           // only show this button if an image is selected and the image isnt uploadet at the moment!
           if (preview != null && !loading)
             TextWithIconButton(
@@ -110,12 +118,20 @@ class _ImagePickerEventScreenState extends State<_ImagePickerEventScreen> with S
                   loading = true;
                 });
                 widget.onPressedUpload(preview!).then((value) async {
+                  if(value){
+                    // opens the successfull notification
+                    setState(() {
+                      uploadSuccessfull = true;
+                    });
+                    Future.delayed(Duration(milliseconds: 1000)).then((value) => Navigator.pop(context));
+                  }
+                  else{
+                    setState(() {
+                      loading = false;
+                      errorHappened = true;
+                    });
+                  }
 
-                  // opens the successfull notification
-                  setState(() {
-                    uploadSuccessfull = true;
-                  });
-                  Future.delayed(Duration(milliseconds: 1000)).then((value) => Navigator.pop(context));
 
 
                 });

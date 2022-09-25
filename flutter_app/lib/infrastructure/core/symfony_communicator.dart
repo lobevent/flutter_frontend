@@ -56,6 +56,7 @@ class SymfonyCommunicator {
   /// Uri has to start with an backslash "/".
 
   Future<String> postFile(String uri, File file, [Encoding? encoding]) async {
+
     var stream = new http.ByteStream(DelegatingStream.typed(file.openRead()));
     var length = await file.length();
 
@@ -112,7 +113,6 @@ class SymfonyCommunicator {
 
   /// The [requestFunction] is an lambda function, containing a request to execute
   static Future<Response> handleExceptions(Response response) async {
-    // TODO any reason to give a lambda into this? We could directly pass the response or
     // TODO subclassing the Response class (like the reddit link I did sent you)
     //tried the solution with passing -> now I get that i can call await when calling a function
     if (response.statusCode ~/ 100 == 2) {

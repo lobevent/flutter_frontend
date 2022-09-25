@@ -79,6 +79,7 @@ class NetWorkFailure<T> with _$NetWorkFailure<T>{
       InsufficientPermissions<T>;
 
   const factory NetWorkFailure.unableToUpdate() = UnableToUpdate<T>;
+  const factory NetWorkFailure.connectionError() = ConnectionError<T>;
 
   const factory NetWorkFailure.notAuthenticated() = NotAuthenticated<T>;
 

@@ -8,6 +8,8 @@ class AppStrings {
   static const String signInWithGoogle = "Sign In with Google";
   static const String signInWithPhone = "Sign In with Phone Number";
 
+  static const String errorHappend = "Error happened, please try again!";
+
   static const String phoneNumberVerificationTitle =
       "Verify yourself with your phone number.";
   static const String phoneNumberTextFieldHint = "Phone Number";

@@ -221,9 +221,10 @@ class EventFormCubit extends Cubit<EventFormState> {
 
   /// remove non friends from invitations
   Event removeNoneFriends(Event event, List<Profile> friends) {
-    event.invitations.removeWhere((invitation) =>
+    List<Invitation> invitations = List.from(event.invitations);
+    invitations.removeWhere((invitation) =>
         !friends.map((i) => i.id.value).contains(invitation.profile.id.value));
-    return event;
+    return event.copyWith(invitations: invitations);
   }
 
   // Future<void> chooseImage(Event event) async {

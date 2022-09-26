@@ -27,7 +27,7 @@ final Map<Type, dynamic> factoryMap = {
   InvitationDto: (Map<String, dynamic> json) => InvitationDto.fromJson(json),
   EventSeriesDto: (Map<String, dynamic> json) => EventSeriesDto.fromJson(json),
   MyLocationDto: (Map<String, dynamic> json) => MyLocationDto.fromJson(json),
-  EventProfilePictureDto: (Map<String, dynamic> json) => MyLocationDto.fromJson(json),
+  EventProfilePictureDto: (Map<String, dynamic> json) => EventProfilePictureDto.fromJson(json),
   AchievementsDto: (Map<String, dynamic> json) =>
       AchievementsDto.fromJson(json),
 };

@@ -57,8 +57,7 @@ class EventScreenPage extends StatelessWidget {
                         /// the event contents and information
                         EventContent(),
 
-                        /// todoevents list
-                        TodoWidget(),
+
                       ]),
                       /// if the error state is not active, load the contentS
                       orElse: () => left([
@@ -68,8 +67,6 @@ class EventScreenPage extends StatelessWidget {
                             /// the event contents and information
                             EventContent(),
 
-                            /// todoevents list
-                            TodoWidget(),
                           ])),
                 ),
               ),

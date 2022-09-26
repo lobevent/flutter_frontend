@@ -1,4 +1,5 @@
 
+import 'package:flutter_frontend/domain/event/event_profile_picture.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
@@ -19,9 +20,11 @@ class EventProfilePictureDto extends BaseDto{
 
 
   @override
-  toDomain() {
-    // TODO: implement toDomain
-    throw UnimplementedError();
+  EventProfilePicture toDomain() {
+    return EventProfilePicture(
+      profile: profile.toDomain(),
+      path: path
+    );
   }
 
   factory EventProfilePictureDto.fromJson(Map<String, dynamic> json) => _$EventProfilePictureDtoFromJson(json);

@@ -20,6 +20,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/add_friends/add_friends_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/like/like_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/EventProfilePictures/SmallCarousel/es_ec_epp_carousel.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/es_ec_UesMenuButton.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/es_ec_add_friends_button.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/Overlays/es_ol_invited_persons.dart';
@@ -33,6 +34,7 @@ import '../../../../../../data/common_hive.dart';
 import '../../../../../../domain/post/post.dart';
 import '../../../../core/widgets/animations/animated_check.dart';
 import '../../../../core/widgets/timer_widget.dart';
+import 'EventContentWidgets/EventTodoWidget/es_ec_td_todo_widget.dart';
 import 'EventContentWidgets/es_ec_uploadImageButton.dart';
 
 class EventContent extends StatelessWidget {
@@ -82,6 +84,8 @@ class EventContent extends StatelessWidget {
                   if (stateLoaded.event.status != null)
                     if(stateLoaded.event.date.isAfter(DateTime.now())) TimerWidget(dateTime: stateLoaded.event.date),
 
+                  /// todoevents list
+                  TodoWidget(),
                   ///for confirming the attending of an event
                   ImHereButton(
                       context,
@@ -93,6 +97,7 @@ class EventContent extends StatelessWidget {
                   if(stateLoaded.event.status != null && stateLoaded.event.status == EventStatus.confirmAttending)
                       UploadImageButton(),
 
+                  EventProfilePicturesSmallCarousell(event: stateLoaded.event),
 
 
                   /// Used as space

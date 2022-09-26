@@ -144,7 +144,10 @@ class PostScreenCubit extends Cubit<PostScreenState> {
     for (XFile? element in loaded.images) {
       if (element != null) {
         await repository.uploadImages(post.id!, element).then((value) {
-          value.fold((l) => null, (imagePath) => post.images!.add(imagePath));
+          List<String> postImages = List.of(post.images!);
+
+          value.fold((l) => null, (imagePath) => postImages.add(imagePath));
+          post.copyWith(images: postImages);
         });
       }
     }

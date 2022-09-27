@@ -58,6 +58,7 @@ class EventScreenPage extends StatelessWidget {
                         EventContent(),
 
 
+
                       ]),
                       /// if the error state is not active, load the contentS
                       orElse: () => left([

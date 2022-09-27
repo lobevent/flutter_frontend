@@ -51,6 +51,8 @@ class _EventProfilePicturesSmallCarousellState extends State<EventProfilePicture
               error: (fal)=> Text(fal.failure.toString()),
               picsLoaded: (pls){
             //----------- shown on loaded------------------
+                if(pls.picPaths.length == 0)
+                  return Text("");
                 return Stack(
                   children: [
                     ClipRect(

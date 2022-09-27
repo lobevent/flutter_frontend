@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class AppColors {
 
+  static const Color accentColor = Color(0xFFFFFF00);
+
   static const Color deletionOngoingColor = Color(0x4A1F0C00);
   static const Color primaryColor = Color(0xFF040C0C);
   static const Color backGroundColor = Color(0xFF081919);

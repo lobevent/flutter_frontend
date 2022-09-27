@@ -84,8 +84,7 @@ class EventContent extends StatelessWidget {
                   if (stateLoaded.event.status != null)
                     if(stateLoaded.event.date.isAfter(DateTime.now())) TimerWidget(dateTime: stateLoaded.event.date),
 
-                  /// todoevents list
-                  TodoWidget(),
+
                   ///for confirming the attending of an event
                   ImHereButton(
                       context,
@@ -94,8 +93,13 @@ class EventContent extends StatelessWidget {
                       stateLoaded.event,
                       stateLoaded.event.status),
 
+
+
+                  /// todoevents list
+                  TodoWidget(),
+
                   if(stateLoaded.event.status != null && stateLoaded.event.status == EventStatus.confirmAttending)
-                      UploadImageButton(),
+                    UploadImageButton(),
 
                   EventProfilePicturesSmallCarousell(event: stateLoaded.event),
 

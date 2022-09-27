@@ -47,8 +47,13 @@ extension TodoOverlayCubit on EventScreenCubit {
                   // if successfull emit new state with the added item
                   (item) {
                 //add item to the eventOrgalist
-                value.event.todo!.items.insert(0, item);
-                emit(value.copyWith(addingItem: false));
+                    List<Item> items = List.from(value.event.todo!.items);
+
+                items.insert(0, item);
+                emit(
+                    value.copyWith(
+                        addingItem: false,
+                        event: value.event.copyWith(todo: todo.copyWith(items: items))));
               }));
         },
         // if we are not in the loaded state we have an error, we should not be here

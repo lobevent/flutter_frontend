@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Overlays/my_location_form/my_location_form_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Profile/ProfileImagePickerWidget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_upload.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_profile_pictures_page/epp_page.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_series_form/event_series_form_main.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_series_screen/ess_page.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_swiper/event_swiper.dart';
@@ -49,7 +50,8 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/post_scre
     AutoRoute(page: EventSeriesListPage),
     AutoRoute(page: EventSeriesScreenPage),
     AutoRoute(page: MyLocationsPage),
-    AutoRoute(page: MyLocationForm)
+    AutoRoute(page: MyLocationForm),
+    AutoRoute(page: EPPPage)
   ],
 )
 class $Router {}

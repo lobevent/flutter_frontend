@@ -99,6 +99,9 @@ class EventContent extends StatelessWidget {
 
                   EventProfilePicturesSmallCarousell(event: stateLoaded.event),
 
+                  /// Contains the description of the event
+                  DescriptionWidget(
+                      stateLoaded.event.description!.getOrCrash()),
 
                   /// Used as space
                   const SizedBox(height: 20),
@@ -123,9 +126,7 @@ class EventContent extends StatelessWidget {
                   /// Used as space
                   const SizedBox(height: 20),
 
-                  /// Contains the description of the event
-                  DescriptionWidget(
-                      stateLoaded.event.description!.getOrCrash()),
+
                 ],
               );
             },

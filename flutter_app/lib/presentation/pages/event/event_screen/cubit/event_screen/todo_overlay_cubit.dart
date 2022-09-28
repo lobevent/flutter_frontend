@@ -47,13 +47,13 @@ extension TodoOverlayCubit on EventScreenCubit {
                   // if successfull emit new state with the added item
                   (item) {
                 //add item to the eventOrgalist
-                    List<Item> items = List.from(value.event.todo!.items);
+                List<Item> items = List.from(value.event.todo!.items);
 
                 items.insert(0, item);
-                emit(
-                    value.copyWith(
-                        addingItem: false,
-                        event: value.event.copyWith(todo: todo.copyWith(items: items))));
+                emit(value.copyWith(
+                    addingItem: false,
+                    event: value.event
+                        .copyWith(todo: todo.copyWith(items: items))));
               }));
         },
         // if we are not in the loaded state we have an error, we should not be here
@@ -104,12 +104,17 @@ extension TodoOverlayCubit on EventScreenCubit {
                   (failure) => emit(EventScreenState.addEditItemFailute(
                       failure: failure, event: loadedState.event)), (itemBack) {
                 //find position of the item
-                int itemPos =
-                    todo.items.indexWhere((i) => i.id.value == item.id.value);
-                // set the item at the position to the returned Item
-                todo.items[itemPos] = itemBack;
+                List<Item> items = List.from(loadedState.event.todo!.items);
+                Todo? todo = loadedState.event.todo;
 
-                emit(EventScreenState.loaded(event: loadedState.event));
+                int itemPos =
+                    items.indexWhere((i) => i.id.value == item.id.value);
+                items[itemPos] = itemBack;
+
+                var newState = loadedState.copyWith(
+                    event: loadedState.event
+                        .copyWith(todo: todo!.copyWith(items: items)));
+                emit(newState);
               }));
         },
         // if we are not in the loaded state we have an error, we should not be here
@@ -134,11 +139,18 @@ extension TodoOverlayCubit on EventScreenCubit {
                           event: loadedState.event,
                           failure: fail)), (itemBack) {
                     emit(EventScreenState.loading());
-                    int itemPos = loadedState.event.todo!.items
-                        .indexWhere((i) => i.id.value == item.id.value);
-                    loadedState.event.todo!.items[itemPos] = itemBack;
 
-                    emit(EventScreenState.loaded(event: loadedState.event, last2Posts: loadedState.last2Posts));
+                    List<Item> items = List.from(loadedState.event.todo!.items);
+                    Todo? todo = loadedState.event.todo;
+
+                    int itemPos =
+                        items.indexWhere((i) => i.id.value == item.id.value);
+                    items[itemPos] = itemBack;
+
+                    var newState = loadedState.copyWith(
+                        event: loadedState.event
+                            .copyWith(todo: todo!.copyWith(items: items)));
+                    emit(newState);
                   }));
         },
         orElse: () => throw LogicError);
@@ -157,11 +169,17 @@ extension TodoOverlayCubit on EventScreenCubit {
                           event: loadedState.event,
                           failure: fail)), (itemBack) {
                     emit(EventScreenState.loading());
-                    int itemPos = loadedState.event.todo!.items
-                        .indexWhere((i) => i.id.value == item.id.value);
-                    loadedState.event.todo!.items[itemPos] = itemBack;
+                    List<Item> items = List.from(loadedState.event.todo!.items);
+                    Todo? todo = loadedState.event.todo;
 
-                    emit(EventScreenState.loaded(event: loadedState.event, last2Posts: loadedState.last2Posts));
+                    int itemPos =
+                        items.indexWhere((i) => i.id.value == item.id.value);
+                    items[itemPos] = itemBack;
+
+                    var newState = loadedState.copyWith(
+                        event: loadedState.event
+                            .copyWith(todo: todo!.copyWith(items: items)));
+                    emit(newState);
                   }));
         },
         orElse: () => throw LogicError);

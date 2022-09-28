@@ -12,7 +12,6 @@ import '../../../event/event_screen/cubit/add_people_item/add_people_item_cubit.
 import '../add_friends_dialog.dart';
 import '../loading_overlay.dart';
 
-
 ///
 /// The Element Widget for td items used in [TodoList]
 ///
@@ -64,14 +63,15 @@ class _ItemElementWidgetState extends State<ItemElementWidget> {
           Text(widget.description + "\n" + profileNames(widget.item.profiles!)),
 
       // the action buttons are only displayed if user is host!
-      trailing: widget.event.isHost ? FittedBox(
-        //TODO fix bs design
-        fit: BoxFit.fill,
-        child: Row(
-            children: actionButtons(widget.deleteItemFunc != null,
-                widget.addPeopleToItemFunc != null)),
-      ) : null,
-
+      trailing: widget.event.isHost
+          ? FittedBox(
+              //TODO fix bs design
+              fit: BoxFit.fill,
+              child: Row(
+                  children: actionButtons(widget.deleteItemFunc != null,
+                      widget.addPeopleToItemFunc != null)),
+            )
+          : null,
 
       onTap: () {
         widget.editItemFunc!(widget.item);
@@ -79,10 +79,9 @@ class _ItemElementWidgetState extends State<ItemElementWidget> {
       onLongPress: () {
         //TODO: deassignen verbieten wenn paar h vorher?
         //deassign profile to todo item
-        final String? ownId = CommonHive.getBoxEntry<String?>("ownProfileId", CommonHive.ownProfileIdAndPic);
-        if (widget.item.profiles!
-            .map((e) => e.id.value)
-            .contains(ownId)) {
+        final String? ownId = CommonHive.getBoxEntry<String>(
+            "ownProfileId", CommonHive.ownProfileIdAndPic);
+        if (widget.item.profiles!.map((e) => e.id.value).contains(ownId)) {
           widget.deassignProf!(widget.item, null);
         } else {
           widget.assignProf!(widget.item, null);

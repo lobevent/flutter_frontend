@@ -76,9 +76,12 @@ extension TodoOverlayCubit on EventScreenCubit {
             emit(EventScreenState.loading());
             //and then remove the item and emit new state with the item deleted
 
-            loadedState.event.todo!.items
-                .removeWhere((i) => i.id.value == item.id.value);
-            emit(EventScreenState.loaded(event: loadedState.event));
+            List<Item> items = loadedState.event.todo!.items.toList();
+            items.removeWhere((i) => i.id.value == item.id.value);
+            emit(loadedState.copyWith(
+                event: loadedState.event
+                    .copyWith(todo: todo.copyWith(items: items))));
+           // emit(EventScreenState.loaded(event: loadedState.event));
           } else {
             // TODO: Fix this garbage! Never return booleans from requests, what if we have an networkfailure? The user will never know which??
             emit(EventScreenState.error(failure: NetWorkFailure.unexpected()));

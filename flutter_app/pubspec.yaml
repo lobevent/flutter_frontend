@@ -15,6 +15,9 @@ dependencies:
   # generates routes and handles all the navigation stuff
   auto_route: ^4.2.1
 
+  # for grid and list animations
+  flutter_staggered_animations: ^1.0.0
+
   # annotations for json code generation
   json_annotation: ^4.3.0
 

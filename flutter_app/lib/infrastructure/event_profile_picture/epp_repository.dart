@@ -23,6 +23,16 @@ class EventProfilePictureRepository extends Repository{
     });
   }
 
+  Future<Either<NetWorkFailure, EventProfilePicture>> deleteEpp(EventProfilePicture epp) async {
+    return localErrorHandler<EventProfilePicture>(() async {
+
+      EventProfilePictureDto eppDtos =  await remoteService.delete(epp.id.value.toString());
+      return right(eppDtos.toDomain());
+
+    });
+  }
+
+
 
 
   ///

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_profile_pictures_page/cubit/epp_page_cubit.dart';
@@ -17,7 +18,6 @@ class EPPPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // ---- bloc stuff
     return BlocProvider(
         create: (context) => EppPageCubit(event), 

@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:http/http.dart';
@@ -8,6 +10,7 @@ import 'event_profile_picture_dtos.dart';
 
 class EventProfilePictureRemoteService extends RemoteService<EventProfilePictureDto>{
   static const getEPPFromEvent = "/epp/event/%id%";
+  static const deleteEpp = "/epp/%id%";
 
 
   final SymfonyCommunicator client;
@@ -17,8 +20,13 @@ class EventProfilePictureRemoteService extends RemoteService<EventProfilePicture
       SymfonyCommunicator();
 
 
+  Future<EventProfilePictureDto> delete(String EppId) async{
+    Response response = await client.delete(deleteEpp.interpolate({"id": EppId}));
+    return EventProfilePictureDto.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+  }
 
-  Future<List<EventProfilePictureDto>> getFromEvent(String eventId){
+
+  Future<List<EventProfilePictureDto>> getFromEvent(String eventId) async{
     return _getList(getEPPFromEvent.interpolate({"id": eventId}));
   }
 

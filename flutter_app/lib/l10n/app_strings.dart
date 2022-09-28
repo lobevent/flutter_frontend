@@ -42,8 +42,18 @@ class AppStrings {
   static const String deleteCommentDialogTitle = "Delete this comment?";
   static const String deleteCommentDialogText =
       "Do you want to delete this comment?";
+
   static const String deleteCommentDialogConfirm = "Delete";
   static const String deleteCommentDialogAbort = "Abort";
+
+
+  static const String genericDeleteTitle =
+      "Delete this?";
+  static const String genericDeleteDialogText =
+      "Are you sure to delete this? This action can not be undone!";
+  static const String genericDeleteDialogConfirm = "Delete";
+  static const String genericDeleteDialogAbort = "Abort";
+
 
   static const String noProfilesFound = "No profiles found";
   static const String noEventsFound = "No events found";

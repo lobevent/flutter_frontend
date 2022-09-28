@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_classes.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/CarouselIndicators.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,13 +19,16 @@ class ImageCarousel extends StatefulWidget {
   final double maxHeight;
   final Color? activeColor;
   final Color? inactiveColor;
+  final bool zoomable;
+
   const ImageCarousel(
       {Key? key,
       this.imagePaths = const [],
       this.isLoadetFromWeb = false,
       this.maxHeight = 120,
       this.activeColor,
-      this.inactiveColor})
+      this.inactiveColor,
+      this.zoomable = false})
       : super(key: key);
 
   @override
@@ -34,8 +38,10 @@ class ImageCarousel extends StatefulWidget {
 class _ImageCarouselState extends State<ImageCarousel> {
   // the PageController is needet tocontroll the display and the current page
   late PageController _pageController;
+
   //the currently active Page is controlled here
   int activePage = 0;
+
   //int maxImages = 5;
 
   @override
@@ -71,21 +77,28 @@ class _ImageCarouselState extends State<ImageCarousel> {
 
               // we use container, because we use the images as boxdecoration
               return Container(
+                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                decoration: BoxDecoration(
+                    image: DecorationImage(fit: BoxFit.cover, image: image)),
                 child: GestureDetector(
                   onTap: () async {
                     await showDialog(
                         context: context,
-                        builder: (_) => FittedBox(
-                            fit: BoxFit.contain,
-                            child: ImageDialog(
-                              image: image,
-                            )));
+                        builder: (_) {
+                          return FittedBox(
+                              fit: BoxFit.contain,
+                              child: InteractiveViewer(
+                                  panEnabled: false,
+                                  // Set it to false to prevent panning.
+                                  boundaryMargin: EdgeInsets.all(80),
+                                  minScale: 0.5,
+                                  maxScale: 4,
+                                  child: ImageDialog(
+                                    image: image,
+                                  )));
+                        });
                   },
                 ),
-                // so the images dont overlap
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                decoration: BoxDecoration(
-                    image: DecorationImage(fit: BoxFit.cover, image: image)),
               );
             }),
       ),
@@ -112,6 +125,7 @@ class ImageDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = image.resolve(const ImageConfiguration());
     return Dialog(
       child: Row(
         children: [
@@ -119,7 +133,7 @@ class ImageDialog extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-                image: DecorationImage(image: image, fit: BoxFit.cover)),
+                image: DecorationImage(image: image, fit: BoxFit.contain)),
           ),
           if (buttonFunction != null)
             TextWithIconButton(
@@ -129,6 +143,73 @@ class ImageDialog extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  ///returns zoomable dialog for pictures
+  static showInterActiveImageOverlay(
+      BuildContext context, String? networkImagePath) async {
+    AssetImage asset = const AssetImage("assets/images/partypeople.jpg");
+    Size size;
+    size = await GeneralImage.calculateImageDimension(networkImagePath, asset)
+        .then((size) => size);
+    await showDialog(
+        context: context,
+        builder: (_) {
+          return Container(
+              width: MediaQuery.of(context).size.width,
+              child: AspectRatio(
+                aspectRatio: size.aspectRatio,
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: InteractiveViewer(
+                    panEnabled: false,
+                    // Set it to false to prevent panning.
+                    minScale: 0.5,
+                    maxScale: 4,
+                    child: ImageDialog(
+                      image: GeneralImage.getAssetOrNetwork(
+                        networkImagePath,
+                        asset,
+                      ),
+                    ),
+                  ),
+                ),
+              ));
+        });
+  }
+
+  static showInterActiveImagePickerOverlay(
+      BuildContext context, List<String>? imagePaths) async {
+    await showDialog(
+        context: context,
+        builder: (_) {
+          //check if we display the caroussel
+          if (imagePaths!.length > 1) {
+            return OverflowBox(
+                child: Column(
+              //global align in center
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //return imagecaroussel and u can click on the seperate images again
+                ImageCarousel(
+                    //white colors because showDialog makes everything grey
+                    activeColor: Colors.white,
+                    inactiveColor: Colors.white24,
+                    maxHeight: 100,
+                    isLoadetFromWeb: true,
+                    imagePaths: imagePaths),
+              ],
+            ));
+          } else {
+            //just show the 1 profilepic on click
+            return FittedBox(
+              fit: BoxFit.contain,
+              child: ImageDialog(
+                image: ProfileImage.getAssetsOrNetwork(imagePaths),
+              ),
+            );
+          }
+        });
   }
 }
 

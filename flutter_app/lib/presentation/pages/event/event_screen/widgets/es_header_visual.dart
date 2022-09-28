@@ -14,6 +14,7 @@ class HeaderVisual extends StatelessWidget {
   Widget build(BuildContext context) {
     //Object image = networkImagePath == null ? AssetImage("assets/images/partypeople.jpg") : NetworkImage(dotenv.env['ipSim']!.toString() + '/uploads/private' + networkImagePath!);
     ImageProvider image;
+
     if (networkImagePath == null) {
       image = AssetImage("assets/images/partypeople.jpg");
     } else {
@@ -37,24 +38,7 @@ class HeaderVisual extends StatelessWidget {
           ),
         ),
         onTap: () async {
-          await showDialog(
-              context: context,
-              builder: (_) {
-                return FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: InteractiveViewer(
-                    panEnabled: false,
-                    // Set it to false to prevent panning.
-                    boundaryMargin: EdgeInsets.all(80),
-                    minScale: 0.5,
-                    maxScale: 4,
-                    child: ImageDialog(
-                      image: ProfileImage.getAssetOrNetwork(networkImagePath,
-                          const AssetImage("assets/images/partypeople.jpg")),
-                    ),
-                  ),
-                );
-              });
+          ImageDialog.showInterActiveImageOverlay(context, networkImagePath);
         });
     //return imagecaroussel and u can click on the seperate images again
 

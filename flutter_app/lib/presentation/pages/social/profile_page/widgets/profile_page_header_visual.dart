@@ -44,37 +44,8 @@ class _ProfilePageHeaderVisualState extends State<ProfilePageHeaderVisual> {
                 showImagePickerOverlay(context);
               } else {
                 //show the picture as dialog
-                await showDialog(
-                    context: context,
-                    builder: (_) {
-                      //check if we display the caroussel
-                      if (widget.profile!.images!.length > 1) {
-                        return OverflowBox(
-                            child: Column(
-                          //global align in center
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            //return imagecaroussel and u can click on the seperate images again
-                            ImageCarousel(
-                                //white colors because showDialog makes everything grey
-                                activeColor: Colors.white,
-                                inactiveColor: Colors.white24,
-                                maxHeight: 100,
-                                isLoadetFromWeb: true,
-                                imagePaths: widget.profile!.images!),
-                          ],
-                        ));
-                      } else {
-                        //just show the 1 profilepic on click
-                        return FittedBox(
-                          fit: BoxFit.contain,
-                          child: ImageDialog(
-                            image: ProfileImage.getAssetsOrNetwork(
-                                widget.profile!.images!),
-                          ),
-                        );
-                      }
-                    });
+                ImageDialog.showInterActiveImagePickerOverlay(
+                    context, widget.profile!.images);
               }
             }
           },

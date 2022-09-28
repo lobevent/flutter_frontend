@@ -31,10 +31,10 @@ Future<void> main() async {
   // save router to getIt so we can route from everywhere
   InjectionContainer.getIt.registerLazySingleton(() => _appRouter);
 
-
   //initialize some boxes, for storing score related entries
-  await CommonHive.deleteHive();
-  final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
+  //await CommonHive.deleteHive();
+  final appDocumentDirectory =
+      await path_provider.getApplicationDocumentsDirectory();
   await Hive.initFlutter(appDocumentDirectory.path);
   await CommonHive.initBoxes();
 

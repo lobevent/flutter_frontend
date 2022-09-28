@@ -7,13 +7,13 @@ import 'package:flutter_frontend/domain/profile/profile.dart';
 /// (like loading the same asset image)
 class ProfileImage {
   /// check if an image string is given, and if not give back an image from assets
-  static ImageProvider getAssetOrNetwork(String? imagePath) {
+  static ImageProvider getAssetOrNetwork(String? imagePath, [AssetImage? assetImage]) {
 
     if (imagePath != null) {
       // TODO: This is a common problem, but networlimage has no fallback... so it throws an error if the file doesnt exits!
       return NetworkImage(dotenv.env['ipSim']!.toString() + imagePath);
     } else {
-      return const AssetImage(
+      return assetImage ??const AssetImage(
         "assets/images/partypeople.jpg",
       );
     }
@@ -30,12 +30,12 @@ class ProfileImage {
   }
 
   // TODO: make it viable for a list of images
-  static ImageProvider getAssetsOrNetwork(List<String?> imagePaths) {
+  static ImageProvider getAssetsOrNetwork(List<String?> imagePaths, [AssetImage? assetImage]) {
     if (imagePaths != null && imagePaths.length != 0) {
       return NetworkImage(dotenv.env['ipSim']!.toString() + imagePaths.first!);
       //return NetworkImage(dotenv.env['ipSim']!.toString()+imagePaths.last!);
     } else {
-      return const AssetImage(
+      return assetImage ?? const AssetImage(
         "assets/images/partypeople.jpg",
       );
     }

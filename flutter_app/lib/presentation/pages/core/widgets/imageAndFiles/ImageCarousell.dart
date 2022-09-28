@@ -80,7 +80,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
   ///
   Widget _buildCarouselIndicators() {
     return CarouselIndicators(
-      length: widget.imagePaths.length,
+      length: widget.epps.length == 0 ? widget.imagePaths.length : widget.epps.length,
       activePage: activePage,
       activeColor: widget.activeColor,
       inactiveColor: widget.inactiveColor,
@@ -95,7 +95,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
     return ConstrainedBox(
       constraints: new BoxConstraints(
         minWidth: 20.0,
-        maxHeight: widget.imagePaths.length == 0 ? 10 : widget.maxHeight,
+        maxHeight: widget.imagePaths.length == 0 && widget.epps.length == 0 ? 10 : widget.maxHeight,
       ),
       child: PageView.builder(
         physics: BouncingScrollPhysics(),
@@ -134,9 +134,9 @@ class _ImageCarouselState extends State<ImageCarousel> {
                   InteractiveViewer(
                       child: _buildSingleImage(image, context),
                     ),
-                  /*if(withProfile)*/ SizedBox(height: 20,),
-                  _showUserButton(Profile(id: UniqueId(), name: ProfileName("asdad"))/*widget.epps[pagePosition].profile*/),
-                  /*if(withProfile)*/ SizedBox(height: 20,),
+                  if(withProfile) SizedBox(height: 20,),
+                  if(withProfile) _showUserButton(widget.epps[pagePosition].profile),
+                  if(withProfile) SizedBox(height: 20,),
                 ],
             ):
             _buildSingleImage(image, context);
@@ -180,7 +180,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
                 constraints: new BoxConstraints(
                   minWidth: MediaQuery.of(context).size.width/1.2,
                   minHeight: widget.maxHeight - 100,
-                  maxHeight: widget.imagePaths.length == 0 ? 10 : widget.maxHeight,
+                  maxHeight: widget.imagePaths.length == 0 && widget.epps.length == 0 ? 10 : widget.maxHeight,
                 ),),
                //child:
             ));

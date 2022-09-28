@@ -66,9 +66,9 @@ class _EppGridListTileState extends State<EppGridListTile> with SingleTickerProv
           onTap: (){
             context.read<EppPageCubit>().state.maybeMap(orElse: (){},
               loaded: (ls) =>
-              ImageDialog.showInterActiveImageCarouselOverlay(context, ls.epps.map((e) => e.path).toList())
-                  // ImageDialog.EppsShowInterActiveImageCarouselOverlay(
-                  // context, ls.epps, ls.epps.indexWhere((epplist) => epplist.id.value.toString() == widget.epp.id.value.toString()))
+              //ImageDialog.showInterActiveImageCarouselOverlay(context, ls.epps.map((e) => e.path).toList())
+                   ImageDialog.EppsShowInterActiveImageCarouselOverlay(
+                   context, ls.epps, ls.epps.indexWhere((epplist) => epplist.id.value.toString() == widget.epp.id.value.toString()))
             );
           },
           onLongPress: () async {

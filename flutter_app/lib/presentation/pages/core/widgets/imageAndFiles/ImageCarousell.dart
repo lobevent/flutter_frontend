@@ -2,10 +2,18 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_frontend/domain/core/value_objects.dart';
+import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/domain/profile/value_objects.dart';
+import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_classes.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/CarouselIndicators.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../../../../domain/event/event_profile_picture.dart';
+import 'package:auto_route/auto_route.dart' hide Router;
+import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 // TODO: show images fullscreen on tap with all images and carousel!
 ///
@@ -20,6 +28,9 @@ class ImageCarousel extends StatefulWidget {
   final Color? activeColor;
   final Color? inactiveColor;
   final bool zoomable;
+  final bool isDialog;
+  final int startPosition;
+  final List<EventProfilePicture> epps;
 
   const ImageCarousel(
       {Key? key,
@@ -28,7 +39,7 @@ class ImageCarousel extends StatefulWidget {
       this.maxHeight = 120,
       this.activeColor,
       this.inactiveColor,
-      this.zoomable = false})
+      this.zoomable = false, this.isDialog = false, this.epps = const [], this.startPosition = 0})
       : super(key: key);
 
   @override
@@ -46,74 +57,149 @@ class _ImageCarouselState extends State<ImageCarousel> {
 
   @override
   void initState() {
+    activePage = widget.startPosition;
     super.initState();
-    _pageController = PageController(viewportFraction: 0.8);
+    _pageController = PageController(viewportFraction: 0.8, initialPage: activePage);
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      ConstrainedBox(
-        constraints: new BoxConstraints(
-          minWidth: 20.0,
-          maxHeight: widget.imagePaths.length == 0 ? 10 : widget.maxHeight,
-        ),
-        child: PageView.builder(
-            // mainly for the indicators, so they are updated
-            onPageChanged: (page) {
-              setState(() {
-                activePage = page;
-              });
-            },
-            controller: _pageController,
-            itemCount: widget.imagePaths.length,
-            pageSnapping: true,
-            itemBuilder: (context, pagePosition) {
-              // the image to be shown
-              ImageProvider image = widget.isLoadetFromWeb
-                  ? NetworkImage(dotenv.env['ipSim']!.toString() +
-                      widget.imagePaths[pagePosition])
-                  : Image.file(File(widget.imagePaths[pagePosition])).image;
-
-              // we use container, because we use the images as boxdecoration
-              return Container(
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                decoration: BoxDecoration(
-                    image: DecorationImage(fit: BoxFit.cover, image: image)),
-                child: GestureDetector(
-                  onTap: () async {
-                    await showDialog(
-                        context: context,
-                        builder: (_) {
-                          return FittedBox(
-                              fit: BoxFit.contain,
-                              child: InteractiveViewer(
-                                  panEnabled: false,
-                                  // Set it to false to prevent panning.
-                                  boundaryMargin: EdgeInsets.all(80),
-                                  minScale: 0.5,
-                                  maxScale: 4,
-                                  child: ImageDialog(
-                                    image: image,
-                                  )));
-                        });
-                  },
-                ),
-              );
-            }),
-      ),
+      _buildImages(),
       // The indicators!
-      CarouselIndicators(
-        length: widget.imagePaths.length,
-        activePage: activePage,
-        activeColor: widget.activeColor,
-        inactiveColor: widget.inactiveColor,
-      )
+      _buildCarouselIndicators()
     ]
         // Pageview so we have a nice little carousel
 
         );
   }
+
+  ///
+  /// builds CarouselIndicators
+  /// indicate where we are in the view
+  ///
+  Widget _buildCarouselIndicators() {
+    return CarouselIndicators(
+      length: widget.imagePaths.length,
+      activePage: activePage,
+      activeColor: widget.activeColor,
+      inactiveColor: widget.inactiveColor,
+    );
+  }
+
+  ///
+  /// builds the Pageviewer
+  /// This is the horizontal scrollable Part
+  ///
+  Widget _buildImages() {
+    return ConstrainedBox(
+      constraints: new BoxConstraints(
+        minWidth: 20.0,
+        maxHeight: widget.imagePaths.length == 0 ? 10 : widget.maxHeight,
+      ),
+      child: PageView.builder(
+        physics: BouncingScrollPhysics(),
+          // mainly for the indicators, so they are updated
+          onPageChanged: (page) {
+            setState(() {
+              activePage = page;
+            });
+          },
+          controller: _pageController,
+          // if we receive epps take their lenght
+          itemCount: widget.epps.length == 0 ? widget.imagePaths.length : widget.epps.length,
+          pageSnapping: true,
+          itemBuilder: (context, pagePosition) {
+          // ------------------------------------------------------------------------ START ITEMBUILDER ----------------------------------------
+          ImageProvider image;
+          // indicates wheter we show the profile button or not
+          bool withProfile;
+
+
+          if(widget.epps.length == 0) {
+              // the image to be shown
+              image = widget.isLoadetFromWeb
+                  ? NetworkImage(dotenv.env['ipSim']!.toString() + widget.imagePaths[pagePosition])
+                  : Image.file(File(widget.imagePaths[pagePosition])).image;
+              withProfile = false;
+          }else{
+            withProfile = true;
+            image = NetworkImage(dotenv.env['ipSim']!.toString() + widget.epps[pagePosition].path);
+          }
+
+            // If its an dialog, enable scrolling with [interactiveViewer]
+            return widget.isDialog ? Column(
+                //mainAxisSize: MainAxisSize.min,
+                children: [
+                  InteractiveViewer(
+                      child: _buildSingleImage(image, context),
+                    ),
+                  /*if(withProfile)*/ SizedBox(height: 20,),
+                  _showUserButton(Profile(id: UniqueId(), name: ProfileName("asdad"))/*widget.epps[pagePosition].profile*/),
+                  /*if(withProfile)*/ SizedBox(height: 20,),
+                ],
+            ):
+            _buildSingleImage(image, context);
+          // ------------------------------------------------------------------------ END ITEMBUILDER ----------------------------------------
+          }),
+    );
+  }
+
+  ///
+  /// Builds image with gesture detector for capturing tapping events
+  /// On tap another dialog is displayed for confortable zooming
+  /// [image] is an ImageProvider and contains the actual image
+  /// [context] is used for dimensions
+  ///
+  Widget _buildSingleImage(ImageProvider<Object> image, BuildContext context)  {
+    return GestureDetector(
+      onTap: () async {
+        await showDialog(
+            context: context,
+            builder: (_) {
+              return FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: InteractiveViewer(
+                      panEnabled: false,
+                      // Set it to false to prevent panning.
+                      boundaryMargin: EdgeInsets.all(80),
+                      minScale: 0.5,
+                      maxScale: 4,
+                      child: ImageDialog(
+                        image: image,
+                      )));
+            });
+      },// we use container, because we use the images as boxdecoration
+    child: Container(
+              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              decoration: BoxDecoration(
+                color: widget.isDialog?AppColors.darkGrey.withOpacity(0.5):null,
+                  image: DecorationImage(fit: widget.isDialog? BoxFit.scaleDown : BoxFit.cover, image: image)),
+              child: ConstrainedBox(
+                child: Text(""),
+                constraints: new BoxConstraints(
+                  minWidth: MediaQuery.of(context).size.width/1.2,
+                  minHeight: widget.maxHeight - 100,
+                  maxHeight: widget.imagePaths.length == 0 ? 10 : widget.maxHeight,
+                ),),
+               //child:
+            ));
+  }
+
+  ///
+  /// builds the UserButton, on tap should be routing to the user page
+  ///
+  Widget _showUserButton(Profile profile) {
+    // constrined Box is used here, so the button is smaller then the widgets
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width/1.5),
+        child: TextWithIconButton(withSpacer: true, onPressed: (){
+          context.router.push(ProfilePageRoute(profileId: profile.id));
+        }, text: profile.name.getOrEmptyString(), icon: Icons.person,));
+  }
+  
+  
+  
 }
 
 class ImageDialog extends StatelessWidget {
@@ -178,7 +264,7 @@ class ImageDialog extends StatelessWidget {
         });
   }
 
-  static showInterActiveImagePickerOverlay(
+  static showInterActiveImageCarouselOverlay(
       BuildContext context, List<String>? imagePaths) async {
     await showDialog(
         context: context,
@@ -192,10 +278,11 @@ class ImageDialog extends StatelessWidget {
               children: [
                 //return imagecaroussel and u can click on the seperate images again
                 ImageCarousel(
+                    isDialog: true,
                     //white colors because showDialog makes everything grey
                     activeColor: Colors.white,
                     inactiveColor: Colors.white24,
-                    maxHeight: 100,
+                    maxHeight: MediaQuery.of(context).size.height/1.6,
                     isLoadetFromWeb: true,
                     imagePaths: imagePaths),
               ],
@@ -211,7 +298,37 @@ class ImageDialog extends StatelessWidget {
           }
         });
   }
+
+
+
+  static EppsShowInterActiveImageCarouselOverlay(
+      BuildContext context, List<EventProfilePicture> epps, [int activePage = 0]) async {
+    await showDialog(
+        context: context,
+        builder: (_) {
+            return OverflowBox(
+                child: Column(
+              //global align in center
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //return imagecaroussel and u can click on the seperate images again
+                ImageCarousel(
+                    startPosition: activePage,
+                    isDialog: true,
+                    //white colors because showDialog makes everything grey
+                    activeColor: Colors.white,
+                    inactiveColor: Colors.white24,
+                    maxHeight: MediaQuery.of(context).size.height/1.6,
+                    isLoadetFromWeb: true,
+                    epps: epps,
+                    imagePaths: []),
+              ],
+            ));
+        });
+  }
 }
+
+
 
 // TODO: This is work on the Carousell as popup
 // class ImageDialog extends StatefulWidget {

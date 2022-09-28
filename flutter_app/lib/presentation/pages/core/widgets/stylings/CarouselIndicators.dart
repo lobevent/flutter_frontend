@@ -24,6 +24,9 @@ class CarouselIndicators extends StatelessWidget {
 
   /// This method generate indicator dots for the carousel
   List<Widget> indicators(int imagesLength, int currentIndex) {
+    if(imagesLength > 10){
+      return [Text(currentIndex.toString() +  "/"  + imagesLength.toString())];
+    }
     return List<Widget>.generate(imagesLength, (index) {
       return Container(
         margin: EdgeInsets.all(3),

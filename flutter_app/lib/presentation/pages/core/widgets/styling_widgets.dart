@@ -252,12 +252,13 @@ class TextWithIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final IconData? icon;
   final bool disabled;
+  final bool withSpacer;
   const TextWithIconButton(
       {Key? key,
       required this.onPressed,
       required this.text,
       this.icon,
-      this.disabled = false})
+      this.disabled = false, this.withSpacer = false})
       : super(key: key);
 
   @override
@@ -270,16 +271,19 @@ class TextWithIconButton extends StatelessWidget {
       //child: Expanded(
       child: Row(
         children: [
+          if(withSpacer) Spacer(),
           // button and text are Prestyled
           Icon(
             icon,
             color: AppColors.stdTextColor,
           ),
 
+          if(withSpacer) Spacer(),
           Text(
             text,
             style: TextStyle(color: AppColors.stdTextColor),
           ),
+          if(withSpacer) Spacer(),
         ],
       //),
       ),

@@ -7,6 +7,7 @@ import 'package:flutter_frontend/domain/event/event_profile_picture.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/gen_dialog.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/ImageCarousell.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_profile_pictures_page/cubit/epp_page_cubit.dart';
 
 class EppGridListTile extends StatefulWidget {
@@ -57,31 +58,36 @@ class _EppGridListTileState extends State<EppGridListTile> with SingleTickerProv
 
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 10, minWidth: 10, maxHeight: 30, minHeight: 30),
-      child: GestureDetector(
-        onLongPress: () {},
-        child: Container(
-          decoration: BoxDecoration(
-              border: own ? Border.all(color: AppColors.accentColor, width: 2) : null,
-              image: DecorationImage(fit: BoxFit.cover, image: image)),
-          child: GestureDetector(
-            onLongPress: () async {
-              if (own) {
-                controller.forward();
-                Future.delayed(Duration(seconds: 2)).then((value) => controller.reverse());
-              }
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.black.withOpacity(opacity),
-                      AppColors.black.withOpacity(1 / endOpacity * opacity),
-                    ],
-                  )),
-              child: opacity > 0 ? _DeleteButton(context) : null,
-            ),
+      child: Container(
+        decoration: BoxDecoration(
+            border: own ? Border.all(color: AppColors.accentColor, width: 2) : null,
+            image: DecorationImage(fit: BoxFit.cover, image: image)),
+        child: GestureDetector(
+          onTap: (){
+            context.read<EppPageCubit>().state.maybeMap(orElse: (){},
+              loaded: (ls) =>
+              ImageDialog.showInterActiveImageCarouselOverlay(context, ls.epps.map((e) => e.path).toList())
+                  // ImageDialog.EppsShowInterActiveImageCarouselOverlay(
+                  // context, ls.epps, ls.epps.indexWhere((epplist) => epplist.id.value.toString() == widget.epp.id.value.toString()))
+            );
+          },
+          onLongPress: () async {
+            if (own) {
+              controller.forward();
+              Future.delayed(Duration(seconds: 2)).then((value) => controller.reverse());
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppColors.black.withOpacity(opacity),
+                    AppColors.black.withOpacity(1 / endOpacity * opacity),
+                  ],
+                )),
+            child: opacity > 0 ? _DeleteButton(context) : null,
           ),
         ),
       ),

@@ -44,7 +44,7 @@ class _ProfilePageHeaderVisualState extends State<ProfilePageHeaderVisual> {
                 showImagePickerOverlay(context);
               } else {
                 //show the picture as dialog
-                ImageDialog.showInterActiveImagePickerOverlay(
+                ImageDialog.showInterActiveImageCarouselOverlay(
                     context, widget.profile!.images);
               }
             }

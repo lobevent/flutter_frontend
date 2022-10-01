@@ -80,7 +80,7 @@ class GeneralImage {
     Completer<Size> completer = Completer();
     var image;
     if (imagePath != null) {
-      image = NetworkImage(dotenv.env['ipSim']!.toString() + imagePath!);
+      image = NetworkImage(dotenv.env['ipSim']!.toString() + imagePath);
     } else {
       image = assetImage;
     }

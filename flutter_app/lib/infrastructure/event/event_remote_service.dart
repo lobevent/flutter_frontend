@@ -40,7 +40,10 @@ class EventRemoteService extends RemoteService<EventDto> {
       "/events/userInterest/%amount%/%lastEventTime%";
   static const String eventConfirmUser =
       "/user/eventStatus/%eventId%/%longitude%/%latitude%/confirm";
+
   //event search name maxresults last
+  static const String feedPath =
+      "/mainfeedreal/%latitude%/%longitude%/%distance%/%maxResults%/%last%";
 
   // TODO combine it to event path?
   static const String postPath = "/event";
@@ -54,9 +57,7 @@ class EventRemoteService extends RemoteService<EventDto> {
   final SymfonyCommunicator client;
 
   EventRemoteService({SymfonyCommunicator? communicator})
-      : client = communicator ??
-            SymfonyCommunicator();
-
+      : client = communicator ?? SymfonyCommunicator();
 
   Future<EventDto> getSingle(UniqueId id) async {
     final String uri = "$eventByIdPath${id.value}";
@@ -145,10 +146,9 @@ class EventRemoteService extends RemoteService<EventDto> {
       "status": "1",
     }));
   }
-  Future<List<EventDto>> searchNearEvents(
-      double latitude, double longitude, int distance,
-      DateTime lastEventTime,
-      int amount) async {
+
+  Future<List<EventDto>> searchNearEvents(double latitude, double longitude,
+      int distance, DateTime lastEventTime, int amount) async {
     return _getEventList(nearestEventsPath.interpolate({
       "latitude": latitude.toString(),
       "longitude": longitude.toString(),
@@ -214,7 +214,8 @@ class EventRemoteService extends RemoteService<EventDto> {
   }
 
   Future<String> uploadImageToEvent(String eventId, File image) async {
-    return client.postFile(uploadImage.interpolate({"eventId": eventId}), image);
+    return client.postFile(
+        uploadImage.interpolate({"eventId": eventId}), image);
   }
 
   /*static String generatePaginatedRoute(
@@ -248,8 +249,18 @@ class EventRemoteService extends RemoteService<EventDto> {
     return true;
   }
 
-  //  Future<List<EventDto>> getViewableEventsFromProfile(int ProfileId){
-  //
-  //  }
-
+  Future<List<EventDto>> getFeed(
+      double latitude,
+      double longitude,
+      int distance,
+      int maxResults,
+      DateTime lastEventTime) async {
+    return _getEventList(feedPath.interpolate({
+      "latitude": latitude.toString(),
+      "longitude": longitude.toString(),
+      "distance": distance.toString(),
+      "maxResults": maxResults.toString(),
+      "last": lastEventTime.toString(),
+    }));
+  }
 }

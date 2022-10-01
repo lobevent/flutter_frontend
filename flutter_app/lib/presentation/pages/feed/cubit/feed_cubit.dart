@@ -1,26 +1,29 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_frontend/domain/post/post.dart';
-import 'package:flutter_frontend/infrastructure/post/post_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
+
+import '../../../../application/core/geo_functions_cubit.dart';
+import '../../../../domain/event/event.dart';
+import '../../../../infrastructure/event/event_repository.dart';
 
 
 part 'feed_state.dart';
 
 class FeedCubit extends Cubit<FeedState> {
   FeedCubit() : super(FeedState()) {
-    loadFeed();
+    loadFeedReal();
     controller.addListener(_scrollListener);
     
   }
-  PostRepository repository = GetIt.I<PostRepository>();
+  EventRepository repository = GetIt.I<EventRepository>();
   ScrollController controller = ScrollController();
   DateTime lastLoadedDate = DateTime.now();
 
-  Future<void> loadFeed() async {
+/*  Future<void> loadFeed() async {
     state.isLoading = true;
     emit(state);
     repository.getFeed(lastPostTime: DateTime.now(), amount: 20).then((value) => value.fold(
@@ -37,36 +40,75 @@ class FeedCubit extends Cubit<FeedState> {
         (failure) {
           emit(state.copywith(isLoading: false, error: some(failure.toString())));
         },
-            (posts) {
-          emit(state.copywith(isLoading: false, posts: posts));
+            (events) {
+          emit(state.copywith(isLoading: false, events: events));
         }));
   }
-  
+
+ */
+
+  Future<void> loadFeedReal() async {
+    state.isLoading = true;
+    emit(state);
+    final geof = GeoFunctionsCubit(event: null);
+    Position? position;
+    await geof.checkUserPosition();
+    geof.state.maybeMap(
+        loaded: (loadedState) {
+          position = loadedState.position;
+        },
+        orElse: () {});
+    repository.getFeed(position!.latitude,
+        position!.longitude,
+        5,
+        30,
+      DateTime.now()).then((value) => value.fold(
+      // (failure) {
+      //   state.isLoading = false;
+      //   state.error = some(failure.toString());
+      //   emit(state);
+      // },
+      // (posts) {
+      //   state.isLoading = false;
+      //   state.posts = posts;
+      //   emit(state);
+      // }));
+            (failure) {
+          emit(state.copywith(isLoading: false, error: some(failure.toString())));
+        },
+            (events) {
+          emit(state.copywith(isLoading: false, events: events));
+        }));
+  }
+
+  /*
   Future<void> loadMore() async{
     // if(lastLoadedDate.toIso8601String() == state.posts.last.creationDate.toIso8601String()){
     //   return;
     // }
     emit(state.copywith(isLoadingNew: true));
-    repository.getFeed(lastPostTime: state.posts.last.creationDate, amount: 2).then((value) => value.fold(
+    repository.getFeed(lastPostTime: state.events.last.creationDate, amount: 2).then((value) => value.fold(
       (failure) {
           emit(state.copywith(isLoadingNew: false, error: some(failure.toString())));
         },
-      (posts) {
-        if(posts.length == 0){
+      (events) {
+        if(events.length == 0){
           emit(state.copywith(endReached: true));
         }else {
-            state.posts.addAll(posts);
-            emit(state.copywith(isLoadingNew: false, posts: state.posts));
+            state.events.addAll(events);
+            emit(state.copywith(isLoadingNew: false, events: state.events));
           }
         }));
     //this.lastLoadedDate = state.posts.last.creationDate;
   }
+
+   */
   
   _scrollListener(){
     if (controller.offset >= controller.position.maxScrollExtent &&
         !controller.position.outOfRange) {
       if(!state.endReached) {
-        loadMore();
+        //loadMore();
       }
     }
     if (controller.offset <= controller.position.minScrollExtent &&

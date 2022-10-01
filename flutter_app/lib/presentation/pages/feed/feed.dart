@@ -9,9 +9,14 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.d
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/main_app_bar.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_widget.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/feed/cubit/feed_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
+
+import '../../../domain/event/event.dart';
+import '../event/core/event_list_tiles/event_list_tiles.dart';
+import '../event/events_multilist/cubit/events_mulitlist_cubit.dart';
 
 
 class FeedScreen extends StatefulWidget {
@@ -22,6 +27,7 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
+  List<Event> events =[];
 
   Widget child = Text('');
   Widget LoadingIndicatorOrEnd = Container();
@@ -41,8 +47,11 @@ class _FeedScreenState extends State<FeedScreen> {
                     LoadingIndicatorOrEnd = Container();
                   }
           }
-                child = state.error.isSome() ? ErrorMessage(errorText: state.error.fold(() {}, (a) => a)) : generateUnscrollablePostContainer(posts: state.posts , showAutor: true);
-                setState(() {
+
+                child = state.error.isSome() ? ErrorMessage(errorText: state.error.fold(() {}, (a) => a)) :
+                    Column (children: [Container(child:itemBuilder(state.events, null) ,)],) ;
+                //generateUnscrollablePostContainer(posts: state.posts , showAutor: true);
+                setState(() {events = state.events;
 
                 });
               },
@@ -70,6 +79,42 @@ class _FeedScreenState extends State<FeedScreen> {
               },
             ),
     );
+  }
+  Widget itemBuilder(List<Event> events, EventStatus? userEventStatus) {
+    return ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        // the padding is set to the std padding defined in styling widgets
+        padding: stdPadding,
+        scrollDirection: Axis.vertical,
+        itemCount: events.length,
+        itemBuilder: (context, index){
+          if (events[index].failureOption.isSome()) {
+            return Ink(
+                color: Colors.red,
+                child: ListTile(
+                  title:
+                  Text(events[index].failureOption.fold(() => "", (a) => a.toString())),
+                ));
+          }
+          if (this.events.isEmpty ) {
+            return Ink(
+                color: Colors.red,
+                child: const ListTile(title: Text("No events available")));
+          } else {
+            if(events[index].date.isBefore(DateTime.now())){
+              return PostCommentBaseWidget(date: events[index].date, content: events[index].name.toString(), actionButtonsWidgets: Text(''));
+            }
+            return EventListTiles(
+              key: ObjectKey(events[index]),
+              eventStatus: userEventStatus,
+              isInvitation: false,
+              event: events[index],
+              onDeletion: null,
+            );
+          }
+        });
+
   }
 
 

@@ -21,7 +21,7 @@ class PostRemoteService extends RemoteService<PostDto> {
 
   //Routes Lists
   static const String ownPostsPath = "/post/%amount%/%lastPostTime%";
-  static const String feedPath = "/mainfeed/%amount%/%lastPostTime%";
+  static const String feedPath = "/mainfeedreal/%amount%/%lastPostTime%";
   static const String postsFromUserPath = "/profile/post/%profileId%";
   static const String postsFromEventPath =
       "/event/%eventId%/posts/%amount%/%lastPostTime%";

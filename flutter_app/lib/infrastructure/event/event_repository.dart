@@ -186,11 +186,16 @@ class EventRepository extends Repository {
     return _eventRemoteService.confirmUserAtEvent(
         eventId.value, longitude, latitude);
   }
-  // Future<Either<NetWorkFailure, bool>> sendInvitation(Event event, Profile profile)async{
-  //   return localErrorHandler(() async {
-  //
-  //   });
-  // }
-  //
+
+  ///
+  /// gets the feed for logged in user
+  ///
+  Future<Either<NetWorkFailure, List<Event>>> getFeed(
+      double latitude, double longitude, int distance,
+       int amount,DateTime lastEventTime) async {
+    return localErrorHandler(() async {
+      return _getList(() => _eventRemoteService.getFeed(latitude, longitude, distance,  amount, lastEventTime));
+    });
+  }
 
 }

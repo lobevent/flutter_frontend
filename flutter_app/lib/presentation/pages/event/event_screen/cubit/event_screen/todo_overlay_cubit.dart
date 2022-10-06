@@ -54,7 +54,7 @@ extension TodoOverlayCubit on EventScreenCubit {
                     addingItem: false,
                     event: value.event
                         .copyWith(todo: todo.copyWith(items: items))));
-              }));
+                  }));
         },
         // if we are not in the loaded state we have an error, we should not be here
         orElse: () => throw LogicError());

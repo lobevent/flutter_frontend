@@ -124,7 +124,7 @@ class EventRepository extends Repository {
   }
 
   Future<Either<NetWorkFailure, List<Event>>> getNearEvents(double latitude, double longitude, int distance,
-      DateTime lastEventTime, int amount) async {
+      DateTime lastEventTime, int amount, {bool descending = false}) async {
     return _getList(
             () => _eventRemoteService.searchNearEvents(latitude, longitude, distance, lastEventTime, amount));
   }

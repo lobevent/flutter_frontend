@@ -7,18 +7,26 @@ class LoadingOverlay extends StatelessWidget {
   final Widget child;
   final bool isLoading;
   final String? text;
+  final bool sliver;
 
   /// take child widget as input, as well as an boolean, to decide whether
   /// to show the loading overlay or the child widget
   LoadingOverlay(
-      {Key? key, required this.child, required this.isLoading, this.text})
+      {Key? key, required this.child, required this.isLoading, this.text, this.sliver = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if(sliver)
+      return SliverToBoxAdapter(child: buildStack(),);
+
     ///use stack to put the overlay above
+    return buildStack();
+  }
+
+  Stack buildStack() {
     return Stack(
-        children: <Widget>[child, LoadingIndicator(isLoading: isLoading)]);
+      children: <Widget>[child, LoadingIndicator(isLoading: isLoading)]);
   }
 }
 

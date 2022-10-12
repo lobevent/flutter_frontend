@@ -91,9 +91,8 @@ class _EventList_BarState extends State<EventList_Bar> {
                   label: TextWithIcon(icon: Icons.history, text: "recent",),
                   selected: context.read<EventsMultilistCubit>().LoadPastEvents,
                   onSelected: (bool selted){
-                    context.read<EventsMultilistCubit>().LoadPastEvents = !context.read<EventsMultilistCubit>().LoadPastEvents;
                     setState(() {
-
+                      context.read<EventsMultilistCubit>().LoadPastEvents = !context.read<EventsMultilistCubit>().LoadPastEvents;
                     });
                     },),
                 Spacer()

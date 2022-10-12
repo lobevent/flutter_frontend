@@ -6,8 +6,17 @@ import 'package:http/http.dart';
 
 import 'exceptions.dart';
 
-class RemoteService<DTO extends BaseDto> { 
-  Future<List<DTO>> convertList(Response response) async { // dit versteht kein mensch was hier passiert
+class RemoteService<DTO extends BaseDto> {
+
+  Future<List<DTO>> convertList(Response response) async {
+    return _convertList<DTO>(response);
+  }
+
+  Future<List<T>> covertListForeign<T extends BaseDto>(Response response){
+    return _convertList<T>(response);
+  }
+
+  Future<List<T>> _convertList<T extends BaseDto>(Response response) async { // dit versteht kein mensch was hier passiert
     List<DTO> dtoList;
     try {
       dtoList = ((jsonDecode(response.body) as List) 

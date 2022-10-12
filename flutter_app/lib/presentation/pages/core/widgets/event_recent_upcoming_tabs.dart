@@ -13,7 +13,8 @@ class EventTabs extends StatelessWidget {
   final bool isLoading;
   final List<Event> upcoming;
   final List<Event> recendEvents;
-  const EventTabs({Key? key, required this.upcoming, required this.recendEvents, this.isLoading = false}) : super(key: key);
+  final Function(Event event, bool recent)? onDeletion;
+  const EventTabs({Key? key, required this.upcoming, required this.recendEvents, this.isLoading = false, this.onDeletion}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,19 +38,20 @@ class EventTabs extends StatelessWidget {
                   ]
                       :
                   [
-                    EventListBuilder(upcoming),
-                    EventListBuilder(recendEvents)
+                    EventListBuilder(upcoming, false),
+                    EventListBuilder(recendEvents, true)
                   ])))
         ]));
   }
 
 
   /// generates Lisview of an eventList
-  Widget EventListBuilder(List<Event> events){
+  Widget EventListBuilder(List<Event> events, bool recent){
     return ListView.builder(
         itemCount: events.length,
         itemBuilder: (context, i){
-          return EventListTiles(key: ObjectKey(events[i]), event: events[i]);
+          return EventListTiles(key: ObjectKey(events[i]), event: events[i],
+              onDeletion: onDeletion != null ? (Event event) => onDeletion!(event, recent) : null);
         });
   }
 }

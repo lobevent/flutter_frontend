@@ -17,13 +17,13 @@ class RemoteService<DTO extends BaseDto> {
   }
 
   Future<List<T>> _convertList<T extends BaseDto>(Response response) async { // dit versteht kein mensch was hier passiert
-    List<DTO> dtoList;
+    List<T> dtoList;
     try {
       dtoList = ((jsonDecode(response.body) as List) 
               .map((e) => e as Map<String, dynamic>))
           .toList()
-          .map((e) => factoryMap[DTO](e)
-              as DTO) //factorymap is from the corefile deserialization_factory_map (single point of uglyness)
+          .map((e) => factoryMap[T](e)
+              as T) //factorymap is from the corefile deserialization_factory_map (single point of uglyness)
           .toList(); // TODO this is something we need to handle in a more robust and async way. This way will make our ui not responsive and also could fail if it's not a Map<String, dynamic>
     } on Exception {
       throw UnexpectedFormatException();

@@ -9,6 +9,13 @@ class AppStrings {
   static const String signInWithPhone = "Sign In with Phone Number";
 
   static const String errorHappend = "Error happened, please try again!";
+  static const String insufficientPermissions = "insufficient Permissions";
+  static const String unexpected = "unexpected error happened";
+  static const String unableToUpdate = "was not able to update!";
+  static const String connectionError = "an connection Error occured";
+  static const String notAuthenticated = "not authenticated!";
+  static const String notFound = "not found!";
+  static const String internalServer = "internal server";
 
   static const String phoneNumberVerificationTitle =
       "Verify yourself with your phone number.";
@@ -90,4 +97,9 @@ class AppStrings {
   static const String address = "address";
   static const String name = 'name';
   static const String addLocation = "Add Location";
+
+
+
+  static const String recent = "Recent";
+  static const String upcoming = "Upcoming";
 }

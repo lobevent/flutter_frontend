@@ -9,7 +9,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/animations/load
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/event_list_tiles.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_series_screen/cubit/event_series_screen_cubit.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_series_screen/widgets_tabs/ess_page_eventTabs.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/event_recent_upcoming_tabs.dart';
 
 class EventSeriesScreenPage extends StatelessWidget {
   final UniqueId seriesId;
@@ -58,7 +58,7 @@ class EventSeriesScreenPage extends StatelessWidget {
                             Spacer()
                           ]),
                         // this provides the tab bar and the contents of the tabs; namely it displays the events in ListTiles within a listview
-                        EventTabs(upcoming: state.series.upcomingEvents ?? [], recendEvents: state.series.recentEvents ?? [])
+                        EventTabs(upcoming: state.series.upcomingEvents ?? [], recendEvents: state.series.recentEvents ?? [], isLoading: false,)
                       ]),
             )));
       }),

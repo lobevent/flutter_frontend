@@ -82,19 +82,7 @@ class ProfilePageMeta extends StatelessWidget {
               text: " Friends: ${friendscount?.toString() ?? 0.toString()}",
               icon: Icons.emoji_people_outlined),
 
-/*          StdTextButton(
-                onPressed: () =>  context.router.push(ProfileFriendsScreenRoute()),
-                child: Row(children: [
-                  const Icon(
-                    Icons.emoji_people_outlined,
-                    color: AppColors.stdTextColor,
-                  ),
-                  // divide in two texts, as count could be null, and the whole thing isnt diplayed
-                  Text(" Friends: ", style: TextStyle(color: AppColors.stdTextColor),),
-                  Text(friendscount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
-                ],),)
 
-              ,*/
           Spacer(),
           //for the calender
           TextWithIconButton(
@@ -104,22 +92,10 @@ class ProfilePageMeta extends StatelessWidget {
           Spacer(),
 
           TextWithIconButton(
-              onPressed: () => context.router.push(EventsMultilistScreenRoute(
-                  option: EventScreenOptions.fromUser, profile: profile)),
+              onPressed: () => context.router.push(EventUserPageRoute(profile: profile)),
               text: " Events: ${eventcount?.toString() ?? 0.toString()}",
               icon: Icons.tapas_outlined)
 
-/*          StdTextButton(
-                onPressed: () => context.router.push(EventsMultilistScreenRoute(option: EventScreenOptions.fromUser, profile: profile )),
-                child: Row(children: [
-                  const Icon(
-                    Icons.tapas_outlined,
-                    color: AppColors.stdTextColor,
-                  ),
-                  // divide in two texts, as count could be null, and the whole thing isnt diplayed
-                  Text(" Events: ", style: TextStyle(color: AppColors.stdTextColor),),
-                  Text(eventcount?.toString()?? 0.toString(), style: TextStyle(color: AppColors.stdTextColor)),
-                ],),)*/
         ]),
       ],
     );

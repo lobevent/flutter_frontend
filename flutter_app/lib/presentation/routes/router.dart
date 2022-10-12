@@ -6,6 +6,7 @@ import 'package:flutter_frontend/presentation/pages/event/event_profile_pictures
 import 'package:flutter_frontend/presentation/pages/event/event_series_form/event_series_form_main.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_series_screen/ess_page.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_swiper/event_swiper.dart';
+import 'package:flutter_frontend/presentation/pages/event/events_user/events_user_page.dart';
 import 'package:flutter_frontend/presentation/pages/event/eventseries_list/esl_page.dart';
 import 'package:flutter_frontend/presentation/pages/login_register_email/registration_widget.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/event_form.dart';
@@ -51,7 +52,8 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/post_scre
     AutoRoute(page: EventSeriesScreenPage),
     AutoRoute(page: MyLocationsPage),
     AutoRoute(page: MyLocationForm),
-    AutoRoute(page: EPPPage)
+    AutoRoute(page: EPPPage),
+    AutoRoute(page: EventUserPage)
   ],
 )
 class $Router {}

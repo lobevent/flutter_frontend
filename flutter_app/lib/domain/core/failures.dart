@@ -89,7 +89,13 @@ class NetWorkFailure<T> with _$NetWorkFailure<T>{
 
 
   static String getDisplayStringFromFailure(NetWorkFailure failure){
-    return '';
+    return failure.map(unexpected: (_)=>AppStrings.unexpected,
+        insufficientPermissions: (_)=>AppStrings.insufficientPermissions,
+        unableToUpdate: (_)=>AppStrings.unableToUpdate,
+        connectionError: (_)=>AppStrings.connectionError,
+        notAuthenticated: (_)=>AppStrings.notAuthenticated,
+        notFound: (_)=>AppStrings.notFound,
+        internalServer: (_)=>AppStrings.internalServer);
   }
 }
 

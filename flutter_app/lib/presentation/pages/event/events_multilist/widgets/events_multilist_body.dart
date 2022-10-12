@@ -9,7 +9,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/std_choice_text_chip.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/event_list_tiles.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_series_screen/widgets_tabs/ess_page_eventTabs.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/event_recent_upcoming_tabs.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/cubit/events_mulitlist_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/widgets/emb_bar.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -69,7 +69,7 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
           // -------------------------------------------------- WIDGET FROM HERE -------------------------------------------
           // ---------------------------------------------------------------------------------------------------------------
           if (eventsRecent.isNotEmpty) {
-            return EventTabs(upcoming: events, recendEvents: eventsRecent);
+            return EventTabs(upcoming: events, recendEvents: eventsRecent, isLoading: false,);
           }
           bool loading  = state.maybeMap((value) => false, orElse: () => false, loading: (_) => true);
           return CustomScrollView(

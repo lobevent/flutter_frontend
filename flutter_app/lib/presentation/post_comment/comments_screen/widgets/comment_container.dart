@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/data/storage_shared.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
@@ -15,6 +14,8 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets
 import 'package:flutter_frontend/presentation/post_comment/comments_screen/cubit/comment_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:get_it/get_it.dart';
+
+import '../../../../data/common_hive.dart';
 
 class CommentContainer extends StatelessWidget {
   const CommentContainer({Key? key}) : super(key: key);
@@ -34,7 +35,7 @@ class CommentContainer extends StatelessWidget {
                       loadedComment.comment),
                 ],
             loadedPost: (loadedPost) => [
-                  PostWidget(post: loadedPost.post),
+                  PostWidget(post: loadedPost.post, context: context),
                   CommentList(loadedPost.post.comments ?? [], context),
                   WriteWidget(context, loadedPost.post),
                 ],
@@ -144,7 +145,7 @@ class CommentContainer extends StatelessWidget {
             )),
         //delete an comment button
         //check if its the own comment to display delete button
-        if(GetIt.I<StorageShared>().checkIfOwnId(comment.owner.id.value.toString()))...[
+        if(CommonHive.checkIfOwnId(comment.owner.id.value.toString()))...[
           StdTextButton(
               onPressed: () {
             showCommentEditOverlay(context, comment);

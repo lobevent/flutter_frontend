@@ -17,6 +17,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../../data/common_hive.dart';
 import '../../../../../infrastructure/event_series/eventSeries_repository.dart';
 
 part 'event_form_cubit.freezed.dart';
@@ -60,9 +61,8 @@ class EventFormCubit extends Cubit<EventFormState> {
         event: state.event.copyWith(description: EventDescription(body))));
   }
 
-  void changeMaxPersons(int maxPersons){
-    emit(state.copyWith(
-        event: state.event.copyWith(maxPersons: maxPersons)));
+  void changeMaxPersons(int maxPersons) {
+    emit(state.copyWith(event: state.event.copyWith(maxPersons: maxPersons)));
   }
 
   void changeDate(DateTime date) {
@@ -77,7 +77,7 @@ class EventFormCubit extends Cubit<EventFormState> {
     emit(state.copyWith(event: state.event.copyWith(longitude: longitude)));
   }
 
-  void changeAddress(String? address){
+  void changeAddress(String? address) {
     emit(state.copyWith(event: state.event.copyWith(address: address)));
   }
 
@@ -170,6 +170,7 @@ class EventFormCubit extends Cubit<EventFormState> {
 
   /// save event to database
   Future<void> saveEvent() async {
+    //safe for score
     return updateEditEvent(() => repository.create(state.event));
   }
 
@@ -220,9 +221,10 @@ class EventFormCubit extends Cubit<EventFormState> {
 
   /// remove non friends from invitations
   Event removeNoneFriends(Event event, List<Profile> friends) {
-    event.invitations.removeWhere((invitation) =>
+    List<Invitation> invitations = List.from(event.invitations);
+    invitations.removeWhere((invitation) =>
         !friends.map((i) => i.id.value).contains(invitation.profile.id.value));
-    return event;
+    return event.copyWith(invitations: invitations);
   }
 
   // Future<void> chooseImage(Event event) async {

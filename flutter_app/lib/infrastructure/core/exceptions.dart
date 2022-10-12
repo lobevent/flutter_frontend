@@ -1,6 +1,7 @@
 class CommunicationException implements Exception {}
 
 class NotAuthenticatedException implements CommunicationException {}
+class ConnectionException implements CommunicationException {}
 
 class NotAuthorizedException implements CommunicationException {}
 

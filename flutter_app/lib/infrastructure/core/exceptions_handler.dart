@@ -18,6 +18,9 @@ class ExceptionsHandler {
       case NotAuthorizedException:
         return const NetWorkFailure.insufficientPermissions();
         break;
+      case ConnectionException:
+        return const NetWorkFailure.connectionError();
+        break;
       case UnexpectedFormatException:
         return const NetWorkFailure.unexpected();
       default:

@@ -252,12 +252,13 @@ class TextWithIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final IconData? icon;
   final bool disabled;
+  final bool withSpacer;
   const TextWithIconButton(
       {Key? key,
       required this.onPressed,
       required this.text,
       this.icon,
-      this.disabled = false})
+      this.disabled = false, this.withSpacer = false})
       : super(key: key);
 
   @override
@@ -266,21 +267,25 @@ class TextWithIconButton extends StatelessWidget {
       disabled: disabled,
       // the call of the on pressed. With the nullcheck, because not every button needs an onpressed
       onPressed: () => onPressed == null ? null : onPressed!(),
-      child: Expanded(
+      // commented out, if error arises, pls make an bool with expanded or not
+      //child: Expanded(
       child: Row(
         children: [
+          if(withSpacer) Spacer(),
           // button and text are Prestyled
           Icon(
             icon,
             color: AppColors.stdTextColor,
           ),
 
+          if(withSpacer) Spacer(),
           Text(
             text,
             style: TextStyle(color: AppColors.stdTextColor),
           ),
+          if(withSpacer) Spacer(),
         ],
-      ),
+      //),
       ),
     );
   }

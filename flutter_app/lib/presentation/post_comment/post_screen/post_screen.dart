@@ -8,6 +8,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/post_comment/post_screen/widgets/post_container.dart';
 
+import '../../pages/core/widgets/write_widget.dart';
 import 'cubit/post_screen_cubit.dart';
 
 class PostsScreen extends StatelessWidget {
@@ -32,6 +33,7 @@ class PostsScreen extends StatelessWidget {
                         [ErrorMessage(errorText: errState.error)],
                     orElse: () => [
                           PostContainer(event: event),
+                      WriteWidget(event: event, cubitContext: context,)
                         ])),
               ));
         },

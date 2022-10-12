@@ -15,6 +15,10 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/coordi
 
 import '../../../../../core/utils/geo/osm_extensions/utilities.dart';
 
+
+
+
+
 class MyLocationFormOverlay {
   MyLocationFormOverlay({MyLocation? myLocation, required BuildContext context}) {
     final OverlayState overlayState = Overlay.of(context)!;
@@ -28,7 +32,28 @@ class MyLocationFormOverlay {
     overlayState.insert(overlayEntry);
   }
 }
+
+
+
+
+
 // ---------------------------------------------------------------------------------------------------- Just testing ----------------------------------
+
+
+// class MyLocationFormOverlay {
+//   MyLocationFormOverlay({MyLocation? myLocation, required BuildContext context}) {
+//     final OverlayState overlayState = Overlay.of(context)!;
+//     OverlayEntry? overlayEntry;
+//     overlayEntry =
+//         OverlayEntry(builder: (context) => Dismissible(
+//           key: GlobalKey(),
+//         child: AutocompleteBasicExample(),));
+//     overlayState.insert(overlayEntry);
+//   }
+// }
+
+
+
 // class test extends StatefulWidget {
 //   const test({Key? key}) : super(key: key);
 //
@@ -155,18 +180,25 @@ class AutocompleteBasicExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Autocomplete<String>(
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text == '') {
-          return const Iterable<String>.empty();
-        }
-        return _kOptions.where((String option) {
-          return option.contains(textEditingValue.text.toLowerCase());
-        });
-      },
-      onSelected: (String selection) {
-        debugPrint('You just selected $selection');
-      },
+    return Scaffold(
+      body: Column(
+        children: [
+          Spacer(),
+          Autocomplete<String>(
+            optionsBuilder: (TextEditingValue textEditingValue) {
+              if (textEditingValue.text == '') {
+                return const Iterable<String>.empty();
+              }
+              return _kOptions.where((String option) {
+                return option.contains(textEditingValue.text.toLowerCase());
+              });
+            },
+            onSelected: (String selection) {
+              debugPrint('You just selected $selection');
+            },
+          ),
+        ],
+      ),
     );
   }
 }

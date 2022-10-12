@@ -21,6 +21,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/add_friends/add_friends_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/like/like_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/EventProfilePictures/SmallCarousel/es_ec_epp_carousel.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/es_ec_UesMenuButton.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/es_ec_add_friends_button.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/Overlays/es_ol_invited_persons.dart';
@@ -30,8 +31,11 @@ import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
 import '../../../../../../application/core/geo_functions_cubit.dart';
+import '../../../../../../data/common_hive.dart';
 import '../../../../../../domain/post/post.dart';
+import '../../../../core/widgets/animations/animated_check.dart';
 import '../../../../core/widgets/timer_widget.dart';
+import 'EventContentWidgets/EventTodoWidget/es_ec_td_todo_widget.dart';
 import 'EventContentWidgets/es_ec_uploadImageButton.dart';
 
 class EventContent extends StatelessWidget {
@@ -81,6 +85,7 @@ class EventContent extends StatelessWidget {
                   if (stateLoaded.event.status != null || StorageShared().checkIfOwnId(stateLoaded.event.owner!.id.value.toString()))
                     if(stateLoaded.event.date.isAfter(DateTime.now())) TimerWidget(dateTime: stateLoaded.event.date),
 
+
                   ///for confirming the attending of an event
                   ImHereButton(
                       context,
@@ -89,8 +94,19 @@ class EventContent extends StatelessWidget {
                       stateLoaded.event,
                       stateLoaded.event.status),
 
+
+
+                  /// todoevents list
+                  TodoWidget(),
+
                   if(stateLoaded.event.status != null && stateLoaded.event.status == EventStatus.confirmAttending)
-                      UploadImageButton(),
+                    UploadImageButton(),
+
+                  EventProfilePicturesSmallCarousell(event: stateLoaded.event),
+
+                  /// Contains the description of the event
+                  DescriptionWidget(
+                      stateLoaded.event.description!.getOrCrash()),
 
                   /// Used as space
                   const SizedBox(height: 20),
@@ -115,9 +131,7 @@ class EventContent extends StatelessWidget {
                   /// Used as space
                   const SizedBox(height: 20),
 
-                  /// Contains the description of the event
-                  DescriptionWidget(
-                      stateLoaded.event.description!.getOrCrash()),
+
                 ],
               );
             },
@@ -242,17 +256,19 @@ class EventContent extends StatelessWidget {
   }
 
   Widget CoordsWidget(double? longitude, double? latitude) {
-    return InkWell(
-      onTap: (){
-        if(latitude != null && longitude != null){
-          MapsLauncher.launchCoordinates(latitude, longitude);
-        }
-      },
-        child: PaddingWidget(children: [
-      Icon(Icons.my_location),
-      Text("Latitude: ${latitude??'NaN'}"),
-      Text(" Longitude: ${longitude??'NaN'}"),
-    ]));
+    return FittedBox(
+      child: InkWell(
+        onTap: (){
+          if(latitude != null && longitude != null){
+            MapsLauncher.launchCoordinates(latitude, longitude);
+          }
+        },
+          child: PaddingWidget(children: [
+        Icon(Icons.my_location),
+        Text("Latitude: ${latitude??'NaN'}"),
+        Text(" Longitude: ${longitude??'NaN'}"),
+      ])),
+    );
   }
 
   Widget ImHereButton(BuildContext contextEvent, double? latitude,
@@ -280,8 +296,9 @@ class EventContent extends StatelessWidget {
                       },
                       text: "I am here!",
                     );
-                  } else
-                    return Text("Confirm when you are at the location.");
+                  } else {
+                    return const Text("Confirm when you are at the location.");
+                  }
                 },
                 orElse: () => const Text(""));
           }),
@@ -367,6 +384,8 @@ class EventContent extends StatelessWidget {
   Widget PaddingWidget({required List<Widget> children}) {
     return PaddingRowWidget(children: children);
   }
+
+
 
   /// widget which is 1 half of a post, also it got gradient and an postscreen button
   Widget generate1HalfPostWithOpacity(

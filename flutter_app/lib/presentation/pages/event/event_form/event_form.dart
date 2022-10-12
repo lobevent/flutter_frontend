@@ -12,10 +12,12 @@ import 'cubit/event_form_cubit.dart';
 
 class EventFormPage extends StatelessWidget {
   final String? editedEventId;
+  final DateTime? selectedCalenderDate;
 
   const EventFormPage({
     Key? key,
     this.editedEventId,
+    this.selectedCalenderDate,
   }) : super(key: key);
 
   @override
@@ -59,6 +61,7 @@ class EventFormPage extends StatelessWidget {
                     event: state.event,
                     isEditing: state.isEditing,
                     showErrorMessages: state.showErrorMessages,
+                    selectedCalenderDate: selectedCalenderDate,
                   ),
                 ]),
               ),

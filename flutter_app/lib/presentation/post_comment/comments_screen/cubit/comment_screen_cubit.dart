@@ -90,7 +90,7 @@ class CommentScreenCubit extends Cubit<CommentScreenState> {
                           emit(CommentScreenState.error(failure.toString())),
                       (comment) {
                     //doesnt work yet, increment the childcount so it displays
-                    value.post.comments!.add(comment);
+                        List<Comment>postCommentsAdded= [...value.post.comments!, comment];
                     value.post.commentCount != null
                         ? value.post.commentCount! + 1
                         : value.post.commentCount == 1;

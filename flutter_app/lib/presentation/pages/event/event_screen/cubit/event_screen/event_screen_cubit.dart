@@ -16,6 +16,7 @@ import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../../../data/common_hive.dart';
 import '../../../../../../domain/post/post.dart';
 import '../../../../../../infrastructure/post/post_repository.dart';
 
@@ -52,6 +53,11 @@ class EventScreenCubit extends Cubit<EventScreenState> {
                       event: event,
                       last2Posts: post.isNotEmpty ? post : null))));
         }));
+  }
+
+
+  Future<void> reload() async {
+    state.maybeMap(orElse: (){}, loaded: (state)=> getEvent(state.event.id));
   }
 
   Future<void> createOrgaEvent(
@@ -112,7 +118,7 @@ class EventScreenCubit extends Cubit<EventScreenState> {
           });
         });
   }
-
+  ///confirm user at event with confirmAttending
   Future<void> UserConfirmAtEvent(
       Event event, double? longitude, double? latitude) async {
     state.maybeMap(
@@ -132,6 +138,14 @@ class EventScreenCubit extends Cubit<EventScreenState> {
         });
   }
 
+  // //save confirmattending to event, and also delete if confirmattending is revoked
+  // void saveConfirmAttendingScore(Event event){
+  //     if(CommonHive.getAttendingConfirmed(event.id.value.toString())==event.id.value.toString()) {
+  //       CommonHive.deleteAttendingConfirmed(event.id.value.toString());
+  //   }
+  //     CommonHive.saveAttendingConfirmed(event.id.value.toString());
+  // }
+
   ///
   /// this alters the local invitation list and adds an invitation
   ///
@@ -139,9 +153,10 @@ class EventScreenCubit extends Cubit<EventScreenState> {
     state.maybeMap(
         orElse: () {},
         loaded: (loaded) {
+          List<Invitation> invitations = List.from(loaded.event.invitations);
           emit(EventScreenState.loading());
-          loaded.event.invitations.add(invitation);
-          emit(loaded);
+          invitations.add(invitation);
+          emit(loaded.copyWith(event: loaded.event.copyWith(invitations: invitations)));
         });
   }
 
@@ -162,7 +177,7 @@ class EventScreenCubit extends Cubit<EventScreenState> {
   ///
   /// this alters the local invitation list and add host
   ///
-  void addHost(Invitation invitation) {
+  void addHost( Invitation invitation) {
     toggleHost(invitation, true);
   }
 

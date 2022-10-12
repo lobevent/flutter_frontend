@@ -10,6 +10,8 @@ import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/like/like_cubit.dart';
 import 'package:http/http.dart';
 
+import 'achievements_dtos.dart';
+
 class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String profileIdPath = "/profile/";
 
@@ -50,6 +52,8 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
   static const String commentUnLikePath = "/comment/%objectId%/unlike";
 
   static const String addFriendsToEventPath = "/event/addFriends/";
+  static const String scorePath = "/profile/%profileId%/score";
+  static const String achievementsPath = "/profile/%profileId%/achievements";
 
   SymfonyCommunicator client;
 
@@ -230,5 +234,19 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
         "$addFriendsToEventPath${event.id.value}",
         jsonEncode(friends.map((e) => e.toJson())));
     return convertList(response);
+  }
+
+  Future<Response> getProfileScore(String profileId) async {
+    final Response response =
+        await client.get(scorePath.interpolate({"profileId": profileId}));
+
+    return response;
+  }
+
+  Future<AchievementsDto> getAchievements(String profileId) async {
+    final Response response = await client
+        .get(achievementsPath.interpolate({"profileId": profileId}));
+    return AchievementsDto.fromJson(
+        jsonDecode(response.body) as Map<String, dynamic>);
   }
 }

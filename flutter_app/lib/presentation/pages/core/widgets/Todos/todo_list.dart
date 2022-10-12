@@ -8,6 +8,8 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/Todos/item_elem
 import 'package:flutter_frontend/presentation/pages/core/widgets/animations.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/event_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/event_screen/todo_overlay_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/EventTodoWidget/es_ec_td_todo_widget.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/EventTodoWidget/es_ec_td_tw_todo_overview.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:provider/src/provider.dart';
 import 'package:auto_route/auto_route.dart';
@@ -16,6 +18,9 @@ import '../../../../../domain/profile/profile.dart';
 import '../../../../../l10n/app_strings.dart';
 import '../gen_dialog.dart';
 
+///
+/// List of tdo items, used in [EventTodoWidget]
+///
 class TodoList extends StatefulWidget {
   final Event event;
   final Todo? todo;
@@ -38,8 +43,14 @@ class _TodoListState extends State<TodoList> {
   }
 
   Widget TodoItemList(List<Item> items, BuildContext context) {
-    return Column(
-      children: <Widget>[...getTodoItems(items, context)],
+    return Container(
+      constraints: BoxConstraints(maxHeight: 200),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[...getTodoItems(items, context)],
+        ),
+      ),
     );
   }
 

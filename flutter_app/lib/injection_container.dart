@@ -1,13 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubit.dart';
 import 'package:flutter_frontend/core/services/AuthTokenService.dart';
-import 'package:flutter_frontend/data/storage_shared.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:flutter_frontend/infrastructure/auth/firebase_auth_facade.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/event/event_local_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
+import 'package:flutter_frontend/infrastructure/event_profile_picture/epp_remote_service.dart';
+import 'package:flutter_frontend/infrastructure/event_profile_picture/epp_repository.dart';
 import 'package:flutter_frontend/infrastructure/event_series/eventSeries_remote_service.dart';
 import 'package:flutter_frontend/infrastructure/event_series/eventSeries_repository.dart';
 import 'package:flutter_frontend/infrastructure/invitation/invitation_repository.dart';
@@ -24,6 +25,7 @@ import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 
+import 'data/common_hive.dart';
 import 'infrastructure/auth/symfonyLogin.dart';
 import 'infrastructure/invitation/invitation_remote_service.dart';
 import 'infrastructure/profile/profile_remote_service.dart';
@@ -46,14 +48,6 @@ class InjectionContainer {
 
     // register Token Service for retrieving login tokens
     getIt.registerLazySingleton(() => AuthTokenService());
-
-    // register Shared storage
-
-    getIt.registerLazySingleton(() => StorageShared());
-
-
-
-
 
     getIt.registerLazySingleton<FirebaseAuthFacade>(() => FirebaseAuthFacade(
         FirebaseAuth.instance,
@@ -79,6 +73,10 @@ class InjectionContainer {
     getIt.registerLazySingleton(() => MyLocationRepository(
         remoteService: MyLocationRemoteService(communicator: GetIt.I<SymfonyCommunicator>())));
 
+
+    getIt.registerLazySingleton(() => EventProfilePictureRepository(
+        remoteService: EventProfilePictureRemoteService(communicator: GetIt.I<SymfonyCommunicator>())));
+
     getIt.registerLazySingleton(
       () => TodoRepository(
         ItemRemoteService(communicator: GetIt.I<SymfonyCommunicator>()),
@@ -99,6 +97,7 @@ class InjectionContainer {
   /// This loads async stuff for the Container
   /// IMPORTANT NOTE: this has to be called AFTER [InjectionContainer.injectDependencies()] !!!!!!!
   static Future<void> loadNecessities() async{
-    GetIt.I<StorageShared>().safeOwnProfile();
+    CommonHive.safeOwnProfileIdAndPic();
+    //GetIt.I<StorageShared>().safeOwnProfile();
   }
 }

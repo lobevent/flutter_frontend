@@ -22,45 +22,45 @@ class EventListTiles extends StatelessWidget {
   final EventStatus? eventStatus;
 
   const EventListTiles(
-      {required ObjectKey key, required this.event, this.onDeletion, this.isInvitation = false, this.eventStatus})
+      {required ObjectKey key,
+      required this.event,
+      this.onDeletion,
+      this.isInvitation = false,
+      this.eventStatus})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-    return BlocProvider(create:(context) => EventTileFunctionsCubit(event), child:
-      Card(
-        child: Column(children: [
+    return BlocProvider(
+        create: (context) => EventTileFunctionsCubit(event),
+        child: Card(
+            child: Column(children: [
           TopInfo(event: event),
           TopImage(event: event),
           if (event.isHost)
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: event.isHost ? actionButtons(onDeletion != null, context) : [],
+              children: event.isHost
+                  ? actionButtons(onDeletion != null, context)
+                  : [],
             ),
           Row(
-            children: [
-
-            ],
+            children: [],
           )
-        ])
-      )
-    );
+        ])));
   }
-
-
 
   /// action buttons for the event, can be made invisible, if its not own events
   List<Widget> actionButtons(bool visible, BuildContext context) {
     Icon uesIcon = Icon(Icons.error);
-    if(isInvitation) {
+    if (isInvitation) {
       switch (eventStatus) {
         case EventStatus.attending:
-        uesIcon = Icon(Icons.check);
+          uesIcon = Icon(Icons.check);
           break;
         case EventStatus.notAttending:
-        uesIcon = Icon(Icons.clear);
+          uesIcon = Icon(Icons.clear);
           break;
         case EventStatus.interested:
           uesIcon = Icon(Icons.lightbulb);
@@ -76,8 +76,8 @@ class EventListTiles extends StatelessWidget {
       }
       return <Widget>[
         IconButton(icon: uesIcon, onPressed: () => {}),
-        ];
-        }
+      ];
+    }
     if (visible) {
       return <Widget>[
         IconButton(
@@ -89,8 +89,9 @@ class EventListTiles extends StatelessWidget {
                       AppStrings.deleteEventDialogText,
                       AppStrings.deleteEventDialogConfirm,
                       AppStrings.deleteEventDialogAbort)
-                  .then((value) async =>
-                      {if (value) onDeletion!(event) else print("abort delete")});
+                  .then((value) async => {
+                        if (value) onDeletion!(event) else print("abort delete")
+                      });
             }),
         IconButton(
             icon: Icon(Icons.edit), onPressed: () => {editEvent(context)}),
@@ -102,7 +103,4 @@ class EventListTiles extends StatelessWidget {
   void editEvent(BuildContext context) {
     context.router.push(EventFormPageRoute(editedEventId: event.id.value));
   }
-
-
-
 }

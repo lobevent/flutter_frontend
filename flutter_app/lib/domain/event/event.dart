@@ -43,6 +43,7 @@ class Event with _$Event {
       double? longitude,
       String? address,
       double? latitude,
+        double? distance,
       required bool isHost,
       String? image}) = EventFull;
 

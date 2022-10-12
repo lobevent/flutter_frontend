@@ -8,6 +8,15 @@ class AppStrings {
   static const String signInWithGoogle = "Sign In with Google";
   static const String signInWithPhone = "Sign In with Phone Number";
 
+  static const String errorHappend = "Error happened, please try again!";
+  static const String insufficientPermissions = "insufficient Permissions";
+  static const String unexpected = "unexpected error happened";
+  static const String unableToUpdate = "was not able to update!";
+  static const String connectionError = "an connection Error occured";
+  static const String notAuthenticated = "not authenticated!";
+  static const String notFound = "not found!";
+  static const String internalServer = "internal server";
+
   static const String phoneNumberVerificationTitle =
       "Verify yourself with your phone number.";
   static const String phoneNumberTextFieldHint = "Phone Number";
@@ -40,8 +49,18 @@ class AppStrings {
   static const String deleteCommentDialogTitle = "Delete this comment?";
   static const String deleteCommentDialogText =
       "Do you want to delete this comment?";
+
   static const String deleteCommentDialogConfirm = "Delete";
   static const String deleteCommentDialogAbort = "Abort";
+
+
+  static const String genericDeleteTitle =
+      "Delete this?";
+  static const String genericDeleteDialogText =
+      "Are you sure to delete this? This action can not be undone!";
+  static const String genericDeleteDialogConfirm = "Delete";
+  static const String genericDeleteDialogAbort = "Abort";
+
 
   static const String noProfilesFound = "No profiles found";
   static const String noEventsFound = "No events found";
@@ -78,4 +97,9 @@ class AppStrings {
   static const String address = "address";
   static const String name = 'name';
   static const String addLocation = "Add Location";
+
+
+
+  static const String recent = "Recent";
+  static const String upcoming = "Upcoming";
 }

@@ -7,6 +7,10 @@ class AppTextStyles {
     color: AppColors.stdTextColor,
   );
 
+  static const error = TextStyle(
+    color: AppColors.errorColor,
+  );
+
   static const stdText = TextStyle(
     color: AppColors.stdTextColor,
     fontWeight: FontWeight.bold

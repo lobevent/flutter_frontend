@@ -15,6 +15,9 @@ dependencies:
   # generates routes and handles all the navigation stuff
   auto_route: ^4.2.1
 
+  # for grid and list animations
+  flutter_staggered_animations: ^1.0.0
+
   # annotations for json code generation
   json_annotation: ^4.3.0
 
@@ -97,6 +100,9 @@ dependencies:
   image_picker: ^0.8.4+4
   flutter_osm_plugin: ^0.39.0
   maps_launcher: ^2.0.1
+  table_calendar: ^3.0.7
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
 
 
 dev_dependencies:

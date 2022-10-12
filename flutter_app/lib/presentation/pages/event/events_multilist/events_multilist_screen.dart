@@ -15,20 +15,25 @@ class EventsMultilistScreen extends StatelessWidget {
   final EventScreenOptions? option;
   final Profile? profile;
   EventsMultilistScreen(
-      {Key? key, this.profile, this.option = EventScreenOptions.owned})
+      {Key? key, this.profile, this.option = EventScreenOptions.near})
       : super(key: key);
 
+  // ------------------------------------ JUST BLOC AND STATE MANGEMENT STUFF ---------------------------------------------
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => EventsMultilistCubit(
-          option: option ?? EventScreenOptions.owned, profile: profile),
+          option: option ?? EventScreenOptions.near, profile: profile),
       child: BlocConsumer<EventsMultilistCubit, EventsMultilistState>(
           listener: (context, state) => {},
           builder: (context, state) {
+
+
             bool isLoading = state.maybeMap((_) => false,
                 loadedInvited: (s) => false,
                 loading: (_) => true,
                 orElse: () => false);
+
+            // here starts the real deal
             return OwnEventScreenHolder(
               profile: profile,
               isLoading: isLoading,
@@ -58,7 +63,11 @@ class OwnEventScreenHolder extends StatelessWidget {
     return BasicContentContainer(
         appBar: MainAppBar(),
         bottomNavigationBar: BottomNavigation(selected: navigation),
-        child_ren: right( Container(child: EventsMultilistBody(profileView: profile!=null,))),
-        isLoading: isLoading);
+        child_ren: right(
+            Container(
+                child: EventsMultilistBody(profileView: profile!=null,)
+            )
+        ),
+       /* isLoading: isLoading*/);
   }
 }

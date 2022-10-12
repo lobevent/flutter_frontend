@@ -19,6 +19,7 @@ class InvitationDto extends BaseDto with _$InvitationDto {
     1: EventStatus.attending,
     2: EventStatus.interested,
     3: EventStatus.invited,
+    4: EventStatus.confirmAttending
   };
 
   static final Map domainToDtoStatus =

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/core/Utils/LoginControllFunctions.dart';
 import 'package:flutter_frontend/core/services/AuthTokenService.dart';
-import 'package:flutter_frontend/data/storage_shared.dart';
+import 'package:flutter_frontend/data/common_hive.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
@@ -56,6 +56,7 @@ class SymfonyCommunicator {
   /// Uri has to start with an backslash "/".
 
   Future<String> postFile(String uri, File file, [Encoding? encoding]) async {
+
     var stream = new http.ByteStream(DelegatingStream.typed(file.openRead()));
     var length = await file.length();
 
@@ -106,12 +107,12 @@ class SymfonyCommunicator {
     headers = {"Authorization": "Bearer $token"};
 
     //fetch and save profile in sharedstorage
-    GetIt.I<StorageShared>().safeOwnProfile();
+    //GetIt.I<StorageShared>().safeOwnProfile();
+    CommonHive.safeOwnProfileIdAndPic();
   }
 
   /// The [requestFunction] is an lambda function, containing a request to execute
   static Future<Response> handleExceptions(Response response) async {
-    // TODO any reason to give a lambda into this? We could directly pass the response or
     // TODO subclassing the Response class (like the reddit link I did sent you)
     //tried the solution with passing -> now I get that i can call await when calling a function
     if (response.statusCode ~/ 100 == 2) {

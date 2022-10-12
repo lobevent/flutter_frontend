@@ -75,81 +75,81 @@ class _ImageUploadPickerState extends State<ImageUploadPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Column(children: [
-        if (!kIsWeb &&
-            defaultTargetPlatform == TargetPlatform.android &&
-            widget.showPreview)
-          FutureBuilder<void>(
-            future: retrieveLostData(),
-            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                case ConnectionState.waiting:
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+        children: [
+      if (!kIsWeb &&
+          defaultTargetPlatform == TargetPlatform.android &&
+          widget.showPreview)
+        FutureBuilder<void>(
+          future: retrieveLostData(),
+          builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+                return const Text(
+                  'You have not yet picked an image.',
+                  textAlign: TextAlign.center,
+                );
+              case ConnectionState.done:
+                return _handlePreview();
+              default:
+                if (snapshot.hasError) {
+                  return Text(
+                    'Pick image/video error: ${snapshot.error}}',
+                    textAlign: TextAlign.center,
+                  );
+                } else {
                   return const Text(
                     'You have not yet picked an image.',
                     textAlign: TextAlign.center,
                   );
-                case ConnectionState.done:
-                  return _handlePreview();
-                default:
-                  if (snapshot.hasError) {
-                    return Text(
-                      'Pick image/video error: ${snapshot.error}}',
-                      textAlign: TextAlign.center,
-                    );
-                  } else {
-                    return const Text(
-                      'You have not yet picked an image.',
-                      textAlign: TextAlign.center,
-                    );
-                  }
-              }
-            },
-          )
-        else if (widget.showPreview)
-          _handlePreview(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            if(!widget.hideGalery)
-            Spacer(),
-            if(!widget.hideGalery)
-              TextWithIconButton(
-                  onPressed: () {
-                    _onImageButtonPressed(ImageSource.gallery, context: context);
-                  },
-                  text: "",
-                  icon: Icons.photo),
-            Spacer(),
-            if (widget.showMultiPic)
-              TextWithIconButton(
+                }
+            }
+          },
+        )
+      else if (widget.showPreview)
+        _handlePreview(),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          if(!widget.hideGalery)
+          Spacer(),
+          if(!widget.hideGalery)
+            TextWithIconButton(
                 onPressed: () {
-                  isVideo = false;
-                  _onImageButtonPressed(
-                    ImageSource.gallery,
-                    context: context,
-                    isMultiImage: true,
-                  );
+                  _onImageButtonPressed(ImageSource.gallery, context: context);
                 },
                 text: "",
-                icon: Icons.photo_library,
-              ),
-            if (widget.showMultiPic)
-            Spacer(),
+                icon: Icons.photo),
+          Spacer(),
+          if (widget.showMultiPic)
             TextWithIconButton(
               onPressed: () {
                 isVideo = false;
-                _onImageButtonPressed(ImageSource.camera, context: context);
+                _onImageButtonPressed(
+                  ImageSource.gallery,
+                  context: context,
+                  isMultiImage: true,
+                );
               },
               text: "",
-              icon: Icons.camera_alt,
+              icon: Icons.photo_library,
             ),
-            Spacer(),
-          ],
-        ),
-        //buildButton(),
-      ])
+          if (widget.showMultiPic)
+          Spacer(),
+          TextWithIconButton(
+            onPressed: () {
+              isVideo = false;
+              _onImageButtonPressed(ImageSource.camera, context: context);
+            },
+            text: "",
+            icon: Icons.camera_alt,
+          ),
+          Spacer(),
+        ],
+      ),
+      //buildButton(),
     ]);
   }
 

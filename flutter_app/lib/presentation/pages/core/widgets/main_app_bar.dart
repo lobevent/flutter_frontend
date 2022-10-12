@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart' hide Router;
-import 'package:flutter_frontend/data/storage_shared.dart';
+import 'package:flutter_frontend/data/common_hive.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/gen_dialog.dart';
@@ -44,6 +44,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
         icon: const Icon(Icons.location_on_outlined));
   }
 
+
   Widget MyLocationsFormButton(BuildContext context){
     return IconButton(
         onPressed: (){
@@ -70,7 +71,8 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
 
 
   Widget OwnProfile(BuildContext context){
-    Future<String?> image = StorageShared().getOwnProfileImage();
+    Future<String?> image = CommonHive.getOwnPic();
+    //StorageShared().getOwnProfileImage();
     return FutureBuilder<String?>(
       future: image,
         builder: (BuildContext context, AsyncSnapshot<String?> snapshot){

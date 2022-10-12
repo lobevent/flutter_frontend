@@ -5,11 +5,13 @@ import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/core/utils/loading/scroll_listener.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/std_choice_text_chip.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/event_list_tiles.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_series_screen/widgets_tabs/ess_page_eventTabs.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/event_recent_upcoming_tabs.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/cubit/events_mulitlist_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/events_multilist/widgets/emb_bar.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 class EventsMultilistBody extends StatefulWidget {
@@ -61,38 +63,45 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
               deleted: (state) => false, orElse: () => true);
         },
         builder: (context, state) {
+
+
           // ---------------------------------------------------------------------------------------------------------------
           // -------------------------------------------------- WIDGET FROM HERE -------------------------------------------
           // ---------------------------------------------------------------------------------------------------------------
           if (eventsRecent.isNotEmpty) {
-            return EventTabs(upcoming: events, recendEvents: eventsRecent);
+            return EventTabs(upcoming: events, recendEvents: eventsRecent, isLoading: false,);
           }
-
+          bool loading  = state.maybeMap((value) => false, orElse: () => false, loading: (_) => true);
           return CustomScrollView(
             slivers: [
               // Add the app bar to the CustomScrollView.
               if (!widget.profileView) EventList_Bar(),
+
+              if(loading)
+                SliverToBoxAdapter(child: LoadingIndicator(isLoading: loading)),
+
               // Next, create a SliverList
-              SliverList(
-                // Use a delegate to build items as they're scrolled on screen.
-                delegate: SliverChildBuilderDelegate(
-                  // The builder function returns a ListTile with a title that
-                  // displays the index of the current item.
-                  (context, index) {
-                    if (isInvites) {
-                      return ItemBuilder(index, this.invitations[index].event!,
-                          this.invitations[index].userEventStatus);
-                    } else {
-                      return ItemBuilder(index, events[index], null);
-                    }
-                  },
-                  // Builds 1000 ListTiles
-                  childCount:
-                      isInvites ? this.invitations.length : this.events.length,
+              if(!loading)
+                SliverList(
+                  // Use a delegate to build items as they're scrolled on screen.
+                  delegate: SliverChildBuilderDelegate(
+                    // The builder function returns a ListTile with a title that
+                    // displays the index of the current item.
+                    (context, index) {
+                      if (isInvites) {
+                        return ItemBuilder(index, this.invitations[index].event!,
+                            this.invitations[index].userEventStatus);
+                      } else {
+                        return ItemBuilder(index, events[index], events[index].status);
+                      }
+                    },
+                    // Builds 1000 ListTiles
+                    childCount:
+                        isInvites ? this.invitations.length : this.events.length,
+                  ),
                 ),
-              ),
             ],
-            //controller: context.read<EventsMultilistCubit>().controller,
+            controller: context.read<EventsMultilistCubit>().controller,
           );
         });
   }
@@ -132,83 +141,3 @@ class EventsMultilistBodyState extends State<EventsMultilistBody> {
   }
 }
 
-class EventList_Bar extends StatefulWidget {
-  const EventList_Bar({Key? key}) : super(key: key);
-
-  @override
-  State<EventList_Bar> createState() => _EventList_BarState();
-}
-
-class _EventList_BarState extends State<EventList_Bar> {
-  final GlobalKey<ChipChoiceState> myKey = GlobalKey();
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverAppBar(
-      elevation: 10.0,
-      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-      automaticallyImplyLeading: false,
-      pinned: true,
-      //lat 37.4219983 long -122.084
-      bottom: myKey.currentState?.value! == 1
-          ? PreferredSize(
-              preferredSize: const Size(50, 50),
-              child: Slider.adaptive(
-                  value: context.read<EventsMultilistCubit>().kilometersVal,
-                  min: 0,
-                  max: 50,
-                  divisions: 50,
-                  label: context
-                      .read<EventsMultilistCubit>()
-                      .kilometersVal
-                      .toString(),
-                  onChangeEnd: (newRating) {
-                    context
-                        .read<EventsMultilistCubit>()
-                        .getEvents(EventScreenOptions.near, newRating.ceil());
-                  },
-                  onChanged: (newRating) {
-                    setState(() {
-                      context.read<EventsMultilistCubit>().kilometersVal =
-                          newRating;
-                    });
-                  }),
-            )
-          : const PreferredSize(preferredSize: Size(0, 0), child: Text("")),
-      flexibleSpace: Row(
-        children: [
-          ChipChoice(
-            key: myKey,
-            list: {
-              "own": (bool bla) {
-                context
-                    .read<EventsMultilistCubit>()
-                    .getEvents(EventScreenOptions.owned);
-              },
-              "near": (bool bla) {
-                context.read<EventsMultilistCubit>().getEvents(
-                    EventScreenOptions.near,
-                    context.read<EventsMultilistCubit>().kilometersVal.ceil());
-              },
-              "recent": (bool bla) {
-                context
-                    .read<EventsMultilistCubit>()
-                    .getEvents(EventScreenOptions.recent);
-              },
-              "invited": (bool bla) {
-                context
-                    .read<EventsMultilistCubit>()
-                    .getEvents(EventScreenOptions.invited);
-              },
-              "attending": (bool bla) {
-                context
-                    .read<EventsMultilistCubit>()
-                    .getEvents(EventScreenOptions.ownAttending);
-              },
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}

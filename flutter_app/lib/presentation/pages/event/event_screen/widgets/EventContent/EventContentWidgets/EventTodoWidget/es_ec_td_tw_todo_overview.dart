@@ -33,9 +33,10 @@ class _EventTodoWidgetState extends State<EventTodoWidget> {
             children: [
               Text('TodoName: ${widget.todo!.name.getOrCrash()}'),
               // the create item button, for showing overlay
-              IconButton(
-                  onPressed: () => showOverlay(context),
-                  icon: const Icon(Icons.add)),
+              if(widget.event.isHost)
+                IconButton(
+                    onPressed: () => showOverlay(context),
+                    icon: const Icon(Icons.add)),
               /// Used as space
               const SizedBox(height: 20),
 

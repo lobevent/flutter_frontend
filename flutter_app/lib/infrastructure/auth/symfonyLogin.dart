@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter_frontend/core/services/AuthTokenService.dart';
-import 'package:flutter_frontend/data/storage_shared.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';

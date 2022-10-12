@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -15,6 +16,8 @@ import 'package:flutter_frontend/infrastructure/profile/profile_remote_service.d
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/like/like_cubit.dart';
 import 'package:flutter_frontend/domain/core/repository.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'achievements_dtos.dart';
 
 class ProfileRepository extends Repository {
   final ProfileRemoteService _profileRemoteService;
@@ -37,14 +40,12 @@ class ProfileRepository extends Repository {
   ///
   @override
   Future<Either<NetWorkFailure, Profile>> create(Profile profile) async {
-    try {
+    return localErrorHandler(() async {
       final profileDto = ProfileDto.fromDomain(profile);
       ProfileDto returnedProfileDto =
           await _profileRemoteService.create(profileDto);
       return right(returnedProfileDto.toDomain());
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
+    });
   }
 
   ///
@@ -52,14 +53,12 @@ class ProfileRepository extends Repository {
   ///
   @override
   Future<Either<NetWorkFailure, Profile>> delete(Profile profile) async {
-    try {
+    return localErrorHandler(() async {
       final profileDto = ProfileDto.fromDomain(profile);
       ProfileDto returnedProfileDto =
           await _profileRemoteService.delete(profileDto);
       return right(returnedProfileDto.toDomain());
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
+    });
   }
 
   ///
@@ -67,14 +66,12 @@ class ProfileRepository extends Repository {
   ///
   @override
   Future<Either<NetWorkFailure, Profile>> getSingleProfile(UniqueId id) async {
-    try {
+    return localErrorHandler(() async {
       final ProfileDto profileDto =
           await _profileRemoteService.getSingleProfile(id.value);
       final Profile profile = profileDto.toDomain();
       return right(profile);
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
+    });
   }
 
   ///
@@ -82,14 +79,12 @@ class ProfileRepository extends Repository {
   ///
   @override
   Future<Either<NetWorkFailure, Profile>> update(Profile profile) async {
-    try {
+    return localErrorHandler(() async {
       final profileDto = ProfileDto.fromDomain(profile);
       ProfileDto returnedpProfileDto;
       returnedpProfileDto = await _profileRemoteService.update(profileDto);
       return right(returnedpProfileDto.toDomain());
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
+    });
   }
 
   //-------------------List Getters--------------------------
@@ -166,70 +161,61 @@ class ProfileRepository extends Repository {
   }
 
   ///Friendship functionalities (maybe do them in seperate repository
-  Future<String> sendFriendRequest(UniqueId id) async {
-    try {
+  Future<Either<NetWorkFailure, String>> sendFriendRequest(UniqueId id) async {
+    return localErrorHandler(() async {
       final success = await _profileRemoteService.sendFriendship(id.value);
-      return success;
-    } on CommunicationException catch (e) {
-      return e.toString();
-    }
+      return right(success);
+    });
   }
 
-  Future<bool> acceptFriend(UniqueId id) async {
-    try {
+  Future<Either<NetWorkFailure, bool>> acceptFriend(UniqueId id) async {
+    return localErrorHandler(() async {
       final bool success =
           await _profileRemoteService.acceptFriendRequest(id.value);
-      return success;
-    } on CommunicationException catch (e) {
-      return false;
-    }
+      return right(success);
+    });
   }
 
-  Future<bool> deleteFriend(UniqueId id) async {
-    try {
+  Future<Either<NetWorkFailure, bool>> deleteFriend(UniqueId id) async {
+    return localErrorHandler(() async {
       final bool success =
           await _profileRemoteService.deleteFriendRequest(id.value);
-      return success;
-    } on CommunicationException catch (e) {
-      return false;
-    }
+      return right(success);
+    });
   }
 
   ///Like functionalities
   //TODO: make this to show backend errors ...
-  Future<bool> like(UniqueId objectId, LikeTypeOption option) async {
-    try {
+  Future<Either<NetWorkFailure, bool>> like(
+      UniqueId objectId, LikeTypeOption option) async {
+    return localErrorHandler(() async {
       final bool success =
           await _profileRemoteService.like(objectId.value, option);
-      return success;
-    } on CommunicationException catch (e) {
-      return false;
-    }
+      return right(success);
+    });
   }
 
-  Future<bool> unlike(UniqueId objectId, LikeTypeOption option) async {
-    try {
+  Future<Either<NetWorkFailure, bool>> unlike(
+      UniqueId objectId, LikeTypeOption option) async {
+    return localErrorHandler(() async {
       final bool success =
           await _profileRemoteService.unlike(objectId.value, option);
-      return success;
-    } on CommunicationException catch (e) {
-      return false;
-    }
+      return right(success);
+    });
   }
 
-  Future<bool> checkLikeStatus(UniqueId objectId) async {
-    try {
+  Future<Either<NetWorkFailure, bool>> checkLikeStatus(
+      UniqueId objectId) async {
+    return localErrorHandler(() async {
       final bool success =
           await _profileRemoteService.getOwnLikeStatus(objectId.value);
-      return success;
-    } on CommunicationException catch (e) {
-      return false;
-    }
+      return right(success);
+    });
   }
 
   Future<Either<NetWorkFailure, List<Profile>>> addFriendsToEvent(
       List<Profile> profiles, Event event) async {
-    try {
+    return localErrorHandler(() async {
       final profileDtos =
           profiles.map((e) => ProfileDto.fromDomain(e)).toList();
       final List<Profile> profilesResp =
@@ -237,9 +223,7 @@ class ProfileRepository extends Repository {
               .map((e) => e.toDomain())
               .toList();
       return right(profilesResp);
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
+    });
   }
 
   ///
@@ -250,12 +234,26 @@ class ProfileRepository extends Repository {
   }
 
   Future<Either<NetWorkFailure, Profile>> getOwnProfile() async {
-    try {
+    return localErrorHandler(() async {
       final ProfileDto profileDto = await _profileRemoteService.getOwnProfile();
       final Profile profile = profileDto.toDomain();
       return right(profile);
-    } on CommunicationException catch (e) {
-      return left(ExceptionsHandler.reactOnCommunicationException(e));
-    }
+    });
+  }
+
+  Future<Either<NetWorkFailure, String>> getScore(String profileId) async {
+    return localErrorHandler(() async {
+      final resp = await _profileRemoteService.getProfileScore(profileId);
+      return right(utf8.decode(resp.bodyBytes));
+    });
+  }
+
+  Future<Either<NetWorkFailure, AchievementsDto>> getAchievements(
+      String profileId) async {
+    return localErrorHandler(() async {
+      final AchievementsDto achievements =
+          await _profileRemoteService.getAchievements(profileId);
+      return right(achievements);
+    });
   }
 }

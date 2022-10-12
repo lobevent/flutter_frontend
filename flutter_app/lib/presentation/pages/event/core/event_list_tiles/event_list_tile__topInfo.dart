@@ -5,6 +5,7 @@ import 'package:flutter_frontend/presentation/core/styles/icons.dart';
 import 'package:flutter_frontend/presentation/core/utils/converters/date_time_converter.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/cubit/event_tile_functions_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/es_ec_UesMenuButton.dart';
+import 'dart:math' as math;
 
 import '../../../../../domain/event/event.dart';
 import '../../../core/widgets/styling_widgets.dart';
@@ -22,14 +23,17 @@ class TopInfo extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if (event.distance!=null) TextWithIcon(text: event.distance!.toStringAsFixed(1), icon: Icons.social_distance_rounded) else const SizedBox.shrink(),
               SizedBox(
-                width: MediaQuery.of(context).size.width - 20,
+                //Todo how to fix this idk
+                width: MediaQuery.of(context).size.width - 120,
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
                       event.name.getOrCrash(), style: Theme.of(context).textTheme.headline5),
                 ),
               ),
+              if(event.distance!=null)Text(" ") else SizedBox.shrink(),
             ],),
           SizedBox(height: Constants.stdSpacesBetweenContent),
           Row(

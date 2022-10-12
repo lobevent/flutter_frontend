@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,11 +30,18 @@ enum EventScreenOptions {
   invited
 }
 
+// TODO: this has to be debugged. When calling a new function to fast, the old one will emit a wrong state
 class EventsMultilistCubit extends Cubit<EventsMultilistState> {
-  EventScreenOptions option = EventScreenOptions.owned;
+
+
+  int checknumber = 0;
+  EventScreenOptions option = EventScreenOptions.near;
   Profile? profile;
   double kilometersVal = 5;
-  EventsMultilistCubit({this.option = EventScreenOptions.owned, this.profile})
+
+
+  bool LoadPastEvents = false;
+  EventsMultilistCubit({this.option = EventScreenOptions.near, this.profile})
       : super(EventsMultilistState.initial()) {
     emit(EventsMultilistState.initial());
     controller.addListener(_scrollListener);
@@ -42,19 +51,13 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
   EventRepository repository = GetIt.I<EventRepository>();
   InvitationRepository invRepo = GetIt.I<InvitationRepository>();
 
-  _scrollListener() {
-    if (controller.offset >= controller.position.maxScrollExtent &&
-        !controller.position.outOfRange) {
-      kilometersVal = kilometersVal + 5;
-      loadMore();
-    }
-    if (controller.offset <= controller.position.minScrollExtent &&
-        !controller.position.outOfRange) {}
-  }
 
   /// gets events from backend, swiches on the options
   Future<void> getEvents(EventScreenOptions option,
       [int? distanceKilometers]) async {
+
+    checknumber = Random().nextInt(1000000000);
+    int localCheckNumber = checknumber;
     final Either<NetWorkFailure, List<Event>> eventsList;
     final Either<NetWorkFailure, List<Event>> eventsListRecent;
     final Either<NetWorkFailure, List<Invitation>> invitationList;
@@ -121,19 +124,28 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
           isInvite = true;
           invitationList.fold(
               (l) => EventsMultilistState.error(error: l.toString()),
-              (r) => emit(EventsMultilistState.loadedInvited(invites: r)));
+              (r) {
+                if (localCheckNumber == checknumber) {
+                  //checks whether the function was called again and had been ready
+                  emit(EventsMultilistState.loadedInvited(invites: r));
+                }
+              });
         }
         return;
         break;
     }
-    emit(EventsMultilistState.loaded(
+    //checks whether the function was called again and had been ready
+    if(localCheckNumber == checknumber){
+      emit(EventsMultilistState.loaded(
         events: eventsList.fold((l) => throw Exception, (r) => r)));
-
+    }
     // } catch (e) {
     //   throw e;
     //   emit(EventsMultilistState.error(error: e.toString()));
     // }
   }
+
+
 
   /// deletes Event if its own event list
   Future<bool> deleteEvent(Event event) async {
@@ -164,6 +176,9 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
     return true;
   }
 
+
+
+
   Future<void> loadMore() async {
     // if(lastLoadedDate.toIso8601String() == state.posts.last.creationDate.toIso8601String()){
     //   return;
@@ -177,18 +192,38 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
         },
         orElse: () {});
 
+    List<Event> oldEvent = [];
+    state.maybeMap((value) => null, loaded: (loadedState) {
+      oldEvent = loadedState.events;
+    }, orElse: () {});
+
+
     final Either<NetWorkFailure, List<Event>> eventsList =
         await repository.getNearEvents(position!.latitude, position!.longitude,
-            kilometersVal.ceil(), DateTime.now(), 30);
+            kilometersVal.ceil(), oldEvent.last.creationDate, 30);
 
     List<Event> eventsNew = eventsList.fold((l) => throw Exception(), (r) => r);
-    List<Event> oldEvent = [];
+
 
     state.maybeMap((value) => null, loaded: (loadedState) {
       oldEvent = loadedState.events;
     }, orElse: () {});
-    oldEvent.addAll(eventsNew);
+    //oldEvent.addAll(eventsNew);
     emit(EventsMultilistState.initial());
-    emit(EventsMultilistState.loaded(events: oldEvent));
+    emit(EventsMultilistState.loaded(events: eventsNew));
   }
+
+  _scrollListener() {
+    if (controller.offset >= controller.position.maxScrollExtent &&
+        !controller.position.outOfRange) {
+      kilometersVal = kilometersVal + 5;
+      loadMore();
+    }
+    if (controller.offset <= controller.position.minScrollExtent &&
+        !controller.position.outOfRange) {}
+  }
+
+
 }
+
+

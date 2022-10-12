@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
@@ -13,8 +14,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 
-part 'post_screen_state.dart';
 part 'post_screen_cubit.freezed.dart';
+part 'post_screen_state.dart';
 
 class PostScreenCubit extends Cubit<PostScreenState> {
   final Event? event;
@@ -47,6 +48,7 @@ class PostScreenCubit extends Cubit<PostScreenState> {
         postContent: PostContent(postDesc),
         event: event,
         owner: Profile(id: UniqueId(), name: ProfileName("test")));
+    var statecheck = state;
     await state.maybeMap(
       loaded: (value) async {
         emit(PostScreenState.loading());
@@ -58,10 +60,11 @@ class PostScreenCubit extends Cubit<PostScreenState> {
                 (postReturned) async {
               post = await uploadImages(postReturned, value);
               //add our post to posts and emit the postsscreen
-              value.posts.add(postReturned);
-              emit(PostScreenState.loaded(posts: value.posts));
+              List<Post> postsAdded=  [...value.posts, postReturned];
+              emit(PostScreenState.loaded(posts: postsAdded));
             }));
       },
+      initial: (st){ print("intial");},
       orElse: () => throw LogicError(),
     );
   }
@@ -87,25 +90,32 @@ class PostScreenCubit extends Cubit<PostScreenState> {
                   }
                   ));
         },
-        orElse: () => throw LogicError());
+        error: (st){
+          emit(PostScreenState.error(error: st.error));
+        },
+        orElse: () =>
+        throw LogicError());
   }
 
   //we dont use this
   Future<void> deletePost(Post post) async {
-    await state.maybeMap(
-        loaded: (postLoaded) async {
-          repository.deletePost(post).then((value) {
-            //emit the loading bar
-            emit(PostScreenState.loading());
-            //delete post out of postlist and emit updated postlist
-            List<Post> updatedPostList = postLoaded.posts;
-            //returns true if element is in there and removed
-            updatedPostList.remove(post);
-            //emit our updated postlist
-            emit(PostScreenState.loaded(posts: updatedPostList));
-          });
-        },
-        orElse: () => throw LogicError());
+      await state.maybeMap(
+          loaded: (postLoaded) async {
+            repository.deletePost(post).then((value) {
+              //emit the loading bar
+              emit(PostScreenState.loading());
+              //delete post out of postlist and emit updated postlist
+              List<Post> updatedPostList = postLoaded.posts;
+              //returns true if element is in there and removed
+              updatedPostList.remove(post);
+              //emit our updated postlist
+              emit(PostScreenState.loaded(posts: updatedPostList));
+            });
+          },
+          orElse: () {
+            emit(PostScreenState.error(error: 'Logic Problem'));
+          }
+          );
   }
 
   // an simple error handler for eithers
@@ -134,7 +144,10 @@ class PostScreenCubit extends Cubit<PostScreenState> {
     for (XFile? element in loaded.images) {
       if (element != null) {
         await repository.uploadImages(post.id!, element).then((value) {
-          value.fold((l) => null, (imagePath) => post.images!.add(imagePath));
+          List<String> postImages = List.of(post.images!);
+
+          value.fold((l) => null, (imagePath) => postImages.add(imagePath));
+          post.copyWith(images: postImages);
         });
       }
     }

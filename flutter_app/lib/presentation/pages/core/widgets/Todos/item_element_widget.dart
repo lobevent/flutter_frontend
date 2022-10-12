@@ -1,16 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/data/common_hive.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/todo/item.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/Todos/todo_list.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../../../../data/storage_shared.dart';
 import '../../../../../domain/event/event.dart';
 import '../../../event/event_screen/cubit/add_people_item/add_people_item_cubit.dart';
 import '../add_friends_dialog.dart';
 import '../loading_overlay.dart';
 
+///
+/// The Element Widget for td items used in [TodoList]
+///
 class ItemElementWidget extends StatefulWidget {
   final Item item;
   final String name;
@@ -57,23 +61,27 @@ class _ItemElementWidgetState extends State<ItemElementWidget> {
       // the assigned profiles
       subtitle:
           Text(widget.description + "\n" + profileNames(widget.item.profiles!)),
-      trailing: FittedBox(
-        //TODO fix bs design
-        fit: BoxFit.fill,
-        child: Row(
-            children: actionButtons(widget.deleteItemFunc != null,
-                widget.addPeopleToItemFunc != null)),
-      ),
+
+      // the action buttons are only displayed if user is host!
+      trailing: widget.event.isHost
+          ? FittedBox(
+              //TODO fix bs design
+              fit: BoxFit.fill,
+              child: Row(
+                  children: actionButtons(widget.deleteItemFunc != null,
+                      widget.addPeopleToItemFunc != null)),
+            )
+          : null,
+
       onTap: () {
         widget.editItemFunc!(widget.item);
       },
       onLongPress: () {
         //TODO: deassignen verbieten wenn paar h vorher?
         //deassign profile to todo item
-        String? ownId = GetIt.I<StorageShared>().getOwnProfileId();
-        if (widget.item.profiles!
-            .map((e) => e.id.value)
-            .contains(GetIt.I<StorageShared>().getOwnProfileId())) {
+        final String? ownId = CommonHive.getBoxEntry<String>(
+            "ownProfileId", CommonHive.ownProfileIdAndPic);
+        if (widget.item.profiles!.map((e) => e.id.value).contains(ownId)) {
           widget.deassignProf!(widget.item, null);
         } else {
           widget.assignProf!(widget.item, null);
@@ -85,6 +93,7 @@ class _ItemElementWidgetState extends State<ItemElementWidget> {
   // extract the assigned profile names
   String profileNames(List<Profile> profiles) {
     String profileNameList = "";
+    // generates profile names String
     for (var i = 0; i < profiles.length; i++) {
       String profileNameI =
           profiles[i].name.value.fold((l) => l.toString(), (r) => r.toString());

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/data/common_hive.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
@@ -10,14 +11,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../../domain/core/errors.dart';
+import '../../../../../infrastructure/profile/achievements_dtos.dart';
 
 part 'profile_page_cubit.freezed.dart';
 part 'profile_page_state.dart';
 
 class ProfilePageCubit extends Cubit<ProfilePageState> {
   final UniqueId profileId;
+  AchievementsDto? achievements;
 
-  ProfilePageCubit({required UniqueId this.profileId})
+  ProfilePageCubit({required UniqueId this.profileId, this.achievements})
       : super(ProfilePageState.loading()) {
     loadProfile(profileId);
   }

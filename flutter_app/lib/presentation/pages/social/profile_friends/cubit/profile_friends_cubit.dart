@@ -10,6 +10,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 
 part 'profile_friends_cubit.freezed.dart';
+
 part 'profile_friends_state.dart';
 
 class ProfileFriendsCubit extends Cubit<ProfileFriendsState> {
@@ -19,6 +20,7 @@ class ProfileFriendsCubit extends Cubit<ProfileFriendsState> {
     emit(ProfileFriendsState.initial());
     getFriends();
   }
+
   ProfileRepository repository = GetIt.I<ProfileRepository>();
 
   ///loading the friends and the pending friendrequests
@@ -48,14 +50,12 @@ class ProfileFriendsCubit extends Cubit<ProfileFriendsState> {
   }
 
   ///accept the friendship and wait for backendresponse, maybe update the listview here too?
-  Future<bool> acceptFriendship(Profile profile) async {
+  Future<void> acceptFriendship(Profile profile) async {
     final success = await repository.acceptFriend(profile.id);
-
-    return success;
   }
 
   ///delete the friendship and update the listview, 2 lists for the tabs
-  Future<bool> deleteFriendship(Profile profile) async {
+  Future<void> deleteFriendship(Profile profile) async {
     final success = await repository.deleteFriend(profile.id);
 
     this.state.maybeMap((value) => null,
@@ -71,7 +71,5 @@ class ProfileFriendsCubit extends Cubit<ProfileFriendsState> {
               friendList: friends, pendingFriendsList: pendingFriends));
         },
         orElse: () => throw Exception('LogicError'));
-
-    return success;
   }
 }

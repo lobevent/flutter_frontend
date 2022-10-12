@@ -4,11 +4,15 @@ import 'dart:io';
 
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/feed/event_and_post_carrier.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:http/http.dart';
+
+import '../feed/event_and_post_carrier_dtos.dart';
+import '../post/post_dtos.dart';
 
 class EventRemoteService extends RemoteService<EventDto> {
   static const String eventByIdPath = "/event/";
@@ -31,7 +35,7 @@ class EventRemoteService extends RemoteService<EventDto> {
   static const String attendingEventsPath =
       "/event/%amount%/%lastEventTime%/%status%"; //TODO attending?
   static const String nearestEventsPath =
-      "/event/distance/%latitude%/%longitude%/%distance%/%amount%/%lastEventTime%"; //TODO attending?
+      "/event/distance/%latitude%/%longitude%/%distance%/%amount%/%lastEventTime%/%descending%"; //TODO attending?
   static const String unreactedEventsPath =
       "/user/events/%amount%/%lastEventTime%/"; //TODO reaction?
   static const String searchEventsPath =
@@ -40,7 +44,10 @@ class EventRemoteService extends RemoteService<EventDto> {
       "/events/userInterest/%amount%/%lastEventTime%";
   static const String eventConfirmUser =
       "/user/eventStatus/%eventId%/%longitude%/%latitude%/confirm";
+
   //event search name maxresults last
+  static const String feedPath =
+      "/mainfeedreal/%latitude%/%longitude%/%distance%/%maxResults%/%last%";
 
   // TODO combine it to event path?
   static const String postPath = "/event";
@@ -54,8 +61,7 @@ class EventRemoteService extends RemoteService<EventDto> {
   final SymfonyCommunicator client;
 
   EventRemoteService({SymfonyCommunicator? communicator})
-      : client = communicator ??
-            SymfonyCommunicator(); // TODO this doesn't work on runtime -> will throw an error!
+      : client = communicator ?? SymfonyCommunicator();
 
   Future<EventDto> getSingle(UniqueId id) async {
     final String uri = "$eventByIdPath${id.value}";
@@ -144,16 +150,17 @@ class EventRemoteService extends RemoteService<EventDto> {
       "status": "1",
     }));
   }
-  Future<List<EventDto>> searchNearEvents(
-      double latitude, double longitude, int distance,
-      DateTime lastEventTime,
-      int amount) async {
+
+  Future<List<EventDto>> searchNearEvents(double latitude, double longitude,
+      int distance, DateTime lastEventTime, int amount,
+      {bool descending = false}) async {
     return _getEventList(nearestEventsPath.interpolate({
       "latitude": latitude.toString(),
       "longitude": longitude.toString(),
       "distance": distance.toString(),
       "amount": amount.toString(),
       "lastEventTime": lastEventTime.toString(),
+      "descending": descending ? '1' : '0',
     }));
   }
 
@@ -212,8 +219,9 @@ class EventRemoteService extends RemoteService<EventDto> {
     client.postFile(uploadMainImage.interpolate({"eventId": eventId}), image);
   }
 
-  Future<void> uploadImageToEvent(String eventId, File image) async {
-    client.postFile(uploadImage.interpolate({"eventId": eventId}), image);
+  Future<String> uploadImageToEvent(String eventId, File image) async {
+    return client.postFile(
+        uploadImage.interpolate({"eventId": eventId}), image);
   }
 
   /*static String generatePaginatedRoute(
@@ -235,6 +243,19 @@ class EventRemoteService extends RemoteService<EventDto> {
     return convertList(response);
   }
 
+  Future<EventAndPostCarrierDto> _getFeedList(String path) async {
+    final Response response = await client.get(path);
+    final data = jsonDecode(response.body);
+    final eventsData = data["events"];
+    final postsData = data["posts"];
+
+    final List<EventDto> eventsDto = await covertListForeign<EventDto>(
+        Response(jsonEncode(eventsData), 200));
+    final List<PostDto> postsDto =
+        await covertListForeign<PostDto>(Response(jsonEncode(postsData), 200));
+    return EventAndPostCarrierDto(eventsDto: eventsDto, postsDto: postsDto);
+  }
+
   Future<bool> confirmUserAtEvent(
       String eventId, double longitude, double latitude) async {
     final Response response = await client.post(
@@ -247,8 +268,29 @@ class EventRemoteService extends RemoteService<EventDto> {
     return true;
   }
 
-  //  Future<List<EventDto>> getViewableEventsFromProfile(int ProfileId){
-  //
-  //  }
+  Future<List<EventDto>> getFeed(double latitude, double longitude,
+      int distance, int maxResults, DateTime lastEventTime) async {
+    return _getEventList(feedPath.interpolate({
+      "latitude": latitude.toString(),
+      "longitude": longitude.toString(),
+      "distance": distance.toString(),
+      "maxResults": maxResults.toString(),
+      "last": lastEventTime.toString(),
+    }));
+  }
 
+  Future<EventAndPostCarrierDto> getFeedEventsPost(
+      double latitude,
+      double longitude,
+      int distance,
+      int maxResults,
+      DateTime lastEventTime) async {
+    return _getFeedList(feedPath.interpolate({
+      "latitude": latitude.toString(),
+      "longitude": longitude.toString(),
+      "distance": distance.toString(),
+      "maxResults": maxResults.toString(),
+      "last": lastEventTime.toString(),
+    }));
+  }
 }

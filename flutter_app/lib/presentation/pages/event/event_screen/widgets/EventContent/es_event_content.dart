@@ -6,7 +6,6 @@ import 'package:flutter_frontend/data/icons_with_texts.dart';
 import 'package:flutter_frontend/data/icons_with_texts.dart';
 import 'package:flutter_frontend/data/icons_with_texts.dart';
 import 'package:flutter_frontend/data/icons_with_texts.dart';
-import 'package:flutter_frontend/data/storage_shared.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/event/event_series.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
@@ -82,9 +81,11 @@ class EventContent extends StatelessWidget {
                       stateLoaded.event.longitude, stateLoaded.event.latitude),
 
                   /// timerwidget to display when party starts
-                  if (stateLoaded.event.status != null || StorageShared().checkIfOwnId(stateLoaded.event.owner!.id.value.toString()))
-                    if(stateLoaded.event.date.isAfter(DateTime.now())) TimerWidget(dateTime: stateLoaded.event.date),
-
+                  if (stateLoaded.event.status != null ||
+                      CommonHive.checkIfOwnId(
+                          stateLoaded.event.owner!.id.value.toString()))
+                    if (stateLoaded.event.date.isAfter(DateTime.now()))
+                      TimerWidget(dateTime: stateLoaded.event.date),
 
                   ///for confirming the attending of an event
                   ImHereButton(
@@ -94,12 +95,11 @@ class EventContent extends StatelessWidget {
                       stateLoaded.event,
                       stateLoaded.event.status),
 
-
-
                   /// todoevents list
                   TodoWidget(),
 
-                  if(stateLoaded.event.status != null && stateLoaded.event.status == EventStatus.confirmAttending)
+                  if (stateLoaded.event.status != null &&
+                      stateLoaded.event.status == EventStatus.confirmAttending)
                     UploadImageButton(),
 
                   EventProfilePicturesSmallCarousell(event: stateLoaded.event),
@@ -130,8 +130,6 @@ class EventContent extends StatelessWidget {
 
                   /// Used as space
                   const SizedBox(height: 20),
-
-
                 ],
               );
             },
@@ -148,18 +146,20 @@ class EventContent extends StatelessWidget {
     IconData icon;
     String text;
 
-
     switch (status) {
       case EventStatus.attending:
         icon = IconsWithTexts.uesWithIcons[EventStatus.attending]!.values.first;
         text = IconsWithTexts.uesWithIcons[EventStatus.attending]!.keys.first;
         break;
       case EventStatus.notAttending:
-        icon = IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.values.first;
-        text = IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.keys.first;
+        icon =
+            IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.values.first;
+        text =
+            IconsWithTexts.uesWithIcons[EventStatus.notAttending]!.keys.first;
         break;
       case EventStatus.interested:
-        icon = IconsWithTexts.uesWithIcons[EventStatus.interested]!.values.first;
+        icon =
+            IconsWithTexts.uesWithIcons[EventStatus.interested]!.values.first;
         text = IconsWithTexts.uesWithIcons[EventStatus.interested]!.keys.first;
         break;
       case EventStatus.invited:
@@ -167,8 +167,10 @@ class EventContent extends StatelessWidget {
         text = IconsWithTexts.uesWithIcons[EventStatus.invited]!.keys.first;
         break;
       case EventStatus.confirmAttending:
-        icon = IconsWithTexts.uesWithIcons[EventStatus.confirmAttending]!.values.first;
-        text = IconsWithTexts.uesWithIcons[EventStatus.confirmAttending]!.keys.first;
+        icon = IconsWithTexts
+            .uesWithIcons[EventStatus.confirmAttending]!.values.first;
+        text = IconsWithTexts
+            .uesWithIcons[EventStatus.confirmAttending]!.keys.first;
         break;
       default:
         icon = Icons.lightbulb;
@@ -258,16 +260,16 @@ class EventContent extends StatelessWidget {
   Widget CoordsWidget(double? longitude, double? latitude) {
     return FittedBox(
       child: InkWell(
-        onTap: (){
-          if(latitude != null && longitude != null){
-            MapsLauncher.launchCoordinates(latitude, longitude);
-          }
-        },
+          onTap: () {
+            if (latitude != null && longitude != null) {
+              MapsLauncher.launchCoordinates(latitude, longitude);
+            }
+          },
           child: PaddingWidget(children: [
-        Icon(Icons.my_location),
-        Text("Latitude: ${latitude??'NaN'}"),
-        Text(" Longitude: ${longitude??'NaN'}"),
-      ])),
+            Icon(Icons.my_location),
+            Text("Latitude: ${latitude ?? 'NaN'}"),
+            Text(" Longitude: ${longitude ?? 'NaN'}"),
+          ])),
     );
   }
 
@@ -384,8 +386,6 @@ class EventContent extends StatelessWidget {
   Widget PaddingWidget({required List<Widget> children}) {
     return PaddingRowWidget(children: children);
   }
-
-
 
   /// widget which is 1 half of a post, also it got gradient and an postscreen button
   Widget generate1HalfPostWithOpacity(

@@ -58,6 +58,8 @@ class EventRemoteService extends RemoteService<EventDto> {
   static const String uploadMainImage = '/event/uploadImage/%eventId%';
   static const String uploadImage = '/upload/profileEventImage/%eventId%';
 
+  static const String nextAttendingEventPath = '/event/nextAttending';
+
   final SymfonyCommunicator client;
 
   EventRemoteService({SymfonyCommunicator? communicator})
@@ -78,6 +80,12 @@ class EventRemoteService extends RemoteService<EventDto> {
       "lastEventTime": lastEventTime.toString(),
       "descending": descending.toString()
     }));
+  }
+
+  Future<EventDto> getNextAttendingEvent() async {
+    final Response response = await client.get(nextAttendingEventPath);
+    final EventDto eventDto = _decodeEvent(response);
+    return eventDto;
   }
 
   Future<List<EventDto>> getSearchedEvents(

@@ -16,6 +16,7 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 import '../../../domain/event/event.dart';
 import '../../../domain/feed/event_and_post_carrier.dart';
+import '../core/widgets/feed_event_timer.dart';
 import '../event/core/event_list_tiles/event_list_tiles.dart';
 import '../event/events_multilist/cubit/events_mulitlist_cubit.dart';
 
@@ -52,6 +53,9 @@ class _FeedScreenState extends State<FeedScreen> {
               ? ErrorMessage(errorText: state.error.fold(() {}, (a) => a))
               : Column(
                   children: [
+                    Container(
+                      child: FeedEventTimer(),
+                    ),
                     Container(
                       child: itemBuilder(null, state.eventAndPostCarrier),
                     )

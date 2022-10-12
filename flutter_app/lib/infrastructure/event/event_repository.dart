@@ -244,4 +244,12 @@ class EventRepository extends Repository {
           latitude, longitude, distance, amount, lastEventTime));
     });
   }
+
+  Future<Either<NetWorkFailure, Event>> getNextAttEvent() async {
+    return localErrorHandler(() async {
+      final EventDto eventDto =
+          await _eventRemoteService.getNextAttendingEvent();
+      return right(eventDto.toDomain());
+    });
+  }
 }

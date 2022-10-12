@@ -8,8 +8,8 @@ import 'package:meta/meta.dart';
 
 import '../../../../application/core/geo_functions_cubit.dart';
 import '../../../../domain/event/event.dart';
+import '../../../../domain/feed/event_and_post_carrier.dart';
 import '../../../../infrastructure/event/event_repository.dart';
-
 
 part 'feed_state.dart';
 
@@ -17,7 +17,6 @@ class FeedCubit extends Cubit<FeedState> {
   FeedCubit() : super(FeedState()) {
     loadFeedReal();
     controller.addListener(_scrollListener);
-    
   }
   EventRepository repository = GetIt.I<EventRepository>();
   ScrollController controller = ScrollController();
@@ -58,27 +57,27 @@ class FeedCubit extends Cubit<FeedState> {
           position = loadedState.position;
         },
         orElse: () {});
-    repository.getFeed(position!.latitude,
-        position!.longitude,
-        5,
-        30,
-      DateTime.now()).then((value) => value.fold(
-      // (failure) {
-      //   state.isLoading = false;
-      //   state.error = some(failure.toString());
-      //   emit(state);
-      // },
-      // (posts) {
-      //   state.isLoading = false;
-      //   state.posts = posts;
-      //   emit(state);
-      // }));
-            (failure) {
-          emit(state.copywith(isLoading: false, error: some(failure.toString())));
-        },
-            (events) {
-          emit(state.copywith(isLoading: false, events: events));
-        }));
+    repository
+        .getFeedPostsEvents(
+            position!.latitude, position!.longitude, 5, 30, DateTime.now())
+        .then((value) => value.fold(
+                // (failure) {
+                //   state.isLoading = false;
+                //   state.error = some(failure.toString());
+                //   emit(state);
+                // },
+                // (posts) {
+                //   state.isLoading = false;
+                //   state.posts = posts;
+                //   emit(state);
+                // }));
+                (failure) {
+              emit(state.copywith(
+                  isLoading: false, error: some(failure.toString())));
+            }, (eventAndPostCarrier) {
+              emit(state.copywith(
+                  isLoading: false, eventAndPostCarrier: eventAndPostCarrier));
+            }));
   }
 
   /*
@@ -103,16 +102,15 @@ class FeedCubit extends Cubit<FeedState> {
   }
 
    */
-  
-  _scrollListener(){
+
+  _scrollListener() {
     if (controller.offset >= controller.position.maxScrollExtent &&
         !controller.position.outOfRange) {
-      if(!state.endReached) {
+      if (!state.endReached) {
         //loadMore();
       }
     }
     if (controller.offset <= controller.position.minScrollExtent &&
-        !controller.position.outOfRange) {
-    }
+        !controller.position.outOfRange) {}
   }
 }

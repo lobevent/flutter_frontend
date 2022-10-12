@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/repository.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
@@ -12,6 +13,11 @@ import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/event/event_local_service.dart';
 import 'package:flutter_frontend/infrastructure/event/event_remote_service.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../domain/feed/event_and_post_carrier.dart';
+import '../../domain/post/post.dart';
+import '../feed/event_and_post_carrier_dtos.dart';
+import '../post/post_dtos.dart';
 
 // TODO ignored this it's too late and seems to be in progress
 
@@ -82,6 +88,30 @@ class EventRepository extends Repository {
     }
   }
 
+  Future<Either<NetWorkFailure, EventsAndPostsCarrier>> _getListEventsPosts(
+      Future<EventAndPostCarrierDto> Function() repocall) async {
+    try {
+      final eventAndPostCarrierDto = await repocall();
+      //convert the dto objects to domain Objects
+      final eventAndPostCarrier = eventAndPostCarrierDto.toDomain();
+      return right(eventAndPostCarrier);
+    } on CommunicationException catch (e) {
+      return left(ExceptionsHandler.reactOnCommunicationException(e));
+    }
+  }
+
+  Future<Either<NetWorkFailure, List<Event>>> _getFeedList(
+      Future<List<EventDto>> Function() repocall) async {
+    try {
+      final eventDtos = await repocall();
+      //convert the dto objects to domain Objects
+      final events = eventDtos.map((edto) => edto.toDomain()).toList();
+      return right(events);
+    } on CommunicationException catch (e) {
+      return left(ExceptionsHandler.reactOnCommunicationException(e));
+    }
+  }
+
   Future<Either<NetWorkFailure, List<Event>>> getOwnedEvents(
       DateTime lastEventTime, int amount,
       {bool descending = false}) async {
@@ -123,10 +153,11 @@ class EventRepository extends Repository {
         () => _eventRemoteService.getAttendingEvents(lastEventTime, amount));
   }
 
-  Future<Either<NetWorkFailure, List<Event>>> getNearEvents(double latitude, double longitude, int distance,
-      DateTime lastEventTime, int amount, {bool descending = false}) async {
-    return _getList(
-            () => _eventRemoteService.searchNearEvents(latitude, longitude, distance, lastEventTime, amount));
+  Future<Either<NetWorkFailure, List<Event>>> getNearEvents(double latitude,
+      double longitude, int distance, DateTime lastEventTime, int amount,
+      {bool descending = false}) async {
+    return _getList(() => _eventRemoteService.searchNearEvents(
+        latitude, longitude, distance, lastEventTime, amount));
   }
 
   Future<Either<NetWorkFailure, List<Event>>> getRecentEvents(
@@ -191,11 +222,26 @@ class EventRepository extends Repository {
   /// gets the feed for logged in user
   ///
   Future<Either<NetWorkFailure, List<Event>>> getFeed(
-      double latitude, double longitude, int distance,
-       int amount,DateTime lastEventTime) async {
+      double latitude,
+      double longitude,
+      int distance,
+      int amount,
+      DateTime lastEventTime) async {
     return localErrorHandler(() async {
-      return _getList(() => _eventRemoteService.getFeed(latitude, longitude, distance,  amount, lastEventTime));
+      return _getList(() => _eventRemoteService.getFeed(
+          latitude, longitude, distance, amount, lastEventTime));
     });
   }
 
+  Future<Either<NetWorkFailure, EventsAndPostsCarrier>> getFeedPostsEvents(
+      double latitude,
+      double longitude,
+      int distance,
+      int amount,
+      DateTime lastEventTime) async {
+    return localErrorHandler(() async {
+      return _getListEventsPosts(() => _eventRemoteService.getFeedEventsPost(
+          latitude, longitude, distance, amount, lastEventTime));
+    });
+  }
 }

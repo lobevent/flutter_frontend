@@ -37,6 +37,7 @@ class AppStrings {
   static const String notAttending = "not attending";
   static const String interested = "interested";
   static const String invited = "invited";
+  static const String local = "local";
   static const String there = "there";
   static const String participants = "Participants";
 

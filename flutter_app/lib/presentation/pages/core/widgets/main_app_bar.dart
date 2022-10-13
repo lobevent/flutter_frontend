@@ -24,7 +24,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
     return AppBar(
       backgroundColor: AppColors.primaryColor,
       leading: OwnProfile(context),
-      actions: [LeadingButton(context), AddSeriesButton(context), ShowSeriesButton(context), MyLocationsButton(context), MyLocationsFormButton(context), LogoutButton(context)],
+      actions: [LeadingButton(context), AddSeriesButton(context), ShowSeriesButton(context), MyLocationsButton(context), MyLocationsFormButton(context), TEST_EventOverview(context), LogoutButton(context)],
     );
   }
 
@@ -34,6 +34,15 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
           context.router.push(EventFormPageRoute());
         },
         icon: const Icon(Icons.add));
+  }
+
+
+  Widget TEST_EventOverview(BuildContext context){
+    return IconButton(
+        onPressed: (){
+          context.router.push(EventOverviewPageRoute());
+        },
+        icon: const Icon(Icons.add_a_photo));
   }
 
   Widget MyLocationsButton(BuildContext context){

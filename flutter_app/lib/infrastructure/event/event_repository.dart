@@ -245,7 +245,7 @@ class EventRepository extends Repository {
     });
   }
 
-  Future<Either<NetWorkFailure, Event>> getNextAttEvent() async {
+  Future<Either<NetWorkFailure, Event?>> getNextAttEvent() async {
     return localErrorHandler(() async {
       final EventDto eventDto =
           await _eventRemoteService.getNextAttendingEvent();

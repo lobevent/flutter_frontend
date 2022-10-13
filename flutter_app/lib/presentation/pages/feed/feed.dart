@@ -61,7 +61,6 @@ class _FeedScreenState extends State<FeedScreen> {
                     )
                   ],
                 );
-          //generateUnscrollablePostContainer(posts: state.posts , showAutor: true);
           setState(() {
             events = state.eventAndPostCarrier.events;
           });
@@ -73,6 +72,8 @@ class _FeedScreenState extends State<FeedScreen> {
           return previus.isLoading != current.isLoading;
         },
         builder: (context, state) {
+          List<EventAndPostCarrier> evPostList =
+          generateSingleCarriers(state.eventAndPostCarrier);
           return BasicContentContainer(
             controller: context.read<FeedCubit>().controller,
             appBar: MainAppBar(),
@@ -80,9 +81,56 @@ class _FeedScreenState extends State<FeedScreen> {
                 const BottomNavigation(selected: NavigationOptions.home),
             child_ren: left([
               LoadingOverlay(
-                isLoading: state.isLoading,
-                child: Column(children: [child, LoadingIndicatorOrEnd]),
-              )
+                  isLoading: state.isLoading,
+                  child: CustomScrollView(
+                    shrinkWrap: true,
+                    // the padding is set to the std padding defined in styling widgets
+                    scrollDirection: Axis.vertical,
+                    physics: NeverScrollableScrollPhysics(),
+                    slivers: [
+                      const SliverAppBar(
+                        collapsedHeight: 100,
+                          pinned: true,
+                          flexibleSpace: FlexibleSpaceBar(
+                            centerTitle: true,
+                              title: FeedEventTimer()),
+                        ),
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                                (BuildContext context, int index){
+                                  if (evPostList.isEmpty) {
+                                    return Ink(
+                                        color: Colors.red,
+                                        child: const ListTile(title: Text("No content available")));
+                                  } else {
+                                    //if(events[index].date.isBefore(DateTime.now())){
+                                    //  return PostCommentBaseWidget(date: events[index].date, content: events[index].name.toString(), actionButtonsWidgets: Text(''));
+                                    // }
+                                    if (evPostList[index].event != null) {
+                                      return EventListTiles(
+                                        key: ObjectKey(evPostList[index].event),
+                                        eventStatus: null,
+                                        isInvitation: false,
+                                        event: evPostList[index].event!,
+                                        onDeletion: null,
+                                      );
+                                    } else if (evPostList[index].post != null) {
+                                      return PostWidget(
+                                          post: evPostList[index].post!, context: context);
+                                    } else {
+                                      return Text("some error");
+                                    }
+                                  }
+                        },
+
+                        childCount: evPostList.length,
+                        )
+                      )
+                    ],
+                  )
+                  //Column(children: [child, LoadingIndicatorOrEnd]),
+
+                  )
             ]),
           );
         },

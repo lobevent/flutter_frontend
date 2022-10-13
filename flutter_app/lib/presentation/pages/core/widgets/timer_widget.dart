@@ -38,7 +38,7 @@ class _TimerState extends State<TimerWidget> {
               child: Text('$days:$hours:$minutes:$seconds',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      color: AppColors.black,
+                      color: AppColors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 30)));
         });

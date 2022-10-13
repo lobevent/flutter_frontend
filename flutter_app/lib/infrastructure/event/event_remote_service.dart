@@ -84,8 +84,8 @@ class EventRemoteService extends RemoteService<EventDto> {
 
   Future<EventDto> getNextAttendingEvent() async {
     final Response response = await client.get(nextAttendingEventPath);
-    final EventDto eventDto = _decodeEvent(response);
-    return eventDto;
+    final List<EventDto> eventDto = await convertList(response);
+    return eventDto.first;
   }
 
   Future<List<EventDto>> getSearchedEvents(
@@ -256,11 +256,11 @@ class EventRemoteService extends RemoteService<EventDto> {
     final data = jsonDecode(response.body);
     final eventsData = data["events"];
     final postsData = data["posts"];
-
-    final List<EventDto> eventsDto = await covertListForeign<EventDto>(
-        Response(jsonEncode(eventsData), 200));
-    final List<PostDto> postsDto =
-        await covertListForeign<PostDto>(Response(jsonEncode(postsData), 200));
+    final eventsResp = Response(jsonEncode(eventsData), 200);
+    final postsResp = Response(jsonEncode(postsData), 200);
+    final List<EventDto> eventsDto =
+        await covertListForeign<EventDto>(eventsResp);
+    final List<PostDto> postsDto = await covertListForeign<PostDto>(postsResp);
     return EventAndPostCarrierDto(eventsDto: eventsDto, postsDto: postsDto);
   }
 

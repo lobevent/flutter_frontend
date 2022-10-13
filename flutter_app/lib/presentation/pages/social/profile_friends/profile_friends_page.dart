@@ -45,9 +45,6 @@ class ProfileFriendsScreenHolder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasicContentContainer(
-      bottomNavigationBar: BottomNavigation(
-        selected: NavigationOptions.friends,
-      ),
       isLoading: isLoading,
       child_ren: right(ProfileFriendsBody()),
       scrollable: false,

@@ -38,7 +38,7 @@ class EventScreenPage extends StatelessWidget {
                 onRefresh: () => _reload(context),
                 child: BasicContentContainer(
                   bottomNavigationBar: const BottomNavigation(
-                    selected: NavigationOptions.ownEvents,
+                    selected: NavigationOptions.eventOverview,
                   ),
                   child_ren: state.maybeMap(
 

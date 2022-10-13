@@ -31,7 +31,6 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/post_scre
   routes: [
     AutoRoute(path: '/', page: FeedScreen, initial: true),
     AutoRoute(page: EventFormPage),
-    AutoRoute(page: EventsMultilistScreen),
     AutoRoute(page: ItemCreateWidget),
     AutoRoute(page: LoginScreen),
     AutoRoute(page: PhoneNumberSignInScreen),

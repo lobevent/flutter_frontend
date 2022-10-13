@@ -11,6 +11,8 @@ import 'package:flutter_frontend/presentation/pages/event/events_multilist/widge
 import '../../core/widgets/stylings/core_widgets_stylings_text_with_icon.dart';
 import 'cubit/events_mulitlist_cubit.dart';
 
+
+@deprecated
 class EventsMultilistScreen extends StatelessWidget {
   final EventScreenOptions? option;
   final Profile? profile;
@@ -52,7 +54,7 @@ class OwnEventScreenHolder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var navigation = NavigationOptions.ownEvents;
+    var navigation = NavigationOptions.eventOverview;
 
     // var tabs = <Tab>[
     //   Tab(child: TextWithIcon(text: "Own", icon: Icons.person,)),

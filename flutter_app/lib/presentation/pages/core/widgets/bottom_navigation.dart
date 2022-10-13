@@ -8,23 +8,17 @@ import 'package:flutter_frontend/domain/core/value_objects.dart';
 
 enum NavigationOptions {
   home,
-  ownEvents,
-  invited,
-  ownProfile,
-  login,
+  eventOverview,
   profileSearch,
-  friends,
-  addEvent,
-  imageUpload,
   eventSwiper,
 }
 
 class BottomNavigation extends StatelessWidget {
   static Map enumToData = {
     NavigationOptions.home: {'key': 0, 'route': FeedScreenRoute()},
-    NavigationOptions.ownEvents: {
+    NavigationOptions.eventOverview: {
       'key': 1,
-      'route': EventsMultilistScreenRoute()
+      'route': EventOverviewPageRoute()
     },
     NavigationOptions.profileSearch: {
       'key': 2,
@@ -53,7 +47,7 @@ class BottomNavigation extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.event),
-          label: 'OwnEvents',
+          label: 'Event Overview',
           backgroundColor: AppColors.primaryColor,
         ),
         BottomNavigationBarItem(

@@ -5,6 +5,7 @@ import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/animations/LoadingEventsAnimation.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_overview/cubit/event_overview_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_overview/widgets/eop_tab_bar_view.dart';
@@ -19,6 +20,7 @@ class EventOverviewPage extends StatelessWidget {
       child: BlocBuilder<EventOverviewCubit, EventOverviewState>(
         builder: (context, state) {
           return BasicContentContainer(
+              bottomNavigationBar: BottomNavigation(selected: NavigationOptions.eventOverview,),
               child_ren: right(
 
                   DefaultTabController(

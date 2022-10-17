@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_overview/cubit/event_overview_cubit.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_overview/widgets/eop_single_tab_distances/cubit__eop_single_tab_distances/eop_single_tab_distances_cubit.dart';
 
 class EOPTabBarViewDistanceBar extends StatefulWidget {
   const EOPTabBarViewDistanceBar({Key? key}) : super(key: key);
@@ -21,17 +22,17 @@ class _EOPTabBarViewDistanceBarState extends State<EOPTabBarViewDistanceBar> {
         bottom: PreferredSize(
           preferredSize: const Size(90, 70),
           child: Slider.adaptive(
-              value: context.read<EventOverviewCubit>().getSearchDistatnce(),
+              value: context.read<EopSingleTabDistancesCubit>().getSearchDistatnce(),
               min: 0,
               max: 50,
               divisions: 50,
-              label: context.read<EventOverviewCubit>().getSearchDistatnce().toString(),
+              label: context.read<EopSingleTabDistancesCubit>().getSearchDistatnce().toString(),
               onChangeEnd: (newRating) {
-                  context.read<EventOverviewCubit>().setSearchDistanceAndUpdate(newRating);
+                  context.read<EopSingleTabDistancesCubit>().setSearchDistanceAndUpdate(newRating);
                 },
               onChanged: (newRating) {
                 setState(() {
-                  context.read<EventOverviewCubit>().setSearchDistance(newRating);
+                  context.read<EopSingleTabDistancesCubit>().setSearchDistance(newRating);
                 });
               }),
         )

@@ -16,7 +16,7 @@ part 'event_overview_cubit.freezed.dart';
 
 class EventOverviewCubit extends Cubit<EventOverviewState> {
   EventRepository repository = GetIt.I<EventRepository>();
-  InvitationRepository invRepo = GetIt.I<InvitationRepository>();
+    InvitationRepository invRepo = GetIt.I<InvitationRepository>();
   
   double searchDistanceKm = 5;
 

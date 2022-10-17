@@ -27,6 +27,10 @@ class InvitationRepository extends Repository{
     return _getList(() => remoteService.getInvitations(lastEventTime, amount, descending));
   }
 
+  Future<Either<NetWorkFailure, List<Event>>> getInvitationsAsEvents(DateTime lastEventTime, int amount, {bool descending = false})async{
+    return _mapInvitesUESToEvents(await _getList(() => remoteService.getInvitations(lastEventTime, amount, descending)));
+  }
+
   Future<Either<NetWorkFailure, Invitation>> sendInvitation(Profile profile, Event event, bool isHost){
     return localErrorHandler(() async {
       return right((await remoteService.sendInvitation(profile.id.value, event.id.value, isHost ? '1' : '0')).toDomain());
@@ -52,4 +56,32 @@ class InvitationRepository extends Repository{
       return right(( await remoteService.removeHost(profile.id.value, event.id.value)).toDomain());
     });
   }
+
+
+
+  //**************************************************************************************************************
+  //****************************  Helper Methods and Transformers   **********************************************
+  //**************************************************************************************************************
+
+  ///
+  /// maps the ues to the events in the list and returns the invitations as events
+  ///
+  Either<NetWorkFailure, List<Event>> _mapInvitesUESToEvents(Either<NetWorkFailure, List<Invitation>> invitationsOrFailure){
+    return invitationsOrFailure.fold(
+            (l) => left(l),
+            (invitations) {
+              List<Invitation> invitationsCleaned = _checkForEmptyInvitations(invitations);
+              return right(invitationsCleaned.map((e) => e.event!.copyWith(status: e.userEventStatus)).toList());
+            });
+  }
+
+  ///
+  /// if in the list of invitations is one without an event, it removes it from the list
+  /// 
+  List<Invitation> _checkForEmptyInvitations(List<Invitation> invitations){
+    List<Invitation> invitationsMutable = List.of(invitations);
+    invitationsMutable.removeWhere((invite) => invite.event == null);
+    return invitationsMutable;
+  }
+
 }

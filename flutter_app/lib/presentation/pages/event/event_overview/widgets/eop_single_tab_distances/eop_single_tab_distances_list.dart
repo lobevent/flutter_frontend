@@ -19,8 +19,7 @@ class SingleTabDistancesEventOverview extends StatefulWidget {
 class SingleTabDistancesEventOverviewState extends State<SingleTabDistancesEventOverview> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (BuildContext context) =>  EopSingleTabDistancesCubit(),
-      child: BlocBuilder<EopSingleTabDistancesCubit, EopSingleTabDistancesState>(
+    return BlocBuilder<EopSingleTabDistancesCubit, EopSingleTabDistancesState>(
         builder: (context, state){
           switch (state.status){
             case Status.loading:
@@ -34,8 +33,7 @@ class SingleTabDistancesEventOverviewState extends State<SingleTabDistancesEvent
               break;
           }
         },
-      ),
-    );
+      );
   }
 
   Widget EventListBuilderLocal(List<Event> events){

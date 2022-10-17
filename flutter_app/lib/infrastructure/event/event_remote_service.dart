@@ -33,7 +33,7 @@ class EventRemoteService extends RemoteService<EventDto> {
   static const String invitedEventsPath =
       "/user/events/invited/%amount%/%lastEventTime%/%descending%";
   static const String attendingEventsPath =
-      "/event/%amount%/%lastEventTime%/%status%/%descending%"; //TODO attending?
+      "/event/reacted/%amount%/%lastEventTime%/%status%/%descending%"; //TODO attending?
   static const String nearestEventsPath =
       "/event/distance/%latitude%/%longitude%/%distance%/%amount%/%lastEventTime%/%descending%"; //TODO attending?
   static const String unreactedEventsPath =

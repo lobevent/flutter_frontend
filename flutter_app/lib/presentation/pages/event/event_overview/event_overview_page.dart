@@ -7,7 +7,6 @@ import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/animations/LoadingEventsAnimation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_overview/cubit/event_overview_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_overview/widgets/eop_tab_bar_view.dart';
 
 class EventOverviewPage extends StatelessWidget {
@@ -15,29 +14,22 @@ class EventOverviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => EventOverviewCubit(),
-      child: BlocBuilder<EventOverviewCubit, EventOverviewState>(
-        builder: (context, state) {
-          return BasicContentContainer(
-              bottomNavigationBar: BottomNavigation(selected: NavigationOptions.eventOverview,),
-              child_ren: right(
+      return BasicContentContainer(
+          bottomNavigationBar: BottomNavigation(selected: NavigationOptions.eventOverview,),
+          child_ren: right(
 
-                  DefaultTabController(
-                      length: 3,
-                      child: Column(mainAxisSize: MainAxisSize.min, children: [
+              DefaultTabController(
+                  length: 3,
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
 
-                        // ------------------------------------------------------------------------------------------------------------------
-                        // ------------------------------------------- here the TabBar and the Tabview --------------------------------------
-                        // ------------------------------------------------------------------------------------------------------------------
-                        EOPTabBar(),
-                        EventOverviewTabBarView()
-                      ]))
+                    // ------------------------------------------------------------------------------------------------------------------
+                    // ------------------------------------------- here the TabBar and the Tabview --------------------------------------
+                    // ------------------------------------------------------------------------------------------------------------------
+                    EOPTabBar(),
+                    EventOverviewTabBarView()
+                  ]))
 
-          ));
-        },
-      ),
-    );
+      ));
   }
 
   Widget EOPTabBar(){

@@ -13,6 +13,16 @@ import '../../../../../../../domain/event/event.dart';
 
 part 'eop_single_tab_basic_state.dart';
 
+class InvitedEOPSingleTabCubit extends EopSingleTabBasicCubit{
+  InvitedEOPSingleTabCubit() : super(eventOption: EventOptions.invitations);
+}
+
+class AttendingEOPSingleTabCubit extends EopSingleTabBasicCubit{
+  AttendingEOPSingleTabCubit() : super(eventOption: EventOptions.attending);
+}
+
+
+
 enum EventOptions{ invitations, attending }
 class EopSingleTabBasicCubit extends Cubit<EopSingleTabBasicState> {
 
@@ -26,7 +36,7 @@ class EopSingleTabBasicCubit extends Cubit<EopSingleTabBasicState> {
   InvitationRepository invRepo = GetIt.I<InvitationRepository>();
 
   Future<void> loadEvents() async{
-    (await _eventsLoadingFunction(DateTime.now(), 30))
+    (await _eventsLoadingFunction(DateTime.now(), 30, ))
         .fold(
             (l) => emit(state.copyWith(failure: l, status: Status.failure)),
             (r) => emit(state.copyWith(status: Status.success, events: r))
@@ -49,3 +59,5 @@ class EopSingleTabBasicCubit extends Cubit<EopSingleTabBasicState> {
   }
 
 }
+
+

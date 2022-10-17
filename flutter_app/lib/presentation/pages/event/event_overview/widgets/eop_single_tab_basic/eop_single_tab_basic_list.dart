@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -7,20 +9,20 @@ import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/
 import 'package:flutter_frontend/presentation/pages/event/event_overview/widgets/eop_single_tab_basic/cubit__eop_single_tab_basic/eop_single_tab_basic_cubit.dart';
 
 
-class SingleTabBasicEventOverview extends StatefulWidget {
+class SingleTabBasicEventOverview<CUBIT extends Cubit<EopSingleTabBasicState>> extends StatefulWidget {
+
 
   const SingleTabBasicEventOverview({Key? key, required this.attending}) : super(key: key);
 
   final bool attending;
   @override
-  State<SingleTabBasicEventOverview> createState() => _SingleTabBasicEventOverviewState();
+  State<SingleTabBasicEventOverview> createState() => _SingleTabBasicEventOverviewState<CUBIT>();
 }
 
-class _SingleTabBasicEventOverviewState extends State<SingleTabBasicEventOverview> {
+class _SingleTabBasicEventOverviewState<C extends Cubit<EopSingleTabBasicState>> extends State<SingleTabBasicEventOverview> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (BuildContext context) =>  EopSingleTabBasicCubit(eventOption: widget.attending ? EventOptions.attending : EventOptions.invitations),
-      child: BlocBuilder<EopSingleTabBasicCubit, EopSingleTabBasicState>(
+    return BlocBuilder<C, EopSingleTabBasicState>(
         builder: (context, state){
           switch (state.status){
             case Status.loading:
@@ -34,8 +36,7 @@ class _SingleTabBasicEventOverviewState extends State<SingleTabBasicEventOvervie
               break;
           }
         },
-      ),
-    );
+      );
   }
 
 

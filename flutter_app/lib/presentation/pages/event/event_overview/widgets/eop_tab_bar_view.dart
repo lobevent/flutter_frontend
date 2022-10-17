@@ -24,7 +24,7 @@ class EventOverviewTabBarView extends StatelessWidget {
               BlocProvider(create: (BuildContext context) =>  AttendingEOPSingleTabCubit(),),
               BlocProvider(create: (BuildContext context) =>  EopSingleTabDistancesCubit(),),
             ],
-            child: TabBarView(
+            child: const TabBarView(
                 children: [
                   SingleTabBasicEventOverview<AttendingEOPSingleTabCubit>(attending: true, ),
                   SingleTabBasicEventOverview<InvitedEOPSingleTabCubit>(attending: false,),

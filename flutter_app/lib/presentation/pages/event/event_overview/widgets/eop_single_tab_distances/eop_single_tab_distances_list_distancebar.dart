@@ -19,7 +19,7 @@ class _EOPTabBarViewDistanceBarState extends State<EOPTabBarViewDistanceBar> {
         pinned: true,
         //lat 37.4219983 long -122.084
         bottom: PreferredSize(
-          preferredSize: const Size(90, 70),
+          preferredSize: const Size(40, 00),
           child: Slider.adaptive(
               value: context.read<EopSingleTabDistancesCubit>().getSearchDistatnce(),
               min: 0,

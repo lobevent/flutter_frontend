@@ -18,17 +18,21 @@ part 'eop_single_tab_distances_state.dart';
 
 class EopSingleTabDistancesCubit extends Cubit<EopSingleTabDistancesState> {
 
-  EopSingleTabDistancesCubit() : super(EopSingleTabDistancesState(events: [], status: Status.loading)) {
+  EopSingleTabDistancesCubit() : super(EopSingleTabDistancesState(events: [], status: Status.loadingEvents)) {
     loadEvents();
   }
   double searchDistanceKm = 5;
-
+  Position? position;
 
   EventRepository repository = GetIt.I<EventRepository>();
 
   Future<void> loadEvents() async{
-    Position? position = await _getLocalPosition();
-    (await repository.getNearEvents(position!.latitude, position.longitude, searchDistanceKm.ceil(), DateTime.now(), 30))
+    emit(EopSingleTabDistancesState.loadingEmpty());
+    if(this.position == null){
+      await _getLocalPosition();
+      emit(state.copyWith(status: Status.loadingEvents));
+    }
+    (await repository.getNearEvents(this.position!.latitude, this.position!.longitude, searchDistanceKm.ceil(), DateTime.now(), 30, descending: false))
         .fold(
             (l) => emit(state.copyWith(failure: l, status: Status.failure)),
             (r) => emit(state.copyWith(status: Status.success, events: r))
@@ -65,6 +69,7 @@ class EopSingleTabDistancesCubit extends Cubit<EopSingleTabDistancesState> {
   /// get device position
   ///
   Future<Position?> _getLocalPosition() async{
+    emit(state.copyWith(status: Status.gettingGPSPosition));
     final geof = GeoFunctionsCubit(event: null);
     Position? position;
     await geof.checkUserPosition();
@@ -73,6 +78,7 @@ class EopSingleTabDistancesCubit extends Cubit<EopSingleTabDistancesState> {
           position = loadedState.position;
         },
         orElse: () {});
+    this.position = position;
     return position;
   }
 

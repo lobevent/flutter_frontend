@@ -26,6 +26,7 @@ class AppStrings {
 
   static const String countryCodeTitle = "Select your country";
   static const String countryCodeSearchBar = "Search countries";
+  static const String loadingGps = "Loading Gps";
 
   static const String deleteEventDialogTitle = "Are you sure?";
   static const String deleteEventDialogText =

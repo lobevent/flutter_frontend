@@ -1,6 +1,6 @@
 part of 'eop_single_tab_distances_cubit.dart';
 
-enum Status {loading, success, failure}
+enum Status {gettingGPSPosition, loadingEvents, success, failure}
 class EopSingleTabDistancesState {
   const EopSingleTabDistancesState({required this.events, required this.status, this.failure});
 
@@ -14,6 +14,8 @@ class EopSingleTabDistancesState {
         status: status ?? this.status,
         failure: failure);
   }
+
+  factory EopSingleTabDistancesState.loadingEmpty(){ return const EopSingleTabDistancesState(events: [], status: Status.loadingEvents);}
 
   EopSingleTabDistancesState addEventsToList(List<Event> newEvents){
     return copyWith(events: List.of(events)..addAll(newEvents));

@@ -9,6 +9,10 @@ import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/
 import 'package:flutter_frontend/presentation/pages/event/event_overview/widgets/eop_single_tab_basic/cubit__eop_single_tab_basic/eop_single_tab_basic_cubit.dart';
 
 
+///
+/// Shows list of events
+/// an cubit with [EopSingleTabBasicState] must be provided
+///
 class SingleTabBasicEventOverview<CUBIT extends Cubit<EopSingleTabBasicState>> extends StatefulWidget {
 
 
@@ -40,6 +44,9 @@ class _SingleTabBasicEventOverviewState<C extends Cubit<EopSingleTabBasicState>>
   }
 
 
+  ///
+  /// builds event list
+  ///
   Widget EventListBuilder(List<Event> events) {
     return ListView.builder(
         itemCount: events.length,

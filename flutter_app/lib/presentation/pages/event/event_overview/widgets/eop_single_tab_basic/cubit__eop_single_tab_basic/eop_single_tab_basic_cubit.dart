@@ -36,6 +36,7 @@ class EopSingleTabBasicCubit extends Cubit<EopSingleTabBasicState> {
   InvitationRepository invRepo = GetIt.I<InvitationRepository>();
 
   Future<void> loadEvents() async{
+    emit(state.copyWith(status: Status.loading));
     (await _eventsLoadingFunction(DateTime.now(), 30, ))
         .fold(
             (l) => emit(state.copyWith(failure: l, status: Status.failure)),

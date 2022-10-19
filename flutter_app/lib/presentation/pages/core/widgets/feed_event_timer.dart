@@ -18,25 +18,29 @@ class FeedEventTimer extends StatelessWidget {
       create: (context) => EventTimerCubit(),
       child: BlocBuilder<EventTimerCubit, EventTimerState>(
         builder: (context, state) {
-          return state.maybeMap((value) => const Text(''), initial: (init) {
-            return const Text('         ');
+          return state.maybeMap((value) => const SizedBox.shrink(),
+              initial: (init) {
+            return const SizedBox.shrink();
           }, loading: (loadingState) {
             return const CircularProgressIndicator();
           }, loaded: (loadedState) {
-            if (loadedState.event!.date
-                .isBefore(DateTime.now().add(Duration(days: 7)))) {
-              return EventTimer(loadedState.event!, context);
-            } else {
-              return const SizedBox.shrink();
-            }
+            //check if events is in 7 days
+            //if (loadedState.event!.date.isBefore(DateTime.now().add(const Duration(days: 7)))) {
+            return EventTimer(loadedState.event!, context);
+            //} else {
+            //return const SizedBox.shrink();
+            //}
           }, error: (err) {
             return ErrorWidget(err.error);
           }, orElse: () {
-            return Text('');
+            return const SizedBox.shrink();
           });
         },
       ),
     );
+    /*return
+
+     */
   }
 
   oderByDate(List<Event> events) {

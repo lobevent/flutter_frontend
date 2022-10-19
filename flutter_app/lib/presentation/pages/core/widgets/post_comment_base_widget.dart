@@ -8,6 +8,8 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/i
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:intl/intl.dart';
 
+import 'Profile/profile_popup.dart';
+
 class PostCommentBaseWidget extends StatelessWidget {
   /// the post attribute, which contains all the post data
   final Profile? autor;
@@ -76,7 +78,13 @@ class PostCommentBaseWidget extends StatelessWidget {
         ),
         Spacer(),
         // if author is null, just user a spacer instead
-        author == null ? Spacer() : AuthorWidget(author),
+        author == null
+            ? Spacer()
+            : ProfilePopup(
+                loadingButtonSize: 40,
+                isLoading: false,
+                profile: author,
+              ),
       ],
     );
   }

@@ -73,61 +73,53 @@ class _FeedScreenState extends State<FeedScreen> {
         },
         builder: (context, state) {
           List<EventAndPostCarrier> evPostList =
-          generateSingleCarriers(state.eventAndPostCarrier);
+              generateSingleCarriers(state.eventAndPostCarrier);
           return BasicContentContainer(
             controller: context.read<FeedCubit>().controller,
             appBar: MainAppBar(),
             bottomNavigationBar:
                 const BottomNavigation(selected: NavigationOptions.home),
-            child_ren: right(
-              LoadingOverlay(
-                  isLoading: state.isLoading,
-                  child: CustomScrollView(
-                    shrinkWrap: true,
-                    // the padding is set to the std padding defined in styling widgets
-                    scrollDirection: Axis.vertical,
-                    slivers: [
-                      const SliverAppBar(
-                          pinned: true,
-                          bottom: PreferredSize(preferredSize: Size(0, 10),
-                          child: FeedEventTimer())),
-                      SliverList(
+            child_ren: right(LoadingOverlay(
+                isLoading: state.isLoading,
+                child: CustomScrollView(
+                  shrinkWrap: true,
+                  // the padding is set to the std padding defined in styling widgets
+                  scrollDirection: Axis.vertical,
+                  slivers: [
+                    const SliverToBoxAdapter(child: FeedEventTimer()),
+                    SliverList(
                         delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index){
-                                  if (evPostList.isEmpty) {
-                                    return Ink(
-                                        color: Colors.red,
-                                        child: const ListTile(title: Text("No content available")));
-                                  } else {
-                                    //if(events[index].date.isBefore(DateTime.now())){
-                                    //  return PostCommentBaseWidget(date: events[index].date, content: events[index].name.toString(), actionButtonsWidgets: Text(''));
-                                    // }
-                                    if (evPostList[index].event != null) {
-                                      return EventListTiles(
-                                        key: ObjectKey(evPostList[index].event),
-                                        eventStatus: null,
-                                        isInvitation: false,
-                                        event: evPostList[index].event!,
-                                        onDeletion: null,
-                                      );
-                                    } else if (evPostList[index].post != null) {
-                                      return PostWidget(
-                                          post: evPostList[index].post!, context: context);
-                                    } else {
-                                      return Text("some error");
-                                    }
-                                  }
-                        },
+                      (BuildContext context, int index) {
+                        if (evPostList.isEmpty) {
+                          return Ink(
+                              color: Colors.red,
+                              child: const ListTile(
+                                  title: Text("No content available")));
+                        } else {
+                          if (evPostList[index].event != null) {
+                            return EventListTiles(
+                              key: ObjectKey(evPostList[index].event),
+                              eventStatus: null,
+                              isInvitation: false,
+                              event: evPostList[index].event!,
+                              onDeletion: null,
+                            );
+                          } else if (evPostList[index].post != null) {
+                            return PostWidget(
+                                post: evPostList[index].post!,
+                                context: context);
+                          } else {
+                            return Text("some error");
+                          }
+                        }
+                      },
+                      childCount: evPostList.length,
+                    ))
+                  ],
+                )
+                //Column(children: [child, LoadingIndicatorOrEnd]),
 
-                        childCount: evPostList.length,
-                        )
-                      )
-                    ],
-                  )
-                  //Column(children: [child, LoadingIndicatorOrEnd]),
-
-                  )
-            ),
+                )),
           );
         },
       ),

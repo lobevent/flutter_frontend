@@ -17,71 +17,86 @@ class TopInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(height: Constants.stdSpacesBetweenContent),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (event.distance!=null) TextWithIcon(text: event.distance!.toStringAsFixed(1), icon: Icons.social_distance_rounded) else const SizedBox.shrink(),
-              SizedBox(
-                //Todo how to fix this idk
-                width: MediaQuery.of(context).size.width - 120,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                      event.name.getOrCrash(), style: Theme.of(context).textTheme.headline5),
-                ),
-              ),
-              if(event.distance!=null)Text(" ") else SizedBox.shrink(),
-            ],),
-          SizedBox(height: Constants.stdSpacesBetweenContent),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(height: Constants.stdSpacesBetweenContent),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (event.distance != null)
               TextWithIcon(
-                text: event.owner?.name.getOrEmptyString() ?? '',
-                icon: Icons.location_on_outlined,
+                  text: event.distance!.toStringAsFixed(1),
+                  icon: Icons.social_distance_rounded)
+            else
+              const SizedBox.shrink(),
+            SizedBox(
+              //Todo how to fix this idk
+              width: MediaQuery.of(context).size.width - 120,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(event.name.getOrCrash(),
+                    style: Theme.of(context).textTheme.headline5),
               ),
-              Text(DateTimeConverter.convertToStringWithMonthName(event.date), style: TextStyle(fontWeight: FontWeight.bold),),
-              UESButton(context),
-            ],),
-          SizedBox(height: Constants.stdSpacesBetweenContent),
-        ],
-
-      );
+            ),
+            if (event.maxPersons != null)
+              TextWithIcon(
+                  text:
+                      "${event.attendingCount ?? "?"} / ${event.maxPersons.toString()}",
+                  icon: Icons.accessibility_new_rounded),
+          ],
+        ),
+        SizedBox(height: Constants.stdSpacesBetweenContent),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            TextWithIcon(
+              text: event.owner?.name.getOrEmptyString() ?? '',
+              icon: Icons.location_on_outlined,
+            ),
+            Text(
+              DateTimeConverter.convertToStringWithMonthName(event.date),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            UESButton(context),
+          ],
+        ),
+        SizedBox(height: Constants.stdSpacesBetweenContent),
+      ],
+    );
   }
 
-
-  Widget UESButton(BuildContext context){
+  Widget UESButton(BuildContext context) {
     return BlocBuilder<EventTileFunctionsCubit, EventTileFunctionsState>(
       builder: (context, state) {
-      IconData uesIcon = Icons.error;
-      switch (state.status) {
-        case EventStatus.attending:
-          uesIcon = AppIcons.attending;
-          break;
-        case EventStatus.notAttending:
-          uesIcon = AppIcons.notAttending;
-          break;
-        case EventStatus.interested:
-          uesIcon = AppIcons.interested;
-          break;
-        case null:
-          break;
-        case EventStatus.invited:
-          uesIcon = AppIcons.invited;
-          break;
-        case EventStatus.confirmAttending:
-          uesIcon = AppIcons.there;
-          break;
-      }
-      return UesMenuButton(icon: uesIcon,
-        deactivated: EventStatus.confirmAttending == state.status,
-        onClickFunction:(EventStatus status) => {
-        context.read<EventTileFunctionsCubit>().changeStatus(status), Navigator.pop(context)},
-        isLoading: state is EventTileUESLoading,);
-
+        IconData uesIcon = Icons.error;
+        switch (state.status) {
+          case EventStatus.attending:
+            uesIcon = AppIcons.attending;
+            break;
+          case EventStatus.notAttending:
+            uesIcon = AppIcons.notAttending;
+            break;
+          case EventStatus.interested:
+            uesIcon = AppIcons.interested;
+            break;
+          case null:
+            break;
+          case EventStatus.invited:
+            uesIcon = AppIcons.invited;
+            break;
+          case EventStatus.confirmAttending:
+            uesIcon = AppIcons.there;
+            break;
+        }
+        return UesMenuButton(
+          icon: uesIcon,
+          deactivated: EventStatus.confirmAttending == state.status,
+          onClickFunction: (EventStatus status) => {
+            context.read<EventTileFunctionsCubit>().changeStatus(status),
+            Navigator.pop(context)
+          },
+          isLoading: state is EventTileUESLoading,
+        );
       },
     );
   }

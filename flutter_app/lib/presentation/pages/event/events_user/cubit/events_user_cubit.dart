@@ -14,22 +14,26 @@ import '../../../../../domain/event/event.dart';
 part 'events_user_cubit.freezed.dart';
 part 'events_user_state.dart';
 
+enum View {declined, owned}
 class EventsUserCubit extends Cubit<EventsUserState> {
   Profile profile;
+  View view;
   EventRepository repository = GetIt.I<EventRepository>();
 
-  EventsUserCubit(this.profile) : super(EventsUserState.loading()){
+  EventsUserCubit(this.profile, {this.view = View.owned}) : super(EventsUserState.loading()){
     loadEvents();
   }
 
+  /// loads first events
+  /// uses [_upcomingFunction] to determine the correct repository call
   Future<void> loadEvents() async{
     emit(EventsUserState.loading());
     final Either<NetWorkFailure, List<Event>> eventsList;
     final Either<NetWorkFailure, List<Event>> eventsListRecent;
 
 
-    eventsList = await repository.getEventsFromUserUpcoming(DateTime.now(), 30, profile);
-    eventsListRecent = await repository.getEventsFromUserRecent(DateTime.now(), 30, profile, descending: true);
+    eventsList = await _upcomingFunction(DateTime.now(), 30, profile);
+    eventsListRecent = await _recentFunction(DateTime.now(), 30, profile, descending: true);
 
     if(eventsList.fold((l) {emit(EventsUserState.failure(failure: l)); return true;}, (r) => false)) {
       return;
@@ -47,41 +51,34 @@ class EventsUserCubit extends Cubit<EventsUserState> {
 
 
 
-  // /// deletes Event if its own event list
-  // Future<bool> deleteEvent(Event event, bool recent) async {
-  //
-  //   final Either<NetWorkFailure, Event> deletedEvent =
-  //   await repository.delete(event);
-  //
-  //   deletedEvent.fold((failure) {
-  //     emit(EventsUserState.failure(failure: failure));
-  //     return false;
-  //   }, (event) => null);
-  //
-  //   // map because of our states
-  //   this.state.maybeMap(
-  //       loaded: (state) {
-  //         //state.events.remove(event);
-  //         if(recent){
-  //           List<Event> events = state.recent_events;
-  //           events.remove(event);
-  //           // we want to have the events in the state, so we emit the events again!
-  //           emit(EventsUserState.loaded(recent_events: events, future_events: state.future_events, ));
-  //         }else{
-  //           List<Event> events = state.future_events;
-  //           events.remove(event);
-  //           // we want to have the events in the state, so we emit the events again!
-  //           emit(EventsUserState.loaded(recent_events: state.recent_events, future_events: events, ));
-  //         }
-  //
-  //         //this one is for the listview but
-  //         //emit(EventsMultilistState.deleted(event: event));
-  //
-  //       },
-  //       orElse: () => throw Exception('LogicError'));
-  //
-  //   return true;
-  // }
+  /// generic function for upcoming events to reduce boilerplate and code duplication
+  Future<Either<NetWorkFailure, List<Event>>> _upcomingFunction(DateTime lastEventTime, int amount, Profile profile,
+      {bool descending = false}) async{
+    switch (view){
+      case View.declined:
+        return await repository.getAttendingEvents(lastEventTime, amount, status: EventStatus.notAttending, descending: descending,);
+        break;
+      case View.owned:
+        return await repository.getEventsFromUserUpcoming(DateTime.now(), 30, profile, descending: descending);
+        break;
+    }
+
+  }
+  /// generic function for recent events to reduce boilerplate and code duplication
+  Future<Either<NetWorkFailure, List<Event>>> _recentFunction(DateTime lastEventTime, int amount, Profile profile,
+      {bool descending = true}) async{
+    switch (view){
+
+      case View.declined:
+        return await repository.getAttendingEvents(lastEventTime, amount, status: EventStatus.notAttending, descending: descending,);
+        break;
+      case View.owned:
+        return await repository.getEventsFromUserRecent(DateTime.now(), 30, profile, descending: descending);
+        break;
+    }
+
+  }
+
 
 }
 

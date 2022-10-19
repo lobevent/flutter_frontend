@@ -150,12 +150,12 @@ class EventRemoteService extends RemoteService<EventDto> {
   Future<List<EventDto>> getAttendingEvents(
       //TODO attending events?
       DateTime lastEventTime,
-      int amount, {bool descending  = false}) async {
+      int amount, {bool descending  = false, int status = 1}) async {
     return _getEventList(attendingEventsPath.interpolate({
       "amount": amount.toString(),
       "lastEventTime": lastEventTime.toString(),
       //1 for attending 2 for interested
-      "status": "1",
+      "status": status.toString(),
       "descending": descending ? '1' : '0',
     }));
   }

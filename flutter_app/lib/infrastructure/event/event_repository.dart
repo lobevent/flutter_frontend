@@ -148,9 +148,9 @@ class EventRepository extends Repository {
   }
 
   Future<Either<NetWorkFailure, List<Event>>> getAttendingEvents(
-      DateTime lastEventTime, int amount, {bool descending = false}) async {
+      DateTime lastEventTime, int amount, {bool descending = false, EventStatus status = EventStatus.attending}) async {
     return _getList(
-        () => _eventRemoteService.getAttendingEvents(lastEventTime, amount, descending: descending));
+        () => _eventRemoteService.getAttendingEvents(lastEventTime, amount, descending: descending, status: EventDto.domainToDtoStatus[status] as int));
   }
 
   Future<Either<NetWorkFailure, List<Event>>> getNearEvents(double latitude,

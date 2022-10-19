@@ -6,6 +6,7 @@ import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/infrastructure/core/local/common_hive/common_hive.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/animations/LoadingEventsAnimation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_widget.dart';
@@ -16,19 +17,20 @@ import 'package:flutter_frontend/presentation/pages/event/events_user/cubit/even
 import '../../../../domain/event/event.dart';
 
 ///
-/// Main page of the userEventOverview
+/// Main page of the userEventOverview, displays user related events in recent and upcomming tab
 ///
 class EventUserPage extends StatelessWidget {
   final Profile profile;
+  final View view;
 
-  const EventUserPage({Key? key, required this.profile}) : super(key: key);
+  const EventUserPage({Key? key, required this.profile, this.view = View.owned}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
 
     return BlocProvider(
-      create: (context) => EventsUserCubit(profile),
+      create: (context) => EventsUserCubit(profile, view: view),
       child: BlocBuilder<EventsUserCubit, EventsUserState>(
         builder: (context, state) {
 
@@ -55,14 +57,10 @@ class EventUserPage extends StatelessWidget {
   /// TODO: move the functionalitiy for deletion and editing into the [eventListTile]
   ///
   Widget _mapLoadingOrContent(EventsUserState state, BuildContext context){
-    bool isOwnProfile = CommonHive.checkIfOwnId(profile.id.value);
-    Function(Event event, bool recent)? onDeletion;
-    if(isOwnProfile){
-      onDeletion = context.read<EventsUserCubit>().deleteEvent;
-    }
-    return state.map(loading: (_) => EventTabs(upcoming: [], recendEvents: [], isLoading: true,),
+    String text = context.read<EventsUserCubit>().view == View.owned ? AppStrings.heading_ownedEvents + (CommonHive.getOwnProfileName()??"") : AppStrings.heading_ownedEvents;
+    return state.map(loading: (_) => EventTabs(heading: text,upcoming: [], recendEvents: [], isLoading: true,),
         loaded: (loadedState) => EventTabs(
-            onDeletion: onDeletion,
+            heading: text,
             upcoming: loadedState.future_events,
             recendEvents: loadedState.recent_events),
             failure: (failure) => NetworkErrorWidget(failure: failure.failure),

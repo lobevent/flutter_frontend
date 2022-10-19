@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
+import 'package:flutter_frontend/presentation/core/styles/icons.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/animations/LoadingEventsAnimation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/main_app_bar.dart';
@@ -57,7 +58,7 @@ class EventOverviewPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _recentSwitcherButton(context, state),
-          _recentSwitcherButton(context, state),
+          _showDeclined(context, state),
         ],
       ),
     );
@@ -75,7 +76,7 @@ class EventOverviewPage extends StatelessWidget {
   Widget _showDeclined(BuildContext context, EventOverviewState state){
     return IconButton(
       splashRadius: 20,
-      icon: Icon(Icons.ac_unit),
+      icon: Icon(AppIcons.notAttending),
       onPressed: () => context.read<EventOverviewBloc>().add(state.status == MainStatus.upcoming ?
       EventOverviewShowRecent() :
       EventOverviewShowUpcomming()),);

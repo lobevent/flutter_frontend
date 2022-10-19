@@ -14,6 +14,7 @@ import '../../../profile/profile_repository.dart';
 
 //TODO: use this also token, its way faster and easier
 
+// ignore: avoid_classes_with_only_static_members
 class CommonHive {
   static const String achievements = 'achievements';
   static const String ownProfileIdAndPic = 'ownProfileIdAndPic';
@@ -48,6 +49,8 @@ class CommonHive {
       await GetIt.I<ProfileRepository>()
           .getOwnProfile()
           .then((value) => value.fold((l) => null, (ownProfile) {
+                CommonHive.saveBoxEntry<String>(ownProfile.name.getOrEmptyString(),
+                    "ownProfileName", ownProfileIdAndPic);
                 CommonHive.saveBoxEntry<String>(ownProfile.id.value.toString(),
                     "ownProfileId", ownProfileIdAndPic);
                 try {
@@ -65,6 +68,10 @@ class CommonHive {
 
   static Future<String?> getOwnPic() async {
     return CommonHive.getBoxEntry<String>("ownProfilePic", ownProfileIdAndPic);
+  }
+
+  static String? getOwnProfileName()  {
+    return CommonHive.getBoxEntry<String>("ownProfileName", ownProfileIdAndPic);
   }
 
   ///checks if some id is ownProfileId

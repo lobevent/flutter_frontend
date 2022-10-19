@@ -15,6 +15,9 @@ import 'package:flutter_frontend/presentation/pages/event/events_user/cubit/even
 
 import '../../../../domain/event/event.dart';
 
+///
+/// Main page of the userEventOverview
+///
 class EventUserPage extends StatelessWidget {
   final Profile profile;
 
@@ -47,6 +50,10 @@ class EventUserPage extends StatelessWidget {
 
 
 
+  ///
+  /// maps the current state to an representing widget and adds an deletionfunktion if the profile of the event is the same as the viewing profile
+  /// TODO: move the functionalitiy for deletion and editing into the [eventListTile]
+  ///
   Widget _mapLoadingOrContent(EventsUserState state, BuildContext context){
     bool isOwnProfile = CommonHive.checkIfOwnId(profile.id.value);
     Function(Event event, bool recent)? onDeletion;

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 
+///
+/// provides an Floatingactionbutton to Position in an Stack widget
+/// The top widget is [Positioned] so the containing widget must support that
+/// The Floating Action button is displayed in the right bottom corner
+///
 class FloatingButtonRightBottom extends StatelessWidget {
   const FloatingButtonRightBottom({Key? key, required this.onPressed}) : super(key: key);
 

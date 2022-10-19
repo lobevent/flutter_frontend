@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart' hide Router;
-import 'package:dartz/dartz.dart' show left, Either;
+import 'package:dartz/dartz.dart' show Either, left, right;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
@@ -79,22 +79,18 @@ class _FeedScreenState extends State<FeedScreen> {
             appBar: MainAppBar(),
             bottomNavigationBar:
                 const BottomNavigation(selected: NavigationOptions.home),
-            child_ren: left([
+            child_ren: right(
               LoadingOverlay(
                   isLoading: state.isLoading,
                   child: CustomScrollView(
                     shrinkWrap: true,
                     // the padding is set to the std padding defined in styling widgets
                     scrollDirection: Axis.vertical,
-                    physics: NeverScrollableScrollPhysics(),
                     slivers: [
                       const SliverAppBar(
-                        collapsedHeight: 100,
                           pinned: true,
-                          flexibleSpace: FlexibleSpaceBar(
-                            centerTitle: true,
-                              title: FeedEventTimer()),
-                        ),
+                          bottom: PreferredSize(preferredSize: Size(0, 10),
+                          child: FeedEventTimer())),
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index){
@@ -131,13 +127,14 @@ class _FeedScreenState extends State<FeedScreen> {
                   //Column(children: [child, LoadingIndicatorOrEnd]),
 
                   )
-            ]),
+            ),
           );
         },
       ),
     );
   }
 
+  @Deprecated("Sliver child delegate is doing this now")
   Widget itemBuilder(EventStatus? userEventStatus,
       EventsAndPostsCarrier eventsAndPostsCarrier) {
     List<EventAndPostCarrier> evPostList =

@@ -13,6 +13,11 @@ import '../../../../../../../domain/event/event.dart';
 
 part 'eop_single_tab_basic_state.dart';
 
+
+// ********************************************************************************************************************
+//********************************** HELPER CLASSES TO DISTINGUISH THE CORRECT CUBIT **********************************
+// ********************************************************************************************************************
+
 class InvitedEOPSingleTabCubit extends EopSingleTabBasicCubit{
   InvitedEOPSingleTabCubit() : super(eventOption: EventOptions.invitations);
 }
@@ -22,8 +27,10 @@ class AttendingEOPSingleTabCubit extends EopSingleTabBasicCubit{
 }
 
 
-
+/// EventOptions provide the correct repository and the for it
+/// they determine which events are loaded
 enum EventOptions{ invitations, attending }
+
 class EopSingleTabBasicCubit extends Cubit<EopSingleTabBasicState> {
 
   EopSingleTabBasicCubit({required this.eventOption}) : super(EopSingleTabBasicState(events: [], status: Status.loading)) {
@@ -35,6 +42,9 @@ class EopSingleTabBasicCubit extends Cubit<EopSingleTabBasicState> {
   EventRepository repository = GetIt.I<EventRepository>();
   InvitationRepository invRepo = GetIt.I<InvitationRepository>();
 
+  ///
+  /// this function loads the initial events
+  ///
   Future<void> loadEvents() async{
     emit(state.copyWith(status: Status.loading));
     (await _eventsLoadingFunction(DateTime.now(), 30, ))
@@ -48,6 +58,9 @@ class EopSingleTabBasicCubit extends Cubit<EopSingleTabBasicState> {
 
 
 
+  ///
+  /// provides the correct repository function depending on whether the events should be loaded from invitations or attending events
+  ///
   Future<Either<NetWorkFailure, List<Event>>> _eventsLoadingFunction(DateTime dateTime, int amount, {bool descending = false}){
     switch (eventOption){
       case EventOptions.invitations:

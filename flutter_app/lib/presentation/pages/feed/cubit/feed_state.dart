@@ -11,7 +11,6 @@ class FeedState {
     this.error = error ?? this.error;
     this.eventAndPostCarrier = eventAndPostCarrier ?? this.eventAndPostCarrier;
     this.isLoadingNew = isLoadingNew ?? this.isLoadingNew;
-    this.isLoadingNew = isLoadingNew ?? this.isLoadingNew;
     this.endReached = endReached ?? this.endReached;
   } // you have to update the constructor
 

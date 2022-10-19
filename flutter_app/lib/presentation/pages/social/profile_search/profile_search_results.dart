@@ -175,13 +175,31 @@ class SearchResultsListViewState extends State<SearchResultsListView>
                   ],
                 );
               } else {
-                return TabBarView(
-                  controller: tabController,
-                  children: [
-                    ListView(children: generateProfileTiles(profiles)),
-                    ListView(children: generateEventTiles(events)),
-                  ],
-                );
+                return state.maybeMap(loading: (loading) {
+                  return Text("");
+                }, loadedBoth: (loadedBoth) {
+                  return TabBarView(
+                    controller: tabController,
+                    children: [
+                      ListView(
+                          children: generateProfileTiles(loadedBoth.profiles)),
+                      ListView(children: generateEventTiles(loadedBoth.events)),
+                    ],
+                  );
+                }, error: (err) {
+                  print(err.toString());
+                  return Text("");
+                }, orElse: () {
+                  return TabBarView(
+                    controller: tabController,
+                    children: [
+                      ListView(
+                          children: [buildStartSearching(context, "users")]),
+                      ListView(
+                          children: [buildStartSearching(context, "events")])
+                    ],
+                  );
+                });
               }
             }),
           ),

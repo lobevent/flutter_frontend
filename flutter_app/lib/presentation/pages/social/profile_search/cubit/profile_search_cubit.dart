@@ -48,10 +48,10 @@ class ProfileSearchCubit extends Cubit<ProfileSearchState> {
   Future<void> searchByBothName(String queryName) async {
     try {
       emit(ProfileSearchState.loading());
-      final Either<NetWorkFailure, List<Event>> eventList =
-          await eventRepository.searchEvent(DateTime.now(), 10, queryName);
       final Either<NetWorkFailure, List<Profile>> profileList = await repository
           .getSearchProfiles(amount: 10, searchString: queryName);
+      final Either<NetWorkFailure, List<Event>> eventList =
+          await eventRepository.searchEvent(DateTime.now(), 10, queryName);
       emit(ProfileSearchState.loadedBoth(
           profiles: profileList.fold((l) => throw Exception, (r) => r),
           events: eventList.fold((l) => throw Exception, (r) => r)));

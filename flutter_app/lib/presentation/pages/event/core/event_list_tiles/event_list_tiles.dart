@@ -14,6 +14,7 @@ import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/event_list_tiles__topImage.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
+import '../../../../../infrastructure/core/local/common_hive/common_hive.dart';
 import '../../../core/widgets/styling_widgets.dart';
 
 class EventListTiles extends StatefulWidget {
@@ -22,11 +23,12 @@ class EventListTiles extends StatefulWidget {
   final bool isInvitation;
   final EventStatus? eventStatus;
 
-  const EventListTiles({required ObjectKey key,
-    required this.event,
-    this.onDeletion,
-    this.isInvitation = false,
-    this.eventStatus})
+  const EventListTiles(
+      {required ObjectKey key,
+      required this.event,
+      this.onDeletion,
+      this.isInvitation = false,
+      this.eventStatus})
       : super(key: key);
 
   @override
@@ -35,36 +37,40 @@ class EventListTiles extends StatefulWidget {
 
 class _EventListTilesState extends State<EventListTiles> {
   bool vilibility = true;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) => EventTileFunctionsCubit(widget.event),
         child: BlocConsumer<EventTileFunctionsCubit, EventTileFunctionsState>(
           listener: (context, state) {
-            if(state is EventTileDeletionSuccess){
+            if (state is EventTileDeletionSuccess) {
               setState(() {
                 vilibility = false;
               });
             }
           },
-          builder: (context, state) =>  Visibility(
+          builder: (context, state) => Visibility(
             visible: vilibility,
             child: Card(
                 child: Column(children: [
-                  TopInfo(event: widget.event),
-                  TopImage(event: widget.event),
-                  if (widget.event.isHost)
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: widget.event.isHost
-                          ? actionButtons(CommonHive.checkIfOwnId(widget.event.owner?.id.value??""), context)
-                          : [],
-                    ),
-                  Row(
-                    children: [],
-                  )
-                ])),
+              TopInfo(event: widget.event),
+              TopImage(event: widget.event),
+              if (widget.event.isHost)
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: widget.event.isHost
+                      ? actionButtons(
+                          CommonHive.checkIfOwnId(
+                              widget.event.owner?.id.value ?? ""),
+                          context)
+                      : [],
+                ),
+              Row(
+                children: [],
+              )
+            ])),
           ),
         ));
   }
@@ -89,7 +95,7 @@ class _EventListTilesState extends State<EventListTiles> {
           uesIcon = Icon(Icons.lightbulb);
           break;
         case EventStatus.confirmAttending:
-        // TODO: Handle this case.
+          // TODO: Handle this case.
           break;
       }
       return <Widget>[
@@ -102,25 +108,26 @@ class _EventListTilesState extends State<EventListTiles> {
             icon: Icon(Icons.delete),
             onPressed: () {
               GenDialog.genericDialog(
-                  context,
-                  AppStrings.deleteEventDialogTitle,
-                  AppStrings.deleteEventDialogText,
-                  AppStrings.deleteEventDialogConfirm,
-                  AppStrings.deleteEventDialogAbort)
-                  .then((value) async =>
-              {
-                if (value) {
-                  if(widget.onDeletion != null){
-                    widget.onDeletion!(widget.event)
-                  }
-                  else{
-                    context.read<EventTileFunctionsCubit>().deleteEvent(widget.event)
-                  }
-                }
-                else{
-                  print("abort delete")
-                }
-              });
+                      context,
+                      AppStrings.deleteEventDialogTitle,
+                      AppStrings.deleteEventDialogText,
+                      AppStrings.deleteEventDialogConfirm,
+                      AppStrings.deleteEventDialogAbort)
+                  .then((value) async => {
+                        if (value)
+                          {
+                            if (widget.onDeletion != null)
+                              {widget.onDeletion!(widget.event)}
+                            else
+                              {
+                                context
+                                    .read<EventTileFunctionsCubit>()
+                                    .deleteEvent(widget.event)
+                              }
+                          }
+                        else
+                          {print("abort delete")}
+                      });
             }),
         IconButton(
             icon: Icon(Icons.edit), onPressed: () => {editEvent(context)}),
@@ -130,6 +137,7 @@ class _EventListTilesState extends State<EventListTiles> {
   }
 
   void editEvent(BuildContext context) {
-    context.router.push(EventFormPageRoute(editedEventId: widget.event.id.value));
+    context.router
+        .push(EventFormPageRoute(editedEventId: widget.event.id.value));
   }
 }

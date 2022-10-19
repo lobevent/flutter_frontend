@@ -97,6 +97,7 @@ class ProfileRepository extends Repository {
     return localErrorHandler(() async {
       final List<ProfileDto> searchProfiles =
           await _profileRemoteService.getSearchedProfiles(amount, searchString);
+      var x = right(_convertToDomainList(searchProfiles));
       return right(_convertToDomainList(searchProfiles));
     });
   }

@@ -22,7 +22,7 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
 
   //List Routes
   ///TODO: change the searchProfilepath page 0
-  static const String searchProfilePath = "/profile/search/%needle%/%amount%/0";
+  static const String searchProfilePath = "/profile/search/%needle%/%amount%/";
   static const String attendingUsersPath =
       "/event/%eventId%/profiles/%maxResults%/0";
   static const String followerPath = "/profile/%profileId%/%amount%/";
@@ -102,8 +102,9 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
 
   Future<List<ProfileDto>> getSearchedProfiles(
       int amount, String searchString) async {
-    return _getProfileList(searchProfilePath
+    var x = _getProfileList(searchProfilePath
         .interpolate({"needle": searchString, "amount": amount.toString()}));
+    return x;
   }
 
   //event/%eventId%/profiles/%maxResults%/0

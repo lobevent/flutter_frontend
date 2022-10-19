@@ -11,18 +11,18 @@ import 'package:flutter_frontend/presentation/pages/event/event_overview/widgets
 import 'package:flutter_frontend/presentation/pages/event/event_overview/widgets/eop_single_tab_distances/eop_single_tab_distances_list_distancebar.dart';
 
 
-class SingleTabDistancesEventOverview extends StatefulWidget {
+class SingleTabDistancesEventOverview<C extends EopSingleTabDistancesCubit> extends StatefulWidget {
 
   const SingleTabDistancesEventOverview({Key? key}) : super(key: key);
 
   @override
-  State<SingleTabDistancesEventOverview> createState() => SingleTabDistancesEventOverviewState();
+  State<SingleTabDistancesEventOverview> createState() => SingleTabDistancesEventOverviewState<C>();
 }
 
-class SingleTabDistancesEventOverviewState extends State<SingleTabDistancesEventOverview> {
+class SingleTabDistancesEventOverviewState<C extends EopSingleTabDistancesCubit> extends State<SingleTabDistancesEventOverview> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EopSingleTabDistancesCubit, EopSingleTabDistancesState>(
+    return BlocBuilder<C, EopSingleTabDistancesState>(
         builder: (context, state){
           switch (state.status){
             case Status.loadingEvents:
@@ -47,7 +47,7 @@ class SingleTabDistancesEventOverviewState extends State<SingleTabDistancesEvent
       children: [
         CustomScrollView(
           slivers: [
-            EOPTabBarViewDistanceBar(),
+            EOPTabBarViewDistanceBar<C>(),
 
             // loading animation, it needs an sliver to box adapter! It is here, so the distance bare does not dissapear
             if(loading)
@@ -70,7 +70,7 @@ class SingleTabDistancesEventOverviewState extends State<SingleTabDistancesEvent
           //controller: context.read<EventsMultilistCubit>().controller,
         ),
         FloatingButtonRightBottom(
-          onPressed: (){context.read<EopSingleTabDistancesCubit>().loadEvents();},
+          onPressed: (){context.read<C>().loadEvents();},
         )
         ]);
   }

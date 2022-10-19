@@ -26,6 +26,15 @@ class AttendingEOPSingleTabCubit extends EopSingleTabBasicCubit{
   AttendingEOPSingleTabCubit() : super(eventOption: EventOptions.attending);
 }
 
+//************************************* those are for the recent cubits, in this way the other cubits are preserved, and we have much less boilerplate **********************************
+class Recent_InvitedEOPSingleTabCubit extends EopSingleTabBasicCubit{
+  Recent_InvitedEOPSingleTabCubit() : super(eventOption: EventOptions.invitations, isRecent: true);
+}
+
+class Recent_AttendingEOPSingleTabCubit extends EopSingleTabBasicCubit{
+  Recent_AttendingEOPSingleTabCubit() : super(eventOption: EventOptions.attending, isRecent: true);
+}
+
 
 /// EventOptions provide the correct repository and the for it
 /// they determine which events are loaded
@@ -33,11 +42,12 @@ enum EventOptions{ invitations, attending }
 
 class EopSingleTabBasicCubit extends Cubit<EopSingleTabBasicState> {
 
-  EopSingleTabBasicCubit({required this.eventOption}) : super(EopSingleTabBasicState(events: [], status: Status.loading)) {
+  EopSingleTabBasicCubit({required this.eventOption, this.isRecent = false}) : super(EopSingleTabBasicState(events: [], status: Status.loading)) {
     loadEvents();
   }
 
 
+  bool isRecent;
   EventOptions eventOption;
   EventRepository repository = GetIt.I<EventRepository>();
   InvitationRepository invRepo = GetIt.I<InvitationRepository>();
@@ -47,12 +57,13 @@ class EopSingleTabBasicCubit extends Cubit<EopSingleTabBasicState> {
   ///
   Future<void> loadEvents() async{
     emit(state.copyWith(status: Status.loading));
-    (await _eventsLoadingFunction(DateTime.now(), 30, ))
+    (await _eventsLoadingFunction(DateTime.now(), 30, descending: isRecent))
         .fold(
             (l) => emit(state.copyWith(failure: l, status: Status.failure)),
             (r) => emit(state.copyWith(status: Status.success, events: r))
     );
   }
+
 
 
 

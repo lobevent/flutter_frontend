@@ -7,3 +7,5 @@ class EventTileFunctionsInitial extends EventTileFunctionsState {EventTileFuncti
 class EventTileUESLoading extends EventTileFunctionsState {EventTileUESLoading(EventStatus? status):super(status);}
 class EventTileUESLoaded extends EventTileFunctionsState{EventTileUESLoaded(EventStatus? status):super(status); }
 class EventTileUESError extends EventTileFunctionsState{ final NetWorkFailure failure;  EventTileUESError(this.failure, EventStatus? status):super(status);}
+class EventTileDeletionError extends EventTileFunctionsState{ final NetWorkFailure failure;  EventTileDeletionError({required this.failure, EventStatus? status}):super(status);}
+class EventTileDeletionSuccess extends EventTileFunctionsState{ EventTileDeletionSuccess({EventStatus? status}):super(status);}

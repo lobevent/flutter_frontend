@@ -17,6 +17,8 @@ class AppStrings {
   static const String notFound = "not found!";
   static const String internalServer = "internal server";
 
+  static const String refresh = "refresh";
+
   static const String phoneNumberVerificationTitle =
       "Verify yourself with your phone number.";
   static const String phoneNumberTextFieldHint = "Phone Number";
@@ -35,6 +37,7 @@ class AppStrings {
   static const String deleteEventDialogAbort = "Abort";
 
   static const String attending = "attending";
+  static const String attended = "attended";
   static const String notAttending = "not attending";
   static const String interested = "interested";
   static const String invited = "invited";

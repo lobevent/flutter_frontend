@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_frontend/application/core/geo_functions.dart';
 import 'package:flutter_frontend/application/core/geo_functions_cubit.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/infrastructure/event/event_repository.dart';
@@ -82,17 +83,12 @@ class EopSingleTabDistancesCubit extends Cubit<EopSingleTabDistancesState> {
   ///
   /// get device position
   ///
-  Future<Position?> _getLocalPosition() async{
+  ///
+  /// get device position
+  ///
+  Future<Position?> _getLocalPosition() async {
     emit(state.copyWith(status: Status.gettingGPSPosition));
-    final geof = GeoFunctionsCubit(event: null);
-    Position? position;
-    await geof.checkUserPosition();
-    geof.state.maybeMap(
-        loaded: (loadedState) {
-          position = loadedState.position;
-        },
-        orElse: () {});
-    this.position = position;
+    position = await GeoFunctions().checkIfNeedToFetchPosition(5);
     return position;
   }
 

@@ -54,7 +54,7 @@ class _SingleTabBasicEventOverviewState<C extends EopSingleTabBasicCubit> extend
         ListView.builder(
             itemCount: events.length,
             itemBuilder: (context, i) {
-              return EventListTiles(key: ObjectKey(events[i]), event: events[i]);
+              return EventListTiles(key: ObjectKey(events[i]), event: events[i],  isLowInterest: context.read<C>().isRecent);
             }),
         FloatingButtonRightBottom(onPressed: () => context.read<C>().loadEvents())
       ],

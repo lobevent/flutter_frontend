@@ -20,17 +20,19 @@ import '../../../../domain/event/event.dart';
 /// Main page of the userEventOverview, displays user related events in recent and upcomming tab
 ///
 class EventUserPage extends StatelessWidget {
-  final Profile profile;
+  final Profile? profile;
   final View view;
 
-  const EventUserPage({Key? key, required this.profile, this.view = View.owned}) : super(key: key);
+  const EventUserPage({Key? key, this.profile, this.view = View.owned}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
+    if(view == View.owned) {
+      assert(profile != null);
+    }
 
     return BlocProvider(
-      create: (context) => EventsUserCubit(profile, view: view),
+      create: (context) => EventsUserCubit(profile: profile, view: view),
       child: BlocBuilder<EventsUserCubit, EventsUserState>(
         builder: (context, state) {
 
@@ -57,7 +59,7 @@ class EventUserPage extends StatelessWidget {
   /// TODO: move the functionalitiy for deletion and editing into the [eventListTile]
   ///
   Widget _mapLoadingOrContent(EventsUserState state, BuildContext context){
-    String text = context.read<EventsUserCubit>().view == View.owned ? AppStrings.heading_ownedEvents + (CommonHive.getOwnProfileName()??"") : AppStrings.heading_ownedEvents;
+    String text = view == View.owned ? AppStrings.heading_ownedEvents + (CommonHive.getOwnProfileName()??"") : AppStrings.heading_declinedEvents;
     return state.map(loading: (_) => EventTabs(heading: text,upcoming: [], recendEvents: [], isLoading: true,),
         loaded: (loadedState) => EventTabs(
             heading: text,

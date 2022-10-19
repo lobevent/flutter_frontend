@@ -60,7 +60,7 @@ class SingleTabDistancesEventOverviewState<C extends EopSingleTabDistancesCubit>
                   // The builder function returns a ListTile with a title that
                   // displays the index of the current item.
                     (BuildContext context, int index) {
-                      return EventListTiles(key: ObjectKey(events[index]), event: events[index]);
+                      return EventListTiles(key: ObjectKey(events[index]), event: events[index], isLowInterest: context.read<C>().isRecent,);
                     },
                     // Builds 1000 ListTiles
                     childCount: events.length

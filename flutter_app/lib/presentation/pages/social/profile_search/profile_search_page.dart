@@ -9,12 +9,25 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import 'cubit/profile_search_cubit.dart';
 
-class ProfileSearchPage extends StatefulWidget {
+class ProfileSearchPage extends StatelessWidget {
+  const ProfileSearchPage({Key? key}) : super(key: key);
+
   @override
-  _ProfileSearchState createState() => _ProfileSearchState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => ProfileSearchCubit(),
+      child: ProfileSearchContainer()
+    );
+  }
 }
 
-class _ProfileSearchState extends State<ProfileSearchPage> {
+
+class ProfileSearchContainer extends StatefulWidget {
+  @override
+  _ProfileSearchContainerState createState() => _ProfileSearchContainerState();
+}
+
+class _ProfileSearchContainerState extends State<ProfileSearchContainer> {
   String? profileSearch;
   List<Profile> profiles = [];
   List<Event> events = [];
@@ -36,6 +49,77 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
   void dispose() {
     controller.dispose();
     super.dispose();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    //for the tapable history tiles
+    return BlocBuilder<ProfileSearchCubit, ProfileSearchState>(
+      builder: (context, state) {
+        return Scaffold(
+            bottomNavigationBar: BottomNavigation(
+              selected: NavigationOptions.profileSearch,
+            ),
+            body: FloatingSearchBar(
+                controller: controller,
+                body: FloatingSearchBarScrollNotifier(
+                  child: LoadingOverlay(
+                    child: SearchResultsListView(),
+                    isLoading: false,
+                  ),
+                ),
+                transition: CircularFloatingSearchBarTransition(),
+                physics: const BouncingScrollPhysics(),
+                title: Text(selectedTerm ?? "Search"),
+                hint: 'Search and find out',
+                actions: [
+                  FloatingSearchBarAction.searchToClear(),
+                ],
+                onQueryChanged: (query) {
+                  //search for old recommendations
+                  setState(() {
+                    filteredSearchHistory = filterSearchTerms(filter: query);
+                  });
+                },
+                onSubmitted: (query) async {
+                  setState(() {
+                    if (query != "") {
+                      addSearchTerm(query);
+                      selectedTerm = query;
+                      context
+                          .read<ProfileSearchCubit>()
+                          .searchByBothName(query);
+                      controller.close();
+                    }
+                  });
+                },
+                builder: (context, transition) {
+                  return ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Material(
+                        color: Colors.white,
+                        elevation: 4,
+                        child: Builder(
+                          builder: (context) {
+                            //if query empty and history empty, return the Start Searching Site
+                            if (filteredSearchHistory!.isEmpty &&
+                                controller.query.isEmpty) {
+                              return buildQueryContainerInitial(context);
+                            } else if (filteredSearchHistory!.isEmpty) {
+                              // if empty add query and show query as tile
+                              return buildQueryListTile(context);
+                            } else {
+                              //return the previous search history results
+                              return buildPreviousQuerys(context);
+                            }
+                          },
+                          //itemCount: this.profiles.length),
+                        ),
+                      ));
+                }));
+      },
+    );
   }
 
   List<String> filterSearchTerms({required String? filter}) {
@@ -70,80 +154,6 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
     addSearchTerm(term);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (context) => ProfileSearchCubit(),
-        child: BlocBuilder<ProfileSearchCubit, ProfileSearchState>(
-            builder: (context, state) {
-          //loadingoverlay mapping
-          final bool isLoading = state.maybeMap(
-              initial: (_) => false, loading: (_) => true, orElse: () => false);
-          //for the tapable history tiles
-          return Scaffold(
-              bottomNavigationBar: BottomNavigation(
-                selected: NavigationOptions.profileSearch,
-              ),
-              body: FloatingSearchBar(
-                  controller: controller,
-                  body: FloatingSearchBarScrollNotifier(
-                    child: LoadingOverlay(
-                      child: SearchResultsListView(),
-                      isLoading: isLoading,
-                    ),
-                  ),
-                  transition: CircularFloatingSearchBarTransition(),
-                  physics: const BouncingScrollPhysics(),
-                  title: Text(selectedTerm ?? "Search"),
-                  hint: 'Search and find out',
-                  actions: [
-                    FloatingSearchBarAction.searchToClear(),
-                  ],
-                  onQueryChanged: (query) {
-                    //search for old recommendations
-                    setState(() {
-                      filteredSearchHistory = filterSearchTerms(filter: query);
-                    });
-                  },
-                  onSubmitted: (query) async {
-                    setState(() {
-                      if (query != "") {
-                        addSearchTerm(query);
-                        selectedTerm = query;
-                        context
-                            .read<ProfileSearchCubit>()
-                            .searchByBothName(query);
-                        controller.close();
-                      }
-                    });
-                  },
-                  builder: (context, transition) {
-                    return ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Material(
-                          color: Colors.white,
-                          elevation: 4,
-                          child: Builder(
-                            builder: (context) {
-                              //if query empty and history empty, return the Start Searching Site
-                              if (filteredSearchHistory!.isEmpty &&
-                                  controller.query.isEmpty) {
-                                return buildQueryContainerInitial(context);
-                              } else if (filteredSearchHistory!.isEmpty) {
-                                // if empty add query and show query as tile
-                                return buildQueryListTile(context);
-                              } else {
-                                //return the previous search history results
-                                return buildPreviousQuerys(context);
-                              }
-                            },
-                            //itemCount: this.profiles.length),
-                          ),
-                        ));
-                  }));
-        }));
-  }
-
   ///builds the initial floatingbar (where there is no history)
   Container buildQueryContainerInitial(BuildContext context) {
     return Container(
@@ -165,9 +175,9 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
       onTap: () {
         setState(() {
           //we need the context of this, idk if this could be done better
-          BlocProvider(
-            create: (context) => ProfileSearchCubit(),
-          );
+          // BlocProvider(
+          //   create: (context) => ProfileSearchCubit(),
+          // );
           addSearchTerm(controller.query);
           selectedTerm = controller.query;
           context.read<ProfileSearchCubit>().searchByBothName(controller.query);
@@ -182,7 +192,8 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
     return Column(
       children: filteredSearchHistory!
           .map(
-            (term) => ListTile(
+            (term) =>
+            ListTile(
               title: Text(
                 term,
                 maxLines: 1,
@@ -209,7 +220,7 @@ class _ProfileSearchState extends State<ProfileSearchPage> {
                 controller.close();
               },
             ),
-          )
+      )
           .toList(),
     );
   }

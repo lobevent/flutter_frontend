@@ -86,7 +86,7 @@ class _FeedScreenState extends State<FeedScreen> {
                   // the padding is set to the std padding defined in styling widgets
                   scrollDirection: Axis.vertical,
                   slivers: [
-                    const SliverToBoxAdapter(child: FeedEventTimer()),
+                    SliverAppBar(flexibleSpace: FeedEventTimer(), automaticallyImplyLeading: false, pinned: true,),
                     SliverList(
                         delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {

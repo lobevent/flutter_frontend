@@ -21,14 +21,14 @@ class EventListTiles extends StatefulWidget {
   final Event event;
   final Function(Event event)? onDeletion;
   final bool isInvitation;
+  final bool isLowInterest;
   final EventStatus? eventStatus;
 
-  const EventListTiles(
-      {required ObjectKey key,
-      required this.event,
-      this.onDeletion,
-      this.isInvitation = false,
-      this.eventStatus})
+  const EventListTiles({required ObjectKey key,
+    required this.event,
+    this.onDeletion,
+    this.isInvitation = false,
+    this.eventStatus, this.isLowInterest = false})
       : super(key: key);
 
   @override
@@ -53,6 +53,16 @@ class _EventListTilesState extends State<EventListTiles> {
           builder: (context, state) => Visibility(
             visible: vilibility,
             child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(0), // if you need this
+                side: BorderSide(
+                  color: AppColors.black,
+                  width: 0.5,
+                ),
+              ),
+              margin: EdgeInsets.zero,
+              borderOnForeground: true,
+              color: widget.isLowInterest ?AppColors.lowInterestColor : null,
                 child: Column(children: [
               TopInfo(event: widget.event),
               TopImage(event: widget.event),

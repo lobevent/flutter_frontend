@@ -29,6 +29,15 @@ class PostCommentBaseWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(0), // if you need this
+          side: BorderSide(
+            color: AppColors.black,
+            width: 0.5,
+          ),
+        ),
+        margin: EdgeInsets.zero,
+        borderOnForeground: true,
         // constrained Box for min height
         child: ConstrainedBox(
             constraints: const BoxConstraints(

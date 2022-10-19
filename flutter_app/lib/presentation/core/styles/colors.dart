@@ -13,6 +13,7 @@ class AppColors {
 
   static const Color textOnAccentColor = Color(0xFF000000);
   static const Color accentButtonColor = Color(0xFFA57C00);
+  static const Color lowInterestColor = Color(0x32552900);
   static const Color errorColor = Color(0xFFFF2323);
   static const Color lightErrorBackgroundColor = Color(0xFFC4ACAC);
 

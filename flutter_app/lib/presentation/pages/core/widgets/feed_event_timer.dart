@@ -14,28 +14,33 @@ class FeedEventTimer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => EventTimerCubit(),
-      child: BlocBuilder<EventTimerCubit, EventTimerState>(
-        builder: (context, state) {
-          return state.maybeMap((value) => const SizedBox.shrink(),
-              initial: (init) {
-            return const SizedBox.shrink();
-          }, loading: (loadingState) {
-            return const CircularProgressIndicator();
-          }, loaded: (loadedState) {
-            //check if events is in 7 days
-            //if (loadedState.event!.date.isBefore(DateTime.now().add(const Duration(days: 7)))) {
-            return EventTimer(loadedState.event!, context);
-            //} else {
-            //return const SizedBox.shrink();
-            //}
-          }, error: (err) {
-            return ErrorWidget(err.error);
-          }, orElse: () {
-            return const SizedBox.shrink();
-          });
-        },
+    return Padding(
+      padding: EdgeInsets.all(5),
+      child: FittedBox(
+        child: BlocProvider(
+          create: (context) => EventTimerCubit(),
+          child: BlocBuilder<EventTimerCubit, EventTimerState>(
+            builder: (context, state) {
+              return state.maybeMap((value) => const SizedBox.shrink(),
+                  initial: (init) {
+                return const SizedBox.shrink();
+              }, loading: (loadingState) {
+                return const CircularProgressIndicator();
+              }, loaded: (loadedState) {
+                //check if events is in 7 days
+                //if (loadedState.event!.date.isBefore(DateTime.now().add(const Duration(days: 7)))) {
+                return EventTimer(loadedState.event!, context);
+                //} else {
+                //return const SizedBox.shrink();
+                //}
+              }, error: (err) {
+                return ErrorWidget(err.error);
+              }, orElse: () {
+                return const SizedBox.shrink();
+              });
+            },
+          ),
+        ),
       ),
     );
     /*return

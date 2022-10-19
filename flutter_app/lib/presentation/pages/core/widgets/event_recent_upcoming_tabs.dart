@@ -53,8 +53,7 @@ class EventTabs extends StatelessWidget {
     return ListView.builder(
         itemCount: events.length,
         itemBuilder: (context, i){
-          return EventListTiles(key: ObjectKey(events[i]), event: events[i],
-              onDeletion: onDeletion != null ? (Event event) => onDeletion!(event, recent) : null);
+          return EventListTiles(key: ObjectKey(events[i]), event: events[i], isLowInterest: recent,);
         });
   }
 }

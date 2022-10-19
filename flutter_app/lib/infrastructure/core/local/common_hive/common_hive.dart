@@ -20,6 +20,9 @@ class CommonHive {
   static const String ownProfileIdAndPic = 'ownProfileIdAndPic';
   static const String ownPosition = 'ownPosition';
 
+
+  static const String ownProfileIdBoxString = "ownProfileId";
+
   ///init the boxes we need
   static Future<void> initBoxes() async {
     await Hive.openBox<String>(ownProfileIdAndPic);
@@ -52,7 +55,7 @@ class CommonHive {
                 CommonHive.saveBoxEntry<String>(ownProfile.name.getOrEmptyString(),
                     "ownProfileName", ownProfileIdAndPic);
                 CommonHive.saveBoxEntry<String>(ownProfile.id.value.toString(),
-                    "ownProfileId", ownProfileIdAndPic);
+                    ownProfileIdBoxString, ownProfileIdAndPic);
                 try {
                   ownImage = ownProfile.images?[0];
                 } on RangeError catch (exception) {
@@ -74,9 +77,13 @@ class CommonHive {
     return CommonHive.getBoxEntry<String>("ownProfileName", ownProfileIdAndPic);
   }
 
+  static String? getOwnProfileId()  {
+    return CommonHive.getBoxEntry<String>(ownProfileIdBoxString, ownProfileIdAndPic);
+  }
+
   ///checks if some id is ownProfileId
   static bool checkIfOwnId(String checkId) {
-    return CommonHive.getBoxEntry<String>('ownProfileId', ownProfileIdAndPic) ==
+    return CommonHive.getBoxEntry<String>(ownProfileIdBoxString, ownProfileIdAndPic) ==
         checkId;
   }
 

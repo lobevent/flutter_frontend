@@ -30,6 +30,7 @@ class Profile with _$Profile {
     List<String>? images,
   }) = _FullProfile;
 
+
   //check if the whole object is no failure
   // TODO same problem as in all other data classes before. Use the methods of value objects. And this seems to be a pretty repetitive task --> implement a super class!
   Option<ValueFailure<dynamic>> get failureOption {

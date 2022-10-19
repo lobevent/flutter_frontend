@@ -1,7 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/infrastructure/core/local/common_hive/common_hive.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/core/styles/icons.dart';
@@ -11,6 +14,8 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/main_app_bar.da
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_overview/main_bloc/event_overview_bloc.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_overview/widgets/eop_tab_bar_view.dart';
+import 'package:flutter_frontend/presentation/pages/event/events_user/cubit/events_user_cubit.dart';
+import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class EventOverviewPage extends StatelessWidget {
   const EventOverviewPage({Key? key}) : super(key: key);
@@ -65,10 +70,11 @@ class EventOverviewPage extends StatelessWidget {
   }
 
   Widget _recentSwitcherButton(BuildContext context, EventOverviewState state){
+    bool isUpcoming = state.status == MainStatus.upcoming;
     return IconButton(
       splashRadius: 20,
-      icon: Icon(Icons.ac_unit),
-      onPressed: () => context.read<EventOverviewBloc>().add(state.status == MainStatus.upcoming ?
+      icon: isUpcoming ? Icon(Icons.ac_unit) : Icon(Icons.flash_on),
+      onPressed: () => context.read<EventOverviewBloc>().add(isUpcoming ?
       EventOverviewShowRecent() :
       EventOverviewShowUpcomming()),);
   }
@@ -77,9 +83,7 @@ class EventOverviewPage extends StatelessWidget {
     return IconButton(
       splashRadius: 20,
       icon: Icon(AppIcons.notAttending),
-      onPressed: () => context.read<EventOverviewBloc>().add(state.status == MainStatus.upcoming ?
-      EventOverviewShowRecent() :
-      EventOverviewShowUpcomming()),);
+      onPressed: () => context.router.navigate(EventUserPageRoute(view: View.declined)));
   }
 
   Widget _EOPTabBar(EventOverviewState state) {
@@ -89,8 +93,8 @@ class EventOverviewPage extends StatelessWidget {
       indicatorColor: AppColors.stdIndicatedTabColor,
       tabs: [
         Tab(child: Text(isRecent ? AppStrings.attended : AppStrings.attending), icon: Icon(Icons.check_rounded),),
-        Tab(child: Text(AppStrings.invited), icon: Icon(Icons.mail),),
-        Tab(child: Text(AppStrings.local), icon: Icon(Icons.location_on_outlined),),
+        const Tab(child: Text(AppStrings.invited), icon: Icon(Icons.mail),),
+        const Tab(child: Text(AppStrings.local), icon: Icon(Icons.location_on_outlined),),
       ],
     );
   }

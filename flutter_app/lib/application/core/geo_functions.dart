@@ -1,66 +1,51 @@
-import 'package:bloc/bloc.dart';
-import 'package:dartz/dartz.dart';
-import 'package:flutter_frontend/presentation/core/utils/validators/distanceCoordinatesValidator.dart';
+import 'package:flutter_frontend/domain/post/post.dart';
+import 'package:flutter_frontend/infrastructure/core/local/common_hive/common_hive.dart';
+import 'package:flutter_frontend/infrastructure/core/local/common_hive/types/hive_position.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'dart:math' as math;
 
 import '../../domain/event/event.dart';
+import '../../presentation/core/utils/validators/distanceCoordinatesValidator.dart';
 
-part 'geo_functions_cubit.freezed.dart';
-part 'geo_functions_state.dart';
-
-@Deprecated("use geo functions, without cubit")
-class GeoFunctionsCubit extends Cubit<GeoFunctionsState> {
-  Position? position;
-  final Event? event;
-  bool? nearby;
-
-  GeoFunctionsCubit({required this.event})
-      : super(GeoFunctionsState.initial()) {
-    emit(GeoFunctionsState.initial());
-    checkPosAndNearEvent();
+class GeoFunctions {
+  Future<Position> checkUserPosition() async {
+    return await determinePosition(LocationAccuracy.high);
   }
 
-  ///only safe the position of the user in state
-  Future<void> checkUserPosition() async {
-    try {
-      emit(GeoFunctionsState.loading());
-      position = await determinePosition(LocationAccuracy.high).then((value) {
-        emit(GeoFunctionsState.loaded(position: value, nearby: false));
-      });
-    } catch (e) {
-      GeoFunctionsState.error(error: e.toString());
+  ///check if we need to fetch position or if last position fetch was before some minutes
+  Future<Position> checkIfNeedToFetchPosition(int minutes) async {
+    //try to get boxentry
+    final HivePosition? position = CommonHive.getBoxEntry<HivePosition>(
+        "position", CommonHive.ownPosition);
+    if (position == null ||
+        position.timestamp!
+            .isAfter(DateTime.now().subtract(Duration(minutes: minutes)))) {
+      final Position positionFetched = await checkUserPosition();
+      //save boxentry
+      CommonHive.saveBoxEntry<HivePosition>(
+          HivePosition.genHivePosFromPos(positionFetched),
+          'position',
+          CommonHive.ownPosition);
+      return positionFetched;
+    } else {
+      return HivePosition.genPosfromHivePos(position);
     }
   }
 
-  ///check position of user and calc if is in same area <200m of the event
-  Future<void> checkPosAndNearEvent() async {
-    try {
-      emit(GeoFunctionsState.loading());
-      position =
-          await determinePosition(LocationAccuracy.high).then((posValue) {
-        checkIfNearEvent(event!.longitude, event!.latitude, posValue.longitude,
-                posValue.latitude)
-            .then((nearbyVal) {
-          emit(GeoFunctionsState.loaded(position: posValue, nearby: nearbyVal));
-        });
-      });
-    } catch (e) {
-      GeoFunctionsState.error(error: e.toString());
-    }
+  ///is event near our pos?
+  Future<bool> checkPosAndNearEvent(Event event, int maxDistance) async {
+    final Position position = await checkIfNeedToFetchPosition(5);
+    return checkIfNearEvent(event.longitude, event.latitude, position.longitude,
+        position.latitude, maxDistance);
   }
 
   ///check with haversine if distance between coords is <200m
   Future<bool> checkIfNearEvent(double? longitude, double? latitude,
-      double? longitude2, double? latitude2) async {
+      double? longitude2, double? latitude2, int maxDistance) async {
     double distanceMeters =
         calcDistanceHaversine(longitude2!, latitude2!, longitude!, latitude!);
-    if (distanceMeters < 200) {
-      nearby = true;
+    if (distanceMeters < maxDistance) {
       return true;
     } else {
-      nearby = false;
       return false;
     }
   }

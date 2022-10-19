@@ -8,7 +8,7 @@ import 'package:flutter_frontend/presentation/pages/social/profile_page/cubit/pr
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../../../../data/common_hive.dart';
+import '../../../../../infrastructure/core/local/common_hive/common_hive.dart';
 import '../../../../../domain/core/value_objects.dart';
 import '../../../../../domain/profile/profile.dart';
 import '../../../core/widgets/imageAndFiles/ImageCarousell.dart';

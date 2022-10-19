@@ -30,7 +30,7 @@ import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
 import '../../../../../../application/core/geo_functions_cubit.dart';
-import '../../../../../../data/common_hive.dart';
+import '../../../../../../infrastructure/core/local/common_hive/common_hive.dart';
 import '../../../../../../domain/post/post.dart';
 import '../../../../core/widgets/animations/animated_check.dart';
 import '../../../../core/widgets/timer_widget.dart';

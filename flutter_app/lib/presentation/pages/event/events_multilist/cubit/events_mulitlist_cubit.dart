@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/application/core/geo_functions.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -32,13 +33,10 @@ enum EventScreenOptions {
 
 // TODO: this has to be debugged. When calling a new function to fast, the old one will emit a wrong state
 class EventsMultilistCubit extends Cubit<EventsMultilistState> {
-
-
   int checknumber = 0;
   EventScreenOptions option = EventScreenOptions.near;
   Profile? profile;
   double kilometersVal = 5;
-
 
   bool LoadPastEvents = false;
   EventsMultilistCubit({this.option = EventScreenOptions.near, this.profile})
@@ -51,11 +49,9 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
   EventRepository repository = GetIt.I<EventRepository>();
   InvitationRepository invRepo = GetIt.I<InvitationRepository>();
 
-
   /// gets events from backend, swiches on the options
   Future<void> getEvents(EventScreenOptions option,
       [int? distanceKilometers]) async {
-
     checknumber = Random().nextInt(1000000000);
     int localCheckNumber = checknumber;
     final Either<NetWorkFailure, List<Event>> eventsList;
@@ -91,21 +87,10 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
                 eventsListRecent.fold((l) => throw Exception, (r) => r)));
         break;
       case EventScreenOptions.near:
-        final geof = GeoFunctionsCubit(event: null);
-        Position? position;
-        await geof.checkUserPosition();
-        geof.state.maybeMap(
-            loaded: (loadedState) {
-              position = loadedState.position;
-            },
-            orElse: () {});
-
-        eventsList = await repository.getNearEvents(
-            position!.latitude,
-            position!.longitude,
-            kilometersVal.ceil(),
-            DateTime.now(),
-            30);
+        final Position? position =
+            await GeoFunctions().checkIfNeedToFetchPosition(5);
+        eventsList = await repository.getNearEvents(position!.latitude,
+            position.longitude, kilometersVal.ceil(), DateTime.now(), 30);
         break;
       case EventScreenOptions.ownAttending:
         eventsList = await repository.getAttendingEvents(DateTime.now(), 30);
@@ -123,29 +108,26 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
               descending: false);
           isInvite = true;
           invitationList.fold(
-              (l) => EventsMultilistState.error(error: l.toString()),
-              (r) {
-                if (localCheckNumber == checknumber) {
-                  //checks whether the function was called again and had been ready
-                  emit(EventsMultilistState.loadedInvited(invites: r));
-                }
-              });
+              (l) => EventsMultilistState.error(error: l.toString()), (r) {
+            if (localCheckNumber == checknumber) {
+              //checks whether the function was called again and had been ready
+              emit(EventsMultilistState.loadedInvited(invites: r));
+            }
+          });
         }
         return;
         break;
     }
     //checks whether the function was called again and had been ready
-    if(localCheckNumber == checknumber){
+    if (localCheckNumber == checknumber) {
       emit(EventsMultilistState.loaded(
-        events: eventsList.fold((l) => throw Exception, (r) => r)));
+          events: eventsList.fold((l) => throw Exception, (r) => r)));
     }
     // } catch (e) {
     //   throw e;
     //   emit(EventsMultilistState.error(error: e.toString()));
     // }
   }
-
-
 
   /// deletes Event if its own event list
   Future<bool> deleteEvent(Event event) async {
@@ -176,34 +158,23 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
     return true;
   }
 
-
-
-
   Future<void> loadMore() async {
     // if(lastLoadedDate.toIso8601String() == state.posts.last.creationDate.toIso8601String()){
     //   return;
     // }
-    final geof = GeoFunctionsCubit(event: null);
-    Position? position;
-    await geof.checkUserPosition();
-    geof.state.maybeMap(
-        loaded: (loadedState) {
-          position = loadedState.position;
-        },
-        orElse: () {});
+    final Position? position =
+        await GeoFunctions().checkIfNeedToFetchPosition(5);
 
     List<Event> oldEvent = [];
     state.maybeMap((value) => null, loaded: (loadedState) {
       oldEvent = loadedState.events;
     }, orElse: () {});
 
-
     final Either<NetWorkFailure, List<Event>> eventsList =
-        await repository.getNearEvents(position!.latitude, position!.longitude,
+        await repository.getNearEvents(position!.latitude, position.longitude,
             kilometersVal.ceil(), oldEvent.last.creationDate, 30);
 
     List<Event> eventsNew = eventsList.fold((l) => throw Exception(), (r) => r);
-
 
     state.maybeMap((value) => null, loaded: (loadedState) {
       oldEvent = loadedState.events;
@@ -222,8 +193,4 @@ class EventsMultilistCubit extends Cubit<EventsMultilistState> {
     if (controller.offset <= controller.position.minScrollExtent &&
         !controller.position.outOfRange) {}
   }
-
-
 }
-
-

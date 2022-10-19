@@ -16,7 +16,7 @@ import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 
-import '../../../../../../data/common_hive.dart';
+import '../../../../../../infrastructure/core/local/common_hive/common_hive.dart';
 import '../../../../../../domain/post/post.dart';
 import '../../../../../../infrastructure/post/post_repository.dart';
 
@@ -55,9 +55,8 @@ class EventScreenCubit extends Cubit<EventScreenState> {
         }));
   }
 
-
   Future<void> reload() async {
-    state.maybeMap(orElse: (){}, loaded: (state)=> getEvent(state.event.id));
+    state.maybeMap(orElse: () {}, loaded: (state) => getEvent(state.event.id));
   }
 
   Future<void> createOrgaEvent(
@@ -118,6 +117,7 @@ class EventScreenCubit extends Cubit<EventScreenState> {
           });
         });
   }
+
   ///confirm user at event with confirmAttending
   Future<void> UserConfirmAtEvent(
       Event event, double? longitude, double? latitude) async {
@@ -156,7 +156,8 @@ class EventScreenCubit extends Cubit<EventScreenState> {
           List<Invitation> invitations = List.from(loaded.event.invitations);
           emit(EventScreenState.loading());
           invitations.add(invitation);
-          emit(loaded.copyWith(event: loaded.event.copyWith(invitations: invitations)));
+          emit(loaded.copyWith(
+              event: loaded.event.copyWith(invitations: invitations)));
         });
   }
 
@@ -177,7 +178,7 @@ class EventScreenCubit extends Cubit<EventScreenState> {
   ///
   /// this alters the local invitation list and add host
   ///
-  void addHost( Invitation invitation) {
+  void addHost(Invitation invitation) {
     toggleHost(invitation, true);
   }
 
@@ -200,10 +201,13 @@ class EventScreenCubit extends Cubit<EventScreenState> {
         });
   }
 
-
-  Future<bool> uploadImage(XFile image){
-    return state.maybeMap(orElse: (){return Future(() => false);}, loaded: (loaded){
-      return repository.uploadImageToEvent(loaded.event.id, image).then((value) => value.fold((failure) => false, (r) => true));
+  Future<bool> uploadImage(XFile image) {
+    return state.maybeMap(orElse: () {
+      return Future(() => false);
+    }, loaded: (loaded) {
+      return repository
+          .uploadImageToEvent(loaded.event.id, image)
+          .then((value) => value.fold((failure) => false, (r) => true));
     });
   }
 }

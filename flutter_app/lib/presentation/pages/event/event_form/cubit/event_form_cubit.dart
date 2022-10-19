@@ -17,7 +17,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../../data/common_hive.dart';
+import '../../../../../infrastructure/core/local/common_hive/common_hive.dart';
 import '../../../../../infrastructure/event_series/eventSeries_repository.dart';
 
 part 'event_form_cubit.freezed.dart';

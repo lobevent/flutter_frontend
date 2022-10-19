@@ -15,24 +15,23 @@ class FeedEventTimer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          EventTimerCubit(),
+      create: (context) => EventTimerCubit(),
       child: BlocBuilder<EventTimerCubit, EventTimerState>(
         builder: (context, state) {
-          return state.maybeMap((value) => const Text(''),
-              initial: (init){
+          return state.maybeMap((value) => const Text(''), initial: (init) {
             return const Text('         ');
-              },
-              loading: (loadingState){
+          }, loading: (loadingState) {
             return const CircularProgressIndicator();
-              },
-              loaded: (loadedState) {
-            return EventTimer(loadedState.event!, context);
-            },
-              error: (err){
+          }, loaded: (loadedState) {
+            if (loadedState.event!.date
+                .isBefore(DateTime.now().add(Duration(days: 7)))) {
+              return EventTimer(loadedState.event!, context);
+            } else {
+              return const SizedBox.shrink();
+            }
+          }, error: (err) {
             return ErrorWidget(err.error);
-              },
-              orElse: () {
+          }, orElse: () {
             return Text('');
           });
         },
@@ -48,11 +47,13 @@ class FeedEventTimer extends StatelessWidget {
 
   Widget EventTimer(Event event, BuildContext context) {
     return InkWell(
-      child: Column(children: [
-        Text(event.name.getOrCrash()),
-        TimerWidget(dateTime: event.date)
-      ],),
-      onTap: () =>context.router.push(EventScreenPageRoute(eventId: event.id)),
+      child: Column(
+        children: [
+          Text(event.name.getOrCrash()),
+          TimerWidget(dateTime: event.date)
+        ],
+      ),
+      onTap: () => context.router.push(EventScreenPageRoute(eventId: event.id)),
     );
   }
 }

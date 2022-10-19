@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_frontend/application/core/geo_functions.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
@@ -49,17 +50,11 @@ class FeedCubit extends Cubit<FeedState> {
   Future<void> loadFeedReal() async {
     state.isLoading = true;
     emit(state);
-    final geof = GeoFunctionsCubit(event: null);
-    Position? position;
-    await geof.checkUserPosition();
-    geof.state.maybeMap(
-        loaded: (loadedState) {
-          position = loadedState.position;
-        },
-        orElse: () {});
+    final Position? position =
+        await GeoFunctions().checkIfNeedToFetchPosition(5);
     repository
         .getFeedPostsEvents(
-            position!.latitude, position!.longitude, 5, 30, DateTime.now())
+            position!.latitude, position.longitude, 5, 30, DateTime.now())
         .then((value) => value.fold(
                 // (failure) {
                 //   state.isLoading = false;

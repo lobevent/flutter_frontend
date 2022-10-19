@@ -19,7 +19,7 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/src/provider.dart';
 
-import '../../../../../data/common_hive.dart';
+import '../../../../../infrastructure/core/local/common_hive/common_hive.dart';
 import '../../../../../domain/post/value_objects.dart';
 import '../../../../post_comment/post_screen/widgets/post_widget_cubit/post_widget_cubit.dart';
 import '../gen_dialog.dart';
@@ -61,7 +61,8 @@ class _PostWidgetState extends State<PostWidget> {
   Widget ActionWidgets(BuildContext context) {
     return PaddingRowWidget(children: [
       StdTextButton(
-          onPressed: () => context.router.push(CommentsScreenRoute(post: widget.post)),
+          onPressed: () =>
+              context.router.push(CommentsScreenRoute(post: widget.post)),
           child: Row(
             children: [
               Icon(Icons.comment),
@@ -70,7 +71,9 @@ class _PostWidgetState extends State<PostWidget> {
             ],
           )),
       //delete a post
-      if (widget.post.owner == null || CommonHive.checkIfOwnId(widget.post.owner?.id.value.toString()??"")) ...[
+      if (widget.post.owner == null ||
+          CommonHive.checkIfOwnId(
+              widget.post.owner?.id.value.toString() ?? "")) ...[
         StdTextButton(
             onPressed: () {
               showPostEditOverlay(context);
@@ -87,7 +90,9 @@ class _PostWidgetState extends State<PostWidget> {
                   .then((value) async => {
                         {
                           if (value)
-                            context.read<PostWidgetCubit>().deletePost(widget.post)
+                            context
+                                .read<PostWidgetCubit>()
+                                .deletePost(widget.post)
                           else
                             print("abort delete post"),
                         }
@@ -153,18 +158,17 @@ Widget generateUnscrollablePostContainer(
           itemCount: posts.length,
           itemBuilder: (context, index) {
             return BlocProvider(
-              create: (context) =>
-                  PostWidgetCubit(post: posts[index]),
+              create: (context) => PostWidgetCubit(post: posts[index]),
               child: BlocBuilder<PostWidgetCubit, PostWidgetState>(
                   builder: (context, state) {
                 return state.maybeMap(
-                  initial: (init) {
-                    return PostWidget(
-                        post: posts[index],
-                        showAuthor: showAutor,
-                        event: posts[index].event,
-                        context: context);
-                  },
+                    initial: (init) {
+                      return PostWidget(
+                          post: posts[index],
+                          showAuthor: showAutor,
+                          event: posts[index].event,
+                          context: context);
+                    },
                     loaded: (st) {
                       return PostWidget(
                           post: posts[index],

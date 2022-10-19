@@ -7,7 +7,7 @@ import 'package:flutter_frontend/presentation/pages/social/profile_page/cubit/pr
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../../../data/common_hive.dart';
+import '../../../../infrastructure/core/local/common_hive/common_hive.dart';
 import '../../../../domain/profile/profile.dart';
 
 part 'profile_score_cubit.freezed.dart';
@@ -46,8 +46,7 @@ class ProfileScoreCubit extends Cubit<ProfileScoreState> {
             }));
   }
 
-  Future<void> loadAchievements(Profile profile) async {
-  }
+  Future<void> loadAchievements(Profile profile) async {}
 
   ///check achievements and save in commonhive
   void checkOwnAchievements(Profile profile, AchievementsDto achievementsDto) {

@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_frontend/data/common_hive.dart';
+import 'package:flutter_frontend/infrastructure/core/local/common_hive/common_hive.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
@@ -82,7 +82,6 @@ class ProfilePageMeta extends StatelessWidget {
               text: " Friends: ${friendscount?.toString() ?? 0.toString()}",
               icon: Icons.emoji_people_outlined),
 
-
           Spacer(),
           //for the calender
           TextWithIconButton(
@@ -92,10 +91,10 @@ class ProfilePageMeta extends StatelessWidget {
           Spacer(),
 
           TextWithIconButton(
-              onPressed: () => context.router.push(EventUserPageRoute(profile: profile)),
+              onPressed: () =>
+                  context.router.push(EventUserPageRoute(profile: profile)),
               text: " Events: ${eventcount?.toString() ?? 0.toString()}",
               icon: Icons.tapas_outlined)
-
         ]),
       ],
     );
@@ -142,10 +141,9 @@ class ProfilePageMeta extends StatelessWidget {
             ],
           );
         }, loaded: (st) {
-          return Column(
-              children: [
-                AchievementTile(),
-                ScoreHelperWidget(context, st.score, profile)
+          return Column(children: [
+            AchievementTile(),
+            ScoreHelperWidget(context, st.score, profile)
           ]);
         }, orElse: () {
           return ScoreHelperWidget(context, null, profile);

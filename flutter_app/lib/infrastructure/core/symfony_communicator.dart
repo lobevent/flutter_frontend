@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/core/Utils/LoginControllFunctions.dart';
 import 'package:flutter_frontend/core/services/AuthTokenService.dart';
-import 'package:flutter_frontend/data/common_hive.dart';
+import 'package:flutter_frontend/infrastructure/core/local/common_hive/common_hive.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
@@ -56,7 +56,6 @@ class SymfonyCommunicator {
   /// Uri has to start with an backslash "/".
 
   Future<String> postFile(String uri, File file, [Encoding? encoding]) async {
-
     var stream = new http.ByteStream(DelegatingStream.typed(file.openRead()));
     var length = await file.length();
 
@@ -71,7 +70,6 @@ class SymfonyCommunicator {
     request.files.add(multipartFile);
     var response = await request.send();
     print(response.statusCode);
-
 
     return response.stream.bytesToString();
     return response.reasonPhrase!;

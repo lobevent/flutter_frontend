@@ -15,7 +15,7 @@ import 'package:flutter_frontend/presentation/post_comment/comments_screen/cubit
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../../../data/common_hive.dart';
+import '../../../../infrastructure/core/local/common_hive/common_hive.dart';
 
 class CommentContainer extends StatelessWidget {
   const CommentContainer({Key? key}) : super(key: key);
@@ -87,8 +87,12 @@ class CommentContainer extends StatelessWidget {
     );
   }
 
-  Widget WriteWidget(BuildContext context, Post? loadedPost,
-      [Comment? parentComment, OverlayEntry? overlay,]) {
+  Widget WriteWidget(
+    BuildContext context,
+    Post? loadedPost, [
+    Comment? parentComment,
+    OverlayEntry? overlay,
+  ]) {
     TextEditingController postWidgetController = TextEditingController();
     return Container(
         width: 300,
@@ -145,37 +149,39 @@ class CommentContainer extends StatelessWidget {
             )),
         //delete an comment button
         //check if its the own comment to display delete button
-        if(CommonHive.checkIfOwnId(comment.owner.id.value.toString()))...[
+        if (CommonHive.checkIfOwnId(comment.owner.id.value.toString())) ...[
           StdTextButton(
               onPressed: () {
-            showCommentEditOverlay(context, comment);
-    },
-    child: Icon(Icons.edit)),
+                showCommentEditOverlay(context, comment);
+              },
+              child: Icon(Icons.edit)),
           StdTextButton(
               onPressed: () {
                 GenDialog.genericDialog(
-                    context,
-                    AppStrings.deleteCommentDialogAbort,
-                    AppStrings.deleteCommentDialogText,
-                    AppStrings.deleteCommentDialogConfirm,
-                    AppStrings.deleteCommentDialogAbort)
+                        context,
+                        AppStrings.deleteCommentDialogAbort,
+                        AppStrings.deleteCommentDialogText,
+                        AppStrings.deleteCommentDialogConfirm,
+                        AppStrings.deleteCommentDialogAbort)
                     .then((value) async => {
-                  if (value)
-                    context.read<CommentScreenCubit>().deleteComment(comment)
-                  else
-                    print("abort delete Comment"),
-                });
+                          if (value)
+                            context
+                                .read<CommentScreenCubit>()
+                                .deleteComment(comment)
+                          else
+                            print("abort delete Comment"),
+                        });
               },
               child: Icon(Icons.delete))
-
         ],
       ],
     );
   }
+
   /// build this Widget as overlay!
   void showCommentEditOverlay(
       BuildContext
-      cubitContextLocal /* this is used to access the cubit inside of the overlay*/,
+          cubitContextLocal /* this is used to access the cubit inside of the overlay*/,
       Comment comment) async {
     //initialise overlaystate and entries
     final OverlayState overlayState = Overlay.of(cubitContextLocal)!;
@@ -187,9 +193,9 @@ class CommentContainer extends StatelessWidget {
       return DismissibleOverlay(
         overlayEntry: overlayEntry!,
         child: Scaffold(
-          body: WriteWidget(cubitContextLocal, null, comment, overlayEntry)
-          //WriteWidget(context: cubitContextLocal, event: event!, post: post, overlayEntry: overlayEntry),
-        ),
+            body: WriteWidget(cubitContextLocal, null, comment, overlayEntry)
+            //WriteWidget(context: cubitContextLocal, event: event!, post: post, overlayEntry: overlayEntry),
+            ),
       );
     });
 

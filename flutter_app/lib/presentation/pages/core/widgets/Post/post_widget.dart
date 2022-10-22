@@ -59,27 +59,24 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   Widget ActionWidgets(BuildContext context) {
-    return PaddingRowWidget(children: [
-      StdTextButton(
-          onPressed: () =>
-              context.router.push(CommentsScreenRoute(post: widget.post)),
-          child: Row(
-            children: [
-              Icon(Icons.comment),
-              Text(widget.post.commentCount.toString(),
-                  style: TextStyle(color: AppColors.stdTextColor))
-            ],
-          )),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          MaterialButton(onPressed: ()=>context.router.push(CommentsScreenRoute(post: widget.post)), child: Row(children:  [
+            Icon(Icons.comment),
+            Text(widget.post.commentCount.toString(),
+                style: TextStyle(color: AppColors.stdTextColor))
+          ],),),
       //delete a post
       if (widget.post.owner == null ||
           CommonHive.checkIfOwnId(
               widget.post.owner?.id.value.toString() ?? "")) ...[
-        StdTextButton(
+        IconButton(
             onPressed: () {
               showPostEditOverlay(context);
             },
-            child: Icon(Icons.edit)),
-        StdTextButton(
+            icon: Icon(Icons.edit)),
+        IconButton(
             onPressed: () {
               GenDialog.genericDialog(
                       context,
@@ -98,7 +95,7 @@ class _PostWidgetState extends State<PostWidget> {
                         }
                       });
             },
-            child: Icon(Icons.delete))
+            icon: Icon(Icons.delete))
       ],
     ]);
   }

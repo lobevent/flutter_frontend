@@ -28,8 +28,7 @@ class PostCommentBaseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        shape: RoundedRectangleBorder(
+    return Card(shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(0), // if you need this
           side: BorderSide(
             color: AppColors.black,
@@ -40,12 +39,14 @@ class PostCommentBaseWidget extends StatelessWidget {
         borderOnForeground: true,
         // constrained Box for min height
         child: ConstrainedBox(
+
             constraints: const BoxConstraints(
               minHeight: 150.0,
               minWidth: 50.0,
             ),
             // column contains the content
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Add header information (date, author, etc.)
                 MetaHeadWidget(date: date, author: autor),
@@ -53,7 +54,7 @@ class PostCommentBaseWidget extends StatelessWidget {
                 ContentWidget(content),
                 imageCarousell(),
                 // actions like comments and likes
-                actionButtonsWidgets,
+                Align(alignment: Alignment.topLeft,child: actionButtonsWidgets,),
               ],
             )));
   }

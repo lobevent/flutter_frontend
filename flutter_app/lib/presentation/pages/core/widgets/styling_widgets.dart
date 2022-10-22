@@ -292,6 +292,7 @@ class TextWithIconButton extends StatelessWidget {
 }
 
 
+
 /// checkbox with text widget
 /// its statefull, because the text and the checkbox are covered by a button
 /// the button is useful because you dont have to hit the checkbox directly to toggle

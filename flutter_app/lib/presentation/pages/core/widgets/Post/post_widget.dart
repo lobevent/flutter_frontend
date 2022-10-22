@@ -60,9 +60,9 @@ class _PostWidgetState extends State<PostWidget> {
 
   Widget ActionWidgets(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          MaterialButton(onPressed: ()=>context.router.push(CommentsScreenRoute(post: widget.post)), child: Row(children:  [
+          flatButton(onPressed: ()=>context.router.push(CommentsScreenRoute(post: widget.post)), icon: Row(children:  [
             Icon(Icons.comment),
             Text(widget.post.commentCount.toString(),
                 style: TextStyle(color: AppColors.stdTextColor))
@@ -71,12 +71,13 @@ class _PostWidgetState extends State<PostWidget> {
       if (widget.post.owner == null ||
           CommonHive.checkIfOwnId(
               widget.post.owner?.id.value.toString() ?? "")) ...[
-        IconButton(
-            onPressed: () {
-              showPostEditOverlay(context);
-            },
-            icon: Icon(Icons.edit)),
-        IconButton(
+        flatButton(
+              onPressed: () {
+                showPostEditOverlay(context);
+              },
+              icon: Icon(Icons.edit),
+        ),
+        flatButton(
             onPressed: () {
               GenDialog.genericDialog(
                       context,
@@ -98,6 +99,18 @@ class _PostWidgetState extends State<PostWidget> {
             icon: Icon(Icons.delete))
       ],
     ]);
+  }
+
+  Widget flatButton({required Widget icon, required VoidCallback onPressed}){
+    return Expanded(child: Container(
+      height: 40,
+      decoration: BoxDecoration(border: Border.all(width: 0.5, color: AppColors.darkGrey)),
+      child: MaterialButton(
+        padding: EdgeInsets.zero,
+        onPressed: onPressed,
+        child: FittedBox(child: icon),
+      ),
+    ));
   }
 
   /// build this Widget as overlay!

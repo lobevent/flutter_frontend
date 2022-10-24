@@ -55,8 +55,11 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
             (fail) => emit(ProfilePageState.error(error: fail.toString())),
             (filePath) {
           emit(ProfilePageState.loading());
-          value.profile.images!.insert(0, filePath);
-          emit(ProfilePageState.loaded(profile: value.profile));
+          List<String> oldList =[];
+          oldList.insert(0, filePath);
+          oldList.addAll(value.profile.images!);
+          Profile profile = value.profile.copyWith(images: oldList);
+          emit(ProfilePageState.loaded(profile: profile));
         });
       },
       orElse: () => throw LogicError(),

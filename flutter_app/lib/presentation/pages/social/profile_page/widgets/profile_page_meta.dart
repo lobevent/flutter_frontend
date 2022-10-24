@@ -155,29 +155,44 @@ class ProfilePageMeta extends StatelessWidget {
   Widget AchievementTile() {
     return ExpansionTile(
       title: Text("Achievements"),
+      //TODO: fetch achievements of other users
       children: [Text("${CommonHive.getAchievements()}")],
     );
   }
 
   Widget ScoreHelperWidget(
       BuildContext context, String? score, Profile profile) {
-    return InkWell(
-      child: Container(
-        width: 60,
-        height: 60,
-        decoration: const BoxDecoration(
-            shape: BoxShape.circle, color: AppColors.accentButtonColor),
-        child: Center(
-          child: score != null
-              ? Text("Score:$score")
-              : Text(
-                  "Score: ${CommonHive.getBoxEntry<String>("profileScore", CommonHive.ownProfileIdAndPic) ?? "0"}",
-                ),
+    bool isOwnProfile = CommonHive.checkIfOwnId(profile.id.value.toString());
+    if(isOwnProfile){
+      return InkWell(
+        child: Container(
+          width: 60,
+          height: 60,
+          decoration: const BoxDecoration(
+              shape: BoxShape.circle, color: AppColors.accentButtonColor),
+          child: Center(
+            child: score != null
+                ? Text("Score:$score")
+                : Text(
+              "Score: ${CommonHive.getBoxEntry<String>("profileScore", CommonHive.ownProfileIdAndPic) ?? "0"}",
+            ),
+          ),
         ),
-      ),
-      onTap: () {
-        context.read<ProfileScoreCubit>().getProfileScore(profile);
-      },
-    );
+        onTap: () {
+          context.read<ProfileScoreCubit>().getOwnProfileScore(profile);
+        },
+      );
+    }else{
+      context.read<ProfileScoreCubit>().getProfileScore(profile);
+      return Container(
+          width: 60,
+          height: 60,
+          decoration: const BoxDecoration(
+              shape: BoxShape.circle, color: AppColors.accentButtonColor),
+          child: Center(
+            child: Text("Score:$score"),
+            ),
+          );
+    }
   }
 }

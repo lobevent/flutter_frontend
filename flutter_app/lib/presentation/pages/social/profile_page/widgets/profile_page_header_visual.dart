@@ -16,6 +16,7 @@ import '../../../core/widgets/imageAndFiles/ImageCarousell.dart';
 class ProfilePageHeaderVisual extends StatefulWidget {
   final String? imagePath;
   final Profile? profile;
+
   const ProfilePageHeaderVisual({Key? key, this.profile, this.imagePath})
       : super(key: key);
 
@@ -27,6 +28,11 @@ class ProfilePageHeaderVisual extends StatefulWidget {
 class _ProfilePageHeaderVisualState extends State<ProfilePageHeaderVisual> {
   @override
   Widget build(BuildContext context) {
+    bool isOwnProfile=true;
+    if(widget.profile!=null){
+      isOwnProfile =
+      CommonHive.checkIfOwnId(widget.profile!.id.value.toString());
+    }
     return BlocBuilder<ProfilePageCubit, ProfilePageState>(
         builder: (context, state) {
       return Row(children: [
@@ -38,7 +44,7 @@ class _ProfilePageHeaderVisualState extends State<ProfilePageHeaderVisual> {
           onTap: () async {
             //check  if its own profile page for uploading
             if (widget.profile != null &&
-                CommonHive.checkIfOwnId(widget.profile!.id.value.toString())) {
+                isOwnProfile) {
               //no pic is uploaded, so upload 1
               if (widget.profile!.images == null) {
                 showImagePickerOverlay(context);
@@ -56,16 +62,18 @@ class _ProfilePageHeaderVisualState extends State<ProfilePageHeaderVisual> {
             backgroundImage: decidePic(),
             child: Align(
               alignment: Alignment.bottomCenter,
-              child: InkWell(
-                onTap: () {
-                  //upload profilepictures
-                  showImagePickerOverlay(context);
-                },
-                child: Container(
-                  color: Colors.grey.withOpacity(0.3),
-                  child: Text("Upload"),
-                ),
-              ),
+              child: isOwnProfile
+                  ? InkWell(
+                      onTap: () {
+                        //upload profilepictures
+                        showImagePickerOverlay(context);
+                      },
+                      child: Container(
+                        color: Colors.grey.withOpacity(0.3),
+                        child: Text("Upload"),
+                      ),
+                    )
+                  : SizedBox.shrink(),
             ),
           ),
         ),

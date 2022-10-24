@@ -25,7 +25,7 @@ class ProfileScoreCubit extends Cubit<ProfileScoreState> {
   ProfileRepository repository = GetIt.I<ProfileRepository>();
 
   //gets own profilescore as string, or shows 0
-  Future<void> getProfileScore(Profile profile) async {
+  Future<void> getOwnProfileScore(Profile profile) async {
     return repository
         .getScore(profile.id.value.toString())
         .then((value) => value.fold((l) => '0', (r) {
@@ -35,6 +35,14 @@ class ProfileScoreCubit extends Cubit<ProfileScoreState> {
               emit(ProfileScoreState.loaded(score: r));
               //emit(ProfilePageState.reloadScore(profile: profile, score: r));
             }));
+  }
+  Future<void> getProfileScore(Profile profile) async {
+    return repository
+        .getScore(profile.id.value.toString())
+        .then((value) => value.fold((l) => '0', (r) {
+      emit(ProfileScoreState.loaded(score: r));
+      //emit(ProfilePageState.reloadScore(profile: profile, score: r));
+    }));
   }
 
   //fetch profiles and maybe do some logic here

@@ -56,9 +56,9 @@ class _FeedScreenState extends State<FeedScreen> {
                     Container(
                       child: FeedEventTimer(),
                     ),
-                    Container(
-                      child: itemBuilder(null, state.eventAndPostCarrier),
-                    )
+                    //Container(
+                     // child: itemBuilder(null, state.eventAndPostCarrier),
+                    //)
                   ],
                 );
           setState(() {
@@ -86,7 +86,7 @@ class _FeedScreenState extends State<FeedScreen> {
                   // the padding is set to the std padding defined in styling widgets
                   scrollDirection: Axis.vertical,
                   slivers: [
-                    SliverAppBar(flexibleSpace: FeedEventTimer(), automaticallyImplyLeading: false, pinned: true,),
+                    FeedEventTimer(),
                     SliverList(
                         delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {

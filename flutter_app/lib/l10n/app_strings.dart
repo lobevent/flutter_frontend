@@ -86,6 +86,9 @@ class AppStrings {
   static const String heading_ownedEvents = "Owned Events of User: ";
   static const String heading_declinedEvents = "Declined Events";
 
+  static const String edit = "Edit";
+  static const String delete = "Delete";
+
   static const String followedEventSeriesOverviewTitle =
       "Followed event series";
   static const String createEventGeneralInfo = "General Info";

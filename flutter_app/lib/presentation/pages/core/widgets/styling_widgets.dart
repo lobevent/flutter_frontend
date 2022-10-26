@@ -205,16 +205,29 @@ class OverflowSafeString extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-        // overflow is alowed, so no overflowerror arises
-        child: SizedOverflowBox(
-      //the alignment of the content should be on the left side and
-      // vertical it should be centered
-      alignment: Alignment.centerLeft,
-      size: Size(MediaQuery.of(context).size.width * 0.2, 30),
-      child: child,
-    ));
+    return
+      // overflow is alowed, so no overflowerror arises
+        FittedBox(
+          //the alignment of the content should be on the left side and
+          // vertical it should be centered
+          alignment: Alignment.centerLeft,
+          //size: Size(MediaQuery.of(context).size.width * 0.2, 30),
+          child: child,
+        );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return ClipRect(
+  //       // overflow is alowed, so no overflowerror arises
+  //       child: SizedOverflowBox(
+  //     //the alignment of the content should be on the left side and
+  //     // vertical it should be centered
+  //     alignment: Alignment.centerLeft,
+  //     size: Size(MediaQuery.of(context).size.width * 0.2, 30),
+  //     child: child,
+  //   ));
+  // }
 }
 
 class StdTextButton extends StatelessWidget {

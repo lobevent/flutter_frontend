@@ -46,7 +46,7 @@ class _ProfilePopupState extends State<ProfilePopup> {
             ),
             // sized box for little distance
             SizedBox(
-              width: 20,
+              width: 10,
             ),
             // overflow safe
             OverflowSafeString(
@@ -62,8 +62,8 @@ class _ProfilePopupState extends State<ProfilePopup> {
               height: 200,
               //child: InkWell(
               child: PaddingRowWidget(
-                paddinfLeft: 20,
-                paddingRight: 20,
+                paddinfLeft: 5,
+                paddingRight: 0,
                 children: [
                   InkWell(
                       //what to display in popup
@@ -75,11 +75,14 @@ class _ProfilePopupState extends State<ProfilePopup> {
                                 widget.profile.images?[0]),
                             radius: 50,
                           ),
-                          OverflowSafeString(
-                              child: Text(
-                            widget.profile.name.getOrCrash(),
-                            style: AppTextStyles.stdSubTextStyle,
-                          ))
+                          ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: 160/*, minWidth: 150*/),
+                            child: OverflowSafeString(
+                                child: Text(
+                              widget.profile.name.getOrCrash(),
+                              style: AppTextStyles.stdSubTextStyle,
+                            )),
+                          )
                         ],
                       ),
                       onTap: () {

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart' hide Router;
+import 'package:dartz/dartz.dart' hide State;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_comment_shared_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Post/write_widget/write_widget_post_image_picker.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_widget/post_widget_cubit/post_widget_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
@@ -32,29 +34,14 @@ class PostWidget extends StatefulWidget {
   final bool showAuthor;
   final bool showCommentAction;
 
-  const PostWidget({Key? key,
-    required this.post,
-    this.event,
-    this.showAuthor = true,
-    this.showCommentAction = true})
-      : super(key: key);
+  const PostWidget({Key? key, required this.post, this.event, this.showAuthor = true, this.showCommentAction = true}) : super(key: key);
 
   @override
-  State<PostWidget> createState() => _PostWidgetState(post: post, event: event, showAuthor: showAuthor, showCommentAction: showCommentAction);
+  State<PostWidget> createState() => _PostWidgetState();
 }
 
 class _PostWidgetState extends State<PostWidget> {
 
-  late Post post;
-  Event? event;
-  late bool showAuthor;
-  late bool showCommentAction;
-  _PostWidgetState({
-    required this.post,
-    required this.event,
-    required this.showAuthor,
-    required this.showCommentAction,
-  }): super();
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +52,10 @@ class _PostWidgetState extends State<PostWidget> {
           return Visibility(
             visible: state.status != StatusPWS.deletionSuccess,
             child: PostCommentBaseWidget(
-                date: post.creationDate,
-                content: state.post.postContent.getOrEmptyString(),//widget.post.postContent.getOrEmptyString(),//
-                images: post.images == null ? [] : state.post.images!,
+                popUpItems: PopupItems(context),
+                date: state.post.creationDate,
+                content: state.post.postContent.getOrEmptyString(), //widget.post.postContent.getOrEmptyString(),//
+                images: state.post.images == null ? [] : state.post.images!,
                 autor: widget.showAuthor ? widget.post.owner : null,
                 actionButtonsWidgets: ActionWidgets(context)),
           );
@@ -76,93 +64,21 @@ class _PostWidgetState extends State<PostWidget> {
     );
   }
 
-  Widget ActionWidgets(BuildContext context) {
-    return Row(
-      //mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          flatButton(onPressed: () => context.router.push(CommentsScreenRoute(post: widget.post)), icon: Row(children: [
-            Icon(Icons.comment),
-            Text(widget.post.commentCount.toString(),
-                style: TextStyle(color: AppColors.stdTextColor))
-          ],),),
-          //delete a post
-          if (widget.post.owner == null ||
-              CommonHive.checkIfOwnId(
-                  widget.post.owner?.id.value.toString() ?? "")) ...[
-            flatButton(
-              onPressed: () {
-                showPostEditOverlay(context);
-              },
-              icon: Icon(Icons.edit),
-            ),
-            flatButton(
-                onPressed: () {
-                  GenDialog.genericDialog(
-                      context,
-                      AppStrings.deleteCommentDialogAbort,
-                      AppStrings.deleteCommentDialogText,
-                      AppStrings.deleteCommentDialogConfirm,
-                      AppStrings.deleteCommentDialogAbort)
-                      .then((value) async =>
-                  {
-                    {
-                      if (value)
-                        context
-                            .read<PostWidgetCubit>()
-                            .deletePost(widget.post)
-                      else
-                        print("abort delete post"),
-                    }
-                  });
-                },
-                icon: Icon(Icons.delete))
-          ],
-        ]);
+  List<PopupMenuItem>? PopupItems(BuildContext context) {
+    if (widget.post.owner == null || CommonHive.checkIfOwnId(widget.post.owner?.id.value.toString() ?? "")) {
+      return PopupItemsCommentPost(context, () {showPostEditOverlay(context);}, () { context.read<PostWidgetCubit>().deletePost(widget.post);});
+    }
   }
 
-  Widget flatButton({required Widget icon, required VoidCallback onPressed}) {
-    return Expanded(child: Container(
-      height: 40,
-      decoration: BoxDecoration(border: Border.all(width: 0.5, color: AppColors.darkGrey)),
-      child: MaterialButton(
-        padding: EdgeInsets.zero,
-        onPressed: onPressed,
-        child: FittedBox(child: icon),
-      ),
-    ));
+  Widget ActionWidgets(BuildContext context) {
+    return ActionWidgetsCommentPost(context, left(widget.post));
   }
+
+
 
   /// build this Widget as overlay!
-  void showPostEditOverlay(BuildContext
-  cubitContextLocal /* this is used to access the cubit inside of the overlay*/) async {
-    //initialise overlaystate and entries
-    final OverlayState overlayState = Overlay.of(cubitContextLocal)!;
-    //have to do it nullable
-
-    OverlayEntry? overlayEntry;
-
-    //this is the way to work with overlays
-    overlayEntry = OverlayEntry(builder: (buildContext) {
-      return DismissibleOverlay(
-        overlayEntry: overlayEntry!,
-        child: Scaffold(
-          body: WriteWidget(
-              changeImages: (images){},
-              onSubmit: (postContent){
-                cubitContextLocal.read<PostWidgetCubit>().editPost(
-                    widget.post.copyWith(
-                        postContent: PostContent(postContent)));
-                //remove Overlay
-                overlayEntry?.remove();
-              },
-              post: widget.post,),
-        ),
-      );
-    });
-
-    //insert the entry in the state to make it accesible
-    overlayState.insert(overlayEntry);
+  void showPostEditOverlay(BuildContext cubitContextLocal /* this is used to access the cubit inside of the overlay*/) async {
+    showPostEditOverlayCommentPost(cubitContextLocal, widget.post.postContent.getOrEmptyString(),
+            (postContent) => cubitContextLocal.read<PostWidgetCubit>().editPost(widget.post.copyWith(postContent: PostContent(postContent))));
   }
 }
-
-

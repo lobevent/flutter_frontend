@@ -58,6 +58,7 @@ class _EventListTilesState extends State<EventListTiles> {
                 side: BorderSide(
                   color: AppColors.black,
                   width: 0.5,
+
                 ),
               ),
               margin: EdgeInsets.zero,

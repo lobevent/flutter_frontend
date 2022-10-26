@@ -1,12 +1,15 @@
 import 'dart:convert';
 
 import 'package:auto_route/auto_route.dart' hide Router;
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_comment_shared_widgets.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/Post/write_widget/write_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/gen_dialog.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_widget/post_widget.dart';
@@ -31,13 +34,22 @@ class CommentContainer extends StatelessWidget {
                       comment: loadedComment.comment, context: context),
                   CommentList(
                       loadedComment.comment.commentChildren ?? [], context),
-                  WriteWidget(context, loadedComment.comment.post,
-                      loadedComment.comment),
+
+
+
+                  WriteWidget(postContent: loadedComment.comment.commentContent.getOrEmptyString(), onSubmit:  (content) {
+                    if(loadedComment.comment.commentParent == null) {
+                      context.read<CommentScreenCubit>().postComment(content, loadedComment.comment.post);
+                    }else {
+                      context.read<CommentScreenCubit>().postComment(content, loadedComment.post, loadedComment.comment.commentParent);
+                    }
+                    },),
+
                 ],
             loadedPost: (loadedPost) => [
                   PostWidget(post: loadedPost.post),
                   CommentList(loadedPost.post.comments ?? [], context),
-                  WriteWidget(context, loadedPost.post),
+                  WriteWidget(onSubmit: (content) => context.read<CommentScreenCubit>().postComment(content, loadedPost.post),),
                 ],
             orElse: () => [Text("")]),
       );
@@ -57,20 +69,6 @@ class CommentContainer extends StatelessWidget {
     );
   }
 
-  Widget PositionedFloatingButton() {
-    return Positioned(
-      right: 20,
-      bottom: 20,
-      child: Align(
-        alignment: Alignment.bottomRight,
-        child: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: Colors.green,
-          child: const Icon(Icons.navigation),
-        ),
-      ),
-    );
-  }
 
   /// comment widget is the main widget to display comments
   /// as long as it only is used here, it will not be exportet
@@ -87,119 +85,79 @@ class CommentContainer extends StatelessWidget {
     );
   }
 
-  Widget WriteWidget(
-    BuildContext context,
-    Post? loadedPost, [
-    Comment? parentComment,
-    OverlayEntry? overlay,
-  ]) {
-    TextEditingController postWidgetController = TextEditingController();
-    return Container(
-        width: 300,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            gradient: const LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Colors.white12,
-                Colors.white70,
-              ],
-            )),
-        child: Title(
-          title: "Post a comment.",
-          color: Colors.black,
-          child: Column(
-            children: [
-              FullWidthPaddingInput(
-                password: false,
-                maxLines: 6,
-                controller: postWidgetController,
-              ),
-              TextWithIconButton(
-                  onPressed: () {
-                    parentComment == null
-                        ? context
-                            .read<CommentScreenCubit>()
-                            .postComment(postWidgetController.text, loadedPost!)
-                        : context.read<CommentScreenCubit>().postComment(
-                            postWidgetController.text,
-                            loadedPost!,
-                            parentComment);
-                  },
-                  text: "Post"),
-            ],
-          ),
-        ));
-  }
+  // Widget WriteWidget(
+  //   BuildContext context,
+  //   Post? loadedPost, [
+  //   Comment? parentComment,
+  //   OverlayEntry? overlay,
+  // ]) {
+  //   TextEditingController postWidgetController = TextEditingController();
+  //   return Container(
+  //       width: 300,
+  //       decoration: BoxDecoration(
+  //           borderRadius: BorderRadius.circular(10.0),
+  //           gradient: const LinearGradient(
+  //             begin: Alignment.topRight,
+  //             end: Alignment.bottomLeft,
+  //             colors: [
+  //               Colors.white12,
+  //               Colors.white70,
+  //             ],
+  //           )),
+  //       child: Title(
+  //         title: "Post a comment.",
+  //         color: Colors.black,
+  //         child: Column(
+  //           children: [
+  //             FullWidthPaddingInput(
+  //               password: false,
+  //               maxLines: 6,
+  //               controller: postWidgetController,
+  //             ),
+  //             TextWithIconButton(
+  //                 onPressed: () {
+  //                   parentComment == null
+  //                       ? context
+  //                           .read<CommentScreenCubit>()
+  //                           .postComment(postWidgetController.text, loadedPost!)
+  //                       : context.read<CommentScreenCubit>().postComment(
+  //                           postWidgetController.text,
+  //                           loadedPost!,
+  //                           parentComment);
+  //                 },
+  //                 text: "Post"),
+  //           ],
+  //         ),
+  //       ));
+  // }
 
   /// generate the widget with the action buttons (like load children etc.)
   Widget ActionWidgets(BuildContext context, Comment comment) {
-    return PaddingRowWidget(
-      children: [
-        StdTextButton(
-            onPressed: () => context.router
-                .push(CommentsScreenRoute(parentComment: comment)),
-            child: Row(
-              children: [
-                Icon(Icons.comment),
-                Text(comment.childCount.toString(),
-                    style: TextStyle(color: AppColors.stdTextColor))
-              ],
-            )),
-        //delete an comment button
-        //check if its the own comment to display delete button
-        if (CommonHive.checkIfOwnId(comment.owner.id.value.toString())) ...[
-          StdTextButton(
-              onPressed: () {
-                showCommentEditOverlay(context, comment);
-              },
-              child: Icon(Icons.edit)),
-          StdTextButton(
-              onPressed: () {
-                GenDialog.genericDialog(
-                        context,
-                        AppStrings.deleteCommentDialogAbort,
-                        AppStrings.deleteCommentDialogText,
-                        AppStrings.deleteCommentDialogConfirm,
-                        AppStrings.deleteCommentDialogAbort)
-                    .then((value) async => {
-                          if (value)
-                            context
-                                .read<CommentScreenCubit>()
-                                .deleteComment(comment)
-                          else
-                            print("abort delete Comment"),
-                        });
-              },
-              child: Icon(Icons.delete))
-        ],
-      ],
-    );
+    return ActionWidgetsCommentPost(context, right(comment));
   }
 
   /// build this Widget as overlay!
-  void showCommentEditOverlay(
-      BuildContext
-          cubitContextLocal /* this is used to access the cubit inside of the overlay*/,
-      Comment comment) async {
-    //initialise overlaystate and entries
-    final OverlayState overlayState = Overlay.of(cubitContextLocal)!;
-    //have to do it nullable
-    OverlayEntry? overlayEntry;
-
-    //this is the way to work with overlays
-    overlayEntry = OverlayEntry(builder: (buildContext) {
-      return DismissibleOverlay(
-        overlayEntry: overlayEntry!,
-        child: Scaffold(
-            body: WriteWidget(cubitContextLocal, null, comment, overlayEntry)
-            //WriteWidget(context: cubitContextLocal, event: event!, post: post, overlayEntry: overlayEntry),
-            ),
-      );
-    });
-
-    //insert the entry in the state to make it accesible
-    overlayState.insert(overlayEntry);
-  }
+  // void showCommentEditOverlay(
+  //     BuildContext
+  //         cubitContextLocal /* this is used to access the cubit inside of the overlay*/,
+  //     Comment comment) async {
+  //   //initialise overlaystate and entries
+  //   final OverlayState overlayState = Overlay.of(cubitContextLocal)!;
+  //   //have to do it nullable
+  //   OverlayEntry? overlayEntry;
+  //
+  //   //this is the way to work with overlays
+  //   overlayEntry = OverlayEntry(builder: (buildContext) {
+  //     return DismissibleOverlay(
+  //       overlayEntry: overlayEntry!,
+  //       child: Scaffold(
+  //           body: WriteWidget(cubitContextLocal, null, comment, overlayEntry)
+  //           //WriteWidget(context: cubitContextLocal, event: event!, post: post, overlayEntry: overlayEntry),
+  //           ),
+  //     );
+  //   });
+  //
+  //   //insert the entry in the state to make it accesible
+  //   overlayState.insert(overlayEntry);
+  // }
 }

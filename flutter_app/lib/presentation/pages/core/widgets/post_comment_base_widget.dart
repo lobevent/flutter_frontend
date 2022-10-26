@@ -16,6 +16,7 @@ class PostCommentBaseWidget extends StatelessWidget {
   final DateTime date;
   final String content;
   final Widget actionButtonsWidgets;
+  final List<PopupMenuItem>? popUpItems;
   final List<String> images;
   const PostCommentBaseWidget(
       {Key? key,
@@ -23,7 +24,7 @@ class PostCommentBaseWidget extends StatelessWidget {
       this.images = const [],
       required this.date,
       required this.content,
-      required this.actionButtonsWidgets})
+      required this.actionButtonsWidgets, this.popUpItems})
       : super(key: key);
 
   @override
@@ -74,13 +75,16 @@ class PostCommentBaseWidget extends StatelessWidget {
   }
 
   Widget DateWidgetPost(DateTime date){
-    return Align(
-      alignment: Alignment.bottomLeft,
-      child: Text(
-        DateFormat('EEEE, MMM d, yyyy, HH:mm').format(date),
-        style: const TextStyle(
-          color: AppColors.stdTextColor,
-          fontSize: AppSizes.metaSubText,
+    return Padding(
+      padding: EdgeInsets.only(left: paddingLeftConst - 15),
+      child: Align(
+        alignment: Alignment.bottomLeft,
+        child: Text(
+          DateFormat('EEEE, MMM d, yyyy, HH:mm').format(date),
+          style: const TextStyle(
+            color: AppColors.stdTextColor,
+            fontSize: AppSizes.metaSubText,
+          ),
         ),
       ),
     );
@@ -92,21 +96,15 @@ class PostCommentBaseWidget extends StatelessWidget {
       paddinfLeft: paddingLeftConst - 15,
       paddingRight: paddingLeftConst - 15,
       children: [
-        // Text(
-        //   DateFormat('EEEE, MMM d, yyyy, HH:mm').format(date),
-        //   style: const TextStyle(
-        //     color: AppColors.stdTextColor,
-        //     fontSize: AppSizes.metaSubText,
-        //   ),
-        // ),
         // if author is null, just user a spacer instead
-        author == null
-            ? Spacer()
-            : ProfilePopup(
+        if (author == null) Spacer() else ProfilePopup(
                 loadingButtonSize: 40,
                 isLoading: false,
                 profile: author,
               ),
+        Spacer(),
+        if(popUpItems != null)
+          PopupMenuButton(itemBuilder: (BuildContext context) => popUpItems!)
       ],
     );
   }
@@ -118,27 +116,27 @@ class PostCommentBaseWidget extends StatelessWidget {
     );
   }
 
-  /// the widget for displaying the author (Overflow Safe)
-  Widget AuthorWidget(Profile profile) {
-    // row so we can display multiple things
-    return Row(
-      children: [
-        // get avatar image or from assets
-        CircleAvatar(
-          backgroundImage: ProfileImage.getAssetOrNetwork(profile.images?[0]),
-          radius: 10,
-        ),
-        // sized box for little distance
-        SizedBox(
-          width: 20,
-        ),
-        // overflow safe
-        OverflowSafeString(
-            child: Text(
-          profile.name.getOrCrash(),
-          style: AppTextStyles.stdSubTextStyle,
-        ))
-      ],
-    );
-  }
+  // /// the widget for displaying the author (Overflow Safe)
+  // Widget AuthorWidget(Profile profile) {
+  //   // row so we can display multiple things
+  //   return Row(
+  //     children: [
+  //       // get avatar image or from assets
+  //       CircleAvatar(
+  //         backgroundImage: ProfileImage.getAssetOrNetwork(profile.images?[0]),
+  //         radius: 10,
+  //       ),
+  //       // sized box for little distance
+  //       SizedBox(
+  //         width: 00,
+  //       ),
+  //       // overflow safe
+  //       OverflowSafeString(
+  //           child: Text(
+  //         profile.name.getOrCrash(),
+  //         style: AppTextStyles.stdSubTextStyle,
+  //       ))
+  //     ],
+  //   );
+  // }
 }

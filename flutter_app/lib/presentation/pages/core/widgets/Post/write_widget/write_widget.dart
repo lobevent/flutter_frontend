@@ -11,13 +11,13 @@ import '../../../../../post_comment/post_screen/cubit/post_screen_cubit.dart';
 import 'write_widget_post_image_picker.dart';
 
 class WriteWidget extends StatefulWidget{
-  final Post? post;
+  final String? postContent;
   final Function(String postContent) onSubmit;
-  final Function(List<XFile?> images) changeImages;
+  final Function(List<XFile?> images)? changeImages;
   WriteWidget({
     Key? key,
     required this.onSubmit,
-    this.post, required this.changeImages,
+    this.postContent, this.changeImages,
 
   }): super(key: key);
 
@@ -31,8 +31,8 @@ class _WriteWidgetState extends State<WriteWidget> {
   @override
   void initState(){
     super.initState();
-    if(this.widget.post != null){
-      postWidgetController = TextEditingController(text: widget.post!.postContent.getOrEmptyString());
+    if(this.widget.postContent != null){
+      postWidgetController = TextEditingController(text: widget.postContent!);
     }
     else {
       postWidgetController = TextEditingController();
@@ -55,7 +55,7 @@ class _WriteWidgetState extends State<WriteWidget> {
                 maxLines: 6,
                 controller: postWidgetController,
               ),
-              if (widget.post == null) PostImagePickerWidget(changeImages: widget.changeImages) else Text(""),
+              if (widget.postContent == null && widget.changeImages != null) PostImagePickerWidget(changeImages: widget.changeImages!) else Text(""),
               TextWithIconButton(
                   onPressed: () {
                     widget.onSubmit(postWidgetController.text);

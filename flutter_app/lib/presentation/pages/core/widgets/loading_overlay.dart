@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 
 /// this class is meant to be the main loading overlay
+@Deprecated("User [BasicContentContainer] instead")
 class LoadingOverlay extends StatelessWidget {
   final Widget child;
   final bool isLoading;

@@ -104,6 +104,8 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   hive_generator: ^1.1.3
+  copy_with_extension_gen: ^4.0.4
+  copy_with_extension: ^4.0.4
 
 
 dev_dependencies:

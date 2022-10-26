@@ -6,15 +6,18 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/ImageCarousell.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_upload.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/cubit/event_form_cubit.dart';
-import 'package:flutter_frontend/presentation/post_comment/post_screen/cubit/post_screen_cubit.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../../../../post_comment/post_screen/cubit/post_screen_cubit.dart';
 
 // good tutorial: https://blog.logrocket.com/creating-image-carousel-flutter/
 // TODO: open an Dialog with the image when clicking on it!
+///
 /// The image picker widged for posts!
 class PostImagePickerWidget extends StatefulWidget {
+  final Function(List<XFile?> images) changeImages;
   const PostImagePickerWidget({
-    Key? key,
+    Key? key, required this.changeImages,
   }) : super(key: key);
 
   @override

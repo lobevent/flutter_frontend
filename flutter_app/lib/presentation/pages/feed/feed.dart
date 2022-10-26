@@ -8,7 +8,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigati
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/main_app_bar.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_widget.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_widget/post_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/feed/cubit/feed_cubit.dart';
@@ -106,8 +106,7 @@ class _FeedScreenState extends State<FeedScreen> {
                             );
                           } else if (evPostList[index].post != null) {
                             return PostWidget(
-                                post: evPostList[index].post!,
-                                context: context);
+                                post: evPostList[index].post!);
                           } else {
                             return Text("some error");
                           }
@@ -167,7 +166,7 @@ class _FeedScreenState extends State<FeedScreen> {
               );
             } else if (evPostList[index].post != null) {
               return PostWidget(
-                  post: evPostList[index].post!, context: context);
+                  post: evPostList[index].post!);
             } else {
               return Text("some error");
             }

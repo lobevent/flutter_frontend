@@ -58,7 +58,7 @@ class PostScreenCubit extends Cubit<PostScreenState> {
                     //if failure emit to error screen
                     emit(PostScreenState.error(error: failure.toString())),
                 (postReturned) async {
-              post = await uploadImages(postReturned, value);
+              post = await _uploadImages(postReturned, value);
               //add our post to posts and emit the postsscreen
               List<Post> postsAdded=  [...value.posts, postReturned];
               emit(PostScreenState.loaded(posts: postsAdded));
@@ -137,7 +137,7 @@ class PostScreenCubit extends Cubit<PostScreenState> {
   ///
   /// Uploads all images in the state one by one to the server and returns altered Post with the images inside
   ///
-  Future<Post> uploadImages(Post post, _Loaded loaded) async {
+  Future<Post> _uploadImages(Post post, _Loaded loaded) async {
     if (post.images == null) {
       post = post.copyWith(images: []);
     }

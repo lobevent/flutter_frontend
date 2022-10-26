@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_widget.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_widget/post_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/cubit/profile_page_cubit.dart';
+
+import '../../../core/widgets/Post/unscrollable_post_container.dart';
 
 class ProfilePagePosts extends StatelessWidget {
   const ProfilePagePosts({Key? key}) : super(key: key);
@@ -35,5 +37,5 @@ class ProfilePagePosts extends StatelessWidget {
 
 /// generate list of posts
 Widget PostList(List<Post> posts, Profile profile) {
-  return generateUnscrollablePostContainer(posts: posts, profile: profile);
+  return UnscrollablePostContainer(posts: posts, profile: profile);
 }

@@ -54,7 +54,7 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/post_scre
     AutoRoute(page: MyLocationForm),
     AutoRoute(page: EPPPage),
     AutoRoute(page: EventUserPage),
-    AutoRoute(page: EventOverviewPage)
+    CustomRoute(page: EventOverviewPage, transitionsBuilder: TransitionsBuilders.noTransition)
   ],
 )
 class $Router {}

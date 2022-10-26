@@ -40,10 +40,22 @@ class PostWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<PostWidget> createState() => _PostWidgetState();
+  State<PostWidget> createState() => _PostWidgetState(post: post, event: event, showAuthor: showAuthor, showCommentAction: showCommentAction);
 }
 
 class _PostWidgetState extends State<PostWidget> {
+
+  late Post post;
+  Event? event;
+  late bool showAuthor;
+  late bool showCommentAction;
+  _PostWidgetState({
+    required this.post,
+    required this.event,
+    required this.showAuthor,
+    required this.showCommentAction,
+  }): super();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -53,9 +65,9 @@ class _PostWidgetState extends State<PostWidget> {
           return Visibility(
             visible: state.status != StatusPWS.deletionSuccess,
             child: PostCommentBaseWidget(
-                date: widget.post.creationDate,
-                content: widget.post.postContent.getOrCrash(),
-                images: widget.post.images == null ? [] : widget.post.images!,
+                date: post.creationDate,
+                content: state.post.postContent.getOrEmptyString(),//widget.post.postContent.getOrEmptyString(),//
+                images: post.images == null ? [] : state.post.images!,
                 autor: widget.showAuthor ? widget.post.owner : null,
                 actionButtonsWidgets: ActionWidgets(context)),
           );
@@ -126,6 +138,7 @@ class _PostWidgetState extends State<PostWidget> {
     //initialise overlaystate and entries
     final OverlayState overlayState = Overlay.of(cubitContextLocal)!;
     //have to do it nullable
+
     OverlayEntry? overlayEntry;
 
     //this is the way to work with overlays

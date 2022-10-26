@@ -70,6 +70,7 @@ class FeedCubit extends Cubit<FeedState> {
               emit(state.copywith(
                   isLoading: false, error: some(failure.toString())));
             }, (eventAndPostCarrier) {
+
               emit(state.copywith(
                   isLoading: false, eventAndPostCarrier: eventAndPostCarrier));
             }));

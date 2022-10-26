@@ -28,10 +28,11 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
-  List<Event> events = [];
 
   Widget child = Text('');
   Widget LoadingIndicatorOrEnd = Container();
+  List<EventAndPostCarrier> evPostList = [];
+  
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +62,9 @@ class _FeedScreenState extends State<FeedScreen> {
                     //)
                   ],
                 );
-          setState(() {
-            events = state.eventAndPostCarrier.events;
-          });
+          // setState(() {
+          //   events = state.eventAndPostCarrier.events;
+          // });
         },
         // buildWhen: (previousState, state) {
         //   return previousState.isLoading != state.isLoading;
@@ -127,7 +128,7 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @Deprecated("Sliver child delegate is doing this now")
   Widget itemBuilder(EventStatus? userEventStatus,
-      EventsAndPostsCarrier eventsAndPostsCarrier) {
+      EventAndPostCarriers eventsAndPostsCarrier) {
     List<EventAndPostCarrier> evPostList =
         generateSingleCarriers(eventsAndPostsCarrier);
     return ListView.builder(
@@ -166,6 +167,8 @@ class _FeedScreenState extends State<FeedScreen> {
               );
             } else if (evPostList[index].post != null) {
               return PostWidget(
+
+                  key: ObjectKey(evPostList[index].post),
                   post: evPostList[index].post!);
             } else {
               return Text("some error");

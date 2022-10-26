@@ -5,7 +5,7 @@ class FeedState {
   FeedState(
       {this.isLoading = false,
       Option<String>? error,
-      EventsAndPostsCarrier? eventAndPostCarrier,
+      EventAndPostCarriers? eventAndPostCarrier,
       bool? isLoadingNew,
       bool? endReached}) {
     this.error = error ?? this.error;
@@ -18,12 +18,12 @@ class FeedState {
   bool isLoadingNew = false;
   bool isLoading = false;
   Option<String> error = none();
-  EventsAndPostsCarrier eventAndPostCarrier = EventsAndPostsCarrier();
+  EventAndPostCarriers eventAndPostCarrier = EventAndPostCarriers();
 
   FeedState copywith(
       {bool? isLoading,
       Option<String>? error,
-      EventsAndPostsCarrier? eventAndPostCarrier,
+      EventAndPostCarriers? eventAndPostCarrier,
       bool? isLoadingNew,
       bool? endReached}) {
     // and ofcourse the copywith method if you want to be happy

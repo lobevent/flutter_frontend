@@ -1,11 +1,11 @@
 import 'package:flutter_frontend/domain/event/event.dart';
 import '../post/post.dart';
 
-class EventsAndPostsCarrier {
+class EventAndPostCarriers {
   List<Event> events;
   List<Post> posts;
 
-  EventsAndPostsCarrier({this.events = const [], this.posts = const []});
+  EventAndPostCarriers({this.events = const [], this.posts = const []});
 }
 
 class EventAndPostCarrier {
@@ -16,7 +16,7 @@ class EventAndPostCarrier {
 }
 
 List<EventAndPostCarrier> generateSingleCarriers(
-    EventsAndPostsCarrier eventsAndPostsCarrier) {
+    EventAndPostCarriers eventsAndPostsCarrier) {
   List<EventAndPostCarrier> evPostCarrierList = eventsAndPostsCarrier.events
       .map((e) => EventAndPostCarrier(event: e))
       .toList();

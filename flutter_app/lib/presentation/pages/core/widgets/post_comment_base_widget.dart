@@ -53,6 +53,7 @@ class PostCommentBaseWidget extends StatelessWidget {
                 // content of the post
                 ContentWidget(content),
                 imageCarousell(),
+                DateWidgetPost(date),
                 // actions like comments and likes
                 Align(alignment: Alignment.topLeft,child: actionButtonsWidgets,),
               ],
@@ -72,6 +73,18 @@ class PostCommentBaseWidget extends StatelessWidget {
     ]);
   }
 
+  Widget DateWidgetPost(DateTime date){
+    return Align(
+      alignment: Alignment.bottomLeft,
+      child: Text(
+        DateFormat('EEEE, MMM d, yyyy, HH:mm').format(date),
+        style: const TextStyle(
+          color: AppColors.stdTextColor,
+          fontSize: AppSizes.metaSubText,
+        ),
+      ),
+    );
+  }
   /// the head meta wiget displays metadata for the post
   Widget MetaHeadWidget({Profile? author = null, required DateTime date}) {
     return PaddingRowWidget(
@@ -79,14 +92,13 @@ class PostCommentBaseWidget extends StatelessWidget {
       paddinfLeft: paddingLeftConst - 15,
       paddingRight: paddingLeftConst - 15,
       children: [
-        Text(
-          DateFormat('EEEE, MMM d, yyyy').format(date),
-          style: const TextStyle(
-            color: AppColors.stdTextColor,
-            fontSize: AppSizes.metaSubText,
-          ),
-        ),
-        Spacer(),
+        // Text(
+        //   DateFormat('EEEE, MMM d, yyyy, HH:mm').format(date),
+        //   style: const TextStyle(
+        //     color: AppColors.stdTextColor,
+        //     fontSize: AppSizes.metaSubText,
+        //   ),
+        // ),
         // if author is null, just user a spacer instead
         author == null
             ? Spacer()

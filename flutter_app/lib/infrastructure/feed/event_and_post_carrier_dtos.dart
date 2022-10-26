@@ -19,15 +19,15 @@ class EventAndPostCarrierDto extends BaseDto with _$EventAndPostCarrierDto {
   }) = EventAndPostCarrierFull;
 
   @override
-  EventsAndPostsCarrier toDomain() {
-    return EventsAndPostsCarrier(
+  EventAndPostCarriers toDomain() {
+    return EventAndPostCarriers(
       events: eventsDto.map((e) => e.toDomain()).toList(),
       posts: postsDto.map((e) => e.toDomain()).toList(),
     );
   }
 
   factory EventAndPostCarrierDto.fromDomain(
-      EventsAndPostsCarrier eventAndPostCarrier) {
+      EventAndPostCarriers eventAndPostCarrier) {
     return EventAndPostCarrierDto(postsDto: [], eventsDto: []);
   }
 

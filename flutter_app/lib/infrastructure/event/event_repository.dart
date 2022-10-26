@@ -88,7 +88,7 @@ class EventRepository extends Repository {
     }
   }
 
-  Future<Either<NetWorkFailure, EventsAndPostsCarrier>> _getListEventsPosts(
+  Future<Either<NetWorkFailure, EventAndPostCarriers>> _getListEventsPosts(
       Future<EventAndPostCarrierDto> Function() repocall) async {
     try {
       final eventAndPostCarrierDto = await repocall();
@@ -233,7 +233,7 @@ class EventRepository extends Repository {
     });
   }
 
-  Future<Either<NetWorkFailure, EventsAndPostsCarrier>> getFeedPostsEvents(
+  Future<Either<NetWorkFailure, EventAndPostCarriers>> getFeedPostsEvents(
       double latitude,
       double longitude,
       int distance,

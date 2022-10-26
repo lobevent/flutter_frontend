@@ -4,27 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
-import 'package:flutter_frontend/domain/profile/profile.dart';
-import 'package:flutter_frontend/l10n/app_strings.dart';
-import 'package:flutter_frontend/presentation/core/style.dart';
-import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_comment_shared_widgets.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/Post/write_widget/write_widget_post_image_picker.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_widget/post_widget_cubit/post_widget_cubit.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
-import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
-import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/pick_image_widget.dart';
-import 'package:flutter_frontend/presentation/post_comment/comments_screen/cubit/comment_screen_cubit.dart';
-import 'package:flutter_frontend/presentation/post_comment/comments_screen/widgets/comment_container.dart';
-import 'package:flutter_frontend/presentation/routes/router.gr.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/src/provider.dart';
 
 import '../../../../../../infrastructure/core/local/common_hive/common_hive.dart';
 import '../../../../../../domain/post/value_objects.dart';
-import '../../gen_dialog.dart';
-import '../write_widget/write_widget.dart';
 
 /// this is the post widget, which should be used everywhere
 class PostWidget extends StatefulWidget {
@@ -78,7 +64,8 @@ class _PostWidgetState extends State<PostWidget> {
 
   /// build this Widget as overlay!
   void showPostEditOverlay(BuildContext cubitContextLocal /* this is used to access the cubit inside of the overlay*/) async {
-    showPostEditOverlayCommentPost(cubitContextLocal, widget.post.postContent.getOrEmptyString(),
-            (postContent) => cubitContextLocal.read<PostWidgetCubit>().editPost(widget.post.copyWith(postContent: PostContent(postContent))));
+    Post statePost = cubitContextLocal.read<PostWidgetCubit>().state.post;
+    showPostEditOverlayCommentPost(cubitContextLocal, statePost.postContent.getOrEmptyString(),
+            (postContent) => statePost.copyWith(postContent: PostContent(postContent)));
   }
 }

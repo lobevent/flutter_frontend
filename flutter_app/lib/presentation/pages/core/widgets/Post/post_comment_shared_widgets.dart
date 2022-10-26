@@ -41,13 +41,13 @@ List<PopupMenuItem>? PopupItemsCommentPost(BuildContext context, VoidCallback on
 }
 
 
-
+///Provides Row of ActionWidgets shared by Comments and Posts
 Widget ActionWidgetsCommentPost(BuildContext context, Either<Post, Comment> comment_or_post) {
   return Row(
     //mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         flatButton(
-          onPressed: () => context.router.push(comment_or_post.fold((l) => CommentsScreenRoute(post: l), (r) => CommentsScreenRoute(parentComment: r))),
+          onPressed: () => context.router.push(CommentsPageRoute(entity: comment_or_post)),
           icon: Row(
             children: [Icon(Icons.comment), Text(comment_or_post.fold((l) => l.commentCount.toString(), (r) => r.childCount.toString()),
                 style: TextStyle(color: AppColors.stdTextColor))],
@@ -56,6 +56,7 @@ Widget ActionWidgetsCommentPost(BuildContext context, Either<Post, Comment> comm
       ]);
 }
 
+/// Provides flatButton mostly used in [ActionWidgetsCommentPost]
 Widget flatButton({required Widget icon, required VoidCallback onPressed}) {
   return Expanded(
       child: Container(

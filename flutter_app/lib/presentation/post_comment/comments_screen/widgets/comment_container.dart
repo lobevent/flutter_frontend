@@ -20,6 +20,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../../../infrastructure/core/local/common_hive/common_hive.dart';
 
+@Deprecated("new is CommentPage")
 class CommentContainer extends StatelessWidget {
   const CommentContainer({Key? key}) : super(key: key);
   @override
@@ -85,51 +86,6 @@ class CommentContainer extends StatelessWidget {
     );
   }
 
-  // Widget WriteWidget(
-  //   BuildContext context,
-  //   Post? loadedPost, [
-  //   Comment? parentComment,
-  //   OverlayEntry? overlay,
-  // ]) {
-  //   TextEditingController postWidgetController = TextEditingController();
-  //   return Container(
-  //       width: 300,
-  //       decoration: BoxDecoration(
-  //           borderRadius: BorderRadius.circular(10.0),
-  //           gradient: const LinearGradient(
-  //             begin: Alignment.topRight,
-  //             end: Alignment.bottomLeft,
-  //             colors: [
-  //               Colors.white12,
-  //               Colors.white70,
-  //             ],
-  //           )),
-  //       child: Title(
-  //         title: "Post a comment.",
-  //         color: Colors.black,
-  //         child: Column(
-  //           children: [
-  //             FullWidthPaddingInput(
-  //               password: false,
-  //               maxLines: 6,
-  //               controller: postWidgetController,
-  //             ),
-  //             TextWithIconButton(
-  //                 onPressed: () {
-  //                   parentComment == null
-  //                       ? context
-  //                           .read<CommentScreenCubit>()
-  //                           .postComment(postWidgetController.text, loadedPost!)
-  //                       : context.read<CommentScreenCubit>().postComment(
-  //                           postWidgetController.text,
-  //                           loadedPost!,
-  //                           parentComment);
-  //                 },
-  //                 text: "Post"),
-  //           ],
-  //         ),
-  //       ));
-  // }
 
   /// generate the widget with the action buttons (like load children etc.)
   Widget ActionWidgets(BuildContext context, Comment comment) {
@@ -137,27 +93,9 @@ class CommentContainer extends StatelessWidget {
   }
 
   /// build this Widget as overlay!
-  // void showCommentEditOverlay(
-  //     BuildContext
-  //         cubitContextLocal /* this is used to access the cubit inside of the overlay*/,
-  //     Comment comment) async {
-  //   //initialise overlaystate and entries
-  //   final OverlayState overlayState = Overlay.of(cubitContextLocal)!;
-  //   //have to do it nullable
-  //   OverlayEntry? overlayEntry;
-  //
-  //   //this is the way to work with overlays
-  //   overlayEntry = OverlayEntry(builder: (buildContext) {
-  //     return DismissibleOverlay(
-  //       overlayEntry: overlayEntry!,
-  //       child: Scaffold(
-  //           body: WriteWidget(cubitContextLocal, null, comment, overlayEntry)
-  //           //WriteWidget(context: cubitContextLocal, event: event!, post: post, overlayEntry: overlayEntry),
-  //           ),
-  //     );
-  //   });
-  //
-  //   //insert the entry in the state to make it accesible
-  //   overlayState.insert(overlayEntry);
-  // }
+  void showCommentEditOverlay(
+      BuildContext context/* this is used to access the cubit inside of the overlay*/,
+      Comment comment) async {
+    //showPostEditOverlayCommentPost(context, comment.commentContent.getOrEmptyString(), (p0) => context.read<CommentScreenCubit>().postComment(commentDesc, loadedPost))
+  }
 }

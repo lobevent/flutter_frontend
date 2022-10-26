@@ -10,6 +10,7 @@ import 'package:flutter_frontend/presentation/post_comment/comments_screen/widge
 
 import 'cubit/comment_screen_cubit.dart';
 
+@Deprecated("new is CommentPage")
 class CommentsScreen extends StatelessWidget {
   final Post? post;
   final Comment? parentComment;

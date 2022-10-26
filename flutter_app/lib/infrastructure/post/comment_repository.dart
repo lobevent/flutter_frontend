@@ -19,17 +19,27 @@ class CommentRepository extends Repository {
 
   // -------------------------------- Single Crud operations --------------------------------------
 
+  ///---------------------------------------------------------------------Comment ADD/EDIT/DELETE-----------------------------------------------------
   ///
-  /// Creates an comment in the backend or returns failure
+  /// adds a comment
   ///
-  Future<Either<NetWorkFailure, Comment>> create(Comment comment) async {
+  Future<Either<NetWorkFailure, Comment>> createComment(Comment comment, UniqueId parentId) async {
     return localErrorHandler<Comment>(() async {
       final commentDto = CommentDto.fromDomain(comment);
-      CommentDto returnedCommentDto =
-          await _commentRemoteService.create(commentDto);
+      CommentDto returnedCommentDto = await _commentRemoteService.createComment(
+          commentDto, parentId.value.toString());
       return right(returnedCommentDto.toDomain());
     });
   }
+
+  Future<Either<NetWorkFailure, Comment>> deletePostComment(String postOrCommentId) async {
+    return localErrorHandler<Comment>(() async {
+      final CommentDto commentDto =
+      await _commentRemoteService.deletePostOrComment(postOrCommentId);
+      return right(commentDto.toDomain());
+    });
+  }
+
 
   ///
   /// deletes an comment in the backend or returns failure
@@ -38,7 +48,7 @@ class CommentRepository extends Repository {
     return localErrorHandler<Comment>(() async {
       final commentDto = CommentDto.fromDomain(comment);
       CommentDto returnedCommentDto =
-          await _commentRemoteService.delete(commentDto);
+      await _commentRemoteService.delete(commentDto);
       return right(returnedCommentDto.toDomain());
     });
   }
@@ -49,7 +59,7 @@ class CommentRepository extends Repository {
   Future<Either<NetWorkFailure, Comment>> getSingleComment(UniqueId id) async {
     return localErrorHandler<Comment>(() async {
       final CommentDto commentDto =
-          await _commentRemoteService.getSingleComment(id.value);
+      await _commentRemoteService.getSingleComment(id.value);
       final Comment comment = commentDto.toDomain();
       return right(comment);
     });
@@ -62,7 +72,7 @@ class CommentRepository extends Repository {
     return localErrorHandler(() async {
       final commentDto = CommentDto.fromDomain(comment);
       CommentDto returnedComment =
-          await _commentRemoteService.update(commentDto);
+      await _commentRemoteService.update(commentDto);
       return right(returnedComment.toDomain());
     });
   }
@@ -72,14 +82,13 @@ class CommentRepository extends Repository {
   ///
   /// loads comment that have an parent post
   ///
-  Future<Either<NetWorkFailure, List<Comment>>> getCommentsFromPost(
-      {required DateTime lastCommentTime,
-      required int amount,
-      required Post postParent}) async {
+  Future<Either<NetWorkFailure, List<Comment>>> getCommentsFromPost({required DateTime lastCommentTime,
+    required int amount,
+    required Post postParent}) async {
     return localErrorHandler<List<Comment>>(() async {
       List<CommentDto> commentDtos =
-          await _commentRemoteService.getCommentsFromPost(
-              lastCommentTime, amount, postParent.id!.value.toString());
+      await _commentRemoteService.getCommentsFromPost(
+          lastCommentTime, amount, postParent.id!.value.toString());
       return right(convertToDomainList(commentDtos));
     });
   }
@@ -94,8 +103,8 @@ class CommentRepository extends Repository {
   }) async {
     return localErrorHandler<List<Comment>>(() async {
       List<CommentDto> commentDtos =
-          await _commentRemoteService.getCommentsFromCommentParent(
-              lastCommentTime, amount, commentParent.id.value.toString());
+      await _commentRemoteService.getCommentsFromCommentParent(
+          lastCommentTime, amount, commentParent.id.value.toString());
       return right(convertToDomainList(commentDtos));
     });
   }
@@ -110,8 +119,8 @@ class CommentRepository extends Repository {
   }) async {
     return localErrorHandler<List<Comment>>(() async {
       List<CommentDto> commentDtos =
-          await _commentRemoteService.getCommentsFromUser(
-              lastCommentTime, amount, profile.id.value.toString());
+      await _commentRemoteService.getCommentsFromUser(
+          lastCommentTime, amount, profile.id.value.toString());
       return right(convertToDomainList(commentDtos));
     });
   }
@@ -119,11 +128,10 @@ class CommentRepository extends Repository {
   ///
   /// load all own comments
   ///
-  Future<Either<NetWorkFailure, List<Comment>>> getOwnComments(
-      {required DateTime lastCommentTime, required int amount}) async {
+  Future<Either<NetWorkFailure, List<Comment>>> getOwnComments({required DateTime lastCommentTime, required int amount}) async {
     return localErrorHandler<List<Comment>>(() async {
       List<CommentDto> commentDtos =
-          await _commentRemoteService.getOwnComments(lastCommentTime, amount);
+      await _commentRemoteService.getOwnComments(lastCommentTime, amount);
       return right(convertToDomainList(commentDtos));
     });
   }
@@ -134,28 +142,5 @@ class CommentRepository extends Repository {
   List<Comment> convertToDomainList(List<CommentDto> commentDtos) {
     return commentDtos.map((commentDtos) => commentDtos.toDomain()).toList();
   }
-
-  ///---------------------------------------------------------------------Comment ADD/EDIT/DELETE-----------------------------------------------------
-  ///
-  /// adds a comment
-  ///
-  Future<Either<NetWorkFailure, Comment>> createComment(
-      Comment comment, String postId,
-      [String parentId = ""]) async {
-    return localErrorHandler<Comment>(() async {
-      final commentDto = CommentDto.fromDomain(comment);
-      CommentDto returnedCommentDto = await _commentRemoteService.createComment(
-          commentDto, postId, parentId);
-      return right(returnedCommentDto.toDomain());
-    });
-  }
-
-  Future<Either<NetWorkFailure, Comment>> deletePostComment(
-      String postOrCommentId) async {
-    return localErrorHandler<Comment>(() async {
-      final CommentDto commentDto =
-          await _commentRemoteService.deletePostOrComment(postOrCommentId);
-      return right(commentDto.toDomain());
-    });
-  }
 }
+

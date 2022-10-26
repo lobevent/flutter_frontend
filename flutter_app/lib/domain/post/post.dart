@@ -24,6 +24,9 @@ class Post with _$Post {
     List<String>? images,
   }) = _Post;
 
+  static Post createDummyPost(){
+    return Post(creationDate: DateTime.now(), postContent: PostContent(""));
+  }
 /*  const factory Post.WithoutId({
     required DateTime creationDate,
     required PostContent postContent,

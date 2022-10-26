@@ -24,6 +24,7 @@ import 'package:flutter_frontend/presentation/pages/preferences/my_locations_pag
 import 'package:flutter_frontend/presentation/pages/social/profile_friends/profile_friends_page.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/profile_page.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_search/profile_search_page.dart';
+import 'package:flutter_frontend/presentation/post_comment/comments_page/comments_page.dart';
 import 'package:flutter_frontend/presentation/post_comment/comments_screen/comments_screen.dart';
 import 'package:flutter_frontend/presentation/post_comment/post_screen/post_screen.dart';
 
@@ -43,7 +44,7 @@ import '../pages/social/profile_search/profile_search_screen.dart';
     AutoRoute(page: ProfileSearchScreen),
     AutoRoute(page: ProfileSearchPage),
     AutoRoute(page: ProfileFriendsScreen),
-    AutoRoute(page: CommentsScreen),
+    AutoRoute(page: CommentsPage),
     AutoRoute(page: PostsScreen),
     AutoRoute(page: LoginRegister),
     AutoRoute(page: ImageUpload),

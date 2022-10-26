@@ -38,7 +38,7 @@ class PostDto extends BaseDto with _$PostDto {
         content: post.postContent.getOrCrash(),
         owner: post.owner!=null ? ProfileDto.fromDomain(post.owner!)
             : null,
-        event: EventDto.fromDomain(post.event!),
+        event: post.event != null ? EventDto.fromDomain(post.event!) : null,
         comments: <CommentDto>[],
         images: post.images,
         commentCount: post.commentCount);

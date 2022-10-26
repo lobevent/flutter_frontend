@@ -1,12 +1,13 @@
 part of 'comments_page_cubit.dart';
 
-enum StateCPS  {loading, loadingSuccessfull}
+enum StatusCPS  {loading, loadingSuccessful, loadingFailure, posting, postingSuccess, postingFailure}
 @CopyWith()
 class CommentsPageState {
-  final StateCPS state;
-  final Either<Post, Comment>? parent;
-  final Comment? comment;
+  final StatusCPS status;
+  final Either<Post, Comment> entity;
+  final List<Comment> children;
+  final NetWorkFailure? failure;
 
-  CommentsPageState({required this.state, this.parent, this.comment});
+  CommentsPageState({this.failure, required this.status, required this.entity, required this.children});
 }
 

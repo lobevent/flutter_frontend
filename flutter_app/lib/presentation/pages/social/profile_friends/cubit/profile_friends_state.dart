@@ -8,7 +8,7 @@ class ProfileFriendsState with _$ProfileFriendsState {
 
   factory ProfileFriendsState.initial() = _Initial;
 
-  factory ProfileFriendsState.loading() = _LoadInProgress;
+  factory ProfileFriendsState.loading() = LoadInProgress;
 
   factory ProfileFriendsState.loadedBoth(
       {required List<Profile> friendList,

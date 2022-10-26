@@ -26,28 +26,12 @@ class _ProfileFriendsScreenState extends State<ProfileFriendsScreen> {
       child: BlocConsumer<ProfileFriendsCubit, ProfileFriendsState>(
           listener: (context, state) => {},
           builder: (context, state) {
-            bool isLoading = state.maybeMap((initial) => false,
-                loading: (_) => true, orElse: () => false);
-            return ProfileFriendsScreenHolder(
-              isLoading: isLoading,
+            return BasicContentContainer(
+              isLoading: state is LoadInProgress,
+              child_ren: right(ProfileFriendsBody()),
+              scrollable: false,
             );
           }),
-    );
-  }
-}
-
-class ProfileFriendsScreenHolder extends StatelessWidget {
-  final bool isLoading;
-
-  ProfileFriendsScreenHolder({Key? key, required this.isLoading})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BasicContentContainer(
-      isLoading: isLoading,
-      child_ren: right(ProfileFriendsBody()),
-      scrollable: false,
     );
   }
 }

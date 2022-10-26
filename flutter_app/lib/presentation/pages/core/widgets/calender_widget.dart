@@ -6,6 +6,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/infrastructure/core/local/common_hive/common_hive.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_message.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
@@ -18,8 +20,10 @@ import 'package:table_calendar/table_calendar.dart';
 
 class CalenderWidget extends StatefulWidget {
   final OverlayEntry overlayEntry;
+  final Profile profile;
 
-  CalenderWidget({Key? key, required this.overlayEntry}) : super(key: key);
+  CalenderWidget({Key? key, required this.overlayEntry, required this.profile})
+      : super(key: key);
 
   @override
   CalenderWidgetState createState() => CalenderWidgetState();
@@ -44,7 +48,12 @@ class CalenderWidgetState extends State<CalenderWidget> {
     return BlocProvider(
       create: (context) =>
           //use this cubit to fetch own/attending events
-          EventsMultilistCubit(option: EventScreenOptions.owned),
+          EventsMultilistCubit(
+              profile: widget.profile,
+              option:
+                  CommonHive.checkIfOwnId(widget.profile.id.value.toString())
+                      ? EventScreenOptions.owned
+                      : EventScreenOptions.fromUser),
       child: BlocConsumer<EventsMultilistCubit, EventsMultilistState>(
           listener: (context, state) => {},
           builder: (context, state) {

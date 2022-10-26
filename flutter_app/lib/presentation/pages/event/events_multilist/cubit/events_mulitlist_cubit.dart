@@ -32,6 +32,7 @@ enum EventScreenOptions {
 }
 
 // TODO: this has to be debugged. When calling a new function to fast, the old one will emit a wrong state
+@Deprecated("Thx daniel")
 class EventsMultilistCubit extends Cubit<EventsMultilistState> {
   int checknumber = 0;
   EventScreenOptions option = EventScreenOptions.near;

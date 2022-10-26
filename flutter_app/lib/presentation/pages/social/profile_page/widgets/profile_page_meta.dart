@@ -5,6 +5,7 @@ import 'package:flutter_frontend/infrastructure/core/local/common_hive/common_hi
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/animations/rotatingCircle.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/calender_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/events_multilist/cubit/events_mulitlist_cubit.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:hive/hive.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../../core/widgets/animations/loading_button.dart';
 import '../../profile_score and achievements/profile_score_cubit.dart';
 
 class ProfilePageMeta extends StatelessWidget {
@@ -85,7 +87,7 @@ class ProfilePageMeta extends StatelessWidget {
           Spacer(),
           //for the calender
           TextWithIconButton(
-              onPressed: () => showOverlay(context), text: 'Calender'),
+              onPressed: () => showOverlay(context, profile), text: 'Calender'),
           //TableCalendar(focusedDay: DateTime.now(), firstDay: DateTime.now(), lastDay: DateTime(2022, DateTime.september, 30)),
           // The Events Button
           Spacer(),
@@ -100,7 +102,7 @@ class ProfilePageMeta extends StatelessWidget {
     );
   }
 
-  void showOverlay(BuildContext buildContext) async {
+  void showOverlay(BuildContext buildContext, Profile profile) async {
     final OverlayState overlayState = Overlay.of(buildContext)!;
 
     //have to do it nullable
@@ -108,14 +110,15 @@ class ProfilePageMeta extends StatelessWidget {
 
     //this is the way to work with overlays
     overlayEntry = OverlayEntry(builder: (context) {
-      return CalenderOverlay(context, overlayEntry!);
+      return CalenderOverlay(context, overlayEntry!, profile);
       //ItemCreateWidget(overlayEntry: overlayEntry!, todo: widget.todo!, cubitContext: buildContext);
     });
     overlayState.insert(overlayEntry);
   }
 
   //our calender widget as overlay
-  Widget CalenderOverlay(BuildContext context, OverlayEntry overlayEntry) {
+  Widget CalenderOverlay(
+      BuildContext context, OverlayEntry overlayEntry, Profile profile) {
     DateTime? _selectedDay;
 
     return DismissibleOverlay(
@@ -123,6 +126,7 @@ class ProfilePageMeta extends StatelessWidget {
         child: Scaffold(
           body: CalenderWidget(
             overlayEntry: overlayEntry,
+            profile: profile,
           ),
         ));
   }
@@ -137,7 +141,8 @@ class ProfilePageMeta extends StatelessWidget {
           return Column(
             children: [
               AchievementTile(),
-              ScoreHelperWidget(context, null, profile)
+              ScoreHelperWidget(context, null, profile),
+              //ScoreHelperWidget(context, null, profile)
             ],
           );
         }, loaded: (st) {
@@ -163,7 +168,8 @@ class ProfilePageMeta extends StatelessWidget {
   Widget ScoreHelperWidget(
       BuildContext context, String? score, Profile profile) {
     bool isOwnProfile = CommonHive.checkIfOwnId(profile.id.value.toString());
-    if(isOwnProfile){
+
+    if (isOwnProfile) {
       return InkWell(
         child: Container(
           width: 60,
@@ -174,25 +180,25 @@ class ProfilePageMeta extends StatelessWidget {
             child: score != null
                 ? Text("Score:$score")
                 : Text(
-              "Score: ${CommonHive.getBoxEntry<String>("profileScore", CommonHive.ownProfileIdAndPic) ?? "0"}",
-            ),
+                    "Score: ${CommonHive.getBoxEntry<String>("profileScore", CommonHive.ownProfileIdAndPic) ?? "0"}",
+                  ),
           ),
         ),
         onTap: () {
           context.read<ProfileScoreCubit>().getOwnProfileScore(profile);
         },
       );
-    }else{
+    } else {
       context.read<ProfileScoreCubit>().getProfileScore(profile);
       return Container(
-          width: 60,
-          height: 60,
-          decoration: const BoxDecoration(
-              shape: BoxShape.circle, color: AppColors.accentButtonColor),
-          child: Center(
-            child: Text("Score:$score"),
-            ),
-          );
+        width: 60,
+        height: 60,
+        decoration: const BoxDecoration(
+            shape: BoxShape.circle, color: AppColors.accentButtonColor),
+        child: Center(
+          child: Text("Score:$score"),
+        ),
+      );
     }
   }
 }

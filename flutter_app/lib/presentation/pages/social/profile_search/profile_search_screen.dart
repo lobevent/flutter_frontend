@@ -86,7 +86,7 @@ class _ProfileSearchContainerState extends State<ProfileSearchContainer> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 8, right: 8, top: 30, bottom: 8),
+                    left: 8, right: 8, top: 30, bottom: 0),
                 child: decideSearchTextField(),
               ),
               decideExpanded()

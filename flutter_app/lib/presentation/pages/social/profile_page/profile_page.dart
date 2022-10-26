@@ -33,42 +33,40 @@ class ProfilePage extends StatelessWidget {
       child: BlocBuilder<ProfilePageCubit, ProfilePageState>(
         builder: (context, state) {
           ///the loading Overlay wraps the whole tree
-          return LoadingOverlay(
-              isLoading: state is ProfileLoadInProgress,
-              child:
+          return
 
-                  /// check if an error has occured and show error message in that case
-                  /// wrapped in a list to match closure context
-                  BasicContentContainer(
-                      scrollable: true,
-                      bottomNavigationBar: const BottomNavigation(
-                        selected: NavigationOptions.home,
-                      ),
-                      child_ren: left(state.maybeMap(
+              /// check if an error has occured and show error message in that case
+              /// wrapped in a list to match closure context
+              BasicContentContainer(
+                  isLoading: state is ProfileLoadInProgress,
+                  scrollable: true,
+                  bottomNavigationBar: const BottomNavigation(
+                    selected: NavigationOptions.home,
+                  ),
+                  child_ren: left(state.maybeMap(
 
-                          /// if the error state is not active, load the contents
-                          error: (errState) =>
-                              [ErrorMessage(errorText: errState.error)],
-                          loaded: (loadedState) => [
-                                // the profile image
-                                ProfilePageHeaderVisual(
-                                    profile: loadedState.profile),
-                                ProfilePageMeta(),
-                                ProfilePagePosts(),
-                              ],
-                          loading: (loadingState) => [
-                                // the profile image
-                                ProfilePageHeaderVisual(
-                                ),
-                                ProfilePageMeta(),
-                                ProfilePagePosts(),
-                              ],
-                          orElse: () => const [
-                                // the profile image
-                                ProfilePageHeaderVisual(),
-                                ProfilePageMeta(),
-                                ProfilePagePosts(),
-                              ]))));
+                      /// if the error state is not active, load the contents
+                      error: (errState) =>
+                          [ErrorMessage(errorText: errState.error)],
+                      loaded: (loadedState) => [
+                            // the profile image
+                            ProfilePageHeaderVisual(
+                                profile: loadedState.profile),
+                            ProfilePageMeta(),
+                            ProfilePagePosts(),
+                          ],
+                      loading: (loadingState) => [
+                            // the profile image
+                            ProfilePageHeaderVisual(),
+                            ProfilePageMeta(),
+                            ProfilePagePosts(),
+                          ],
+                      orElse: () => const [
+                            // the profile image
+                            ProfilePageHeaderVisual(),
+                            ProfilePageMeta(),
+                            ProfilePagePosts(),
+                          ])));
         },
       ),
     );

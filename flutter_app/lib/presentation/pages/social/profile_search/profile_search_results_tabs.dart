@@ -143,7 +143,7 @@ class ProfileSearchResultsTabsState extends State<ProfileSearchResultsTabs>
   //return profile list without my own profile
   List<Profile> getProfileListWithoutOwn(List<Profile> profiles) {
     String? ownId = CommonHive.getOwnProfileId();
-    if (ownId != null) {
+    if (ownId != null && profiles.isNotEmpty) {
       List<Profile> profilesMirror = profiles.toList();
       int index = profilesMirror
           .indexWhere((element) => element.id.value.toString() == ownId);

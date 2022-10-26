@@ -115,11 +115,7 @@ dev_dependencies:
   build_runner: ^2.1.4
 
 
-#icon for the app
-flutter_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/logos/palk logo.png"
+
 
   # generator for the auto route plugin
   auto_route_generator: ^4.2.1
@@ -144,3 +140,9 @@ flutter:
     - assets/images/partypeople.jpg
     - .env
     - .env.ios
+
+#icon for the app
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logos/palk logo.png"

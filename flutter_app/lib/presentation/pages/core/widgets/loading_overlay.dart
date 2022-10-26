@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/animations/palk_animation.dart';
 
 /// this class is meant to be the main loading overlay
 @Deprecated("User [BasicContentContainer] instead")
@@ -53,7 +54,7 @@ class LoadingIndicator extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const CircularProgressIndicator(),
+              const PalkAnimation(size: 80),
               const SizedBox(height: 8),
               Text(
                 text,

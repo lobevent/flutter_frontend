@@ -54,10 +54,10 @@ extension TodoOverlayCubit on EventScreenCubit {
                     addingItem: false,
                     event: value.event
                         .copyWith(todo: todo.copyWith(items: items))));
-                  }));
+              }));
         },
         // if we are not in the loaded state we have an error, we should not be here
-        orElse: () => throw LogicError());
+        orElse: () {});
   }
 
   ///
@@ -70,24 +70,19 @@ extension TodoOverlayCubit on EventScreenCubit {
     state.maybeMap(
         loaded: (loadedState) async {
           // await the deleteion
-          bool success = await todoRepository.deleteItem(item);
-          if (success) {
-            // emit the loading state, so we can trigger an state change
-            emit(EventScreenState.loading());
-            //and then remove the item and emit new state with the item deleted
+          final Either<NetWorkFailure, Item> itemBack =
+              await todoRepository.deleteItem(item);
 
+          itemBack.fold((l) => emit(EventScreenState.error(failure: l)), (r) {
+            emit(EventScreenState.loading());
             List<Item> items = loadedState.event.todo!.items.toList();
             items.removeWhere((i) => i.id.value == item.id.value);
             emit(loadedState.copyWith(
                 event: loadedState.event
                     .copyWith(todo: todo.copyWith(items: items))));
-           // emit(EventScreenState.loaded(event: loadedState.event));
-          } else {
-            // TODO: Fix this garbage! Never return booleans from requests, what if we have an networkfailure? The user will never know which??
-            emit(EventScreenState.error(failure: NetWorkFailure.unexpected()));
-          }
+          });
         },
-        orElse: () => {});
+        orElse: () {});
   }
 
   ///

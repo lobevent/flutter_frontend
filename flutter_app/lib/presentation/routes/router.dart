@@ -27,6 +27,8 @@ import 'package:flutter_frontend/presentation/pages/social/profile_search/profil
 import 'package:flutter_frontend/presentation/post_comment/comments_screen/comments_screen.dart';
 import 'package:flutter_frontend/presentation/post_comment/post_screen/post_screen.dart';
 
+import '../pages/social/profile_search/profile_search_screen.dart';
+
 @MaterialAutoRouter(
   routes: [
     AutoRoute(path: '/', page: FeedScreen, initial: true),
@@ -38,6 +40,7 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/post_scre
     AutoRoute(page: PhoneNumberVerificationCodeScreen),
     AutoRoute(page: EventScreenPage),
     AutoRoute(page: ProfilePage),
+    AutoRoute(page: ProfileSearchScreen),
     AutoRoute(page: ProfileSearchPage),
     AutoRoute(page: ProfileFriendsScreen),
     AutoRoute(page: CommentsScreen),
@@ -47,7 +50,10 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/post_scre
     AutoRoute(page: RegistrationForm),
     AutoRoute(page: ProfileImagePickerWidget),
     AutoRoute(page: EventSwiper),
-    CustomRoute(page: EventSeriesFormMain, transitionsBuilder: TransitionsBuilders.fadeIn, durationInMilliseconds: 400),
+    CustomRoute(
+        page: EventSeriesFormMain,
+        transitionsBuilder: TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 400),
     AutoRoute(page: EventSeriesListPage),
     AutoRoute(page: EventSeriesScreenPage),
     AutoRoute(page: MyLocationsPage),

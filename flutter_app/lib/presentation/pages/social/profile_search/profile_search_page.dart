@@ -9,18 +9,17 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import 'cubit/profile_search_cubit.dart';
 
+@Deprecated("rebuilding this ugly ass mf")
 class ProfileSearchPage extends StatelessWidget {
   const ProfileSearchPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProfileSearchCubit(),
-      child: ProfileSearchContainer()
-    );
+        create: (context) => ProfileSearchCubit(),
+        child: ProfileSearchContainer());
   }
 }
-
 
 class ProfileSearchContainer extends StatefulWidget {
   @override
@@ -50,7 +49,6 @@ class _ProfileSearchContainerState extends State<ProfileSearchContainer> {
     controller.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -192,8 +190,7 @@ class _ProfileSearchContainerState extends State<ProfileSearchContainer> {
     return Column(
       children: filteredSearchHistory!
           .map(
-            (term) =>
-            ListTile(
+            (term) => ListTile(
               title: Text(
                 term,
                 maxLines: 1,
@@ -220,7 +217,7 @@ class _ProfileSearchContainerState extends State<ProfileSearchContainer> {
                 controller.close();
               },
             ),
-      )
+          )
           .toList(),
     );
   }

@@ -119,13 +119,13 @@ class TodoRepository extends ITodoRepository {
   }
 
   @override
-  Future<bool> deleteItem(Item item) async {
+  Future<Either<NetWorkFailure, Item>> deleteItem(Item item) async {
     try {
       //try if the request can be made, if not we will get an NetworkFailure
-      final bool success = await _itemRemoteService.deleteItem(item.id.value);
-      return success;
+      return right(
+          (await _itemRemoteService.deleteItem(item.id.value)).toDomain());
     } on CommunicationException catch (e) {
-      return false;
+      return left(ExceptionsHandler.reactOnCommunicationException(e));
     }
   }
 

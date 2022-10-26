@@ -19,7 +19,7 @@ class CommonHive {
   static const String achievements = 'achievements';
   static const String ownProfileIdAndPic = 'ownProfileIdAndPic';
   static const String ownPosition = 'ownPosition';
-
+  static const String searchHistory = 'searchHistory';
 
   static const String ownProfileIdBoxString = "ownProfileId";
 
@@ -29,6 +29,7 @@ class CommonHive {
     await Hive.openBox<bool>(achievements);
     Hive.registerAdapter(HivePositionAdapter());
     await Hive.openBox<HivePosition>(ownPosition);
+    await Hive.openBox<String>(searchHistory);
   }
 
   ///delete hive storage
@@ -52,8 +53,10 @@ class CommonHive {
       await GetIt.I<ProfileRepository>()
           .getOwnProfile()
           .then((value) => value.fold((l) => null, (ownProfile) {
-                CommonHive.saveBoxEntry<String>(ownProfile.name.getOrEmptyString(),
-                    "ownProfileName", ownProfileIdAndPic);
+                CommonHive.saveBoxEntry<String>(
+                    ownProfile.name.getOrEmptyString(),
+                    "ownProfileName",
+                    ownProfileIdAndPic);
                 CommonHive.saveBoxEntry<String>(ownProfile.id.value.toString(),
                     ownProfileIdBoxString, ownProfileIdAndPic);
                 try {
@@ -73,17 +76,19 @@ class CommonHive {
     return CommonHive.getBoxEntry<String>("ownProfilePic", ownProfileIdAndPic);
   }
 
-  static String? getOwnProfileName()  {
+  static String? getOwnProfileName() {
     return CommonHive.getBoxEntry<String>("ownProfileName", ownProfileIdAndPic);
   }
 
-  static String? getOwnProfileId()  {
-    return CommonHive.getBoxEntry<String>(ownProfileIdBoxString, ownProfileIdAndPic);
+  static String? getOwnProfileId() {
+    return CommonHive.getBoxEntry<String>(
+        ownProfileIdBoxString, ownProfileIdAndPic);
   }
 
   ///checks if some id is ownProfileId
   static bool checkIfOwnId(String checkId) {
-    return CommonHive.getBoxEntry<String>(ownProfileIdBoxString, ownProfileIdAndPic) ==
+    return CommonHive.getBoxEntry<String>(
+            ownProfileIdBoxString, ownProfileIdAndPic) ==
         checkId;
   }
 
@@ -102,6 +107,20 @@ class CommonHive {
     final box = Hive.box<bool>(achievements);
     final bool? val = box.get(key);
     return val;
+  }
+
+  static Future<void> saveSearchHistory(List<String>? searchHistorySave) async {
+    final box = Hive.box<String>(searchHistory);
+    await box.clear();
+    if (searchHistorySave != null) {
+      box.addAll(searchHistorySave);
+    } else {}
+  }
+
+  static List<String>? getSearchHistory() {
+    final box = Hive.box<String>(searchHistory);
+    final List<String>? vals = box.values.map((e) => e.toString()).toList();
+    return vals;
   }
 
   static void saveBoxEntry<T>(T value, String key, String boxName) {

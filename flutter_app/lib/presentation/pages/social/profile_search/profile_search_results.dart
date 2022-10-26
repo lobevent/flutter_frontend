@@ -9,6 +9,7 @@ import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/
 import 'package:flutter_frontend/presentation/pages/event/core/profile_list_tiles.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
+import '../../../../infrastructure/core/local/common_hive/common_hive.dart';
 import 'cubit/profile_search_cubit.dart';
 
 class SearchResultsListView extends StatefulWidget {
@@ -104,6 +105,19 @@ class SearchResultsListViewState extends State<SearchResultsListView>
     }
   }
 
+  //return profile list without my own profile
+  List<Profile> getProfileListWithoutOwn(List<Profile> profiles) {
+    String? ownId = CommonHive.getOwnProfileId();
+    if (ownId != null) {
+      int index = profiles
+          .indexWhere((element) => element.id.value.toString() == ownId);
+      List<Profile> profilesMirror = profiles.toList();
+      profilesMirror.removeAt(index);
+      return profilesMirror;
+    }
+    return profiles;
+  }
+
   ///build initial search screen in tabs
   Widget buildStartSearching(BuildContext context, String eventProfile) {
     return Center(
@@ -183,7 +197,8 @@ class SearchResultsListViewState extends State<SearchResultsListView>
                     controller: tabController,
                     children: [
                       ListView(
-                          children: generateProfileTiles(loadedBoth.profiles)),
+                          children: generateProfileTiles(
+                              getProfileListWithoutOwn(loadedBoth.profiles))),
                       ListView(children: generateEventTiles(loadedBoth.events)),
                     ],
                   );

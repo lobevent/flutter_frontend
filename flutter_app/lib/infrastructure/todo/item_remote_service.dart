@@ -56,10 +56,9 @@ class ItemRemoteService extends RemoteService<ItemDto> {
     }
   }
 
-  Future<bool> deleteItem(String itemId) async {
-    final Response response =
-        await client.delete(deletePath.interpolate({"itemId": itemId}));
-    return response.body.isNotEmpty;
+  Future<ItemDto> deleteItem(String itemId) async {
+    return _decodeItem(
+        await client.delete(deletePath.interpolate({"itemId": itemId})));
   }
 
   Future<ItemDto> updateItem(ItemDto itemDto) async {

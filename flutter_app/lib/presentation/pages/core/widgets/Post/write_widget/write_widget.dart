@@ -10,9 +10,21 @@ import '../../../../../core/styles/colors.dart';
 import '../../../../../post_comment/post_screen/cubit/post_screen_cubit.dart';
 import 'write_widget_post_image_picker.dart';
 
+
+///
+/// widget used for writing comments or posts
+///
 class WriteWidget extends StatefulWidget{
+  /// [postContent] can also come from an Comment
+  /// its just a string, so no boilerplate is there deciding whether it is [Comment] or [Post]
   final String? postContent;
+
+  /// [onSubmit] is the function that is called when the submit button is called.
+  /// The function receives the typed in string
   final Function(String postContent) onSubmit;
+
+  /// [changeImages] is only used with post, it receives an [List] of images from the imagepicker
+  /// the list might contain only one item
   final Function(List<XFile?> images)? changeImages;
   WriteWidget({
     Key? key,
@@ -31,12 +43,13 @@ class _WriteWidgetState extends State<WriteWidget> {
   @override
   void initState(){
     super.initState();
-    if(this.widget.postContent != null){
-      postWidgetController = TextEditingController(text: widget.postContent!);
-    }
-    else {
-      postWidgetController = TextEditingController();
-    }
+    postWidgetController = TextEditingController(text: widget.postContent);
+    // if(widget.postContent != null){
+    //   postWidgetController = TextEditingController(text: widget.postContent);
+    // }
+    // else {
+    //   postWidgetController = TextEditingController();
+    // }
   }
 
   @override

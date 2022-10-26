@@ -5,11 +5,17 @@ import 'package:flutter_frontend/domain/post/comment.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_widget/post_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Post/write_widget/write_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/gen_dialog.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/dismissible_overlay.dart';
+import 'package:flutter_frontend/presentation/post_comment/comments_page/widgets/comment_widget/comment_widget.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart' hide Router;
 
+
+///
+/// generates an [List] of [PopupMenuItem]s used in [PostWidget] or [CommentWidget]
+///
 List<PopupMenuItem>? PopupItemsCommentPost(BuildContext context, VoidCallback onEdit, VoidCallback onDelete) {
     return [
       PopupMenuItem(
@@ -41,7 +47,10 @@ List<PopupMenuItem>? PopupItemsCommentPost(BuildContext context, VoidCallback on
 }
 
 
+///
 ///Provides Row of ActionWidgets shared by Comments and Posts
+/// [comment_or_post] contains the entity on which to generate routes and button text
+///
 Widget ActionWidgetsCommentPost(BuildContext context, Either<Post, Comment> comment_or_post) {
   return Row(
     //mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -56,7 +65,10 @@ Widget ActionWidgetsCommentPost(BuildContext context, Either<Post, Comment> comm
       ]);
 }
 
-/// Provides flatButton mostly used in [ActionWidgetsCommentPost]
+///
+/// Provides flatButton mostly used in [ActionWidgetsCommentPost],
+/// [onPressed] must be provided to route to the correct screen
+///
 Widget flatButton({required Widget icon, required VoidCallback onPressed}) {
   return Expanded(
       child: Container(

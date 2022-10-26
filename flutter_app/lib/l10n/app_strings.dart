@@ -54,7 +54,7 @@ class AppStrings {
   static const String deleteCommentDialogTitle = "Delete this comment?";
   static const String deleteCommentDialogText =
       "Do you want to delete this comment?";
-
+  static const String failedDeleting = "Deleting failed!";
   static const String deleteCommentDialogConfirm = "Delete";
   static const String deleteCommentDialogAbort = "Abort";
 
@@ -108,6 +108,7 @@ class AppStrings {
   static const String address = "address";
   static const String name = 'name';
   static const String addLocation = "Add Location";
+
 
 
 

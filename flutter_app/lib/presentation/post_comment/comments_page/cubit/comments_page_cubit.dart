@@ -27,6 +27,9 @@ class CommentsPageCubit extends Cubit<CommentsPageState> {
     loadChildren();
   }
 
+  ///
+  /// loads children of the entity, whether from the backend or directly from the entity
+  ///
   Future<void> loadChildren()async{
     if(state.entity.fold((l) => l.comments?.isEmpty??true, (r) => r.commentChildren?.isEmpty??true)){
       state.entity.fold((post){
@@ -43,8 +46,13 @@ class CommentsPageCubit extends Cubit<CommentsPageState> {
               (r) => emit(state.copyWith(status: StatusCPS.loadingSuccessful, children: r.commentChildren)));
     }
   }
-  
+
+
+  ///
+  /// generates new [Comment], sends it to backend, and updates ui
+  ///
   postComment(String content){
+    emit(state.copyWith(status: StatusCPS.posting));
     Comment comment = Comment(
       id: UniqueId(),
       creationDate: DateTime.now(),
@@ -64,10 +72,17 @@ class CommentsPageCubit extends Cubit<CommentsPageState> {
     ));
   }
 
+  ///
+  /// adds [count] to either comment or post comment child property
+  ///
   Either<Post, Comment> _entityAddChildCount(int count){
-    return state.entity.fold((l) => left(l.copyWith(commentCount: l.commentCount??0 + count)), (r) => right(r.copyWith(childCount: r.childCount??0 + count)));
+    return state.entity.fold(
+            (l) => left(l.copyWith(commentCount: (l.commentCount??0) + count)),
+            (r) => right(r.copyWith(childCount: (r.childCount??0) + count)));
   }
 
+  /// folds the either with [List] children or [NetWorkFailure]
+  /// and emits respective state
   _emitFailureOrChildren(Either<NetWorkFailure, List<Comment>> either){
     either.fold(
         (l) => emit(state.copyWith(status: StatusCPS.loadingFailure)),

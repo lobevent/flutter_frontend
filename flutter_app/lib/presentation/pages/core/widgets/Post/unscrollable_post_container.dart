@@ -7,6 +7,9 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets
 
 import '../../../../../domain/event/event.dart';
 
+///
+/// Generates an List with [PostWidget] Components that is unscrollable
+///
 class UnscrollablePostContainer extends StatelessWidget {
   final List<Post> posts;
   final Profile? profile;

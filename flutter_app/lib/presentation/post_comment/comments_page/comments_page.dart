@@ -35,17 +35,8 @@ class CommentsPage extends StatelessWidget {
       child: BlocBuilder<CommentsPageCubit, CommentsPageState>(
         builder: (context, state) {
           return BasicContentContainer(
-            //floating action button to scroll down
-            /*floatingActionButton: FloatingActionButton.small(
-              elevation: 0.0,
-              onPressed: () {},
-              backgroundColor: Colors.green,
-              child: const Icon(Icons.navigation),
-            ),
-
-             */
             child_ren: left([
-            state.entity.fold((l) => PostWidget(post: l), (r) => CommentWidget(comment: r)),
+              state.entity.fold((l) => PostWidget(post: l), (r) => CommentWidget(comment: r)),
               CommentList(state.children, state.status == StatusCPS.loading, context),
               if(state.status != StatusCPS.loading)
                 WriteWidget(onSubmit: (content) =>context.read<CommentsPageCubit>().postComment(content))
@@ -60,6 +51,8 @@ class CommentsPage extends StatelessWidget {
 
   /// generates the list with the comments
   /// this is not scrollable
+  /// if the entity is already comment, it adds padding
+  /// if  [isLoading] is true it shows an animation
   Widget CommentList(List<Comment> comments, bool isLoading, BuildContext context) {
     if(isLoading){
       return SizedBox(

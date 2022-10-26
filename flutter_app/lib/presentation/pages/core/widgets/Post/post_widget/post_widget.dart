@@ -2,8 +2,12 @@ import 'package:auto_route/auto_route.dart' hide Router;
 import 'package:dartz/dartz.dart' hide State;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
 import 'package:flutter_frontend/domain/post/post.dart';
+import 'package:flutter_frontend/l10n/app_strings.dart';
+import 'package:flutter_frontend/presentation/core/styles/colors.dart';
+import 'package:flutter_frontend/presentation/core/styles/text_styles.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_comment_shared_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Post/post_widget/post_widget_cubit/post_widget_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/post_comment_base_widget.dart';
@@ -33,7 +37,15 @@ class _PostWidgetState extends State<PostWidget> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => PostWidgetCubit(post: widget.post),
-      child: BlocBuilder<PostWidgetCubit, PostWidgetState>(
+      child: BlocConsumer<PostWidgetCubit, PostWidgetState>(
+        listener: (context, state) {
+          if(state.status == StatusPWS.deletionFailure && state.failure != null){
+            // show error SnackBar
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(AppStrings.failedDeleting + ": "+ NetWorkFailure.getDisplayStringFromFailure(state.failure!)
+              , style: AppTextStyles.stdText,), backgroundColor: AppColors.errorColor,));
+          }
+        },
         builder: (context, state) {
           return Visibility(
             visible: state.status != StatusPWS.deletionSuccess,

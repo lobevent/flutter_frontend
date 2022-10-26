@@ -44,6 +44,7 @@ class CommentRepository extends Repository {
   ///
   /// deletes an comment in the backend or returns failure
   ///
+  @Deprecated("use [deletePostComment]")
   Future<Either<NetWorkFailure, Comment>> delete(Comment comment) async {
     return localErrorHandler<Comment>(() async {
       final commentDto = CommentDto.fromDomain(comment);

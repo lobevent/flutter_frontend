@@ -94,7 +94,7 @@ class CommentRemoteService extends RemoteService<CommentDto> {
   }
 
   Future<CommentDto> delete(CommentDto commentDto) async {
-    return _decodeComment(await client.delete("$deletePath${commentDto.id}"));
+    return _decodeComment(await client.delete("$deletePath/${commentDto.id}"));
   }
 
   Future<CommentDto> update(CommentDto commentDto) async {

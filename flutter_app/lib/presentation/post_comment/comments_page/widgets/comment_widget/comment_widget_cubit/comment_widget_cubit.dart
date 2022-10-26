@@ -38,7 +38,7 @@ class CommentWidgetCubit extends Cubit<CommentWidgetState> {
 
   Future<void> deleteComment(Comment comment) async {
     emit(state.copyWith(status: StatusCWS.deletionInProgress));
-    repository.delete(comment).then((value) {
+    repository.deletePostComment(comment.id.value.toString()).then((value) {
       value.fold(
               (l) => emit(state.copyWith(status: StatusCWS.deletionFailure, failure: l)),
               (r) => emit(state.copyWith(status: StatusCWS.deletionSuccess)));

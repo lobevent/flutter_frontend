@@ -461,6 +461,7 @@ class FullWidthPaddingInput extends StatelessWidget {
         maxLength: maxLength,
         validator: validator,
         onChanged: onChanged,
+        minLines: 1,
         maxLines: maxLines != null ? maxLines : 1,
         decoration: InputDecoration(
           hintText: hintText,

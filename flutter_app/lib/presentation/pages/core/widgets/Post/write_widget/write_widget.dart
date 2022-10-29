@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:image_picker/image_picker.dart';
@@ -54,14 +55,16 @@ class _WriteWidgetState extends State<WriteWidget> {
 
   @override
   Widget build(BuildContext context) {
+    //return TextFormField();
 
     return Container(
         decoration: BoxDecoration(border: Border.all(color: AppColors.mainIcon)),
-        width: 300,
+        //width: 300,
         child: Title(
           title: "Post something.",
           color: AppColors.black,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               FullWidthPaddingInput(
                 password: false,

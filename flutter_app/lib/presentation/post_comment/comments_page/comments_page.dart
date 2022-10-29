@@ -35,13 +35,22 @@ class CommentsPage extends StatelessWidget {
       child: BlocBuilder<CommentsPageCubit, CommentsPageState>(
         builder: (context, state) {
           return BasicContentContainer(
-            child_ren: left([
-              state.entity.fold((l) => PostWidget(post: l), (r) => CommentWidget(comment: r)),
-              CommentList(state.children, state.status == StatusCPS.loading, context),
+            child_ren: right(Stack(
+              children:[
+              SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                    children: [
+                      state.entity.fold((l) => PostWidget(post: l), (r) => CommentWidget(comment: r)),
+                      CommentList(state.children, state.status == StatusCPS.loading, context),
+                ]),
+              ),
               if(state.status != StatusCPS.loading)
-                WriteWidget(onSubmit: (content) =>context.read<CommentsPageCubit>().postComment(content))
+                Align(
+                  alignment: Alignment.bottomCenter,
+                    child: WriteWidget(onSubmit: (content) =>context.read<CommentsPageCubit>().postComment(content)))
             ]),
-          );
+          ));
         },
       ),
     );

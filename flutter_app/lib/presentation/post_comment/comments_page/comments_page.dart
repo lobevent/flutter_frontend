@@ -43,6 +43,7 @@ class CommentsPage extends StatelessWidget {
                     children: [
                       state.entity.fold((l) => PostWidget(post: l), (r) => CommentWidget(comment: r)),
                       CommentList(state.children, state.status == StatusCPS.loading, context),
+                      Opacity(opacity: 0, child: WriteWidget(onSubmit: (content){},))
                 ]),
               ),
               if(state.status != StatusCPS.loading)

@@ -24,6 +24,7 @@ class WriteWidget extends StatefulWidget{
   /// The function receives the typed in string
   final Function(String postContent) onSubmit;
 
+
   /// [changeImages] is only used with post, it receives an [List] of images from the imagepicker
   /// the list might contain only one item
   final Function(List<XFile?> images)? changeImages;
@@ -58,7 +59,10 @@ class _WriteWidgetState extends State<WriteWidget> {
     //return TextFormField();
 
     return Container(
-        decoration: BoxDecoration(border: Border.all(color: AppColors.mainIcon)),
+
+        decoration: BoxDecoration(border:
+            Border.all(color: AppColors.mainIcon),
+            color: AppColors.backGroundColor),
         //width: 300,
         child: Title(
           title: "Post something.",
@@ -66,18 +70,25 @@ class _WriteWidgetState extends State<WriteWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              FullWidthPaddingInput(
-                password: false,
-                maxLines: 6,
-                controller: postWidgetController,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: FullWidthPaddingInput(
+                      password: false,
+                      maxLines: 6,
+                      controller: postWidgetController,
+                    ),
+                  ),
+
+                  IconButton(
+                  onPressed: () {
+                      widget.onSubmit(postWidgetController.text);
+                      postWidgetController.clear();
+                    }, icon: Icon(Icons.send))
+                ],
               ),
               if (widget.postContent == null && widget.changeImages != null) PostImagePickerWidget(changeImages: widget.changeImages!) else Text(""),
-              TextWithIconButton(
-                  onPressed: () {
-                    widget.onSubmit(postWidgetController.text);
-                    postWidgetController.clear();
-                  },
-                  text: "Post")
             ],
           ),
         ));

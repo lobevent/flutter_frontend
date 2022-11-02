@@ -27,6 +27,15 @@ class MainProfileSearchCubit extends Cubit<MainProfileSearchState> {
     CommonHive.saveSearchHistory(_searchHistory);
   }
 
+  Future<bool> backButtonPressed()async{
+    if(state.status == PSStatus.searchSubmitted){
+      emit(state.copyWith(status: PSStatus.initial, searchbarOpen: false));
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /// called when the searchbar opens
   enterSearch(){
     if(state.searchbarOpen == false) {

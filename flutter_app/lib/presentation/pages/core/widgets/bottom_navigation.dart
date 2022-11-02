@@ -22,7 +22,7 @@ class BottomNavigation extends StatelessWidget {
     },
     NavigationOptions.profileSearch: {
       'key': 2,
-      'route': ProfileSearchScreenRoute()
+      'route': ProfileSearchPageMainRoute()
     },
     NavigationOptions.eventSwiper: {'key': 3, 'route': EventSwiperRoute()},
   };

@@ -13,7 +13,6 @@ import 'package:flutter_frontend/presentation/pages/login_register_email/registr
 import 'package:flutter_frontend/presentation/pages/event/event_form/event_form.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/event_screen_page.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/Overlays/es_ol_item_create_form.dart';
-import 'package:flutter_frontend/presentation/pages/event/events_multilist/events_multilist_screen.dart';
 import 'package:flutter_frontend/presentation/pages/feed/feed.dart';
 import 'package:flutter_frontend/presentation/pages/login/country_code_selection_screen.dart';
 import 'package:flutter_frontend/presentation/pages/login/login_screen.dart';
@@ -23,14 +22,10 @@ import 'package:flutter_frontend/presentation/pages/login_register_email/login_r
 import 'package:flutter_frontend/presentation/pages/preferences/my_locations_page/my_locations_page.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_friends/profile_friends_page.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_page/profile_page.dart';
-import 'package:flutter_frontend/presentation/pages/social/profile_search/profile_search_page.dart';
-import 'package:flutter_frontend/presentation/pages/social/profile_search_screen/cubit/main_profile_search_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_search_screen/profile_search_page_main.dart';
 import 'package:flutter_frontend/presentation/post_comment/comments_page/comments_page.dart';
-import 'package:flutter_frontend/presentation/post_comment/comments_screen/comments_screen.dart';
 import 'package:flutter_frontend/presentation/post_comment/post_screen/post_screen.dart';
 
-import '../pages/social/profile_search/profile_search_screen.dart';
 
 @MaterialAutoRouter(
   routes: [
@@ -43,7 +38,6 @@ import '../pages/social/profile_search/profile_search_screen.dart';
     AutoRoute(page: PhoneNumberVerificationCodeScreen),
     AutoRoute(page: EventScreenPage),
     AutoRoute(page: ProfilePage),
-    AutoRoute(page: ProfileSearchScreen),
     AutoRoute(page: ProfileFriendsScreen),
     AutoRoute(page: ProfileSearchPageMain),
     AutoRoute(page: CommentsPage),

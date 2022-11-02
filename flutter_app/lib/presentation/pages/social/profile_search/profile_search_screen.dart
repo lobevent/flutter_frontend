@@ -1,10 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dartz/dartz.dart' hide State;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/bottom_navigation.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_search/cubit/profile_search_cubit.dart';
-import 'package:flutter_frontend/presentation/pages/social/profile_search/profile_search_results_tabs.dart';
+import 'package:flutter_frontend/presentation/pages/social/profile_search/widgets/profile_search_results_tabs.dart';
 
 import '../../../../infrastructure/core/local/common_hive/common_hive.dart';
 
@@ -13,13 +15,13 @@ class ProfileSearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BasicContentContainer(
       bottomNavigationBar:
           BottomNavigation(selected: NavigationOptions.profileSearch),
-      body: BlocProvider(
+      child_ren: right(BlocProvider(
         create: (context) => ProfileSearchCubit(),
         child: ProfileSearchContainer(),
-      ),
+      )),
     );
   }
 }
@@ -115,7 +117,7 @@ class _ProfileSearchContainerState extends State<ProfileSearchContainer> {
             searchIsTapped = true;
           });
         },
-        controller: searchController,
+        //controller: searchController,
         decoration: const InputDecoration(
           labelText: "Search",
           hintText: "Search",

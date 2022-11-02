@@ -110,7 +110,7 @@ class AppStrings {
   static const String addLocation = "Add Location";
 
 
-
+  static const String search = "Search";
 
   static const String recent = "Recent";
   static const String upcoming = "Upcoming";

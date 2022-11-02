@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../domain/event/event.dart';
-import '../../../../domain/profile/profile.dart';
-import '../../../../infrastructure/core/local/common_hive/common_hive.dart';
-import '../../../../l10n/app_strings.dart';
-import '../../core/widgets/bottom_navigation.dart';
-import '../../event/core/event_list_tiles/event_list_tiles.dart';
-import '../../event/core/profile_list_tiles.dart';
-import 'cubit/profile_search_cubit.dart';
+import '../../../../../domain/event/event.dart';
+import '../../../../../domain/profile/profile.dart';
+import '../../../../../infrastructure/core/local/common_hive/common_hive.dart';
+import '../../../../../l10n/app_strings.dart';
+import '../../../core/widgets/bottom_navigation.dart';
+import '../../../event/core/event_list_tiles/event_list_tiles.dart';
+import '../../../event/core/profile_list_tiles.dart';
+import '../cubit/profile_search_cubit.dart';
 
 class ProfileSearchResultsTabs extends StatefulWidget {
   @override

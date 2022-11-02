@@ -24,22 +24,25 @@ class EventProfileSearchLoaderCubit<T> extends Cubit<EventProfileSearchLoaderSta
   final String searchString;
 
   EventProfileSearchLoaderCubit(this.searchString) : super(EventProfileSearchLoaderState(status: EpslStatus.loading)){
-    assert(T is Event || T is Profile);
+    assert(T == Event || T == Profile);
     searchByString(searchString);
   }
 
 
 
   Future<void> searchByString(String searchString) async {
+    emit(state.copyWith(status: EpslStatus.loading));
     decideRepoFunction(searchString: searchString).then((value) => value.fold(
-            (l) => state.copyWith(failure: l, status: EpslStatus.error),
-            (r) => state.copyWith(status: EpslStatus.loaded, enities: r)));
+            (l) => emit(state.copyWith(failure: l, status: EpslStatus.error)),
+            (r) => emit(state.copyWith(status: EpslStatus.loaded, enities: r))
+    )
+    );
   }
 
   Future<Either<NetWorkFailure, List<T>>> decideRepoFunction({required String searchString, int amount = 10})async{
-    if(T is Profile){
+    if(T == Profile){
       return repository.getSearchProfiles(searchString: searchString, amount: 10) as Future<Either<NetWorkFailure, List<T>>>;
-    } else if(T is Event){
+    } else if(T == Event){
       return eventRepository.searchEvent(DateTime.now(), 10, searchString) as Future<Either<NetWorkFailure, List<T>>>;
     }
     else {

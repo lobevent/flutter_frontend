@@ -28,11 +28,17 @@ class MainProfileSearchCubit extends Cubit<MainProfileSearchState> {
   }
 
   enterSearch(){
-    emit(state.copyWith(status: PSStatus.enteredSearch));
+    if(state.status == PSStatus.initial){
+      emit(state.copyWith(status: PSStatus.enteredSearch));
+    }else if(state.status == PSStatus.enteredSearch){
+      emit(state.copyWith(status: PSStatus.enteredSearchOnResults));
+    }
   }
 
   leaveSearch(){
-    emit(state.copyWith(status: PSStatus.initial));
+    if(state.status == PSStatus.enteredSearch){
+      emit(state.copyWith(status: PSStatus.initial));
+    }
   }
 
   changeSearchTerm(String? searchTerm){

@@ -18,7 +18,7 @@ class ProfileSearchPageMain extends StatelessWidget {
         child: BlocBuilder<MainProfileSearchCubit, MainProfileSearchState>(
           builder: (context, state){
             return Stack(children: [
-                SuggestionsBuilder(),
+                deciderSearchOrSuggestions(state),
                 ActivatableTextarea(),
             ],);
           },
@@ -29,7 +29,9 @@ class ProfileSearchPageMain extends StatelessWidget {
 
   Widget deciderSearchOrSuggestions(MainProfileSearchState state){
     if(state.status == PSStatus.searchSubmitted && state.searchString != null){
-      return EventProfileSearchLoaderContainer(searchString: state.searchString);
+      return EventProfileSearchLoaderContainer(searchString: state.searchString!);
+    }else{
+      return SuggestionsBuilder();
     }
   }
 

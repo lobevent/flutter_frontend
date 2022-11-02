@@ -30,6 +30,10 @@ class EventProfileSearchLoaderCubit<T> extends Cubit<EventProfileSearchLoaderSta
 
 
 
+  /// calls to the dedicated backendfunction, emits [EpslStatus.loading], and passes the searchstring
+  /// emits new state with the list of the entities with the type [T]
+  /// if an error occurs it changes the [status] to [EpslStatus.error]
+  /// on success the [status] is changed to [EpslStatus.loaded]
   Future<void> searchByString(String searchString) async {
     this.searchString = searchString;
     emit(state.copyWith(status: EpslStatus.loading));
@@ -40,6 +44,8 @@ class EventProfileSearchLoaderCubit<T> extends Cubit<EventProfileSearchLoaderSta
     );
   }
 
+  /// decides which repository function to use
+  /// performs typecheck on [T] and calls on the correct function
   Future<Either<NetWorkFailure, List<T>>> decideRepoFunction({required String searchString, int amount = 10})async{
     if(T == Profile){
       return repository.getSearchProfiles(searchString: searchString, amount: 10) as Future<Either<NetWorkFailure, List<T>>>;

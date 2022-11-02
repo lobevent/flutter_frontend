@@ -28,7 +28,6 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         ShowSeriesButton(context),
         MyLocationsButton(context),
         MyLocationsFormButton(context),
-        TestNewSearch(context),
         LogoutButton(context)
       ],
     );
@@ -40,15 +39,6 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
           context.router.push(EventFormPageRoute());
         },
         icon: const Icon(Icons.add));
-  }
-
-
-  Widget TestNewSearch(BuildContext context) {
-    return IconButton(
-        onPressed: () {
-          context.router.push(ProfileSearchPageMainRoute());
-        },
-        icon: const Icon(Icons.supervised_user_circle));
   }
 
   Widget MyLocationsButton(BuildContext context) {

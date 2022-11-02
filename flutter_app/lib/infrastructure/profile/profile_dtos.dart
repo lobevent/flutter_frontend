@@ -15,6 +15,17 @@ class ProfileDto extends BaseDto with _$ProfileDto {
   const ProfileDto._();
 
 
+  static const Map<int, FriendShipStatus> dtoToDomainFriendStatusStatus = {
+    0: FriendShipStatus.noFriendStatus,
+    1: FriendShipStatus.iSend,
+    2: FriendShipStatus.theySend,
+    3: FriendShipStatus.accepted,
+  };
+
+  static final Map domainToDtoFrienshipStatus =
+  dtoToDomainFriendStatusStatus.map((key, value) => MapEntry(value, key));
+
+
   const factory ProfileDto({
     required String id,
     required String username,
@@ -24,6 +35,8 @@ class ProfileDto extends BaseDto with _$ProfileDto {
     List<PostDto>? posts,
     List<CommentDto>? comments,
     List<String>? images,
+    int? friendshipStatus,
+    bool? isFriend,
   }) = _ProfileDto;
 
   factory ProfileDto.fromDomain(Profile profile) {
@@ -33,6 +46,7 @@ class ProfileDto extends BaseDto with _$ProfileDto {
               username: profile.name.getOrCrash(),
             ),
         full: (detailedProfile) => ProfileDto(
+            isFriend: detailedProfile.isFriend,
             id: detailedProfile.id.value,
             username: detailedProfile.name.getOrCrash(),
             ownedEvents: detailedProfile.ownedEvents != null
@@ -68,9 +82,14 @@ class ProfileDto extends BaseDto with _$ProfileDto {
       return Profile(
           id: UniqueId.fromUniqueString(id), name: ProfileName(username),
           // that is done, so we dont have empty arrays as images (so there is no need for index checks!)
-          images: images != null && images!.length == 0 ? null : images);
+          images: images != null && images!.length == 0 ? null : images,
+        isFriend: isFriend,
+        friendShipStatus: dtoToDomainFriendStatusStatus[friendshipStatus??0]
+      );
     } else {
       return Profile.full(
+          isFriend: isFriend,
+          friendShipStatus: dtoToDomainFriendStatusStatus[friendshipStatus??0],
           id: UniqueId.fromUniqueString(id),
           name: ProfileName(username),
           ownedEvents: ownedEvents != null

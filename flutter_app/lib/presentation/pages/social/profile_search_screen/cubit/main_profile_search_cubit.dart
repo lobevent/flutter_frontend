@@ -27,6 +27,8 @@ class MainProfileSearchCubit extends Cubit<MainProfileSearchState> {
     CommonHive.saveSearchHistory(_searchHistory);
   }
 
+  /// if we are in the resultsview, the backbutton should go back to the discovery page
+  /// but if we are on the discovery page, the backbutton should go to the main app
   Future<bool> backButtonPressed()async{
     if(state.status == PSStatus.searchSubmitted){
       emit(state.copyWith(status: PSStatus.initial, searchbarOpen: false));

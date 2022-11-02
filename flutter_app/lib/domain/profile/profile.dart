@@ -9,6 +9,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'profile.freezed.dart';
 
+enum FriendShipStatus {
+  noFriendStatus,
+  theySend,
+  iSend,
+  accepted,
+}
+
 @freezed
 class Profile with _$Profile {
   const Profile._();
@@ -16,18 +23,22 @@ class Profile with _$Profile {
   const factory Profile({
     required UniqueId id,
     required ProfileName name,
-    List<String>? images
+    List<String>? images,
+    bool? isFriend,
+    FriendShipStatus? friendShipStatus,
   }) = BaseProfile;
 
   const factory Profile.full({
     required UniqueId id,
     required ProfileName name,
+    bool? isFriend,
     List<Event>? ownedEvents,
     List<Event>? invitations,
     int? friendshipCount,
     List<Post>? posts,
     List<Comment>? comments,
     List<String>? images,
+    FriendShipStatus? friendShipStatus,
   }) = _FullProfile;
 
 

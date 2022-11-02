@@ -55,6 +55,11 @@ class AppStrings {
   static const String deleteFriendDialogConfirm = "Delete";
   static const String deleteFriendDialogAbort = "Abort";
 
+  static const String stopFriendRequestDialogText =
+      "You are about to delete an Friendrequest!";
+  static const String stopFriendRequestDialogConfirm = "Abort request";
+  static const String stopFriendRequestDialogAbort = "leave";
+
   static const String deleteCommentDialogTitle = "Delete this comment?";
   static const String deleteCommentDialogText =
       "Do you want to delete this comment?";

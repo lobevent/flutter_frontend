@@ -4,7 +4,7 @@ import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/animations/LoadingEventsAnimation.dart';
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/event_list_tiles.dart';
-import 'package:flutter_frontend/presentation/pages/event/core/profile_list_tiles.dart';
+import 'package:flutter_frontend/presentation/pages/core/list_tiles/ProfileListTiles/profile_list_tiles.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_search_screen/cubit/main_profile_search_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_search_screen/cubit/main_profile_search_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/social/profile_search_screen/widget_components/event_profile_search_loader/cubit_epsl/event_profile_search_loader_cubit.dart';
@@ -40,7 +40,7 @@ class EventProfileListViewBuilder<T> extends StatelessWidget {
 
   Widget decideWhichTiles(EventProfileSearchLoaderState<T> state, int index) {
     if (T == Profile) {
-      return ProfileListTiles(profile: state.enities[index] as Profile, key: ObjectKey(state.enities[index]),);
+      return ProfileListTiles(profile: state.enities[index] as Profile, hideActions: false, key: ObjectKey(state.enities[index]),);
     } else if (T == Event) {
       return EventListTiles(
         event: state.enities[index] as Event, eventStatus: (state.enities[index] as Event).status, key: ObjectKey(state.enities[index] as Event),);

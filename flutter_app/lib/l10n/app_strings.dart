@@ -19,6 +19,10 @@ class AppStrings {
 
   static const String refresh = "refresh";
 
+
+  static const String Event = "Event";
+  static const String Profile = "Profile";
+
   static const String phoneNumberVerificationTitle =
       "Verify yourself with your phone number.";
   static const String phoneNumberTextFieldHint = "Phone Number";
@@ -108,6 +112,7 @@ class AppStrings {
   static const String address = "address";
   static const String name = 'name';
   static const String addLocation = "Add Location";
+
 
 
   static const String search = "Search";

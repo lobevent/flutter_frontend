@@ -21,7 +21,7 @@ class EventProfileSearchLoaderCubit<T> extends Cubit<EventProfileSearchLoaderSta
 
   /// is given on initialization
   /// contains the string with which the search method is called
-  final String searchString;
+  String searchString;
 
   EventProfileSearchLoaderCubit(this.searchString) : super(EventProfileSearchLoaderState(status: EpslStatus.loading)){
     assert(T == Event || T == Profile);
@@ -31,6 +31,7 @@ class EventProfileSearchLoaderCubit<T> extends Cubit<EventProfileSearchLoaderSta
 
 
   Future<void> searchByString(String searchString) async {
+    this.searchString = searchString;
     emit(state.copyWith(status: EpslStatus.loading));
     decideRepoFunction(searchString: searchString).then((value) => value.fold(
             (l) => emit(state.copyWith(failure: l, status: EpslStatus.error)),

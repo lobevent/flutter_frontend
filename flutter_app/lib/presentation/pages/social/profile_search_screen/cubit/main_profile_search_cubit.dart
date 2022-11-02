@@ -22,30 +22,32 @@ class MainProfileSearchCubit extends Cubit<MainProfileSearchState> {
   /// submits the serch term and changes visualization. In the deeper cubits a search should be provided
   /// gets the [searchTerm] and sets it in the state
   submitSearchTerm(String searchTerm){
-    emit(state.copyWith(searchString: searchTerm, status: PSStatus.searchSubmitted));
+    emit(state.copyWith(searchString: searchTerm, status: PSStatus.searchSubmitted, searchbarOpen: false));
     _addSearchTerm(searchTerm);
     CommonHive.saveSearchHistory(_searchHistory);
   }
 
+  /// called when the searchbar opens
   enterSearch(){
-    if(state.status == PSStatus.initial){
-      emit(state.copyWith(status: PSStatus.enteredSearch));
-    }else if(state.status == PSStatus.enteredSearch){
-      emit(state.copyWith(status: PSStatus.enteredSearchOnResults));
+    if(state.searchbarOpen == false) {
+      emit(state.copyWith(searchbarOpen: true));
     }
   }
 
+  /// called when the searchbar closes
   leaveSearch(){
-    if(state.status == PSStatus.enteredSearch){
-      emit(state.copyWith(status: PSStatus.initial));
+    if(state.searchbarOpen == true) {
+      emit(state.copyWith(searchbarOpen: false));
     }
   }
 
+  /// called when searchterm closes
   changeSearchTerm(String? searchTerm){
     emit(state.copyWith(filteredSearchHistory: _filterSearchTerms(searchTerm)));
   }
 
-  //add search term to history
+  ///add search term to history in [CommonHive]
+  ///if the searchterm is already there, its deleted and added at the start
   void _addSearchTerm(String term) {
     if (term.isEmpty) {
       return;

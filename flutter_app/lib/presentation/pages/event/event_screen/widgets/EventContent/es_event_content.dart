@@ -238,7 +238,7 @@ class EventContent extends StatelessWidget {
                         Icon(Icons.supervised_user_circle),
                         Text(
                           profile.name.getOrCrash(),
-                          style: TextStyle(color: textColor),
+                          //style: TextStyle(color: textColor),
                         )
                       ] // TODO: maybe change textsize dynamicaly: https://stackoverflow.com/questions/50751226/how-to-dynamically-resize-text-in-flutter
                           ))))
@@ -321,7 +321,7 @@ class EventContent extends StatelessWidget {
           child: ExpandText(
         description,
         maxLines: 3,
-        style: const TextStyle(color: Color(0xFF2F1919)),
+        //style: const TextStyle(color: Color(0xFF2F1919)),
       )),
     ]);
   }

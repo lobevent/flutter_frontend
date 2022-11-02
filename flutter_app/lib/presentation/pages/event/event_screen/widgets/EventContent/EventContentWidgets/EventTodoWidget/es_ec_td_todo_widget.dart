@@ -21,17 +21,22 @@ class TodoWidget extends StatefulWidget {
 
 class _TodoWidgetState extends State<TodoWidget> {
   late Event eventPass;
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EventScreenCubit, EventScreenState>(builder: (context, state) {
+    return BlocBuilder<EventScreenCubit, EventScreenState>(
+        builder: (context, state) {
       return state.maybeMap(
         loaded: (stateLoaded) {
           eventPass = stateLoaded.event;
           //check if todoList existed; else show button to create one
           if (stateLoaded.event.todo != null) {
-            return EventTodoWidget(todo: stateLoaded.event.todo, event: stateLoaded.event, showLoading: stateLoaded.addingItem,);
-          }
-          else {
+            return EventTodoWidget(
+              todo: stateLoaded.event.todo,
+              event: stateLoaded.event,
+              showLoading: stateLoaded.addingItem,
+            );
+          } else {
             // create todolist button
             return IconButton(
                 onPressed: () {
@@ -57,11 +62,13 @@ class _TodoWidgetState extends State<TodoWidget> {
 
     //controllers for name and desc
 
-
     //this is the way to work with overlays
-    overlayEntry = OverlayEntry(builder: (buildContext)
-    {
-      return TodoListForm(overlayEntry: overlayEntry!, cubitContext: context, event: eventPass,);
+    overlayEntry = OverlayEntry(builder: (buildContext) {
+      return TodoListForm(
+        overlayEntry: overlayEntry!,
+        cubitContext: context,
+        event: eventPass,
+      );
     });
     //insert the entry in the state to make it accesible
     overlayState.insert(overlayEntry);

@@ -14,6 +14,7 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:hive/hive.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../../../../infrastructure/profile/achievements_dtos.dart';
 import '../../../core/widgets/animations/loading_button.dart';
 import '../../profile_score and achievements/profile_score_cubit.dart';
 
@@ -37,8 +38,7 @@ class ProfilePageMeta extends StatelessWidget {
     );
   }
 
-  Widget ProfilePageMetaFull(BuildContext context, Profile profile,
-      [String? score]) {
+  Widget ProfilePageMetaFull(BuildContext context, Profile profile) {
     return ConstrainedBox(
         constraints: const BoxConstraints(
           minHeight: 150.0,
@@ -60,10 +60,11 @@ class ProfilePageMeta extends StatelessWidget {
     return PaddingRowWidget(children: [
       Text(title,
           style: TextStyle(
-              height: 2,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: textColor))
+            height: 2,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            //color: textColor
+          ))
     ]);
   }
 
@@ -102,6 +103,7 @@ class ProfilePageMeta extends StatelessWidget {
     );
   }
 
+  ///show Calender overlay
   void showOverlay(BuildContext buildContext, Profile profile) async {
     final OverlayState overlayState = Overlay.of(buildContext)!;
 
@@ -111,12 +113,11 @@ class ProfilePageMeta extends StatelessWidget {
     //this is the way to work with overlays
     overlayEntry = OverlayEntry(builder: (context) {
       return CalenderOverlay(context, overlayEntry!, profile);
-      //ItemCreateWidget(overlayEntry: overlayEntry!, todo: widget.todo!, cubitContext: buildContext);
     });
     overlayState.insert(overlayEntry);
   }
 
-  //our calender widget as overlay
+  ///our calender widget as overlay
   Widget CalenderOverlay(
       BuildContext context, OverlayEntry overlayEntry, Profile profile) {
     DateTime? _selectedDay;
@@ -131,74 +132,69 @@ class ProfilePageMeta extends StatelessWidget {
         ));
   }
 
-  //score widget for counting entries in box and displaying them as profile score
+  ///score widget for counting entries in box and displaying them as profile score
   Widget ScoreAndAchievements(Profile profile) {
     return BlocProvider(
-      create: (context) => ProfileScoreCubit(profileId: profile.id),
+      create: (context) => ProfileScoreCubit(
+          profileId: profile.id,
+          //check if its our own Profile and put it in state
+          isOwnProfile: CommonHive.checkIfOwnId(profile.id.value.toString())),
       child: BlocBuilder<ProfileScoreCubit, ProfileScoreState>(
           builder: (context, state) {
         return state.maybeMap(loading: (st) {
           return Column(
             children: [
-              AchievementTile(),
-              ScoreHelperWidget(context, null, profile),
-              //ScoreHelperWidget(context, null, profile)
+              AchievementTile(context),
+              ScoreWidget(context, null, profile),
             ],
           );
         }, loaded: (st) {
           return Column(children: [
-            AchievementTile(),
-            ScoreHelperWidget(context, st.score, profile)
+            AchievementTile(context, st.achievements),
+            ScoreWidget(context, st.score, profile)
           ]);
         }, orElse: () {
-          return ScoreHelperWidget(context, null, profile);
+          return ScoreWidget(context, null, profile);
         });
       }),
     );
   }
 
-  Widget AchievementTile() {
+  /// achievements widget
+  /// TODO: decide when we fetch or when we can use commonhive
+  Widget AchievementTile(BuildContext context,
+      [AchievementsDto? achievements]) {
     return ExpansionTile(
       title: Text("Achievements"),
-      //TODO: fetch achievements of other users
-      children: [Text("${CommonHive.getAchievements()}")],
+      children: [Text(CommonHive.getAchievements().toString())],
     );
   }
 
-  Widget ScoreHelperWidget(
-      BuildContext context, String? score, Profile profile) {
-    bool isOwnProfile = CommonHive.checkIfOwnId(profile.id.value.toString());
-
-    if (isOwnProfile) {
-      return InkWell(
-        child: Container(
-          width: 60,
-          height: 60,
-          decoration: const BoxDecoration(
-              shape: BoxShape.circle, color: AppColors.accentButtonColor),
-          child: Center(
-            child: score != null
-                ? Text("Score:$score")
-                : Text(
-                    "Score: ${CommonHive.getBoxEntry<String>("profileScore", CommonHive.ownProfileIdAndPic) ?? "0"}",
-                  ),
-          ),
-        ),
-        onTap: () {
-          context.read<ProfileScoreCubit>().getOwnProfileScore(profile);
-        },
-      );
-    } else {
+  ///score widget fetchs score if its not our own profile, or it gets CommonHIve entry
+  Widget ScoreWidget(BuildContext context, String? score, Profile profile) {
+    //check if not own profile
+    if (!context.read<ProfileScoreCubit>().isOwnProfile) {
       context.read<ProfileScoreCubit>().getProfileScore(profile);
-      return Container(
+    }
+    return InkWell(
+      child: Container(
         width: 60,
         height: 60,
-        decoration: const BoxDecoration(
-            shape: BoxShape.circle, color: AppColors.accentButtonColor),
+        decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Theme.of(context).colorScheme.primary),
         child: Center(
-          child: Text("Score:$score"),
+          child: score != null
+              ? Text("Score:$score")
+              : Text(
+                  "Score: ${CommonHive.getBoxEntry<String>("profileScore", CommonHive.ownProfileIdAndPic) ?? "0"}",
+                ),
         ),
-      );
-    }
+      ),
+      //update via ontap
+      onTap: () {
+        context.read<ProfileScoreCubit>().getProfileScore(profile);
+      },
+    );
   }
 }

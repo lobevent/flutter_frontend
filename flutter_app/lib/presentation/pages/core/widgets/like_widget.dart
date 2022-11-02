@@ -5,6 +5,9 @@ import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/like/like_cubit.dart';
 
+import 'animations/loading_button.dart';
+import 'animations/palk_animation.dart';
+
 class LikeButton extends StatefulWidget {
   final UniqueId objectId;
   final LikeTypeOption option;
@@ -30,7 +33,7 @@ class _LikeButtonState extends State<LikeButton> {
   Widget build(BuildContext context) {
     return BlocListener<LikeCubit, LikeState>(
       listener: (context, state) {
-        state.maybeMap((value) => {},
+        state.maybeMap(
             loaded: (state) {
               this.likeStatus = state.likeStatus;
               setState(() {});
@@ -40,44 +43,30 @@ class _LikeButtonState extends State<LikeButton> {
       child: BlocBuilder<LikeCubit, LikeState>(
         builder: (context, state) {
           //return the likebutton only if it fetched the status from backend
-          return state.maybeMap((value) => (Text("")),
-              loaded: (state) {
-                return buildLikeWithStatus();
+          return state.maybeMap(
+              loading: (loading) {
+                return PalkAnimation(
+                  size: 30,
+                );
               },
-              orElse: () => buildLikeWithStatus());
+              loaded: (state) {
+                return OutlinedButton(
+                    onPressed: () {
+                      //call the backend
+                      context.read<LikeCubit>().unOrlike(
+                          widget.objectId, widget.option, state.likeStatus);
+                    },
+                    //icon liked or not liked?
+                    child: state.likeStatus == true
+                        ? const Icon(Icons.thumb_up_alt)
+                        : const Icon(Icons.thumb_up_alt_outlined));
+              },
+              error: (err) {
+                return ErrorWidget(err);
+              },
+              orElse: () => Icon(Icons.local_airport_outlined));
         },
       ),
     );
-  }
-
-  //just
-  void changeLikeStatus() {
-    setState(() {
-      likeStatus = !likeStatus;
-    });
-  }
-
-  ///decide if the icon for liking or unliking is shown
-  Icon decideIcon(bool likeStatus) {
-    if (likeStatus) {
-      return Icon(Icons.thumb_up_alt);
-    } else {
-      return Icon(Icons.thumb_up_alt_outlined);
-    }
-  }
-
-  ///build the likebutton, fetch if user liked it and change Icon and likestatus if user presses the button
-  Widget buildLikeWithStatus() {
-    return StdTextButton(
-        onPressed: () {
-          //call the backend
-          context
-              .read<LikeCubit>()
-              .unOrlike(widget.objectId, widget.option, likeStatus);
-          //change the bool likestatus
-          changeLikeStatus();
-        },
-        //icon liked or not liked?
-        child: decideIcon(widget.likeStatus));
   }
 }

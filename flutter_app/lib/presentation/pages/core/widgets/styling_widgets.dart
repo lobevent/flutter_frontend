@@ -206,14 +206,14 @@ class OverflowSafeString extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return
-      // overflow is alowed, so no overflowerror arises
+        // overflow is alowed, so no overflowerror arises
         FittedBox(
-          //the alignment of the content should be on the left side and
-          // vertical it should be centered
-          alignment: Alignment.centerLeft,
-          //size: Size(MediaQuery.of(context).size.width * 0.2, 30),
-          child: child,
-        );
+      //the alignment of the content should be on the left side and
+      // vertical it should be centered
+      alignment: Alignment.centerLeft,
+      //size: Size(MediaQuery.of(context).size.width * 0.2, 30),
+      child: child,
+    );
   }
 
   // @override
@@ -245,14 +245,13 @@ class StdTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
         decoration: BoxDecoration(
-            color: disabled ? AppColors.lightGrey : AppColors.darkGrey,
-            /*   border:Border.all(width: 2.0,
-                  color:  Color(0x6BBBBBBB)),*/
+            color: disabled ? AppColors.darkGrey : AppColors.lightGrey,
+            border: Border.all(width: 2.0, color: Color(0x6BBBBBBB)),
             borderRadius: BorderRadius.circular(10)),
         child: TextButton(
-            style: ButtonStyle(
-                overlayColor: MaterialStateColor.resolveWith(
-                    (states) => Color(0xFFCECECE))),
+            //style: ButtonStyle(
+            //   overlayColor: MaterialStateColor.resolveWith(
+            //      (states) => Color(0xFFCECECE))),
             onPressed: () =>
                 onPressed == null || disabled ? null : onPressed!(),
             child: child));
@@ -271,7 +270,8 @@ class TextWithIconButton extends StatelessWidget {
       required this.onPressed,
       required this.text,
       this.icon,
-      this.disabled = false, this.withSpacer = false})
+      this.disabled = false,
+      this.withSpacer = false})
       : super(key: key);
 
   @override
@@ -284,27 +284,25 @@ class TextWithIconButton extends StatelessWidget {
       //child: Expanded(
       child: Row(
         children: [
-          if(withSpacer) Spacer(),
+          if (withSpacer) Spacer(),
           // button and text are Prestyled
           Icon(
             icon,
             color: AppColors.stdTextColor,
           ),
 
-          if(withSpacer) Spacer(),
+          if (withSpacer) Spacer(),
           Text(
             text,
             style: TextStyle(color: AppColors.stdTextColor),
           ),
-          if(withSpacer) Spacer(),
+          if (withSpacer) Spacer(),
         ],
-      //),
+        //),
       ),
     );
   }
 }
-
-
 
 /// checkbox with text widget
 /// its statefull, because the text and the checkbox are covered by a button
@@ -353,29 +351,33 @@ class _TextCheckBoxState extends State<TextCheckbox> {
     }
 
     // As button, the Standard textbutton is used of cource
-    return StdTextButton(
+    return
+        /*StdTextButton(
         onPressed: () {
           // when the button is hit, the checkbox value gets triggered!
           value = !value;
           callOnChanged(value);
           setState(() {});
         },
-        child: Row(
-          children: [
-            Checkbox(
-              // the fill color is set by an material stateproperty, the states are
-              // similar to css pseudo classes like hover etc!
-              // more info: https://api.flutter.dev/flutter/material/Checkbox-class.html
-              fillColor: MaterialStateProperty.resolveWith(getColor),
-              // if the checkbox is toggled (Not if value is changed externaly!!!; see callOnChanged)
-              onChanged: (bool? value) => callOnChanged(value),
-              value: value,
-            ),
-            // the text in this checkbox, with styling
-            Text(widget.text != null ? widget.text! : '',
-                style: TextStyle(color: AppColors.stdTextColor)),
-          ],
-        ));
+        child:
+       */
+        Row(
+      children: [
+        Checkbox(
+          // the fill color is set by an material stateproperty, the states are
+          // similar to css pseudo classes like hover etc!
+          // more info: https://api.flutter.dev/flutter/material/Checkbox-class.html
+          fillColor: MaterialStateProperty.resolveWith(getColor),
+          // if the checkbox is toggled (Not if value is changed externaly!!!; see callOnChanged)
+          onChanged: (bool? value) => callOnChanged(value),
+          value: value,
+        ),
+        // the text in this checkbox, with styling
+        Text(widget.text != null ? widget.text! : '',
+            style: TextStyle(color: AppColors.stdTextColor)),
+      ],
+    );
+    //)
   }
 
   // because the checkbox' on changed is not called if value is changed externaly
@@ -418,7 +420,6 @@ class GenericSearchBar extends StatelessWidget {
   }
 }
 
-
 class FullWidthPaddingInput extends StatelessWidget {
   final TextEditingController? controller;
   final String? labelText;
@@ -434,19 +435,21 @@ class FullWidthPaddingInput extends StatelessWidget {
   final AutovalidateMode? autoValidateMode;
   final FocusNode? fieldFocusNode;
 
-  FullWidthPaddingInput(
-      {this.controller,
-      this.labelText,
-      this.hintText,
-      this.password = false,
-      this.maxLines,
-      this.maxLength,
-      this.validator,
-      this.onChanged,
-      this.textInputType,
-      this.padding = const EdgeInsets.all(10),
-      this.inputFormatters, this.autoValidateMode, this.fieldFocusNode,
-      });
+  FullWidthPaddingInput({
+    this.controller,
+    this.labelText,
+    this.hintText,
+    this.password = false,
+    this.maxLines,
+    this.maxLength,
+    this.validator,
+    this.onChanged,
+    this.textInputType,
+    this.padding = const EdgeInsets.all(10),
+    this.inputFormatters,
+    this.autoValidateMode,
+    this.fieldFocusNode,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -476,11 +479,12 @@ class FullWidthPaddingInput extends StatelessWidget {
   }
 }
 
-
 class CoordinatesPickerInput extends StatelessWidget {
   const CoordinatesPickerInput({
     Key? key,
-    required this.textEditingControllerLongi, required this.labeltext, this.onChanged,
+    required this.textEditingControllerLongi,
+    required this.labeltext,
+    this.onChanged,
   }) : super(key: key);
 
   final TextEditingController textEditingControllerLongi;
@@ -493,11 +497,14 @@ class CoordinatesPickerInput extends StatelessWidget {
       // autoValidateMode: AutovalidateMode.onUserInteraction,
       labelText: labeltext,
       controller: textEditingControllerLongi,
-      inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[1234567890.-]'))],
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp('[1234567890.-]'))
+      ],
       onChanged: (value2) => onChanged,
-      textInputType: TextInputType.numberWithOptions(decimal: true, signed: true),
-      validator: (value){
-        if(value == null || value == ''){
+      textInputType:
+          TextInputType.numberWithOptions(decimal: true, signed: true),
+      validator: (value) {
+        if (value == null || value == '') {
           return 'please provide an $labeltext';
         }
       },

@@ -13,7 +13,7 @@ class AddToSeries extends StatefulWidget {
 }
 
 class _AddToSeriesState extends State<AddToSeries> {
-  List<EventSeries>  series = [];
+  List<EventSeries> series = [];
   EventSeries? selected = null;
   bool isLoading = true;
 
@@ -22,40 +22,38 @@ class _AddToSeriesState extends State<AddToSeries> {
     return BlocListener<EventFormCubit, EventFormState>(
         listenWhen: (previous, current) => previous != current,
         listener: (context, state) {
-          if(!state.isLoadingSeries){
+          if (!state.isLoadingSeries) {
             setState(() {
               series = state.series;
               isLoading = false;
             });
           }
         },
-        child: Column(
-            children: [
-              DropdownButton<EventSeries>(
-                value: selected,
-                //icon: const Icon(Icons.arrow_downward),
-                elevation: 16,
-                style: const TextStyle(color: AppColors.primaryColor),
-                underline: Container(
-                  height: 2,
-                  color: AppColors.primaryColor,
-                ),
-                onChanged: (EventSeries? newValue) {
-
-                  context.read<EventFormCubit>().setEventSeries(newValue);
-                  setState(() {
-                    selected = newValue!;
-                  });
-                },
-                items: series
-                    .map<DropdownMenuItem<EventSeries>>((EventSeries value) {
-                  return DropdownMenuItem<EventSeries>(
-                    value: value,
-                    child: Text(value.name.getOrCrash()),
-                  );
-                }).toList(),
-              ),
-              if(isLoading) LinearProgressIndicator()
-            ]));
+        child: Column(children: [
+          DropdownButton<EventSeries>(
+            value: selected,
+            //icon: const Icon(Icons.arrow_downward),
+            elevation: 16,
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            underline: Container(
+              height: 2,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            onChanged: (EventSeries? newValue) {
+              context.read<EventFormCubit>().setEventSeries(newValue);
+              setState(() {
+                selected = newValue!;
+              });
+            },
+            items:
+                series.map<DropdownMenuItem<EventSeries>>((EventSeries value) {
+              return DropdownMenuItem<EventSeries>(
+                value: value,
+                child: Text(value.name.getOrCrash()),
+              );
+            }).toList(),
+          ),
+          if (isLoading) LinearProgressIndicator()
+        ]));
   }
 }

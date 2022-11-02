@@ -25,7 +25,8 @@ class FriendListTile extends StatelessWidget {
       required this.onAddFriend,
       required this.onRemoveFriend,
       this.isHost = false,
-      this.onAddHost, this.onRemoveHost /*, this.overlayEntry*/})
+      this.onAddHost,
+      this.onRemoveHost /*, this.overlayEntry*/})
       : super(key: key);
 
   @override
@@ -111,7 +112,7 @@ class FriendListTile extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   child: Icon(
                     isHost ? Icons.castle_rounded : Icons.check_circle,
-                    color: AppColors.backGroundColor,
+                    //color: AppColors.backGroundColor,
                   ),
                 ),
               ),

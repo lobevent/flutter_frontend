@@ -6,6 +6,8 @@ import 'package:flutter_frontend/infrastructure/profile/profile_repository.dart'
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../../../domain/core/failures.dart';
+
 part 'like_cubit.freezed.dart';
 
 part 'like_state.dart';
@@ -35,13 +37,17 @@ class LikeCubit extends Cubit<LikeState> {
   ///just like or unlike (depending on the likestatus) 1 entity and pass option to handle different route in remote service
   Future<void> unOrlike(
       UniqueId objectId, LikeTypeOption option, bool likeStatusUi) async {
+    emit(LikeState.loading());
+
     bool success = false;
     if (likeStatusUi) {
       final success = await repository.unlike(objectId, option);
-      success.fold((l) => emit(LikeState.error()), (r) => this.likeStatus = r);
+      success.fold((l) => emit(LikeState.error(failure: l)),
+          (r) => emit(LikeState.loaded(likeProfiles: [], likeStatus: r)));
     } else {
       final success = await repository.like(objectId, option);
-      success.fold((l) => emit(LikeState.error()), (r) => this.likeStatus = r);
+      success.fold((l) => emit(LikeState.error(failure: l)),
+          (r) => emit(LikeState.loaded(likeProfiles: [], likeStatus: r)));
     }
   }
 
@@ -49,7 +55,7 @@ class LikeCubit extends Cubit<LikeState> {
   Future<void> getOwnLikeStatus(UniqueId objectId) async {
     final success = await repository.checkLikeStatus(objectId);
 
-    emit(LikeState.loaded(
-        likeProfiles: [], likeStatus: success.fold((l) => false, (r) => r)));
+    success.fold((l) => emit(LikeState.error(failure: l)),
+        (r) => emit(LikeState.loaded(likeProfiles: [], likeStatus: r)));
   }
 }

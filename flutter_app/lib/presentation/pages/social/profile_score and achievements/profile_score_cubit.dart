@@ -7,6 +7,7 @@ import 'package:flutter_frontend/presentation/pages/social/profile_page/cubit/pr
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../domain/core/failures.dart';
 import '../../../../infrastructure/core/local/common_hive/common_hive.dart';
 import '../../../../domain/profile/profile.dart';
 
@@ -16,36 +17,32 @@ part 'profile_score_state.dart';
 
 class ProfileScoreCubit extends Cubit<ProfileScoreState> {
   final UniqueId profileId;
+  final bool isOwnProfile;
 
-  ProfileScoreCubit({required this.profileId})
+  ProfileScoreCubit({required this.profileId, required this.isOwnProfile})
       : super(ProfileScoreState.loading()) {
     emit(ProfileScoreState.loading());
   }
 
   ProfileRepository repository = GetIt.I<ProfileRepository>();
 
-  //gets own profilescore as string, or shows 0
-  Future<void> getOwnProfileScore(Profile profile) async {
-    return repository
-        .getScore(profile.id.value.toString())
-        .then((value) => value.fold((l) => '0', (r) {
-              //safe profilescore in commonhive
-              CommonHive.saveBoxEntry<String>(
-                  r, "profileScore", CommonHive.ownProfileIdAndPic);
-              emit(ProfileScoreState.loaded(score: r));
-              //emit(ProfilePageState.reloadScore(profile: profile, score: r));
-            }));
-  }
+  ///gets own profilescore and saves it to commonhive, if its our own profile
   Future<void> getProfileScore(Profile profile) async {
-    return repository
-        .getScore(profile.id.value.toString())
-        .then((value) => value.fold((l) => '0', (r) {
-      emit(ProfileScoreState.loaded(score: r));
-      //emit(ProfilePageState.reloadScore(profile: profile, score: r));
-    }));
+    return repository.getScore(profile.id.value.toString()).then((value) =>
+        value.fold((l) => emit(ProfileScoreState.error(error: l.toString())),
+            (r) async {
+          //safe profilescore in commonhive
+          if (isOwnProfile) {
+            CommonHive.saveBoxEntry<String>(
+                r, "profileScore", CommonHive.ownProfileIdAndPic);
+          }
+          emit(ProfileScoreState.loaded(
+            score: r,
+          ));
+        }));
   }
 
-  //fetch profiles and maybe do some logic here
+  ///fetch achievements
   Future<AchievementsDto?> getAchievements(Profile profile) async {
     return repository
         .getAchievements(profile.id.value.toString())
@@ -53,8 +50,6 @@ class ProfileScoreCubit extends Cubit<ProfileScoreState> {
               return r;
             }));
   }
-
-  Future<void> loadAchievements(Profile profile) async {}
 
   ///check achievements and save in commonhive
   void checkOwnAchievements(Profile profile, AchievementsDto achievementsDto) {

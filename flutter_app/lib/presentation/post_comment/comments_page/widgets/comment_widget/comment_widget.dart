@@ -26,26 +26,36 @@ class CommentWidget extends StatefulWidget {
   final bool showAuthor;
   final bool showCommentAction;
 
-  const CommentWidget({Key? key, required this.comment, this.showAuthor = true, this.showCommentAction = true}) : super(key: key);
+  const CommentWidget(
+      {Key? key,
+      required this.comment,
+      this.showAuthor = true,
+      this.showCommentAction = true})
+      : super(key: key);
 
   @override
   State<CommentWidget> createState() => _CommentWidgetState();
 }
 
 class _CommentWidgetState extends State<CommentWidget> {
-
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CommentWidgetCubit(comment: widget.comment),
       child: BlocConsumer<CommentWidgetCubit, CommentWidgetState>(
         listener: (context, state) {
-          if(state.status == StatusCWS.deletionFailure && state.failure != null){
+          if (state.status == StatusCWS.deletionFailure &&
+              state.failure != null) {
             // show error SnackBar
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(AppStrings.failedDeleting + ": "+ NetWorkFailure.getDisplayStringFromFailure(state.failure!), style: AppTextStyles.stdText,),
-                  backgroundColor: AppColors.errorColor,));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                AppStrings.failedDeleting +
+                    ": " +
+                    NetWorkFailure.getDisplayStringFromFailure(state.failure!),
+                style: AppTextStyles.stdText,
+              ),
+              backgroundColor: AppColors.errorColor,
+            ));
           }
         },
         builder: (context, state) {
@@ -56,7 +66,8 @@ class _CommentWidgetState extends State<CommentWidget> {
               child: PostCommentBaseWidget(
                   popUpItems: PopupItems(context),
                   date: state.comment.creationDate,
-                  content: state.comment.commentContent.getOrEmptyString(), //widget.post.postContent.getOrEmptyString(),//
+                  content: state.comment.commentContent
+                      .getOrEmptyString(), //widget.post.postContent.getOrEmptyString(),//
                   //images: state.post.images == null ? [] : state.post.images!,
                   autor: widget.showAuthor ? widget.comment.owner : null,
                   actionButtonsWidgets: ActionWidgets(context)),
@@ -69,8 +80,13 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   /// Provides List of PopUpMenuItems
   List<PopupMenuItem>? PopupItems(BuildContext context) {
-    if (widget.comment.owner == null || CommonHive.checkIfOwnId(widget.comment.owner?.id.value.toString() ?? "")) {
-      return PopupItemsCommentPost(context, () {showCommentEditOverlay(context);}, () { context.read<CommentWidgetCubit>().deleteComment(widget.comment);});
+    if (widget.comment.owner == null ||
+        CommonHive.checkIfOwnId(widget.comment.owner.id.value.toString())) {
+      return PopupItemsCommentPost(context, () {
+        showCommentEditOverlay(context);
+      }, () {
+        context.read<CommentWidgetCubit>().deleteComment(widget.comment);
+      });
     }
   }
 
@@ -79,14 +95,16 @@ class _CommentWidgetState extends State<CommentWidget> {
     return ActionWidgetsCommentPost(context, right(widget.comment));
   }
 
-
-
   /// build this Widget as overlay!
-  void showCommentEditOverlay(BuildContext cubitContextLocal /* this is used to access the cubit inside of the overlay*/) async {
-    Comment stateComment = cubitContextLocal.read<CommentWidgetCubit>().state.comment;
-    showPostEditOverlayCommentPost(cubitContextLocal, stateComment.commentContent.getOrEmptyString(),
-            (postContent) => stateComment.copyWith(commentContent: CommentContent(postContent)
-            )
-    );
+  void showCommentEditOverlay(
+      BuildContext
+          cubitContextLocal /* this is used to access the cubit inside of the overlay*/) async {
+    Comment stateComment =
+        cubitContextLocal.read<CommentWidgetCubit>().state.comment;
+    showPostEditOverlayCommentPost(
+        cubitContextLocal,
+        stateComment.commentContent.getOrEmptyString(),
+        (postContent) =>
+            stateComment.copyWith(commentContent: CommentContent(postContent)));
   }
 }

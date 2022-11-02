@@ -206,7 +206,9 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
             commentLikePath.interpolate({"objectId": objectId}), objectId);
         break;
     }
-    return response.body.isNotEmpty;
+    var x = utf8.decode(response.bodyBytes);
+    //check if true
+    return utf8.decode(response.bodyBytes) == "1";
   }
 
   Future<bool> unlike(String objectId, LikeTypeOption option) async {
@@ -226,6 +228,8 @@ class ProfileRemoteService extends RemoteService<ProfileDto> {
             commentUnLikePath.interpolate({"objectId": objectId}), objectId);
         break;
     }
+    var x = response.body.isNotEmpty;
+    //check if not empty
     return response.body.isNotEmpty;
   }
 

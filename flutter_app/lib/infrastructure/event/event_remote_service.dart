@@ -82,10 +82,10 @@ class EventRemoteService extends RemoteService<EventDto> {
     }));
   }
 
-  Future<EventDto> getNextAttendingEvent() async {
+  Future<EventDto?> getNextAttendingEvent() async {
     final Response response = await client.get(nextAttendingEventPath);
-    final List<EventDto> eventDto = await convertList(response);
-    return eventDto.first;
+    final List<EventDto?> eventDto = await convertList(response);
+    if (eventDto.isNotEmpty) return eventDto.first;
   }
 
   Future<List<EventDto>> getSearchedEvents(
@@ -150,7 +150,9 @@ class EventRemoteService extends RemoteService<EventDto> {
   Future<List<EventDto>> getAttendingEvents(
       //TODO attending events?
       DateTime lastEventTime,
-      int amount, {bool descending  = false, int status = 1}) async {
+      int amount,
+      {bool descending = false,
+      int status = 1}) async {
     return _getEventList(attendingEventsPath.interpolate({
       "amount": amount.toString(),
       "lastEventTime": lastEventTime.toString(),

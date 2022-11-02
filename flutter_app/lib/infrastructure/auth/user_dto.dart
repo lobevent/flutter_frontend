@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase;
+//import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter_frontend/domain/auth/user.dart';
 import 'package:flutter_frontend/domain/auth/value_objects.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
@@ -40,7 +40,7 @@ class UserDto extends BaseDto with _$UserDto {
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>
       _$UserDtoFromJson(json);
-
+/*
   factory UserDto.fromFirebase(firebase.User firebaseUser) {
     return UserDto(
       id: firebaseUser.uid,
@@ -48,4 +48,6 @@ class UserDto extends BaseDto with _$UserDto {
       emailAddress: firebaseUser.email,
     );
   }
+
+ */
 }

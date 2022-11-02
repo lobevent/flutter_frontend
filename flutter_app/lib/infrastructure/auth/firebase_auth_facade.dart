@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_frontend/domain/auth/auth_failure.dart';
 import 'package:flutter_frontend/domain/auth/i_auth_facade.dart';
@@ -11,6 +11,7 @@ import 'package:flutter_frontend/infrastructure/auth/user_dto.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+/*
 /// Class for the Auth API calls.
 class FirebaseAuthFacade implements IAuthFacade {
   final FirebaseAuth _firebaseAuth;
@@ -317,3 +318,5 @@ class FirebaseAuthFacade implements IAuthFacade {
     ]);
   }
 }
+
+ */

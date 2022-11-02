@@ -4,7 +4,6 @@ part of 'profile_score_cubit.dart';
 class ProfileScoreState with _$ProfileScoreState {
   factory ProfileScoreState.loading() = ScoreLoadInProgress;
   factory ProfileScoreState.loaded(
-      {required String score
-}) = _ScoreLoaded;
+      {required String score, AchievementsDto? achievements}) = _ScoreLoaded;
   factory ProfileScoreState.error({required String error}) = _ScoreError;
 }

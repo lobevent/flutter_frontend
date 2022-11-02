@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_core/firebase_core.dart';
+//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -8,6 +8,7 @@ import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubi
 import 'package:flutter_frontend/infrastructure/core/local/common_hive/common_hive.dart';
 import 'package:flutter_frontend/injection_container.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
+import 'package:flutter_frontend/presentation/core/styles/dark_theme.dart';
 import 'package:flutter_frontend/presentation/core/utils/observers/RouterObserver.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart'
     as _app_router;
@@ -38,7 +39,7 @@ Future<void> main() async {
   await Hive.initFlutter(appDocumentDirectory.path);
   await CommonHive.initBoxes();
 
-  await Firebase.initializeApp();
+  //await Firebase.initializeApp();
   await InjectionContainer.injectDependencies();
   await InjectionContainer.loadNecessities();
   runApp(MyApp());
@@ -55,13 +56,16 @@ class MyApp extends StatelessWidget {
                 create: (context) => GetIt.I<SignInFormCubit>()),
           ],
           child: MaterialApp.router(
-              theme: ThemeData(
+              theme: DarkTheme().getDarkTheme(),
+              /*ThemeData(
                 //colorScheme: ThemeData().colorScheme.copyWith(primary: AppColors.backGroundColor, brightness: Brightness.dark),
                 focusColor: AppColors.accentButtonColor,
                 brightness: Brightness.dark,
                 primaryColor: AppColors.backGroundColor,
                 fontFamily: 'Prompt',
               ),
+
+               */
               routerDelegate: AutoRouterDelegate(_appRouter,
                   navigatorObservers: () => [AutoRouteObserver()]),
               routeInformationParser: _appRouter.defaultRouteParser()),

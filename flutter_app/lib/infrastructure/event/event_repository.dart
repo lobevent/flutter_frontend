@@ -148,16 +148,21 @@ class EventRepository extends Repository {
   }
 
   Future<Either<NetWorkFailure, List<Event>>> getAttendingEvents(
-      DateTime lastEventTime, int amount, {bool descending = false, EventStatus status = EventStatus.attending}) async {
-    return _getList(
-        () => _eventRemoteService.getAttendingEvents(lastEventTime, amount, descending: descending, status: EventDto.domainToDtoStatus[status] as int));
+      DateTime lastEventTime, int amount,
+      {bool descending = false,
+      EventStatus status = EventStatus.attending}) async {
+    return _getList(() => _eventRemoteService.getAttendingEvents(
+        lastEventTime, amount,
+        descending: descending,
+        status: EventDto.domainToDtoStatus[status] as int));
   }
 
   Future<Either<NetWorkFailure, List<Event>>> getNearEvents(double latitude,
       double longitude, int distance, DateTime lastEventTime, int amount,
       {bool descending = false}) async {
     return _getList(() => _eventRemoteService.searchNearEvents(
-        latitude, longitude, distance, lastEventTime, amount, descending: descending));
+        latitude, longitude, distance, lastEventTime, amount,
+        descending: descending));
   }
 
   Future<Either<NetWorkFailure, List<Event>>> getRecentEvents(
@@ -247,13 +252,14 @@ class EventRepository extends Repository {
 
   Future<Either<NetWorkFailure, Event?>> getNextAttEvent() async {
     return localErrorHandler(() async {
-      final EventDto eventDto =
+      final EventDto? eventDto =
           await _eventRemoteService.getNextAttendingEvent();
-      return right(eventDto.toDomain());
+      if (eventDto != null) {
+        final Event event = eventDto.toDomain();
+        return right(event);
+      }
+      //cant return event here
+      return right(null);
     });
   }
-
-
-
-
 }

@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_frontend/application/auth/sign_in_form/sign_in_form_cubit.dart';
 import 'package:flutter_frontend/core/services/AuthTokenService.dart';
 import 'package:flutter_frontend/infrastructure/auth/current_login.dart';
@@ -48,12 +48,14 @@ class InjectionContainer {
     // register Token Service for retrieving login tokens
     getIt.registerLazySingleton(() => AuthTokenService());
 
-    getIt.registerLazySingleton<FirebaseAuthFacade>(() => FirebaseAuthFacade(
+    /* getIt.registerLazySingleton<FirebaseAuthFacade>(() => FirebaseAuthFacade(
         FirebaseAuth.instance,
         GoogleSignIn.standard(scopes: ["email", "profile"])));
 
     getIt.registerLazySingleton(
         () => SignInFormCubit(authFacade: getIt<FirebaseAuthFacade>()));
+
+    */
 
     getIt.registerLazySingleton(() => EventRepository(
         EventRemoteService(communicator: GetIt.I<SymfonyCommunicator>()),

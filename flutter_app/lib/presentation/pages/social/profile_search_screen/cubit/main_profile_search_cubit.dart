@@ -10,9 +10,8 @@ class MainProfileSearchCubit extends Cubit<MainProfileSearchState> {
   List<String> _searchHistory = [];
 
 
-  MainProfileSearchCubit() : super(MainProfileSearchState(status: PSStatus.initial)){
+  MainProfileSearchCubit() : super(MainProfileSearchState(status: PSStatus.initial, filteredSearchHistory: CommonHive.getSearchHistory() ?? [])){
     _searchHistory = CommonHive.getSearchHistory() ?? [];
-    emit(state.copyWith(filteredSearchHistory: _searchHistory));
   }
 
   static const historyLength = 5;
@@ -20,9 +19,20 @@ class MainProfileSearchCubit extends Cubit<MainProfileSearchState> {
 
 
 
+  /// submits the serch term and changes visualization. In the deeper cubits a search should be provided
+  /// gets the [searchTerm] and sets it in the state
   submitSearchTerm(String searchTerm){
+    emit(state.copyWith(searchString: searchTerm, status: PSStatus.searchSubmitted));
     _addSearchTerm(searchTerm);
     CommonHive.saveSearchHistory(_searchHistory);
+  }
+
+  enterSearch(){
+    emit(state.copyWith(status: PSStatus.enteredSearch));
+  }
+
+  leaveSearch(){
+    emit(state.copyWith(status: PSStatus.initial));
   }
 
   changeSearchTerm(String? searchTerm){
@@ -56,5 +66,6 @@ class MainProfileSearchCubit extends Cubit<MainProfileSearchState> {
       return _searchHistory.reversed.toList();
     }
   }
+
 
 }

@@ -56,6 +56,8 @@ class MyApp extends StatelessWidget {
           ],
           child: MaterialApp.router(
               theme: ThemeData(
+                //colorScheme: ThemeData().colorScheme.copyWith(primary: AppColors.backGroundColor, brightness: Brightness.dark),
+                focusColor: AppColors.accentButtonColor,
                 brightness: Brightness.dark,
                 primaryColor: AppColors.backGroundColor,
                 fontFamily: 'Prompt',

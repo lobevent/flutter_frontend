@@ -1,6 +1,6 @@
 part of 'main_profile_search_cubit.dart';
 
-enum PSStatus {initial, readyLoadingSuggestions, enteredSearch, searchEntered}
+enum PSStatus {initial, readyLoadingSuggestions, enteredSearch, searchSubmitted}
 @CopyWith()
 class MainProfileSearchState{
   final String? searchString;

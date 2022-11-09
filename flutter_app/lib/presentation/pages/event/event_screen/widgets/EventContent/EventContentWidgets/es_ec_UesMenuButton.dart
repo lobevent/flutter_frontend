@@ -38,13 +38,13 @@ class _UesMenuButtonState extends State<UesMenuButton> {
       return LoadingButton(size: widget.loadingButtonSize,);
     }
     if(widget.deactivated){
-      return Row(children: [Icon(widget.icon), if(widget.text != null) Text(widget.text??'', style: TextStyle(color: AppColors.stdTextColor))]);
+      return Row(children: [Icon(widget.icon), if(widget.text != null) Text(widget.text??'', style: Theme.of(context).textTheme.bodyText1)]);
     }
 
 // This menu button widget updates a _selection field (of type EventStatus,
 // not shown here).
     return PopupMenuButton(
-        child: Row(children: [Icon(widget.icon), if(widget.text != null) Text(widget.text??'', style: TextStyle(color: AppColors.stdTextColor))]),
+        child: Row(children: [Icon(widget.icon), if(widget.text != null) Text(widget.text??'', style: Theme.of(context).textTheme.bodyText1)]),
         itemBuilder: (BuildContext context) {
           return [
             PopupMenuWidget(

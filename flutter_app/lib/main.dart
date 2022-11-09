@@ -46,18 +46,27 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  //value notifier to change on time
+  static final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(DarkTheme().currentTheme());
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<SignInFormCubit>(
-                create: (context) => GetIt.I<SignInFormCubit>()),
-          ],
-          child: MaterialApp.router(
-              theme: DarkTheme().getDarkTheme(),
-              /*ThemeData(
+    //so we can change theme on runtime
+    return ValueListenableBuilder<ThemeMode>(
+        valueListenable: themeNotifier,
+        builder: (_, ThemeMode currentMode, __){
+          return GestureDetector(
+              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<SignInFormCubit>(
+                      create: (context) => GetIt.I<SignInFormCubit>()),
+                ],
+                child: MaterialApp.router(
+                    themeMode: currentMode,
+                    theme: DarkTheme().getLightTheme(),
+                    darkTheme: DarkTheme().getDarkTheme(),
+                    /*ThemeData(
                 //colorScheme: ThemeData().colorScheme.copyWith(primary: AppColors.backGroundColor, brightness: Brightness.dark),
                 focusColor: AppColors.accentButtonColor,
                 brightness: Brightness.dark,
@@ -66,10 +75,12 @@ class MyApp extends StatelessWidget {
               ),
 
                */
-              routerDelegate: AutoRouterDelegate(_appRouter,
-                  navigatorObservers: () => [AutoRouteObserver()]),
-              routeInformationParser: _appRouter.defaultRouteParser()),
-        ));
+                    routerDelegate: AutoRouterDelegate(_appRouter,
+                        navigatorObservers: () => [AutoRouteObserver()]),
+                    routeInformationParser: _appRouter.defaultRouteParser()),
+              ));
+        });
+
     //   (
     //   title: 'Material App',
     //   builder: ExtendedNavigator.builder<app_router.Router>(router: app_router.Router()),

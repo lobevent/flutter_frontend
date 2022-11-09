@@ -59,7 +59,7 @@ Widget ActionWidgetsCommentPost(BuildContext context, Either<Post, Comment> comm
           onPressed: () => context.router.push(CommentsPageRoute(entity: comment_or_post)),
           icon: Row(
             children: [Icon(Icons.comment), Text(comment_or_post.fold((l) => l.commentCount.toString(), (r) => r.childCount.toString()),
-                style: TextStyle(color: AppColors.stdTextColor))],
+                style: Theme.of(context).textTheme.bodyText1)],
           ),
         ),
       ]);

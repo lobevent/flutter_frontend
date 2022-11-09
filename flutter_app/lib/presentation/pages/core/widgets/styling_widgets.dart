@@ -294,7 +294,7 @@ class TextWithIconButton extends StatelessWidget {
           if (withSpacer) Spacer(),
           Text(
             text,
-            style: TextStyle(color: AppColors.stdTextColor),
+            style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color),
           ),
           if (withSpacer) Spacer(),
         ],

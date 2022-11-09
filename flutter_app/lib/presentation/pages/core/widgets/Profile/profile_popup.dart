@@ -52,7 +52,7 @@ class _ProfilePopupState extends State<ProfilePopup> {
             OverflowSafeString(
                 child: Text(
               widget.profile.name.getOrCrash(),
-              style: AppTextStyles.stdSubTextStyle,
+              style: Theme.of(context).textTheme.subtitle1,
             ))
           ],
         ),
@@ -80,7 +80,7 @@ class _ProfilePopupState extends State<ProfilePopup> {
                             child: OverflowSafeString(
                                 child: Text(
                               widget.profile.name.getOrCrash(),
-                              style: AppTextStyles.stdSubTextStyle,
+                              style: Theme.of(context).textTheme.subtitle1,
                             )),
                           )
                         ],

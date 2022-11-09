@@ -52,9 +52,9 @@ class PostCommentBaseWidget extends StatelessWidget {
                 // Add header information (date, author, etc.)
                 MetaHeadWidget(date: date, author: autor),
                 // content of the post
-                ContentWidget(content),
+                ContentWidget(content, context),
                 imageCarousell(),
-                DateWidgetPost(date),
+                DateWidgetPost(date, context),
                 // actions like comments and likes
                 Align(alignment: Alignment.topLeft,child: actionButtonsWidgets,),
               ],
@@ -62,29 +62,25 @@ class PostCommentBaseWidget extends StatelessWidget {
   }
 
   /// contains the content of the post
-  Widget ContentWidget(String content) {
+  Widget ContentWidget(String content, BuildContext context) {
     return PaddingRowWidget(children: [
       //prevent overflowing textlines
       Expanded(
         child: Text(
           content,
-          style: const TextStyle(color: AppColors.stdTextColor),
+          style: Theme.of(context).textTheme.bodyText1),
         ),
-      )
     ]);
   }
 
-  Widget DateWidgetPost(DateTime date){
+  Widget DateWidgetPost(DateTime date, BuildContext context){
     return Padding(
       padding: EdgeInsets.only(left: paddingLeftConst - 15),
       child: Align(
         alignment: Alignment.bottomLeft,
         child: Text(
           DateFormat('EEEE, MMM d, yyyy, HH:mm').format(date),
-          style: const TextStyle(
-            color: AppColors.stdTextColor,
-            fontSize: AppSizes.metaSubText,
-          ),
+          style: Theme.of(context).textTheme.subtitle1,
         ),
       ),
     );

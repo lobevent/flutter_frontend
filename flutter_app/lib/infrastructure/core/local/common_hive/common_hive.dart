@@ -97,6 +97,17 @@ class CommonHive {
     box.put(key, true);
   }
 
+  static void safeThemeMode(bool darkModeEnabled){
+    final box = Hive.box<bool>(achievements);
+    box.put("darkModeEnabled", darkModeEnabled);
+  }
+
+  static bool getDarkMode(){
+    final box = Hive.box<bool>(achievements);
+    bool? val = box.get("darkModeEnabled");
+    return val??true;
+  }
+
   static List<String> getAchievements() {
     final box = Hive.box<bool>(achievements);
     final List<String> values = box.keys.map((e) => e.toString()).toList();

@@ -12,22 +12,26 @@ class TextWithIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      Icon(icon, color: AppColors.stdTextColor,),
+      Icon(icon, color:
+          Theme.of(context).iconTheme.color
+      //AppColors.stdTextColor,
+      ),
       if(onTap != null )GestureDetector(
-        child: makeTextWidget(),
+        child: makeTextWidget(context),
         onTap: (){
           if(onTap != null) onTap!();
         },
       ),
-      if(onTap == null) makeTextWidget()
+      if(onTap == null) makeTextWidget(context)
     ]);
   }
 
 
-  Widget makeTextWidget(){
+  Widget makeTextWidget(BuildContext context){
     return Text(
       text,
-      style: TextStyle(color: AppColors.stdTextColor),
+      style: Theme.of(context).textTheme.bodyText1
+      //TextStyle(color: AppColors.stdTextColor),
     );
   }
 }

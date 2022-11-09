@@ -39,7 +39,6 @@ import 'EventContentWidgets/es_ec_uploadImageButton.dart';
 
 class EventContent extends StatelessWidget {
   ///the color used to display the text on this page
-  final Color textColor = AppColors.stdTextColor;
 
   const EventContent({Key? key}) : super(key: key);
 
@@ -55,7 +54,7 @@ class EventContent extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   /// at first the title of course
-                  TitleText(stateLoaded.event.name.getOrCrash()),
+                  TitleText(stateLoaded.event.name.getOrCrash(), context),
 
                   /// Used as space
                   const SizedBox(height: 20),
@@ -135,7 +134,7 @@ class EventContent extends StatelessWidget {
             },
 
             /// If some other state is active, display empty
-            orElse: () => TitleText(''));
+            orElse: () => TitleText('', context));
       },
     );
   }
@@ -185,7 +184,7 @@ class EventContent extends StatelessWidget {
         GestureDetector(
           child: Text(
             AppStrings.participants + ':' + attending.toString(),
-            style: TextStyle(color: textColor),
+            style: Theme.of(context).textTheme.bodyText1,
           ),
           onTap: () {
             InvitedPersonsOverlay.showInvitedPersonsOverlay(context);
@@ -214,7 +213,7 @@ class EventContent extends StatelessWidget {
       /// Format the date
       Text(
         DateFormat('EEEE, MMM d, yyyy').format(date),
-        style: TextStyle(color: textColor),
+        style: Theme.of(context).textTheme.bodyText1,
       ),
       Spacer(),
 
@@ -246,14 +245,10 @@ class EventContent extends StatelessWidget {
   }
 
   /// A text widget, styled for headings
-  Widget TitleText(String title) {
+  Widget TitleText(String title, BuildContext context) {
     return PaddingWidget(children: [
       Text(title,
-          style: TextStyle(
-              height: 2,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: textColor))
+          style: Theme.of(context).textTheme.headline1)
     ]);
   }
 

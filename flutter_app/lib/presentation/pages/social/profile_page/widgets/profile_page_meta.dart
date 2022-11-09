@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/infrastructure/core/local/common_hive/common_hive.dart';
 import 'package:flutter_frontend/domain/core/errors.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
+import 'package:flutter_frontend/main.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
+import 'package:flutter_frontend/presentation/core/styles/dark_theme.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/animations/rotatingCircle.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/calender_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
@@ -74,8 +76,14 @@ class ProfilePageMeta extends StatelessWidget {
     return Column(
       children: [
         //our ProfileScore and Achievements
-        ScoreAndAchievements(profile),
 
+        ScoreAndAchievements(profile),
+        IconButton(
+            onPressed: (){
+              DarkTheme().switchTheme();
+              MyApp.themeNotifier.value=DarkTheme().currentTheme();
+              },
+            icon: Icon(Icons.mode_night_outlined)),
         PaddingRowWidget(children: [
           // Null friends is not tested yet. Maybe not working
           // The Friends Button

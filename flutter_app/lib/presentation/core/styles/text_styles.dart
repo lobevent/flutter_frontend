@@ -6,6 +6,9 @@ class AppTextStyles {
   static const basic = TextStyle(
     color: AppColors.stdTextColor,
   );
+  static const basicDark = TextStyle(
+    color: AppColors.black,
+  );
 
   static const error = TextStyle(
     color: AppColors.errorColor,
@@ -14,6 +17,11 @@ class AppTextStyles {
   static const stdText = TextStyle(
     color: AppColors.stdTextColor,
     fontWeight: FontWeight.bold
+  );
+
+  static const stdTextDark = TextStyle(
+      color: AppColors.textOnAccentColor,
+      fontWeight: FontWeight.bold
   );
 
   static const stdSelectedText = TextStyle(

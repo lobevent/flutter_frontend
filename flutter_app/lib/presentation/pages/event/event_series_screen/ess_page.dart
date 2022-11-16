@@ -10,6 +10,9 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/event_list_tiles.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_series_screen/cubit/event_series_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/event_recent_upcoming_tabs.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_series_screen/widgets/ess_invite_friends_widget.dart';
+
+import '../event_form/widgets/invite_friends_widget.dart';
 
 class EventSeriesScreenPage extends StatelessWidget {
   final UniqueId seriesId;
@@ -49,6 +52,7 @@ class EventSeriesScreenPage extends StatelessWidget {
                                       state.series.subscribersCount.toString(),
                                   style: AppTextStyles.stdText,
                                 ),
+                                EssInviteFriendsWidget(),
                                 Spacer(),
                                 Text(
                                   "Events: " +

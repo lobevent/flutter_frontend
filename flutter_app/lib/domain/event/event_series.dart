@@ -5,8 +5,9 @@ import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_series.freezed.dart';
+
 @freezed
-class EventSeries with _$EventSeries{
+class EventSeries with _$EventSeries {
   // final UniqueId id;
   // final EventName name;
   // final EventDescription description;
@@ -16,6 +17,7 @@ class EventSeries with _$EventSeries{
     required UniqueId id,
     required EventName name,
     required EventDescription description,
+    required bool public,
     List<Event>? upcomingEvents,
     List<Event>? recentEvents,
     int? subscribersCount,

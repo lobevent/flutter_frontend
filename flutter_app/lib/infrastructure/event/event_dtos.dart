@@ -95,7 +95,8 @@ class EventDto extends BaseDto with _$EventDto {
         maxPersons: maxPersons,
         id: UniqueId.fromUniqueString(id),
         name: EventName(name),
-        date: date,
+        //convert to local from backend
+        date: date.toLocal(),
         description:
             description == null ? null : EventDescription(description!),
         todo: todo == null ? null : todo!.toDomain(),

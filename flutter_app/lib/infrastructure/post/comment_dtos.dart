@@ -46,7 +46,7 @@ class CommentDto extends BaseDto with _$CommentDto {
   Comment toDomain() {
     return Comment(
         id: UniqueId.fromUniqueString(this.id!),
-        creationDate: date,
+        creationDate: date.toLocal(),
         commentContent: CommentContent(content),
         owner: profile.toDomain(),
         post: post.toDomain(),

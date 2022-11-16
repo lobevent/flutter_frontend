@@ -13,75 +13,94 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/event_recent_up
 
 class EventSeriesScreenPage extends StatelessWidget {
   final UniqueId seriesId;
-  const EventSeriesScreenPage({Key? key, required this.seriesId}) : super(key: key);
+
+  const EventSeriesScreenPage({Key? key, required this.seriesId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => EventSeriesScreenCubit(seriesId: seriesId),
       child: BlocBuilder<EventSeriesScreenCubit, EventSeriesScreenState>(
-        // this is here, so we dont get an error when we change subscribtion status
-        buildWhen: (previous, current) => !(current is ESS_ReadySubscrLoading),
+          // this is here, so we dont get an error when we change subscribtion status
+          buildWhen: (previous, current) =>
+              !(current is ESS_ReadySubscrLoading),
           builder: (context, state) {
-        return BasicContentContainer(
-            isLoading: state is ESS_Loading,
-            child_ren: right(Column(
-              mainAxisSize: MainAxisSize.min,
-              children: state.maybeMap(
-                  orElse: () {
-                    return [];
-                  },
-                  ready: (state) => [
-                        Text("Event Series: " + state.series.name.getOrCrash(), style: AppTextStyles.stdLittleHeading),
-                        PaddingRowWidget(
-                          centered: true,
-                          paddingTop: 25,
-                          paddingBottom: 25,
-                          children: [
+            return BasicContentContainer(
+                isLoading: state is ESS_Loading,
+                child_ren: right(Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: state.maybeMap(
+                      orElse: () {
+                        return [];
+                      },
+                      ready: (state) => [
                             Text(
-                              "Subscribers: " + state.series.subscribersCount.toString(),
-                              style: AppTextStyles.stdText,
+                                "Event Series: " +
+                                    state.series.name.getOrCrash(),
+                                style: AppTextStyles.stdLittleHeading),
+                            PaddingRowWidget(
+                              centered: true,
+                              paddingTop: 25,
+                              paddingBottom: 25,
+                              children: [
+                                Text(
+                                  "Subscribers: " +
+                                      state.series.subscribersCount.toString(),
+                                  style: AppTextStyles.stdText,
+                                ),
+                                Spacer(),
+                                Text(
+                                  "Events: " +
+                                      state.series.eventCount.toString(),
+                                  style: AppTextStyles.stdText,
+                                ),
+                              ],
                             ),
-                            Spacer(),
-                            Text(
-                              "Events: " + state.series.eventCount.toString(),
-                              style: AppTextStyles.stdText,
-                            ),
-                          ],
-
-                        ),
-                        PaddingRowWidget(
-                          centered: true,
-                          children: [
-                            Spacer(),
-                            SubscriptionButton(),
-                            Spacer()
+                            PaddingRowWidget(centered: true, children: [
+                              Spacer(),
+                              SubscriptionButton(),
+                              Spacer()
+                            ]),
+                            // this provides the tab bar and the contents of the tabs; namely it displays the events in ListTiles within a listview
+                            Expanded(
+                              child: EventTabs(
+                                upcoming: state.series.upcomingEvents ?? [],
+                                recendEvents: state.series.recentEvents ?? [],
+                                isLoading: false,
+                              ),
+                            )
                           ]),
-                        // this provides the tab bar and the contents of the tabs; namely it displays the events in ListTiles within a listview
-                        EventTabs(upcoming: state.series.upcomingEvents ?? [], recendEvents: state.series.recentEvents ?? [], isLoading: false,)
-                      ]),
-            )));
-      }),
+                )));
+          }),
     );
-
   }
 
-
-  Widget SubscriptionButton(){
+  Widget SubscriptionButton() {
     return BlocBuilder<EventSeriesScreenCubit, EventSeriesScreenState>(
         builder: (context, state) {
-          return state.maybeMap(orElse: () => Spacer(),
-              ready: (readyState){
-                if(!(readyState.series.subscribed?? false)){
-                  return TextWithIconButton(onPressed: (){context.read<EventSeriesScreenCubit>().subscribe();}, icon: AppIcons.subscribe, text: '',);
-                }
-                else{
-                  return TextWithIconButton(onPressed: (){context.read<EventSeriesScreenCubit>().unsubscribe();}, icon: AppIcons.revokeSubscription, text: '',);
-                }
-              },
-              readyAndLoadingSubscription: (l) => LoadingButton()
-          );
-        });
-
+      return state.maybeMap(
+          orElse: () => Spacer(),
+          ready: (readyState) {
+            if (!(readyState.series.subscribed ?? false)) {
+              return TextWithIconButton(
+                onPressed: () {
+                  context.read<EventSeriesScreenCubit>().subscribe();
+                },
+                icon: AppIcons.subscribe,
+                text: '',
+              );
+            } else {
+              return TextWithIconButton(
+                onPressed: () {
+                  context.read<EventSeriesScreenCubit>().unsubscribe();
+                },
+                icon: AppIcons.revokeSubscription,
+                text: '',
+              );
+            }
+          },
+          readyAndLoadingSubscription: (l) => LoadingButton());
+    });
   }
 }

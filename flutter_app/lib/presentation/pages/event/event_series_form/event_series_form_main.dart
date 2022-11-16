@@ -1,4 +1,4 @@
-import'package:dartz/dartz.dart' as dartz;
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
@@ -13,8 +13,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 class EventSeriesFormMain extends StatefulWidget {
-
   final EventSeries? series;
+
   const EventSeriesFormMain({Key? key, this.series}) : super(key: key);
 
   @override
@@ -30,41 +30,42 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
 
   bool isEdit = false;
 
+  bool isPublic = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) => EventSeriesFormCubit(widget.series),
         child: BlocConsumer<EventSeriesFormCubit, EventSeriesFormState>(
-          listener: (context, state) {
-
-            if(state is ESF_SavedReady){
-              // display snackbar
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("+++++ Successfully created ++++++")));
-              // pop until feed (home)
-              context.router.popUntil(
-                (route) => route.settings.name == FeedScreenRoute.name,
-              );
-            }
-          },
+            listener: (context, state) {
+          if (state is ESF_SavedReady) {
+            // display snackbar
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("+++++ Successfully created ++++++")));
+            // pop until feed (home)
+            context.router.popUntil(
+              (route) => route.settings.name == FeedScreenRoute.name,
+            );
+          }
+        },
             // this is the view!
-          builder: (context, state) {
-
-            return BasicContentContainer(
-              isLoading: false,//state is ESF_Loading || state is ESF_Saving,
-              scrollable: true,
-              child_ren: dartz.left([
-                const SizedBox(height: 20),
-                Text(AppStrings.createSeries, style: Theme.of(context).textTheme.headline3),
-                const SizedBox(height: 20),
-                // every input has to be inside the form
-                MainForm(context),
-                SubmitButton(context)
+            builder: (context, state) {
+          return BasicContentContainer(
+            isLoading: false, //state is ESF_Loading || state is ESF_Saving,
+            scrollable: true,
+            child_ren: dartz.left([
+              const SizedBox(height: 20),
+              Text(AppStrings.createSeries,
+                  style: Theme.of(context).textTheme.headline3),
+              const SizedBox(height: 20),
+              // every input has to be inside the form
+              MainForm(context),
+              SubmitButton(context)
             ]),
-        );
-      })
-
-    );
+          );
+        }));
   }
+
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++      WIDGETS      +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -74,7 +75,7 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
   ///
   /// The submission button, which also calls the validation function!
   ///
-  Widget SubmitButton(BuildContext context){
+  Widget SubmitButton(BuildContext context) {
     return StdTextButton(
         onPressed: () {
           // only submit if the form is valid!
@@ -85,54 +86,81 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
         child: const Icon(Icons.add, color: AppColors.stdTextColor));
   }
 
-
   //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   //-------------------------------------------------------------------------------------- INPUTS ----------------------------------------------------------------------------------
   //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-  Widget MainForm(BuildContext context){
+  Widget MainForm(BuildContext context) {
     return BlocListener<EventSeriesFormCubit, EventSeriesFormState>(
       listenWhen: (p, c) => (p is ESF_Ready) != (c is ESF_Ready),
       listener: (context, state) {
-        state.maybeMap(orElse: (){}, ready: (readyState) {
-          title_controller.text = readyState.series.name.getOrEmptyString();
-          desc_controller.text = readyState.series.description.getOrEmptyString();
-        });
+        state.maybeMap(
+            orElse: () {},
+            ready: (readyState) {
+              title_controller.text = readyState.series.name.getOrEmptyString();
+              desc_controller.text =
+                  readyState.series.description.getOrEmptyString();
+            });
       },
       child: Form(
           key: _formKey,
-          child: Column(children: [
-            // title field
-            TitleInput(context),
-            const SizedBox(height: 20),
-            // description field
-            DescriptionInput(context),
-          ],)
-      ),
+          child: Column(
+            children: [
+              // title field
+              TitleInput(context),
+              const SizedBox(height: 20),
+              // description field
+              DescriptionInput(context),
+              const SizedBox(
+                height: 20,
+              ),
+              //public checkbox
+              PublicCheckBox(context),
+            ],
+          )),
     );
   }
 
-  Widget TitleInput(BuildContext context){
+  Widget TitleInput(BuildContext context) {
     return FullWidthPaddingInput(
       labelText: AppStrings.enterSeriesName,
       controller: title_controller,
       maxLength: EventName.maxLength,
-      onChanged: (value)=>context.read<EventSeriesFormCubit>().changeTitle(value),
-      validator: (_) => context.read<EventSeriesFormCubit>().state.maybeMap(orElse: ()=>null, ready: (ready) => StringValueValidator(ready.series.name.value)),
+      onChanged: (value) =>
+          context.read<EventSeriesFormCubit>().changeTitle(value),
+      validator: (_) => context.read<EventSeriesFormCubit>().state.maybeMap(
+          orElse: () => null,
+          ready: (ready) => StringValueValidator(ready.series.name.value)),
     );
   }
 
-  Widget DescriptionInput(BuildContext context){
+  Widget PublicCheckBox(BuildContext context) {
+    return TextCheckbox(
+        value: isPublic,
+        text: AppStrings.publicEvent,
+        onChanged: (bool? value) {
+          if (value != null) {
+            context.read<EventSeriesFormCubit>().changePublic(value);
+            isPublic = value;
+            setState(() {});
+          }
+        });
+  }
+
+  Widget DescriptionInput(BuildContext context) {
     return FullWidthPaddingInput(
       labelText: AppStrings.enterSeriesDescription,
       controller: desc_controller,
       maxLength: EventDescription.maxLength,
       maxLines: 5,
-      onChanged: (value)=>context.read<EventSeriesFormCubit>().changeDescription(value),
-      validator: (_) => context.read<EventSeriesFormCubit>().state.maybeMap(orElse: ()=>null, ready: (ready) => StringValueValidator(ready.series.description.value)),
+      onChanged: (value) =>
+          context.read<EventSeriesFormCubit>().changeDescription(value),
+      validator: (_) => context.read<EventSeriesFormCubit>().state.maybeMap(
+          orElse: () => null,
+          ready: (ready) =>
+              StringValueValidator(ready.series.description.value)),
     );
   }
-
 
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -140,7 +168,9 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-  String? StringValueValidator(dartz.Either<ValueFailure<String>, String> value){
-    return value.fold((failure) => failure.getDisplayStringLocal(), (r) => null);
+  String? StringValueValidator(
+      dartz.Either<ValueFailure<String>, String> value) {
+    return value.fold(
+        (failure) => failure.getDisplayStringLocal(), (r) => null);
   }
 }

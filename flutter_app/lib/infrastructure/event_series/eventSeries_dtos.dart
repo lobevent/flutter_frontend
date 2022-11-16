@@ -16,42 +16,46 @@ part 'eventSeries_dtos.g.dart';
 
 @freezed
 class EventSeriesDto extends BaseDto with _$EventSeriesDto {
-
   const EventSeriesDto._();
 
   const factory EventSeriesDto(
-      {
-        required String id,
-        required String name,
-        required String description,
-        @JsonKey(includeIfNull: false) @EventListConverter() List<EventDto>? upcomingEvents,
-        @JsonKey(includeIfNull: false) @EventListConverter() List<EventDto>? recentEvents,
-        int? subscribersCount,
-        int? eventCount,
-        bool? subscribed,
-        //@JsonKey(includeIfNull: false) @EventListConverter() List<EventDto>? events,
-        DateTime? creationDate}) = EventSeriesFull;
+      {required String id,
+      required String name,
+      required String description,
+      required bool public,
+      @JsonKey(includeIfNull: false)
+      @EventListConverter()
+          List<EventDto>? upcomingEvents,
+      @JsonKey(includeIfNull: false)
+      @EventListConverter()
+          List<EventDto>? recentEvents,
+      int? subscribersCount,
+      int? eventCount,
+      bool? subscribed,
+      //@JsonKey(includeIfNull: false) @EventListConverter() List<EventDto>? events,
+      DateTime? creationDate}) = EventSeriesFull;
 
   @override
   EventSeries toDomain() {
     return EventSeries(
-        id: UniqueId.fromUniqueString(id),
-        description: EventDescription(description),
-        name: EventName(name),
-        recentEvents: recentEvents?.map((e) => e.toDomain()).toList(),
-        upcomingEvents: upcomingEvents?.map((e) => e.toDomain()).toList(),
-        subscribersCount: subscribersCount,
-        eventCount: eventCount,
-        subscribed: subscribed,
-        );
+      id: UniqueId.fromUniqueString(id),
+      description: EventDescription(description),
+      name: EventName(name),
+      public: public,
+      recentEvents: recentEvents?.map((e) => e.toDomain()).toList(),
+      upcomingEvents: upcomingEvents?.map((e) => e.toDomain()).toList(),
+      subscribersCount: subscribersCount,
+      eventCount: eventCount,
+      subscribed: subscribed,
+    );
   }
 
   factory EventSeriesDto.fromDomain(EventSeries eventSeries) {
     return EventSeriesDto(
-      name: eventSeries.name.getOrCrash(),
-      description: eventSeries.description.getOrCrash(),
-      id: eventSeries.id.value
-    );
+        name: eventSeries.name.getOrCrash(),
+        description: eventSeries.description.getOrCrash(),
+        id: eventSeries.id.value,
+        public: eventSeries.public);
   }
 
   factory EventSeriesDto.fromJson(Map<String, dynamic> json) =>

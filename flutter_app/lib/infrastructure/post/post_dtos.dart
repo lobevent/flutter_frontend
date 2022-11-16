@@ -18,16 +18,15 @@ part 'post_dtos.g.dart';
 class PostDto extends BaseDto with _$PostDto {
   const PostDto._();
 
-  const factory PostDto({
-    String? id,
-    required DateTime date,
-    required String content,
-    int? commentCount,
-    @CommentsConverter() List<CommentDto>? comments,
-    @ProfileConverter() ProfileDto? owner,
-    @EventConverter() EventDto? event,
-    List<String>? images
-  }) = _PostDto;
+  const factory PostDto(
+      {String? id,
+      required DateTime date,
+      required String content,
+      int? commentCount,
+      @CommentsConverter() List<CommentDto>? comments,
+      @ProfileConverter() ProfileDto? owner,
+      @EventConverter() EventDto? event,
+      List<String>? images}) = _PostDto;
 
   factory PostDto.fromDomain(Post post) {
     PostDto returnedDto;
@@ -36,8 +35,7 @@ class PostDto extends BaseDto with _$PostDto {
         id: post.id?.value,
         date: post.creationDate,
         content: post.postContent.getOrCrash(),
-        owner: post.owner!=null ? ProfileDto.fromDomain(post.owner!)
-            : null,
+        owner: post.owner != null ? ProfileDto.fromDomain(post.owner!) : null,
         event: post.event != null ? EventDto.fromDomain(post.event!) : null,
         comments: <CommentDto>[],
         images: post.images,
@@ -51,7 +49,7 @@ class PostDto extends BaseDto with _$PostDto {
   Post toDomain() {
     return Post(
         id: UniqueId.fromUniqueString(id!),
-        creationDate: date,
+        creationDate: date.toLocal(),
         postContent: PostContent(content),
         owner: owner?.toDomain(),
         event: event?.toDomain(),

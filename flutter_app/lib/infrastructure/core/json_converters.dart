@@ -1,5 +1,6 @@
 import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
+import 'package:flutter_frontend/infrastructure/event_series/eventSeries_dtos.dart';
 import 'package:flutter_frontend/infrastructure/post/comment_dtos.dart';
 import 'package:flutter_frontend/infrastructure/post/post_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
@@ -46,6 +47,22 @@ class ListConverter<DTO extends BaseDto>
 class CommentsConverter extends ListConverter<CommentDto> {
   const CommentsConverter() : super();
 }
+
+class EventSeriesConverter
+    implements JsonConverter<EventSeriesDto, Map<String, dynamic>> {
+  const EventSeriesConverter();
+
+  @override
+  EventSeriesDto fromJson(Map<String, dynamic> owner) {
+    return EventSeriesDto.fromJson(owner);
+  }
+
+  @override
+  Map<String, dynamic> toJson(EventSeriesDto eventSeriesDto) {
+    return eventSeriesDto.toJson();
+  }
+}
+
 
 class ProfileConverter
     implements JsonConverter<ProfileDto, Map<String, dynamic>> {

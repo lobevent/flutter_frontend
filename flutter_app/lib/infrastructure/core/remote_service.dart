@@ -8,6 +8,7 @@ import 'exceptions.dart';
 
 class RemoteService<DTO extends BaseDto> {
 
+
   Future<List<DTO>> convertList(Response response) async {
     return _convertList<DTO>(response);
   }

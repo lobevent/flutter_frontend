@@ -1,8 +1,12 @@
 
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/domain/core/repository.dart';
+import 'package:flutter_frontend/domain/event/event_series.dart';
 import 'package:flutter_frontend/domain/event/event_series_invitation.dart';
+import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/infrastructure/core/interpolation.dart';
 import 'package:flutter_frontend/infrastructure/core/remote_service.dart';
 import 'package:flutter_frontend/infrastructure/core/symfony_communicator.dart';
@@ -31,6 +35,48 @@ class EventSeriesInvitationRepository extends Repository with RemoteService<Even
     });
   }
 
+  ///
+  /// react to an [EventSeriesInvitation]
+  /// the user can either decline or accept the invitation
+  ///
+  Future<Either<NetWorkFailure, EventSeriesInvitation>> react({required bool accept, required EventSeriesInvitation invitation}) async{
+    return localErrorHandler<EventSeriesInvitation>(() async {
+
+      Response response = await client.delete(_ESI_Routes.react.interpolate({
+        "id": invitation.eventSeries.id.value,
+        "accept": accept?"1":"0"
+      }));
+
+      EventSeriesInvitationDto eppDtos =  EventSeriesInvitationDto.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      return right(eppDtos.toDomain());
+
+    });
+  }
+
+  ///
+  /// Sends an request to invite an user or to uninvite them
+  /// Uninvitation will only have an effect if the user was invited before
+  /// the [invited] flag tells whether to invite or uninvite if its false the user will be uninvited
+  ///
+  Future<Either<NetWorkFailure, EventSeriesInvitation>> changeInviteStatus_ofUser({
+    required EventSeries series, required Profile profile, required bool invited}) async{
+    return localErrorHandler<EventSeriesInvitation>(() async {
+
+      Response response = await client.delete(_ESI_Routes.change_status_user.interpolate({
+        "id": series.id.value,
+        "invited": invited?"1":"0",
+        "profile": profile.id.value
+      }));
+
+      EventSeriesInvitationDto eppDtos =  EventSeriesInvitationDto.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      return right(eppDtos.toDomain());
+
+    });
+  }
+
+
+
+
 
 
 
@@ -39,12 +85,14 @@ class EventSeriesInvitationRepository extends Repository with RemoteService<Even
 
 
   /// Converts Dto list to domain list
+  /// this was usually used in the [Repository]s
   List<EventSeriesInvitation> convertToDomainList(List<EventSeriesInvitationDto> esi) =>
       esi.map((epp_dtos) => epp_dtos.toDomain()).toList();
 
 
 
   /// makes the repo call and converts the [EventSeriesInvitationDto]s to an actual list from json
+  /// this wa usually used in the [RemoteService]s
   Future<List<EventSeriesInvitationDto>> _getList(String path) async => convertList((await client.get(path)));
 
 

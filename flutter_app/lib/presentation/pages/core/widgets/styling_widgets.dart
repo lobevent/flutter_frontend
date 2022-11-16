@@ -434,6 +434,7 @@ class FullWidthPaddingInput extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final AutovalidateMode? autoValidateMode;
   final FocusNode? fieldFocusNode;
+  final TextStyle? textStyle;
 
   FullWidthPaddingInput({
     this.controller,
@@ -449,6 +450,8 @@ class FullWidthPaddingInput extends StatelessWidget {
     this.inputFormatters,
     this.autoValidateMode,
     this.fieldFocusNode,
+    this.textStyle
+
   });
 
   @override
@@ -464,6 +467,7 @@ class FullWidthPaddingInput extends StatelessWidget {
         maxLength: maxLength,
         validator: validator,
         onChanged: onChanged,
+        style: textStyle,
         minLines: 1,
         maxLines: maxLines != null ? maxLines : 1,
         decoration: InputDecoration(
@@ -482,18 +486,22 @@ class FullWidthPaddingInput extends StatelessWidget {
 class CoordinatesPickerInput extends StatelessWidget {
   const CoordinatesPickerInput({
     Key? key,
+
     required this.textEditingControllerLongi,
     required this.labeltext,
-    this.onChanged,
+    this.onChanged,  this.textStyle
   }) : super(key: key);
 
   final TextEditingController textEditingControllerLongi;
   final String labeltext;
   final ValueChanged<String>? onChanged;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
     return FullWidthPaddingInput(
+
+      textStyle: textStyle,
       // autoValidateMode: AutovalidateMode.onUserInteraction,
       labelText: labeltext,
       controller: textEditingControllerLongi,

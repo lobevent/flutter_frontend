@@ -109,18 +109,20 @@ class _CoordinatesPickerAndAutoCompleteAdressState extends State<CoordinatesPick
 
 
   ConstrainedBox _buildCoordFields() {
+    TextStyle? style= Theme.of(context).textTheme.subtitle2;
     return ConstrainedBox(constraints: BoxConstraints(maxHeight: 56),
         child:
-
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Flexible(child: CoordinatesPickerInput(
+              textStyle: style,
               textEditingControllerLongi: widget.textEditingControllerLongi,
               labeltext: "longitude",
               onChanged: (value2) =>
                   widget.onLongitudeChanged(double.parse(value2 == "" ? '0' : value2)),)),
             Flexible(child: CoordinatesPickerInput(
+              textStyle: style,
               textEditingControllerLongi: widget.textEditingControllerLati,
               labeltext: "Latitude",
               onChanged: (value2) => widget.onLatitudeChanged(double.parse(value2 == "" ? '0' : value2)),)),

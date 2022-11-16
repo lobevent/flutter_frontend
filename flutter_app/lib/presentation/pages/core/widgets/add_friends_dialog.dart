@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/domain/event/event_series_invitation.dart';
 import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
@@ -14,6 +15,9 @@ class AddFriendsDialog extends StatefulWidget {
 
   /// the list with all the friends, that are invited
   final List<Invitation> invitedFriends;
+
+
+  final List<EventSeriesInvitation> esInvitations;
   // callbackfunctio for adding friend
   final Function(Profile) onAddFriend;
   // callback functtion for removing friends
@@ -30,7 +34,7 @@ class AddFriendsDialog extends StatefulWidget {
       required this.onAddFriend,
       required this.onRemoveFriend,
       this.onAddHost,
-      this.assignedTodoItem, this.onRemoveHost})
+      this.assignedTodoItem, this.onRemoveHost, this.esInvitations = const []})
       : super(key: key);
 
   AddFriendsDialogState createState() => AddFriendsDialogState();
@@ -102,10 +106,13 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
             itemBuilder: (context, i) {
               Invitation? invitation;
               Profile? assignedToItem;
+              EventSeriesInvitation? es_inv;
+
               try {
                 invitation = widget.invitedFriends.firstWhere((element) =>
                     element.profile.id.value.toString() ==
                     results[i].id.value.toString());
+                es_inv = widget.esInvitations.firstWhere((element) => element.invitedProfile.id.value == results[i].id.value);
                 if (widget.assignedTodoItem != null) {
                   Profile assignedToItem = widget.friends.firstWhere(
                       (element) =>
@@ -118,7 +125,7 @@ class AddFriendsDialogState extends State<AddFriendsDialog> {
               return FriendListTile(
                 profile: results[i],
                 // here we check if that person is invited or only a friend. this map and contains returns an bool
-                showCheck: invitation != null || assignedToItem != null,
+                showCheck: invitation != null || assignedToItem != null || es_inv != null,
                 isHost: invitation?.addHost ?? false,
 
                 // the function given for the button on invitation!

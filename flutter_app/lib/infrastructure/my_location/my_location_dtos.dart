@@ -12,7 +12,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'my_location_dtos.freezed.dart';
 part 'my_location_dtos.g.dart';
 
-
 @freezed
 class MyLocationDto extends BaseDto<MyLocation> with _$MyLocationDto{
 
@@ -22,7 +21,7 @@ class MyLocationDto extends BaseDto<MyLocation> with _$MyLocationDto{
 
   const factory MyLocationDto({
     String? id,
-    required String address,
+    required String adress,
     required String name,
     required double latitude,
     required double longitude,
@@ -30,12 +29,12 @@ class MyLocationDto extends BaseDto<MyLocation> with _$MyLocationDto{
   }) = MyLocationD;
 
   factory MyLocationDto.fromDomain(MyLocation myLocation){
-    return MyLocationDto(address: myLocation.address.getOrEmptyString(), name: myLocation.name.getOrEmptyString(), latitude: myLocation.latitude, longitude: myLocation.longitude);
+    return MyLocationDto(adress: myLocation.address.getOrEmptyString(), name: myLocation.name.getOrEmptyString(), latitude: myLocation.latitude, longitude: myLocation.longitude, id: myLocation.id?.value);
   }
 
   @override
   MyLocation toDomain() {
-    return MyLocation(id: id != null ? UniqueId.fromUniqueString(id!): null, latitude: latitude, longitude: longitude, address: MyLocationAddress(address), name: MyLocationName(name));
+    return MyLocation(id: id != null ? UniqueId.fromUniqueString(id!): null, latitude: latitude, longitude: longitude, address: MyLocationAddress(adress), name: MyLocationName(name));
   }
 
 

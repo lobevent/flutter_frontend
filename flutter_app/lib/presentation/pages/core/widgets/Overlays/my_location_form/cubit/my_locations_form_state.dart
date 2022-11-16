@@ -13,19 +13,16 @@ part of 'my_locations_form_cubit.dart';
 //   factory MyLocationsFormState.editing({MyLocation location}) = Editing;
 // }
 
-abstract class MyLocationsFormState {}
-
-class MyLocationsFormInitial extends MyLocationsFormState {}
-class MyLocationFormAdding extends MyLocationsFormState{
+enum MLFStatus {initial, loading, saving, error, finished}
+@CopyWith()
+class MyLocationsFormState {
   final MyLocation location;
+  final MLFStatus status;
+  final NetWorkFailure? failure;
 
-  MyLocationFormAdding(this.location);
+  const MyLocationsFormState({required this.status, required this.location, this.failure});
+
+  factory MyLocationsFormState.initial() => MyLocationsFormState(
+      status: MLFStatus.initial,
+      location: MyLocation(latitude: 0.0, longitude: 0.0, address: MyLocationAddress(""), name: MyLocationName(""), id: UniqueId()));
 }
-
-class MyLocationFormSuccsessfullySubmitted extends MyLocationsFormState{}
-class MyLocationFormError extends MyLocationsFormState{
-  final NetWorkFailure failure;
-
-  MyLocationFormError(this.failure);
-}
-

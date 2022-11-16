@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,8 +12,9 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/animations/Load
 import 'package:flutter_frontend/presentation/pages/core/widgets/error_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/preferences/my_locations_page/cubit/my_locations_cubit.dart';
+import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
-// https://www.kodeco.com/33302203-overlays-in-flutter-getting-started
+
 
 
 class MyLocationsPage extends StatelessWidget {
@@ -99,7 +101,7 @@ class MyLocationsPage extends StatelessWidget {
                           color: AppColors.accentButtonColor,
                           shape: BoxShape.circle,
                         ),
-                        child: IconButton(onPressed: () => MyLocationFormOverlay(context: context), icon: Icon(Icons.add), color: AppColors.textOnAccentColor,)));
+                        child: IconButton(onPressed: () => context.router.push(MyLocationFormRoute()), icon: Icon(Icons.add), color: AppColors.textOnAccentColor,)));
   }
 
 

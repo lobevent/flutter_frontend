@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:dartz/dartz.dart' hide State;
 import 'package:flutter/material.dart';
@@ -12,11 +13,12 @@ import 'package:flutter_frontend/presentation/core/utils/geo/search_completion.d
 import 'package:flutter_frontend/presentation/pages/core/widgets/Overlays/my_location_form/cubit/my_locations_form_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/coordinates_picker_with_adress_autocomplete.dart';
+import 'package:flutter_frontend/presentation/pages/preferences/my_locations_page/cubit/my_locations_cubit.dart';
 
 import '../../../../../core/utils/geo/osm_extensions/utilities.dart';
 
 
-
+// https://www.kodeco.com/33302203-overlays-in-flutter-getting-started
 
 
 class MyLocationFormOverlay {
@@ -164,14 +166,15 @@ class _MyLocationFormState extends State<MyLocationForm> {
             BlocProvider(
               create: (context) => MyLocationsFormCubit(),
               child: BlocConsumer<MyLocationsFormCubit, MyLocationsFormState>(
-                listenWhen: (p,c) => p.runtimeType != c.runtimeType,
+                listenWhen: (p,c) => p.status != c.status,
                 listener: (context, state) {
-                  if(state is MyLocationFormAdding){
-                    controller_name.text = (state as MyLocationFormAdding).location.name.getOrEmptyString();
-                    controller_longitude.text = (state as MyLocationFormAdding).location.longitude.toString();
-                    controller_latitude.text = (state as MyLocationFormAdding).location.latitude.toString();
-                    setState(() {});
+                  if(state.status == MLFStatus.finished){
+                    context.router.pop();
                   }
+                  controller_name.text = state.location.name.getOrEmptyString();
+                  controller_longitude.text = state.location.longitude.toString();
+                  controller_latitude.text = state.location.latitude.toString();
+                  setState(() {});
                 },
                 buildWhen: (p, c) => p.runtimeType != c.runtimeType,
                 builder: (context, state) {
@@ -186,7 +189,8 @@ class _MyLocationFormState extends State<MyLocationForm> {
                           hintText: AppStrings.name,
                           onChanged: (value) => _formCubit(context).changeName(value),
                         ),
-                        _buildCoordinatesPickerAndAutoCompleteAdress(context)
+                        _buildCoordinatesPickerAndAutoCompleteAdress(context),
+                        Center(child: StdTextButton(child: Text("Submit"), onPressed: () => _formCubit(context).submit(),),)
                       ],
                     ),
                   );
@@ -259,9 +263,9 @@ class _MyLocationFormState extends State<MyLocationForm> {
 //                   listenWhen: (p,c) => p.runtimeType != c.runtimeType,
 //                   listener: (context, state) {
 //                     if(state is MyLocationFormAdding){
-//                       controller_name.text = (state as MyLocationFormAdding).location.name.getOrEmptyString();
-//                       controller_longitude.text = (state as MyLocationFormAdding).location.longitude.toString();
-//                       controller_latitude.text = (state as MyLocationFormAdding).location.latitude.toString();
+//                       controller_name.text = state.location.name.getOrEmptyString();
+//                       controller_longitude.text = state.location.longitude.toString();
+//                       controller_latitude.text = state.location.latitude.toString();
 //                       setState(() {});
 //                     }
 //                   },

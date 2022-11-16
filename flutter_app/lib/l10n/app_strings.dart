@@ -101,7 +101,8 @@ class AppStrings {
   static const String followedEventSeriesOverviewTitle =
       "Followed event series";
   static const String createEventGeneralInfo = "General Info";
-  static const String createEventPlaceTime = "Place & Time";
+  static const String createEventTime = "Time";
+  static const String createEventPlace = "Place";
   static const String createEventAccess = "Access";
 
   static const String myLocationsPageHeading = "MyLocations";

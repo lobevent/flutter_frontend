@@ -10,10 +10,10 @@ import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/max
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/pick_image_widget.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'coords_picker.dart';
-import 'description_body_widged.dart';
-import 'event_series/add_to_series.dart';
-import 'title_widget.dart';
+import 'widgets/coords_picker.dart';
+import 'widgets/description_body_widged.dart';
+import 'widgets/event_series/add_to_series.dart';
+import 'widgets/title_widget.dart';
 
 class EventFormContainer extends StatefulWidget {
   final bool showErrorMessages;
@@ -115,7 +115,7 @@ class _EventFormContainerState extends State<EventFormContainer> {
         Step(
           state: currentStep > 1 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 1,
-          title: Text(AppStrings.createEventPlaceTime),
+          title: Text(AppStrings.createEventTime),
           content: Container(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -126,6 +126,8 @@ class _EventFormContainerState extends State<EventFormContainer> {
             ),
           ),
         ),
+
+
         Step(
           state: currentStep > 2 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 2,

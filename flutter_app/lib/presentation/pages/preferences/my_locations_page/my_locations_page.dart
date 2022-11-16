@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/domain/core/failures.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
@@ -16,41 +17,36 @@ class MyLocationsPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return BasicContentContainer(
-      scrollable: true,
         child_ren: right(
       BlocProvider(create: (context) => MyLocationsCubit(),
         child: BlocBuilder<MyLocationsCubit, MyLocationsState>(
           builder: (context, state) {
-            if(state is MyLocationsLoading){
-              return Row(children: [Spacer(), Column(children: [Spacer(), CircularProgressIndicator(),Spacer()],), Spacer()]);
-            } else if(state is MyLocationsLoaded){
-              return RefreshIndicator(
-                onRefresh: () => _reload(context),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    SingleChildScrollView(
-                      // this is done so the refresh indicator always works
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 50, bottom: 50),
-                        child: _buildListView(state),
-                      )
-                    ),
-                    _buildTitle(),
-                    // The Positioned Button
-                    _buildAddButton(context),
-                  ],
-                ),
-              );
+            switch (state.status){
+              case MyLocationStatus.loading:
+                return Row(children: [Spacer(), Column(children: [Spacer(), CircularProgressIndicator(),Spacer()],), Spacer()]);
+                break;
+              case MyLocationStatus.loaded:
+                return Body(context, state);
+                break;
+              case MyLocationStatus.error:
+                if(state.myLocations.isEmpty){
+                  return ErrorWidget(NetWorkFailure.getDisplayStringFromFailure(state.failure!));
+                }
+                else{
+                  return Body(context, state);
+                }
+                break;
             }
-              return Spacer();
           },
         )
       )
 
     ));
   }
+
+
+
+
 
 
   Future<void> _reload(BuildContext context) async{
@@ -62,6 +58,28 @@ class MyLocationsPage extends StatelessWidget {
   //---------------------------------------------------------------Private Widgets--------------------------------------------------------------------
   //--------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+  Widget Body(BuildContext context, MyLocationsState state){
+    return RefreshIndicator(
+      onRefresh: () => _reload(context),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          SingleChildScrollView(
+            // this is done so the refresh indicator always works
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Padding(
+                padding: EdgeInsets.only(top: 50, bottom: 50),
+                child: _buildListView(state),
+              )
+          ),
+          _buildTitle(),
+          // The Positioned Button
+          _buildAddButton(context),
+        ],
+      ),
+    );
+  }
   /// generates Title Positioned Widget
   Positioned _buildTitle() {
     return Positioned(
@@ -91,7 +109,7 @@ class MyLocationsPage extends StatelessWidget {
   /// Generates Listview of the Locations
   /// [state] is the state of the cubit, it contains the locations
   /// The Listview is not scrollable
-  ListView _buildListView(MyLocationsLoaded state) {
+  ListView _buildListView(MyLocationsState state) {
     return ListView.separated(
                           physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,

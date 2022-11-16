@@ -29,11 +29,55 @@ class MyLocationFormOverlay {
     //     });
     overlayEntry =
         OverlayEntry(builder: (context) => DismissibleOverlay(overlayEntry: overlayEntry!, child: MyLocationForm(location: myLocation,),));
+    // overlayEntry =
+    //     OverlayEntry(builder: (context) => DismissibleOverlay(overlayEntry: overlayEntry!, child: AutocompleteBasicExample(),));
+    // overlayEntry =
+    //     OverlayEntry(builder: (context) => Dismissible(
+    //         onDismissed: (dismissDirection) => overlayEntry?.remove(),
+    //         direction: DismissDirection.vertical,
+    //         key: Key(''),
+    //         child: ColorfulSafeArea(child: AutocompleteBasicExample())
+    //     ),);
+
     overlayState.insert(overlayEntry);
   }
 }
 
-
+//
+// class AutocompleteBasicExample extends StatelessWidget {
+//   const AutocompleteBasicExample();
+//
+//   static const List<String> _kOptions = <String>[
+//     'aardvark',
+//     'bobcat',
+//     'chameleon',
+//   ];
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Column(
+//         children: [
+//           Spacer(),
+//           Autocomplete<String>(
+//             optionsBuilder: (TextEditingValue textEditingValue) {
+//               if (textEditingValue.text == '') {
+//                 return const Iterable<String>.empty();
+//               }
+//               return _kOptions.where((String option) {
+//                 return option.contains(textEditingValue.text.toLowerCase());
+//               });
+//             },
+//             onSelected: (String selection) {
+//               debugPrint('You just selected $selection');
+//             },
+//           ),
+//           Spacer()
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 
 
@@ -169,39 +213,6 @@ class _MyLocationFormState extends State<MyLocationForm> {
 
 
 
-class AutocompleteBasicExample extends StatelessWidget {
-  const AutocompleteBasicExample();
-
-  static const List<String> _kOptions = <String>[
-    'aardvark',
-    'bobcat',
-    'chameleon',
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Spacer(),
-          Autocomplete<String>(
-            optionsBuilder: (TextEditingValue textEditingValue) {
-              if (textEditingValue.text == '') {
-                return const Iterable<String>.empty();
-              }
-              return _kOptions.where((String option) {
-                return option.contains(textEditingValue.text.toLowerCase());
-              });
-            },
-            onSelected: (String selection) {
-              debugPrint('You just selected $selection');
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 
 

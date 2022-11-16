@@ -7,8 +7,13 @@ import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/list_tiles/my_location_tile.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/Overlays/my_location_form/my_location_form_overlay.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/animations/LoadingEventsAnimation.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/error_widget.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/preferences/my_locations_page/cubit/my_locations_cubit.dart';
+
+// https://www.kodeco.com/33302203-overlays-in-flutter-getting-started
+
 
 class MyLocationsPage extends StatelessWidget {
   const MyLocationsPage({Key? key}) : super(key: key);
@@ -21,32 +26,25 @@ class MyLocationsPage extends StatelessWidget {
       BlocProvider(create: (context) => MyLocationsCubit(),
         child: BlocBuilder<MyLocationsCubit, MyLocationsState>(
           builder: (context, state) {
-            switch (state.status){
-              case MyLocationStatus.loading:
-                return Row(children: [Spacer(), Column(children: [Spacer(), CircularProgressIndicator(),Spacer()],), Spacer()]);
-                break;
-              case MyLocationStatus.loaded:
-                return Body(context, state);
-                break;
-              case MyLocationStatus.error:
-                if(state.myLocations.isEmpty){
-                  return ErrorWidget(NetWorkFailure.getDisplayStringFromFailure(state.failure!));
-                }
-                else{
-                  return Body(context, state);
-                }
-                break;
-            }
-          },
+            return RefreshIndicator(
+              onRefresh: () => _reload(context),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  ScrollViewOrError(context, state),
+
+                  _buildTitle(),
+                  // The Positioned Button
+                  _buildAddButton(context),
+                ],
+              ),
+            );
+          }
         )
       )
 
     ));
   }
-
-
-
-
 
 
   Future<void> _reload(BuildContext context) async{
@@ -59,27 +57,28 @@ class MyLocationsPage extends StatelessWidget {
   //--------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-  Widget Body(BuildContext context, MyLocationsState state){
-    return RefreshIndicator(
-      onRefresh: () => _reload(context),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          SingleChildScrollView(
-            // this is done so the refresh indicator always works
-              physics: AlwaysScrollableScrollPhysics(),
-              child: Padding(
-                padding: EdgeInsets.only(top: 50, bottom: 50),
-                child: _buildListView(state),
-              )
-          ),
-          _buildTitle(),
-          // The Positioned Button
-          _buildAddButton(context),
-        ],
-      ),
+  ///
+  /// Determines whether to display the scrollview or the errorWidget
+  /// An http error can also occur when deleting, but the view should not be deactivated then,
+  /// so if [state.myLocations] is not empty it will be shown anyway
+  /// if the [state.status] is [MyLocationStatus.loading] an loading animation is displayed
+  ///
+  Widget ScrollViewOrError(BuildContext context, MyLocationsState state){
+    if(state.status == MyLocationStatus.error && state.myLocations.isEmpty){
+      return NetworkErrorWidget(failure: state.failure!);
+    }
+    return  SingleChildScrollView(
+      // this is done so the refresh indicator always works
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Padding(
+          padding: EdgeInsets.only(top: 70, bottom: 50),
+          child: state.status == MyLocationStatus.loading ?
+            SizedBox(child: LoadingEventsAnimation(), height: MediaQuery.of(context).size.height *0.7,) :
+            _buildListView(state),
+        )
     );
   }
+
   /// generates Title Positioned Widget
   Positioned _buildTitle() {
     return Positioned(
@@ -115,7 +114,7 @@ class MyLocationsPage extends StatelessWidget {
                               shrinkWrap: true,
                               itemCount: (state).myLocations.length,
                               itemBuilder: (context, index) => MyLocationTile(location: state.myLocations[index],
-                              onDelete: context.read<MyLocationsCubit>().deleteMyLocation),
+                                onDelete: context.read<MyLocationsCubit>().deleteMyLocation),
                         separatorBuilder: (context, index)=> const Divider(height: 1, thickness: 1,),);
   }
   

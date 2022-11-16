@@ -77,6 +77,10 @@ class DarkTheme with ChangeNotifier{
     bodyText1: AppTextStyles.basic,
     bodyText2: AppTextStyles.stdText,
     subtitle1: TextStyle(
+      fontSize: 20.0,
+      color: AppTextStyles.stdText.color,
+    ),
+    subtitle2: TextStyle(
       fontSize: 10.0,
       color: AppTextStyles.stdText.color,
     ),

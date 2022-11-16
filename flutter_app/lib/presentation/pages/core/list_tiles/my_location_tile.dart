@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/l10n/app_strings.dart';
+import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/gen_dialog.dart';
 
@@ -28,25 +29,22 @@ class _MyLocationTileState extends State<MyLocationTile> {
 
     return ListTile(
       tileColor: isDeleting ? AppColors.deletionOngoingColor : null,
-      title:
-
-      Row(
-        children: [
-        Spacer(),
-        FittedBox(child: Text(widget.location.name.getOrEmptyString()),),
-        Spacer(),
-        if(widget.onDelete != null)
-          IconButton(
-              onPressed: ()=>_onPressed(),
-              icon: Icon(Icons.delete))],),
-
-
+      trailing: widget.onDelete != null? deleteButton() :null,
+      leading: Icon(Icons.location_on_outlined),
+      title: Center(child: FittedBox(child: Text(widget.location.name.getOrEmptyString()),)),
       subtitle: Center(child: FittedBox(child: Text("${widget.location.address.getOrEmptyString()} at lat${widget.location.latitude}, long: ${widget.location.longitude}"),),)
       );
   }
 
 
-
+  Widget deleteButton(){
+    return Ink(
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.accentButtonColor, width: 1.0),
+          //color: Colors.indigo[900],
+          shape: BoxShape.circle,
+        ), child: IconButton(onPressed: ()=>_onPressed(), icon: Icon(Icons.delete), splashRadius: 24,));
+  }
 
   void _onPressed(){
     GenDialog.genericDialog(context, AppStrings.deleteMyLocationDialogTitle, AppStrings.deleteMyLocationDialogText, AppStrings.deleteMyLocationDialogConfirm, AppStrings.deleteMyLocationDialogAbort)

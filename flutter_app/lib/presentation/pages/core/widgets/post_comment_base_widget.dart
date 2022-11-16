@@ -80,7 +80,7 @@ class PostCommentBaseWidget extends StatelessWidget {
         alignment: Alignment.bottomLeft,
         child: Text(
           DateFormat('EEEE, MMM d, yyyy, HH:mm').format(date),
-          style: Theme.of(context).textTheme.subtitle1,
+          style: Theme.of(context).textTheme.subtitle2,
         ),
       ),
     );

@@ -46,8 +46,9 @@ class _DatePickerState extends State<DatePicker> {
         }
         return
             // as there are two buttons, the paddingrowwidget is the natural choice
-            PaddingRowWidget(
-              paddinfLeft: 0,
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
           // the date button; opens datepicker
           _DateButton(context),
@@ -102,7 +103,6 @@ class _DatePickerState extends State<DatePicker> {
                 } else {
                   date = value;
                 }
-
                 /// set the button string
                 dateButtonText = _formatDateOrTime(dateTime: date!);
                 // set the state for the stateless widget

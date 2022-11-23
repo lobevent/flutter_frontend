@@ -19,7 +19,7 @@ class _EventNameFieldState extends State<EventNameField> {
     final textEditingController = TextEditingController();
 
     return BlocListener<EventFormCubit, EventFormState>(
-      listenWhen: (p, c) => p.isLoading != c.isLoading,
+      listenWhen: (p, c) => p.status != c.status,
       listener: (context, state) {
         textEditingController.text = state.event.name.getOrCrash();
       },
@@ -27,7 +27,7 @@ class _EventNameFieldState extends State<EventNameField> {
           padding: const EdgeInsets.all(10),
           child: TextFormField(
             controller: textEditingController,
-            decoration: InputDecoration(labelText: "Event Name"),
+            decoration: InputDecoration(labelText: "Event Name", border: OutlineInputBorder()),
             /*decoration: InputDecoration(
               filled: true,
               focusColor:

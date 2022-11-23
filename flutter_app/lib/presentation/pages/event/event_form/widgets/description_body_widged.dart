@@ -19,7 +19,7 @@ class _DescriptionFieldState extends State<DescriptionField> {
     final textEditingController = TextEditingController();
 
     return BlocListener<EventFormCubit, EventFormState>(
-      listenWhen: (p, c) => p.isLoading != c.isLoading,
+      listenWhen: (p, c) => p.status != c.status,
       listener: (context, state) {
         textEditingController.text = state.event.description!.getOrCrash();
       },
@@ -29,9 +29,11 @@ class _DescriptionFieldState extends State<DescriptionField> {
           child: TextFormField(
             controller: textEditingController,
             decoration: const InputDecoration(
+              border: OutlineInputBorder(),
               labelText: 'Event description',
               //counterText: '',
             ),
+
             maxLength: EventDescription.maxLength - 1,
             maxLines: null,
             minLines: 5,

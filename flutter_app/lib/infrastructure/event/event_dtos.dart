@@ -6,6 +6,7 @@ import 'package:flutter_frontend/infrastructure/core/base_dto.dart';
 import 'package:flutter_frontend/infrastructure/core/json_converters.dart';
 import 'package:flutter_frontend/infrastructure/event_series/eventSeries_dtos.dart';
 import 'package:flutter_frontend/infrastructure/invitation/invitation_dtos.dart';
+import 'package:flutter_frontend/infrastructure/my_location/my_location_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -52,6 +53,7 @@ class EventDto extends BaseDto with _$EventDto {
     double? distance,
     //@JsonKey(ignore: true) bool? isHost,
     bool? isHost,
+    MyLocationDto? myLocation,
   }) = EventDtoFull;
 
   factory EventDto.fromDomain(Event event) {
@@ -75,6 +77,7 @@ class EventDto extends BaseDto with _$EventDto {
         longitude: event.longitude,
         address: event.address,
         latitude: event.latitude,
+        myLocation: event.myLocation != null ? MyLocationDto.fromDomain(event.myLocation!) : null,
         distance: event.distance,
         visibleWithoutLogin: event.visibleWithoutLogin,
         invitations:
@@ -113,6 +116,7 @@ class EventDto extends BaseDto with _$EventDto {
         address: address,
         visibleWithoutLogin: visibleWithoutLogin,
         invitations: invitationL,
+        myLocation: myLocation?.toDomain(),
         isHost: isHost ?? false,
         distance: distance,
         image: image);

@@ -64,9 +64,13 @@ class DarkTheme with ChangeNotifier{
       ),
 
       inputDecorationTheme: InputDecorationTheme(
+
+
+          errorStyle: TextStyle(fontSize: 10),
+          helperStyle: TextStyle(fontSize: 10),
           focusColor: Colors.red,
           contentPadding: EdgeInsets.all(20),
-          labelStyle: TextStyle(decorationColor: Colors.red)),
+          labelStyle: TextStyle(decorationColor: Colors.red, fontSize: 15),),
 
       /// ----------------------------------------------------------------------TextTheme-------------------------------------------------------------------------------------------------
       textTheme: _darkTextTheme,

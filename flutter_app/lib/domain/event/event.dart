@@ -4,6 +4,7 @@ import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event_series.dart';
 import 'package:flutter_frontend/domain/event/invitation.dart';
 import 'package:flutter_frontend/domain/event/value_objects.dart';
+import 'package:flutter_frontend/domain/my_location/my_location.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/domain/profile/value_objects.dart';
 import 'package:flutter_frontend/domain/todo/todo.dart';
@@ -43,6 +44,7 @@ class Event with _$Event {
       double? longitude,
       String? address,
       double? latitude,
+      MyLocation? myLocation,
         double? distance,
       required bool isHost,
       String? image}) = EventFull;

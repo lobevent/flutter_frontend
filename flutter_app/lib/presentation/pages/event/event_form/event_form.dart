@@ -27,7 +27,7 @@ class EventFormPage extends StatelessWidget {
         child: BlocConsumer<EventFormCubit, EventFormState>(
           //listener: (context, state) {},
           listenWhen: (p, c) =>
-              p.saveFailureOrSuccessOption != c.saveFailureOrSuccessOption,
+              p.status == MainStatus.saving && c.status != MainStatus.saving,
           listener: (context, state) {
             successAndErrorHandler(state, context);
           },
@@ -35,36 +35,29 @@ class EventFormPage extends StatelessWidget {
 
           builder: (context, state) {
             // generate the heading
-            String text = state.isSaving ? "Saving" : "Loading";
-            return LoadingOverlay(
-              // controll the overlay
-              isLoading: state.isSaving || state.isLoading,
-              // set the custom loading text
-              text: text,
+            String text = state.isEditing ? "Saving" : "Loading";
+            return BasicContentContainer(
+              isLoading: state.status == MainStatus.loading || state.status == MainStatus.saving,
+              // its scrollable, because the form might get big
+              scrollable: false,
 
-              // the basic container, as everywhere
-              child: BasicContentContainer(
-                // its scrollable, because the form might get big
-                scrollable: false,
+              /// add a sticky bottom navigation
+              bottomNavigationBar: BottomNavigation(context),
 
-                /// add a sticky bottom navigation
-                bottomNavigationBar: BottomNavigation(context),
+              child_ren: left([
+                /// Title text for this page
+                Text(state.isEditing ? 'Edit a Event' : 'Create a Event'),
 
-                child_ren: left([
-                  /// Title text for this page
-                  Text(state.isEditing ? 'Edit a Event' : 'Create a Event'),
-
-                  /// the form which contains all the inputs
-                  /// because the inputs have to be wrapped in a Form to function
-                  /// properly
-                  EventFormContainer(
-                    event: state.event,
-                    isEditing: state.isEditing,
-                    showErrorMessages: state.showErrorMessages,
-                    selectedCalenderDate: selectedCalenderDate,
-                  ),
-                ]),
-              ),
+                /// the form which contains all the inputs
+                /// because the inputs have to be wrapped in a Form to function
+                /// properly
+                EventFormContainer(
+                  event: state.event,
+                  isEditing: state.isEditing,
+                  showErrorMessages: state.showErrorMessages,
+                  selectedCalenderDate: selectedCalenderDate,
+                ),
+              ]),
             );
           },
         ));
@@ -86,21 +79,12 @@ class EventFormPage extends StatelessWidget {
     ]);
   }
 
-  void successAndErrorHandler(state, BuildContext context) {
-    state.saveFailureOrSuccessOption.fold(
-      () {},
-      (either) {
-        either.fold(
-          (failure) {
-            //TODO: ADD flushbar
-          },
-          (_) {
-            context.router.popUntil(
-              (route) => route.settings.name == FeedScreenRoute.name,
-            );
-          },
-        );
-      },
+  void successAndErrorHandler(EventFormState state, BuildContext context) {
+    if(state.status == MainStatus.formHasErrors){
+      //throw UnimplementedError();
+    }
+    context.router.popUntil(
+          (route) => route.settings.name == FeedScreenRoute.name,
     );
   }
 }

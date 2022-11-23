@@ -283,6 +283,7 @@ class TextWithIconButton extends StatelessWidget {
       // commented out, if error arises, pls make an bool with expanded or not
       //child: Expanded(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           if (withSpacer) Spacer(),
           // button and text are Prestyled

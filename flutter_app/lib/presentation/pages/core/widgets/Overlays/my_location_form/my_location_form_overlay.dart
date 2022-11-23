@@ -181,6 +181,7 @@ class _MyLocationFormState extends State<MyLocationForm> {
                   return Form(
                     key: _formKey,
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(AppStrings.addLocation, style: AppTextStyles.stdLittleHeading,),
                         FullWidthPaddingInput(
@@ -190,7 +191,7 @@ class _MyLocationFormState extends State<MyLocationForm> {
                           onChanged: (value) => _formCubit(context).changeName(value),
                         ),
                         _buildCoordinatesPickerAndAutoCompleteAdress(context),
-                        Center(child: StdTextButton(child: Text("Submit"), onPressed: () => _formCubit(context).submit(),),)
+                        Center(child: StdTextButton(child: Text("Submit"), onPressed: () => _formCubit(context).submit(),),),
                       ],
                     ),
                   );

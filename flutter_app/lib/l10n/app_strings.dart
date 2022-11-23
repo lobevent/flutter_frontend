@@ -122,6 +122,7 @@ class AppStrings {
 
 
   static const String search = "Search";
+  static const String resetSelection = "reset selection";
 
   static const String recent = "Recent";
   static const String upcoming = "Upcoming";

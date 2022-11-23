@@ -10,7 +10,7 @@ import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/max
 import 'package:flutter_frontend/presentation/pages/event/event_form/widgets/pick_image_widget.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'widgets/coords_picker.dart';
+import 'widgets/coords_picker/coords_picker.dart';
 import 'widgets/description_body_widged.dart';
 import 'widgets/event_series/add_to_series.dart';
 import 'widgets/title_widget.dart';
@@ -87,10 +87,11 @@ class _EventFormContainerState extends State<EventFormContainer> {
     );
   }
 
+  /// this getter generates a list of the implemented steps
   List<Step> getSteps() => [
         Step(
           state: currentStep > 0 ? StepState.complete : StepState.indexed,
-          isActive: currentStep >= 0,
+          isActive: currentStep == 0,
           title: Text(AppStrings.createEventGeneralInfo),
           content: Container(
             child: Column(
@@ -114,34 +115,39 @@ class _EventFormContainerState extends State<EventFormContainer> {
         ),
         Step(
           state: currentStep > 1 ? StepState.complete : StepState.indexed,
-          isActive: currentStep >= 1,
+          isActive: currentStep == 1,
           title: Text(AppStrings.createEventTime),
           content: Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                DatePicker(widget.selectedCalenderDate),
-                CoordsPicker(),
-              ],
-            ),
+            height: MediaQuery.of(context).size.height - 500,
+            child: DatePicker(widget.selectedCalenderDate),
+          ),
+        ),
+
+        Step(
+          state: currentStep > 2 ? StepState.complete : StepState.indexed,
+          isActive: currentStep == 2,
+          title: Text(AppStrings.createEventPlace),
+          content: Container(
+            height: MediaQuery.of(context).size.height - 500,
+            child: CoordsPicker(),
           ),
         ),
 
 
         Step(
-          state: currentStep > 2 ? StepState.complete : StepState.indexed,
-          isActive: currentStep >= 2,
+          state: currentStep > 3 ? StepState.complete : StepState.indexed,
+          isActive: currentStep >= 3,
           title: Text(AppStrings.createEventAccess),
-          content: Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const CheckBoxArea(),
-                const MaxPersons(),
-                if (!widget.isEditing) InviteFriendsWidget(),
-                if (!widget.isEditing) AddToSeries(),
-              ],
-            ),
+          label: Text(AppStrings.createEventAccess),
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              const CheckBoxArea(),
+              const MaxPersons(),
+              if (!widget.isEditing) InviteFriendsWidget(),
+              if (!widget.isEditing) AddToSeries(),
+            ],
           ),
         ),
       ];

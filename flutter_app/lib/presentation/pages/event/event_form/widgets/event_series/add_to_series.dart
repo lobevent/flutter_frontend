@@ -22,11 +22,14 @@ class _AddToSeriesState extends State<AddToSeries> {
     return BlocListener<EventFormCubit, EventFormState>(
         listenWhen: (previous, current) => previous != current,
         listener: (context, state) {
-          if (!state.isLoadingSeries) {
+          if (state.seriesStatus == SeriesStatus.ready) {
             setState(() {
               series = state.series;
               isLoading = false;
             });
+          }
+          if(state.seriesStatus == SeriesStatus.error){
+            throw UnimplementedError(); // TODO: implement ERRORSNACKBAR ASAP
           }
         },
         child: Column(children: [

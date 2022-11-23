@@ -30,7 +30,7 @@ class _InviteFriendsWidgetState extends State<InviteFriendsWidget> {
   Widget _AddFriendsButton(BuildContext context, EventFormState state) {
     return Column(children: [
       TextWithIconButton(
-        disabled: state.isLoadingFriends,
+        disabled: state.friendStatus != FriendsStatus.ready,
         onPressed: () => inviteFriends(context, state),
         icon: Icons.group,
         text: AppStrings.inviteFriends,

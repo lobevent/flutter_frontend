@@ -28,7 +28,7 @@ class SymfonyCommunicator {
 
   SymfonyCommunicator({this.jwt, Client? client})
       : //assert(jwt != null, "jwt must be given"),
-        headers = {"Authorization": "Bearer $jwt"},
+        headers = {"Authorization": "Bearer $jwt", HttpHeaders.contentTypeHeader : 'application/json; charset=utf-8'},
         client = client ?? Client();
 
   /// Get an resource with uri.

@@ -23,12 +23,13 @@ class _CheckBoxAreaState extends State<CheckBoxArea> {
         isPublic = state.event.public;
         visibleWithoutLogin = state.event.visibleWithoutLogin;
       }
-      return PaddingRowWidget(paddingTop: 20, children: [
-        //the checkboxes with the buttons
-        _PublicCheckbox(context),
-        Spacer(),
-        _visibleWitoutLoginCheckbox(context)
-      ]);
+      return Row(
+          children: [
+            //the checkboxes with the buttons
+            _PublicCheckbox(context),
+            Spacer(),
+            _visibleWitoutLoginCheckbox(context)
+          ]);
     });
   }
 

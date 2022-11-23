@@ -10,14 +10,16 @@ import '../../../../../l10n/app_strings.dart';
 import '../styling_widgets.dart';
 
 class CoordinatesPickerAndAutoCompleteAdress extends StatefulWidget {
+  final bool isPadded;
   final TextEditingController textEditingControllerLongi;
   final TextEditingController textEditingControllerLati;
+  final TextEditingValue? initialValue;
   final void Function(String selectedAdress) onAdressSelected;
   final void Function(double latitude) onLatitudeChanged;
   final void Function(double longitude) onLongitudeChanged;
 
 
-  const CoordinatesPickerAndAutoCompleteAdress({Key? key, required this.textEditingControllerLongi,required  this.textEditingControllerLati, required this.onAdressSelected, required this.onLatitudeChanged, required this.onLongitudeChanged}) : super(key: key);
+  const CoordinatesPickerAndAutoCompleteAdress({Key? key, required this.textEditingControllerLongi,required  this.textEditingControllerLati, required this.onAdressSelected, required this.onLatitudeChanged, required this.onLongitudeChanged, this.initialValue, this.isPadded = true}) : super(key: key);
 
   @override
   State<CoordinatesPickerAndAutoCompleteAdress> createState() => _CoordinatesPickerAndAutoCompleteAdressState();
@@ -62,12 +64,13 @@ class _CoordinatesPickerAndAutoCompleteAdressState extends State<CoordinatesPick
   // ----------------------------------------------------------- WIDGETS --------------------------------------------------------------
   // ----------------------------------------------------------------------------------------------------------------------------------
   Autocomplete<SearchInfoDetailed> _buildAdressAutocomplete() {
-    print("rebuid");
     return Autocomplete<SearchInfoDetailed>(
-
+        initialValue: widget.initialValue,
         fieldViewBuilder:
             (BuildContext context, TextEditingController fieldTextEditingController, FocusNode fieldFocusNode, VoidCallback onFieldSubmitted) {
+
           return FullWidthPaddingInput(
+            padding: !(widget.isPadded) ? EdgeInsets.all(0) : null,
             labelText: AppStrings.address,
             hintText: AppStrings.address,
             fieldFocusNode: fieldFocusNode,
@@ -116,12 +119,14 @@ class _CoordinatesPickerAndAutoCompleteAdressState extends State<CoordinatesPick
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Flexible(child: CoordinatesPickerInput(
+              padding: widget.isPadded ? null : EdgeInsets.fromLTRB(0, 10, 20, 10),
               textStyle: style,
               textEditingControllerLongi: widget.textEditingControllerLongi,
               labeltext: "longitude",
               onChanged: (value2) =>
                   widget.onLongitudeChanged(double.parse(value2 == "" ? '0' : value2)),)),
             Flexible(child: CoordinatesPickerInput(
+              padding: widget.isPadded ? null : EdgeInsets.fromLTRB(20, 10, 0, 10),
               textStyle: style,
               textEditingControllerLongi: widget.textEditingControllerLati,
               labeltext: "Latitude",

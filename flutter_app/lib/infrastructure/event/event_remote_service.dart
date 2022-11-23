@@ -256,11 +256,12 @@ class EventRemoteService extends RemoteService<EventDto> {
 
   Future<EventAndPostCarrierDto> _getFeedList(String path) async {
     final Response response = await client.get(path);
+    response.headers.addAll({HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     final data = jsonDecode(response.body);
     final eventsData = data["events"];
     final postsData = data["posts"];
-    final eventsResp = Response(jsonEncode(eventsData), 200);
-    final postsResp = Response(jsonEncode(postsData), 200);
+    final eventsResp = Response(jsonEncode(eventsData), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    final postsResp = Response(jsonEncode(postsData), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     final List<EventDto> eventsDto =
         await covertListForeign<EventDto>(eventsResp);
     final List<PostDto> postsDto = await covertListForeign<PostDto>(postsResp);

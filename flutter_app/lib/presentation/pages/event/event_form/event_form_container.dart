@@ -65,20 +65,20 @@ class _EventFormContainerState extends State<EventFormContainer> {
           controlsBuilder: (BuildContext context, ControlsDetails details) {
             return Row(
               children: [
-                if (currentStep < 2)
-                  Expanded(
-                    child: ElevatedButton(
-                      child: Text("NEXT"),
-                      onPressed: details.onStepContinue,
-                    ),
-                  ),
                 if (currentStep != 0)
                   Expanded(
                     child: ElevatedButton(
                       child: Text("BACK"),
                       onPressed: details.onStepCancel,
                     ),
-                  )
+                  ),
+                if (currentStep < 3)
+                  Expanded(
+                    child: ElevatedButton(
+                      child: Text("NEXT"),
+                      onPressed: details.onStepContinue,
+                    ),
+                  ),
               ],
             );
           },
@@ -139,15 +139,18 @@ class _EventFormContainerState extends State<EventFormContainer> {
           isActive: currentStep >= 3,
           title: Text(AppStrings.createEventAccess),
           label: Text(AppStrings.createEventAccess),
-          content: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              const CheckBoxArea(),
-              const MaxPersons(),
-              if (!widget.isEditing) InviteFriendsWidget(),
-              if (!widget.isEditing) AddToSeries(),
-            ],
+          content: Container(
+            height: MediaQuery.of(context).size.height - 500,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                const CheckBoxArea(),
+                const MaxPersons(),
+                if (!widget.isEditing) InviteFriendsWidget(),
+                if (!widget.isEditing) AddToSeries(),
+              ],
+            ),
           ),
         ),
       ];

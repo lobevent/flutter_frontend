@@ -362,22 +362,26 @@ class _TextCheckBoxState extends State<TextCheckbox> {
         },
         child:
        */
-        Row(
+        InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: () => setState(() {value = !value;callOnChanged(value);}),
+          child: Row(
       children: [
-        Checkbox(
-          // the fill color is set by an material stateproperty, the states are
-          // similar to css pseudo classes like hover etc!
-          // more info: https://api.flutter.dev/flutter/material/Checkbox-class.html
-          fillColor: MaterialStateProperty.resolveWith(getColor),
-          // if the checkbox is toggled (Not if value is changed externaly!!!; see callOnChanged)
-          onChanged: (bool? value) => callOnChanged(value),
-          value: value,
-        ),
-        // the text in this checkbox, with styling
-        Text(widget.text != null ? widget.text! : '',
-            style: TextStyle(color: AppColors.stdTextColor)),
+          Checkbox(
+            // the fill color is set by an material stateproperty, the states are
+            // similar to css pseudo classes like hover etc!
+            // more info: https://api.flutter.dev/flutter/material/Checkbox-class.html
+            fillColor: MaterialStateProperty.resolveWith(getColor),
+            // if the checkbox is toggled (Not if value is changed externaly!!!; see callOnChanged)
+            onChanged: (bool? value) => callOnChanged(value),
+            value: value,
+          ),
+          // the text in this checkbox, with styling
+          Text(widget.text != null ? widget.text! : '',
+              style: TextStyle(color: AppColors.stdTextColor)),
       ],
-    );
+    ),
+        );
     //)
   }
 
@@ -431,7 +435,7 @@ class FullWidthPaddingInput extends StatelessWidget {
   final FormFieldValidator<String>? validator;
   final ValueChanged<String>? onChanged;
   final TextInputType? textInputType;
-  final EdgeInsets padding;
+  final EdgeInsets? padding;
   final List<TextInputFormatter>? inputFormatters;
   final AutovalidateMode? autoValidateMode;
   final FocusNode? fieldFocusNode;
@@ -447,7 +451,7 @@ class FullWidthPaddingInput extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.textInputType,
-    this.padding = const EdgeInsets.all(10),
+    this.padding,
     this.inputFormatters,
     this.autoValidateMode,
     this.fieldFocusNode,
@@ -458,7 +462,7 @@ class FullWidthPaddingInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: padding,
+      padding: padding??const EdgeInsets.all(10),
       child: TextFormField(
         obscureText: password ? true : false,
         enableSuggestions: password ? false : true,
@@ -488,11 +492,14 @@ class CoordinatesPickerInput extends StatelessWidget {
   const CoordinatesPickerInput({
     Key? key,
 
+
     required this.textEditingControllerLongi,
     required this.labeltext,
-    this.onChanged,  this.textStyle
+    this.onChanged,  this.textStyle, this.padding
   }) : super(key: key);
 
+
+  final EdgeInsets? padding;
   final TextEditingController textEditingControllerLongi;
   final String labeltext;
   final ValueChanged<String>? onChanged;
@@ -502,6 +509,7 @@ class CoordinatesPickerInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return FullWidthPaddingInput(
 
+      padding: padding,
       textStyle: textStyle,
       // autoValidateMode: AutovalidateMode.onUserInteraction,
       labelText: labeltext,

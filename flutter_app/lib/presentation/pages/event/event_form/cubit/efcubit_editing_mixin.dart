@@ -56,12 +56,11 @@ mixin EventFormCubitEditing on Cubit<EventFormState> {
 
   void addFriend(Profile profile) {
     if (!state.event.invitations.map((e) => e.profile).contains(profile)) {
-      state.event.invitations.add(Invitation(
+      emit(state.copyWith(event: state.event.copyWith(invitations: state.event.invitations.toList()..add(Invitation(
           profile: profile,
           event: state.event,
           id: UniqueId(),
-          addHost: false));
-      emit(state);
+          addHost: false)))));
     }
   }
 
@@ -104,9 +103,9 @@ mixin EventFormCubitEditing on Cubit<EventFormState> {
     if (state.event.invitations
         .map((e) => e.profile.id.toString())
         .contains(profile.id.toString())) {
-      state.event.invitations.removeWhere(
+      List<Invitation> invs = state.event.invitations.toList()..removeWhere(
               (invitation) => invitation.profile.id.value == profile.id.value);
-      emit(state);
+      emit(state.copyWith(event: state.event.copyWith(invitations: invs)));
     }
   }
 

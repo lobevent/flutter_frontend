@@ -18,47 +18,56 @@ class EventSeriesListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (context) => EventSeriesListCubit(), child:
-        BlocBuilder<EventSeriesListCubit, EventSeriesListState>(
+    return BlocProvider(
+      create: (context) => EventSeriesListCubit(),
+      child: BlocBuilder<EventSeriesListCubit, EventSeriesListState>(
           builder: (context, EventSeriesListState state) {
-
-            return BasicContentContainer(
-              scrollable: false,
-              isLoading: state is ESL_Loading,
-              bottomNavigationBar: BottomNavigation(selected: NavigationOptions.home),
-              child_ren: left([
-                  Text(AppStrings.ownEventSeriesOverviewTitle, style: Theme.of(context).textTheme.headline3),
-                  EventSeriesTabs()
-
-              ]),
-            );
-          }),
+        return BasicContentContainer(
+          scrollable: false,
+          isLoading: state is ESL_Loading,
+          bottomNavigationBar:
+              BottomNavigation(selected: NavigationOptions.home),
+          child_ren: left([
+            Text(AppStrings.ownEventSeriesOverviewTitle,
+                style: Theme.of(context).textTheme.headline3),
+            EventSeriesTabs()
+          ]),
         );
-   
+      }),
+    );
   }
 
-  Widget EventSeriesTabs(){
+  Widget EventSeriesTabs() {
     return DefaultTabController(
         length: 2,
-        child: Expanded(child: Column(mainAxisSize: MainAxisSize.min, children: [
+        child: Expanded(
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
           const TabBar(
             indicatorColor: AppColors.stdIndicatedTabColor,
             tabs: [
               StdSpacedIconTextTab(text: "Own", iconHere: Icons.upcoming),
-              StdSpacedIconTextTab(text: "Subscribed", iconHere: Icons.recent_actors_outlined),
+              StdSpacedIconTextTab(
+                  text: "Subscribed", iconHere: Icons.recent_actors_outlined),
             ],
           ),
-
-          Expanded(child: Container(
-              child: const TabBarView(
-                  physics: NeverScrollableScrollPhysics(),
-                  children: [
-                    EventSeriesList(own: true,),
-                    EventSeriesList(own: false,)
-                  ])))
+          Expanded(
+              child: Container(
+                  child: const TabBarView(
+                      physics: NeverScrollableScrollPhysics(),
+                      children: [
+                EventSeriesList(
+                  own: true,
+                ),
+                EventSeriesList(
+                  own: false,
+                )
+              ])))
         ])));
   }
+  /*            ExpansionTile(
+              title: Text("EventSeriesInvitations"),
+              children: [EventSeriesInvCard(essInv: state.esInv[0])],
+            ),
 
-
-
+   */
 }

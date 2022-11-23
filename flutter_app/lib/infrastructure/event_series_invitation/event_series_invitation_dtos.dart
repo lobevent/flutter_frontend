@@ -11,41 +11,43 @@ import '../profile/profile_dtos.dart';
 
 part 'event_series_invitation_dtos.g.dart';
 
-
 @JsonSerializable()
 @ProfileConverter()
 @EventSeriesConverter()
-class EventSeriesInvitationDto extends BaseDto{
+class EventSeriesInvitationDto extends BaseDto {
+  bool accepted;
+  bool addAsHost;
+  String id;
+  DateTime creationDate;
+  @ProfileConverter()
+  ProfileDto invitedProfile;
+  @PostConverter()
+  ProfileDto invitingProfile;
+  @EventSeriesConverter()
+  EventSeriesDto eventSeries;
 
-   bool accepted;
-   String id;
-   DateTime creationDate;
-   @ProfileConverter()
-   ProfileDto invitedProfile;
-   @PostConverter()
-   ProfileDto invitingProfile;
-   @EventSeriesConverter()
-   EventSeriesDto eventSeries;
-
-   EventSeriesInvitationDto({required this.accepted,
-     required this.creationDate, required this.invitedProfile, required this.invitingProfile, required this.eventSeries,
-     required this.id
-   }){}
-
-
-
+  EventSeriesInvitationDto(
+      {required this.addAsHost,
+      required this.accepted,
+      required this.creationDate,
+      required this.invitedProfile,
+      required this.invitingProfile,
+      required this.eventSeries,
+      required this.id}) {}
 
   @override
-  EventSeriesInvitation toDomain() =>
-      EventSeriesInvitation(accepted: accepted, id: UniqueId.fromUniqueString(id), creationDate: creationDate,
-        invitedProfile: invitedProfile.toDomain(),
-        invitingProfile: invitingProfile.toDomain(), eventSeries: eventSeries.toDomain());
+  EventSeriesInvitation toDomain() => EventSeriesInvitation(
+      addAsHost: addAsHost,
+      accepted: accepted,
+      id: UniqueId.fromUniqueString(id),
+      creationDate: creationDate,
+      invitedProfile: invitedProfile.toDomain(),
+      invitingProfile: invitingProfile.toDomain(),
+      eventSeries: eventSeries.toDomain());
 
-
-   factory EventSeriesInvitationDto.fromJson(Map<String, dynamic> json) => _$EventSeriesInvitationDtoFromJson(json);
-
+  factory EventSeriesInvitationDto.fromJson(Map<String, dynamic> json) =>
+      _$EventSeriesInvitationDtoFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$EventSeriesInvitationDtoToJson(this);
-
 }

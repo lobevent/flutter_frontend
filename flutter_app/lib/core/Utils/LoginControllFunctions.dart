@@ -15,12 +15,10 @@ import 'package:flutter_frontend/presentation/routes/router.gr.dart'
 class LoginControllFunctions {
   static logout() async {
     await CommonHive.deleteHive();
-    await CommonHive.initBoxes();
     await GetIt.I<AuthTokenService>().deleteToken();
     GetIt.I<_app_router.Router>().popUntilRoot();
     (_app_router.LoginRegisterRoute());
     GetIt.I<_app_router.Router>().replace(_app_router.LoginRegisterRoute());
-
   }
 
   static Future<void> setLoginStuff() async {

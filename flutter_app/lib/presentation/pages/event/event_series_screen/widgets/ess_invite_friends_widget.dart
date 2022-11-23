@@ -8,6 +8,8 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/add_friends_dia
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/cubit/event_form_cubit.dart';
 
+import '../../../../../domain/event/event_series_invitation.dart';
+import '../../../core/widgets/error_widget.dart';
 import '../cubit/event_series_screen_cubit.dart';
 
 class EssInviteFriendsWidget extends StatefulWidget {
@@ -19,10 +21,15 @@ class EssInviteFriendsWidget extends StatefulWidget {
 }
 
 class _EssInviteFriendsWidgetState extends State<EssInviteFriendsWidget> {
+  bool disableButton = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EventSeriesScreenCubit, EventSeriesScreenState>(
         builder: (context, state) {
+      if (state.status == EventSeriesScreenStatus.error) {
+        return NetworkErrorWidget(failure: state.failure!);
+      }
       return _AddFriendsButton(context, state);
     });
   }
@@ -33,9 +40,14 @@ class _EssInviteFriendsWidgetState extends State<EssInviteFriendsWidget> {
     return Column(children: [
       TextWithIconButton(
         text: AppStrings.inviteFriends,
-        disabled: false,
+        disabled: disableButton,
         //state.isLoadingFriends,
-        onPressed: () => inviteFriends(context, state),
+        onPressed: () {
+          context
+              .read<EventSeriesScreenCubit>()
+              .getFriendsAndEsInv()
+              .then((value) => inviteFriends(context, state));
+        },
         icon: Icons.group,
       ),
       //if (state.isLoadingFriends) const LinearProgressIndicator()
@@ -43,31 +55,40 @@ class _EssInviteFriendsWidgetState extends State<EssInviteFriendsWidget> {
   }
 
   void inviteFriends(BuildContext contextWCubit, EventSeriesScreenState state) {
-    showDialog(
-        context: contextWCubit,
-        builder: (BuildContext context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return AddFriendsDialog(
-              friends: [],
-              //state.friends!,
-              invitedFriends: [],
-              //state.invitedFriends,
-              onAddFriend: (Profile profile) {
-                contextWCubit.read<EventFormCubit>().addFriend(profile);
-              },
-              onRemoveFriend: (Profile profile) {
-                contextWCubit.read<EventFormCubit>().removeFriend(profile);
-              },
-              onAddHost: (Profile profile) {
-                contextWCubit.read<EventFormCubit>().addFriendAsHost(profile);
-              },
-              onRemoveHost: (Profile profile) {
-                contextWCubit
-                    .read<EventFormCubit>()
-                    .removeFriendAsHost(profile);
-              },
-            );
+    if (state.friends.isNotEmpty) {
+      showDialog(
+          context: contextWCubit,
+          builder: (BuildContext context) {
+            return StatefulBuilder(builder: (context, setState) {
+              return AddFriendsDialog(
+                friends: state.friends,
+                //state.friends!,
+                invitedFriends: [],
+                esInvitations: state.esInv,
+                //state.invitedFriends,
+                onAddFriend: (Profile profile) {
+                  contextWCubit
+                      .read<EventSeriesScreenCubit>()
+                      .addFriend(state.eventSeries, true, profile, false);
+                },
+                onRemoveFriend: (Profile profile) {
+                  contextWCubit
+                      .read<EventSeriesScreenCubit>()
+                      .removeFriend(profile);
+                },
+                onAddHost: (Profile profile) {
+                  contextWCubit
+                      .read<EventSeriesScreenCubit>()
+                      .addFriendAsHost(profile);
+                },
+                onRemoveHost: (Profile profile) {
+                  contextWCubit
+                      .read<EventSeriesScreenCubit>()
+                      .removeFriendAsHost(profile);
+                },
+              );
+            });
           });
-        });
+    }
   }
 }

@@ -10,6 +10,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets
 import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/event_list_tiles.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_series_screen/cubit/event_series_screen_cubit.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/event_recent_upcoming_tabs.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_series_screen/widgets/ess_inv_card.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_series_screen/widgets/ess_invite_friends_widget.dart';
 
 import '../event_form/widgets/invite_friends_widget.dart';
@@ -27,84 +28,82 @@ class EventSeriesScreenPage extends StatelessWidget {
       child: BlocBuilder<EventSeriesScreenCubit, EventSeriesScreenState>(
           // this is here, so we dont get an error when we change subscribtion status
           buildWhen: (previous, current) =>
-              !(current is ESS_ReadySubscrLoading),
+              !(current.status == EventSeriesScreenStatus.loading),
           builder: (context, state) {
             return BasicContentContainer(
-                isLoading: state is ESS_Loading,
-                child_ren: right(Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: state.maybeMap(
-                      orElse: () {
-                        return [];
-                      },
-                      ready: (state) => [
-                            Text(
-                                "Event Series: " +
-                                    state.series.name.getOrCrash(),
-                                style: AppTextStyles.stdLittleHeading),
-                            PaddingRowWidget(
-                              centered: true,
-                              paddingTop: 25,
-                              paddingBottom: 25,
-                              children: [
-                                Text(
-                                  "Subscribers: " +
-                                      state.series.subscribersCount.toString(),
-                                  style: AppTextStyles.stdText,
-                                ),
-                                EssInviteFriendsWidget(),
-                                Spacer(),
-                                Text(
-                                  "Events: " +
-                                      state.series.eventCount.toString(),
-                                  style: AppTextStyles.stdText,
-                                ),
-                              ],
-                            ),
-                            PaddingRowWidget(centered: true, children: [
-                              Spacer(),
-                              SubscriptionButton(),
-                              Spacer()
-                            ]),
-                            // this provides the tab bar and the contents of the tabs; namely it displays the events in ListTiles within a listview
-                            Expanded(
-                              child: EventTabs(
-                                upcoming: state.series.upcomingEvents ?? [],
-                                recendEvents: state.series.recentEvents ?? [],
-                                isLoading: false,
+                isLoading: state.status == EventSeriesScreenStatus.loading,
+                child_ren: right(
+                  Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: state.status == EventSeriesScreenStatus.loaded
+                          ? [
+                              Text(
+                                  "Event Series: " +
+                                      state.eventSeries.name.getOrCrash(),
+                                  style: AppTextStyles.stdLittleHeading),
+                              PaddingRowWidget(
+                                centered: true,
+                                paddingTop: 25,
+                                paddingBottom: 25,
+                                children: [
+                                  Text(
+                                    "Subscribers: " +
+                                        state.eventSeries.subscribersCount
+                                            .toString(),
+                                    style: AppTextStyles.stdText,
+                                  ),
+                                  EssInviteFriendsWidget(),
+                                  Spacer(),
+                                  Text(
+                                    "Events: " +
+                                        state.eventSeries.eventCount.toString(),
+                                    style: AppTextStyles.stdText,
+                                  ),
+                                ],
                               ),
-                            )
-                          ]),
-                )));
+                              PaddingRowWidget(centered: true, children: [
+                                Spacer(),
+                                SubscriptionButton(context, state),
+                                Spacer()
+                              ]),
+                              // this provides the tab bar and the contents of the tabs; namely it displays the events in ListTiles within a listview
+                              Expanded(
+                                child: EventTabs(
+                                  upcoming:
+                                      state.eventSeries.upcomingEvents ?? [],
+                                  recendEvents:
+                                      state.eventSeries.recentEvents ?? [],
+                                  isLoading: false,
+                                ),
+                              )
+                            ]
+                          : [Text("")]),
+                ));
           }),
     );
   }
 
-  Widget SubscriptionButton() {
-    return BlocBuilder<EventSeriesScreenCubit, EventSeriesScreenState>(
-        builder: (context, state) {
-      return state.maybeMap(
-          orElse: () => Spacer(),
-          ready: (readyState) {
-            if (!(readyState.series.subscribed ?? false)) {
-              return TextWithIconButton(
-                onPressed: () {
-                  context.read<EventSeriesScreenCubit>().subscribe();
-                },
-                icon: AppIcons.subscribe,
-                text: '',
-              );
-            } else {
-              return TextWithIconButton(
-                onPressed: () {
-                  context.read<EventSeriesScreenCubit>().unsubscribe();
-                },
-                icon: AppIcons.revokeSubscription,
-                text: '',
-              );
-            }
+  Widget SubscriptionButton(
+      BuildContext context, EventSeriesScreenState state) {
+    if (state.status == EventSeriesScreenStatus.loaded) {
+      if (!(state.eventSeries.subscribed ?? false)) {
+        return TextWithIconButton(
+          onPressed: () {
+            context.read<EventSeriesScreenCubit>().subscribe();
           },
-          readyAndLoadingSubscription: (l) => LoadingButton());
-    });
+          icon: AppIcons.subscribe,
+          text: '',
+        );
+      } else {
+        return TextWithIconButton(
+          onPressed: () {
+            context.read<EventSeriesScreenCubit>().unsubscribe();
+          },
+          icon: AppIcons.revokeSubscription,
+          text: '',
+        );
+      }
+    }
+    return Text("");
   }
 }

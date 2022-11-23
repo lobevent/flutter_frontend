@@ -64,14 +64,25 @@ class EventSeriesInvitationRepository extends Repository
           required bool invited,
           bool addHost = false}) async {
     return localErrorHandler<EventSeriesInvitation>(() async {
-      Response response =
-          await client.delete(_ESI_Routes.change_status_user.interpolate({
-        "id": series.id.value,
-        "invited": invited ? "1" : "0",
-        "profile": profile.id.value,
-        "addHost": addHost ? "1" : "0",
-      }));
-
+      Response response;
+      if (invited) {
+        response = await client.post(
+            _ESI_Routes.change_status_user.interpolate({
+              "id": series.id.value,
+              "invited": invited ? "1" : "0",
+              "profileId": profile.id.value,
+              "addHost": addHost ? "1" : "0",
+            }),
+            "");
+      } else {
+        response =
+            await client.delete(_ESI_Routes.change_status_user.interpolate({
+          "id": series.id.value,
+          "invited": invited ? "1" : "0",
+          "profileId": profile.id.value,
+          "addHost": addHost ? "1" : "0",
+        }));
+      }
       EventSeriesInvitationDto eppDtos = EventSeriesInvitationDto.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
       return right(eppDtos.toDomain());

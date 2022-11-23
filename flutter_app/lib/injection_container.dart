@@ -27,6 +27,7 @@ import 'package:http/http.dart';
 
 import 'infrastructure/core/local/common_hive/common_hive.dart';
 import 'infrastructure/auth/symfonyLogin.dart';
+import 'infrastructure/event_series_invitation/esi_repository.dart';
 import 'infrastructure/invitation/invitation_remote_service.dart';
 import 'infrastructure/profile/profile_remote_service.dart';
 import 'infrastructure/profile/profile_repository.dart';
@@ -95,6 +96,9 @@ class InjectionContainer {
 
     getIt.registerLazySingleton(() => ProfileRepository(
         ProfileRemoteService(communicator: GetIt.I<SymfonyCommunicator>())));
+
+    getIt.registerLazySingleton(() => EventSeriesInvitationRepository(
+        communicator: GetIt.I<SymfonyCommunicator>()));
   }
 
   /// This loads async stuff for the Container

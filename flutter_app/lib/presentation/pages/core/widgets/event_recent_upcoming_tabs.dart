@@ -10,50 +10,66 @@ import 'package:flutter_frontend/presentation/pages/event/core/event_list_tiles/
 
 ///Event Tabs contains an TabController an within two tabs: Upcoming Events and recent events!
 class EventTabs extends StatelessWidget {
-
   final bool isLoading;
   final List<Event> upcoming;
   final List<Event> recendEvents;
   final String? heading;
   final Function(Event event, bool recent)? onDeletion;
-  const EventTabs({Key? key, required this.upcoming, required this.recendEvents, this.isLoading = false, this.onDeletion, this.heading}) : super(key: key);
+
+  const EventTabs(
+      {Key? key,
+      required this.upcoming,
+      required this.recendEvents,
+      this.isLoading = false,
+      this.onDeletion,
+      this.heading})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
         length: 2,
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          if(heading != null) Text(heading!, style: AppTextStyles.stdLittleHeading,),
+          if (heading != null)
+            Text(
+              heading!,
+              style: AppTextStyles.stdLittleHeading,
+            ),
           const TabBar(
             indicatorColor: AppColors.stdIndicatedTabColor,
             tabs: [
-              StdSpacedIconTextTab(text: AppStrings.upcoming, iconHere: Icons.upcoming),
-              StdSpacedIconTextTab(text: AppStrings.recent, iconHere: Icons.recent_actors_outlined),
+              StdSpacedIconTextTab(
+                  text: AppStrings.upcoming, iconHere: Icons.upcoming),
+              StdSpacedIconTextTab(
+                  text: AppStrings.recent,
+                  iconHere: Icons.recent_actors_outlined),
             ],
           ),
-
-          Expanded(child: Container(
-              child: TabBarView(
-                  children: isLoading ?
-                  [
-                    LoadingEventsAnimation(),
-                    LoadingEventsAnimation(),
-                  ]
-                      :
-                  [
-                    EventListBuilder(upcoming, false),
-                    EventListBuilder(recendEvents, true)
-                  ])))
+          Expanded(
+              child: Container(
+                  child: TabBarView(
+                      children: isLoading
+                          ? [
+                              LoadingEventsAnimation(),
+                              LoadingEventsAnimation(),
+                            ]
+                          : [
+                              EventListBuilder(upcoming, false),
+                              EventListBuilder(recendEvents, true)
+                            ])))
         ]));
   }
 
-
   /// generates Lisview of an eventList
-  Widget EventListBuilder(List<Event> events, bool recent){
+  Widget EventListBuilder(List<Event> events, bool recent) {
     return ListView.builder(
         itemCount: events.length,
-        itemBuilder: (context, i){
-          return EventListTiles(key: ObjectKey(events[i]), event: events[i], isLowInterest: recent,);
+        itemBuilder: (context, i) {
+          return EventListTiles(
+            key: ObjectKey(events[i]),
+            event: events[i],
+            isLowInterest: recent,
+          );
         });
   }
 }

@@ -25,4 +25,10 @@ class EventSeries with _$EventSeries {
     bool? subscribed,
     //List<Event>? events
   }) = EventSeriesNormal;
+
+  factory EventSeries.empty() => EventSeries(
+      id: UniqueId.fromUniqueString("e6837df8-9e99-4f00-a40d-0e798834e9da"),
+      name: EventName(""),
+      description: EventDescription(''),
+      public: false);
 }

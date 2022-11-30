@@ -25,9 +25,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         LeadingButton(context),
         AddSeriesButton(context),
-        ShowSeriesButton(context),
         MyLocationsButton(context),
-        MyLocationsFormButton(context),
         LogoutButton(context)
       ],
     );
@@ -49,13 +47,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: const Icon(Icons.location_on_outlined));
   }
 
-  Widget MyLocationsFormButton(BuildContext context) {
-    return IconButton(
-        onPressed: () {
-          context.router.push(MyLocationFormRoute());
-        },
-        icon: const Icon(Icons.format_align_center));
-  }
+
 
   Widget AddSeriesButton(BuildContext context) {
     return IconButton(
@@ -65,13 +57,6 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: const Icon(Icons.add_alert));
   }
 
-  Widget ShowSeriesButton(BuildContext context) {
-    return IconButton(
-        onPressed: () {
-          context.router.push(EventSeriesListPageRoute());
-        },
-        icon: const Icon(Icons.label_important_outlined));
-  }
 
   Widget OwnProfile(BuildContext context) {
     Future<String?> image = CommonHive.getOwnPic();

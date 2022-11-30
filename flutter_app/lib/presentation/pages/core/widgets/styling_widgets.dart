@@ -1,5 +1,6 @@
 library stlyling_widgets;
 
+import 'package:auto_route/auto_route.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:dartz/dartz.dart' show left, Either;
 import 'package:flutter/cupertino.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_frontend/presentation/pages/core/widgets/loading_overlay
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/core_widgets_stylings_text_with_icon.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/std_choice_text_chip.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/stylings/chip_choice.dart';
+import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/CarouselIndicators.dart';
 export 'package:flutter_frontend/presentation/pages/core/widgets/stylings/dismissible_overlay.dart';
@@ -53,7 +55,7 @@ class BasicContentContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     //assert(onlyChild == true && child != null || onlyChild == false && children != null);
     return Scaffold(
-      floatingActionButton: floatingActionButton ?? null,
+      floatingActionButton: floatingActionButton ?? FloatingActionButton(onPressed: ()=>context.router.push(EventFormPageRoute()), child: Icon(Icons.add)),
       appBar: appBar,
       body: ColorfulSafeArea(
           color: AppColors.mainIcon,
@@ -62,6 +64,7 @@ class BasicContentContainer extends StatelessWidget {
             child: ScrollOrNotChild(),
           )),
       bottomNavigationBar: bottomNavigationBar,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 

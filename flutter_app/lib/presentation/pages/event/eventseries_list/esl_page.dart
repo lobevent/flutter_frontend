@@ -26,7 +26,7 @@ class EventSeriesListPage extends StatelessWidget {
           scrollable: false,
           isLoading: state is ESL_Loading,
           bottomNavigationBar:
-              BottomNavigation(selected: NavigationOptions.home),
+              BottomNavigation(selected: NavigationOptions.eventSeries),
           child_ren: left([
             Text(AppStrings.ownEventSeriesOverviewTitle,
                 style: Theme.of(context).textTheme.headline3),

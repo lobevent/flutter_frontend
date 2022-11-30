@@ -11,6 +11,7 @@ enum NavigationOptions {
   eventOverview,
   profileSearch,
   eventSwiper,
+  eventSeries
 }
 
 class BottomNavigation extends StatelessWidget {
@@ -20,15 +21,20 @@ class BottomNavigation extends StatelessWidget {
       'key': 1,
       'route': EventOverviewPageRoute()
     },
-    NavigationOptions.profileSearch: {
+    NavigationOptions.eventSeries: {
       'key': 2,
+      'route': EventSeriesListPageRoute()
+    },
+    NavigationOptions.profileSearch: {
+      'key': 3,
       'route': ProfileSearchPageMainRoute()
     },
-    NavigationOptions.eventSwiper: {'key': 3, 'route': EventSwiperRoute()},
+
+    //NavigationOptions.eventSwiper: {'key': 3, 'route': EventSwiperRoute()},
   };
 
   static final indexToEnum =
-      enumToData.map((key, value) => MapEntry(value['key'], key));
+  enumToData.map((key, value) => MapEntry(value['key'], key));
 
   final Function(NavigationOptions)? onItemTapped;
   final NavigationOptions selected;
@@ -38,44 +44,64 @@ class BottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-          backgroundColor: AppColors.primaryColor,
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.event),
-          label: 'Event Overview',
-          backgroundColor: AppColors.primaryColor,
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_search),
-          label: 'ProfileSearch',
-          backgroundColor: AppColors.primaryColor,
-        ),
-        //logout
-        // BottomNavigationBarItem(
-        //   icon: Icon(Icons.login),
-        //   label: 'login',
-        //   backgroundColor: Colors.blue,
-        // ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.swap_horiz_outlined),
-          label: 'EventSwiper',
-          backgroundColor: AppColors.primaryColor,
-        ),
-      ],
-      currentIndex: enumToData[selected]['key'] as int,
-      selectedItemColor: AppColors.mainIcon,
-      onTap: (index) => onItemTapped != null
-          ? onItemTapped!(indexToEnum[index] as NavigationOptions)
-          : navigate(indexToEnum[index] as NavigationOptions, context),
+    return BottomAppBar(
+      notchMargin: 5,
+      shape: CircularNotchedRectangle(),
+      // child: Row( //children inside bottom appbar
+      //   mainAxisSize: MainAxisSize.max,
+      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //   children: <Widget>[
+      //     IconButton(icon: Icon(Icons.search, color: Colors.white,), onPressed: () {},),
+      //     IconButton(icon: Icon(Icons.print, color: Colors.white,), onPressed: () {},),
+      //     IconButton(icon: Icon(Icons.people, color: Colors.white,), onPressed: () {},),
+      //   ],
+      // ),
+      child: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+            backgroundColor: AppColors.primaryColor,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event),
+            label: 'Event Overview',
+            backgroundColor: AppColors.primaryColor,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.groups_outlined),
+            label: 'Groups',
+            backgroundColor: AppColors.primaryColor,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_search),
+            label: 'ProfileSearch',
+            backgroundColor: AppColors.primaryColor,
+          ),
+          //logout
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.login),
+          //   label: 'login',
+          //   backgroundColor: Colors.blue,
+          // ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.swap_horiz_outlined),
+          //   label: 'EventSwiper',
+          //   backgroundColor: AppColors.primaryColor,
+          // ),
+        ],
+        currentIndex: enumToData[selected]['key'] as int,
+        selectedItemColor: AppColors.mainIcon,
+        onTap: (index) => onItemTapped != null
+            ? onItemTapped!(indexToEnum[index] as NavigationOptions)
+            : navigate(indexToEnum[index] as NavigationOptions, context),
+      ),
     );
   }
 
   void navigate(NavigationOptions where, BuildContext context) async {
-    context.router.push(enumToData[where]['route'] as PageRouteInfo);
+    context.router.pushAndPopUntil(enumToData[where]['route'] as PageRouteInfo, predicate: (obj) {
+      return (obj.runtimeType == (enumToData[where]['route'] as PageRouteInfo));
+    });
   }
 }

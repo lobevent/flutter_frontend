@@ -6,6 +6,7 @@ class AppColors {
 
   static const Color deletionOngoingColor = Color(0x4A1F0C00);
   static const Color primaryColor = Color(0xFF040C0C);
+  //static const Color primaryColor = Color(0xFF333366-0x002B2B3B);
   static const Color backGroundColor = Color(0xFF081919);
   static const Color stdTextColor = Color(0xFFECF8F8);
   static const Color stdButtonBackground = Color(0xFF081919);

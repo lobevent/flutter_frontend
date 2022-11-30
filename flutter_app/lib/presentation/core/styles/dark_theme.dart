@@ -64,6 +64,10 @@ class DarkTheme with ChangeNotifier{
       /// ----------------------------------------------------------------------IconThemeData-------------------------------------------------------------------------------------------------
       iconTheme: IconThemeData(color: AppColors.darkGrey),
 
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: AppColors.accentButtonColor,
+        foregroundColor: AppColors.primaryColor
+      ),
       /// ----------------------------------------------------------------------ElevatedButton-------------------------------------------------------------------------------------------------
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(

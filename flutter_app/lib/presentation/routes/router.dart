@@ -29,7 +29,10 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/post_scre
 
 @MaterialAutoRouter(
   routes: [
-    AutoRoute(path: '/', page: FeedScreen, initial: true),
+    CustomRoute(path: '/', page: FeedScreen, initial: true, transitionsBuilder: TransitionsBuilders.noTransition),
+    CustomRoute(page: ProfileSearchPageMain, transitionsBuilder: TransitionsBuilders.noTransition),
+    CustomRoute(page: EventOverviewPage, transitionsBuilder: TransitionsBuilders.noTransition),
+    CustomRoute(page: EventSeriesListPage, transitionsBuilder: TransitionsBuilders.noTransition),
     AutoRoute(page: EventFormPage),
     AutoRoute(page: ItemCreateWidget),
     AutoRoute(page: LoginScreen),
@@ -39,7 +42,6 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/post_scre
     AutoRoute(page: EventScreenPage),
     AutoRoute(page: ProfilePage),
     AutoRoute(page: ProfileFriendsScreen),
-    AutoRoute(page: ProfileSearchPageMain),
     AutoRoute(page: CommentsPage),
     AutoRoute(page: PostsScreen),
     AutoRoute(page: LoginRegister),
@@ -51,13 +53,11 @@ import 'package:flutter_frontend/presentation/post_comment/post_screen/post_scre
         page: EventSeriesFormMain,
         transitionsBuilder: TransitionsBuilders.fadeIn,
         durationInMilliseconds: 400),
-    AutoRoute(page: EventSeriesListPage),
     AutoRoute(page: EventSeriesScreenPage),
     AutoRoute(page: MyLocationsPage),
     AutoRoute(page: MyLocationForm),
     AutoRoute(page: EPPPage),
     AutoRoute(page: EventUserPage),
-    CustomRoute(page: EventOverviewPage, transitionsBuilder: TransitionsBuilders.noTransition)
   ],
 )
 class $Router {}

@@ -73,10 +73,9 @@ class GenInviteFriendsCubit<T> extends Cubit<GenInviteFriendsState<T>> {
                     (failure) => emit(state.copyWith(
                         status: GenInviteFriendsStatus.error,
                         failure: failure)), (changedInvite) {
-                  var genInvsAdded = [...state.genericInvs, changedInvite];
+                  List<T> genInvsAdded = [...state.genericInvs, changedInvite as T];
                   emit(state.copyWith(
                     status: GenInviteFriendsStatus.refresh,
-                    friends: state.friends,
                     genericInvs: genInvsAdded as List<T>,
                   ));
                 }));

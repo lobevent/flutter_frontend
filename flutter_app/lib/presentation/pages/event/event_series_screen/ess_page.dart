@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/domain/core/value_objects.dart';
 import 'package:flutter_frontend/domain/event/event.dart';
+import 'package:flutter_frontend/domain/event/event_series_invitation.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
 import 'package:flutter_frontend/presentation/core/styles/icons.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/animations/loading_button.dart';
@@ -55,7 +56,7 @@ class EventSeriesScreenPage extends StatelessWidget {
                                     style: AppTextStyles.stdText,
                                   ),
                                   //EssInviteFriendsWidget(),
-                                  GenInviteFriendsButton(
+                                  GenInviteFriendsButton<EventSeriesInvitation>(
                                     inviteFriendsButtonType:
                                         InviteFriendsButtonType.eventseries,
                                     eventSeriesId: seriesId.value.toString(),

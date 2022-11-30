@@ -3,6 +3,8 @@ part of 'esi_repository.dart';
 // ignore: avoid_classes_with_only_static_members
 class _ESI_Routes {
   static String getAllESInvites = "/eventSeriesInv/own/%declined%";
+  static String getAllESInvitesAsHost =
+      "/eventSeriesInv/asHost/%eventSeriesId%";
   static String react = "/eventSeriesInv/%id%/reactInv/%accept%";
 
   /// has the fields: id, invited, profile

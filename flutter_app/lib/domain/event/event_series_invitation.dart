@@ -12,7 +12,7 @@ class EventSeriesInvitation {
   Profile invitedProfile;
   Profile invitingProfile;
   EventSeries eventSeries;
-  bool addAsHost;
+  bool isHost;
 
   EventSeriesInvitation(
       {required this.id,
@@ -21,5 +21,5 @@ class EventSeriesInvitation {
       required this.invitingProfile,
       required this.invitedProfile,
       required this.accepted,
-      required this.addAsHost}) {}
+      required this.isHost}) {}
 }

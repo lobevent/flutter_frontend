@@ -1,3 +1,4 @@
+import 'package:flutter_frontend/domain/event/event_series_invitation.dart';
 import 'package:flutter_frontend/infrastructure/auth/user_dto.dart';
 import 'package:flutter_frontend/infrastructure/event/event_dtos.dart';
 import 'package:flutter_frontend/infrastructure/event_series/eventSeries_dtos.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_frontend/infrastructure/profile/achievements_dtos.dart';
 import 'package:flutter_frontend/infrastructure/profile/profile_dtos.dart';
 import 'package:flutter_frontend/infrastructure/todo/item_dtos.dart';
 import 'package:flutter_frontend/infrastructure/todo/todo_dtos.dart';
+import 'package:flutter_frontend/infrastructure/event_series_invitation/event_series_invitation_dtos.dart';
 
 import '../event_profile_picture/event_profile_picture_dtos.dart';
 
@@ -27,7 +29,10 @@ final Map<Type, dynamic> factoryMap = {
   InvitationDto: (Map<String, dynamic> json) => InvitationDto.fromJson(json),
   EventSeriesDto: (Map<String, dynamic> json) => EventSeriesDto.fromJson(json),
   MyLocationDto: (Map<String, dynamic> json) => MyLocationDto.fromJson(json),
-  EventProfilePictureDto: (Map<String, dynamic> json) => EventProfilePictureDto.fromJson(json),
+  EventProfilePictureDto: (Map<String, dynamic> json) =>
+      EventProfilePictureDto.fromJson(json),
   AchievementsDto: (Map<String, dynamic> json) =>
       AchievementsDto.fromJson(json),
+  EventSeriesInvitationDto: (Map<String, dynamic> json) =>
+      EventSeriesInvitationDto.fromJson(json),
 };

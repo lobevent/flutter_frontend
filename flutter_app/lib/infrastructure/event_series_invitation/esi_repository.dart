@@ -35,6 +35,19 @@ class EventSeriesInvitationRepository extends Repository
   }
 
   ///
+  /// get all [EventSeriesInvitation]s that are open or declined
+  ///
+  Future<Either<NetWorkFailure, List<EventSeriesInvitation>>>
+      getUnAcceptedInvitesAsHost({required String seriesId}) async {
+    return localErrorHandler<List<EventSeriesInvitation>>(() async {
+      List<EventSeriesInvitationDto> eppDtos = await _getList(_ESI_Routes
+          .getAllESInvitesAsHost
+          .interpolate({"eventSeriesId": seriesId}));
+      return right(convertToDomainList(eppDtos));
+    });
+  }
+
+  ///
   /// react to an [EventSeriesInvitation]
   /// the user can either decline or accept the invitation
   ///
@@ -59,7 +72,7 @@ class EventSeriesInvitationRepository extends Repository
   ///
   Future<Either<NetWorkFailure, EventSeriesInvitation>>
       changeInviteStatus_ofUser(
-          {required EventSeries series,
+          {required String seriesId,
           required Profile profile,
           required bool invited,
           bool addHost = false}) async {
@@ -68,7 +81,7 @@ class EventSeriesInvitationRepository extends Repository
       if (invited) {
         response = await client.post(
             _ESI_Routes.change_status_user.interpolate({
-              "id": series.id.value,
+              "id": seriesId,
               "invited": invited ? "1" : "0",
               "profileId": profile.id.value,
               "addHost": addHost ? "1" : "0",
@@ -77,7 +90,7 @@ class EventSeriesInvitationRepository extends Repository
       } else {
         response =
             await client.delete(_ESI_Routes.change_status_user.interpolate({
-          "id": series.id.value,
+          "id": seriesId,
           "invited": invited ? "1" : "0",
           "profileId": profile.id.value,
           "addHost": addHost ? "1" : "0",

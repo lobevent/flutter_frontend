@@ -106,7 +106,10 @@ class EventSeriesScreenCubit extends Cubit<EventSeriesScreenState> {
   Future<void> addFriend(
       EventSeries es, bool invited, Profile profile, bool isHost) async {
     esiRepository.changeInviteStatus_ofUser(
-        series: es, profile: profile, invited: false, addHost: isHost);
+        profile: profile,
+        invited: false,
+        addHost: isHost,
+        seriesId: seriesId.value.toString());
     /*if (!state.esInv.map((e) => e.invitedProfile).contains(profile)) {
       var esInv = EventSeriesInvitation(
           id: UniqueId(),
@@ -130,7 +133,7 @@ class EventSeriesScreenCubit extends Cubit<EventSeriesScreenState> {
           .where((element) => element.invitedProfile == profile)
           .first;
       if (foundInv != null) {
-        foundInv.addAsHost = true;
+        foundInv.isHost = true;
       } else {
         state.esInv.add(EventSeriesInvitation(
             id: UniqueId(),
@@ -138,7 +141,7 @@ class EventSeriesScreenCubit extends Cubit<EventSeriesScreenState> {
             creationDate: DateTime.now(),
             invitingProfile: Profile(id: UniqueId(), name: ProfileName("fake")),
             accepted: false,
-            addAsHost: true,
+            isHost: true,
             invitedProfile: profile));
         emit(state);
       }
@@ -159,7 +162,7 @@ class EventSeriesScreenCubit extends Cubit<EventSeriesScreenState> {
           .where((element) => element.invitedProfile == profile)
           .first;
       if (foundInv != null) {
-        foundInv.addAsHost = false;
+        foundInv.isHost = false;
       }
       emit(state);
     }
@@ -170,7 +173,7 @@ class EventSeriesScreenCubit extends Cubit<EventSeriesScreenState> {
     if (state.status == EventSeriesScreenStatus.loaded) {
       EventSeriesInvitation esInvInList = state.esInv.firstWhere((element) =>
           element.invitedProfile.id.value == esInv.invitedProfile.id.value);
-      esInvInList.addAsHost = hostStatus;
+      esInvInList.isHost = hostStatus;
       emit(state);
     }
   }

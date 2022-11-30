@@ -16,7 +16,7 @@ part 'event_series_invitation_dtos.g.dart';
 @EventSeriesConverter()
 class EventSeriesInvitationDto extends BaseDto {
   bool accepted;
-  bool addAsHost;
+  bool isHost;
   String id;
   DateTime creationDate;
   @ProfileConverter()
@@ -27,7 +27,7 @@ class EventSeriesInvitationDto extends BaseDto {
   EventSeriesDto eventSeries;
 
   EventSeriesInvitationDto(
-      {required this.addAsHost,
+      {required this.isHost,
       required this.accepted,
       required this.creationDate,
       required this.invitedProfile,
@@ -37,12 +37,12 @@ class EventSeriesInvitationDto extends BaseDto {
 
   @override
   EventSeriesInvitation toDomain() => EventSeriesInvitation(
-      addAsHost: addAsHost,
-      accepted: accepted,
       id: UniqueId.fromUniqueString(id),
+      accepted: accepted,
       creationDate: creationDate,
       invitedProfile: invitedProfile.toDomain(),
       invitingProfile: invitingProfile.toDomain(),
+      isHost: isHost,
       eventSeries: eventSeries.toDomain());
 
   factory EventSeriesInvitationDto.fromJson(Map<String, dynamic> json) =>

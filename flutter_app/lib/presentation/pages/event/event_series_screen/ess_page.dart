@@ -56,9 +56,9 @@ class EventSeriesScreenPage extends StatelessWidget {
                                   ),
                                   //EssInviteFriendsWidget(),
                                   GenInviteFriendsButton(
-                                    onAddFriend: (Profile) {},
-                                    onRemoveFriend: (Profile) {},
-                                    inviteFriendsButtonType: InviteFriendsButtonType.eventseries,
+                                    inviteFriendsButtonType:
+                                        InviteFriendsButtonType.eventseries,
+                                    eventSeriesId: seriesId.value.toString(),
                                   ),
                                   Spacer(),
                                   Text(

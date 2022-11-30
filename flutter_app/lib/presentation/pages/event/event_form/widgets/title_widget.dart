@@ -4,7 +4,7 @@ import 'package:flutter_frontend/domain/event/value_objects.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/cubit/event_form_cubit.dart';
 
 class EventNameField extends StatefulWidget {
-  const EventNameField({
+  const   EventNameField({
     Key? key,
   }) : super(key: key);
 

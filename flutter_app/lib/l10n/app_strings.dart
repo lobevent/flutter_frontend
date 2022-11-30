@@ -127,4 +127,12 @@ class AppStrings {
 
   static const String recent = "Recent";
   static const String upcoming = "Upcoming";
+
+
+  static const String stepperButton_back = "BACK";
+  static const String stepperButton_next = "NEXT";
+  static const String stepperButton_submit = "SUBMIT";
+
+
+  static const String submitButtonToolTip = "All relevant information must be provided, before submission";
 }

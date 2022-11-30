@@ -245,7 +245,7 @@ class StdTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
         decoration: BoxDecoration(
-            color: disabled ? AppColors.darkGrey : AppColors.lightGrey,
+            color: disabled ? AppColors.lightGrey : AppColors.darkGrey,
             border: Border.all(width: 2.0, color: Color(0x6BBBBBBB)),
             borderRadius: BorderRadius.circular(10)),
         child: TextButton(

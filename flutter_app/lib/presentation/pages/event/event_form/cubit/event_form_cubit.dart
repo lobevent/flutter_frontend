@@ -99,6 +99,8 @@ class EventFormCubit extends Cubit<EventFormState> with EventFormCubitEditing {
 
         return right(unit);
       });
+
+      failureOrSuccess?.fold((l) => emit(state.copyWith(status: MainStatus.error, eventFailure: l)), (r) => emit(state.copyWith(status: MainStatus.saved)));
     }else{
       emit(state.copyWith(status: MainStatus.formHasErrors, showErrorMessages: true));
     }

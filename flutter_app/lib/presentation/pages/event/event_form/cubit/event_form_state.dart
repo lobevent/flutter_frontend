@@ -101,7 +101,7 @@ part of 'event_form_cubit.dart';
 // }
 //
 
-enum MainStatus {loading, saving, ready, error, formHasErrors}
+enum MainStatus {loading, saving, ready, error, formHasErrors, saved}
 enum FriendsStatus {loading, ready, error}
 enum SeriesStatus {loading, ready, error}
 
@@ -140,6 +140,7 @@ class EventFormState{
       this.friendsFailure,
       this.seriesFailure,
       });
+
 
   factory EventFormState.initial({bool isEdit = false}) => EventFormState(
       event: Event.empty(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/infrastructure/core/local/common_hive/common_hive.dart';
+import 'package:flutter_frontend/l10n/app_strings.dart';
 import 'package:flutter_frontend/presentation/core/styles/text_styles.dart';
 
 import 'colors.dart';
@@ -61,31 +62,33 @@ class DarkTheme with ChangeNotifier{
           unselectedItemColor: AppColors.lightGrey),
 
       /// ----------------------------------------------------------------------IconThemeData-------------------------------------------------------------------------------------------------
-      iconTheme: IconThemeData(color: AppColors.lightGrey),
+      iconTheme: IconThemeData(color: AppColors.darkGrey),
 
       /// ----------------------------------------------------------------------ElevatedButton-------------------------------------------------------------------------------------------------
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
               primary: AppColors.accentColor,
-              backgroundColor: AppColors.lightGrey)),
+              foregroundColor:  AppColors.accentButtonColor,
+              backgroundColor: AppColors.darkGrey)),
 
       /// ----------------------------------------------------------------------OutlinedButton-------------------------------------------------------------------------------------------------
       outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
               primary: AppColors.accentColor,
-              backgroundColor: AppColors.lightGrey)),
+              foregroundColor:  AppColors.accentButtonColor,
+              backgroundColor: AppColors.darkGrey)),
 
       /// ----------------------------------------------------------------------ButtonTheme-------------------------------------------------------------------------------------------------
       buttonTheme: ButtonThemeData(
         textTheme: ButtonTextTheme.accent,
-        disabledColor: AppColors.lightGrey,
+        disabledColor: AppColors.darkGrey,
         buttonColor: AppColors.accentButtonColor,
       ),
 
       inputDecorationTheme: InputDecorationTheme(
 
 
-          errorStyle: TextStyle(fontSize: 10),
+          errorStyle: TextStyle(fontSize: 11, color: AppColors.errorColor),
           helperStyle: TextStyle(fontSize: 10),
           focusColor: Colors.red,
           contentPadding: EdgeInsets.all(20),

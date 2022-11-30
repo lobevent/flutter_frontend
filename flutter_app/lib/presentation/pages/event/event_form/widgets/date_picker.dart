@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/presentation/core/styles/colors.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/styling_widgets.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_form/cubit/event_form_cubit.dart';
 import 'package:intl/intl.dart';
@@ -8,6 +9,7 @@ import 'package:intl/intl.dart';
 /// The Datepicker widget contains two buttons
 /// an button for date and one for time picking
 /// they are opening an datepicker and timepicker respectively
+/// it implements FormField, so [DatePicker] can be validated in a form!
 class DatePicker extends StatefulWidget {
   //TODO: Fix localization problem
   final DateTime? selectedCalenderDate;
@@ -45,53 +47,74 @@ class _DatePickerState extends State<DatePicker> {
           timeButtonText = _formatDateOrTime(dateTime: date!, time: true);
         }
         return
-            // as there are two buttons, the paddingrowwidget is the natural choice
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-          // the date button; opens datepicker
-          _DateButton(context),
+            // here we implement our formField
+            // so this widget can be validated
+            FormField<DateTime>(
+              validator: (value)=>(value != null && date != null)? null : "Date must be provided",
+              builder: (state) {
+                return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      // the date button; opens datepicker
+                      _DateButton(context, state),
 
-          // the time button; opens time picker
-          _TimeButton(context)
-        ]);
+                      // the time button; opens time picker
+                      _TimeButton(context, state),
+                      state.errorText == null ? SizedBox.shrink() : Text(state.errorText??"", style: Theme.of(context).inputDecorationTheme.errorStyle,)
+                    ]);
+              }
+            );
       },
     );
   }
 
   /// the time button; opens time picker
-  Widget _TimeButton(BuildContext context) {
-    return TextWithIconButton(
-        icon: Icons.access_time,
-        text: timeButtonText,
-        onPressed: () => _selectTime(context).then((value) {
-              if (value != null) {
-                /// merge the date and the time
-                if (date != null) {
-                  date = DateTime(date!.year, date!.month, date!.day,
-                      value.hour, value.minute);
-                } else {
-                  DateTime now = DateTime.now().toLocal();
-                  date = DateTime(
-                      now.year, now.month, now.day, value.hour, value.minute);
+  Widget _TimeButton(BuildContext context, FormFieldState formButtonState) {
+    return Container(
+      decoration: BoxDecoration(
+        border: formButtonState.errorText == null ? null : Border.all(color: AppColors.errorColor, width: 5),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      child: TextWithIconButton(
+          icon: Icons.access_time,
+          text: timeButtonText,
+          onPressed: () => _selectTime(context).then((value) {
+                if (value != null) {
+                  /// merge the date and the time
+                  if (date != null) {
+                    date = DateTime(date!.year, date!.month, date!.day,
+                        value.hour, value.minute);
+                  } else {
+                    DateTime now = DateTime.now().toLocal();
+                    now = now.add(Duration(days: 1));
+                    date = DateTime(
+                        now.year, now.month, now.day, value.hour, value.minute);
+                  }
+
+                  /// set the button string
+                  dateButtonText = _formatDateOrTime(dateTime: date!);
+                  timeButtonText = _formatDateOrTime(dateTime: date!, time: true);
+                  // set the state for the stateless widget
+                  setState(() {});
+                  date = date!.toLocal();
+
+                  /// set the date in the cubit
+                  context.read<EventFormCubit>().changeDate(date!.toLocal());
+                  formButtonState.setValue(date);
                 }
-
-                /// set the button string
-                timeButtonText = _formatDateOrTime(dateTime: date!, time: true);
-                // set the state for the stateless widget
-                setState(() {});
-                date = date!.toLocal();
-
-                /// set the date in the cubit
-                context.read<EventFormCubit>().changeDate(date!.toLocal());
-              }
-            }));
+              })),
+    );
   }
 
   /// the date button; opens datepicker
-  Widget _DateButton(BuildContext context) {
-    return TextWithIconButton(
+  Widget _DateButton(BuildContext context, FormFieldState formButtonState) {
+    return Container(
+        decoration: formButtonState.errorText == null ? null : BoxDecoration(
+          border: Border.all(color: AppColors.errorColor, width: 5),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+    ),
+      child: TextWithIconButton(
         icon: Icons.calendar_today_outlined,
         text: dateButtonText,
         onPressed: () => _selectDate(context).then((value) {
@@ -105,13 +128,16 @@ class _DatePickerState extends State<DatePicker> {
                 }
                 /// set the button string
                 dateButtonText = _formatDateOrTime(dateTime: date!);
+                timeButtonText = _formatDateOrTime(dateTime: date!, time: true);
                 // set the state for the stateless widget
                 setState(() {});
 
                 /// set the date in the cubit
                 context.read<EventFormCubit>().changeDate(date!.toLocal());
+                formButtonState.setValue(date);
               }
-            }));
+            }))
+    );
   }
 
   String _formatDateOrTime({required DateTime dateTime, bool time = false}) {

@@ -50,9 +50,9 @@ class _DescriptionFieldState extends State<DescriptionField> {
                     empty: (f) => 'Cannot be empty',
                     exceedingLength: (f) =>
                         'Exceeding length, max: ${f.maxLength}',
-                    orElse: () => "",
+                    orElse: () => null,
                   ),
-                  (r) => "",
+                  (r) => null,
                 ),
           )),
     );

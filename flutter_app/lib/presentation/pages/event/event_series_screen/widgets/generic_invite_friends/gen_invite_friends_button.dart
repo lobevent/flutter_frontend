@@ -59,12 +59,11 @@ class GenInviteFriendsButtonState extends State<GenInviteFriendsButton> {
             //state.isLoadingFriends,
             onPressed: () {
               context.read<GenInviteFriendsCubit>().disableButton=true;
-              context.read<GenInviteFriendsCubit>().loadFriendsAndStuff().then(
-                      (value) {
-                        var state2 =context.read<GenInviteFriendsCubit>().state;
-                        openInviteOverlay(context, state2.friends, widget.onAddFriend, widget.onRemoveFriend, widget.onAddHost, widget.onRemoveHost);
-                      }
-              );
+              if(stateCubit.status == GenInviteFriendsStatus.loaded){
+                openInviteOverlay(context, stateCubit.friends, widget.onAddFriend, widget.onRemoveFriend, widget.onAddHost, widget.onRemoveHost);
+              }else{
+                context.read<GenInviteFriendsCubit>().loadFriendsAndStuff();
+              }
             },
             icon: Icons.group,
           );

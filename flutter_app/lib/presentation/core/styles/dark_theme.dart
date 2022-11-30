@@ -36,6 +36,25 @@ class DarkTheme with ChangeNotifier{
       ),
       //appBarTheme: AppBarTheme(),
 
+        ///---------------------------------------------------------------------------TAB BAR THEME--------------------------------------------------------------------------------------------------
+        tabBarTheme: TabBarTheme(
+            unselectedLabelColor: AppColors.lightGrey,
+            labelColor: AppColors.white,
+            indicator: UnderlineTabIndicator(
+                borderSide: BorderSide(
+                    width: 1,
+                    color: AppColors.lightGrey)
+            )
+        ),
+        ///-----------------------------------------------------------------------------SLIDER THEME------------------------------------------------------------------------------------------------
+        sliderTheme: SliderThemeData(
+          activeTickMarkColor: AppColors.lightGrey,
+            thumbColor: AppColors.white,
+            overlayColor: AppColors.primaryColor,
+            activeTrackColor: AppColors.primaryColor,
+            valueIndicatorTextStyle: _darkTextTheme.bodyText1
+        ),
+
       /// ----------------------------------------------------------------------BottomNavigation-------------------------------------------------------------------------------------------------
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
           selectedItemColor: AppColors.primaryColor,
@@ -70,7 +89,7 @@ class DarkTheme with ChangeNotifier{
           helperStyle: TextStyle(fontSize: 10),
           focusColor: Colors.red,
           contentPadding: EdgeInsets.all(20),
-          labelStyle: TextStyle(decorationColor: Colors.red, fontSize: 15),),
+          labelStyle: TextStyle(decorationColor: Colors.red)),
 
       /// ----------------------------------------------------------------------TextTheme-------------------------------------------------------------------------------------------------
       textTheme: _darkTextTheme,
@@ -121,7 +140,27 @@ class DarkTheme with ChangeNotifier{
         surface: AppColors.lightGrey,
         onSurface: AppColors.lightGrey,
       ),
-      //appBarTheme: AppBarTheme(),
+
+      appBarTheme: AppBarTheme(
+          color: AppColors.lightGrey),
+
+      ///---------------------------------------------------------------------------TAB BAR THEME--------------------------------------------------------------------------------------------------
+      tabBarTheme: TabBarTheme(
+        unselectedLabelColor: AppColors.lightGrey,
+        labelColor: AppColors.black,
+        indicator: UnderlineTabIndicator(
+          borderSide: BorderSide(
+              width: 1,
+              color: AppColors.lightGrey)
+        )
+      ),
+      ///-----------------------------------------------------------------------------SLIDER THEME------------------------------------------------------------------------------------------------
+      sliderTheme: SliderThemeData(
+        thumbColor: AppColors.accentButtonColor,
+        overlayColor: AppColors.white,
+        activeTrackColor: AppColors.accentButtonColor,
+        valueIndicatorTextStyle: _darkTextTheme.bodyText1
+      ),
 
       /// ----------------------------------------------------------------------BottomNavigation-------------------------------------------------------------------------------------------------
       bottomNavigationBarTheme: BottomNavigationBarThemeData(

@@ -42,7 +42,6 @@ class EventUserPage extends StatelessWidget {
                 context.read<EventsUserCubit>().loadEvents();
               },
               child: Icon(Icons.refresh_outlined),
-              backgroundColor: AppColors.accentColor,
             ),
               child_ren: right(
               _mapLoadingOrContent(state, context)

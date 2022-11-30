@@ -28,7 +28,7 @@ class EventSeries with _$EventSeries {
 
   factory EventSeries.empty() => EventSeries(
       id: UniqueId.fromUniqueString("e6837df8-9e99-4f00-a40d-0e798834e9da"),
-      name: EventName(""),
-      description: EventDescription(''),
+      name: EventName("TEEEEEESSST"),
+      description: EventDescription('TEEEEEESSST'),
       public: false);
 }

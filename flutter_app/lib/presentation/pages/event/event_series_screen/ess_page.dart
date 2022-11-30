@@ -12,7 +12,9 @@ import 'package:flutter_frontend/presentation/pages/event/event_series_screen/cu
 import 'package:flutter_frontend/presentation/pages/core/widgets/event_recent_upcoming_tabs.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_series_screen/widgets/ess_inv_card.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_series_screen/widgets/ess_invite_friends_widget.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_series_screen/widgets/generic_invite_friends/gen_invite_friends_button.dart';
 
+import '../../../../domain/profile/profile.dart';
 import '../event_form/widgets/invite_friends_widget.dart';
 
 class EventSeriesScreenPage extends StatelessWidget {
@@ -52,7 +54,12 @@ class EventSeriesScreenPage extends StatelessWidget {
                                             .toString(),
                                     style: AppTextStyles.stdText,
                                   ),
-                                  EssInviteFriendsWidget(),
+                                  //EssInviteFriendsWidget(),
+                                  GenInviteFriendsButton(
+                                    onAddFriend: (Profile) {},
+                                    onRemoveFriend: (Profile) {},
+                                    inviteFriendsButtonType: InviteFriendsButtonType.eventseries,
+                                  ),
                                   Spacer(),
                                   Text(
                                     "Events: " +

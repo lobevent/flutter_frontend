@@ -20,7 +20,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       leading: OwnProfile(context),
       actions: [
         LeadingButton(context),

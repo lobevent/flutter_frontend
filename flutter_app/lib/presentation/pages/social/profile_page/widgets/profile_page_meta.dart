@@ -190,7 +190,7 @@ class ProfilePageMeta extends StatelessWidget {
         height: 60,
         decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Theme.of(context).colorScheme.primary),
+            color: Theme.of(context).colorScheme.secondary),
         child: Center(
           child: score != null
               ? Text("Score:$score")

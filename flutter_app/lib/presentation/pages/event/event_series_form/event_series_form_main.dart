@@ -138,12 +138,10 @@ class _EventSeriesFormMainState extends State<EventSeriesFormMain> {
     return TextCheckbox(
         value: isPublic,
         text: AppStrings.publicEvent,
-        onChanged: (bool? value) {
-          if (value != null) {
+        onChanged: (bool value) {
             context.read<EventSeriesFormCubit>().changePublic(value);
             isPublic = value;
             setState(() {});
-          }
         });
   }
 

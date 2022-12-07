@@ -36,10 +36,10 @@ class GenInviteFriendsCubit<T> extends Cubit<GenInviteFriendsState<T>> {
                 status: GenInviteFriendsStatus.error, failure: failure)),
             // compare the complete friendlist with the invitations for this event
             // set isLoadingFriends false, as they are loaded now obviously
-            (friends) async {
+            (friends)  {
           switch (inviteFriendsButtonType) {
             case InviteFriendsButtonType.eventseries:
-              await esiRepository
+              esiRepository
                   .getUnAcceptedInvitesAsHost(seriesId: seriesId!)
                   .then((value) => value.fold(
                           (failue) => emit(state.copyWith(
@@ -106,10 +106,11 @@ class GenInviteFriendsCubit<T> extends Cubit<GenInviteFriendsState<T>> {
                     (failure) => emit(state.copyWith(
                         status: GenInviteFriendsStatus.error,
                         failure: failure)), (esInv) {
-                  esInvs.remove(esInv);
+                  List<EventSeriesInvitation> esInvsUpdated= List.from(esInvs);
+                  esInvsUpdated.removeWhere((element) => element.id.value==esInv.id.value);
                   emit(state.copyWith(
                       status: GenInviteFriendsStatus.refresh,
-                      genericInvs: esInvs as List<T>));
+                      genericInvs: esInvsUpdated as List<T>));
                 }));
         break;
       case InviteFriendsButtonType.event:
@@ -134,7 +135,7 @@ class GenInviteFriendsCubit<T> extends Cubit<GenInviteFriendsState<T>> {
                     (failure) => emit(state.copyWith(
                         status: GenInviteFriendsStatus.error,
                         failure: failure)), (esInv) {
-                  var genInvsAdded = [...state.genericInvs, esInv];
+                  List<T> genInvsAdded = [...state.genericInvs, esInv as T];
                   emit(state.copyWith(
                       status: GenInviteFriendsStatus.refresh,
                       genericInvs: genInvsAdded as List<T>));
@@ -168,10 +169,11 @@ class GenInviteFriendsCubit<T> extends Cubit<GenInviteFriendsState<T>> {
                     (failure) => emit(state.copyWith(
                         status: GenInviteFriendsStatus.error,
                         failure: failure)), (esInv) {
-                  esInvs.remove(esInv);
+                  List<EventSeriesInvitation> esInvsUpdated = List.from(esInvs);
+                  esInvsUpdated.removeWhere((element) => element.id.value==esInv.id.value);
                   emit(state.copyWith(
                       status: GenInviteFriendsStatus.refresh,
-                      genericInvs: esInvs as List<T>));
+                      genericInvs: esInvsUpdated as List<T>));
                 }));
         break;
       case InviteFriendsButtonType.event:

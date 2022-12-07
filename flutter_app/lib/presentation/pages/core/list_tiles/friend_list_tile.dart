@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/domain/profile/profile.dart';
 import 'package:flutter_frontend/presentation/core/style.dart';
+import 'package:flutter_frontend/presentation/pages/core/widgets/animations/loading_button.dart';
 import 'package:flutter_frontend/presentation/pages/core/widgets/imageAndFiles/image_classes.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 
@@ -10,11 +11,13 @@ class FriendListTile extends StatelessWidget {
   final bool showCheck;
   final bool showUninviteButton;
   final bool isHost;
+  final bool isLoading;
   final Profile profile;
   final Function(Profile) onAddFriend;
   final Function(Profile) onRemoveFriend;
   final Function(Profile)? onAddHost;
   final Function(Profile)? onRemoveHost;
+
   //final OverlayEntry? overlayEntry;
 
   const FriendListTile(
@@ -26,7 +29,8 @@ class FriendListTile extends StatelessWidget {
       required this.onRemoveFriend,
       this.isHost = false,
       this.onAddHost,
-      this.onRemoveHost /*, this.overlayEntry*/})
+      this.onRemoveHost, this.isLoading =false/*, this.overlayEntry*/
+      })
       : super(key: key);
 
   @override
@@ -59,13 +63,13 @@ class FriendListTile extends StatelessWidget {
     return <Widget>[
       //TODO: third condition may be fcking things up for inviting people idk
       if (!showCheck && !showUninviteButton)
-        IconButton(icon: Icon(Icons.add), onPressed: () => {addFriend(context)})
+        isLoading!=true? IconButton(icon: Icon(Icons.add), onPressed: () => {addFriend(context)}): LoadingButton(size: 25,)
       else
-        IconButton(
-            icon: Icon(Icons.close), onPressed: () => {removeFriend(context)}),
+        isLoading!=true?IconButton(
+            icon: Icon(Icons.close), onPressed: () => {removeFriend(context)}): LoadingButton(size: 25,),
       if (isHost == false)
-        IconButton(
-            icon: Icon(Icons.account_box), onPressed: () => {addHost(context)})
+        isLoading!=true? IconButton(
+            icon: Icon(Icons.account_box), onPressed: () => {addHost(context)}): LoadingButton(size: 25,)
       else
         IconButton(
             icon: Icon(Icons.account_box_outlined),

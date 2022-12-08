@@ -29,7 +29,6 @@ class EventSeriesScreenCubit extends Cubit<EventSeriesScreenState> {
   EventSeriesScreenCubit({required this.seriesId})
       : super(EventSeriesScreenState.loading()) {
     loadEventSeries();
-    getOwnInvs();
   }
 
   ProfileRepository profileRepository = GetIt.I<ProfileRepository>();
@@ -91,15 +90,6 @@ class EventSeriesScreenCubit extends Cubit<EventSeriesScreenState> {
                         eventSeries: series, friends: friends, esInv: esInv))));
           }));
     });
-  }
-
-  Future<void> getOwnInvs() async {
-    await esiRepository.getUnacceptedEventSeriesInvites().then((value) =>
-        value.fold(
-            (failure) => emit(state.copyWith(
-                status: EventSeriesScreenStatus.error, failure: failure)),
-            (r) => emit(state.copyWith(
-                status: EventSeriesScreenStatus.loaded, esInv: r))));
   }
 
   // ------------------------------------------------ add/remove friends EsInv ----------------------

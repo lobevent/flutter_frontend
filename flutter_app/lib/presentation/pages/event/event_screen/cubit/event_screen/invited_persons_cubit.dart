@@ -8,7 +8,7 @@ extension InvitedPersons on EventScreenCubit{
   
   Future<void> revokeInvitation(Profile profile, Event event) async{
 
-    invitationRepository.revokeInvitation(profile, event).then((value) => value.fold(
+    invitationRepository.revokeInvitation(profile, event.id.value).then((value) => value.fold(
             (failure) => throw UnimplementedError(),
             (invitation){
           revokedInvitation(invitation);

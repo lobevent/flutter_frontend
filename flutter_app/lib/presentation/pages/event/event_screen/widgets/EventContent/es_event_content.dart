@@ -24,12 +24,14 @@ import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/E
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/es_ec_UesMenuButton.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/EventContent/EventContentWidgets/es_ec_add_friends_button.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_screen/widgets/Overlays/es_ol_invited_persons.dart';
+import 'package:flutter_frontend/presentation/pages/event/event_series_screen/widgets/generic_invite_friends/gen_invite_friends_button.dart';
 import 'package:flutter_frontend/presentation/routes/router.gr.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
 import '../../../../../../application/core/geo_functions_cubit.dart';
+import '../../../../../../domain/event/invitation.dart';
 import '../../../../../../infrastructure/core/local/common_hive/common_hive.dart';
 import '../../../../../../domain/post/post.dart';
 import '../../../../core/widgets/animations/animated_check.dart';
@@ -119,7 +121,11 @@ class EventContent extends StatelessWidget {
                     height: 20,
                   ),
 
-                  if (stateLoaded.event.isHost) AddFriendsButton(),
+                  if (stateLoaded.event.isHost) GenInviteFriendsButton<Invitation>(
+                      inviteFriendsButtonType: InviteFriendsButtonType.event,
+                    event: stateLoaded.event,
+                  ),
+                    //AddFriendsButton(),
 
                   /// Used as space
                   const SizedBox(height: 20),

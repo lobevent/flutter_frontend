@@ -35,7 +35,7 @@ class AddFriendsCubit extends Cubit<AddFriendsState> {
 
 
   Future<void> inviteFriend(Profile profile, Event event, bool isHost, EventScreenCubit cubit) async{
-    invitationRepository.sendInvitation(profile, event, isHost).then((value) => value.fold(
+    invitationRepository.sendInvitation(profile, event.id.value, isHost).then((value) => value.fold(
             (failure) => emit(AddFriendsState.error(failure: failure)),
             (invitation){
               AddFriendsState currentState = state;
@@ -47,7 +47,7 @@ class AddFriendsCubit extends Cubit<AddFriendsState> {
 
 
   Future<void> revokeInvitation(Profile profile, Event event, EventScreenCubit cubit) async{
-    invitationRepository.revokeInvitation(profile, event).then((value) => value.fold(
+    invitationRepository.revokeInvitation(profile, event.id.value).then((value) => value.fold(
             (failure) => emit(AddFriendsState.error(failure: failure)),
             (invitation){
               AddFriendsState currentState = state;
@@ -60,7 +60,7 @@ class AddFriendsCubit extends Cubit<AddFriendsState> {
 
 
   Future<void> onAddHost(Profile profile, Event event, EventScreenCubit cubit) async{
-    invitationRepository.addHost(profile, event).then((value) => value.fold(
+    invitationRepository.addHost(profile, event.id.value).then((value) => value.fold(
             (failure) => emit(AddFriendsState.error(failure: failure)),
             (invitation){
               AddFriendsState currentState = state;
@@ -73,7 +73,7 @@ class AddFriendsCubit extends Cubit<AddFriendsState> {
 
 
   Future<void> onRemoveHost(Profile profile, Event event, EventScreenCubit cubit) async{
-    invitationRepository.removeHost(profile, event).then((value) => value.fold(
+    invitationRepository.removeHost(profile, event.id.value).then((value) => value.fold(
             (failure) => emit(AddFriendsState.error(failure: failure)),
             (invitation){
               AddFriendsState currentState = state;

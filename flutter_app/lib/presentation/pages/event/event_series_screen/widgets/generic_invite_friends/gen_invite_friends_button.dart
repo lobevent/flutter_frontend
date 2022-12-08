@@ -8,6 +8,7 @@ import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/eve
 import 'package:flutter_frontend/presentation/pages/event/event_series_screen/widgets/ess_invite_friends_widget.dart';
 import 'package:flutter_frontend/presentation/pages/event/event_series_screen/widgets/generic_invite_friends/cubit/gen_invite_friends_cubit.dart';
 
+import '../../../../../../domain/event/event.dart';
 import '../../../../../../domain/event/event_series.dart';
 import '../../../../../../domain/profile/profile.dart';
 import '../../../../../../l10n/app_strings.dart';
@@ -26,6 +27,7 @@ enum InviteFriendsButtonType {
 class GenInviteFriendsButton<T> extends StatelessWidget {
   final InviteFriendsButtonType inviteFriendsButtonType;
   final String? eventSeriesId;
+  final Event? event;
   final Widget? button;
 
   const GenInviteFriendsButton({
@@ -33,8 +35,8 @@ class GenInviteFriendsButton<T> extends StatelessWidget {
     this.button,
     this.eventSeriesId,
     required this.inviteFriendsButtonType,
+    this.event,
   }) : super(key: key);
-
 
   Widget build(BuildContext context) {
     return GenAddFriendsButton(context);
@@ -43,35 +45,44 @@ class GenInviteFriendsButton<T> extends StatelessWidget {
   ///return button and handle states, for loading friends and loading invited
   Widget GenAddFriendsButton(BuildContext context) {
     return BlocProvider(
-        create: (context) => GenInviteFriendsCubit<T>(
-            inviteFriendsButtonType: inviteFriendsButtonType,
-            seriesId: eventSeriesId),
-        child: BlocConsumer<GenInviteFriendsCubit<T>, GenInviteFriendsState<T>>(
-          listenWhen: (p,c)=>
-          p.status!=c.status,
-          listener: (context,state){
-            /////////////////////////////
-          },
-          builder: (context, state){
-            if (state.status == GenInviteFriendsStatus.error) {
-              //TODO error handling
-              //GenDialog.genericDialog(context, "failure", state.failure!.toString());
-              print(state.failure.toString());
-            }
-            return TextWithIconButton(
-                onPressed: () async {
-                  if(state.status==GenInviteFriendsStatus.loading){
-                    await context.read<GenInviteFriendsCubit<T>>().loadFriendsAndStuff();
-                    //Todo; here i want to openinviteoverlay if the state is ready but it aint workin
-                  }else{
-                    if(state.status==GenInviteFriendsStatus.loaded||state.status==GenInviteFriendsStatus.refresh){
-                      openInviteOverlay(context, state.friends, state.genericInvs);
-                    }
+      create: (context) => GenInviteFriendsCubit<T>(
+          inviteFriendsButtonType: inviteFriendsButtonType,
+          seriesId: eventSeriesId,
+          eventId: event?.id.value),
+      child: BlocConsumer<GenInviteFriendsCubit<T>, GenInviteFriendsState<T>>(
+        listenWhen: (p, c) => p.status != c.status,
+        listener: (context, state) async {
+          //open overlay if data is there
+          if (state.status == GenInviteFriendsStatus.loaded) {
+            openInviteOverlay(context, state.friends, state.genericInvs);
+          }
+        },
+        builder: (context, state) {
+          if (state.status == GenInviteFriendsStatus.error) {
+            //TODO error handling
+            print(state.failure.toString());
+          }
+          return TextWithIconButton(
+              onPressed: () async {
+                //fetch stuff
+                if (state.status == GenInviteFriendsStatus.initial) {
+                  context
+                      .read<GenInviteFriendsCubit<T>>()
+                      .loadFriendsAndStuff(event?.invitations as List<T>?);
+                } else {
+                  //open the overlay, because data is there
+                  if (state.status == GenInviteFriendsStatus.loaded ||
+                      state.status == GenInviteFriendsStatus.refresh) {
+                    openInviteOverlay(
+                        context, state.friends, state.genericInvs);
                   }
-                },
-                text: AppStrings.inviteFriends);
-          },
-        ),
+                }
+              },
+              text: state.status == GenInviteFriendsStatus.loading
+                  ? "Loading"
+                  : AppStrings.inviteFriends);
+        },
+      ),
     );
   }
 }
@@ -79,22 +90,24 @@ class GenInviteFriendsButton<T> extends StatelessWidget {
 ///open the overlay for showing and searching friends to invite
 void openInviteOverlay<T>(
     BuildContext contextParent, List<Profile> friends, List<T> genericInvs) {
-   showDialog(
+  showDialog(
       context: contextParent,
       builder: (BuildContext dialogContext) {
-          return GenAddFriendsDialog<T>(
-            friends: friends,
-            parentContext: contextParent,
-            genericInvs: genericInvs,
-          );
+        return GenAddFriendsDialog<T>(
+          friends: friends,
+          parentContext: contextParent,
+          genericInvs: genericInvs,
+        );
       });
 }
 
 class GenAddFriendsDialog<T> extends StatefulWidget {
   /// the list with all the friends of the user
   final List<Profile> friends;
+
   /// our gen cubit context
   final BuildContext parentContext;
+
   /// our gen invites, which are fetched with friends
   final List<T> genericInvs;
 
@@ -111,17 +124,20 @@ class GenAddFriendsDialog<T> extends StatefulWidget {
 class GenAddFriendsDialogState<T> extends State<GenAddFriendsDialog> {
   //input search bar
   final TextEditingController controller = TextEditingController();
+
   ///our friends
   List<Profile> results = [];
+
   ///for loadingindicator after inviting/revoking a friend
-  List<bool> resultsStatusFetching=[];
+  List<bool> resultsStatusFetching = [];
+
   ///our generic invites in the state
-  List<T> genInvs= [];
+  List<T> genInvs = [];
 
   ///init the lists
   @override
   void initState() {
-    genInvs= widget.genericInvs as List<T>;
+    genInvs = widget.genericInvs as List<T>;
     results = List<Profile>.from(widget.friends);
     resultsStatusFetching = List<bool>.filled(results.length, false);
     super.initState();
@@ -152,7 +168,7 @@ class GenAddFriendsDialogState<T> extends State<GenAddFriendsDialog> {
   void onSearchTextChanged(String text) {
     // clear the results before working with it
     results.clear();
-    resultsStatusFetching= [];
+    resultsStatusFetching = [];
     if (text.isEmpty) {
       results = List<Profile>.from(widget.friends);
       resultsStatusFetching = List<bool>.filled(results.length, false);
@@ -188,57 +204,67 @@ class GenAddFriendsDialogState<T> extends State<GenAddFriendsDialog> {
                 isLoading: resultsStatusFetching[i],
                 profile: results[i],
                 // here we check if that person is invited or only a friend. this map and contains returns an bool
-                showCheck:
-                    isShowCheck(results[i], cubitContext, genInvs),
-                isHost:
-                    isShowHost(results[i], cubitContext, genInvs),
+                showCheck: isShowCheck(results[i], cubitContext, genInvs),
+                isHost: isShowHost(results[i], cubitContext, genInvs),
 
                 // the function given for the button on invitation!
-                onAddFriend: (Profile profile) async{
+                onAddFriend: (Profile profile) async {
                   // set loading to true
-                  setState(() {resultsStatusFetching[i]=true;});
-                  await cubitContext.read<GenInviteFriendsCubit<T>>()
+                  setState(() {
+                    resultsStatusFetching[i] = true;
+                  });
+                  await cubitContext
+                      .read<GenInviteFriendsCubit<T>>()
                       .sendInvite(profile);
-                  var stateX=cubitContext.read<GenInviteFriendsCubit<T>>().state;
+                  var stateX =
+                      cubitContext.read<GenInviteFriendsCubit<T>>().state;
                   // emit rebuild and loading = false
                   setState(() {
                     genInvs = stateX.genericInvs;
-                    resultsStatusFetching[i]=false;
+                    resultsStatusFetching[i] = false;
                   });
                 },
                 onRemoveFriend: (Profile profile) async {
-                  setState(() {resultsStatusFetching[i]=true;});
+                  setState(() {
+                    resultsStatusFetching[i] = true;
+                  });
                   await cubitContext
                       .read<GenInviteFriendsCubit<T>>()
                       .revokeInvite(profile);
-                  var stateX=cubitContext.read<GenInviteFriendsCubit<T>>().state;
+                  var stateX =
+                      cubitContext.read<GenInviteFriendsCubit<T>>().state;
                   setState(() {
                     genInvs = stateX.genericInvs;
-                    resultsStatusFetching[i]=false;
+                    resultsStatusFetching[i] = false;
                   });
                 },
                 //TODO: check if the inviter is host
                 onAddHost: (Profile profile) async {
-                  setState(() {resultsStatusFetching[i]=true;});
+                  setState(() {
+                    resultsStatusFetching[i] = true;
+                  });
                   await cubitContext
                       .read<GenInviteFriendsCubit<T>>()
                       .sendInviteAsHost(profile);
-                  var stateX=cubitContext.read<GenInviteFriendsCubit<T>>().state;
+                  var stateX =
+                      cubitContext.read<GenInviteFriendsCubit<T>>().state;
                   setState(() {
                     genInvs = stateX.genericInvs;
-                    resultsStatusFetching[i]=false;
+                    resultsStatusFetching[i] = false;
                   });
-
                 },
-                onRemoveHost: (Profile profile) async{
-                  setState(() {resultsStatusFetching[i]=true;});
+                onRemoveHost: (Profile profile) async {
+                  setState(() {
+                    resultsStatusFetching[i] = true;
+                  });
                   await cubitContext
                       .read<GenInviteFriendsCubit<T>>()
                       .revokeInviteAsHost(profile);
-                  var stateX=cubitContext.read<GenInviteFriendsCubit<T>>().state;
+                  var stateX =
+                      cubitContext.read<GenInviteFriendsCubit<T>>().state;
                   setState(() {
                     genInvs = stateX.genericInvs;
-                    resultsStatusFetching[i]=false;
+                    resultsStatusFetching[i] = false;
                   });
                 },
               );
@@ -260,7 +286,10 @@ class GenAddFriendsDialogState<T> extends State<GenAddFriendsDialog> {
         }
         return false;
       case InviteFriendsButtonType.event:
-        // TODO: Handle this case.
+        List<Invitation> invs = genericInvs as List<Invitation>;
+        if (invs.map((e) => e.profile.id.value).contains(profile.id.value)) {
+          return true;
+        }
         return false;
         break;
       case InviteFriendsButtonType.todo:
@@ -269,6 +298,7 @@ class GenAddFriendsDialogState<T> extends State<GenAddFriendsDialog> {
         break;
     }
   }
+
   ///handle if we show the crown depending on the Types of genericInv and if he is host
   bool isShowHost(
       Profile profile, BuildContext cubitContext, List genericInvs) {
@@ -292,7 +322,14 @@ class GenAddFriendsDialogState<T> extends State<GenAddFriendsDialog> {
         }
         return false;
       case InviteFriendsButtonType.event:
-        // TODO: Handle this case.
+        List<Invitation> invs = genericInvs as List<Invitation>;
+        if (invs.map((e) => e.profile.id.value).contains(profile.id.value)) {
+          var index = invs.indexWhere(
+              (element) => element.profile.id.value == profile.id.value);
+          if (invs[index].addHost == true) {
+            return true;
+          }
+        }
         return false;
         break;
       case InviteFriendsButtonType.todo:

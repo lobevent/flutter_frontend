@@ -12,6 +12,7 @@ import 'package:flutter_frontend/presentation/pages/event/event_screen/cubit/eve
 ///
 /// the add friends button class, here friends can be added to the event!
 ///
+@Deprecated("Use gen_invite_friends_button")
 class AddFriendsButton extends StatelessWidget {
   const AddFriendsButton({Key? key}) : super(key: key);
 

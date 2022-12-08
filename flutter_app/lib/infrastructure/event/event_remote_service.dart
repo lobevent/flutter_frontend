@@ -217,7 +217,7 @@ class EventRemoteService extends RemoteService<EventDto> {
               "eventId": eventDto.id,
               "status": (EventDto.domainToDtoStatus[status] as int).toString()
             }),
-            {}),
+            ""),
         'event');
   }
 

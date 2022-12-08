@@ -8,12 +8,16 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../../domain/event/event_series_invitation.dart';
+import '../../../../../infrastructure/event_series_invitation/esi_repository.dart';
+
 part 'event_series_list_state.dart';
 part 'event_series_list_cubit.freezed.dart';
 
 class EventSeriesListCubit extends Cubit<EventSeriesListState> {
   // late ScrollListener listener;
   EventSeriesRepository repository = GetIt.I<EventSeriesRepository>();
+  EventSeriesInvitationRepository esiRepository = GetIt.I<EventSeriesInvitationRepository>();
 
   EventSeriesListCubit() : super(EventSeriesListState.loading()) {
     loadEventSeriesLists();
@@ -25,8 +29,11 @@ class EventSeriesListCubit extends Cubit<EventSeriesListState> {
         .getOwnAndSubscribedSeries()
         .then((value) => value.fold((failure) {
               emit(EventSeriesListState.failure(failure));
-            }, (seriesList) {
-              emit(EventSeriesListState.ready(seriesList));
+            },
+            (seriesList) {
+          esiRepository.getUnacceptedEventSeriesInvites().then((value) => value.fold(
+                  (failure) => emit(EventSeriesListState.failure(failure)),
+                  (esInvs) => emit(EventSeriesListState.ready(seriesList, esInvs))));
             }));
   }
 
@@ -48,12 +55,11 @@ class EventSeriesListCubit extends Cubit<EventSeriesListState> {
                 readyState.seriesList.own
                     .removeWhere((element) => element.id.value == es.id.value);
                 emit(EventSeriesListState.loading());
-                emit(EventSeriesListState.ready(readyState.seriesList));
+                emit(EventSeriesListState.ready(readyState.seriesList, readyState.esInvs));
                 return true;
               }));
     });
   }
-
   // loadMore(){
   //
   // }

@@ -31,29 +31,29 @@ class InvitationRepository extends Repository{
     return _mapInvitesUESToEvents(await _getList(() => remoteService.getInvitations(lastEventTime, amount, descending)));
   }
 
-  Future<Either<NetWorkFailure, Invitation>> sendInvitation(Profile profile, Event event, bool isHost){
+  Future<Either<NetWorkFailure, Invitation>> sendInvitation(Profile profile, String eventId, bool isHost){
     return localErrorHandler(() async {
-      return right((await remoteService.sendInvitation(profile.id.value, event.id.value, isHost ? '1' : '0')).toDomain());
+      return right((await remoteService.sendInvitation(profile.id.value, eventId, isHost ? '1' : '0')).toDomain());
     });
   }
-  Future<Either<NetWorkFailure, Invitation>> revokeInvitation(Profile profile, Event event){
+  Future<Either<NetWorkFailure, Invitation>> revokeInvitation(Profile profile, String eventId){
     return localErrorHandler(() async {
-      return right(( await remoteService.revokeInvitation(profile.id.value, event.id.value)).toDomain());
-    });
-  }
-
-
-  Future<Either<NetWorkFailure, Invitation>> addHost(Profile profile, Event event){
-    return localErrorHandler(() async {
-      return right(( await remoteService.addHost(profile.id.value, event.id.value)).toDomain());
+      return right(( await remoteService.revokeInvitation(profile.id.value, eventId)).toDomain());
     });
   }
 
 
-
-  Future<Either<NetWorkFailure, Invitation>> removeHost(Profile profile, Event event){
+  Future<Either<NetWorkFailure, Invitation>> addHost(Profile profile, String eventId){
     return localErrorHandler(() async {
-      return right(( await remoteService.removeHost(profile.id.value, event.id.value)).toDomain());
+      return right(( await remoteService.addHost(profile.id.value, eventId)).toDomain());
+    });
+  }
+
+
+
+  Future<Either<NetWorkFailure, Invitation>> removeHost(Profile profile, String eventId){
+    return localErrorHandler(() async {
+      return right(( await remoteService.removeHost(profile.id.value, eventId)).toDomain());
     });
   }
 

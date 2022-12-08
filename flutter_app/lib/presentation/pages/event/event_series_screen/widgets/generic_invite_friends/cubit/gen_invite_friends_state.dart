@@ -1,6 +1,6 @@
 part of 'gen_invite_friends_cubit.dart';
 
-enum GenInviteFriendsStatus { loading, loaded, refresh, error }
+enum GenInviteFriendsStatus { initial, loading, loaded, refresh, error }
 
 @CopyWith()
 class GenInviteFriendsState<T> {
@@ -8,6 +8,9 @@ class GenInviteFriendsState<T> {
   final List<Profile> friends;
   final GenInviteFriendsStatus status;
   final NetWorkFailure? failure;
+
+  factory GenInviteFriendsState.initial() => GenInviteFriendsState<T>(
+      status: GenInviteFriendsStatus.initial, genericInvs: []);
 
   factory GenInviteFriendsState.loading() => GenInviteFriendsState<T>(
       status: GenInviteFriendsStatus.loading, genericInvs: []);

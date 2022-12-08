@@ -20,8 +20,7 @@ class _EventSeriesInvCardState extends State<EventSeriesInvCard> {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Center(
-          child: Text(widget.essInv.eventSeries.name.getOrCrash()),
+        title: Text(widget.essInv.eventSeries.name.getOrCrash(),
         ),
         leading: ProfilePopup(
           profile: widget.essInv.invitingProfile,

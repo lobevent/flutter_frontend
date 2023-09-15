@@ -1,5 +1,13 @@
 ![test_and_build](https://github.com/lobevent/flutter_frontend/workflows/test_and_build/badge.svg?branch=develop)
 
+# This project aimes at providing an local event app
+The idea is to give users the possibility, to connect with locals and organize events with friends more efficiently.
+
+
+
+
+
+
 # Flutter Frontend - repository for the frontend
 
 Flutter App for iOS and Android for the lobevent project.

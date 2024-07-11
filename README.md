@@ -1,94 +1,43 @@
-![test_and_build](https://github.com/lobevent/flutter_frontend/workflows/test_and_build/badge.svg?branch=develop)
+# Palk
+This Project was dedicated to building a flutter based social network app. 
+The purpose of the social network was to bring people togehter in real life.
 
-# This project aimes at providing an local event app
-The idea is to give users the possibility, to connect with locals and organize events with friends more efficiently.
+## The Palk Paradigma
+The idea of palk was to easily organize events. 
+That included:
+- Saving predefined locations
+- generating todo and bring lists
+- public and private events
+- adding the event to a eventseries
+- Verifying that people are actually there
+  - if verified the person was allowed to post their pictures there
+- allowing for posts with questions
+- Seeing who is attending you event
 
+Attending and finding events should be easy too:
+- location based search
+- managing event series
+- gathering socializing points by attending events
+- managing the users calendar
 
+Also of course it has social features like friendships.
 
+## Screenshots
 
-
-
-# Flutter Frontend - repository for the frontend
-
-Flutter App for iOS and Android for the lobevent project.
-
-## Project structure explanation
-
-The directory structure and layer structure is based on Reso Coder's DDD - Clean Architecture Course
-
-![Layer structure](project_structure_utils/images/DDD-Flutter-Diagram.svg)
-
-- [Detailed structure of the project can be found here](https://resocoder.com/2020/03/09/flutter-firebase-ddd-course-1-domain-driven-design-principles/)
-- [All parts of the DDD course can be found here](https://resocoder.com/category/tutorials/flutter/firebase-ddd/)
-- [A fully functional DDD github example project can be found here](https://github.com/ResoCoder/finished-flutter-firebase-ddd-course)
-
-## Project Git Workflow
-
-**The working branch should always be a `feature branch` or at least the `develop?` branch**
-
-The workflow is taken from this [article](https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow).
-In general it follows the structure shown in the image below:
-
-![Git structure](project_structure_utils/images/Git-Workflow-Diagram.svg)
-
-### Branches and there usecases:
-
-- `master` - only for releases (every commit needs a version tag in the format x.x.x)
-- `develop` - main branch with complete development history
-- `features` - feature branches can have self chosen names like 'new_search_event_feature' and are used for developing a new feature
-- `release` - release branches are used to prepare a new release and usually are named the following way 'release_vx.x.x'
-- `hotfix`- hotfix branches are used for bug fixes on a release and usually are named the following way 'hotfix_vx.x.x'
-
-### Feature branches
-
-#### Generating
-
-1. Checkout developer branch: `git checkout develop`
-2. Generate and checkout the new feature branch: `git checkout -b feature_branch_name`
-
-#### Closing
-
-1. Checkout developer branch: `git checkout develop`
-2. Merge your finished feature branch: `git merge feature_branch_name`
-3. Delete the branch: `git branch -D feature_branch_name`
-
-### Release branches
-
-#### Generating
-
-1. Checkout developer branch: `git checkout develop`
-2. Generate and checkout the new release branch: `git checkout -b release_v0.1.0`
-
-#### Closing
-
-1. Checkout master branch: `git checkout master`
-2. Merge into master: `git merge release_v0.1.0`
-3. Tag the version: `git tag -a v0.1.0 -m "Add some details about the verion 0.1.0"`
-4. You have to push the changes **and** also have to explicitly push the tag the following way `git push origin v0.1.0`
-5. (Optional) Merge into develop too if changes are not only for production: 
-5.1 Checkout developer branch: `git checkout develop`
-5.2 Merge into develop: `git merge release_v0.1.0`
-6. Delete the branch: `git branch -D release_v0.1.0`
-
-### Hotfix branches 
-
-#### Generating
-
-1. Checkout master branch: `git checkout master`
-2. Generate and checkout the new hotfix branch: `git checkout -b hotfix_v0.1.1`
-
-#### Closing
-
-1. Checkout master branch: `git checkout master`
-2. Merge into master: `git merge hotfix_v0.1.1`
-3. Tag the version: `git tag -a v0.1.1 -m "Add some details about the hotfix verion 0.1.1"`
-4. You have to push the changes **and** also have to explicitly push the tag the following way `git push origin v0.1.1`
-5. Checkout developer branch: `git checkout develop`
-6. Merge into develop: `git merge hotfix_v0.1.1`
-7. Delete the branch: `git branch -D hotfix_v0.1.1`
+Event Screen           |  Calendar Overview
+:-------------------------:|:-------------------------:
+![The Event Screen](project_structure_utils/images/ScreenshotPalk_1_eventview.jpeg)|  ![The Event Calendar](project_structure_utils/images/ScreenshotPalk_2_calendar.jpeg)
 
 
-## Project Notes
-Not using Injection Package
-Thats why cubit to iauthfacade to authentification_service is not working
-Solution: leave the iauthfacade so we see what functions are need in the infrastructure. But dont use Injectable so implement a constructor in the cubit. (dont use the interface as interface only for safety)
+
+Of course it must be possible to add Events too:
+
+
+Event Add          |  Event Location | Event Access
+:-------------------------:|:-------------------------:|:-------------------------:
+![Selecting Event Name and Description](project_structure_utils/images/ScreenshotPalk_3_new_event_name.jpeg)|  ![Selecting an Event Location or Making a new one](project_structure_utils/images/ScreenshotPalk_4_new_event_location.jpeg) | ![The last step is to select the accesslevel of the event. It can be public, or private or only visible to subscribers of an event series](project_structure_utils/images/ScreenshotPalk_5_new_event_access.jpeg)
+
+
+## The End of Palk
+The project ended, because of the lack of UX-Design and manpower to handle the upcoming workload. Also this repository had to many legacy code to take care of.
+With some luck, this project will be rolled up again in the furture!
